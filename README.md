@@ -32,7 +32,7 @@ Our project aims to help the Appalachian Trail Conservancy streamline and gamify
 1. Clone the repo and cd into it
 2. Run `npm install` in the react-app directory
 3. Run `npm run dev` in the react-app directory
-4. Navigate to http://localhost:3000/ in your browser
+4. Navigate to http://localhost:5173/ in your browser
 
 ---
 
