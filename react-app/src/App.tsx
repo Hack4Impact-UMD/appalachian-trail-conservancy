@@ -2,6 +2,7 @@ import "./App.css";
 import * as React from 'react';
 import { FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Button } from "@mui/material";
 import {Visibility, VisibilityOff} from '@mui/icons-material';
+import styles from './LoginPage.module.css';
 
 function App() {
 
@@ -46,7 +47,7 @@ function App() {
     <Button variant="text">Forgot Password?</Button>
 
     {/* sign in button */}
-    <Button variant="contained" href="#contained-buttons">
+    <Button className={styles["sign-in-button"]} variant="contained" href="#contained-buttons">
       Sign in
     </Button>
 
