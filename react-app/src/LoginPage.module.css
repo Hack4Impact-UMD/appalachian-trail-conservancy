@@ -1,14 +1,21 @@
 .row{
     display: flex;
+    flex-direction: row;
+    justify-content: right;
 }
 
-.column{
-    float: left;
-}
-.left{
-    width: 75%;
-}
 
 .right{
-    width: 25%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    width: 450px;
+    height: 100vh
+}
+
+.heading{
+    font-size: 33px;
+    color: #263843;
+    margin: 8px
 }
