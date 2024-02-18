@@ -1,3 +1,14 @@
-.sign-in-button{
-    background-color: var(--forest-green);
+.row{
+    display: flex;
+}
+
+.column{
+    float: left;
+}
+.left{
+    width: 75%;
+}
+
+.right{
+    width: 25%;
 }
