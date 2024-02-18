@@ -28,12 +28,17 @@ let theme = createTheme({
   },
 });
 
+//These colors should mirror the colors found in "index.css"
 theme = createTheme(theme, {
   palette: {
     primary: {
       forestGreen: "#0a7650",
       skyBlue: "#b1d7e8",
       blueGray: "#263843",
+      oceanGreen: "#49a772",
+      shadowGreen: "#6cb29a",
+      mintGreen: "#82c9a0",
+      icebergBlue: "#cde3e4",
     },
   },
 });
