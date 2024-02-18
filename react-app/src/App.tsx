@@ -18,26 +18,15 @@ function App() {
     border: "2px solid var(--ocean-green)",
     borderRadius: "0px",
     boxShadow: "none",
-    width: 400,
-    marginTop: '5%',
-    padding: '2%',
+    width: 350,
+    marginTop: "5%",
+    padding: "2%",
   };
-
-  const styledContinueAsGuestButton = {
-    backgroundColor: "white",
-    color: "var(--ocean-green)",
-    border: "2px solid var(--ocean-green)",
-    borderRadius: "0px",
-    boxShadow: "none",
-    width: 400,
-    marginTop: '3%',
-    padding: '2%',
-  }
 
   const styledInputBoxes = {
     border: "1px solid black",
     borderRadius: "0px",
-    width: 400,
+    width: 350,
     height: 40,
   };
 
@@ -54,6 +43,15 @@ function App() {
   return (
     <>
       <div className={styles.row}>
+        <div className={styles.imgContainer}>
+          {/* REPLACE IMAGE */}
+          <img
+            src={
+              "https://mediaproxy.salon.com/width/1200/https://media2.salon.com/2019/07/spongebob-20th.jpg"
+            }
+            width={"100%"}
+          />
+        </div>
         <div className={styles.right}>
           {/* REPLACE IMAGE */}
           <img
@@ -68,7 +66,7 @@ function App() {
 
           {/* email field */}
           <div className={styles.alignLeft}>
-          <h3 className={styles.label}>Email</h3>
+            <h3 className={styles.label}>Email</h3>
           </div>
           <TextField
             sx={styledInputBoxes}
@@ -79,7 +77,7 @@ function App() {
 
           {/* password field */}
           <div className={styles.alignLeft}>
-          <h3 className={styles.label}>Password</h3>
+            <h3 className={styles.label}>Password</h3>
           </div>
           <FormControl variant="outlined">
             <InputLabel htmlFor="outlined-adornment-password"></InputLabel>
@@ -105,9 +103,12 @@ function App() {
 
           {/* forgot password button */}
           <div className={styles.alignLeft}>
-          <Button sx={{ color: "var(--ocean-green)", padding: '0px'}} variant="text">
-            Forgot Password?
-          </Button>
+            <Button
+              sx={{ color: "var(--ocean-green)", padding: "0px" }}
+              variant="text"
+            >
+              Forgot Password?
+            </Button>
           </div>
 
           {/* sign in button */}
@@ -117,15 +118,6 @@ function App() {
             href="#contained-buttons"
           >
             Sign in
-          </Button>
-
-          {/* continue as guest button */}
-          <Button
-            sx={styledContinueAsGuestButton}
-            variant="contained"
-            href="#contained-buttons"
-          >
-            Continue as guest
           </Button>
         </div>
       </div>

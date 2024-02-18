@@ -1,27 +1,27 @@
 .row{
     display: flex;
     flex-direction: row;
-    justify-content: right;
+    column-gap: 50px;
+    align-items: center;
 }
 
 .right{
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: fixed;
     width: 450px;
-    height: 100vh;
+    height: 100%;
 }
 
 .heading{
     font-size: 33px;
     color: var(--blue-gray);
     margin: 8px;
-    margin-top: 10%;
+    margin-top: 5%;
 }
 
 .alignLeft{
-    width: 89%;
+    width: 100%;
     text-align: left;
 }
 
@@ -29,4 +29,10 @@
     margin-bottom: 3%;
     margin-top: 6%;
     color: var(--blue-gray);
+}
+
+.imgContainer{
+    display: flex;
+    margin-left: -32px;
+    margin-top: -35px;
 }
