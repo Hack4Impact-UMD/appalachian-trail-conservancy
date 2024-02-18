@@ -4,18 +4,29 @@
     justify-content: right;
 }
 
-
 .right{
     display: flex;
     flex-direction: column;
     align-items: center;
     position: fixed;
     width: 450px;
-    height: 100vh
+    height: 100vh;
 }
 
 .heading{
     font-size: 33px;
-    color: #263843;
-    margin: 8px
+    color: var(--blue-gray);
+    margin: 8px;
+    margin-top: 10%;
+}
+
+.alignLeft{
+    width: 89%;
+    text-align: left;
+}
+
+.label{
+    margin-bottom: 3%;
+    margin-top: 6%;
+    color: var(--blue-gray);
 }

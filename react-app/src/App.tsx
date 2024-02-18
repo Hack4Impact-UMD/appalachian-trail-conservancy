@@ -14,12 +14,25 @@ import styles from "./LoginPage.module.css";
 
 function App() {
   const styledSignInButton = {
-    backgroundColor: "#49A772",
-    border: "2px solid #49A772",
+    backgroundColor: "var(--ocean-green)",
+    border: "2px solid var(--ocean-green)",
     borderRadius: "0px",
     boxShadow: "none",
     width: 400,
+    marginTop: '5%',
+    padding: '2%',
   };
+
+  const styledContinueAsGuestButton = {
+    backgroundColor: "white",
+    color: "var(--ocean-green)",
+    border: "2px solid var(--ocean-green)",
+    borderRadius: "0px",
+    boxShadow: "none",
+    width: 400,
+    marginTop: '3%',
+    padding: '2%',
+  }
 
   const styledInputBoxes = {
     border: "1px solid black",
@@ -54,7 +67,9 @@ function App() {
           <h1 className={styles.heading}>Welcome!</h1>
 
           {/* email field */}
-          <p>Email</p>
+          <div className={styles.alignLeft}>
+          <h3 className={styles.label}>Email</h3>
+          </div>
           <TextField
             sx={styledInputBoxes}
             label=""
@@ -63,7 +78,9 @@ function App() {
           />
 
           {/* password field */}
-          <p>Password</p>
+          <div className={styles.alignLeft}>
+          <h3 className={styles.label}>Password</h3>
+          </div>
           <FormControl variant="outlined">
             <InputLabel htmlFor="outlined-adornment-password"></InputLabel>
             <OutlinedInput
@@ -87,9 +104,11 @@ function App() {
           </FormControl>
 
           {/* forgot password button */}
-          <Button sx={{ color: "#49A772" }} variant="text">
+          <div className={styles.alignLeft}>
+          <Button sx={{ color: "var(--ocean-green)", padding: '0px'}} variant="text">
             Forgot Password?
           </Button>
+          </div>
 
           {/* sign in button */}
           <Button
@@ -98,6 +117,15 @@ function App() {
             href="#contained-buttons"
           >
             Sign in
+          </Button>
+
+          {/* continue as guest button */}
+          <Button
+            sx={styledContinueAsGuestButton}
+            variant="contained"
+            href="#contained-buttons"
+          >
+            Continue as guest
           </Button>
         </div>
       </div>
