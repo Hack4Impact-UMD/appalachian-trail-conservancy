@@ -1,38 +1,71 @@
-.row{
-    display: flex;
-    flex-direction: row;
-    column-gap: 50px;
-    align-items: center;
+/* split screen in two */
+.split {
+    height: 100%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    overflow-x: hidden;
 }
 
-.right{
+/* left image panel */
+.left {
+    left: 0;
+    width:65%
+}
+
+/* right login panel */
+.right {
+    right: 0;
+    width: 35%
+}
+
+/* center right login panel vertically & horizontally */
+.centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+/* login fill in section */
+.login_input{
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 450px;
+    width: 100%;
     height: 100%;
 }
 
+/* welcome! */
 .heading{
     font-size: 33px;
     color: var(--blue-gray);
-    margin: 8px;
-    margin-top: 5%;
+    /* margin: 8px;
+    margin-top: 5%; */
 }
 
+/* login text */
 .alignLeft{
     width: 100%;
     text-align: left;
 }
 
+/* for input text boxes */
 .label{
-    margin-bottom: 3%;
-    margin-top: 6%;
+    /* margin-bottom: 3%; */
+    margin-top: 8%;
     color: var(--blue-gray);
 }
 
-.imgContainer{
-    display: flex;
-    margin-left: -32px;
-    margin-top: -35px;
+.imgContainer {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.imgContainer img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }

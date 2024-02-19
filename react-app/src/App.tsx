@@ -42,7 +42,7 @@ function App() {
 
   return (
     <>
-      <div className={styles.row}>
+      <div className={`${styles.split} ${styles.left}`}>
         <div className={styles.imgContainer}>
           {/* REPLACE IMAGE */}
           <img
@@ -52,74 +52,79 @@ function App() {
             width={"100%"}
           />
         </div>
-        <div className={styles.right}>
-          {/* REPLACE IMAGE */}
-          <img
-            src={
-              "https://i.pinimg.com/736x/e4/dc/e4/e4dce40bc3b75d6c4d68c74763bd7883.jpg"
-            }
-            height={150}
-            width={160}
-          />
-          {/* welcome label */}
-          <h1 className={styles.heading}>Welcome!</h1>
-
-          {/* email field */}
-          <div className={styles.alignLeft}>
-            <h3 className={styles.label}>Email</h3>
-          </div>
-          <TextField
-            sx={styledInputBoxes}
-            label=""
-            variant="outlined"
-            size="small"
-          />
-
-          {/* password field */}
-          <div className={styles.alignLeft}>
-            <h3 className={styles.label}>Password</h3>
-          </div>
-          <FormControl variant="outlined">
-            <InputLabel htmlFor="outlined-adornment-password"></InputLabel>
-            <OutlinedInput
-              sx={styledInputBoxes}
-              id="outlined-adornment-password"
-              type={showPassword ? "text" : "password"}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
+      </div>
+      <div className={`${styles.split} ${styles.right}`}>
+        <div className={styles.centered}>
+          <div className={styles.login_input}>
+            {/* REPLACE IMAGE */}
+            <img
+              src={
+                "https://i.pinimg.com/736x/e4/dc/e4/e4dce40bc3b75d6c4d68c74763bd7883.jpg"
               }
-              label="Password"
+              height={150}
+              width={160}
             />
-          </FormControl>
+            {/* welcome label */}
+            <h1 className={styles.heading}>Welcome!</h1>
 
-          {/* forgot password button */}
-          <div className={styles.alignLeft}>
+            {/* email field */}
+            <div className={styles.alignLeft}>
+              <h3 className={styles.label}>Email</h3>
+            </div>
+            <TextField
+              sx={styledInputBoxes}
+              label=""
+              variant="outlined"
+              size="small"
+            />
+
+            {/* password field */}
+            <div className={styles.alignLeft}>
+              <h3 className={styles.label}>Password</h3>
+            </div>
+            <FormControl variant="outlined">
+              <InputLabel htmlFor="outlined-adornment-password"></InputLabel>
+              <OutlinedInput
+                sx={styledInputBoxes}
+                id="outlined-adornment-password"
+                type={showPassword ? "text" : "password"}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                label="Password"
+              />
+            </FormControl>
+
+            {/* forgot password button */}
+            <div className={styles.alignLeft}>
+              <Button
+                sx={{ color: "var(--ocean-green)", padding: "0px" }}
+                variant="text"
+              >
+                Forgot Password?
+              </Button>
+            </div>
+
+            {/* sign in button */}
             <Button
-              sx={{ color: "var(--ocean-green)", padding: "0px" }}
-              variant="text"
+              sx={styledSignInButton}
+              variant="contained"
+              href="#contained-buttons"
             >
-              Forgot Password?
+              Sign in
             </Button>
           </div>
-
-          {/* sign in button */}
-          <Button
-            sx={styledSignInButton}
-            variant="contained"
-            href="#contained-buttons"
-          >
-            Sign in
-          </Button>
         </div>
+        
       </div>
     </>
   );
