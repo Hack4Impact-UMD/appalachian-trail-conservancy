@@ -1,25 +1,25 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
 import "./index.css";
-import {BrowserRouter, Route, Routes } from "react-router-dom";
-import homePage from "./pages/HomePage"
-import pathwayPage from "./pages/PathwayPage"
-import quizPage from "./pages/QuizPage"
-import trainingPage from "./pages/TrainingPage"
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import HomePage from "./pages/HomePage/HomePage.tsx";
+import PathwayPage from "./pages/PathwayPage/PathwayPage.tsx";
+import QuizPage from "./pages/QuizPage/QuizPage.tsx";
+import TrainingPage from "./pages/TrainingPage/TrainingPage.tsx";
 import { ThemeProvider } from "@mui/material";
 import theme from "./muiTheme.ts";
 
 function App() {
-   return <ThemeProvider theme={theme}>
-    <BrowserRouter>
-      <Routes>
-        <Route path = "/pages/HomePage" element = {<homePage/>}/>
-        <Route path = "/pages/PathwayPage" element = {<pathwayPage/>}/>
-        <Route path = "/pages/QuizPage" element = {<quizPage/>}/>
-        <Route path = "/pages/TrainingPage" element = {<trainingPage/>}/>
-    </Routes>
-  </BrowserRouter>
- </ThemeProvider>;
+  return (
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/PathwayPage" element={<PathwayPage />} />
+          <Route path="/QuizPage" element={<QuizPage />} />
+          <Route path="/TrainingPage" element={<TrainingPage />} />
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
+  );
 }
 
 export default App;

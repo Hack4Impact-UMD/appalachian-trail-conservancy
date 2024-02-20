@@ -1,7 +1,7 @@
 import React from "react";
 
-function Training() {
-    return <h1>Training</h1>
+function TrainingPage() {
+  return <h1>Training</h1>;
 }
 
-export default Training;
+export default TrainingPage;
