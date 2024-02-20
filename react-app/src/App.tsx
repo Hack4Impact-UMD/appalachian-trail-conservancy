@@ -13,9 +13,9 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/PathwayPage" element={<PathwayPage />} />
-          <Route path="/QuizPage" element={<QuizPage />} />
-          <Route path="/TrainingPage" element={<TrainingPage />} />
+          <Route path="/pathway" element={<PathwayPage />} />
+          <Route path="/quiz" element={<QuizPage />} />
+          <Route path="/training" element={<TrainingPage />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
