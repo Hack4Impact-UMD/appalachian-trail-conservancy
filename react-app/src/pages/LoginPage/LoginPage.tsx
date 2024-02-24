@@ -59,7 +59,6 @@ function LoginPage() {
       <div className={`${styles.split} ${styles.right}`}>
         <div className={styles.centered}>
           <div className={styles.login_input}>
-            {/* REPLACE IMAGE */}
             <div className={styles.rightImgContainer}>
               <img src={primaryLogo} />
             </div>
