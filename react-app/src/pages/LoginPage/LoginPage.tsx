@@ -21,6 +21,9 @@ function LoginPage() {
     width: 350,
     marginTop: "5%",
     padding: "2%",
+    "&:hover": {
+      backgroundColor: "var(--ocean-green)",
+    },
   };
 
   const styledInputBoxes = {
@@ -28,6 +31,7 @@ function LoginPage() {
     borderRadius: "0px",
     width: 350,
     height: 40,
+    "& fieldset": { border: "none" },
   };
 
   const [showPassword, setShowPassword] = React.useState(false);
