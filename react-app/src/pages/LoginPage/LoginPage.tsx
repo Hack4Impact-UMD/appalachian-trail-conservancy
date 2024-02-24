@@ -12,28 +12,28 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import styles from "./LoginPage.module.css";
 import primaryLogo from "../../assets/atc-primary-logo.png";
 
-function LoginPage() {
-  const styledSignInButton = {
+const styledSignInButton = {
+  backgroundColor: "var(--ocean-green)",
+  border: "2px solid var(--ocean-green)",
+  borderRadius: "0px",
+  boxShadow: "none",
+  width: 350,
+  marginTop: "5%",
+  padding: "2%",
+  "&:hover": {
     backgroundColor: "var(--ocean-green)",
-    border: "2px solid var(--ocean-green)",
-    borderRadius: "0px",
-    boxShadow: "none",
-    width: 350,
-    marginTop: "5%",
-    padding: "2%",
-    "&:hover": {
-      backgroundColor: "var(--ocean-green)",
-    },
-  };
+  },
+};
 
-  const styledInputBoxes = {
-    border: "1px solid black",
-    borderRadius: "0px",
-    width: 350,
-    height: 40,
-    "& fieldset": { border: "none" },
-  };
+const styledInputBoxes = {
+  border: "1px solid black",
+  borderRadius: "0px",
+  width: 350,
+  height: 40,
+  "& fieldset": { border: "none" },
+};
 
+function LoginPage() {
   const [showPassword, setShowPassword] = React.useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
