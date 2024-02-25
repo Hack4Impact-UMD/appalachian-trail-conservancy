@@ -12,18 +12,30 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import styles from "./LoginPage.module.css";
 import primaryLogo from "../../assets/atc-primary-logo.png";
 
-const styledSignInButton = {
-  backgroundColor: "var(--ocean-green)",
-  border: "2px solid var(--ocean-green)",
+const styledRectButton = {
   borderRadius: "0px",
   boxShadow: "none",
   width: 350,
   marginTop: "5%",
   padding: "2%",
+};
+
+const styledSignIn = {
+  backgroundColor: "var(--ocean-green)",
+  border: "2px solid var(--ocean-green)",
   "&:hover": {
     backgroundColor: "var(--ocean-green)",
   },
-};
+}
+
+const styledContinueAsGuest = {
+  color: "var(--ocean-green)",
+  backgroundColor: "white",
+  border: "2px solid var(--ocean-green)",
+  "&:hover": {
+    backgroundColor: "white",
+  },
+}
 
 const styledInputBoxes = {
   border: "1px solid black",
@@ -114,11 +126,20 @@ function LoginPage() {
 
             {/* sign in button */}
             <Button
-              sx={styledSignInButton}
+              sx={{ ...styledRectButton, ...styledSignIn }}
               variant="contained"
               href="#contained-buttons"
             >
               Sign in
+            </Button>
+
+            {/* continue as guest button */}
+            <Button
+              sx={{ ...styledRectButton, ...styledContinueAsGuest }}
+              variant="contained"
+              href="#contained-buttons"
+            >
+              Continue as guest
             </Button>
           </div>
         </div>
