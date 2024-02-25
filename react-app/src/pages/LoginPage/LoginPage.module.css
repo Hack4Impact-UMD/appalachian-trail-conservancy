@@ -10,13 +10,15 @@
 /* left image panel */
 .left {
     left: 0;
-    width:65%
+    width: 65%;
+    max-width: calc(100vw - 600px);
 }
 
 /* right login panel */
 .right {
     right: 0;
-    width: 35%
+    width: 35%;
+    min-width: 600px;
 }
 
 /* center right login panel vertically & horizontally */
@@ -99,9 +101,10 @@
 /* mobile */
 @media (max-width: 600px) {
     .left {
-        width: 0%
+        width: 0%;
     }
     .right {
-        width: 100%
+        width: 100%;
+        min-width: 0%;
     }
 }
