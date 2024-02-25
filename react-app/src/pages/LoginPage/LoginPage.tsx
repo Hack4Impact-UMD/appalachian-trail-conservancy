@@ -141,6 +141,11 @@ function LoginPage() {
             >
               Continue as guest
             </Button>
+
+            {/* switch to admin link */}
+            <button className={styles.switch}>
+                Switch to Admin Log In
+            </button>
           </div>
         </div>
       </div>
