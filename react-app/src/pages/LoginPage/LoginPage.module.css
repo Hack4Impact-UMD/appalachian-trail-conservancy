@@ -82,3 +82,13 @@
     height: 100%;
     object-fit: cover;
 }
+
+/* mobile */
+@media (max-width: 600px) {
+    .left {
+        width: 0%
+    }
+    .right {
+        width: 100%
+    }
+}
