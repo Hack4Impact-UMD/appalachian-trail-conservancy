@@ -1,16 +1,27 @@
+import "./index.css";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import HomePage from "./pages/HomePage/HomePage.tsx";
+import PathwayPage from "./pages/PathwayPage/PathwayPage.tsx";
+import QuizPage from "./pages/QuizPage/QuizPage.tsx";
+import TrainingPage from "./pages/TrainingPage/TrainingPage.tsx";
+import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import { ThemeProvider } from "@mui/material";
 import theme from "./muiTheme.ts";
-import NavigationBar from "./components/NavigationBar/NavigationBar.tsx";
 
 function App() {
-  const handleItemClick = (item: string) => {
-    console.log(`Clicked on ${item}`);
-    // Here you can add the logic to navigate to different pages
-    // based on the clicked item
-  };
-
-  // return <ThemeProvider theme={theme}>App</ThemeProvider>;
-  return <NavigationBar activeItem="Dashboard" onItemClick={handleItemClick} />;
+  return (
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/pathway" element={<PathwayPage />} />
+          <Route path="/quiz" element={<QuizPage />} />
+          <Route path="/training" element={<TrainingPage />} />
+          <Route path="/login" element={<LoginPage />} />
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
+  );
 }
 
 export default App;
