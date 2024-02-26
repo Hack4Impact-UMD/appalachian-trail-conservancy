@@ -1,0 +1,81 @@
+/* split screen in two */
+.split {
+    height: 100%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    overflow-x: hidden;
+}
+
+/* main div */
+.container{
+    display: flex;
+}
+
+/* left navigation panel placeholder */
+.left {
+    left: 0;
+    width: 250px;
+    background-color: gray;
+}
+
+/* right content panel */
+.right {
+    right: 0;
+    left: 250px;
+    padding-left: 4%;
+    padding-right: 4%;
+}
+
+/* profile image */
+.profilePicture{
+    margin: 6px;
+    clip-path: circle();
+    height: 10em;;
+    text-align: right;
+}
+
+/* aligns text or elements right; used for profile picture */
+.alignRight{
+    text-align: right;
+}
+
+/* flexbox for cards */
+.cardsContainer{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-content: space-between;
+    row-gap: 1em;
+}
+
+/* last row of flexbox */
+.cardsContainer::after {
+    content: "";
+    margin: 5px; 
+    flex-basis: calc(30%);
+}
+
+/* items in flexbox */
+.flexItem{
+    flex: 0 0 calc(33.33% - 10px); 
+    flex-basis: calc(30%); 
+    margin: 5px; 
+    box-sizing: border-box; 
+}
+
+/* contains header and profile picture */
+table{
+    width: 100%;
+}
+
+h1{
+    margin-bottom: 0;
+}
+
+
+/* will eventually be cards */
+.placeholderImage{
+    width: 100%;
+    height: auto;
+}
