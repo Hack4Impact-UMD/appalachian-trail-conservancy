@@ -1,5 +1,5 @@
 import React from 'react';
-import LinearProgressWithLabel from '@mui/material/LinearProgressWithLabel';
+import LinearProgressWithLabel from './LinearProgressWithLabel';
 
 import styles from './Training.module.css';
 
