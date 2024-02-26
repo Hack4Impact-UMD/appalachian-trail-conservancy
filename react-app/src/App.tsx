@@ -5,6 +5,7 @@ import PathwayPage from "./pages/PathwayPage/PathwayPage.tsx";
 import QuizPage from "./pages/QuizPage/QuizPage.tsx";
 import TrainingPage from "./pages/TrainingPage/TrainingPage.tsx";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
+import Dashboard from "./pages/DashboardPage/Dashboard.tsx";
 import { ThemeProvider } from "@mui/material";
 import theme from "./muiTheme.ts";
 
@@ -18,6 +19,7 @@ function App() {
           <Route path="/quiz" element={<QuizPage />} />
           <Route path="/training" element={<TrainingPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
