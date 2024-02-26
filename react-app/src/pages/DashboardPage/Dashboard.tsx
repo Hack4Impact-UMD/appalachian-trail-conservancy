@@ -17,7 +17,6 @@ function Dashboard() {
         </div>
         <div className={styles.header}>
           <h2>Trainings in Progress</h2>
-          {/* CHANGE LINK */}
           <Link className={styles.viewAllLink} to="/trainingsInProgress">
             VIEW ALL
           </Link>
@@ -44,7 +43,7 @@ function Dashboard() {
         </div>
         <div className={styles.header}>
           <h2>Certifications</h2>
-          <Link className={styles.viewAllLink} to="/login">
+          <Link className={styles.viewAllLink} to="/trainingCompleted">
             VIEW ALL
           </Link>
         </div>
