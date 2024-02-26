@@ -1,0 +1,59 @@
+.split {
+    height: 100%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    overflow-x: hidden;
+}
+
+.left {
+    left: 0;
+    width: 250px;
+    background-color: gray;
+}
+
+.right {
+    right: 0;
+    left: 250px;
+    padding-right: 4%;
+    padding-left: 4%;
+}
+
+.rightBox {
+
+}
+
+.titleSection{
+    display: flex;
+    justify-content: space-between;
+}
+
+.title{
+    font-size: 55px
+}
+
+.profilePicture{
+    margin: 6px;
+    clip-path: circle();
+    height: 10em;
+}
+
+
+.certificateSection{
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    align-content:first-baseline; 
+}
+
+.certificateCards{
+    margin-right: 40px;
+    margin-bottom: 20px;
+}
+
+.recommendSection{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+

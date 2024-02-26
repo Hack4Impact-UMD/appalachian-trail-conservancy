@@ -7,6 +7,7 @@ import TrainingPage from "./pages/TrainingPage/TrainingPage.tsx";
 import TrainingsInProgressPage from "./pages/TrainingsInProgressPage/TrainingsInProgressPage.tsx";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import Dashboard from "./pages/DashboardPage/Dashboard.tsx";
+import TrainingCompletedPage from "./pages/TrainingCompletedPage/TrainingCompletedPage.tsx";
 import { ThemeProvider } from "@mui/material";
 import theme from "./muiTheme.ts";
 
@@ -22,6 +23,7 @@ function App() {
           <Route path="/trainingsInProgress" element={<TrainingsInProgressPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/trainingCompleted" element={<TrainingCompletedPage/>}/>
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
