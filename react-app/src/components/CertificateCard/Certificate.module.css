@@ -9,7 +9,7 @@
 }
 
 .certificate-image {
-  width: 100%;
+  width: 150px;
   height: 150px;
   overflow: hidden;
   border-radius: 50%;
@@ -29,9 +29,11 @@
 .certificate-title {
   font-weight: bold;
   margin: 0 0 8px 0;
+  font-size: 18px;
 }
 
 .certificate-date {
   margin: 0;
   color: #777;
+  font-size: 12px;
 }
