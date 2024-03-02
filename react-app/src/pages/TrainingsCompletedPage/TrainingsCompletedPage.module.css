@@ -19,31 +19,59 @@
   padding-left: 4%;
 }
 
-.titleSection {
+.header {
+  font-size: 1.4em;
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
+  margin-top: 2%;
+  margin-bottom: 2%;
 }
 
-.title {
-  font-size: 55px;
-}
-
-.profilePicture {
-  margin: 6px;
-  clip-path: circle();
-  height: 10em;
-}
-
-.certificateSection {
+.subHeader {
   display: flex;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  align-content: first-baseline;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.certificateCards {
-  margin-right: 40px;
-  margin-bottom: 20px;
+.nameHeading {
+  color: var(--forest-green);
+}
+
+.imgContainer {
+  width: 10%;
+  height: 10%;
+  overflow: hidden;
+}
+
+.imgContainer img {
+  width: 100%;
+  height: auto;
+  border-radius: 50%;
+  object-fit: contain;
+}
+
+.certificateContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-content: space-between;
+  row-gap: 1em;
+}
+
+.certificateCard {
+  flex: 0 0 calc(25% - 10px);
+  flex-basis: calc(20%);
+  margin: 5px;
+  box-sizing: border-box;
+}
+
+/* last row of flexbox */
+.certificateContainer::after {
+  content: "";
+  margin: 5px;
+  flex-basis: calc(20%);
 }
 
 .recommendSection {

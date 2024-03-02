@@ -22,19 +22,27 @@
   left: 250px;
   padding-left: 4%;
   padding-right: 4%;
-  margin-top: 1%;
 }
 
 /* have space between header and view all link  */
 .header {
+  font-size: 1.4em;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin-top: 15px;
+  margin-top: 2%;
+  margin-bottom: 2%;
 }
 
-.nameHeading h1 {
-  font-size: 20px;
+.subHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nameHeading {
+  color: var(--forest-green);
 }
 
 .imgContainer {
@@ -51,7 +59,6 @@
 }
 
 .viewAllLink {
-  margin-top: 25px;
   color: black;
   font-size: 14px;
   font-weight: 700;
@@ -62,5 +69,5 @@
 .cardsContainer {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
 }

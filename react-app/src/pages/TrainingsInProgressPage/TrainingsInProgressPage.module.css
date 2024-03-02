@@ -27,24 +27,23 @@
   padding-right: 4%;
 }
 
-/* profile image */
-.profilePicture {
-  margin: 6px;
-  clip-path: circle();
-  height: 10em;
-  text-align: right;
-}
-
 /* aligns text or elements right; used for profile picture */
 .alignRight {
   text-align: right;
+}
+
+.subHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
 /* flexbox for cards */
 .cardsContainer {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: space-between;
   align-content: space-between;
   row-gap: 1em;
 }
@@ -69,12 +68,29 @@ table {
   width: 100%;
 }
 
-h1 {
-  margin-bottom: 0;
+.header {
+  font-size: 1.4em;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 2%;
+  margin-bottom: 2%;
 }
 
-/* will eventually be cards */
-.placeholderImage {
+.nameHeading {
+  color: var(--forest-green);
+}
+
+
+.imgContainer {
+  width: 10%;
+  height: 10%;
+  overflow: hidden;
+}
+
+.imgContainer img {
   width: 100%;
   height: auto;
+  border-radius: 50%;
+  object-fit: contain;
 }

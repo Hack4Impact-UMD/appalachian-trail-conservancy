@@ -15,7 +15,7 @@ function Dashboard() {
             <img src="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg" />
           </div>
         </div>
-        <div className={styles.header}>
+        <div className={styles.subHeader}>
           <h2>Trainings in Progress</h2>
           <Link className={styles.viewAllLink} to="/trainingsInProgress">
             VIEW ALL
@@ -41,7 +41,7 @@ function Dashboard() {
             progress={23}
           />
         </div>
-        <div className={styles.header}>
+        <div className={styles.subHeader}>
           <h2>Certifications</h2>
           <Link className={styles.viewAllLink} to="/trainingCompleted">
             VIEW ALL
