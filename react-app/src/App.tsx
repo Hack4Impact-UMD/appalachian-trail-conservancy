@@ -23,10 +23,7 @@ function App() {
             path="/trainingsCompleted"
             element={<TrainingsCompletedPage />}
           />
-          <Route
-            path="/*"
-            element={<NotFoundPage/>}>
-          </Route>
+          <Route path="/*" element={<NotFoundPage />}></Route>
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

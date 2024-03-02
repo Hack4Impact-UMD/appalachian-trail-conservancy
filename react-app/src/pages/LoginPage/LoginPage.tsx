@@ -11,31 +11,13 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import styles from "./LoginPage.module.css";
 import primaryLogo from "../../assets/atc-primary-logo.png";
+import { styledButtonGreen, styledButtonWhite } from "../../muiTheme";
 
 const styledRectButton = {
-  borderRadius: "0px",
-  boxShadow: "none",
   width: 350,
   marginTop: "5%",
-  padding: "2%",
+  padding: "1%",
 };
-
-const styledSignIn = {
-  backgroundColor: "var(--ocean-green)",
-  border: "2px solid var(--ocean-green)",
-  "&:hover": {
-    backgroundColor: "var(--ocean-green)",
-  },
-}
-
-const styledContinueAsGuest = {
-  color: "var(--ocean-green)",
-  backgroundColor: "white",
-  border: "2px solid var(--ocean-green)",
-  "&:hover": {
-    backgroundColor: "white",
-  },
-}
 
 const styledInputBoxes = {
   border: "1px solid black",
@@ -126,7 +108,7 @@ function LoginPage() {
 
             {/* sign in button */}
             <Button
-              sx={{ ...styledRectButton, ...styledSignIn }}
+              sx={{ ...styledRectButton, ...styledButtonGreen }}
               variant="contained"
               href="#contained-buttons"
             >
@@ -135,7 +117,7 @@ function LoginPage() {
 
             {/* continue as guest button */}
             <Button
-              sx={{ ...styledRectButton, ...styledContinueAsGuest }}
+              sx={{ ...styledRectButton, ...styledButtonWhite }}
               variant="contained"
               href="#contained-buttons"
             >
@@ -143,9 +125,7 @@ function LoginPage() {
             </Button>
 
             {/* switch to admin link */}
-            <button className={styles.switch}>
-                Switch to Admin Log In
-            </button>
+            <button className={styles.switch}>Switch to Admin Log In</button>
           </div>
         </div>
       </div>
