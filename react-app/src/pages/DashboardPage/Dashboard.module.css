@@ -28,6 +28,7 @@
 .header {
   font-size: 1.4em;
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
   justify-content: space-between;
   margin-top: 2%;
@@ -46,8 +47,8 @@
 }
 
 .imgContainer {
-  width: 10%;
-  height: 10%;
+  width: 115px;
+  height: 115px;
   overflow: hidden;
 }
 
@@ -68,6 +69,7 @@
 
 .cardsContainer {
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
   justify-content: space-between;
 }

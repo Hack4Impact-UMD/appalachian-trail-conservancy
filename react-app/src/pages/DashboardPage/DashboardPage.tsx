@@ -43,7 +43,7 @@ function Dashboard() {
         </div>
         <div className={styles.subHeader}>
           <h2>Certifications</h2>
-          <Link className={styles.viewAllLink} to="/trainingCompleted">
+          <Link className={styles.viewAllLink} to="/trainingsCompleted">
             VIEW ALL
           </Link>
         </div>
