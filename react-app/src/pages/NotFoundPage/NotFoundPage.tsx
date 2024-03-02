@@ -11,7 +11,7 @@ const styledRectButton = {
     marginTop: "5%",
     padding: "1%",
     fontSize: "18px",
-    color: "black",
+    color: "white",
     backgroundColor: "var(--ocean-green)",
     border: "2px solid var(--ocean-green)",
     "&:hover": {
