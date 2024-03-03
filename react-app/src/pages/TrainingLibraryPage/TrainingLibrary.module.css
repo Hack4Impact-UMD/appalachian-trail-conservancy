@@ -1,0 +1,60 @@
+.split {
+    height: 100%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    overflow-x: hidden;
+}
+
+/* dummy space for navbar */
+.left {
+    left: 0;
+    width: 250px;
+    background-color: gray;
+}
+  
+.right {
+    right: 0;
+    left: 250px;
+    padding-left: 4%;
+    padding-right: 4%;
+}
+
+.heading {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.heading h1 {
+    font-size: 50px;
+    color: var(--forest-green)
+}
+
+.imgContainer {
+    width: 10%;
+    height: 10%;
+    margin-top: 2%;
+}
+  
+.imgContainer img {
+    max-width: 100%;
+    border-radius: 50%;
+    height: auto
+}
+
+.searchBarContainer {
+    margin-top: 4%;
+}
+
+.cardsContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 4%;
+}
+
+.individualCard {
+    margin-bottom: 2%;
+    margin-right: 2%;
+}
