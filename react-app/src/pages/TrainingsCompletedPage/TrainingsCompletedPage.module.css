@@ -80,5 +80,10 @@
 .recommendSection {
   display: flex;
   justify-content: space-between;
+  align-content: space-between;
   flex-wrap: wrap;
+  row-gap: 1em;
+  column-gap: 1em;
+  margin: 5px;
+  padding-bottom: 20px;
 }
