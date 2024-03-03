@@ -47,8 +47,10 @@
 }
 
 .imgContainer {
-  width: 115px;
-  height: 115px;
+  width: 10%;
+  height: 10%;
+  min-width: 50px;
+  min-height: 50px;
   overflow: hidden;
 }
 

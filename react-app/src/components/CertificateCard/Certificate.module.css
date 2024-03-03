@@ -6,6 +6,8 @@
   border-radius: 8px;*/
   overflow: hidden;
   width: 200px;
+  padding-right: 10px;
+  padding-left: 10px;
 }
 
 .certificate-image {

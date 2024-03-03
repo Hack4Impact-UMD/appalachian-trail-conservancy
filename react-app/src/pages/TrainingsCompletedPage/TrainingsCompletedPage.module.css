@@ -41,8 +41,10 @@
 }
 
 .imgContainer {
-  width: 115px;
-  height: 115px;
+  width: 10%;
+  height: 10%;
+  min-width: 50px;
+  min-height: 50px;
   overflow: hidden;
 }
 
@@ -56,7 +58,7 @@
 .certificateContainer {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: space-between;
   align-content: space-between;
   row-gap: 1em;
 }
