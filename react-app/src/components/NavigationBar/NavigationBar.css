@@ -1,5 +1,3 @@
-
-
 .navigation-container {
   width: 250px;
   height: 100vh;
@@ -19,54 +17,72 @@
   width: 150px;
   height: 150px;
   position: absolute;
-  top: 100px;
+  top: 50px;
   left: 50px;
 }
 
 .menu-items {
   text-align: center;
   position: absolute;
-  top: 350px;
-  left: 25px;
+  top: 275px;
 }
 
-.menu-item, .logout-container button {
-  font-family: Inter;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 30px;
-  letter-spacing: 0em;
-  text-align: left;
-  padding: 10px 20px;
-  cursor: pointer;
-  width: 200px; /* Set a fixed width for all menu items */
-}
-
-.menu-item {
-  position: relative; 
-  padding-left: 30px; /* Add space for the bullet point */
-}
-
-.menu-item::before {
-  content: "";
+.menu-item img {
+  width: 20px;
+  height: 20px;
   position: absolute;
-  left: 0; 
-  top: 50%; 
-  transform: translateY(-50%); /* Adjust the vertical position */
-  width: 22px; 
-  height: 22px; 
-  background-color: #ccc; 
-  border-radius: 50%; /* Make the bullet point a circle */
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.tab-container {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 5px; 
 }
 
-.menu-item:hover, .logout-container button:hover {
-  color: blue;
+.tab {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px 20px 10px 25px; 
+  cursor: pointer;
+  width: 205px;
+  position: relative;
+  margin-bottom: 5px;
+  font-weight: bold
+}
+
+.tab img {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.tab.active {
+  background-color: #0A7650;
+  color: white;
+  font-weight: bold
+
+}
+
+.tab.inactive {
+  background-color: white;
+  color: #263843;
+  font-weight: bold
+
+}
+
+.logout-container img {
+  margin-right: 10px;
 }
 
 .logout-container {
   position: absolute;
   bottom: 20px;
   left: 25px;
+  display: flex;
+  align-items: center;
 }
 
 .logout-container button {
@@ -77,11 +93,17 @@
   line-height: 30px;
   letter-spacing: 0em;
   text-align: left;
-  padding: 10px 20px 10px 30px; 
+  padding: 10px 20px 10px 40px;
+
   cursor: pointer;
   width: 200px; 
-  border: none; 
+  border: none;
+  display: flex;
+  align-items: center; 
+}
 
+.logout-container button img {
+  margin-right: 100px;
 }
 
 a {
@@ -92,4 +114,3 @@ a {
 a:hover {
   color: inherit; 
 }
-

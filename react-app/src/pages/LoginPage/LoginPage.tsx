@@ -26,7 +26,7 @@ const styledSignIn = {
   "&:hover": {
     backgroundColor: "var(--ocean-green)",
   },
-}
+};
 
 const styledContinueAsGuest = {
   color: "var(--ocean-green)",
@@ -35,7 +35,7 @@ const styledContinueAsGuest = {
   "&:hover": {
     backgroundColor: "white",
   },
-}
+};
 
 const styledInputBoxes = {
   border: "1px solid black",
@@ -143,9 +143,7 @@ function LoginPage() {
             </Button>
 
             {/* switch to admin link */}
-            <button className={styles.switch}>
-                Switch to Admin Log In
-            </button>
+            <button className={styles.switch}>Switch to Admin Log In</button>
           </div>
         </div>
       </div>

@@ -1,6 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
 import "./NavigationBar.css";
-import hack4impactLogo from "../../assets/hack4impact_logo.jpg"; // Importing the logo image
+import atcprimarylogo from "../../assets/atc-primary-logo.png";
+import dashboardActive from "../../assets/dashboardWhite.svg";
+import dashboardInactive from "../../assets/dashboardGray.svg";
+import completedActive from "../../assets/completedWhite.svg";
+import completedInactive from "../../assets/completedGray.svg";
+import libraryActive from "../../assets/libraryWhite.svg";
+import libraryInactive from "../../assets/libraryGray.svg";
+import progressActive from "../../assets/progressWhite.svg";
+import progressInactive from "../../assets/progressGray.svg";
+import logout from "../../assets/logout.svg";
 
 interface NavigationProps {
   activeItem: string;
@@ -12,53 +22,105 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
   onItemClick,
 }) => {
   const handleItemClick = (item: string) => {
-    onItemClick(item);
+    if (activeItem !== item) {
+      onItemClick(item);
+    }
   };
 
   return (
     <div className="navigation-container">
       <div className="logo-container">
-        <img src={hack4impactLogo} alt="Hack4Impact Logo" className="logo" />{" "}
+        <img src={atcprimarylogo} alt="Hack4Impact Logo" className="logo" />
       </div>
       <div className="menu-items">
-        <a href="#">
-          <div
-            className="menu-item"
-            onClick={() => handleItemClick("Dashboard")}
-          >
-            Dashboard
-          </div>
-        </a>
-        <a href="#">
-          <div
-            className="menu-item"
-            onClick={() => handleItemClick("Training Library")}
-          >
-            Trainings Library
-          </div>
-        </a>
-        <a href="#">
-          <div
-            className="menu-item"
-            onClick={() => handleItemClick("Training in Progress")}
-          >
-            Trainings in Progress
-          </div>
-        </a>
-        <a href="#">
-          <div
-            className="menu-item"
-            onClick={() => handleItemClick("Training Completed")}
-          >
-            Trainings Completed
-          </div>
-        </a>
+        <div className="tab-container">
+          <NavLink to="/" className="nav-link">
+            <div
+              className={`tab ${
+                activeItem === "Dashboard" ? "active" : "inactive"
+              }`}
+              onClick={() => handleItemClick("Dashboard")}
+            >
+              <img
+                className="icon"
+                src={
+                  activeItem === "Dashboard"
+                    ? dashboardActive
+                    : dashboardInactive
+                }
+                alt="Dashboard Icon"
+              />
+              Dashboard
+            </div>
+          </NavLink>
+        </div>
+
+        <div className="tab-container">
+          <NavLink to="/" className="nav-link">
+            <div
+              className={`tab ${
+                activeItem === "Library" ? "active" : "inactive"
+              }`}
+              onClick={() => handleItemClick("Library")}
+            >
+              <img
+                className="icon"
+                src={activeItem === "Library" ? libraryActive : libraryInactive}
+                alt="Library Icon"
+              />
+              Trainings Library
+            </div>
+          </NavLink>
+        </div>
+
+        <div className="tab-container">
+          <NavLink to="/" className="nav-link">
+            <div
+              className={`tab ${
+                activeItem === "Progress" ? "active" : "inactive"
+              }`}
+              onClick={() => handleItemClick("Progress")}
+            >
+              <img
+                className="icon"
+                src={
+                  activeItem === "Progress" ? progressActive : progressInactive
+                }
+                alt="Progress Icon"
+              />
+              Trainings in Progress
+            </div>
+          </NavLink>
+        </div>
+
+        <div className="tab-container">
+          <NavLink to="/" className="nav-link">
+            <div
+              className={`tab ${
+                activeItem === "Completed" ? "active" : "inactive"
+              }`}
+              onClick={() => handleItemClick("Completed")}
+            >
+              <img
+                className="icon"
+                src={
+                  activeItem === "Completed"
+                    ? completedActive
+                    : completedInactive
+                }
+                alt="Completed Icon"
+              />
+              Trainings Completed
+            </div>
+          </NavLink>
+        </div>
       </div>
       <div className="logout-container">
         <button
           onClick={() => console.log("Logout clicked")}
           className="menu-item"
         >
+          <img src={logout} alt="Logout" />
           Log Out
         </button>
       </div>
