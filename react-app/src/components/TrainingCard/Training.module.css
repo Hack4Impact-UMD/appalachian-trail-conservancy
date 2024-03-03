@@ -1,6 +1,6 @@
 /* Training.module.css */
 
-.training-card {
+.trainingCard {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -11,18 +11,18 @@
   height: 350px;
 }
 
-.training-image {
+.trainingImage {
   height: 250px;
   overflow: hidden;
 }
 
-.training-image img {
+.trainingImage img {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
 
-.training-content {
+.trainingContent {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -31,15 +31,15 @@
   padding: 16px;
 }
 
-.training-title {
+.trainingTitle {
   font-weight: bold;
   margin: 0 0 8px 0;
 }
 
-.training-subtitle {
+.trainingSubtitle {
   margin: 0;
 }
 
-.progress-bar {
+.progressBar {
   margin-top: 16px;
 }

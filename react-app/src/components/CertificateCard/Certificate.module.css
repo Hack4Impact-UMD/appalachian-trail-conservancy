@@ -1,4 +1,4 @@
-.certificate-card {
+.certificateCard {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -6,35 +6,33 @@
   border-radius: 8px;*/
   overflow: hidden;
   width: 200px;
-  padding-right: 10px;
-  padding-left: 10px;
 }
 
-.certificate-image {
+.certificateImage {
   width: 200px;
   height: 200px;
   overflow: hidden;
   border-radius: 50%;
 }
 
-.certificate-image img {
+.certificateImage img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.certificate-details {
+.certificateDetails {
   padding: 16px;
   text-align: center;
 }
 
-.certificate-title {
+.certificateTitle {
   font-weight: bold;
   margin: 0 0 8px 0;
   font-size: 18px;
 }
 
-.certificate-date {
+.certificateDate {
   margin: 0;
   color: #777;
   font-size: 12px;
