@@ -17,90 +17,48 @@ const TrainingsCompletedPage = () => {
       <div className={styles.subHeader}>
           <h2>Certifications</h2>
       </div>
-        <div className={styles.certificateContainer}>
-          <div className={styles.certificateCard}>
-            <Certificate
-              image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-              title="Certificate Title"
-              date="FEBRUARY 26, 2024"
-            />
-          </div>
-          <div className={styles.certificateCard}>
-            <Certificate
-              image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-              title="Certificate Title"
-              date="FEBRUARY 26, 2024"
-            />
-          </div>
-          <div className={styles.certificateCard}>
-            <Certificate
-              image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-              title="Certificate Title"
-              date="FEBRUARY 26, 2024"
-            />
-          </div>
-          <div className={styles.certificateCard}>
-            <Certificate
-              image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-              title="Certificate Title"
-              date="FEBRUARY 26, 2024"
-            />
-          </div>
-          <div className={styles.certificateCard}>
-            <Certificate
-              image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-              title="Certificate Title"
-              date="FEBRUARY 26, 2024"
-            />
-          </div>
-          <div className={styles.certificateCard}>
-            <Certificate
-              image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-              title="Certificate Title"
-              date="FEBRUARY 26, 2024"
-            />
-          </div>
-          <div className={styles.certificateCard}>
-            <Certificate
-              image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-              title="Certificate Title"
-              date="FEBRUARY 26, 2024"
-            />
-          </div>
-          <div className={styles.certificateCard}>
-            <Certificate
-              image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-              title="Certificate Title"
-              date="FEBRUARY 26, 2024"
-            />
-          </div>
-          </div>
-          <div className={styles.subHeader}>
-            <h2> Recommended </h2>
-          </div>
-          <div className={styles.recommendSection}>
-            <div className={styles.TrainingCard}>
-              <TrainingCard
-                image="another_image.jpg"
-                title="Another Training Task"
-                subtitle="Another Subtitle"
-              />
-            </div>
-            <div className={styles.TrainingCard}>
-              <TrainingCard
-                image="another_image.jpg"
-                title="Another Training Task"
-                subtitle="Another Subtitle"
-              />
-            </div>
-            <div className={styles.TrainingCard}>
-              <TrainingCard
-                image="another_image.jpg"
-                title="Another Training Task"
-                subtitle="Another Subtitle"
-              />
-            </div>
-          </div>
+        <div className={styles.cardsContainer}>
+          <Certificate
+            image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+            title="Title"
+            date="FEBRUARY 26, 2024"
+          />
+          <Certificate
+            image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+            title="Title"
+            date="FEBRUARY 26, 2024"
+          />
+          <Certificate
+            image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+            title="Title"
+            date="FEBRUARY 26, 2024"
+          />
+          <Certificate
+            image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+            title="Title"
+            date="FEBRUARY 26, 2024"
+          />
+        </div>
+        <div className={styles.subHeader}>
+          <h2> Recommended </h2>
+        </div>
+        <div className={styles.cardsContainer}>
+          <TrainingCard
+            image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+            title="Another Training Task"
+            subtitle="Another Subtitle"
+          />
+          <TrainingCard
+            image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+            title="Another Training Task"
+            subtitle="Another Subtitle"
+          />
+          <TrainingCard
+            image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+            title="Another Training Task"
+            subtitle="Another Subtitle"
+          />
+        </div>
       </div>
     </div>
   );

@@ -9,10 +9,11 @@
 }
 
 .certificateImage {
-  width: 200px;
-  height: 200px;
+  width: 175px;
+  height: 175px;
   overflow: hidden;
   border-radius: 50%;
+  margin-top: 5px;
 }
 
 .certificateImage img {
@@ -22,18 +23,19 @@
 }
 
 .certificateDetails {
-  padding: 16px;
+  padding: 10px;
   text-align: center;
 }
 
 .certificateTitle {
   font-weight: bold;
-  margin: 0 0 8px 0;
-  font-size: 18px;
+  margin: 0 0 5px 0;
+  font-size: 1.1em;
+  color: var(--forest-green);
 }
 
 .certificateDate {
   margin: 0;
   color: #777;
-  font-size: 12px;
+  font-size: .8em;
 }

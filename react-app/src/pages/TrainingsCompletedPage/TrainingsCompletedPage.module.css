@@ -1,3 +1,4 @@
+/* split screen in two */
 .split {
   height: 100%;
   position: fixed;
@@ -6,34 +7,30 @@
   overflow-x: hidden;
 }
 
+/* dummy space for navbar */
 .left {
   left: 0;
-  width: 250px;
+  width: 25%;
   background-color: gray;
 }
 
 .right {
   right: 0;
-  left: 250px;
-  padding-right: 4%;
-  padding-left: 4%;
+  left: 25%;
+  padding-left: 8%;
+  padding-right: 8%;
 }
 
+/* have space between header and view all link  */
 .header {
-  font-size: 1.4em;
+  font-size: 1.3em;
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: space-between;
-  margin-top: 2%;
-  margin-bottom: 2%;
-}
-
-.subHeader {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
   align-items: center;
+  margin-top: 1.5%;
+  margin-bottom: -.5%;
 }
 
 .nameHeading {
@@ -41,8 +38,10 @@
 }
 
 .imgContainer {
-  width: 10%;
-  height: 10%;
+  display: flex;
+  align-items: center;
+  width: 9%;
+  height: 9%;
   min-width: 50px;
   min-height: 50px;
   overflow: hidden;
@@ -55,35 +54,22 @@
   object-fit: contain;
 }
 
-.certificateContainer {
+.subHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1em;
+  color: rgb(60, 60, 60);
+  margin-bottom: -1%;
+  margin-top: .5%;
+}
+
+.cardsContainer {
   display: flex;
   flex-wrap: wrap;
+  flex-direction: row;
   justify-content: space-between;
-  align-content: space-between;
-  row-gap: 1em;
-}
-
-.certificateCard {
-  flex: 0 0 calc(25% - 10px);
-  flex-basis: calc(20%);
-  margin: 5px;
-  box-sizing: border-box;
-}
-
-/* last row of flexbox */
-.certificateContainer::after {
-  content: "";
-  margin: 5px;
-  flex-basis: calc(20%);
-}
-
-.recommendSection {
-  display: flex;
-  justify-content: space-between;
-  align-content: space-between;
-  flex-wrap: wrap;
   row-gap: 1em;
   column-gap: 1em;
-  margin: 5px;
-  padding-bottom: 20px;
 }

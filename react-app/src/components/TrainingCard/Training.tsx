@@ -31,6 +31,9 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
             <LinearProgressWithLabel value={progress} />
           </div>
         )}
+        {progress == undefined && (
+          <div className={styles['emptyProgressBarContainer']} />
+        )}
       </div>
     </div>
   );

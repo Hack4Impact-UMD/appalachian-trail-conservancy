@@ -7,85 +7,41 @@
   overflow-x: hidden;
 }
 
-/* main div */
-.container {
-  display: flex;
-}
-
-/* left navigation panel placeholder */
+/* dummy space for navbar */
 .left {
   left: 0;
-  width: 250px;
+  width: 25%;
   background-color: gray;
 }
 
-/* right content panel */
 .right {
   right: 0;
-  left: 250px;
-  padding-left: 4%;
-  padding-right: 4%;
+  left: 25%;
+  padding-left: 8%;
+  padding-right: 8%;
 }
 
-/* aligns text or elements right; used for profile picture */
-.alignRight {
-  text-align: right;
-}
-
-.subHeader {
+/* have space between header and view all link  */
+.header {
+  font-size: 1.3em;
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-}
-
-/* flexbox for cards */
-.cardsContainer {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-content: space-between;
-  row-gap: 1em;
-}
-
-/* last row of flexbox */
-.cardsContainer::after {
-  content: "";
-  margin: 5px;
-  flex-basis: calc(30%);
-}
-
-/* items in flexbox */
-.flexItem {
-  flex: 0 0 calc(33.33% - 10px);
-  flex-basis: calc(30%);
-  margin: 5px;
-  box-sizing: border-box;
-}
-
-/* contains header and profile picture */
-table {
-  width: 100%;
-}
-
-.header {
-  font-size: 1.4em;
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-top: 2%;
-  margin-bottom: 2%;
+  margin-top: 1.5%;
+  margin-bottom: 2.5%;
 }
 
 .nameHeading {
   color: var(--forest-green);
 }
 
-
 .imgContainer {
-  width: 10%;
-  height: 10%;
+  display: flex;
+  align-items: center;
+  width: 9%;
+  height: 9%;
   min-width: 50px;
   min-height: 50px;
   overflow: hidden;
@@ -96,4 +52,24 @@ table {
   height: auto;
   border-radius: 50%;
   object-fit: contain;
+}
+
+.subHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1em;
+  color: rgb(60, 60, 60);
+  margin-bottom: -1%;
+  margin-top: .5%;
+}
+
+.cardsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  row-gap: 1em;
+  column-gap: 1em;
 }

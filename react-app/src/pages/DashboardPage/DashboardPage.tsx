@@ -25,20 +25,20 @@ function Dashboard() {
           <TrainingCard
             image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
             title="Title"
-            subtitle="Subtitle"
+            subtitle="SUBTITLE"
             progress={23}
           />
           <TrainingCard
             image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
             title="Title"
-            subtitle="Subtitle"
-            progress={23}
+            subtitle="SUBTITLE"
+            progress={62}
           />
           <TrainingCard
             image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
             title="Title"
-            subtitle="Subtitle"
-            progress={23}
+            subtitle="SUBTITLE"
+            progress={50}
           />
         </div>
         <div className={styles.subHeader}>
@@ -50,22 +50,22 @@ function Dashboard() {
         <div className={styles.cardsContainer}>
           <Certificate
             image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-            title="Certificate Title"
+            title="Title"
             date="FEBRUARY 26, 2024"
           />
           <Certificate
             image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-            title="Certificate Title"
+            title="Title"
             date="FEBRUARY 26, 2024"
           />
           <Certificate
             image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-            title="Certificate Title"
+            title="Title"
             date="FEBRUARY 26, 2024"
           />
           <Certificate
             image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-            title="Certificate Title"
+            title="Title"
             date="FEBRUARY 26, 2024"
           />
         </div>
