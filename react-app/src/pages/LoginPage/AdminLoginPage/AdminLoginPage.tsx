@@ -9,6 +9,7 @@ import {
   Button,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 import styles from "./AdminLoginPage.module.css";
 import primaryLogo from "../../../assets/atc-primary-logo.png";
 import { styledButtonGreen } from "../../../muiTheme";
@@ -116,7 +117,9 @@ function AdminLoginPage() {
             </Button>
 
             {/* switch to user link */}
-            <button className={styles.switch}>Switch to User Log In</button>
+            <Link to="/login/user">
+                <button className={styles.switch}>Switch to User Log In</button>
+            </Link>
           </div>
         </div>
       </div>

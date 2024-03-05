@@ -9,6 +9,7 @@ import {
   Button,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 import styles from "./VolunteerLoginPage.module.css";
 import primaryLogo from "../../../assets/atc-primary-logo.png";
 import { styledButtonGreen, styledButtonWhite } from "../../../muiTheme";
@@ -125,7 +126,9 @@ function VolunteerLoginPage() {
             </Button>
 
             {/* switch to admin link */}
-            <button className={styles.switch}>Switch to Admin Log In</button>
+            <Link to="/login/admin">
+              <button className={styles.switch}>Switch to Admin Log In</button>
+            </Link>
           </div>
         </div>
       </div>
