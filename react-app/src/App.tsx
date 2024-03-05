@@ -7,6 +7,8 @@ import TrainingsCompletedPage from "./pages/TrainingsCompletedPage/TrainingsComp
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage.tsx";
 import { ThemeProvider } from "@mui/material";
 import theme from "./muiTheme.ts";
+import VolunteerLoginPage from "./pages/LoginPage/VolunteerLoginPage/VolunteerLoginPage.tsx";
+import AdminLoginPage from "./pages/LoginPage/AdminLoginPage/AdminLoginPage.tsx";
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/login/user" element={<VolunteerLoginPage />} />
+          <Route path="/login/admin" element={<AdminLoginPage />} />
           <Route
             path="/trainingsInProgress"
             element={<TrainingsInProgressPage />}
