@@ -1,5 +1,3 @@
-/* Training.module.css */
-
 .trainingCard {
   position: relative;
   display: flex;
@@ -8,7 +6,6 @@
   overflow: hidden;
   width: 275px;
   height: 275px;
-  background-color: lightgrey;
 }
 
 .trainingImage {
@@ -19,7 +16,7 @@
 .trainingImage img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
 }
 
 .trainingContent {
@@ -27,7 +24,7 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  background-color: lightblue;
+  background-color: var(--sky-blue);
   padding: 16px;
 }
 
@@ -35,13 +32,13 @@
   font-size: 1.1em;
   font-weight: bold;
   margin: -2px 0 5px 3px;
-  color: rgb(70, 70, 70);
+  color: var(--blue-gray);
 }
 
 .trainingSubtitle {
-  font-size: .8em;
+  font-size: 0.8em;
   margin: 4px 0 4px 3px;
-  color: rgb(61, 61, 61);
+  color: var(--blue-gray);
 }
 
 .progressBar {

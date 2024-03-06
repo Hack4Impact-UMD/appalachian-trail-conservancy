@@ -2,8 +2,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  /*border: 1px solid #ccc;
-  border-radius: 8px;*/
   overflow: hidden;
   width: 200px;
 }
@@ -36,6 +34,6 @@
 
 .certificateDate {
   margin: 0;
-  color: #777;
-  font-size: .8em;
+  color: var(--blue-gray);
+  font-size: 0.8em;
 }

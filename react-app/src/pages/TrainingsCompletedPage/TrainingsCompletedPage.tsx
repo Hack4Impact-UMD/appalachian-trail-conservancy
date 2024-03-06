@@ -7,16 +7,16 @@ const TrainingsCompletedPage = () => {
     <div className={styles.split}>
       <div className={`${styles.split} ${styles.left}`}></div>
       <div className={`${styles.split} ${styles.right}`}>
-      <div className={styles.header}>
+        <div className={styles.header}>
           <h1 className={styles.nameHeading}>Trainings Completed</h1>
           {/* PLACEHOLDER IMAGE */}
           <div className={styles.imgContainer}>
             <img src="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg" />
           </div>
-      </div>
-      <div className={styles.subHeader}>
+        </div>
+        <div className={styles.subHeader}>
           <h2>Certifications</h2>
-      </div>
+        </div>
         <div className={styles.cardsContainer}>
           <Certificate
             image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"

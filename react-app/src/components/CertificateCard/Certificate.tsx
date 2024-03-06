@@ -1,5 +1,5 @@
-import React from 'react';
-import styles from './Certificate.module.css';
+import React from "react";
+import styles from "./Certificate.module.css";
 
 interface CertificateProps {
   image: string;
@@ -9,13 +9,13 @@ interface CertificateProps {
 
 const Certificate: React.FC<CertificateProps> = ({ image, title, date }) => {
   return (
-    <div className={styles['certificateCard']}>
-      <div className={styles['certificateImage']}>
+    <div className={styles["certificateCard"]}>
+      <div className={styles["certificateImage"]}>
         <img src={image} alt="Certificate" />
       </div>
-      <div className={styles['certificateDetails']}>
-        <h2 className={styles['certificateTitle']}>{title}</h2>
-        <p className={styles['certificateDate']}>{date}</p>
+      <div className={styles["certificateDetails"]}>
+        <h2 className={styles["certificateTitle"]}>{title}</h2>
+        <p className={styles["certificateDate"]}>{date}</p>
       </div>
     </div>
   );

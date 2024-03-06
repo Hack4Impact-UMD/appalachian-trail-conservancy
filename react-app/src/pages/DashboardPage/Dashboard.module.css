@@ -30,7 +30,7 @@
   justify-content: space-between;
   align-items: center;
   margin-top: 1.5%;
-  margin-bottom: -.5%;
+  margin-bottom: -0.5%;
 }
 
 .nameHeading {
@@ -60,9 +60,9 @@
   justify-content: space-between;
   align-items: center;
   font-size: 1em;
-  color: rgb(60, 60, 60);
+  color: var(--blue-gray);
   margin-bottom: -1%;
-  margin-top: .5%;
+  margin-top: 0.5%;
 }
 
 .cardsContainer {
@@ -77,7 +77,7 @@
 /* ALL ABOVE IS SAME ON EVERY PAGE (with minor spacing modifications) */
 
 .viewAllLink {
-  color: rgb(60, 60, 60);
+  color: var(--blue-gray);
   font-size: 12px;
   font-weight: 700;
   text-align: center;

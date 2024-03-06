@@ -32,7 +32,7 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
           </div>
         )}
         {progress == undefined && (
-          <div className={styles['emptyProgressBarContainer']} />
+          <div className={styles["emptyProgressBarContainer"]} />
         )}
       </div>
     </div>
