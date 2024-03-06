@@ -16,8 +16,8 @@ function TrainingLibrary() {
     <>
       <div className={`${styles.split} ${styles.left}`}></div>
       <div className={`${styles.split} ${styles.right}`}>
-        <div className={styles.heading}>
-          <h1>Training Library</h1>
+        <div className={styles.header}>
+          <h1 className={styles.nameHeading}>Training Library</h1>
           <div className={styles.imgContainer}>
             <img src="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg" />
           </div>
@@ -38,7 +38,7 @@ function TrainingLibrary() {
           />
         </div>
         <div className={styles.cardsContainer}>
-          <div className={styles.individualCard}>
+          <div>
             <TrainingCard
               image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
               title="Title"
@@ -46,7 +46,7 @@ function TrainingLibrary() {
               progress={23}
             />
           </div>
-          <div className={styles.individualCard}>
+          <div>
             <TrainingCard
               image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
               title="Title"
@@ -54,7 +54,7 @@ function TrainingLibrary() {
               progress={23}
             />
           </div>
-          <div className={styles.individualCard}>
+          <div>
             <TrainingCard
               image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
               title="Title"
@@ -62,7 +62,7 @@ function TrainingLibrary() {
               progress={23}
             />
           </div>
-          <div className={styles.individualCard}>
+          <div>
             <TrainingCard
               image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
               title="Title"
@@ -70,7 +70,7 @@ function TrainingLibrary() {
               progress={23}
             />
           </div>
-          <div className={styles.individualCard}>
+          <div>
             <TrainingCard
               image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
               title="Title"
@@ -78,7 +78,7 @@ function TrainingLibrary() {
               progress={23}
             />
           </div>
-          <div className={styles.individualCard}>
+          <div>
             <TrainingCard
               image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
               title="Title"

@@ -1,60 +1,68 @@
 .split {
-    height: 100%;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    overflow-x: hidden;
+  height: 100%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
 }
 
 /* dummy space for navbar */
 .left {
-    left: 0;
-    width: 250px;
-    background-color: gray;
+  left: 0;
+  width: 25%;
+  background-color: gray;
 }
-  
+
 .right {
-    right: 0;
-    left: 250px;
-    padding-left: 4%;
-    padding-right: 4%;
+  right: 0;
+  left: 25%;
+  padding-left: 8%;
+  padding-right: 8%;
 }
 
-.heading {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+.header {
+  font-size: 1.3em;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.5%;
+  margin-bottom: -0.5%;
 }
 
-.heading h1 {
-    font-size: 50px;
-    color: var(--forest-green)
+.nameHeading {
+  color: var(--forest-green);
 }
 
 .imgContainer {
-    width: 10%;
-    height: 10%;
-    margin-top: 2%;
+  display: flex;
+  align-items: center;
+  width: 9%;
+  height: 9%;
+  min-width: 50px;
+  min-height: 50px;
+  overflow: hidden;
 }
-  
+
 .imgContainer img {
-    max-width: 100%;
-    border-radius: 50%;
-    height: auto
+  width: 100%;
+  height: auto;
+  border-radius: 50%;
+  object-fit: contain;
 }
 
 .searchBarContainer {
-    margin-top: 4%;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 .cardsContainer {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    margin-top: 4%;
-}
-
-.individualCard {
-    margin-bottom: 2%;
-    margin-right: 2%;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  row-gap: 1em;
+  column-gap: 1em;
+  margin-bottom: 1rem;
 }

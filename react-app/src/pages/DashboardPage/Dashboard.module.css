@@ -61,8 +61,12 @@
   align-items: center;
   font-size: 1em;
   color: var(--blue-gray);
-  margin-bottom: -1%;
-  margin-top: 0.5%;
+  margin-top: 0.5rem;
+}
+
+.subHeader h2 {
+  margin-left: 0;
+  margin-bottom: 1rem;
 }
 
 .cardsContainer {
@@ -72,14 +76,14 @@
   justify-content: space-between;
   row-gap: 1em;
   column-gap: 1em;
+  margin-bottom: 1rem;
 }
 
 /* ALL ABOVE IS SAME ON EVERY PAGE (with minor spacing modifications) */
 
 .viewAllLink {
   color: var(--blue-gray);
-  font-size: 12px;
+  font-size: 1rem;
   font-weight: 700;
   text-align: center;
-  height: 20px;
 }
