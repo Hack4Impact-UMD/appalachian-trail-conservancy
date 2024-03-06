@@ -1,4 +1,3 @@
-/* split screen in two */
 .split {
   height: 100%;
   position: fixed;
@@ -21,7 +20,6 @@
   padding-right: 8%;
 }
 
-/* have space between header and view all link  */
 .header {
   font-size: 1.3em;
   display: flex;
@@ -30,7 +28,7 @@
   justify-content: space-between;
   align-items: center;
   margin-top: 1.5%;
-  margin-bottom: 2.5%;
+  margin-bottom: -0.5%;
 }
 
 .nameHeading {
@@ -54,19 +52,9 @@
   object-fit: contain;
 }
 
-.subHeader {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 1em;
-  color: var(--blue-gray);
-  margin-top: 0.5rem;
-}
-
-.subHeader h2 {
-  margin-left: 0;
-  margin-bottom: 1rem;
+.searchBarContainer {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 .cardsContainer {
