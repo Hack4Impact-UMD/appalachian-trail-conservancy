@@ -1,3 +1,4 @@
+/* split screen in two */
 .split {
   height: 100%;
   position: fixed;
@@ -6,40 +7,43 @@
   overflow-x: hidden;
 }
 
-.container {
-  display: flex;
-}
-
 /* dummy space for navbar */
 .left {
   left: 0;
-  width: 250px;
+  width: 25%;
   background-color: gray;
 }
 
 .right {
   right: 0;
-  left: 250px;
-  padding-left: 4%;
-  padding-right: 4%;
-  margin-top: 1%;
+  left: 25%;
+  padding-left: 8%;
+  padding-right: 8%;
 }
 
 /* have space between header and view all link  */
 .header {
+  font-size: 1.3em;
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
   justify-content: space-between;
-  margin-top: 15px;
+  align-items: center;
+  margin-top: 1.5%;
+  margin-bottom: -0.5%;
 }
 
-.nameHeading h1 {
-  font-size: 20px;
+.nameHeading {
+  color: var(--forest-green);
 }
 
 .imgContainer {
-  width: 10%;
-  height: 10%;
+  display: flex;
+  align-items: center;
+  width: 9%;
+  height: 9%;
+  min-width: 50px;
+  min-height: 50px;
   overflow: hidden;
 }
 
@@ -50,17 +54,32 @@
   object-fit: contain;
 }
 
-.viewAllLink {
-  margin-top: 25px;
-  color: black;
-  font-size: 14px;
-  font-weight: 700;
-  text-align: center;
-  height: 20px;
+.subHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1em;
+  color: var(--blue-gray);
+  margin-bottom: -1%;
+  margin-top: 0.5%;
 }
 
 .cardsContainer {
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
+  row-gap: 1em;
+  column-gap: 1em;
+}
+
+/* ALL ABOVE IS SAME ON EVERY PAGE (with minor spacing modifications) */
+
+.viewAllLink {
+  color: var(--blue-gray);
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+  height: 20px;
 }
