@@ -7,17 +7,17 @@
 }
 
 .closeButton {
-  position: absolute; /* Position the button relative to its container */
-  top: 5px; /* Adjust top position as needed */
-  right: 5px; /* Adjust right position as needed */
-  color: gray; /* Set button text color */
-  text-align: center; /* Center text alignment */
-  font-size: 30px; /* Set button text size */
-  font-weight: bold; /* Set button text weight */
-  cursor: pointer; /* Indicate interactivity on hover */
-  border: none; /* Remove default button border */
-  outline: none; /* Remove default button outline */
-  border-radius: 50%; /* Create a circular button */
+  position: absolute; 
+  top: 5px; 
+  right: 5px; 
+  color: gray;
+  text-align: center; 
+  font-size: 30px; 
+  font-weight: bold; 
+  cursor: pointer; 
+  border: none;
+  outline: none; 
+  border-radius: 50%; 
 }
 
 .left {
@@ -37,26 +37,12 @@
 }
 
 .image {
-  width: 100px; /* Adjust width as needed */
-  height: 250px; /* Set height to auto to maintain aspect ratio */
-  overflow: hidden; /* Hide overflowing parts of the image */
-  object-fit: cover; /* Crop image to fit container */
-  object-position: 0% 50%; /* Position the crop area to show the left side */
+  width: 100px; 
+  height: 250px; 
+  overflow: hidden;
+  object-fit: cover; 
+  object-position: 0% 50%; 
 }
-
-.container {
-  right: 0;
-  width: 50px;
-  background-color: gray;
-  z-index: 2;
-  position: relative;
-}
-#clip {
-  position: absolute;
-  clip: rect(0, 50px, 50px, 50);
-  /* clip: shape(top, right, bottom, left); NB 'rect' is the only available option */
-}
-
 
 .background {
   background-color: rgba(0, 0, 0, 0.4);
