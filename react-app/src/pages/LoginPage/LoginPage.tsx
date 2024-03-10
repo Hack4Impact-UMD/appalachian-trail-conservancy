@@ -5,6 +5,7 @@ import { styledButtonGreen, styledButtonWhite } from "../../muiTheme";
 import { Button } from "@mui/material";
 
 const styledRectButton = {
+    height: 40,
     width: 350,
     marginTop: "5%",
     padding: "1%",

@@ -18,6 +18,7 @@ const styledRectButton = {
   width: 350,
   marginTop: "5%",
   padding: "1%",
+  height: 40
 };
 
 const styledInputBoxes = {

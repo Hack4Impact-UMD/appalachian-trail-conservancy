@@ -15,6 +15,7 @@ import primaryLogo from "../../../assets/atc-primary-logo.png";
 import { styledButtonGreen } from "../../../muiTheme";
 
 const styledRectButton = {
+  height: 40,
   width: 350,
   marginTop: "5%",
   padding: "1%",
