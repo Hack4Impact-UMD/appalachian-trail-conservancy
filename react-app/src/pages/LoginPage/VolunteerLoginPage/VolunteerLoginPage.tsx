@@ -12,21 +12,13 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import styles from "./VolunteerLoginPage.module.css";
 import primaryLogo from "../../../assets/atc-primary-logo.png";
-import { styledButtonGreen, styledButtonWhite } from "../../../muiTheme";
+import { styledButtonGreen, styledButtonWhite, styledInputBoxes } from "../../../muiTheme";
 
 const styledRectButton = {
   width: 350,
   marginTop: "5%",
   padding: "1%",
   height: 40
-};
-
-const styledInputBoxes = {
-  border: "1px solid black",
-  borderRadius: "0px",
-  width: 350,
-  height: 40,
-  "& fieldset": { border: "none" },
 };
 
 function VolunteerLoginPage() {

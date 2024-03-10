@@ -66,3 +66,11 @@ export const styledButtonWhite = {
     backgroundColor: "white",
   },
 };
+
+export const styledInputBoxes = {
+  border: "1px solid black",
+  borderRadius: "8px",
+  width: 350,
+  height: 40,
+  "& fieldset": { border: "none" },
+};
