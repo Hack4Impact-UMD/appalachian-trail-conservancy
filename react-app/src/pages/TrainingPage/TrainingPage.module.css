@@ -54,27 +54,7 @@
   object-fit: contain;
 }
 
-.subHeader {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 1em;
-  color: var(--blue-gray);
-  margin-top: 0.5rem;
+.stepContainer {
+  
 }
 
-.subHeader h2 {
-  margin-left: 0;
-  margin-bottom: 1rem;
-}
-
-.cardsContainer {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  justify-content: space-between;
-  row-gap: 1em;
-  column-gap: 1em;
-  margin-bottom: 1rem;
-}
