@@ -54,7 +54,16 @@
   object-fit: contain;
 }
 
-.stepContainer {
+.contentContainer{
   
 }
 
+.stepContainer {
+  background-color: lightblue;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 25%;
+  padding: 3%;
+}
