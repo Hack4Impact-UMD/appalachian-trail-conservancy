@@ -1,39 +1,39 @@
-.certificate-card {
+.certificateCard {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /*border: 1px solid #ccc;
-  border-radius: 8px;*/
   overflow: hidden;
   width: 200px;
 }
 
-.certificate-image {
-  width: 200px;
-  height: 200px;
+.certificateImage {
+  width: 175px;
+  height: 175px;
   overflow: hidden;
   border-radius: 50%;
+  margin-top: 5px;
 }
 
-.certificate-image img {
+.certificateImage img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.certificate-details {
-  padding: 16px;
+.certificateDetails {
+  padding: 10px;
   text-align: center;
 }
 
-.certificate-title {
+.certificateTitle {
   font-weight: bold;
-  margin: 0 0 8px 0;
-  font-size: 18px;
+  margin: 0 0 5px 0;
+  font-size: 1.1em;
+  color: var(--forest-green);
 }
 
-.certificate-date {
+.certificateDate {
   margin: 0;
-  color: #777;
-  font-size: 12px;
+  color: var(--blue-gray);
+  font-size: 0.8em;
 }

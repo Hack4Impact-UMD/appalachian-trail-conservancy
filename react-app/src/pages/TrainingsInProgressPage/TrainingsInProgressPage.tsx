@@ -4,97 +4,54 @@ import TrainingCard from "../../components/TrainingCard/Training.tsx";
 function TrainingsInProgressPage() {
   return (
     <>
-      <div className={styles.container}>
-        <div className={`${styles.split} ${styles.left}`}></div>
-        <div className={`${styles.split} ${styles.right}`}>
-          <div>
-            <table>
-              <tbody>
-                <tr>
-                  <td>
-                    <h1>Trainings in Progress</h1>
-                  </td>
-                  <td className={styles.alignRight}>
-                    <img
-                      src={
-                        "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/South_Shetland-2016-Deception_Island%E2%80%93Chinstrap_penguin_(Pygoscelis_antarctica)_04.jpg/1200px-South_Shetland-2016-Deception_Island%E2%80%93Chinstrap_penguin_(Pygoscelis_antarctica)_04.jpg"
-                      }
-                      className={styles.profilePicture}
-                    ></img>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+      <div className={`${styles.split} ${styles.left}`}></div>
+      <div className={`${styles.split} ${styles.right}`}>
+        <div className={styles.header}>
+          <h1 className={styles.nameHeading}>Trainings in Progress</h1>
+          {/* PLACEHOLDER IMAGE */}
+          <div className={styles.imgContainer}>
+            <img src="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg" />
           </div>
-          <div className={styles.cardsContainer}>
-            <div className={styles.flexItem}>
-              <TrainingCard
-                image="path_to_your_image.jpg"
-                title="Training Task Title"
-                subtitle="Training Task Subtitle"
-                progress={50}
-              />
-            </div>
-            <div className={styles.flexItem}>
-              <TrainingCard
-                image="path_to_your_image.jpg"
-                title="Training Task Title"
-                subtitle="Training Task Subtitle"
-                progress={50}
-              />
-            </div>
-            <div className={styles.flexItem}>
-              <TrainingCard
-                image="path_to_your_image.jpg"
-                title="Training Task Title"
-                subtitle="Training Task Subtitle"
-                progress={50}
-              />
-            </div>
-            <div className={styles.flexItem}>
-              <TrainingCard
-                image="path_to_your_image.jpg"
-                title="Training Task Title"
-                subtitle="Training Task Subtitle"
-                progress={50}
-              />
-            </div>
-            <div className={styles.flexItem}>
-              <TrainingCard
-                image="path_to_your_image.jpg"
-                title="Training Task Title"
-                subtitle="Training Task Subtitle"
-                progress={50}
-              />
-            </div>
-          </div>
+        </div>
+        <div className={styles.cardsContainer}>
+          <TrainingCard
+            image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+            title="Title"
+            subtitle="SUBTITLE"
+            progress={23}
+          />
+          <TrainingCard
+            image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+            title="Title"
+            subtitle="SUBTITLE"
+            progress={7}
+          />
+          <TrainingCard
+            image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+            title="Title"
+            subtitle="SUBTITLE"
+            progress={99}
+          />
+        </div>
+        <div className={styles.subHeader}>
           <h2>Recommended</h2>
-          <div className={styles.cardsContainer}>
-            <div className={styles.flexItem}>
-              <TrainingCard
-                image="path_to_your_image.jpg"
-                title="Training Task Title"
-                subtitle="Training Task Subtitle"
-                progress={50}
-              />
-            </div>
-            <div className={styles.flexItem}>
-              <TrainingCard
-                image="path_to_your_image.jpg"
-                title="Training Task Title"
-                subtitle="Training Task Subtitle"
-                progress={50}
-              />
-            </div>
-            <div className={styles.flexItem}>
-              <TrainingCard
-                image="path_to_your_image.jpg"
-                title="Training Task Title"
-                subtitle="Training Task Subtitle"
-                progress={50}
-              />
-            </div>
-          </div>
+        </div>
+        <div className={styles.cardsContainer}>
+          <TrainingCard
+            image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+            title="Title"
+            subtitle="SUBTITLE"
+          />
+          <TrainingCard
+            image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+            title="Title"
+            subtitle="SUBTITLE"
+          />
+          <TrainingCard
+            image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+            title="Title"
+            subtitle="SUBTITLE"
+          />
         </div>
       </div>
     </>
