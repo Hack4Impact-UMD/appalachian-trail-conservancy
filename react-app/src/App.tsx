@@ -21,7 +21,6 @@ function App() {
 
   return (
     <>
-      <TrainingLibrary />
       <ThemeProvider theme={theme}>
         <BrowserRouter>
           <Routes>

@@ -4,6 +4,7 @@ import { TextField, InputAdornment } from "@mui/material";
 import TrainingCard from "../../components/TrainingCard/Training";
 import { useState } from "react";
 import React from "react";
+import debounce from "lodash.debounce";
 
 const styledSearchBar = {
   border: "2px solid var(--blue-gray)",
@@ -24,6 +25,14 @@ function TrainingLibrary() {
     { title: "Catfish", subtitle: "Subtitle 2", progress: 50 },
     { title: "C", subtitle: "Subtitle 3", progress: 76 },
     { title: "Dog", subtitle: "Subtitle 4", progress: 10 },
+    { title: "Cat", subtitle: "Subtitle 1", progress: 23 },
+    { title: "Catfish", subtitle: "Subtitle 2", progress: 50 },
+    { title: "C", subtitle: "Subtitle 3", progress: 76 },
+    { title: "Dog", subtitle: "Subtitle 4", progress: 10 },
+    { title: "Cat", subtitle: "Subtitle 1", progress: 23 },
+    { title: "Catfish", subtitle: "Subtitle 2", progress: 50 },
+    { title: "C", subtitle: "Subtitle 3", progress: 76 },
+    { title: "Dog", subtitle: "Subtitle 4", progress: 10 },
     // Add more training card data as needed
   ];
 
@@ -36,6 +45,13 @@ function TrainingLibrary() {
   React.useEffect(() => {
     filterTrainings();
   }, [searchQuery]);
+
+  const updateQuery = (e: {
+    target: { value: React.SetStateAction<string> };
+  }) => setSearchQuery(e.target.value);
+
+  const debouncedOnChange = debounce(updateQuery, 500);
+
   return (
     <>
       <div className={`${styles.split} ${styles.left}`}></div>
@@ -53,8 +69,7 @@ function TrainingLibrary() {
             variant="outlined"
             size="small"
             placeholder="Search..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={debouncedOnChange}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
