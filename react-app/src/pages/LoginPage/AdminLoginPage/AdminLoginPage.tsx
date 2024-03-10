@@ -93,7 +93,7 @@ function AdminLoginPage() {
             {/* forgot password button */}
             <div className={styles.alignLeft}>
               <Button
-                sx={{ color: "var(--ocean-green)", padding: "0px" }}
+                sx={{ color: "var(--ocean-green)", padding: "0px", margin: "8px 0px 18px 0px" }}
                 variant="text"
               >
                 Forgot Password?
