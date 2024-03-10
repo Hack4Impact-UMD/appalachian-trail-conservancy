@@ -19,10 +19,9 @@ interface VideoProps {
     return (
       <div>
         {/* Video iframe */}
-        <iframe
+        <iframe className={styles.iframeStyle}
           title="Video Player"
-          width="560"
-          height="315"
+          height="400"
           src={url}
           allow="autoplay; encrypted-media"
           allowFullScreen

@@ -5,3 +5,7 @@
     white-space: nowrap;
     justify-content: space-between;
 }
+
+.iframeStyle{
+    width: 80%;
+}
