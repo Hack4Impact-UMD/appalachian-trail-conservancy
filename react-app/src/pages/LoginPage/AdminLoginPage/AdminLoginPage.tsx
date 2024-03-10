@@ -50,8 +50,8 @@ function AdminLoginPage() {
             <div className={styles.rightImgContainer}>
               <img src={primaryLogo} />
             </div>
-            {/* welcome label */}
-            <h1 className={styles.heading}>Welcome!</h1>
+            {/* admin label */}
+            <h1 className={styles.heading}>Admin</h1>
 
             {/* email field */}
             <div className={styles.alignLeft}>
