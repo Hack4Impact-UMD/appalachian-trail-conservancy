@@ -18,11 +18,10 @@ interface PDFProps {
   const PDFComponent: React.FC<PDFProps> = ({ url, title }) => {
     return (
       <div>
-            <iframe
+            <iframe className={styles.iframeStyle}
             title="PDF Viewer"
             src={url}
-            width="800"
-            height="600"
+            height="400"
             allowFullScreen
             ></iframe>
 
