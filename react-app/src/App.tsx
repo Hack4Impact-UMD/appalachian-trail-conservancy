@@ -10,29 +10,49 @@ import { ThemeProvider } from "@mui/material";
 import theme from "./muiTheme.ts";
 import VolunteerLoginPage from "./pages/LoginPage/VolunteerLoginPage/VolunteerLoginPage.tsx";
 import AdminLoginPage from "./pages/LoginPage/AdminLoginPage/AdminLoginPage.tsx";
+import NavigationBar from "./components/NavigationBar/NavigationBar.tsx";
+import { useState } from "react";
 
 function App() {
+  const [activeItem, setActiveItem] = useState("Dashboard");
+
+  // Function to handle item click
+  const handleItemClick = (item: string) => {
+    setActiveItem(item);
+  };
+
   return (
-    <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/login/user" element={<VolunteerLoginPage />} />
-          <Route path="/login/admin" element={<AdminLoginPage />} />
-          <Route
-            path="/trainingsInProgress"
-            element={<TrainingsInProgressPage />}
-          />
-          <Route
-            path="/trainingsCompleted"
-            element={<TrainingsCompletedPage />}
-          />
-          <Route path="/trainingLibrary" element={<TrainingLibrary />} />
-          <Route path="/*" element={<NotFoundPage />}></Route>
-        </Routes>
-      </BrowserRouter>
-    </ThemeProvider>
+    <>
+      <ThemeProvider theme={theme}>
+        <BrowserRouter>
+          <Routes>
+            <Route
+              path="/nav"
+              element={
+                <NavigationBar
+                  activeItem={activeItem}
+                  onItemClick={handleItemClick}
+                />
+              }
+            />
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/login/user" element={<VolunteerLoginPage />} />
+            <Route path="/login/admin" element={<AdminLoginPage />} />
+            <Route
+              path="/trainingsInProgress"
+              element={<TrainingsInProgressPage />}
+            />
+            <Route
+              path="/trainingsCompleted"
+              element={<TrainingsCompletedPage />}
+            />
+            <Route path="/trainingLibrary" element={<TrainingLibrary />} />
+            <Route path="/*" element={<NotFoundPage />}></Route>
+          </Routes>
+        </BrowserRouter>
+      </ThemeProvider>
+    </>
   );
 }
 

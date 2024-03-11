@@ -53,6 +53,7 @@ export const styledButtonGreen = {
   border: "2px solid var(--ocean-green)",
   "&:hover": {
     backgroundColor: "var(--ocean-green)",
+    color: "white",
   },
 };
 
@@ -64,6 +65,7 @@ export const styledButtonWhite = {
   border: "2px solid var(--ocean-green)",
   "&:hover": {
     backgroundColor: "white",
+    color: "var(--ocean-green)",
   },
 };
 
