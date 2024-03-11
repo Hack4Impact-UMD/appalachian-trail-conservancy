@@ -19,23 +19,23 @@ interface PDFProps {
     return (
       <div>
         <div className={styles.iframeContainer}>
-            <iframe className={styles.iframeStyle}
+          <iframe className={styles.iframeStyle}
             title="PDF Viewer"
             src={url}
             height="400"
             allowFullScreen
-            ></iframe>
+          ></iframe>
         </div>
   
-            <div className={styles.contentLabel}>
-            {/* Video title */}
-            <h2>{title}</h2>
-    
-            {/* Buttons */}
-            <div>
-              <Button sx={buttonStyle} variant="text"> Back </Button>
-              <Button sx={buttonStyle} variant="text"> Continue </Button>
-            </div>
+        <div className={styles.contentLabel}>
+          {/* Video title */}
+          <h2>{title}</h2>
+  
+          {/* Buttons */}
+          <div className={styles.buttonsContainer}>
+            <Button sx={buttonStyle} variant="text"> Back </Button>
+            <Button sx={buttonStyle} variant="text"> Continue </Button>
+          </div>
         </div>
       </div>
     );

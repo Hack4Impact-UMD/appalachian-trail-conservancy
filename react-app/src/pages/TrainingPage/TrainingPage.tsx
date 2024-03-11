@@ -23,8 +23,11 @@ function TrainingPage() {
 
           {/* CONTENT SECTION */}
           <div className={styles.contentContainer}>
-          <VideoComponent url={"https://www.youtube.com/embed/Cvn96VkhbjE?si=ySyjq6tCmBlqPpT7"} title={"SpongeBob Employee"} />
+            <VideoComponent url={"https://www.youtube.com/embed/Cvn96VkhbjE?si=ySyjq6tCmBlqPpT7"} title={"SpongeBob Employee"} />
           </div>
+          {/*<div className={styles.contentContainer}>
+            <PDFComponent url={"https://https://www.vims.edu/cbnerr/_docs/discovery_labs/SpongeBob.pdf"} title={"SpongeBob Employee"} />
+        </div>*/}
 
         {/* FOOTER */}
         <div className={styles.stepContainer}>

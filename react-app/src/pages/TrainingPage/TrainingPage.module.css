@@ -10,31 +10,31 @@
 /* dummy space for navbar */
 .left {
   left: 0;
-  width: 25%;
+  width: 250px;
   background-color: gray;
 }
 
 .right {
   right: 0;
-  left: 25%;
-  padding-left: 8%;
-  padding-right: 8%;
+  left: 250px;
+  padding-left: 10%;
+  padding-right: 10%;
 }
 
 /* have space between header and view all link  */
 .header {
-  font-size: 1.3em;
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-top: 1.5%;
-  margin-bottom: 1%;
+  margin-top: 0%;
+  margin-bottom: 0%;
 }
 
 .nameHeading {
   color: var(--forest-green);
+  font-size: 3.5em;
 }
 
 .imgContainer {
@@ -53,6 +53,8 @@
   border-radius: 50%;
   object-fit: contain;
 }
+
+/* ^HEADER^ */
 
 .contentContainer{
   
