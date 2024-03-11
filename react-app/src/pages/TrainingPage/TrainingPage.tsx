@@ -23,9 +23,8 @@ function TrainingPage() {
 
           {/* CONTENT SECTION */}
           <div className={styles.contentContainer}>
-          <VideoComponent url={"https://www.youtube.com/embed/Cvn96VkhbjE?si=ySyjq6tCmBlqPpT7"} title={"SpongeBob Employee of The Month 01"} />
+          <VideoComponent url={"https://www.youtube.com/embed/Cvn96VkhbjE?si=ySyjq6tCmBlqPpT7"} title={"SpongeBob Employee"} />
           </div>
-      </div>
 
         {/* FOOTER */}
         <div className={styles.stepContainer}>
@@ -39,6 +38,8 @@ function TrainingPage() {
               </Stepper>
             </Box>
         </div>
+
+      </div>
     </>
   );
 }

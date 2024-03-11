@@ -9,9 +9,9 @@ interface VideoProps {
   
   const buttonStyle = {
     color: "black",
-    padding: "4%",
     borderRadius: "0px",
-    margin: "3%",
+    padding: "15%",
+    width: "250%",
     border: "1px solid black"
   };
 
@@ -19,22 +19,23 @@ interface VideoProps {
     return (
       <div>
         {/* Video iframe */}
+        <div className={styles.iframeContainer}>
         <iframe className={styles.iframeStyle}
           title="Video Player"
-          height="400"
           src={url}
           allow="autoplay; encrypted-media"
           allowFullScreen
         ></iframe>
+        </div>
   
         <div className={styles.contentLabel}>
             {/* Video title */}
             <h2>{title}</h2>
     
             {/* Buttons */}
-            <div>
-            <Button sx={buttonStyle} variant="text"> Back </Button>
-            <Button sx={buttonStyle} variant="text"> Continue </Button>
+            <div className={styles.buttonsContainer}>
+              <div><Button sx={buttonStyle} variant="text"> Back </Button></div>
+              <div><Button sx={buttonStyle} variant="text"> Continue </Button></div>
             </div>
         </div>
       </div>

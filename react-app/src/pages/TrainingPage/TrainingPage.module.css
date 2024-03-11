@@ -30,7 +30,7 @@
   justify-content: space-between;
   align-items: center;
   margin-top: 1.5%;
-  margin-bottom: 2.5%;
+  margin-bottom: 1%;
 }
 
 .nameHeading {
@@ -61,9 +61,8 @@
 .stepContainer {
   background-color: lightblue;
   text-align: center;
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  left: 25%;
+  margin-left: -17.2%;
+  margin-right: -17.2%;
+  margin-top: 3%;
   padding: 3%;
 }

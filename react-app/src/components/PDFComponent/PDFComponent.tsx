@@ -18,13 +18,14 @@ interface PDFProps {
   const PDFComponent: React.FC<PDFProps> = ({ url, title }) => {
     return (
       <div>
+        <div className={styles.iframeContainer}>
             <iframe className={styles.iframeStyle}
             title="PDF Viewer"
             src={url}
             height="400"
             allowFullScreen
             ></iframe>
-
+        </div>
   
             <div className={styles.contentLabel}>
             {/* Video title */}
@@ -32,8 +33,8 @@ interface PDFProps {
     
             {/* Buttons */}
             <div>
-            <Button sx={buttonStyle} variant="text"> Back </Button>
-            <Button sx={buttonStyle} variant="text"> Continue </Button>
+              <Button sx={buttonStyle} variant="text"> Back </Button>
+              <Button sx={buttonStyle} variant="text"> Continue </Button>
             </div>
         </div>
       </div>
