@@ -1,3 +1,7 @@
+.linking {
+  text-decoration: none;
+}
+
 .trainingCard {
   position: relative;
   display: flex;
