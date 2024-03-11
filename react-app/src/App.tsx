@@ -8,6 +8,8 @@ import NotFoundPage from "./pages/NotFoundPage/NotFoundPage.tsx";
 import TrainingLibrary from "./pages/TrainingLibraryPage/TrainingLibraryPage.tsx";
 import { ThemeProvider } from "@mui/material";
 import theme from "./muiTheme.ts";
+import VolunteerLoginPage from "./pages/LoginPage/VolunteerLoginPage/VolunteerLoginPage.tsx";
+import AdminLoginPage from "./pages/LoginPage/AdminLoginPage/AdminLoginPage.tsx";
 import NavigationBar from "./components/NavigationBar/NavigationBar.tsx";
 import { useState } from "react";
 
@@ -25,7 +27,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route
-              path="/"
+              path="/nav"
               element={
                 <NavigationBar
                   activeItem={activeItem}
@@ -35,6 +37,8 @@ function App() {
             />
             <Route path="/" element={<Dashboard />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/login/user" element={<VolunteerLoginPage />} />
+            <Route path="/login/admin" element={<AdminLoginPage />} />
             <Route
               path="/trainingsInProgress"
               element={<TrainingsInProgressPage />}

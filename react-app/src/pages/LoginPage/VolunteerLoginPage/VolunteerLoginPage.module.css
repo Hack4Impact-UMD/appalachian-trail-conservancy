@@ -30,6 +30,48 @@
     text-align: center;
 }
 
+/* login fill in section */
+.login_input{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+/* welcome! */
+.heading{
+    font-size: 33px;
+    color: var(--blue-gray);
+    /* margin: 8px;
+    margin-top: 5%; */
+    margin-bottom: 0%;
+}
+
+/* login text */
+.alignLeft{
+    width: 100%;
+    text-align: left;
+}
+
+/* for input text boxes */
+.label{
+    margin-bottom: 3%; 
+    margin-top: 8%;
+    color: var(--blue-gray);
+}
+
+/* switch to admin login - style to look like link */
+.switch{
+    font-weight: bold;
+    text-decoration: underline;
+    text-underline-position: under;
+    background-color: white;
+    border: none;
+    cursor: pointer;
+    margin: 20% 0% 5% 0%
+}
+
 /* for left panel */
 .leftImgContainer {
     width: 100%;
@@ -54,24 +96,6 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-}
-
-/* login fill in section */
-.login_input{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-}
-
-/* welcome! */
-.heading{
-    font-size: 33px;
-    color: var(--blue-gray);
-    /*  margin: 8px; */
-    margin-top: 7%; 
-    margin-bottom: 9%;
 }
 
 /* mobile */

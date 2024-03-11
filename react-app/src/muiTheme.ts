@@ -46,7 +46,7 @@ theme = createTheme(theme, {
 export default theme;
 
 export const styledButtonGreen = {
-  borderRadius: "0px",
+  borderRadius: "20px",
   boxShadow: "none",
   color: "white",
   backgroundColor: "var(--ocean-green)",
@@ -57,7 +57,7 @@ export const styledButtonGreen = {
 };
 
 export const styledButtonWhite = {
-  borderRadius: "0px",
+  borderRadius: "20px",
   boxShadow: "none",
   color: "var(--ocean-green)",
   backgroundColor: "white",
@@ -65,4 +65,12 @@ export const styledButtonWhite = {
   "&:hover": {
     backgroundColor: "white",
   },
+};
+
+export const styledInputBoxes = {
+  border: "1px solid black",
+  borderRadius: "8px",
+  width: 350,
+  height: 40,
+  "& fieldset": { border: "none" },
 };
