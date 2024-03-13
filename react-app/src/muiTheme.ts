@@ -69,6 +69,18 @@ export const styledButtonWhite = {
   },
 };
 
+export const styledButtonWhiteBlack = {
+  height: "50px",
+  boxShadow: "none",
+  color: "black",
+  backgroundColor: "white",
+  border: "2px solid black",
+  borderRadius: "20px",
+  "&:hover": {
+    backgroundColor: "var(--ocean-green)",
+  },
+};
+
 export const styledInputBoxes = {
   border: "1px solid black",
   borderRadius: "8px",

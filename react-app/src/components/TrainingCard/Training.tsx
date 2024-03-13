@@ -1,6 +1,5 @@
 import React from "react";
 import LinearProgressWithLabel from "./LinearProgressWithLabel";
-
 import styles from "./Training.module.css";
 
 interface TrainingCardProps {
@@ -8,6 +7,7 @@ interface TrainingCardProps {
   title: string;
   subtitle: string;
   progress?: number; // Optional progress value
+  setOpenTrainingPopup: any; // Optional close popup function
 }
 
 const TrainingCard: React.FC<TrainingCardProps> = ({
@@ -15,9 +15,13 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
   title,
   subtitle,
   progress,
+  setOpenTrainingPopup,
 }) => {
   return (
-    <div className={styles["trainingCard"]}>
+    <div
+      className={styles["trainingCard"]}
+      onClick={() => setOpenTrainingPopup(true)}
+    >
       <div className={styles["trainingImage"]}>
         <img src={image} alt="Training Task" />
       </div>
