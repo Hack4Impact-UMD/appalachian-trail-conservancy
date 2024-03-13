@@ -10,20 +10,19 @@
 /* dummy space for navbar */
 .left {
   left: 0;
-  width: 25%;
+  width: 250px;
   background-color: gray;
 }
 
 .right {
   right: 0;
-  left: 25%;
-  padding-left: 8%;
-  padding-right: 8%;
+  left: 250px;
+  padding-left: 10%;
+  padding-right: 10%;
 }
 
 /* have space between header and view all link  */
 .header {
-  font-size: 1.3em;
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
@@ -35,15 +34,16 @@
 
 .nameHeading {
   color: var(--forest-green);
+  font-size: 4em;
 }
 
 .imgContainer {
   display: flex;
   align-items: center;
-  width: 9%;
-  height: 9%;
-  min-width: 50px;
-  min-height: 50px;
+  width: 100px;
+  height: 100px;
+  /*min-width: 50px;
+  min-height: 50px;*/
   overflow: hidden;
 }
 
@@ -86,4 +86,26 @@
   font-size: 1rem;
   font-weight: 700;
   text-align: center;
+}
+
+@media screen and (max-width: 896px) {
+  .header {
+    flex-wrap: nowrap;
+    padding-top: 6.5%;
+    padding-bottom: 6.5%;
+  }
+
+  .nameHeading {
+    display: none;
+  }
+
+  .imgContainer {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .imgContainer img {
+    width: 100px;
+    height: 100px;
+  }
 }
