@@ -20,10 +20,16 @@ function App() {
           <Route path="/pathway" element={<PathwayPage />} />
           <Route path="/quiz" element={<QuizPage />} />
           <Route path="/training" element={<TrainingPage />} />
-          <Route path="/trainingsInProgress" element={<TrainingsInProgressPage />} />
+          <Route
+            path="/trainingsInProgress"
+            element={<TrainingsInProgressPage />}
+          />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/trainingCompleted" element={<TrainingCompletedPage/>}/>
+          <Route
+            path="/trainingCompleted"
+            element={<TrainingCompletedPage />}
+          />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
