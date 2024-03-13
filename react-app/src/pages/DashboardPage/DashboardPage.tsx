@@ -29,8 +29,6 @@ function Dashboard() {
         <TrainingPopup
           open={openTrainingPopup}
           onClose={setOpenTrainingPopup}
-          height={200}
-          width={400}
           image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
         />
         <div className={styles.cardsContainer}>
@@ -46,12 +44,14 @@ function Dashboard() {
             title="Title"
             subtitle="SUBTITLE"
             progress={62}
+            setOpenTrainingPopup={setOpenTrainingPopup}
           />
           <TrainingCard
             image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
             title="Title"
             subtitle="SUBTITLE"
             progress={50}
+            setOpenTrainingPopup={setOpenTrainingPopup}
           />
         </div>
         <div className={styles.subHeader}>

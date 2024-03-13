@@ -70,13 +70,13 @@ export const styledButtonWhite = {
 };
 
 export const styledButtonWhiteBlack = {
+  height: "50px",
   boxShadow: "none",
   color: "black",
   backgroundColor: "white",
   border: "2px solid black",
   borderRadius: "20px",
   "&:hover": {
-    color: "white",
     backgroundColor: "var(--ocean-green)",
   },
 };

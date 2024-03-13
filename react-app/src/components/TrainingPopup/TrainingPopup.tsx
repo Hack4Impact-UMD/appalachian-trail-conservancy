@@ -6,8 +6,6 @@ import { styledButtonWhiteBlack } from "../../muiTheme";
 interface modalPropsType {
   open: boolean;
   onClose: any;
-  height: number;
-  width: number;
   image: string;
 }
 
@@ -29,24 +27,27 @@ const TrainingPopup = ({
           <div className={styles.centered}>
             <div className={styles.modal}>
               <div className={styles.left}>
-                <h2>Training Title</h2>
-                <p>
+                <p className={styles.title}>Training Title</p>
+                <p className={styles.textContainer}>
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
                   do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                   Ut enim ad minim veniam, quis nostrud exercitation ullamco
                   laboris nisi ut aliquip ex ea commodo consequat.
                 </p>
-                <Button variant="contained" sx={styledButtonWhiteBlack}>
-                  Learn More
-                </Button>
+                <div className={styles.learnMoreButton}>
+                  <Button
+                    variant="contained"
+                    sx={{ ...styledButtonWhiteBlack, width: "150px" }}
+                  >
+                    Learn More
+                  </Button>
+                </div>
               </div>
               <div className={styles.right}>
                 <div className={styles.closeButton}>
                   <IoCloseOutline onClick={() => onClose()} />
                 </div>
-                <div className={styles.image}>
-                  <img src={image} />
-                </div>
+                <img src={image} />
               </div>
             </div>
           </div>
