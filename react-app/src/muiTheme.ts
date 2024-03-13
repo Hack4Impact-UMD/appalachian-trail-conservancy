@@ -44,3 +44,25 @@ theme = createTheme(theme, {
 });
 
 export default theme;
+
+export const styledButtonGreen = {
+  borderRadius: "0px",
+  boxShadow: "none",
+  color: "white",
+  backgroundColor: "var(--ocean-green)",
+  border: "2px solid var(--ocean-green)",
+  "&:hover": {
+    backgroundColor: "var(--ocean-green)",
+  },
+};
+
+export const styledButtonWhite = {
+  borderRadius: "0px",
+  boxShadow: "none",
+  color: "var(--ocean-green)",
+  backgroundColor: "white",
+  border: "2px solid var(--ocean-green)",
+  "&:hover": {
+    backgroundColor: "white",
+  },
+};

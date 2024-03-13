@@ -11,18 +11,12 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import styles from "./LoginPage.module.css";
 import primaryLogo from "../../assets/atc-primary-logo.png";
+import { styledButtonGreen, styledButtonWhite } from "../../muiTheme";
 
-const styledSignInButton = {
-  backgroundColor: "var(--ocean-green)",
-  border: "2px solid var(--ocean-green)",
-  borderRadius: "0px",
-  boxShadow: "none",
+const styledRectButton = {
   width: 350,
   marginTop: "5%",
-  padding: "2%",
-  "&:hover": {
-    backgroundColor: "var(--ocean-green)",
-  },
+  padding: "1%",
 };
 
 const styledInputBoxes = {
@@ -114,12 +108,24 @@ function LoginPage() {
 
             {/* sign in button */}
             <Button
-              sx={styledSignInButton}
+              sx={{ ...styledRectButton, ...styledButtonGreen }}
               variant="contained"
               href="#contained-buttons"
             >
               Sign in
             </Button>
+
+            {/* continue as guest button */}
+            <Button
+              sx={{ ...styledRectButton, ...styledButtonWhite }}
+              variant="contained"
+              href="#contained-buttons"
+            >
+              Continue as guest
+            </Button>
+
+            {/* switch to admin link */}
+            <button className={styles.switch}>Switch to Admin Log In</button>
           </div>
         </div>
       </div>

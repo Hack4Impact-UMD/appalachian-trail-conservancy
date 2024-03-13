@@ -1,78 +1,67 @@
-import TrainingCard from "../../components/TrainingCard/Training";
-import styles from "./Dashboard.module.css";
-import Certificate from "../../components/CertificateCard/Certificate";
+import Certificate from "../../components/CertificateCard/Certificate.tsx";
+import TrainingCard from "../../components/TrainingCard/Training.tsx";
+import styles from "./TrainingsCompletedPage.module.css";
 
-import { Link } from "react-router-dom";
-function Dashboard() {
+const TrainingsCompletedPage = () => {
   return (
-    <>
+    <div className={styles.split}>
       <div className={`${styles.split} ${styles.left}`}></div>
       <div className={`${styles.split} ${styles.right}`}>
         <div className={styles.header}>
-          <h1 className={styles.nameHeading}>Hello, Name!</h1>
+          <h1 className={styles.nameHeading}>Trainings Completed</h1>
           {/* PLACEHOLDER IMAGE */}
           <div className={styles.imgContainer}>
             <img src="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg" />
           </div>
         </div>
-        <div className={styles.header}>
-          <h2>Trainings in Progress</h2>
-          {/* CHANGE LINK */}
-          <Link className={styles.viewAllLink} to="/trainingsInProgress">
-            VIEW ALL
-          </Link>
-        </div>
-        <div className={styles.cardsContainer}>
-          <TrainingCard
-            image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-            title="Title"
-            subtitle="Subtitle"
-            progress={23}
-          />
-          <TrainingCard
-            image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-            title="Title"
-            subtitle="Subtitle"
-            progress={23}
-          />
-          <TrainingCard
-            image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-            title="Title"
-            subtitle="Subtitle"
-            progress={23}
-          />
-        </div>
-        <div className={styles.header}>
+        <div className={styles.subHeader}>
           <h2>Certifications</h2>
-          <Link className={styles.viewAllLink} to="/login">
-            VIEW ALL
-          </Link>
         </div>
         <div className={styles.cardsContainer}>
           <Certificate
             image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-            title="Certificate Title"
+            title="Title"
             date="FEBRUARY 26, 2024"
           />
           <Certificate
             image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-            title="Certificate Title"
+            title="Title"
             date="FEBRUARY 26, 2024"
           />
           <Certificate
             image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-            title="Certificate Title"
+            title="Title"
             date="FEBRUARY 26, 2024"
           />
           <Certificate
             image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-            title="Certificate Title"
+            title="Title"
             date="FEBRUARY 26, 2024"
+          />
+        </div>
+        <div className={styles.subHeader}>
+          <h2> Recommended </h2>
+        </div>
+        <div className={styles.cardsContainer}>
+          <TrainingCard
+            image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+            title="Another Training Task"
+            subtitle="Another Subtitle"
+          />
+          <TrainingCard
+            image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+            title="Another Training Task"
+            subtitle="Another Subtitle"
+          />
+          <TrainingCard
+            image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+            title="Another Training Task"
+            subtitle="Another Subtitle"
           />
         </div>
       </div>
-    </>
+    </div>
   );
-}
+};
 
-export default Dashboard;
+export default TrainingsCompletedPage;

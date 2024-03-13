@@ -1,45 +1,50 @@
-/* Training.module.css */
-
-.training-card {
+.trainingCard {
   position: relative;
   display: flex;
   flex-direction: column;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  border-radius: 20px;
   overflow: hidden;
-  width: 300px;
-  height: 300px;
+  width: 275px;
+  height: 275px;
 }
 
-.training-image {
+.trainingImage {
   height: 200px;
   overflow: hidden;
 }
 
-.training-image img {
+.trainingImage img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
 }
 
-.training-content {
+.trainingContent {
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  background-color: #f5f5f5;
+  background-color: var(--sky-blue);
   padding: 16px;
 }
 
-.training-title {
+.trainingTitle {
+  font-size: 1.1em;
   font-weight: bold;
-  margin: 0 0 8px 0;
+  margin: -2px 0 5px 3px;
+  color: var(--blue-gray);
 }
 
-.training-subtitle {
-  margin: 0;
+.trainingSubtitle {
+  font-size: 0.8em;
+  margin: 4px 0 4px 3px;
+  color: var(--blue-gray);
 }
 
-.progress-bar {
-  margin-top: 16px;
+.progressBar {
+  margin: 3px 0 -5px 3px;
+}
+
+.emptyProgressBarContainer {
+  height: 18px; /* Same height as the ProgressBarWithLabel */
 }

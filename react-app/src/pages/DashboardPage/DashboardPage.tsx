@@ -1,17 +1,25 @@
-import styles from "./TrainingsInProgressPage.module.css";
-import TrainingCard from "../../components/TrainingCard/Training.tsx";
+import TrainingCard from "../../components/TrainingCard/Training";
+import styles from "./Dashboard.module.css";
+import Certificate from "../../components/CertificateCard/Certificate";
 
-function TrainingsInProgressPage() {
+import { Link } from "react-router-dom";
+function Dashboard() {
   return (
     <>
       <div className={`${styles.split} ${styles.left}`}></div>
       <div className={`${styles.split} ${styles.right}`}>
         <div className={styles.header}>
-          <h1 className={styles.nameHeading}>Trainings in Progress</h1>
+          <h1 className={styles.nameHeading}>Hello, Name!</h1>
           {/* PLACEHOLDER IMAGE */}
           <div className={styles.imgContainer}>
             <img src="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg" />
           </div>
+        </div>
+        <div className={styles.subHeader}>
+          <h2>Trainings in Progress</h2>
+          <Link className={styles.viewAllLink} to="/trainingsInProgress">
+            VIEW ALL
+          </Link>
         </div>
         <div className={styles.cardsContainer}>
           <TrainingCard
@@ -24,33 +32,41 @@ function TrainingsInProgressPage() {
             image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
             title="Title"
             subtitle="SUBTITLE"
-            progress={7}
+            progress={62}
           />
           <TrainingCard
             image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
             title="Title"
             subtitle="SUBTITLE"
-            progress={99}
+            progress={50}
           />
         </div>
         <div className={styles.subHeader}>
-          <h2>Recommended</h2>
+          <h2>Certifications</h2>
+          <Link className={styles.viewAllLink} to="/trainingsCompleted">
+            VIEW ALL
+          </Link>
         </div>
         <div className={styles.cardsContainer}>
-          <TrainingCard
+          <Certificate
             image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
             title="Title"
-            subtitle="SUBTITLE"
+            date="FEBRUARY 26, 2024"
           />
-          <TrainingCard
+          <Certificate
             image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
             title="Title"
-            subtitle="SUBTITLE"
+            date="FEBRUARY 26, 2024"
           />
-          <TrainingCard
+          <Certificate
             image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
             title="Title"
-            subtitle="SUBTITLE"
+            date="FEBRUARY 26, 2024"
+          />
+          <Certificate
+            image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+            title="Title"
+            date="FEBRUARY 26, 2024"
           />
         </div>
       </div>
@@ -58,4 +74,4 @@ function TrainingsInProgressPage() {
   );
 }
 
-export default TrainingsInProgressPage;
+export default Dashboard;

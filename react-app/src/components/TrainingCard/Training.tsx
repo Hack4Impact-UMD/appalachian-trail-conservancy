@@ -17,19 +17,22 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
   progress,
 }) => {
   return (
-    <div className={styles["training-card"]}>
-      <div className={styles["training-image"]}>
+    <div className={styles["trainingCard"]}>
+      <div className={styles["trainingImage"]}>
         <img src={image} alt="Training Task" />
       </div>
-      <div className={styles["training-content"]}>
-        <div className={styles["training-details"]}>
-          <h2 className={styles["training-title"]}>{title}</h2>
-          <p className={styles["training-subtitle"]}>{subtitle}</p>
+      <div className={styles["trainingContent"]}>
+        <div className={styles["trainingDetails"]}>
+          <h2 className={styles["trainingTitle"]}>{title}</h2>
+          <p className={styles["trainingSubtitle"]}>{subtitle}</p>
         </div>
         {progress !== undefined && (
-          <div className={styles["progress-bar"]}>
+          <div className={styles["progressBar"]}>
             <LinearProgressWithLabel value={progress} />
           </div>
+        )}
+        {progress == undefined && (
+          <div className={styles["emptyProgressBarContainer"]} />
         )}
       </div>
     </div>

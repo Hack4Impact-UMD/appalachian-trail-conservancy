@@ -1,13 +1,11 @@
 import "./index.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import HomePage from "./pages/HomePage/HomePage.tsx";
-import PathwayPage from "./pages/PathwayPage/PathwayPage.tsx";
-import QuizPage from "./pages/QuizPage/QuizPage.tsx";
-import TrainingPage from "./pages/TrainingPage/TrainingPage.tsx";
 import TrainingsInProgressPage from "./pages/TrainingsInProgressPage/TrainingsInProgressPage.tsx";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
-import Dashboard from "./pages/DashboardPage/Dashboard.tsx";
-import TrainingCompletedPage from "./pages/TrainingCompletedPage/TrainingCompletedPage.tsx";
+import Dashboard from "./pages/DashboardPage/DashboardPage.tsx";
+import TrainingsCompletedPage from "./pages/TrainingsCompletedPage/TrainingsCompletedPage.tsx";
+import NotFoundPage from "./pages/NotFoundPage/NotFoundPage.tsx";
+import TrainingLibrary from "./pages/TrainingLibraryPage/TrainingLibraryPage.tsx";
 import { ThemeProvider } from "@mui/material";
 import theme from "./muiTheme.ts";
 
@@ -16,20 +14,18 @@ function App() {
     <ThemeProvider theme={theme}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/pathway" element={<PathwayPage />} />
-          <Route path="/quiz" element={<QuizPage />} />
-          <Route path="/training" element={<TrainingPage />} />
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route
             path="/trainingsInProgress"
             element={<TrainingsInProgressPage />}
           />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/dashboard" element={<Dashboard />} />
           <Route
-            path="/trainingCompleted"
-            element={<TrainingCompletedPage />}
+            path="/trainingsCompleted"
+            element={<TrainingsCompletedPage />}
           />
+          <Route path="/trainingLibrary" element={<TrainingLibrary />} />
+          <Route path="/*" element={<NotFoundPage />}></Route>
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
