@@ -1,9 +1,14 @@
+import { useState } from "react";
 import TrainingCard from "../../components/TrainingCard/Training";
 import styles from "./Dashboard.module.css";
 import Certificate from "../../components/CertificateCard/Certificate";
+import TrainingPopup from "../../components/TrainingPopup/TrainingPopup";
 
 import { Link } from "react-router-dom";
+
 function Dashboard() {
+  const [openTrainingPopup, setOpenTrainingPopup] = useState<boolean>(false);
+
   return (
     <>
       <div className={`${styles.split} ${styles.left}`}></div>
@@ -21,12 +26,20 @@ function Dashboard() {
             VIEW ALL
           </Link>
         </div>
+        <TrainingPopup
+          open={openTrainingPopup}
+          onClose={setOpenTrainingPopup}
+          height={200}
+          width={400}
+          image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+        />
         <div className={styles.cardsContainer}>
           <TrainingCard
             image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
             title="Title"
             subtitle="SUBTITLE"
             progress={23}
+            setOpenTrainingPopup={setOpenTrainingPopup}
           />
           <TrainingCard
             image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"

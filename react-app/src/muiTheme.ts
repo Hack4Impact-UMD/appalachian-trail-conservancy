@@ -66,3 +66,15 @@ export const styledButtonWhite = {
     backgroundColor: "white",
   },
 };
+
+export const styledButtonWhiteBlack = {
+  boxShadow: "none",
+  color: "black",
+  backgroundColor: "white",
+  border: "2px solid black",
+  borderRadius: "20px",
+  "&:hover": {
+    color: "white",
+    backgroundColor: "var(--ocean-green)",
+  },
+};

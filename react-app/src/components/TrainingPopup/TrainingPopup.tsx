@@ -1,11 +1,11 @@
 import styles from "./TrainingPopup.module.css";
 import { Button } from "@mui/material";
 import { IoCloseOutline } from "react-icons/io5";
+import { styledButtonWhiteBlack } from "../../muiTheme";
 
 interface modalPropsType {
   open: boolean;
   onClose: any;
-  children: React.ReactNode;
   height: number;
   width: number;
   image: string;
@@ -14,13 +14,8 @@ interface modalPropsType {
 const TrainingPopup = ({
   open,
   onClose,
-  children,
-  height,
-  width,
   image,
 }: modalPropsType): React.ReactElement => {
-  const heightString = height + "px";
-  const widthString = width + "px";
   return (
     <div
       className={styles.modalContainer}
@@ -32,19 +27,22 @@ const TrainingPopup = ({
         <>
           <div className={styles.background} onClick={() => onClose()} />
           <div className={styles.centered}>
-            <div
-              className={styles.modal}
-              style={{ height: heightString, width: widthString }}
-            >
+            <div className={styles.modal}>
               <div className={styles.left}>
-                {children}
-                <Button variant="contained" href="#contained-buttons">
-                  Training
+                <h2>Training Title</h2>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                  laboris nisi ut aliquip ex ea commodo consequat.
+                </p>
+                <Button variant="contained" sx={styledButtonWhiteBlack}>
+                  Learn More
                 </Button>
               </div>
               <div className={styles.right}>
                 <div className={styles.closeButton}>
-                  <IoCloseOutline onClick={onClose} />
+                  <IoCloseOutline onClick={() => onClose()} />
                 </div>
                 <div className={styles.image}>
                   <img src={image} />
