@@ -1,6 +1,26 @@
 import { LinearProgress, Button } from '@mui/material';
 import styles from "./QuizResult.module.css";
 
+const styledProgressShape = {
+    height: 24, 
+    borderRadius: 12,
+};
+
+// if score > 0, dark green & light gray 
+const styledProgressPass = {
+    ...styledProgressShape,
+    backgroundColor: "lightgray", 
+    '& .MuiLinearProgress-bar': {
+        backgroundColor: "var(--forest-green)", 
+    },
+}
+
+// if score = 0, dark gray
+const styledProgressFail = {
+    ...styledProgressShape,
+    backgroundColor: "dimgray", 
+}
+
 const QuizResult = (props: { achievedScore: number; totalScore: number; passingScore: number; }) => {
     const { achievedScore, totalScore, passingScore } = props;
     const passed = achievedScore >= passingScore
@@ -33,20 +53,13 @@ const QuizResult = (props: { achievedScore: number; totalScore: number; passingS
                     <LinearProgress 
                         variant="determinate" 
                         value={achievedScore * 10} 
-                        sx={{
-                            height: 24, 
-                            backgroundColor: "lightgray", 
-                            borderRadius: 12,
-                            '& .MuiLinearProgress-bar': {
-                              backgroundColor: "var(--forest-green)", 
-                            },
-                          }}
+                        sx={achievedScore == 0 ? styledProgressFail : styledProgressPass}
                     />
                 </div>
                 
             </div>
             
-            {/* add quiz card here */}
+            {/* add quiz card here... this just blocks out a section of space*/}
             <div className={styles.quizCardPlaceholder}></div>
 
             {/* buttons */}
