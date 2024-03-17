@@ -10,6 +10,7 @@ import { ThemeProvider } from "@mui/material";
 import theme from "./muiTheme.ts";
 import VolunteerLoginPage from "./pages/LoginPage/VolunteerLoginPage/VolunteerLoginPage.tsx";
 import AdminLoginPage from "./pages/LoginPage/AdminLoginPage/AdminLoginPage.tsx";
+import QuizResult from "./pages/QuizResult/QuizResult.tsx";
 import NavigationBar from "./components/NavigationBar/NavigationBar.tsx";
 import { useState } from "react";
 
@@ -39,16 +40,12 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/login/user" element={<VolunteerLoginPage />} />
             <Route path="/login/admin" element={<AdminLoginPage />} />
-            <Route
-              path="/trainingsInProgress"
-              element={<TrainingsInProgressPage />}
-            />
-            <Route
-              path="/trainingsCompleted"
-              element={<TrainingsCompletedPage />}
-            />
+            <Route path="/trainingsInProgress" element={<TrainingsInProgressPage />} />
+            <Route path="/trainingsCompleted" element={<TrainingsCompletedPage />} />
             <Route path="/trainingLibrary" element={<TrainingLibrary />} />
-            <Route path="/*" element={<NotFoundPage />}></Route>
+            <Route path="/*" element={<NotFoundPage />} />
+
+            <Route path="/quiz/result" element={<QuizResult achievedScore={6} totalScore={10} passingScore={8}/>}></Route>
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
