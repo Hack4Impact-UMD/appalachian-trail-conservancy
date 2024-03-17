@@ -10,28 +10,39 @@ import { ThemeProvider } from "@mui/material";
 import theme from "./muiTheme.ts";
 import VolunteerLoginPage from "./pages/LoginPage/VolunteerLoginPage/VolunteerLoginPage.tsx";
 import AdminLoginPage from "./pages/LoginPage/AdminLoginPage/AdminLoginPage.tsx";
+import RequireAuth from "./auth/RequireAuth/RequireAuth.tsx";
+import { AuthProvider } from "./auth/AuthProvider.tsx";
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/login/user" element={<VolunteerLoginPage />} />
-          <Route path="/login/admin" element={<AdminLoginPage />} />
-          <Route
-            path="/trainingsInProgress"
-            element={<TrainingsInProgressPage />}
-          />
-          <Route
-            path="/trainingsCompleted"
-            element={<TrainingsCompletedPage />}
-          />
-          <Route path="/trainingLibrary" element={<TrainingLibrary />} />
-          <Route path="/*" element={<NotFoundPage />}></Route>
-        </Routes>
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/login/user" element={<VolunteerLoginPage />} />
+            <Route path="/login/admin" element={<AdminLoginPage />} />
+            <Route
+              path="/"
+              element={
+                <RequireAuth>
+                  <Dashboard />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/trainingsInProgress"
+              element={<TrainingsInProgressPage />}
+            />
+            <Route
+              path="/trainingsCompleted"
+              element={<TrainingsCompletedPage />}
+            />
+            <Route path="/trainingLibrary" element={<TrainingLibrary />} />
+            <Route path="/*" element={<NotFoundPage />}></Route>
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </ThemeProvider>
   );
 }

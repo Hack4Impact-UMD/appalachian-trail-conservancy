@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState } from "react";
 import {
   FormControl,
   IconButton,
@@ -10,19 +10,34 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Link } from "react-router-dom";
+import { authenticateUser } from "../../../backend/AuthFunctions";
+import { AuthError } from "firebase/auth";
+import { useNavigate } from "react-router";
+import Loading from "../../../components/LoadingScreen/Loading";
 import styles from "./VolunteerLoginPage.module.css";
 import primaryLogo from "../../../assets/atc-primary-logo.png";
-import { styledButtonGreen, styledButtonWhite, styledInputBoxes } from "../../../muiTheme";
+import {
+  styledButtonGreen,
+  styledButtonWhite,
+  styledInputBoxes,
+} from "../../../muiTheme";
 
 const styledRectButton = {
   width: 350,
   marginTop: "5%",
   padding: "1%",
-  height: 40
+  height: 40,
 };
 
 function VolunteerLoginPage() {
-  const [showPassword, setShowPassword] = React.useState(false);
+  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [openForgotModal, setOpenForgotModal] = useState<boolean>(false);
+  const [showLoading, setShowLoading] = useState<boolean>(false);
+  const [failureMessage, setFailureMessage] = useState<string>("");
+
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -30,6 +45,32 @@ function VolunteerLoginPage() {
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
     event.preventDefault();
+  };
+
+  const handleSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setShowLoading(true);
+
+    if (email && password) {
+      authenticateUser(email, password)
+        .then(() => {
+          setShowLoading(false);
+          navigate("/");
+        })
+        .catch((error) => {
+          setShowLoading(false);
+          const code = (error as AuthError).code;
+          if (code === "auth/too-many-requests") {
+            setFailureMessage(
+              "*Access to this account has been temporarily disabled due to many failed login attempts. You can reset your password or try again later."
+            );
+          } else {
+            setFailureMessage("*Incorrect email address or password");
+          }
+        });
+    } else {
+      setFailureMessage("*Incorrect email address or password");
+    }
   };
 
   return (
@@ -53,70 +94,89 @@ function VolunteerLoginPage() {
             {/* welcome label */}
             <h1 className={styles.heading}>Welcome!</h1>
 
-            {/* email field */}
-            <div className={styles.alignLeft}>
-              <h3 className={styles.label}>Email</h3>
-            </div>
-            <TextField
-              sx={styledInputBoxes}
-              label=""
-              variant="outlined"
-              size="small"
-            />
-
-            {/* password field */}
-            <div className={styles.alignLeft}>
-              <h3 className={styles.label}>Password</h3>
-            </div>
-            <FormControl variant="outlined">
-              <InputLabel htmlFor="outlined-adornment-password"></InputLabel>
-              <OutlinedInput
-                sx={styledInputBoxes}
-                id="outlined-adornment-password"
-                type={showPassword ? "text" : "password"}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      edge="end"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
+            <form
+              onSubmit={(event) => {
+                if (!openForgotModal) {
+                  handleSignIn(event);
                 }
-                label="Password"
+              }}
+            >
+              {/* email field */}
+              <div className={styles.alignLeft}>
+                <h3 className={styles.label}>Email</h3>
+              </div>
+              <TextField
+                value={email}
+                sx={styledInputBoxes}
+                label=""
+                variant="outlined"
+                size="small"
+                onChange={(event) => {
+                  setEmail(event.target.value);
+                }}
               />
-            </FormControl>
 
-            {/* forgot password button */}
-            <div className={styles.alignLeft}>
-              <Button
-                sx={{ color: "var(--ocean-green)", padding: "0px", margin: "8px 0px 18px 0px" }}
-                variant="text"
+              {/* password field */}
+              <div className={styles.alignLeft}>
+                <h3 className={styles.label}>Password</h3>
+              </div>
+              <FormControl variant="outlined">
+                <InputLabel htmlFor="outlined-adornment-password"></InputLabel>
+                <OutlinedInput
+                  value={password}
+                  sx={styledInputBoxes}
+                  id="outlined-adornment-password"
+                  type={showPassword ? "text" : "password"}
+                  onChange={(event) => {
+                    setPassword(event.target.value);
+                  }}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  label="Password"
+                />
+              </FormControl>
+
+              {/* forgot password button */}
+              <div className={styles.alignLeft}>
+                <Button
+                  sx={{
+                    color: "var(--ocean-green)",
+                    padding: "0px",
+                    margin: "8px 0px 18px 0px",
+                  }}
+                  variant="text"
+                >
+                  Forgot Password?
+                </Button>
+              </div>
+              <p
+                className={
+                  failureMessage
+                    ? styles.showFailureMessage
+                    : styles.errorContainer
+                }
               >
-                Forgot Password?
+                {failureMessage}
+              </p>
+              {/* sign in button */}
+              <Button
+                type="submit"
+                sx={{ ...styledRectButton, ...styledButtonGreen }}
+                variant="contained"
+              >
+                {showLoading ? <Loading></Loading> : "Sign In"}
               </Button>
-            </div>
-
-            {/* sign in button */}
-            <Button
-              sx={{ ...styledRectButton, ...styledButtonGreen }}
-              variant="contained"
-              href="#contained-buttons"
-            >
-              Sign in
-            </Button>
-
-            {/* continue as guest button */}
-            <Button
-              sx={{ ...styledRectButton, ...styledButtonWhite }}
-              variant="contained"
-              href="#contained-buttons"
-            >
-              Continue as guest
-            </Button>
+            </form>
 
             {/* switch to admin link */}
             <Link to="/login/admin">
