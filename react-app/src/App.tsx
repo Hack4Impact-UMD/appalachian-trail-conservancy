@@ -39,16 +39,10 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/login/user" element={<VolunteerLoginPage />} />
             <Route path="/login/admin" element={<AdminLoginPage />} />
-            <Route
-              path="/trainingsInProgress"
-              element={<TrainingsInProgressPage />}
-            />
-            <Route
-              path="/trainingsCompleted"
-              element={<TrainingsCompletedPage />}
-            />
+            <Route path="/trainingsInProgress" element={<TrainingsInProgressPage />} />
+            <Route path="/trainingsCompleted" element={<TrainingsCompletedPage />} />
             <Route path="/trainingLibrary" element={<TrainingLibrary />} />
-            <Route path="/*" element={<NotFoundPage />}></Route>
+            <Route path="/*" element={<NotFoundPage />} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
