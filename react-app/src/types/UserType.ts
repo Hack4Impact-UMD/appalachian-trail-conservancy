@@ -1,13 +1,14 @@
 export interface User {
   auth_id: string;
-  id: string;
   email: string;
   type: Role;
 }
 
-export interface Volunteer extends User {
-  auth_id: string;
+export interface VolunteerID extends Volunteer {
   id: string;
+}
+
+export interface Volunteer extends User {
   firstName: string;
   lastName: string;
   trainingInformation: VolunteerTraining[];
@@ -32,6 +33,7 @@ export interface PathwayTraining {
 
 export interface Admin extends User {
   name: string;
+  id: string;
 }
 
 // Should correspond with firestore & cloud functions
