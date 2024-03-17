@@ -45,7 +45,7 @@ function App() {
             <Route path="/trainingLibrary" element={<TrainingLibrary />} />
             <Route path="/*" element={<NotFoundPage />} />
 
-            <Route path="/quiz/result" element={<QuizResult achievedScore={3} totalScore={10} passingScore={8}/>}></Route>
+            <Route path="/quiz/result" element={<QuizResult achievedScore={1} totalScore={10} passingScore={8}/>}></Route>
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

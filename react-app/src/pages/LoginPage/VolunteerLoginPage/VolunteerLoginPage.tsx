@@ -12,7 +12,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import styles from "./VolunteerLoginPage.module.css";
 import primaryLogo from "../../../assets/atc-primary-logo.png";
-import { styledButtonGreen, styledButtonWhite, styledInputBoxes } from "../../../muiTheme";
+import { styledButtonGreen, styledButtonWhiteGreen, styledInputBoxes } from "../../../muiTheme";
 
 const styledRectButton = {
   width: 350,
@@ -111,7 +111,7 @@ function VolunteerLoginPage() {
 
             {/* continue as guest button */}
             <Button
-              sx={{ ...styledRectButton, ...styledButtonWhite }}
+              sx={{ ...styledRectButton, ...styledButtonWhiteGreen }}
               variant="contained"
               href="#contained-buttons"
             >

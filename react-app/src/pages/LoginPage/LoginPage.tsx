@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import styles from "./LoginPage.module.css";
 import primaryLogo from "../../assets/atc-primary-logo.png";
-import { styledButtonGreen, styledButtonWhite } from "../../muiTheme";
+import { styledButtonGreen, styledButtonWhiteGreen } from "../../muiTheme";
 import { Button } from "@mui/material";
 
 const styledRectButton = {
@@ -42,7 +42,7 @@ function LoginPage() {
             </Link>
             <Link to="/login/admin">
               <Button
-                sx={{ ...styledRectButton, ...styledButtonWhite }}
+                sx={{ ...styledRectButton, ...styledButtonWhiteGreen }}
                 variant="contained"
                 href="#contained-buttons">
                 Sign in as admin
