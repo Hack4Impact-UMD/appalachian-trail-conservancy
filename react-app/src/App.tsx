@@ -12,17 +12,8 @@ import VolunteerLoginPage from "./pages/LoginPage/VolunteerLoginPage/VolunteerLo
 import AdminLoginPage from "./pages/LoginPage/AdminLoginPage/AdminLoginPage.tsx";
 import RequireAuth from "./auth/RequireAuth/RequireAuth.tsx";
 import { AuthProvider } from "./auth/AuthProvider.tsx";
-import NavigationBar from "./components/NavigationBar/NavigationBar.tsx";
-import { useState } from "react";
 
 function App() {
-  const [activeItem, setActiveItem] = useState("Dashboard");
-
-  // Function to handle item click
-  const handleItemClick = (item: string) => {
-    setActiveItem(item);
-  };
-
   return (
     <ThemeProvider theme={theme}>
       <AuthProvider>
@@ -41,14 +32,36 @@ function App() {
             />
             <Route
               path="/trainingsInProgress"
-              element={<TrainingsInProgressPage />}
+              element={
+                <RequireAuth>
+                  <TrainingsInProgressPage />
+                </RequireAuth>
+              }
             />
             <Route
               path="/trainingsCompleted"
-              element={<TrainingsCompletedPage />}
+              element={
+                <RequireAuth>
+                  <TrainingsCompletedPage />
+                </RequireAuth>
+              }
             />
-            <Route path="/trainingLibrary" element={<TrainingLibrary />} />
-            <Route path="/*" element={<NotFoundPage />}></Route>
+            <Route
+              path="/trainingLibrary"
+              element={
+                <RequireAuth>
+                  <TrainingLibrary />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/*"
+              element={
+                <RequireAuth>
+                  <NotFoundPage />
+                </RequireAuth>
+              }
+            ></Route>
           </Routes>
         </BrowserRouter>
       </AuthProvider>

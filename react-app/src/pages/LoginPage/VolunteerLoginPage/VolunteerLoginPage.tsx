@@ -16,11 +16,7 @@ import { useNavigate } from "react-router";
 import Loading from "../../../components/LoadingScreen/Loading";
 import styles from "./VolunteerLoginPage.module.css";
 import primaryLogo from "../../../assets/atc-primary-logo.png";
-import {
-  styledButtonGreen,
-  styledButtonWhite,
-  styledInputBoxes,
-} from "../../../muiTheme";
+import { styledButtonGreen, styledInputBoxes } from "../../../muiTheme";
 
 const styledRectButton = {
   width: 350,
@@ -32,8 +28,10 @@ const styledRectButton = {
 function VolunteerLoginPage() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  //Add Forgot Password Popup
   const [openForgotModal, setOpenForgotModal] = useState<boolean>(false);
   const [showLoading, setShowLoading] = useState<boolean>(false);
+  //Add Error Handling
   const [failureMessage, setFailureMessage] = useState<string>("");
 
   const [email, setEmail] = useState<string>("");

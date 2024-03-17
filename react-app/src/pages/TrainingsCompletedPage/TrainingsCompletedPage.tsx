@@ -1,11 +1,12 @@
 import Certificate from "../../components/CertificateCard/Certificate.tsx";
 import TrainingCard from "../../components/TrainingCard/Training.tsx";
 import styles from "./TrainingsCompletedPage.module.css";
+import NavigationBar from "../../components/NavigationBar/NavigationBar.tsx";
 
 const TrainingsCompletedPage = () => {
   return (
-    <div className={styles.split}>
-      <div className={`${styles.split} ${styles.left}`}></div>
+    <>
+      <NavigationBar />
       <div className={`${styles.split} ${styles.right}`}>
         <div className={styles.header}>
           <h1 className={styles.nameHeading}>Trainings Completed</h1>
@@ -60,7 +61,7 @@ const TrainingsCompletedPage = () => {
           />
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

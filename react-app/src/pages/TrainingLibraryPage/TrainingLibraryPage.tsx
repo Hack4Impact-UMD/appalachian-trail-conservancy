@@ -2,8 +2,8 @@ import styles from "./TrainingLibrary.module.css";
 import { IoIosSearch } from "react-icons/io";
 import { TextField, InputAdornment } from "@mui/material";
 import TrainingCard from "../../components/TrainingCard/Training";
-import { useState } from "react";
-import React from "react";
+import { useState, useEffect } from "react";
+import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import debounce from "lodash.debounce";
 
 const styledSearchBar = {
@@ -42,7 +42,8 @@ function TrainingLibrary() {
     );
     setFilteredTrainings(filtered);
   };
-  React.useEffect(() => {
+
+  useEffect(() => {
     filterTrainings();
   }, [searchQuery]);
 
@@ -54,7 +55,7 @@ function TrainingLibrary() {
 
   return (
     <>
-      <div className={`${styles.split} ${styles.left}`}></div>
+      <NavigationBar />
       <div className={`${styles.split} ${styles.right}`}>
         <div className={styles.header}>
           <h1 className={styles.nameHeading}>Training Library</h1>
