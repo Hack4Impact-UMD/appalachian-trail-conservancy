@@ -49,10 +49,10 @@ export const styledButtonGreen = {
   borderRadius: "20px",
   boxShadow: "none",
   color: "white",
-  backgroundColor: "var(--ocean-green)",
-  border: "2px solid var(--ocean-green)",
+  backgroundColor: "var(--forest-green)",
+  border: "2px solid var(--forest-green)",
   "&:hover": {
-    backgroundColor: "var(--ocean-green)",
+    backgroundColor: "var(--forest-green)",
     color: "white",
   },
 };
@@ -60,12 +60,12 @@ export const styledButtonGreen = {
 export const styledButtonWhite = {
   borderRadius: "20px",
   boxShadow: "none",
-  color: "var(--ocean-green)",
+  color: "var(--forest-green)",
   backgroundColor: "white",
-  border: "2px solid var(--ocean-green)",
+  border: "2px solid var(--forest-green)",
   "&:hover": {
     backgroundColor: "white",
-    color: "var(--ocean-green)",
+    color: "var(--forest-green)",
   },
 };
 
