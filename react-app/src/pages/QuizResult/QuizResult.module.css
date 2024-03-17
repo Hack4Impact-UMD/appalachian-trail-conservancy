@@ -1,0 +1,60 @@
+/* scrollable */
+.body {
+    display: flex;
+    overflow-y: auto;
+    flex-direction: column;
+    margin: 2%;
+}
+
+/* badge image */
+.imgContainer {
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+}
+
+.quizCardPlaceholder {
+    height: 500px;
+}
+
+.feedback {
+    display: flex;
+    flex-direction: row;
+}
+
+.feedbackRight {
+    width: 100%;
+    flex-direction: column;
+    margin-left: 4%;
+}
+
+h3 {
+    font-size: 24px;
+}
+
+.score {
+    display: flex;
+    flex-direction: row;
+    font-weight: bold;
+    margin: 2% 0% 2% 0%;
+}
+
+.bigNum {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    font-size: 46px;
+}
+
+.smallNum {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    font-size: 22px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: flex-end; 
+}
+
