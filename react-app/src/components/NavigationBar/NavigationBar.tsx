@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
 import "./NavigationBar.css";
 import atcprimarylogo from "../../assets/atc-primary-logo.png";
