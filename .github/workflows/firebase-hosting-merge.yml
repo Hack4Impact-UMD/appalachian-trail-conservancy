@@ -11,7 +11,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: npm ci && npm run build
+        with:
+          persist-credentials: false
+      - name: Install npm dependencies
+        working-directory: ./react-app
+        run: npm install
+      - name: npm init
+        run: npm init -y
+      - name: deploy it
+        working-directory: ./react-app
+        run: CI=false && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           entryPoint: ./react-app
