@@ -1,0 +1,29 @@
+.quiz-card {
+    background-color: #daafaf;
+    border-radius: 10px; 
+    padding-left: 30px;
+    padding-top: 7px;
+    padding-bottom: 15px;
+    margin-bottom: 20px; 
+    margin-left: 20px;
+    width: 93%;
+    margin-top: 20px;
+}
+
+.question {
+    margin-bottom: 10px; 
+}
+
+.question-number {
+    font-size: 20px; 
+    font-weight: bold;
+}
+
+.question-text {
+    font-weight: bold; 
+}
+
+
+.MuiTypography-body1 {
+    color: black !important;
+}
