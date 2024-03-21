@@ -11,6 +11,7 @@ import theme from "./muiTheme.ts";
 import VolunteerLoginPage from "./pages/LoginPage/VolunteerLoginPage/VolunteerLoginPage.tsx";
 import AdminLoginPage from "./pages/LoginPage/AdminLoginPage/AdminLoginPage.tsx";
 import NavigationBar from "./components/NavigationBar/NavigationBar.tsx";
+import QuizCard from "./pages/QuizComponent/QuizCard/QuizCard.tsx";
 import { useState } from "react";
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
                 />
               }
             />
+
             <Route path="/" element={<Dashboard />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/login/user" element={<VolunteerLoginPage />} />
