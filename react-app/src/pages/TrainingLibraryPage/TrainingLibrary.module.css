@@ -57,6 +57,8 @@
 .searchBarContainer {
   margin-top: 2rem;
   margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
 }
 
 .cardsContainer {
@@ -66,5 +68,14 @@
   justify-content: space-between;
   row-gap: 1em;
   column-gap: 1em;
+  margin-bottom: 1rem;
+}
+
+.card{
+  margin-bottom: 1%;
+}
+
+.subHeader h2 {
+  margin-left: 0;
   margin-bottom: 1rem;
 }
