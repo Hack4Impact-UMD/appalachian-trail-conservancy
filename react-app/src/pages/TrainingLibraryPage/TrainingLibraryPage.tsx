@@ -19,6 +19,7 @@ const styledButton = {
   margin: "1%",
   marginTop: "0%",
   marginLeft: "0.5%",
+  marginRight: "0%",
   height: 38,
 "& fieldset": { border: "none" },
   paddingLeft: "2.5%",
