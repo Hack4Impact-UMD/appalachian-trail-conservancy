@@ -33,9 +33,10 @@ function AdminLoginPage() {
   };
 
   return (
-    <>
-      <div className={`${styles.split} ${styles.left}`}>
-        <div className={styles.leftImgContainer}>
+    <div className={styles.pageContainer}>
+      <div className={`${styles.split}`}>
+        <div className={styles.left}>
+          {/* <div className={styles.leftImgContainer}> */}
           {/* REPLACE IMAGE */}
           <img
             src={
@@ -43,10 +44,10 @@ function AdminLoginPage() {
             }
           />
         </div>
-      </div>
-      <div className={`${styles.split} ${styles.right}`}>
-        <div className={styles.centered}>
-          <div className={styles.login_input}>
+        {/* </div>
+      <div className={`${styles.split}`}> */}
+        <div className={styles.right}>
+          <div className={styles.centered}>
             <div className={styles.rightImgContainer}>
               <img src={primaryLogo} />
             </div>
@@ -80,8 +81,7 @@ function AdminLoginPage() {
                       aria-label="toggle password visibility"
                       onClick={handleClickShowPassword}
                       onMouseDown={handleMouseDownPassword}
-                      edge="end"
-                    >
+                      edge="end">
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
@@ -93,9 +93,12 @@ function AdminLoginPage() {
             {/* forgot password button */}
             <div className={styles.alignLeft}>
               <Button
-                sx={{ color: "var(--ocean-green)", padding: "0px", margin: "8px 0px 18px 0px" }}
-                variant="text"
-              >
+                sx={{
+                  color: "var(--ocean-green)",
+                  padding: "0px",
+                  margin: "8px 0px 18px 0px",
+                }}
+                variant="text">
                 Forgot Password?
               </Button>
             </div>
@@ -104,19 +107,18 @@ function AdminLoginPage() {
             <Button
               sx={{ ...styledRectButton, ...styledButtonGreen }}
               variant="contained"
-              href="#contained-buttons"
-            >
+              href="#contained-buttons">
               Sign in
             </Button>
 
             {/* switch to user link */}
             <Link to="/login/user">
-                <button className={styles.switch}>Switch to User Log In</button>
+              <button className={styles.switch}>Switch to User Log In</button>
             </Link>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

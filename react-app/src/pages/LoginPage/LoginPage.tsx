@@ -13,7 +13,7 @@ const styledRectButton = {
 
 function LoginPage() {
   return (
-    <>
+    <div className={styles.pageContainer}>
       <div className={`${styles.split} ${styles.left}`}>
         <div className={styles.leftImgContainer}>
           {/* REPLACE IMAGE */}
@@ -25,33 +25,31 @@ function LoginPage() {
         </div>
       </div>
       <div className={`${styles.split} ${styles.right}`}>
-        <div className={styles.centered}>
-          <div className={styles.login_input}>
-            <div className={styles.rightImgContainer}>
-              <img src={primaryLogo} />
-            </div>
-            {/* welcome label */}
-            <h1 className={styles.heading}>Welcome!</h1>
-            <Link to="/login/user">
-              <Button
-                sx={{ ...styledRectButton, ...styledButtonGreen }}
-                variant="contained"
-                href="#contained-buttons">
-                Sign in as user
-              </Button>
-            </Link>
-            <Link to="/login/admin">
-              <Button
-                sx={{ ...styledRectButton, ...styledButtonWhite }}
-                variant="contained"
-                href="#contained-buttons">
-                Sign in as admin
-              </Button>
-            </Link>
+        <div className={`${styles.centered} ${styles.login_input}`}>
+          {/* <div className={styles.login_input}> */}
+          <div className={styles.rightImgContainer}>
+            <img src={primaryLogo} />
           </div>
+          {/* welcome label */}
+          <h1 className={styles.heading}>Welcome!</h1>
+          <Link to="/login/user">
+            <Button
+              sx={{ ...styledRectButton, ...styledButtonGreen }}
+              variant="contained">
+              Sign in as user
+            </Button>
+          </Link>
+          <Link to="/login/admin">
+            <Button
+              sx={{ ...styledRectButton, ...styledButtonWhite }}
+              variant="contained">
+              Sign in as admin
+            </Button>
+          </Link>
         </div>
+        {/* </div> */}
       </div>
-    </>
+    </div>
   );
 }
 
