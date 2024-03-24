@@ -14,16 +14,13 @@ const styledRectButton = {
 
 function LoginPage() {
   return (
-    <>
-      <div className={`${styles.split} ${styles.left}`}>
-        <div className={styles.leftImgContainer}>
-          {/* REPLACE IMAGE */}
+    <div className={styles.pageContainer}>
+      <div className={styles.split}>
+        <div className={styles.left}>
           <img src={loginBanner} />
         </div>
-      </div>
-      <div className={`${styles.split} ${styles.right}`}>
-        <div className={styles.centered}>
-          <div className={styles.login_input}>
+        <div className={styles.right}>
+          <div className={styles.centered}>
             <div className={styles.rightImgContainer}>
               <img src={primaryLogo} />
             </div>
@@ -32,23 +29,21 @@ function LoginPage() {
             <Link to="/login/user">
               <Button
                 sx={{ ...styledRectButton, ...styledButtonGreen }}
-                variant="contained"
-              >
+                variant="contained">
                 Sign in as user
               </Button>
             </Link>
             <Link to="/login/admin">
               <Button
                 sx={{ ...styledRectButton, ...styledButtonWhite }}
-                variant="contained"
-              >
+                variant="contained">
                 Sign in as admin
               </Button>
             </Link>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

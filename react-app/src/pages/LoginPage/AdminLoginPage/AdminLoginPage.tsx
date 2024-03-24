@@ -47,16 +47,13 @@ function AdminLoginPage() {
   const handleSignIn = async (event: React.FormEvent<HTMLFormElement>) => {};
 
   return (
-    <>
-      <div className={`${styles.split} ${styles.left}`}>
-        <div className={styles.leftImgContainer}>
-          {/* REPLACE IMAGE */}
+    <div className={styles.pageContainer}>
+      <div className={styles.split}>
+        <div className={styles.left}>
           <img src={loginBanner} />
         </div>
-      </div>
-      <div className={`${styles.split} ${styles.right}`}>
-        <div className={styles.centered}>
-          <div className={styles.login_input}>
+        <div className={styles.right}>
+          <div className={styles.centered}>
             <div className={styles.rightImgContainer}>
               <img src={primaryLogo} />
             </div>
@@ -68,8 +65,7 @@ function AdminLoginPage() {
                 if (!openForgotModal) {
                   handleSignIn(event);
                 }
-              }}
-            >
+              }}>
               {/* email field */}
               <div className={styles.alignLeft}>
                 <h3 className={styles.label}>Email</h3>
@@ -105,8 +101,7 @@ function AdminLoginPage() {
                         aria-label="toggle password visibility"
                         onClick={handleClickShowPassword}
                         onMouseDown={handleMouseDownPassword}
-                        edge="end"
-                      >
+                        edge="end">
                         {showPassword ? <VisibilityOff /> : <Visibility />}
                       </IconButton>
                     </InputAdornment>
@@ -119,32 +114,32 @@ function AdminLoginPage() {
               <div className={styles.alignLeft}>
                 <Button
                   sx={{
-                    color: "var(--ocean-green)",
+                    color: "var(--forest-green)",
                     padding: "0px",
-                    margin: "8px 0px 18px 0px",
+                    margin: "8px 0px 8px 0px",
                   }}
-                  variant="text"
-                >
+                  variant="text">
                   Forgot Password?
                 </Button>
               </div>
+
+              {/* sign in button */}
+              <Button
+                type="submit"
+                sx={{ ...styledRectButton, ...styledButtonGreen }}
+                variant="contained">
+                {showLoading ? <Loading></Loading> : "Sign In"}
+              </Button>
+
+              {/* error message */}
               <p
                 className={
                   failureMessage
                     ? styles.showFailureMessage
                     : styles.errorContainer
-                }
-              >
+                }>
                 {failureMessage}
               </p>
-              {/* sign in button */}
-              <Button
-                type="submit"
-                sx={{ ...styledRectButton, ...styledButtonGreen }}
-                variant="contained"
-              >
-                {showLoading ? <Loading></Loading> : "Sign In"}
-              </Button>
             </form>
 
             {/* switch to user link */}
@@ -154,7 +149,7 @@ function AdminLoginPage() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
