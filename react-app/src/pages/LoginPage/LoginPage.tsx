@@ -3,6 +3,7 @@ import styles from "./LoginPage.module.css";
 import primaryLogo from "../../assets/atc-primary-logo.png";
 import { styledButtonGreen, styledButtonWhite } from "../../muiTheme";
 import { Button } from "@mui/material";
+import loginBanner from "../../assets/login-banner.jpeg";
 
 const styledRectButton = {
   height: 40,
@@ -13,20 +14,13 @@ const styledRectButton = {
 
 function LoginPage() {
   return (
-    <>
-      <div className={`${styles.split} ${styles.left}`}>
-        <div className={styles.leftImgContainer}>
-          {/* REPLACE IMAGE */}
-          <img
-            src={
-              "https://mediaproxy.salon.com/width/1200/https://media2.salon.com/2019/07/spongebob-20th.jpg"
-            }
-          />
+    <div className={styles.pageContainer}>
+      <div className={styles.split}>
+        <div className={styles.left}>
+          <img src={loginBanner} />
         </div>
-      </div>
-      <div className={`${styles.split} ${styles.right}`}>
-        <div className={styles.centered}>
-          <div className={styles.login_input}>
+        <div className={styles.right}>
+          <div className={styles.centered}>
             <div className={styles.rightImgContainer}>
               <img src={primaryLogo} />
             </div>
@@ -35,23 +29,21 @@ function LoginPage() {
             <Link to="/login/user">
               <Button
                 sx={{ ...styledRectButton, ...styledButtonGreen }}
-                variant="contained"
-                href="#contained-buttons">
+                variant="contained">
                 Sign in as user
               </Button>
             </Link>
             <Link to="/login/admin">
               <Button
                 sx={{ ...styledRectButton, ...styledButtonWhite }}
-                variant="contained"
-                href="#contained-buttons">
+                variant="contained">
                 Sign in as admin
               </Button>
             </Link>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

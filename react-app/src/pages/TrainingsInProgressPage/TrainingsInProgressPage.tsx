@@ -1,10 +1,11 @@
 import styles from "./TrainingsInProgressPage.module.css";
 import TrainingCard from "../../components/TrainingCard/Training.tsx";
+import NavigationBar from "../../components/NavigationBar/NavigationBar.tsx";
 
 function TrainingsInProgressPage() {
   return (
     <>
-      <div className={`${styles.split} ${styles.left}`}></div>
+      <NavigationBar />
       <div className={`${styles.split} ${styles.right}`}>
         <div className={styles.header}>
           <h1 className={styles.nameHeading}>Trainings in Progress</h1>
