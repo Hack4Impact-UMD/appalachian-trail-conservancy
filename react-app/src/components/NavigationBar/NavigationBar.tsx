@@ -12,6 +12,13 @@ import libraryActive from "../../assets/libraryWhite.svg";
 import libraryInactive from "../../assets/libraryGray.svg";
 import progressActive from "../../assets/progressWhite.svg";
 import progressInactive from "../../assets/progressGray.svg";
+import trainingsActive from "../../assets/trainingsWhite.svg";
+import trainingsInactive from "../../assets/trainingsGray.svg";
+import pathwaysActive from "../../assets/pathwaysWhite.svg";
+import pathwaysInactive from "../../assets/pathwaysGray.svg";
+import achievementsActive from "../../assets/achievementsWhite.svg";
+import achievementInactive from "../../assets/achievementsGray.svg";
+
 import logout from "../../assets/logout.svg";
 
 function NavigationBar() {
@@ -42,8 +49,7 @@ function NavigationBar() {
               isActive
                 ? `${styles.tab} ${styles.tabActive}`
                 : `${styles.tab} ${styles.tabInActive}`
-            }
-          >
+            }>
             <div>
               <img
                 className={styles.iconActive}
@@ -67,21 +73,20 @@ function NavigationBar() {
               isActive
                 ? `${styles.tab} ${styles.tabActive}`
                 : `${styles.tab} ${styles.tabInActive}`
-            }
-          >
+            }>
             <div>
               <img
                 className={styles.iconActive}
-                src={libraryActive}
-                alt="library icon"
+                src={trainingsActive}
+                alt="trainings icon"
               />
               <img
                 className={styles.iconInactive}
-                src={libraryInactive}
-                alt="library Icon"
+                src={trainingsInactive}
+                alt="trainings icon"
               />
             </div>
-            Trainings Library
+            Trainings
           </NavLink>
         </div>
 
@@ -92,21 +97,20 @@ function NavigationBar() {
               isActive
                 ? `${styles.tab} ${styles.tabActive}`
                 : `${styles.tab} ${styles.tabInActive}`
-            }
-          >
+            }>
             <div>
               <img
                 className={styles.iconActive}
-                src={progressActive}
-                alt="loading icon"
+                src={pathwaysActive}
+                alt="pathways icon"
               />
               <img
                 className={styles.iconInactive}
-                src={progressInactive}
-                alt="loading Icon"
+                src={pathwaysInactive}
+                alt="pathways icon"
               />
             </div>
-            Trainings in Progress
+            Pathways
           </NavLink>
         </div>
 
@@ -117,21 +121,20 @@ function NavigationBar() {
               isActive
                 ? `${styles.tab} ${styles.tabActive}`
                 : `${styles.tab} ${styles.tabInActive}`
-            }
-          >
+            }>
             <div>
               <img
                 className={styles.iconActive}
-                src={completedActive}
-                alt="completed icon"
+                src={achievementsActive}
+                alt="achievements icon"
               />
               <img
                 className={styles.iconInactive}
-                src={completedInactive}
-                alt="completed Icon"
+                src={achievementInactive}
+                alt="achievements icon"
               />
             </div>
-            Trainings Completed
+            Achievements
           </NavLink>
         </div>
       </div>
@@ -140,8 +143,7 @@ function NavigationBar() {
           onClick={() => {
             handleLogOut();
           }}
-          className={styles.menuItem}
-        >
+          className={styles.menuItem}>
           <img src={logout} alt="Logout" />
           Log Out
         </button>
