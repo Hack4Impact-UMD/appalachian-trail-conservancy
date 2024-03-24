@@ -1,4 +1,3 @@
-import * as React from "react";
 import LinearProgress, {
   LinearProgressProps,
 } from "@mui/material/LinearProgress";
@@ -31,7 +30,8 @@ export default function LinearProgressWithLabel(
         <Typography
           variant="body2"
           color="var(--blue-gray)"
-          sx={{ fontSize: "13px" }}>
+          sx={{ fontSize: "13px" }}
+        >
           {`${Math.round(props.value)}%`}
         </Typography>
       </Box>
