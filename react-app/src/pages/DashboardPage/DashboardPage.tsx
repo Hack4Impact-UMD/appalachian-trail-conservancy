@@ -2,8 +2,8 @@ import TrainingCard from "../../components/TrainingCard/Training";
 import styles from "./Dashboard.module.css";
 import Certificate from "../../components/CertificateCard/Certificate";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
-
 import { Link } from "react-router-dom";
+
 function Dashboard() {
   const trainingCards = [
     { title: "Title 1", subtitle: "Subtitle 1", progress: 23 },
