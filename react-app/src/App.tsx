@@ -70,6 +70,20 @@ function App() {
                   <NotFoundPage />
                 </RequireAuth>
               }></Route>
+
+            <Route
+              path="/testfunctions"
+              element={
+                <RequireAuth>
+                  <button
+                    onClick={() => {
+                      //your function
+                    }}>
+                    TEST
+                  </button>
+                </RequireAuth>
+              }
+            />
           </Routes>
         </BrowserRouter>
       </AuthProvider>
