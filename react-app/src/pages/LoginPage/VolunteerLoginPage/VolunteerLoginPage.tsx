@@ -38,15 +38,7 @@ function VolunteerLoginPage() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    event.preventDefault();
-  };
-
-  const handleSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSignIn = async (event: any) => {
     event.preventDefault();
     setShowLoading(true);
 
@@ -69,6 +61,7 @@ function VolunteerLoginPage() {
         });
     } else {
       setFailureMessage("*Incorrect email address or password");
+      setShowLoading(false);
     }
   };
 
@@ -125,8 +118,8 @@ function VolunteerLoginPage() {
                     <InputAdornment position="end">
                       <IconButton
                         aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
+                        onClick={() => setShowPassword(!showPassword)}
+                        onMouseDown={() => setShowPassword(!showPassword)}
                         edge="end">
                         {showPassword ? <VisibilityOff /> : <Visibility />}
                       </IconButton>
@@ -153,7 +146,8 @@ function VolunteerLoginPage() {
               <Button
                 type="submit"
                 sx={{ ...styledRectButton, ...styledButtonGreen }}
-                variant="contained">
+                variant="contained"
+                onClick={(e) => handleSignIn(e)}>
                 {showLoading ? <Loading></Loading> : "Sign In"}
               </Button>
 
