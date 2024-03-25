@@ -110,7 +110,7 @@ function NavigationBar() {
 
         <div className={styles.tabContainer}>
           <NavLink
-            to="/trainingsCompleted"
+            to="/achievements"
             className={({ isActive }) =>
               isActive
                 ? `${styles.tab} ${styles.tabActive}`
