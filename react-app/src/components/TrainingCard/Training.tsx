@@ -26,12 +26,11 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
           <h2 className={styles["trainingTitle"]}>{title}</h2>
           <p className={styles["trainingSubtitle"]}>{subtitle}</p>
         </div>
-        {progress !== undefined && (
+        {progress !== undefined ? (
           <div className={styles["progressBar"]}>
             <LinearProgressWithLabel value={progress} />
           </div>
-        )}
-        {progress == undefined && (
+        ) : (
           <div className={styles["emptyProgressBarContainer"]} />
         )}
       </div>
