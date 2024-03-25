@@ -69,6 +69,30 @@ export const styledButtonWhite = {
   },
 };
 
+export const darkGreenButton = {
+  borderRadius: "10px",
+  boxShadow: "none",
+  color: "white",
+  backgroundColor: "var(--forest-green)",
+  border: "2px solid var(--forest-green)",
+  "&:hover": {
+    backgroundColor: "var(--forest-green)",
+    color: "white",
+  },
+};
+
+export const whiteEmptyButton = {
+  borderRadius: "10px",
+  boxShadow: "none",
+  color: "black",
+  backgroundColor: "white",
+  border: "2px solid black",
+  "&:hover": {
+    backgroundColor: "white",
+    color: "black",
+  },
+};
+
 export const styledInputBoxes = {
   border: "1px solid black",
   borderRadius: "8px",
@@ -76,3 +100,5 @@ export const styledInputBoxes = {
   height: 40,
   "& fieldset": { border: "none" },
 };
+
+

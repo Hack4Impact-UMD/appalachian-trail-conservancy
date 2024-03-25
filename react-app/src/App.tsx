@@ -11,6 +11,7 @@ import theme from "./muiTheme.ts";
 import VolunteerLoginPage from "./pages/LoginPage/VolunteerLoginPage/VolunteerLoginPage.tsx";
 import AdminLoginPage from "./pages/LoginPage/AdminLoginPage/AdminLoginPage.tsx";
 import NavigationBar from "./components/NavigationBar/NavigationBar.tsx";
+import AchievementsPage from "./pages/AchievementsPage/AchievementsPage.tsx"
 import { useState } from "react";
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
               path="/trainingsCompleted"
               element={<TrainingsCompletedPage />}
             />
+            <Route path="/achievements" element={<AchievementsPage/>} />
             <Route path="/trainingLibrary" element={<TrainingLibrary />} />
             <Route path="/*" element={<NotFoundPage />}></Route>
           </Routes>
