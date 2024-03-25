@@ -51,7 +51,7 @@ function TrainingLibrary() {
     target: { value: React.SetStateAction<string> };
   }) => setSearchQuery(e.target.value);
 
-  const debouncedOnChange = debounce(updateQuery, 500);
+  const debouncedOnChange = debounce(updateQuery, 200);
 
   return (
     <>

@@ -38,15 +38,7 @@ function VolunteerLoginPage() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    event.preventDefault();
-  };
-
-  const handleSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSignIn = async (event: any) => {
     event.preventDefault();
     setShowLoading(true);
 
@@ -69,6 +61,7 @@ function VolunteerLoginPage() {
         });
     } else {
       setFailureMessage("*Incorrect email address or password");
+      setShowLoading(false);
     }
   };
 
@@ -91,7 +84,8 @@ function VolunteerLoginPage() {
                 if (!openForgotModal) {
                   handleSignIn(event);
                 }
-              }}>
+              }}
+            >
               {/* email field */}
               <div className={styles.alignLeft}>
                 <h3 className={styles.label}>Email</h3>
@@ -125,9 +119,10 @@ function VolunteerLoginPage() {
                     <InputAdornment position="end">
                       <IconButton
                         aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                        edge="end">
+                        onClick={() => setShowPassword(!showPassword)}
+                        onMouseDown={() => setShowPassword(!showPassword)}
+                        edge="end"
+                      >
                         {showPassword ? <VisibilityOff /> : <Visibility />}
                       </IconButton>
                     </InputAdornment>
@@ -144,16 +139,18 @@ function VolunteerLoginPage() {
                     padding: "0px",
                     margin: "8px 0px 18px 0px",
                   }}
-                  variant="text">
+                  variant="text"
+                >
                   Forgot Password?
                 </Button>
               </div>
 
               {/* sign in button */}
               <Button
-                type="submit"
                 sx={{ ...styledRectButton, ...styledButtonGreen }}
-                variant="contained">
+                variant="contained"
+                onClick={(e) => handleSignIn(e)}
+              >
                 {showLoading ? <Loading></Loading> : "Sign In"}
               </Button>
 
@@ -163,7 +160,8 @@ function VolunteerLoginPage() {
                   failureMessage
                     ? styles.showFailureMessage
                     : styles.errorContainer
-                }>
+                }
+              >
                 {failureMessage}
               </p>
             </form>
