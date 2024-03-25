@@ -13,7 +13,7 @@ function AchievementsPage() {
       <NavigationBar />
       <div className={`${styles.split} ${styles.right}`}>
         <div className={styles.header}>
-          <h1 className={styles.nameHeading}>Trainings in Progress</h1>
+          <h1 className={styles.nameHeading}>Achievements</h1>
           {/* PLACEHOLDER IMAGE */}
           <div className={styles.imgContainer}>
             <img src="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg" />
