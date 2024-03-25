@@ -1,20 +1,16 @@
-import React from "react";
+import { useState } from "react";
 import styles from "./AchievementsPage.module.css";
+import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import { darkGreenButton, whiteEmptyButton } from "../../muiTheme";
 import { Button } from "@mui/material";
 import { MdSort } from "react-icons/md";
 
-
 function AchievementsPage() {
-  const [selectedButtonIndex, setSelectedButtonIndex] = React.useState(0); // Initial selected button
-
-  const handleClick = (index: React.SetStateAction<number>) => {
-    setSelectedButtonIndex(index);
-  };
+  const [badgesSelected, setBadgesSelected] = useState<boolean>(true); // Initial selected button
 
   return (
     <>
-      <div className={`${styles.split} ${styles.left}`}></div>
+      <NavigationBar />
       <div className={`${styles.split} ${styles.right}`}>
         <div className={styles.header}>
           <h1 className={styles.nameHeading}>Trainings in Progress</h1>
@@ -26,29 +22,24 @@ function AchievementsPage() {
         <div className={styles.buttonContainer}>
           <div className={styles.leftButtonContainer}>
             <div className={styles.button}>
-            <Button
-              onClick={() => handleClick(0)}
-              sx={
-                selectedButtonIndex === 0
-                  ? darkGreenButton
-                  : whiteEmptyButton
-              }>
-              Pathway Badges
-            </Button>
+              <Button
+                onClick={() => setBadgesSelected(true)}
+                sx={badgesSelected ? darkGreenButton : whiteEmptyButton}>
+                Pathway Badges
+              </Button>
             </div>
             <div className={styles.button}>
-            <Button
-              onClick={() => handleClick(1)}
-              sx={
-                selectedButtonIndex === 1
-                  ? darkGreenButton
-                  : whiteEmptyButton
-              }>
-              Training Certificates
-            </Button>
+              <Button
+                onClick={() => setBadgesSelected(false)}
+                sx={!badgesSelected ? darkGreenButton : whiteEmptyButton}>
+                Training Certificates
+              </Button>
             </div>
           </div>
-          <Button sx = {whiteEmptyButton}> <MdSort/>Sort</Button>
+          <Button sx={whiteEmptyButton}>
+            <MdSort />
+            Sort
+          </Button>
         </div>
         <div className={styles.cardsContainer}></div>
       </div>
