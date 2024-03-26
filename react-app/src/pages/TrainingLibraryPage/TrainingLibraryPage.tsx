@@ -1,10 +1,11 @@
 import styles from "./TrainingLibrary.module.css";
 import { IoIosSearch } from "react-icons/io";
-import { TextField, InputAdornment, Button } from "@mui/material";
-import TrainingCard from "../../components/TrainingCard/Training";
-import { useState } from "react";
-import React from "react";
+import { TextField, InputAdornment } from "@mui/material";
+import TrainingCard from "../../components/TrainingCard/TrainingCard";
+import { useState, useEffect } from "react";
+import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import debounce from "lodash.debounce";
+import { Button } from "@mui/material";
 
 const styledSearchBar = {
   border: "1.5px solid var(--blue-gray)",
@@ -21,7 +22,7 @@ const styledButton = {
   marginLeft: "0.5%",
   marginRight: "0%",
   height: 38,
-"& fieldset": { border: "none" },
+  "& fieldset": { border: "none" },
   paddingLeft: "2.5%",
   paddingRight: "2.5%",
   paddingTop: "1%",
@@ -31,7 +32,6 @@ const styledButton = {
 };
 
 function TrainingLibrary() {
-  
   const [filterType, setFilterType] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredTrainings, setFilteredTrainings] = useState<
@@ -58,21 +58,23 @@ function TrainingLibrary() {
     let filtered = trainingCards;
 
     if (searchQuery) {
-      filtered = filtered.filter(training =>
+      filtered = filtered.filter((training) =>
         training.title.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
     if (filterType === "inProgress") {
-      filtered = filtered.filter(training => training.progress > 0 && training.progress < 100);
+      filtered = filtered.filter(
+        (training) => training.progress > 0 && training.progress < 100
+      );
     } else if (filterType === "completed") {
-      filtered = filtered.filter(training => training.progress === 100);
+      filtered = filtered.filter((training) => training.progress === 100);
     }
 
     setFilteredTrainings(filtered);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     filterTrainings();
   }, [searchQuery, filterType]);
 
@@ -80,11 +82,11 @@ function TrainingLibrary() {
     target: { value: React.SetStateAction<string> };
   }) => setSearchQuery(e.target.value);
 
-  const debouncedOnChange = debounce(updateQuery, 500);
+  const debouncedOnChange = debounce(updateQuery, 200);
 
   return (
     <>
-      <div className={`${styles.split} ${styles.left}`}></div>
+      <NavigationBar />
       <div className={`${styles.split} ${styles.right}`}>
         <div className={styles.header}>
           <h1 className={styles.nameHeading}> Trainings </h1>
@@ -109,52 +111,79 @@ function TrainingLibrary() {
             }}
           />
           <Button
-          style={{ 
-              backgroundColor: filterType === "all" ? "var(--forest-green)" : "white", 
-              color: filterType === "all" ? "white" : "var(--blue-gray)" 
-              }}
-              sx={{
-                  ...styledButton,
-                  border: `1.5px solid ${filterType === "all" ? "var(--forest-green)" : "var(--blue-gray)"}`,
-                  '&:hover': {
-                      border: `1.5px solid ${filterType === "all" ? "var(--forest-green)" : "var(--blue-gray)"}`,
-                  },
-              }}
-          onClick={() => setFilterType("all")}
+            style={{
+              backgroundColor:
+                filterType === "all" ? "var(--forest-green)" : "white",
+              color: filterType === "all" ? "white" : "var(--blue-gray)",
+            }}
+            sx={{
+              ...styledButton,
+              border: `1.5px solid ${
+                filterType === "all"
+                  ? "var(--forest-green)"
+                  : "var(--blue-gray)"
+              }`,
+              "&:hover": {
+                border: `1.5px solid ${
+                  filterType === "all"
+                    ? "var(--forest-green)"
+                    : "var(--blue-gray)"
+                }`,
+              },
+            }}
+            onClick={() => setFilterType("all")}
           >
-          All
+            All
           </Button>
           <Button
-          style={{ 
-              backgroundColor: filterType === "inProgress" ? "var(--forest-green)" : "white",
-              color: filterType === "inProgress" ? "white" : "var(--blue-gray)" 
-          }}
-          sx={{
+            style={{
+              backgroundColor:
+                filterType === "inProgress" ? "var(--forest-green)" : "white",
+              color: filterType === "inProgress" ? "white" : "var(--blue-gray)",
+            }}
+            sx={{
               ...styledButton,
-              border: `1.5px solid ${filterType === "inProgress" ? "var(--forest-green)" : "var(--blue-gray)"}`,
-              '&:hover': {
-                  border: `1.5px solid ${filterType === "inProgress" ? "var(--forest-green)" : "var(--blue-gray)"}`,
+              border: `1.5px solid ${
+                filterType === "inProgress"
+                  ? "var(--forest-green)"
+                  : "var(--blue-gray)"
+              }`,
+              "&:hover": {
+                border: `1.5px solid ${
+                  filterType === "inProgress"
+                    ? "var(--forest-green)"
+                    : "var(--blue-gray)"
+                }`,
               },
-          }}
-          onClick={() => setFilterType("inProgress")}
+            }}
+            onClick={() => setFilterType("inProgress")}
           >
-          In Progress
+            In Progress
           </Button>
           <Button
-          style={{ 
-              backgroundColor: filterType === "completed" ? "var(--forest-green)" : "white", 
-              color: filterType === "completed" ? "white" : "var(--blue-gray)" 
-          }}
-          sx={{
+            style={{
+              backgroundColor:
+                filterType === "completed" ? "var(--forest-green)" : "white",
+              color: filterType === "completed" ? "white" : "var(--blue-gray)",
+            }}
+            sx={{
               ...styledButton,
-              border: `1.5px solid ${filterType === "completed" ? "var(--forest-green)" : "var(--blue-gray)"}`,
-              '&:hover': {
-                  border: `1.5px solid ${filterType === "completed" ? "var(--forest-green)" : "var(--blue-gray)"}`,
+              border: `1.5px solid ${
+                filterType === "completed"
+                  ? "var(--forest-green)"
+                  : "var(--blue-gray)"
+              }`,
+              "&:hover": {
+                border: `1.5px solid ${
+                  filterType === "completed"
+                    ? "var(--forest-green)"
+                    : "var(--blue-gray)"
+                }`,
               },
-          }}
-          onClick={() => setFilterType("completed")}
+            }}
+            onClick={() => setFilterType("completed")}
           >
-          Completed
+            Completed
           </Button>
         </div>
 
@@ -164,7 +193,6 @@ function TrainingLibrary() {
               <TrainingCard
                 image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
                 title={training.title}
-                subtitle={training.subtitle}
                 progress={training.progress}
               />
             </div>
@@ -178,17 +206,14 @@ function TrainingLibrary() {
           <TrainingCard
             image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
             title="Title"
-            subtitle="SUBTITLE"
           />
           <TrainingCard
             image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
             title="Title"
-            subtitle="SUBTITLE"
           />
           <TrainingCard
             image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
             title="Title"
-            subtitle="SUBTITLE"
           />
         </div>
       </div>

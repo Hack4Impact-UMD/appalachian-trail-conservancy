@@ -47,19 +47,17 @@
   object-fit: contain;
 }
 
-.subHeader {
+.buttonContainer {
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
-  align-items: center;
-  color: var(--blue-gray);
-  margin-top: 0.5rem;
 }
 
-.subHeader h2 {
-  font-size: 2rem;
-  margin-left: 0;
-  margin-bottom: 1rem;
+.leftButtonContainer {
+  display: flex;
+}
+
+.button {
+  margin: 5px;
 }
 
 .cardsContainer {
@@ -70,14 +68,4 @@
   row-gap: 1em;
   column-gap: 1em;
   margin-bottom: 1rem;
-}
-
-/* ALL ABOVE IS SAME ON EVERY PAGE (with minor spacing modifications) */
-
-.viewAllLink {
-  color: var(--blue-gray);
-  font-size: 1rem;
-  font-weight: 700;
-  text-align: center;
-  text-decoration: underline;
 }
