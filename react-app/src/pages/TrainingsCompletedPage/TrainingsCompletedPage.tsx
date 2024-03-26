@@ -1,5 +1,5 @@
 import Certificate from "../../components/CertificateCard/Certificate.tsx";
-import TrainingCard from "../../components/TrainingCard/Training.tsx";
+import TrainingCard from "../../components/TrainingCard/TrainingCard.tsx";
 import styles from "./TrainingsCompletedPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar.tsx";
 

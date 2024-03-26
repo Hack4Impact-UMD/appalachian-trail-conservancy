@@ -1,5 +1,5 @@
-import TrainingCard from "../../components/TrainingCard/Training";
-import PathwayCard from "../../components/PathwayCard/Pathway";
+import TrainingCard from "../../components/TrainingCard/TrainingCard";
+import PathwayCard from "../../components/PathwayCard/PathwayCard";
 import styles from "./Dashboard.module.css";
 import Certificate from "../../components/CertificateCard/Certificate";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
@@ -8,11 +8,11 @@ import { Link } from "react-router-dom";
 function Dashboard() {
   const pathwayCards = [
     { title: "Title 1", progress: 73 },
-    { title: "Title 2"},
+    { title: "Title 2" },
   ];
   const trainingCards = [
     { title: "Title 1", progress: 100 },
-    { title: "Title 2"},
+    { title: "Title 2" },
     { title: "Title 3", progress: 76 },
   ];
   const certificateCards = [

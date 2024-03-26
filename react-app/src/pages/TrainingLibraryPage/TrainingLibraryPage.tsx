@@ -1,7 +1,7 @@
 import styles from "./TrainingLibrary.module.css";
 import { IoIosSearch } from "react-icons/io";
 import { TextField, InputAdornment } from "@mui/material";
-import TrainingCard from "../../components/TrainingCard/Training";
+import TrainingCard from "../../components/TrainingCard/TrainingCard";
 import { useState, useEffect } from "react";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import debounce from "lodash.debounce";

@@ -1,6 +1,6 @@
 import React from "react";
 import LinearProgressWithLabel from "../LinearProgressWithLabel/LinearProgressWithLabel";
-import styles from "./Training.module.css";
+import styles from "./TrainingCard.module.css";
 
 interface TrainingCardProps {
   image: string;
