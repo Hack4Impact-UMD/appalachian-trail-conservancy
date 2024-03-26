@@ -1,9 +1,7 @@
 import "./index.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import TrainingsInProgressPage from "./pages/TrainingsInProgressPage/TrainingsInProgressPage.tsx";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import Dashboard from "./pages/DashboardPage/DashboardPage.tsx";
-import TrainingsCompletedPage from "./pages/TrainingsCompletedPage/TrainingsCompletedPage.tsx";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage.tsx";
 import TrainingLibrary from "./pages/TrainingLibraryPage/TrainingLibraryPage.tsx";
 import PathwayLibrary from "./pages/PathwayLibraryPage/PathwayLibraryPage.tsx";
@@ -49,14 +47,21 @@ function App() {
               }
             />
             <Route
+              path="/achievements"
+              element={
+                <RequireAuth>
+                  <AchievementsPage />
+                </RequireAuth>
+              }
+            />
+            <Route
               path="/*"
               element={
                 <RequireAuth>
                   <NotFoundPage />
                 </RequireAuth>
               }
-            ></Route>
-
+            />
             <Route
               path="/testfunctions"
               element={
