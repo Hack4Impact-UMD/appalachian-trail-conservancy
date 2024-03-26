@@ -1,6 +1,5 @@
 import React from "react";
-import LinearProgressWithLabel from "./LinearProgressWithLabel";
-
+import LinearProgressWithLabel from "../LinearProgressWithLabel/LinearProgressWithLabel";
 import styles from "./Training.module.css";
 
 interface TrainingCardProps {
@@ -18,14 +17,14 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
     if (progress === undefined) {
       // Training not started
       return (
-        <div className={styles.marker} style={{ borderColor: "var(--blue-gray)", color: "var(--blue-gray)" }}>
+        <div className={`${styles.marker} ${styles.notStartedMarker}`}>
           NOT STARTED
         </div>
       );
     } else if (progress === 100) {
       // Training completed
       return (
-        <div className={styles.marker} style={{ backgroundColor: "var(--blue-gray)", color: "white" }}>
+        <div className={`${styles.marker} ${styles.completedMarker}`}>
           COMPLETED
         </div>
       );
@@ -36,13 +35,13 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
   };
 
   return (
-    <div className={styles["trainingCard"]}>
-      <div className={styles["trainingImage"]}>
-        <img src={image} alt="Training Task" />
+    <div className={styles.trainingCard}>
+      <div className={styles.trainingImage}>
+        <img src={image} alt="Training" />
       </div>
-      <div className={styles["trainingContent"]}>
-        <div className={styles["trainingTitle"]}>{title}</div>
-        <div className={styles["progressBar"]}>{renderMarker()}</div>
+      <div className={styles.trainingContent}>
+        <div className={styles.trainingTitle}>{title}</div>
+        <div className={styles.progressBar}>{renderMarker()}</div>
       </div>
     </div>
   );

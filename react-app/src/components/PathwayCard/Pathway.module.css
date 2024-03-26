@@ -6,7 +6,7 @@
   overflow: hidden;
   width: 450px;
   height: 185px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, .3); /* Adding drop shadow */
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.3); /* Adding drop shadow */
 }
 
 .pathwayImage {
@@ -46,8 +46,18 @@
   padding: 6px 15px;
   border: 1.5px solid var(--blue-gray);
   border-radius: 20px;
-  font-size: .9em;
+  font-size: 0.9em;
   font-weight: bold;
   text-align: center;
   margin: -8px 0 -5px 0;
+}
+
+.notStartedMarker {
+  border-color: var(--blue-gray);
+  color: var(--blue-gray);
+}
+
+.completedMarker {
+  background-color: var(--blue-gray);
+  color: white;
 }
