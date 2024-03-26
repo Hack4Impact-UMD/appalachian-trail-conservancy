@@ -17,12 +17,12 @@ function LoginPage() {
     <div className={styles.pageContainer}>
       <div className={styles.split}>
         <div className={styles.left}>
-          <img src={loginBanner} />
+          <img src={loginBanner} alt="Login Image" />
         </div>
         <div className={styles.right}>
           <div className={styles.centered}>
             <div className={styles.rightImgContainer}>
-              <img src={primaryLogo} />
+              <img src={primaryLogo} alt="ATC Logo" />
             </div>
             {/* welcome label */}
             <h1 className={styles.heading}>Welcome!</h1>

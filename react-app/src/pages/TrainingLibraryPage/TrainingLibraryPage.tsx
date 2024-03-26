@@ -1,7 +1,7 @@
 import styles from "./TrainingLibrary.module.css";
 import { IoIosSearch } from "react-icons/io";
 import { TextField, InputAdornment } from "@mui/material";
-import TrainingCard from "../../components/TrainingCard/Training";
+import TrainingCard from "../../components/TrainingCard/TrainingCard";
 import { useState, useEffect } from "react";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import debounce from "lodash.debounce";
@@ -86,7 +86,6 @@ function TrainingLibrary() {
               <TrainingCard
                 image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
                 title={training.title}
-                subtitle={training.subtitle}
                 progress={training.progress}
               />
             </div>

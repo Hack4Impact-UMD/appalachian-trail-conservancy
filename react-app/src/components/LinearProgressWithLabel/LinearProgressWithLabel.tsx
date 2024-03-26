@@ -15,13 +15,13 @@ export default function LinearProgressWithLabel(
           {...props}
           sx={{
             borderRadius: "20px", // Rounded corners for the progress bar
-            height: "8px", // Adjust the height as needed
+            height: "9px", // Thickness of bar
             "&.MuiLinearProgress-colorPrimary": {
               backgroundColor: "white", // Color for the remaining part of the bar
             },
             "& .MuiLinearProgress-bar": {
               borderRadius: "20px", // Rounded corners for the progress bar
-              backgroundColor: "var(--forest-green)", // Color for the completed part of the bar
+              backgroundColor: "var(--blue-gray)", // Color for the completed part of the bar
             },
           }}
         />
@@ -30,7 +30,7 @@ export default function LinearProgressWithLabel(
         <Typography
           variant="body2"
           color="var(--blue-gray)"
-          sx={{ fontSize: "13px" }}
+          sx={{ fontSize: "15px" }}
         >
           {`${Math.round(props.value)}%`}
         </Typography>
