@@ -23,7 +23,6 @@
   justify-content: space-between;
   align-items: center;
   margin-top: 1.5%;
-  margin-bottom: -0.5%;
 }
 
 .nameHeading {
@@ -54,6 +53,11 @@
   justify-content: space-between;
 }
 
+.buttonContainer {
+  display: flex;
+  gap: 20px;
+}
+
 .cardsContainer {
   display: flex;
   flex-wrap: wrap;
@@ -69,6 +73,5 @@
 }
 
 .subHeader h2 {
-  margin-left: 0;
-  margin-bottom: 1rem;
+  margin: 50px 0px 25px 0px;
 }

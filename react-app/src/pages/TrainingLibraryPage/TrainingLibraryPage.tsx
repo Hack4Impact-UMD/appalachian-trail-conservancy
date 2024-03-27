@@ -6,30 +6,8 @@ import { useState, useEffect } from "react";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import debounce from "lodash.debounce";
 import { Button } from "@mui/material";
-
-const styledSearchBar = {
-  border: "1.5px solid var(--blue-gray)",
-  borderRadius: "10px",
-  marginRight: "1%",
-  width: "55%",
-  height: 38,
-  "& fieldset": { border: "none" },
-};
-
-const styledButton = {
-  margin: "1%",
-  marginTop: "0%",
-  marginLeft: "0.5%",
-  marginRight: "0%",
-  height: 38,
-  "& fieldset": { border: "none" },
-  paddingLeft: "2.5%",
-  paddingRight: "2.5%",
-  paddingTop: "1%",
-  paddingBottom: "1%",
-  borderRadius: "13px",
-  whiteSpace: "nowrap",
-};
+import { styledLibrarySearchBar } from "../../muiTheme";
+import { darkGreenButton, whiteEmptyButton } from "../../muiTheme";
 
 function TrainingLibrary() {
   const [filterType, setFilterType] = useState("all");
@@ -97,7 +75,7 @@ function TrainingLibrary() {
 
         <div className={styles.searchBarContainer}>
           <TextField
-            sx={styledSearchBar}
+            sx={styledLibrarySearchBar}
             variant="outlined"
             size="small"
             placeholder="Search..."
@@ -110,81 +88,37 @@ function TrainingLibrary() {
               ),
             }}
           />
-          <Button
-            style={{
-              backgroundColor:
-                filterType === "all" ? "var(--forest-green)" : "white",
-              color: filterType === "all" ? "white" : "var(--blue-gray)",
-            }}
-            sx={{
-              ...styledButton,
-              border: `1.5px solid ${
-                filterType === "all"
-                  ? "var(--forest-green)"
-                  : "var(--blue-gray)"
-              }`,
-              "&:hover": {
-                border: `1.5px solid ${
-                  filterType === "all"
-                    ? "var(--forest-green)"
-                    : "var(--blue-gray)"
-                }`,
-              },
-            }}
-            onClick={() => setFilterType("all")}
-          >
-            All
-          </Button>
-          <Button
-            style={{
-              backgroundColor:
-                filterType === "inProgress" ? "var(--forest-green)" : "white",
-              color: filterType === "inProgress" ? "white" : "var(--blue-gray)",
-            }}
-            sx={{
-              ...styledButton,
-              border: `1.5px solid ${
-                filterType === "inProgress"
-                  ? "var(--forest-green)"
-                  : "var(--blue-gray)"
-              }`,
-              "&:hover": {
-                border: `1.5px solid ${
-                  filterType === "inProgress"
-                    ? "var(--forest-green)"
-                    : "var(--blue-gray)"
-                }`,
-              },
-            }}
-            onClick={() => setFilterType("inProgress")}
-          >
-            In Progress
-          </Button>
-          <Button
-            style={{
-              backgroundColor:
-                filterType === "completed" ? "var(--forest-green)" : "white",
-              color: filterType === "completed" ? "white" : "var(--blue-gray)",
-            }}
-            sx={{
-              ...styledButton,
-              border: `1.5px solid ${
-                filterType === "completed"
-                  ? "var(--forest-green)"
-                  : "var(--blue-gray)"
-              }`,
-              "&:hover": {
-                border: `1.5px solid ${
-                  filterType === "completed"
-                    ? "var(--forest-green)"
-                    : "var(--blue-gray)"
-                }`,
-              },
-            }}
-            onClick={() => setFilterType("completed")}
-          >
-            Completed
-          </Button>
+
+          <div className={styles.buttonContainer}>
+            <Button
+              sx={filterType === "all" ? darkGreenButton : whiteEmptyButton}
+              onClick={() => setFilterType("all")}
+            >
+              All
+            </Button>
+            <Button
+              style={{
+                backgroundColor:
+                  filterType === "inProgress" ? "var(--forest-green)" : "white",
+                color:
+                  filterType === "inProgress" ? "white" : "var(--blue-gray)",
+              }}
+              sx={
+                filterType === "inProgress" ? darkGreenButton : whiteEmptyButton
+              }
+              onClick={() => setFilterType("inProgress")}
+            >
+              In Progress
+            </Button>
+            <Button
+              sx={
+                filterType === "completed" ? darkGreenButton : whiteEmptyButton
+              }
+              onClick={() => setFilterType("completed")}
+            >
+              Completed
+            </Button>
+          </div>
         </div>
 
         <div className={styles.cardsContainer}>
