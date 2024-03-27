@@ -43,7 +43,8 @@ function NavigationBar() {
               isActive
                 ? `${styles.tab} ${styles.tabActive}`
                 : `${styles.tab} ${styles.tabInActive}`
-            }>
+            }
+          >
             <div>
               <img
                 className={styles.iconActive}
@@ -62,12 +63,13 @@ function NavigationBar() {
 
         <div className={styles.tabContainer}>
           <NavLink
-            to="/trainingLibrary"
+            to="/trainings"
             className={({ isActive }) =>
               isActive
                 ? `${styles.tab} ${styles.tabActive}`
                 : `${styles.tab} ${styles.tabInActive}`
-            }>
+            }
+          >
             <div>
               <img
                 className={styles.iconActive}
@@ -86,12 +88,13 @@ function NavigationBar() {
 
         <div className={styles.tabContainer}>
           <NavLink
-            to="/trainingsInProgress"
+            to="/pathways"
             className={({ isActive }) =>
               isActive
                 ? `${styles.tab} ${styles.tabActive}`
                 : `${styles.tab} ${styles.tabInActive}`
-            }>
+            }
+          >
             <div>
               <img
                 className={styles.iconActive}
@@ -115,7 +118,8 @@ function NavigationBar() {
               isActive
                 ? `${styles.tab} ${styles.tabActive}`
                 : `${styles.tab} ${styles.tabInActive}`
-            }>
+            }
+          >
             <div>
               <img
                 className={styles.iconActive}
@@ -137,7 +141,8 @@ function NavigationBar() {
           onClick={() => {
             handleLogOut();
           }}
-          className={styles.menuItem}>
+          className={styles.menuItem}
+        >
           <img src={logout} alt="Logout" />
           Log Out
         </button>

@@ -14,7 +14,7 @@ const PathwayCard: React.FC<PathwayCardProps> = ({
   progress,
 }) => {
   const renderMarker = () => {
-    if (progress === undefined) {
+    if (progress === undefined || progress === 0) {
       // Pathway not started
       return (
         <div className={`${styles.marker} ${styles.notStartedMarker}`}>

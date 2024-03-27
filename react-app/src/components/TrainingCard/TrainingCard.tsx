@@ -14,7 +14,7 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
   progress,
 }) => {
   const renderMarker = () => {
-    if (progress === undefined) {
+    if (progress === undefined || progress === 0) {
       // Training not started
       return (
         <div className={`${styles.marker} ${styles.notStartedMarker}`}>

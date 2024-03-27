@@ -34,7 +34,7 @@ function Dashboard() {
         </div>
         <div className={styles.subHeader}>
           <h2>Pathways in Progress</h2>
-          <Link className={styles.viewAllLink} to="/">
+          <Link className={styles.viewAllLink} to="/pathways">
             VIEW ALL
           </Link>
         </div>
@@ -51,7 +51,7 @@ function Dashboard() {
         </div>
         <div className={styles.subHeader}>
           <h2>Trainings in Progress</h2>
-          <Link className={styles.viewAllLink} to="/trainingsInProgress">
+          <Link className={styles.viewAllLink} to="/trainings">
             VIEW ALL
           </Link>
         </div>
@@ -68,7 +68,7 @@ function Dashboard() {
         </div>
         <div className={styles.subHeader}>
           <h2>Recent Badges</h2>
-          <Link className={styles.viewAllLink} to="/">
+          <Link className={styles.viewAllLink} to="/achievements">
             VIEW ALL
           </Link>
         </div>
@@ -85,7 +85,7 @@ function Dashboard() {
         </div>
         <div className={styles.subHeader}>
           <h2>Recent Certifications</h2>
-          <Link className={styles.viewAllLink} to="/trainingsCompleted">
+          <Link className={styles.viewAllLink} to="/achievements">
             VIEW ALL
           </Link>
         </div>
