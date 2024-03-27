@@ -12,7 +12,7 @@ export interface Volunteer extends User {
   firstName: string;
   lastName: string;
   trainingInformation: VolunteerTraining[];
-  pathwayInformation: PathwayTraining[];
+  pathwayInformation: VolunteerPathway[];
 }
 
 export interface VolunteerTraining {
@@ -23,7 +23,7 @@ export interface VolunteerTraining {
   quizScoreRecieved: number;
 }
 
-export interface PathwayTraining {
+export interface VolunteerPathway {
   pathwayID: string;
   progress: Progress;
   trainingsCompleted: string[];
