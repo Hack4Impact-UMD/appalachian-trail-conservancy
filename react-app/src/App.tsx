@@ -14,6 +14,9 @@ import AchievementsPage from "./pages/AchievementsPage/AchievementsPage.tsx";
 import RequireAuth from "./auth/RequireAuth/RequireAuth.tsx";
 import { AuthProvider } from "./auth/AuthProvider.tsx";
 
+//remove
+import QuizResult from "./components/QuizResult/QuizResult.tsx";
+
 function App() {
   return (
     <ThemeProvider theme={theme}>
@@ -84,6 +87,16 @@ function App() {
                     TEST
                   </button>
                 </RequireAuth>
+              }
+            />
+            <Route
+              path="/quizresult"
+              element={
+                <QuizResult
+                  achievedScore={10}
+                  totalScore={10}
+                  passingScore={5}
+                />
               }
             />
           </Routes>

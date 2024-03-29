@@ -16,12 +16,8 @@ import { useNavigate } from "react-router";
 import Loading from "../../../components/LoadingScreen/Loading";
 import styles from "./VolunteerLoginPage.module.css";
 import primaryLogo from "../../../assets/atc-primary-logo.png";
-<<<<<<< HEAD
-import { styledButtonGreen, styledButtonWhiteGreen, styledInputBoxes } from "../../../muiTheme";
-=======
 import { styledButtonGreen, styledInputBoxes } from "../../../muiTheme";
 import loginBanner from "../../../assets/login-banner.jpeg";
->>>>>>> main
 
 const styledRectButton = {
   width: 350,
@@ -88,7 +84,8 @@ function VolunteerLoginPage() {
                 if (!openForgotModal) {
                   handleSignIn(event);
                 }
-              }}>
+              }}
+            >
               {/* email field */}
               <div className={styles.alignLeft}>
                 <h3 className={styles.label}>Email</h3>
@@ -124,7 +121,8 @@ function VolunteerLoginPage() {
                         aria-label="toggle password visibility"
                         onClick={() => setShowPassword(!showPassword)}
                         onMouseDown={() => setShowPassword(!showPassword)}
-                        edge="end">
+                        edge="end"
+                      >
                         {showPassword ? <VisibilityOff /> : <Visibility />}
                       </IconButton>
                     </InputAdornment>
@@ -141,57 +139,33 @@ function VolunteerLoginPage() {
                     padding: "0px",
                     margin: "8px 0px 18px 0px",
                   }}
-                  variant="text">
+                  variant="text"
+                >
                   Forgot Password?
                 </Button>
               </div>
 
               {/* sign in button */}
               <Button
-<<<<<<< HEAD
-                sx={{ color: "var(--forest-green)", padding: "0px", margin: "8px 0px 18px 0px" }}
-                variant="text"
-              >
-                Forgot Password?
-=======
                 type="submit"
                 sx={{ ...styledRectButton, ...styledButtonGreen }}
                 variant="contained"
-                onClick={(e) => handleSignIn(e)}>
+                onClick={(e) => handleSignIn(e)}
+              >
                 {showLoading ? <Loading></Loading> : "Sign In"}
->>>>>>> main
               </Button>
 
-<<<<<<< HEAD
-            {/* sign in button */}
-            <Button
-              sx={{ ...styledRectButton, ...styledButtonGreen }}
-              variant="contained"
-              href="#contained-buttons"
-            >
-              Sign in
-            </Button>
-
-            {/* continue as guest button */}
-            <Button
-              sx={{ ...styledRectButton, ...styledButtonWhiteGreen }}
-              variant="contained"
-              href="#contained-buttons"
-            >
-              Continue as guest
-            </Button>
-=======
               {/* error message */}
               <p
                 className={
                   failureMessage
                     ? styles.showFailureMessage
                     : styles.errorContainer
-                }>
+                }
+              >
                 {failureMessage}
               </p>
             </form>
->>>>>>> main
 
             {/* switch to admin link */}
             <Link to="/login/admin">

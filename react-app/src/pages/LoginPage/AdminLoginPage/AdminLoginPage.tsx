@@ -65,7 +65,8 @@ function AdminLoginPage() {
                 if (!openForgotModal) {
                   handleSignIn(event);
                 }
-              }}>
+              }}
+            >
               {/* email field */}
               <div className={styles.alignLeft}>
                 <h3 className={styles.label}>Email</h3>
@@ -101,7 +102,8 @@ function AdminLoginPage() {
                         aria-label="toggle password visibility"
                         onClick={handleClickShowPassword}
                         onMouseDown={handleMouseDownPassword}
-                        edge="end">
+                        edge="end"
+                      >
                         {showPassword ? <VisibilityOff /> : <Visibility />}
                       </IconButton>
                     </InputAdornment>
@@ -118,24 +120,19 @@ function AdminLoginPage() {
                     padding: "0px",
                     margin: "8px 0px 8px 0px",
                   }}
-                  variant="text">
+                  variant="text"
+                >
                   Forgot Password?
                 </Button>
               </div>
 
               {/* sign in button */}
               <Button
-<<<<<<< HEAD
-                sx={{ color: "var(--forest-green)", padding: "0px", margin: "8px 0px 18px 0px" }}
-                variant="text"
-              >
-                Forgot Password?
-=======
                 type="submit"
                 sx={{ ...styledRectButton, ...styledButtonGreen }}
-                variant="contained">
+                variant="contained"
+              >
                 {showLoading ? <Loading></Loading> : "Sign In"}
->>>>>>> main
               </Button>
 
               {/* error message */}
@@ -144,7 +141,8 @@ function AdminLoginPage() {
                   failureMessage
                     ? styles.showFailureMessage
                     : styles.errorContainer
-                }>
+                }
+              >
                 {failureMessage}
               </p>
             </form>
