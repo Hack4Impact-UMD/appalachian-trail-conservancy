@@ -48,12 +48,11 @@ export default theme;
 const styledButton = {
   borderRadius: "10px",
   boxShadow: "none",
-  // padding: "2.5%",
-}
+};
 
 // dark green button
 export const styledButtonGreen = {
-  ...styledButton, 
+  ...styledButton,
   color: "white",
   backgroundColor: "var(--forest-green)",
   border: "2px solid var(--forest-green)",
@@ -85,7 +84,7 @@ export const styledButtonWhiteBlack = {
     backgroundColor: "white",
     color: "dimgray",
   },
-}
+};
 
 // used in login page
 export const styledInputBoxes = {

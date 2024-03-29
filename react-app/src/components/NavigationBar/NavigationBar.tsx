@@ -1,131 +1,149 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import "./NavigationBar.css";
+import { useNavigate } from "react-router-dom";
+import { logOut } from "../../backend/AuthFunctions";
+import styles from "./NavigationBar.module.css";
 import atcprimarylogo from "../../assets/atc-primary-logo.png";
 import dashboardActive from "../../assets/dashboardWhite.svg";
 import dashboardInactive from "../../assets/dashboardGray.svg";
-import completedActive from "../../assets/completedWhite.svg";
-import completedInactive from "../../assets/completedGray.svg";
-import libraryActive from "../../assets/libraryWhite.svg";
-import libraryInactive from "../../assets/libraryGray.svg";
-import progressActive from "../../assets/progressWhite.svg";
-import progressInactive from "../../assets/progressGray.svg";
+import trainingsActive from "../../assets/trainingsWhite.svg";
+import trainingsInactive from "../../assets/trainingsGray.svg";
+import pathwaysActive from "../../assets/pathwaysWhite.svg";
+import pathwaysInactive from "../../assets/pathwaysGray.svg";
+import achievementsActive from "../../assets/achievementsWhite.svg";
+import achievementInactive from "../../assets/achievementsGray.svg";
+
 import logout from "../../assets/logout.svg";
 
-interface NavigationProps {
-  activeItem: string;
-  onItemClick: (item: string) => void;
-}
+function NavigationBar() {
+  // Add Error Handling
+  const [submittedError, setSubmittedError] = useState<boolean>(false);
+  const navigate = useNavigate();
 
-const Navigation: React.FunctionComponent<NavigationProps> = ({
-  activeItem,
-  onItemClick,
-}) => {
-  const handleItemClick = (item: string) => {
-    if (activeItem !== item) {
-      onItemClick(item);
-    }
+  const handleLogOut = (): void => {
+    logOut()
+      .then(() => {
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
-    <div className="navigation-container">
-      <div className="logo-container">
-        <img src={atcprimarylogo} alt="Hack4Impact Logo" className="logo" />
+    <div className={styles.navigationContainer}>
+      <div className={styles.logoContainer}>
+        <img src={atcprimarylogo} alt="ATC Logo" className={styles.logo} />
       </div>
-      <div className="menu-items">
-        <div className="tab-container">
-          <NavLink to="/" className="nav-link">
-            <div
-              className={`tab ${
-                activeItem === "Dashboard" ? "active" : "inactive"
-              }`}
-              onClick={() => handleItemClick("Dashboard")}
-            >
+      <div className={styles.menuItems}>
+        <div className={styles.tabContainer}>
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              isActive
+                ? `${styles.tab} ${styles.tabActive}`
+                : `${styles.tab} ${styles.tabInActive}`
+            }>
+            <div>
               <img
-                className="icon"
-                src={
-                  activeItem === "Dashboard"
-                    ? dashboardActive
-                    : dashboardInactive
-                }
-                alt="Dashboard Icon"
+                className={styles.iconActive}
+                src={dashboardActive}
+                alt="dashboard icon"
               />
-              Dashboard
+              <img
+                className={styles.iconInactive}
+                src={dashboardInactive}
+                alt="dashboard icon"
+              />
             </div>
+            Dashboard
           </NavLink>
         </div>
 
-        <div className="tab-container">
-          <NavLink to="/" className="nav-link">
-            <div
-              className={`tab ${
-                activeItem === "Library" ? "active" : "inactive"
-              }`}
-              onClick={() => handleItemClick("Library")}
-            >
+        <div className={styles.tabContainer}>
+          <NavLink
+            to="/trainingLibrary"
+            className={({ isActive }) =>
+              isActive
+                ? `${styles.tab} ${styles.tabActive}`
+                : `${styles.tab} ${styles.tabInActive}`
+            }>
+            <div>
               <img
-                className="icon"
-                src={activeItem === "Library" ? libraryActive : libraryInactive}
-                alt="Library Icon"
+                className={styles.iconActive}
+                src={trainingsActive}
+                alt="trainings icon"
               />
-              Trainings Library
+              <img
+                className={styles.iconInactive}
+                src={trainingsInactive}
+                alt="trainings icon"
+              />
             </div>
+            Trainings
           </NavLink>
         </div>
 
-        <div className="tab-container">
-          <NavLink to="/" className="nav-link">
-            <div
-              className={`tab ${
-                activeItem === "Progress" ? "active" : "inactive"
-              }`}
-              onClick={() => handleItemClick("Progress")}
-            >
+        <div className={styles.tabContainer}>
+          <NavLink
+            to="/trainingsInProgress"
+            className={({ isActive }) =>
+              isActive
+                ? `${styles.tab} ${styles.tabActive}`
+                : `${styles.tab} ${styles.tabInActive}`
+            }>
+            <div>
               <img
-                className="icon"
-                src={
-                  activeItem === "Progress" ? progressActive : progressInactive
-                }
-                alt="Progress Icon"
+                className={styles.iconActive}
+                src={pathwaysActive}
+                alt="pathways icon"
               />
-              Trainings in Progress
+              <img
+                className={styles.iconInactive}
+                src={pathwaysInactive}
+                alt="pathways icon"
+              />
             </div>
+            Pathways
           </NavLink>
         </div>
 
-        <div className="tab-container">
-          <NavLink to="/" className="nav-link">
-            <div
-              className={`tab ${
-                activeItem === "Completed" ? "active" : "inactive"
-              }`}
-              onClick={() => handleItemClick("Completed")}
-            >
+        <div className={styles.tabContainer}>
+          <NavLink
+            to="/achievements"
+            className={({ isActive }) =>
+              isActive
+                ? `${styles.tab} ${styles.tabActive}`
+                : `${styles.tab} ${styles.tabInActive}`
+            }>
+            <div>
               <img
-                className="icon"
-                src={
-                  activeItem === "Completed"
-                    ? completedActive
-                    : completedInactive
-                }
-                alt="Completed Icon"
+                className={styles.iconActive}
+                src={achievementsActive}
+                alt="achievements icon"
               />
-              Trainings Completed
+              <img
+                className={styles.iconInactive}
+                src={achievementInactive}
+                alt="achievements icon"
+              />
             </div>
+            Achievements
           </NavLink>
         </div>
       </div>
-      <div className="logout-container">
+      <div className={styles.logoutContainer}>
         <button
-          onClick={() => console.log("Logout clicked")}
-          className="menu-item"
-        >
+          onClick={() => {
+            handleLogOut();
+          }}
+          className={styles.menuItem}>
           <img src={logout} alt="Logout" />
           Log Out
         </button>
       </div>
     </div>
   );
-};
+}
 
-export default Navigation;
+export default NavigationBar;

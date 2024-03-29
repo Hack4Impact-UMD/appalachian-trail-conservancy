@@ -1,11 +1,12 @@
 import Certificate from "../../components/CertificateCard/Certificate.tsx";
-import TrainingCard from "../../components/TrainingCard/Training.tsx";
+import TrainingCard from "../../components/TrainingCard/TrainingCard.tsx";
 import styles from "./TrainingsCompletedPage.module.css";
+import NavigationBar from "../../components/NavigationBar/NavigationBar.tsx";
 
 const TrainingsCompletedPage = () => {
   return (
-    <div className={styles.split}>
-      <div className={`${styles.split} ${styles.left}`}></div>
+    <>
+      <NavigationBar />
       <div className={`${styles.split} ${styles.right}`}>
         <div className={styles.header}>
           <h1 className={styles.nameHeading}>Trainings Completed</h1>
@@ -46,21 +47,18 @@ const TrainingsCompletedPage = () => {
           <TrainingCard
             image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
             title="Another Training Task"
-            subtitle="Another Subtitle"
           />
           <TrainingCard
             image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
             title="Another Training Task"
-            subtitle="Another Subtitle"
           />
           <TrainingCard
             image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
             title="Another Training Task"
-            subtitle="Another Subtitle"
           />
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

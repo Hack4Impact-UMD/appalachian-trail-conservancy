@@ -1,110 +1,135 @@
+.pageContainer {
+  overflow: hidden;
+  min-height: 100vh;
+}
+
 /* split screen in two */
 .split {
-    height: 100%;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    overflow-x: hidden;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  height: 100vh;
+  overflow: visible;
 }
 
 /* left image panel */
 .left {
-    left: 0;
-    width: 65%;
-    max-width: calc(100vw - 600px);
+  background-size: cover;
+  object-fit: cover;
+  height: 100%;
+  overflow: hidden;
 }
 
 /* right login panel */
 .right {
-    right: 0;
-    width: 35%;
-    min-width: 600px;
+  min-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow-y: scroll;
 }
 
-/* center right login panel vertically & horizontally */
+/* center right login form */
 .centered {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-  }
-
-/* login fill in section */
-.login_input{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* Admin */
-.heading{
-    font-size: 33px;
-    color: var(--blue-gray);
-    /* margin: 8px;
-    margin-top: 5%; */
-    margin-bottom: 0%;
+.heading {
+  font-size: 33px;
+  color: var(--blue-gray);
+  margin-bottom: 0%;
 }
 
 /* login text */
-.alignLeft{
-    width: 100%;
-    text-align: left;
+.alignLeft {
+  width: 100%;
+  text-align: left;
 }
 
 /* for input text boxes */
-.label{
-    margin-bottom: 3%; 
-    margin-top: 8%;
-    color: var(--blue-gray);
+.label {
+  margin-bottom: 0.75rem;
+  margin-top: 1.5rem;
+  color: var(--blue-gray);
+}
+
+/* error message container - used for spacing */
+.errorContainer {
+  visibility: hidden;
+  margin-top: 10px;
+  font-size: 1rem;
+  height: 18px;
+}
+
+/* active error message container */
+.showFailureMessage {
+  margin-top: 10px;
+  font-size: 1rem;
+  color: red;
+  text-align: center;
 }
 
 /* switch to user login - style to look like link */
-.switch{
-    font-weight: bold;
-    text-decoration: underline;
-    text-underline-position: under;
-    background-color: white;
-    border: none;
-    cursor: pointer;
-    margin: 20% 0% 5% 0%
-}
-
-/* for left panel */
-.leftImgContainer {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-}
-
-.leftImgContainer img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+.switch {
+  font-weight: bold;
+  text-decoration: underline;
+  text-underline-position: under;
+  background-color: white;
+  border: none;
+  cursor: pointer;
+  margin: 20% 0% 5% 0%;
 }
 
 /* for logo */
 .rightImgContainer {
-    width: 43%;
-    height: 43%;
-    overflow: hidden;
+  width: 30%;
 }
 
 .rightImgContainer img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* mobile */
-@media (max-width: 600px) {
-    .left {
-        width: 0%;
-    }
-    .right {
-        width: 100%;
-        min-width: 0%;
-    }
+@media screen and (max-width: 850px) {
+  .left {
+    width: 0%;
+  }
+  .right {
+    width: 100%;
+    min-width: 0%;
+  }
+}
+
+@media screen and (max-height: 750px) {
+  .split {
+    flex-direction: row;
+    height: 100%;
+  }
+
+  .right {
+    display: flex;
+    width: 50%;
+    height: 100%;
+    overflow: visible;
+    padding-top: 2rem;
+    padding-bottom: 1rem;
+  }
+
+  .left {
+    background-size: cover;
+    object-fit: cover;
+    min-height: 750px;
+    overflow: hidden;
+    max-height: 100vh;
+  }
+
+  .rightImgContainer {
+    width: 20%;
+  }
 }

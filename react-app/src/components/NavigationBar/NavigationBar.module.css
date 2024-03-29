@@ -1,0 +1,111 @@
+.navigationContainer {
+  width: 250px;
+  height: 100vh;
+  background-color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+}
+
+.logoContainer {
+  text-align: center;
+  margin-top: 15%;
+}
+
+.logo {
+  width: 60%;
+}
+
+.menuItems {
+  text-align: center;
+  margin-top: 15%;
+}
+
+.menuItem img {
+  width: 20px;
+}
+
+.tabContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.tab {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 5% 10% 5% 12%;
+  cursor: pointer;
+  width: 100%;
+  gap: 7%;
+  font-weight: bold;
+}
+
+.tab img {
+  width: 20px;
+}
+
+.tab.tabActive {
+  background-color: var(--forest-green);
+  color: white;
+  font-weight: bold;
+}
+
+.tab.tabInActive {
+  background-color: white;
+  color: var(--blue-gray);
+  font-weight: bold;
+}
+
+.iconInactive {
+  display: block;
+}
+
+.iconActive {
+  display: none;
+}
+
+.tabActive .iconInactive {
+  display: none;
+}
+
+.tabActive .iconActive {
+  display: block;
+}
+
+.logoutContainer img {
+  margin-right: 10px;
+}
+
+.logoutContainer {
+  position: absolute;
+  bottom: 20px;
+  left: 25px;
+  display: flex;
+  align-items: center;
+}
+
+.logoutContainer button {
+  background-color: white;
+  font-weight: bold;
+  text-align: left;
+  cursor: pointer;
+  border: none;
+  display: flex;
+  align-items: center;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  color: inherit;
+}
