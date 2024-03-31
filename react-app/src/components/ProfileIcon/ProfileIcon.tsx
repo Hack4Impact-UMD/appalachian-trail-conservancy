@@ -14,12 +14,13 @@ const ProfileIcon: React.FC<ProfileIconProps> = ({ user }) => {
         width: "50px",
         height: "50px",
         borderRadius: "50%",
-        backgroundColor: "forestgreen",
+        backgroundColor: "#0A7650",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         color: "white",
         fontSize: "18px",
+        fontWeight: "bold",
       }}
     >
       {initials}
