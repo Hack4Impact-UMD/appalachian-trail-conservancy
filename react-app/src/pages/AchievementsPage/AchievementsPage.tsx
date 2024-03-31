@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styles from "./AchievementsPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
-import { darkGreenButton, whiteEmptyButton } from "../../muiTheme";
+import { styledButtonGreen, styledButtonWhiteBlack } from "../../muiTheme";
 import { Button } from "@mui/material";
 import { MdSort } from "react-icons/md";
 
@@ -24,19 +24,23 @@ function AchievementsPage() {
             <div className={styles.button}>
               <Button
                 onClick={() => setBadgesSelected(true)}
-                sx={badgesSelected ? darkGreenButton : whiteEmptyButton}>
+                sx={badgesSelected ? styledButtonGreen : styledButtonWhiteBlack}
+              >
                 Pathway Badges
               </Button>
             </div>
             <div className={styles.button}>
               <Button
                 onClick={() => setBadgesSelected(false)}
-                sx={!badgesSelected ? darkGreenButton : whiteEmptyButton}>
+                sx={
+                  !badgesSelected ? styledButtonGreen : styledButtonWhiteBlack
+                }
+              >
                 Training Certificates
               </Button>
             </div>
           </div>
-          <Button sx={whiteEmptyButton}>
+          <Button sx={styledButtonWhiteBlack}>
             <MdSort />
             Sort
           </Button>
