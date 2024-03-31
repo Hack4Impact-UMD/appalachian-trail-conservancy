@@ -21,10 +21,21 @@ function App() {
   const handleItemClick = (item: string) => {
     setActiveItem(item);
   };
-
+  const quizData = {
+    currentQuestion: 1,
+    totalQuestions: 5,
+    question: "What is the capital of France?",
+    answerOptions: ["Paris", "Berlin", "London", "Madrid"],
+  };
   return (
     <>
-      <ThemeProvider theme={theme}>
+      <QuizCard
+        currentQuestion={quizData.currentQuestion}
+        totalQuestions={quizData.totalQuestions}
+        question={quizData.question}
+        answerOptions={quizData.answerOptions}
+      />
+      {/* <ThemeProvider theme={theme}>
         <BrowserRouter>
           <Routes>
             <Route
@@ -53,7 +64,7 @@ function App() {
             <Route path="/*" element={<NotFoundPage />}></Route>
           </Routes>
         </BrowserRouter>
-      </ThemeProvider>
+      </ThemeProvider> */}
     </>
   );
 }
