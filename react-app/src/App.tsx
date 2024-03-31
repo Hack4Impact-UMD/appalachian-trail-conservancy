@@ -89,16 +89,6 @@ function App() {
                 </RequireAuth>
               }
             />
-            <Route
-              path="/quizresult"
-              element={
-                <QuizResult
-                  achievedScore={10}
-                  totalScore={10}
-                  passingScore={5}
-                />
-              }
-            />
           </Routes>
         </BrowserRouter>
       </AuthProvider>
