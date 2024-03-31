@@ -13,6 +13,7 @@ import AdminLoginPage from "./pages/LoginPage/AdminLoginPage/AdminLoginPage.tsx"
 import AchievementsPage from "./pages/AchievementsPage/AchievementsPage.tsx";
 import RequireAuth from "./auth/RequireAuth/RequireAuth.tsx";
 import { AuthProvider } from "./auth/AuthProvider.tsx";
+import { getAllTrainings, getAllPathways } from './backend/FirestoreCalls';
 
 //remove
 import QuizResult from "./components/QuizResult/QuizResult.tsx";
@@ -80,8 +81,9 @@ function App() {
               element={
                 <RequireAuth>
                   <button
-                    onClick={() => {
-                      //your function
+                    onClick={ async () => { 
+                      console.log(getAllTrainings());
+                      console.log(getAllPathways());               
                     }}
                   >
                     TEST

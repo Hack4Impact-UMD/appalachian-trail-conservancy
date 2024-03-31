@@ -1,5 +1,5 @@
-import { addTraining, addPathway } from "../backend/FirestoreCalls";
-import { type Training } from "../types/TrainingType";
+import { addTraining, addPathway, getAllTrainings, getAllPathways } from "../backend/FirestoreCalls";
+import { type Training, TrainingID } from "../types/TrainingType";
 import { type Pathway } from "../types/PathwayType";
 
 export const addSampleTraining = ({
