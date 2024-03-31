@@ -14,6 +14,9 @@ import AchievementsPage from "./pages/AchievementsPage/AchievementsPage.tsx";
 import RequireAuth from "./auth/RequireAuth/RequireAuth.tsx";
 import { AuthProvider } from "./auth/AuthProvider.tsx";
 
+//remove
+import QuizResult from "./components/QuizResult/QuizResult.tsx";
+
 function App() {
   return (
     <ThemeProvider theme={theme}>
@@ -69,7 +72,8 @@ function App() {
                 <RequireAuth>
                   <NotFoundPage />
                 </RequireAuth>
-              }></Route>
+              }
+            ></Route>
 
             <Route
               path="/testfunctions"
@@ -78,7 +82,8 @@ function App() {
                   <button
                     onClick={() => {
                       //your function
-                    }}>
+                    }}
+                  >
                     TEST
                   </button>
                 </RequireAuth>

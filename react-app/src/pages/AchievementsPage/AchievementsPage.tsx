@@ -1,9 +1,10 @@
 import styles from "./AchievementsPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
-import { darkGreenButton, whiteEmptyButton } from "../../muiTheme";
 import { Select, MenuItem, Button } from "@mui/material";
 import { useState, useEffect } from "react";
 import Certificate from "../../components/CertificateCard/Certificate";
+import { styledButtonGreen, styledButtonWhiteBlack } from "../../muiTheme";
+import { MdSort } from "react-icons/md";
 
 function AchievementsPage() {
   const months = [
@@ -95,7 +96,7 @@ function AchievementsPage() {
             <div className={styles.button}>
               <Button
                 onClick={() => setBadgesSelected(true)}
-                sx={badgesSelected ? darkGreenButton : whiteEmptyButton}
+                sx={badgesSelected ? styledButtonGreen : styledButtonWhiteBlack}
               >
                 Pathway Badges
               </Button>
@@ -103,7 +104,9 @@ function AchievementsPage() {
             <div className={styles.button}>
               <Button
                 onClick={() => setBadgesSelected(false)}
-                sx={!badgesSelected ? darkGreenButton : whiteEmptyButton}
+                sx={
+                  !badgesSelected ? styledButtonGreen : styledButtonWhiteBlack
+                }
               >
                 Training Certificates
               </Button>
@@ -119,6 +122,7 @@ function AchievementsPage() {
         <div className={styles.cardsContainer}>
           {sortedCards.map((card, index) => (
             <Certificate
+              key={index}
               image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
               title={card.title}
               date={card.date}
