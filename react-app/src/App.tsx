@@ -81,10 +81,12 @@ function App() {
               element={
                 <RequireAuth>
                   <button
+                  /*
                     onClick={ async () => { 
                       console.log(getAllTrainings());
                       console.log(getAllPathways());               
                     }}
+                    */
                   >
                     TEST
                   </button>
