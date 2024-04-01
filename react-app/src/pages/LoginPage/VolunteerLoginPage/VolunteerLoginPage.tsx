@@ -18,7 +18,7 @@ import styles from "./VolunteerLoginPage.module.css";
 import primaryLogo from "../../../assets/atc-primary-logo.png";
 import { styledButtonGreen, styledInputBoxes } from "../../../muiTheme";
 import loginBanner from "../../../assets/login-banner.jpeg";
-import ForgotPasswordModal from "../ForgotPasswordModal/ForgotPasswordModal"
+import ForgotPasswordModal from "../ForgotPasswordModal/ForgotPasswordModal";
 
 const styledRectButton = {
   width: 350,
@@ -182,7 +182,10 @@ function VolunteerLoginPage() {
           </div>
         </div>
       </div>
-      <ForgotPasswordModal open={openForgotModal} onClose={handleCloseForgotModal}></ForgotPasswordModal>
+      <ForgotPasswordModal
+        open={openForgotModal}
+        onClose={handleCloseForgotModal}
+      />
     </div>
   );
 }
