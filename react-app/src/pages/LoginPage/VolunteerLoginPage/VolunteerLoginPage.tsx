@@ -18,6 +18,7 @@ import styles from "./VolunteerLoginPage.module.css";
 import primaryLogo from "../../../assets/atc-primary-logo.png";
 import { styledButtonGreen, styledInputBoxes } from "../../../muiTheme";
 import loginBanner from "../../../assets/login-banner.jpeg";
+import ForgotPasswordModal from "../ForgotPasswordModal/ForgotPasswordModal";
 
 const styledRectButton = {
   width: 350,
@@ -31,6 +32,12 @@ function VolunteerLoginPage() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   //Add Forgot Password Popup
   const [openForgotModal, setOpenForgotModal] = useState<boolean>(false);
+  const handleOpenForgotModal = () => {
+    setOpenForgotModal(true);
+  };
+  const handleCloseForgotModal = () => {
+    setOpenForgotModal(false);
+  };
   const [showLoading, setShowLoading] = useState<boolean>(false);
   //Add Error Handling
   const [failureMessage, setFailureMessage] = useState<string>("");
@@ -140,6 +147,7 @@ function VolunteerLoginPage() {
                     margin: "8px 0px 18px 0px",
                   }}
                   variant="text"
+                  onClick={handleOpenForgotModal}
                 >
                   Forgot Password?
                 </Button>
@@ -174,6 +182,10 @@ function VolunteerLoginPage() {
           </div>
         </div>
       </div>
+      <ForgotPasswordModal
+        open={openForgotModal}
+        onClose={handleCloseForgotModal}
+      />
     </div>
   );
 }
