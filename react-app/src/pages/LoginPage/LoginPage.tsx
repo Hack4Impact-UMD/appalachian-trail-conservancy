@@ -29,17 +29,15 @@ function LoginPage() {
             <Link to="/login/user">
               <Button
                 sx={{ ...styledRectButton, ...styledButtonGreen }}
-                variant="contained"
-              >
-                Sign in as user
+                variant="contained">
+                Sign in as volunteer
               </Button>
             </Link>
             <Link to="/login/admin">
               <Button
                 sx={{ ...styledRectButton, ...styledButtonWhiteGreen }}
                 variant="contained"
-                href="#contained-buttons"
-              >
+                href="#contained-buttons">
                 Sign in as admin
               </Button>
             </Link>
