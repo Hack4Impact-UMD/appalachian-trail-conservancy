@@ -7,13 +7,6 @@
   overflow-x: hidden;
 }
 
-/* dummy space for navbar */
-.left {
-  left: 0;
-  width: 250px;
-  background-color: gray;
-}
-
 .right {
   right: 0;
   left: 250px;
@@ -30,7 +23,6 @@
   justify-content: space-between;
   align-items: center;
   margin-top: 1.5%;
-  margin-bottom: -0.5%;
 }
 
 .nameHeading {
@@ -57,6 +49,13 @@
 .searchBarContainer {
   margin-top: 2rem;
   margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.buttonContainer {
+  display: flex;
+  gap: 20px;
 }
 
 .cardsContainer {
@@ -67,4 +66,12 @@
   row-gap: 1em;
   column-gap: 1em;
   margin-bottom: 1rem;
+}
+
+.card {
+  margin-bottom: 1%;
+}
+
+.subHeader h2 {
+  margin: 50px 0px 25px 0px;
 }

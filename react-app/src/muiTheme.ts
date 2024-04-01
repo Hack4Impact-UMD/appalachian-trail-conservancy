@@ -74,6 +74,36 @@ export const styledButtonWhiteGreen = {
   },
 };
 
+export const darkGreenButton = {
+  borderRadius: "20px",
+  boxShadow: "none",
+  color: "white",
+  paddingLeft: "20px",
+  paddingRight: "20px",
+  height: 44,
+  backgroundColor: "var(--forest-green)",
+  border: "2px solid var(--forest-green)",
+  "&:hover": {
+    backgroundColor: "var(--forest-green)",
+    color: "white",
+  },
+};
+
+export const whiteEmptyButton = {
+  borderRadius: "20px",
+  boxShadow: "none",
+  color: "black",
+  paddingLeft: "20px",
+  paddingRight: "20px",
+  height: 44,
+  backgroundColor: "white",
+  border: "2px solid black",
+  "&:hover": {
+    backgroundColor: "white",
+    color: "black",
+  },
+};
+
 // white with dark gray borders
 export const styledButtonWhiteBlack = {
   ...styledButton,
@@ -91,6 +121,14 @@ export const styledInputBoxes = {
   border: "1px solid black",
   borderRadius: "8px",
   width: 350,
+  height: 40,
+  "& fieldset": { border: "none" },
+};
+
+export const styledLibrarySearchBar = {
+  border: "2px solid var(--blue-gray)",
+  borderRadius: "10px",
+  width: "55%",
   height: 40,
   "& fieldset": { border: "none" },
 };
