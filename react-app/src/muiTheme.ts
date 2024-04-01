@@ -45,9 +45,14 @@ theme = createTheme(theme, {
 
 export default theme;
 
-export const styledButtonGreen = {
+const styledButton = {
   borderRadius: "10px",
   boxShadow: "none",
+};
+
+// dark green button
+export const styledButtonGreen = {
+  ...styledButton,
   color: "white",
   backgroundColor: "var(--forest-green)",
   border: "2px solid var(--forest-green)",
@@ -57,9 +62,9 @@ export const styledButtonGreen = {
   },
 };
 
-export const styledButtonWhite = {
-  borderRadius: "10px",
-  boxShadow: "none",
+// white with dark green borders
+export const styledButtonWhiteGreen = {
+  ...styledButton,
   color: "var(--forest-green)",
   backgroundColor: "white",
   border: "2px solid var(--forest-green)",
@@ -99,6 +104,19 @@ export const whiteEmptyButton = {
   },
 };
 
+// white with dark gray borders
+export const styledButtonWhiteBlack = {
+  ...styledButton,
+  color: "dimgray",
+  backgroundColor: "white",
+  border: "2px solid dimgray",
+  "&:hover": {
+    backgroundColor: "white",
+    color: "dimgray",
+  },
+};
+
+// used in login page
 export const styledInputBoxes = {
   border: "1px solid black",
   borderRadius: "8px",

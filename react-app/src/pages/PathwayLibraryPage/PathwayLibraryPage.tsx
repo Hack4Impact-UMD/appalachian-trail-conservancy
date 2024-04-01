@@ -90,24 +90,21 @@ function PathwayLibrary() {
           <div className={styles.buttonContainer}>
             <Button
               sx={filterType === "all" ? darkGreenButton : whiteEmptyButton}
-              onClick={() => setFilterType("all")}
-            >
+              onClick={() => setFilterType("all")}>
               All
             </Button>
             <Button
               sx={
                 filterType === "inProgress" ? darkGreenButton : whiteEmptyButton
               }
-              onClick={() => setFilterType("inProgress")}
-            >
+              onClick={() => setFilterType("inProgress")}>
               In Progress
             </Button>
             <Button
               sx={
                 filterType === "completed" ? darkGreenButton : whiteEmptyButton
               }
-              onClick={() => setFilterType("completed")}
-            >
+              onClick={() => setFilterType("completed")}>
               Completed
             </Button>
           </div>

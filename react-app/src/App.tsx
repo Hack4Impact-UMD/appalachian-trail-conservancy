@@ -60,8 +60,8 @@ function App() {
                 <RequireAuth>
                   <NotFoundPage />
                 </RequireAuth>
-              }
-            />
+              }></Route>
+
             <Route
               path="/testfunctions"
               element={
@@ -69,8 +69,7 @@ function App() {
                   <button
                     onClick={() => {
                       //your function
-                    }}
-                  >
+                    }}>
                     TEST
                   </button>
                 </RequireAuth>
