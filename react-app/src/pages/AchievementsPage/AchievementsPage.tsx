@@ -130,6 +130,7 @@ function AchievementsPage() {
                 },
                 borderRadius: "10px",
                 "& fieldset": { border: "none" },
+                width: "154px"
               }}
             >
               <MenuItem value={"newest"} sx={styledSelectWhiteBlack}>
