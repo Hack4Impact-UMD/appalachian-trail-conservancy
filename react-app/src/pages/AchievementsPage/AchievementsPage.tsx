@@ -3,7 +3,11 @@ import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import { Select, MenuItem, Button } from "@mui/material";
 import { useState, useEffect } from "react";
 import Certificate from "../../components/CertificateCard/Certificate";
-import { styledButtonGreen, styledButtonWhiteBlack, styledSelectWhiteBlack } from "../../muiTheme";
+import {
+  styledButtonGreen,
+  styledButtonWhiteBlack,
+  styledSelectWhiteBlack,
+} from "../../muiTheme";
 import { MdSort } from "react-icons/md";
 
 function AchievementsPage() {
@@ -113,21 +117,36 @@ function AchievementsPage() {
             </div>
           </div>
           <div className={styles.rightButtonContainer}>
-            <Select value={sortMode} onChange={handleChange} size="small" sx={
-              styledSelectWhiteBlack
-            } style={{
-              border: "2px solid dimgray",
-              "&:hover": {
-                backgroundColor: "white",
-                color: "dimgray",
-              },
-              borderRadius: "10px",
-              /*"& fieldset": { border: "none" },*/
-            }}>
-              <MenuItem value={"newest"} sx={styledSelectWhiteBlack}>SORT: NEWEST</MenuItem>
-              <MenuItem value={"oldest"} sx={styledSelectWhiteBlack}>SORT: OLDEST</MenuItem>
-              <MenuItem value={"alphabetically"} sx={styledSelectWhiteBlack}>SORT: A-Z</MenuItem>
-              <MenuItem value={"reverseAlphabetically"} sx={styledSelectWhiteBlack}>SORT: Z-A</MenuItem>
+            <Select
+              value={sortMode}
+              onChange={handleChange}
+              size="small"
+              sx={{
+                ...styledSelectWhiteBlack,
+                border: "2px solid dimgray",
+                "&:hover": {
+                  backgroundColor: "white",
+                  color: "dimgray",
+                },
+                borderRadius: "10px",
+                "& fieldset": { border: "none" },
+              }}
+            >
+              <MenuItem value={"newest"} sx={styledSelectWhiteBlack}>
+                SORT: NEWEST
+              </MenuItem>
+              <MenuItem value={"oldest"} sx={styledSelectWhiteBlack}>
+                SORT: OLDEST
+              </MenuItem>
+              <MenuItem value={"alphabetically"} sx={styledSelectWhiteBlack}>
+                SORT: A-Z
+              </MenuItem>
+              <MenuItem
+                value={"reverseAlphabetically"}
+                sx={styledSelectWhiteBlack}
+              >
+                SORT: Z-A
+              </MenuItem>
             </Select>
           </div>
         </div>
