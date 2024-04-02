@@ -86,6 +86,17 @@ export const styledButtonWhiteBlack = {
   },
 };
 
+export const styledSelectWhiteBlack = {
+  borderColor: "dimgray",
+  height: '40px',
+  color: "dimgray",
+  backgroundColor: "white",
+  boxShadow: "none",
+  fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif',
+  fontWeight: '500',
+  fontSize: '0.875rem'
+};
+
 // used in login page
 export const styledInputBoxes = {
   border: "1px solid black",

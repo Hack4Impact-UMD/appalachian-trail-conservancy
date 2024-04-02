@@ -3,7 +3,7 @@ import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import { Select, MenuItem, Button } from "@mui/material";
 import { useState, useEffect } from "react";
 import Certificate from "../../components/CertificateCard/Certificate";
-import { styledButtonGreen, styledButtonWhiteBlack } from "../../muiTheme";
+import { styledButtonGreen, styledButtonWhiteBlack, styledSelectWhiteBlack } from "../../muiTheme";
 import { MdSort } from "react-icons/md";
 
 function AchievementsPage() {
@@ -112,12 +112,24 @@ function AchievementsPage() {
               </Button>
             </div>
           </div>
-          <Select value={sortMode} onChange={handleChange}>
-            <MenuItem value={"newest"}>SORT: NEWEST</MenuItem>
-            <MenuItem value={"oldest"}>SORT: OLDEST</MenuItem>
-            <MenuItem value={"alphabetically"}>SORT: A-Z</MenuItem>
-            <MenuItem value={"reverseAlphabetically"}>SORT: Z-A</MenuItem>
-          </Select>
+          <div className={styles.rightButtonContainer}>
+            <Select value={sortMode} onChange={handleChange} size="small" sx={
+              styledSelectWhiteBlack
+            } style={{
+              border: "2px solid dimgray",
+              "&:hover": {
+                backgroundColor: "white",
+                color: "dimgray",
+              },
+              borderRadius: "10px",
+              /*"& fieldset": { border: "none" },*/
+            }}>
+              <MenuItem value={"newest"} sx={styledSelectWhiteBlack}>SORT: NEWEST</MenuItem>
+              <MenuItem value={"oldest"} sx={styledSelectWhiteBlack}>SORT: OLDEST</MenuItem>
+              <MenuItem value={"alphabetically"} sx={styledSelectWhiteBlack}>SORT: A-Z</MenuItem>
+              <MenuItem value={"reverseAlphabetically"} sx={styledSelectWhiteBlack}>SORT: Z-A</MenuItem>
+            </Select>
+          </div>
         </div>
         <div className={styles.cardsContainer}>
           {sortedCards.map((card, index) => (
