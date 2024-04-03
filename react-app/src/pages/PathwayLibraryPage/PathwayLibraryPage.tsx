@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import { IoIosSearch } from "react-icons/io";
 import { TextField, InputAdornment, Button } from "@mui/material";
 import {
-  darkGreenButton,
-  whiteEmptyButton,
+  forestGreenButtonPadding,
+  whiteButtonGrayBorder,
   styledLibrarySearchBar,
 } from "../../muiTheme";
 import debounce from "lodash.debounce";
@@ -91,21 +91,32 @@ function PathwayLibrary() {
           />
           <div className={styles.buttonContainer}>
             <Button
-              sx={filterType === "all" ? darkGreenButton : whiteEmptyButton}
+              sx={
+                filterType === "all"
+                  ? forestGreenButtonPadding
+                  : whiteButtonGrayBorder
+              }
+              variant="contained"
               onClick={() => setFilterType("all")}>
               All
             </Button>
             <Button
               sx={
-                filterType === "inProgress" ? darkGreenButton : whiteEmptyButton
+                filterType === "inProgress"
+                  ? forestGreenButtonPadding
+                  : whiteButtonGrayBorder
               }
+              variant="contained"
               onClick={() => setFilterType("inProgress")}>
               In Progress
             </Button>
             <Button
               sx={
-                filterType === "completed" ? darkGreenButton : whiteEmptyButton
+                filterType === "completed"
+                  ? forestGreenButtonPadding
+                  : whiteButtonGrayBorder
               }
+              variant="contained"
               onClick={() => setFilterType("completed")}>
               Completed
             </Button>

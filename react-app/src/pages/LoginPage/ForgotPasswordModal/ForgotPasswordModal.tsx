@@ -1,15 +1,13 @@
 import { useState } from "react";
 import Modal from "../../../components/ModalWrapper/Modal";
 import { TextField, Button } from "@mui/material";
-import { styledButtonGreen, styledInputBoxes } from "../../../muiTheme";
+import { forestGreenButton, styledInputBoxes } from "../../../muiTheme";
 import styles from "./ForgotPasswordModal.module.css";
 import { IoMdClose } from "react-icons/io";
 
 const styledRectButton = {
-  height: 40,
   width: 350,
   marginTop: "5%",
-  padding: "1%",
 };
 
 interface ForgotPasswordModalProps {
@@ -54,9 +52,8 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
 
             <Button
               type="submit"
-              sx={{ ...styledRectButton, ...styledButtonGreen }}
-              variant="contained"
-            >
+              sx={{ ...styledRectButton, ...forestGreenButton }}
+              variant="contained">
               Reset Password
             </Button>
           </form>

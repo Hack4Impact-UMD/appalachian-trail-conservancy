@@ -1,11 +1,11 @@
 import styles from "./NotFoundPage.module.css";
 import primaryLogo from "../../assets/atc-primary-logo.png";
-import { styledButtonGreen } from "../../muiTheme";
+import { forestGreenButton } from "../../muiTheme";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
 
 const buttonStyle = {
-  ...styledButtonGreen,
+  ...forestGreenButton,
   width: 350,
   marginTop: "5%",
   padding: "1%",

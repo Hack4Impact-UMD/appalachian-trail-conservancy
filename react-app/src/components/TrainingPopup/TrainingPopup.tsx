@@ -1,7 +1,7 @@
 import styles from "./TrainingPopup.module.css";
 import { Button } from "@mui/material";
 import { IoCloseOutline } from "react-icons/io5";
-import { styledButtonWhiteBlack } from "../../muiTheme";
+import { whiteButtonGrayBorder } from "../../muiTheme";
 
 interface modalPropsType {
   open: boolean;
@@ -19,8 +19,7 @@ const TrainingPopup = ({
       className={styles.modalContainer}
       onClick={(e) => {
         e.stopPropagation();
-      }}
-    >
+      }}>
       {open ? (
         <>
           <div className={styles.background} onClick={() => onClose()} />
@@ -37,8 +36,7 @@ const TrainingPopup = ({
                 <div className={styles.learnMoreButton}>
                   <Button
                     variant="contained"
-                    sx={{ ...styledButtonWhiteBlack, width: "150px" }}
-                  >
+                    sx={{ ...whiteButtonGrayBorder, width: "150px" }}>
                     Learn More
                   </Button>
                 </div>

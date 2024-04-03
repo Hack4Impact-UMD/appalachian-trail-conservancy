@@ -14,15 +14,13 @@ import { Link } from "react-router-dom";
 import Loading from "../../../components/LoadingScreen/Loading";
 import styles from "./AdminLoginPage.module.css";
 import primaryLogo from "../../../assets/atc-primary-logo.png";
-import { styledButtonGreen, styledInputBoxes } from "../../../muiTheme";
+import { forestGreenButton, styledInputBoxes } from "../../../muiTheme";
 import loginBanner from "../../../assets/login-banner.jpeg";
 import ForgotPasswordModal from "../ForgotPasswordModal/ForgotPasswordModal";
 
 const styledRectButton = {
-  height: 40,
   width: 350,
   marginTop: "5%",
-  padding: "1%",
 };
 
 function AdminLoginPage() {
@@ -136,7 +134,7 @@ function AdminLoginPage() {
               {/* sign in button */}
               <Button
                 type="submit"
-                sx={{ ...styledRectButton, ...styledButtonGreen }}
+                sx={{ ...styledRectButton, ...forestGreenButton }}
                 variant="contained">
                 {showLoading ? <Loading></Loading> : "Sign In"}
               </Button>
@@ -153,7 +151,7 @@ function AdminLoginPage() {
             </form>
 
             {/* switch to user link */}
-            <Link to="/login/user">
+            <Link to="/login/volunteer">
               <button className={styles.switch}>
                 Switch to Volunteer Log In
               </button>
