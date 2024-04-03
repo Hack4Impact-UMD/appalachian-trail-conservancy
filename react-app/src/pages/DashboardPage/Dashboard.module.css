@@ -7,43 +7,36 @@
   overflow-x: hidden;
 }
 
-/* dummy space for navbar */
-.left {
-  left: 0;
-  width: 25%;
-  background-color: gray;
-}
-
 .right {
   right: 0;
-  left: 25%;
-  padding-left: 8%;
-  padding-right: 8%;
+  left: 250px;
+  padding-left: 10%;
+  padding-right: 10%;
 }
 
 /* have space between header and view all link  */
 .header {
-  font-size: 1.3em;
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-top: 1.5%;
-  margin-bottom: -0.5%;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .nameHeading {
   color: var(--forest-green);
+  font-size: 3rem;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .imgContainer {
   display: flex;
   align-items: center;
-  width: 9%;
-  height: 9%;
-  min-width: 50px;
-  min-height: 50px;
+  width: 7%;
+  height: 7%;
   overflow: hidden;
 }
 
@@ -59,12 +52,12 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  font-size: 1em;
   color: var(--blue-gray);
   margin-top: 0.5rem;
 }
 
 .subHeader h2 {
+  font-size: 2rem;
   margin-left: 0;
   margin-bottom: 1rem;
 }
@@ -86,4 +79,5 @@
   font-size: 1rem;
   font-weight: 700;
   text-align: center;
+  text-decoration: underline;
 }

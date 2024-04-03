@@ -1,3 +1,4 @@
+/* split screen in two */
 .split {
   height: 100%;
   position: fixed;
@@ -6,20 +7,14 @@
   overflow-x: hidden;
 }
 
-/* dummy space for navbar */
-.left {
-  left: 0;
-  width: 25%;
-  background-color: gray;
-}
-
 .right {
   right: 0;
-  left: 25%;
-  padding-left: 8%;
-  padding-right: 8%;
+  left: 250px;
+  padding-left: 10%;
+  padding-right: 10%;
 }
 
+/* have space between header and view all link  */
 .header {
   font-size: 1.3em;
   display: flex;
@@ -28,7 +23,6 @@
   justify-content: space-between;
   align-items: center;
   margin-top: 1.5%;
-  margin-bottom: -0.5%;
 }
 
 .nameHeading {
@@ -55,6 +49,13 @@
 .searchBarContainer {
   margin-top: 2rem;
   margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.buttonContainer {
+  display: flex;
+  gap: 20px;
 }
 
 .cardsContainer {
@@ -65,4 +66,12 @@
   row-gap: 1em;
   column-gap: 1em;
   margin-bottom: 1rem;
+}
+
+.card {
+  margin-bottom: 1%;
+}
+
+.subHeader h2 {
+  margin: 50px 0px 25px 0px;
 }
