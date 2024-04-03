@@ -116,6 +116,16 @@ export const styledButtonWhiteBlack = {
   },
 };
 
+export const styledSelectWhiteBlack = {
+  borderColor: "dimgray",
+  height: "40px",
+  color: "dimgray",
+  backgroundColor: "white",
+  boxShadow: "none",
+  fontWeight: "500",
+  fontSize: "0.875rem",
+};
+
 // used in login page
 export const styledInputBoxes = {
   border: "1px solid black",
