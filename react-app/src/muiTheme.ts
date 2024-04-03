@@ -112,7 +112,7 @@ export const styledButtonWhiteBlack = {
   border: "2px solid dimgray",
   "&:hover": {
     backgroundColor: "white",
-    color: "dimgray",
+    color: "var(--ocean-green)",
   },
 };
 

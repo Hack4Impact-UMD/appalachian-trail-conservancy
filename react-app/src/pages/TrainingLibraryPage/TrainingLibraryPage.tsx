@@ -1,15 +1,19 @@
 import styles from "./TrainingLibrary.module.css";
-import { IoIosSearch } from "react-icons/io";
-import { TextField, InputAdornment } from "@mui/material";
-import TrainingCard from "../../components/TrainingCard/TrainingCard";
 import { useState, useEffect } from "react";
+import { IoIosSearch } from "react-icons/io";
+import { Button, TextField, InputAdornment } from "@mui/material";
+import {
+  darkGreenButton,
+  whiteEmptyButton,
+  styledLibrarySearchBar,
+} from "../../muiTheme";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import debounce from "lodash.debounce";
-import { Button } from "@mui/material";
-import { styledLibrarySearchBar } from "../../muiTheme";
-import { darkGreenButton, whiteEmptyButton } from "../../muiTheme";
+import TrainingCard from "../../components/TrainingCard/TrainingCard";
+import TrainingPopup from "../../components/TrainingPopup/TrainingPopup";
 
 function TrainingLibrary() {
+  const [openTrainingPopup, setOpenTrainingPopup] = useState<boolean>(false);
   const [filterType, setFilterType] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredTrainings, setFilteredTrainings] = useState<
@@ -92,8 +96,7 @@ function TrainingLibrary() {
           <div className={styles.buttonContainer}>
             <Button
               sx={filterType === "all" ? darkGreenButton : whiteEmptyButton}
-              onClick={() => setFilterType("all")}
-            >
+              onClick={() => setFilterType("all")}>
               All
             </Button>
             <Button
@@ -106,16 +109,14 @@ function TrainingLibrary() {
               sx={
                 filterType === "inProgress" ? darkGreenButton : whiteEmptyButton
               }
-              onClick={() => setFilterType("inProgress")}
-            >
+              onClick={() => setFilterType("inProgress")}>
               In Progress
             </Button>
             <Button
               sx={
                 filterType === "completed" ? darkGreenButton : whiteEmptyButton
               }
-              onClick={() => setFilterType("completed")}
-            >
+              onClick={() => setFilterType("completed")}>
               Completed
             </Button>
           </div>
@@ -128,6 +129,7 @@ function TrainingLibrary() {
                 image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
                 title={training.title}
                 progress={training.progress}
+                setOpenTrainingPopup={setOpenTrainingPopup}
               />
             </div>
           ))}
@@ -140,17 +142,25 @@ function TrainingLibrary() {
           <TrainingCard
             image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
             title="Title"
+            setOpenTrainingPopup={setOpenTrainingPopup}
           />
           <TrainingCard
             image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
             title="Title"
+            setOpenTrainingPopup={setOpenTrainingPopup}
           />
           <TrainingCard
             image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
             title="Title"
+            setOpenTrainingPopup={setOpenTrainingPopup}
           />
         </div>
       </div>
+      <TrainingPopup
+        open={openTrainingPopup}
+        onClose={setOpenTrainingPopup}
+        image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+      />
     </>
   );
 }
