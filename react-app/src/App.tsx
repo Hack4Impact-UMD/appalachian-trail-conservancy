@@ -13,6 +13,7 @@ import AchievementsPage from "./pages/AchievementsPage/AchievementsPage.tsx";
 import TrainingPage from "./pages/TrainingPage/TrainingPage.tsx";
 import RequireAuth from "./auth/RequireAuth/RequireAuth.tsx";
 import { AuthProvider } from "./auth/AuthProvider.tsx";
+import QuizResult from "./components/QuizResult/QuizResult.tsx";
 
 function App() {
   return (
@@ -21,7 +22,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/login/user" element={<VolunteerLoginPage />} />
+            <Route path="/login/volunteer" element={<VolunteerLoginPage />} />
             <Route path="/login/admin" element={<AdminLoginPage />} />
             <Route
               path="/"
@@ -69,8 +70,7 @@ function App() {
                 <RequireAuth>
                   <NotFoundPage />
                 </RequireAuth>
-              }
-            ></Route>
+              }></Route>
 
             <Route
               path="/testfunctions"
@@ -79,10 +79,21 @@ function App() {
                   <button
                     onClick={() => {
                       //Test function
-                    }}
-                  >
+                    }}>
                     TEST
                   </button>
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/quizresult"
+              element={
+                <RequireAuth>
+                  <QuizResult
+                    achievedScore={5}
+                    totalScore={10}
+                    passingScore={5}
+                  />
                 </RequireAuth>
               }
             />

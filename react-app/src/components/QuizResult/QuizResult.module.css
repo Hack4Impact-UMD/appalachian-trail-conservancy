@@ -58,4 +58,5 @@ h3 {
   display: flex;
   justify-content: flex-end;
   width: 100%;
+  margin-bottom: 1rem;
 }

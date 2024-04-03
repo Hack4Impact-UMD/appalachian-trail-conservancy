@@ -32,21 +32,6 @@
   margin-bottom: 0;
 }
 
-.imgContainer {
-  display: flex;
-  align-items: center;
-  width: 7%;
-  height: 7%;
-  overflow: hidden;
-}
-
-.imgContainer img {
-  width: 100%;
-  height: auto;
-  border-radius: 50%;
-  object-fit: contain;
-}
-
 .buttonContainer {
   display: flex;
   justify-content: space-between;

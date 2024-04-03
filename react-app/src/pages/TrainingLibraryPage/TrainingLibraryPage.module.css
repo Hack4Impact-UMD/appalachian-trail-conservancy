@@ -27,39 +27,21 @@
 
 .nameHeading {
   color: var(--forest-green);
-  font-size: 3rem;
+  font-size: 3.5rem;
   margin-top: 0;
   margin-bottom: 0;
 }
 
-.imgContainer {
+.searchBarContainer {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
   display: flex;
-  align-items: center;
-  width: 7%;
-  height: 7%;
-  overflow: hidden;
-}
-
-.imgContainer img {
-  width: 100%;
-  height: auto;
-  border-radius: 50%;
-  object-fit: contain;
-}
-
-.subHeader {
-  display: flex;
-  flex-direction: row;
   justify-content: space-between;
-  align-items: center;
-  color: var(--blue-gray);
-  margin-top: 0.5rem;
 }
 
-.subHeader h2 {
-  font-size: 2rem;
-  margin-left: 0;
-  margin-bottom: 1rem;
+.buttonContainer {
+  display: flex;
+  gap: 20px;
 }
 
 .cardsContainer {
@@ -72,12 +54,12 @@
   margin-bottom: 1rem;
 }
 
-/* ALL ABOVE IS SAME ON EVERY PAGE (with minor spacing modifications) */
+.card {
+  margin-bottom: 1%;
+}
 
-.viewAllLink {
-  color: var(--blue-gray);
-  font-size: 1rem;
-  font-weight: 700;
-  text-align: center;
-  text-decoration: underline;
+.subHeader h2 {
+  font-size: 2rem;
+  margin-left: 0;
+  margin-bottom: 1rem;
 }
