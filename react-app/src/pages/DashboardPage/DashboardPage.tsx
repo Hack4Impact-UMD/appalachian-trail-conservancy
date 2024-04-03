@@ -6,7 +6,6 @@ import styles from "./Dashboard.module.css";
 import Certificate from "../../components/CertificateCard/Certificate";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import TrainingPopup from "../../components/TrainingPopup/TrainingPopup";
-import { Volunteer } from "../../types/UserType";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 
 function Dashboard() {

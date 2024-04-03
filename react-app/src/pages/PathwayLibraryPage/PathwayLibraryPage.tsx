@@ -1,12 +1,16 @@
 import styles from "./PathwayLibraryPage.module.css";
+import { useState, useEffect } from "react";
 import { IoIosSearch } from "react-icons/io";
 import { TextField, InputAdornment, Button } from "@mui/material";
-import PathwayCard from "../../components/PathwayCard/PathwayCard";
-import { useState, useEffect } from "react";
+import {
+  darkGreenButton,
+  whiteEmptyButton,
+  styledLibrarySearchBar,
+} from "../../muiTheme";
 import debounce from "lodash.debounce";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
-import { styledLibrarySearchBar } from "../../muiTheme";
-import { darkGreenButton, whiteEmptyButton } from "../../muiTheme";
+import PathwayCard from "../../components/PathwayCard/PathwayCard";
+import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 
 function PathwayLibrary() {
   const [filterType, setFilterType] = useState("all");
@@ -67,9 +71,7 @@ function PathwayLibrary() {
       <div className={`${styles.split} ${styles.right}`}>
         <div className={styles.header}>
           <h1 className={styles.nameHeading}>Pathways</h1>
-          <div className={styles.imgContainer}>
-            <img src="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg" />
-          </div>
+          <ProfileIcon />
         </div>
 
         <div className={styles.searchBarContainer}>

@@ -11,6 +11,7 @@ import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import debounce from "lodash.debounce";
 import TrainingCard from "../../components/TrainingCard/TrainingCard";
 import TrainingPopup from "../../components/TrainingPopup/TrainingPopup";
+import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 
 function TrainingLibrary() {
   const [openTrainingPopup, setOpenTrainingPopup] = useState<boolean>(false);
@@ -72,9 +73,7 @@ function TrainingLibrary() {
       <div className={`${styles.split} ${styles.right}`}>
         <div className={styles.header}>
           <h1 className={styles.nameHeading}> Trainings </h1>
-          <div className={styles.imgContainer}>
-            <img src="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg" />
-          </div>
+          <ProfileIcon />
         </div>
 
         <div className={styles.searchBarContainer}>
