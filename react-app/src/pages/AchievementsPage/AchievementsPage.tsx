@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styles from "./AchievementsPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import { styledButtonGreen, styledButtonWhiteBlack } from "../../muiTheme";
 import { Button } from "@mui/material";
 import { MdSort } from "react-icons/md";
@@ -14,18 +15,16 @@ function AchievementsPage() {
       <div className={`${styles.split} ${styles.right}`}>
         <div className={styles.header}>
           <h1 className={styles.nameHeading}>Achievements</h1>
-          {/* PLACEHOLDER IMAGE */}
-          <div className={styles.imgContainer}>
-            <img src="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg" />
-          </div>
+          <ProfileIcon />
         </div>
         <div className={styles.buttonContainer}>
           <div className={styles.leftButtonContainer}>
             <div className={styles.button}>
               <Button
                 onClick={() => setBadgesSelected(true)}
-                sx={badgesSelected ? styledButtonGreen : styledButtonWhiteBlack}
-              >
+                sx={
+                  badgesSelected ? styledButtonGreen : styledButtonWhiteBlack
+                }>
                 Pathway Badges
               </Button>
             </div>
@@ -34,8 +33,7 @@ function AchievementsPage() {
                 onClick={() => setBadgesSelected(false)}
                 sx={
                   !badgesSelected ? styledButtonGreen : styledButtonWhiteBlack
-                }
-              >
+                }>
                 Training Certificates
               </Button>
             </div>

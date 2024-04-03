@@ -6,15 +6,17 @@ interface TrainingCardProps {
   image: string;
   title: string;
   progress?: number; // Optional progress value
+  setOpenTrainingPopup: any; // Close popup function
 }
 
 const TrainingCard: React.FC<TrainingCardProps> = ({
   image,
   title,
   progress,
+  setOpenTrainingPopup,
 }) => {
   const renderMarker = () => {
-    if (progress === undefined) {
+    if (progress === undefined || progress === 0) {
       // Training not started
       return (
         <div className={`${styles.marker} ${styles.notStartedMarker}`}>
@@ -35,7 +37,9 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
   };
 
   return (
-    <div className={styles.trainingCard}>
+    <div
+      className={styles.trainingCard}
+      onClick={() => setOpenTrainingPopup(true)}>
       <div className={styles.trainingImage}>
         <img src={image} alt="Training" />
       </div>
