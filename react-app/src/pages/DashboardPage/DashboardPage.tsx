@@ -23,24 +23,14 @@ function Dashboard() {
     { title: "Title 3", date: "MARCH 24 2024" },
     { title: "Title 4", date: "MARCH 24 2024" },
   ];
-  const user: Volunteer = {
-    auth_id: "example_auth_id",
-    email: "example@example.com",
-    type: "VOLUNTEER",
-    firstName: "Rahul",
-    lastName: "Anantuni",
-    trainingInformation: [],
-    pathwayInformation: [],
-  };
+
   return (
     <>
       <NavigationBar />
       <div className={`${styles.split} ${styles.right}`}>
         <div className={styles.header}>
           <h1 className={styles.nameHeading}>Hello, Name!</h1>
-
-          {/* PLACEHOLDER IMAGE */}
-          <ProfileIcon user={user} />
+          <ProfileIcon />
         </div>
         <div className={styles.subHeader}>
           <h2>Pathways in Progress</h2>
