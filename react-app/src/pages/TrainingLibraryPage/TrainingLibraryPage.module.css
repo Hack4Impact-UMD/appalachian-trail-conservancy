@@ -16,33 +16,29 @@
 
 /* have space between header and view all link  */
 .header {
+  font-size: 1.3em;
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-top: 1.5rem;
-  margin-bottom: 1rem;
+  margin-top: 1.5%;
 }
 
 .nameHeading {
   color: var(--forest-green);
-  font-size: 3rem;
-  margin-top: 0;
-  margin-bottom: 0;
 }
 
-.buttonContainer {
+.searchBarContainer {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
   display: flex;
   justify-content: space-between;
 }
 
-.leftButtonContainer {
+.buttonContainer {
   display: flex;
-}
-
-.button {
-  margin: 5px;
+  gap: 20px;
 }
 
 .cardsContainer {
@@ -53,4 +49,12 @@
   row-gap: 1em;
   column-gap: 1em;
   margin-bottom: 1rem;
+}
+
+.card {
+  margin-bottom: 1%;
+}
+
+.subHeader h2 {
+  margin: 50px 0px 25px 0px;
 }

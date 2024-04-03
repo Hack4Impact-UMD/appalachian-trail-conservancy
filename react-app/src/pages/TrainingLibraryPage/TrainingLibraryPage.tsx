@@ -1,4 +1,4 @@
-import styles from "./TrainingLibrary.module.css";
+import styles from "./TrainingLibraryPage.module.css";
 import { useState, useEffect } from "react";
 import { IoIosSearch } from "react-icons/io";
 import { Button, TextField, InputAdornment } from "@mui/material";

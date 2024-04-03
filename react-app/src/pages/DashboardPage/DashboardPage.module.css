@@ -16,46 +16,35 @@
 
 /* have space between header and view all link  */
 .header {
-  font-size: 1.3em;
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-top: 1.5%;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .nameHeading {
   color: var(--forest-green);
+  font-size: 3rem;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
-.imgContainer {
+.subHeader {
   display: flex;
-  align-items: center;
-  width: 9%;
-  height: 9%;
-  min-width: 50px;
-  min-height: 50px;
-  overflow: hidden;
-}
-
-.imgContainer img {
-  width: 100%;
-  height: auto;
-  border-radius: 50%;
-  object-fit: contain;
-}
-
-.searchBarContainer {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-  display: flex;
+  flex-direction: row;
   justify-content: space-between;
+  align-items: center;
+  color: var(--blue-gray);
+  margin-top: 0.5rem;
 }
 
-.buttonContainer {
-  display: flex;
-  gap: 20px;
+.subHeader h2 {
+  font-size: 2rem;
+  margin-left: 0;
+  margin-bottom: 1rem;
 }
 
 .cardsContainer {
@@ -68,10 +57,12 @@
   margin-bottom: 1rem;
 }
 
-.card {
-  margin-bottom: 1%;
-}
+/* ALL ABOVE IS SAME ON EVERY PAGE (with minor spacing modifications) */
 
-.subHeader h2 {
-  margin: 50px 0px 25px 0px;
+.viewAllLink {
+  color: var(--blue-gray);
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: underline;
 }

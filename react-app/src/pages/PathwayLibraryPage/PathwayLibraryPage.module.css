@@ -27,23 +27,9 @@
 
 .nameHeading {
   color: var(--forest-green);
-}
-
-.imgContainer {
-  display: flex;
-  align-items: center;
-  width: 9%;
-  height: 9%;
-  min-width: 50px;
-  min-height: 50px;
-  overflow: hidden;
-}
-
-.imgContainer img {
-  width: 100%;
-  height: auto;
-  border-radius: 50%;
-  object-fit: contain;
+  font-size: 3rem;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .searchBarContainer {
