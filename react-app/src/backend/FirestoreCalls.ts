@@ -95,3 +95,41 @@ export function getPathway(id: string): Promise<PathwayID> {
       });
   });
 }
+
+export function getAllTrainings(): Promise<TrainingID[]> {
+  const trainingsRef = collection(db, 'Trainings');
+  return new Promise((resolve, reject) => {
+    getDocs(trainingsRef)
+      .then((trainingSnapshot) => {
+        const allTrainings: TrainingID[] = [];
+        const trainings = trainingSnapshot.docs.map((doc) => {
+          const training: Training = doc.data() as Training;
+          const newTraining: TrainingID = { ...training, id: doc.id };
+          allTrainings.push(newTraining);
+        });
+        resolve( allTrainings );
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+}
+
+export function getAllPathways(): Promise<PathwayID[]> {
+  const pathwaysRef = collection(db, 'Pathways');
+  return new Promise((resolve, reject) => {
+    getDocs(pathwaysRef)
+      .then((pathwaySnapshot) => {
+        const allPathways: PathwayID[] = [];
+        const pathways = pathwaySnapshot.docs.map((doc) => {
+          const pathway: Pathway = doc.data() as Pathway;
+          const newPathway: PathwayID = { ...pathway, id: doc.id };
+          allPathways.push(newPathway);
+        });
+        resolve( allPathways );
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+}

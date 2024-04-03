@@ -35,14 +35,12 @@
 .buttonContainer {
   display: flex;
   justify-content: space-between;
+  padding-bottom: 20px;
 }
 
 .leftButtonContainer {
   display: flex;
-}
-
-.button {
-  margin: 5px;
+  gap: 20px;
 }
 
 .cardsContainer {
