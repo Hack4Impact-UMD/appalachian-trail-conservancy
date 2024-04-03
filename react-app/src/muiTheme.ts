@@ -45,14 +45,16 @@ theme = createTheme(theme, {
 
 export default theme;
 
-const styledButton = {
-  borderRadius: "10px",
+// common styles
+const baseStyles = {
+  borderRadius: "15px",
   boxShadow: "none",
+  height: 44,
 };
 
-// dark green button
-export const styledButtonGreen = {
-  ...styledButton,
+// forest green button
+export const forestGreenButton = {
+  ...baseStyles,
   color: "white",
   backgroundColor: "var(--forest-green)",
   border: "2px solid var(--forest-green)",
@@ -62,9 +64,16 @@ export const styledButtonGreen = {
   },
 };
 
-// white with dark green borders
-export const styledButtonWhiteGreen = {
-  ...styledButton,
+// forest green button with padding
+export const forestGreenButtonPadding = {
+  ...forestGreenButton,
+  paddingLeft: "20px",
+  paddingRight: "20px",
+};
+
+// white with dark green borders (no hover change)
+export const whiteButtonGreenBorder = {
+  ...baseStyles,
   color: "var(--forest-green)",
   backgroundColor: "white",
   border: "2px solid var(--forest-green)",
@@ -74,71 +83,69 @@ export const styledButtonWhiteGreen = {
   },
 };
 
-export const darkGreenButton = {
-  borderRadius: "20px",
-  boxShadow: "none",
-  color: "white",
+// white w/ blue gray border; ocean green background on hover
+export const whiteButtonGrayBorder = {
+  ...baseStyles,
   paddingLeft: "20px",
   paddingRight: "20px",
-  height: 44,
-  backgroundColor: "var(--forest-green)",
-  border: "2px solid var(--forest-green)",
+  color: "var(--blue-gray)",
+  backgroundColor: "white",
+  border: "2px solid var(--blue-gray)",
   "&:hover": {
-    backgroundColor: "var(--forest-green)",
     color: "white",
+    backgroundColor: "var(--ocean-green)",
+    border: "2px solid var(--ocean-green)",
   },
 };
 
-export const whiteEmptyButton = {
-  borderRadius: "20px",
-  boxShadow: "none",
-  color: "black",
-  paddingLeft: "20px",
-  paddingRight: "20px",
-  height: 44,
+// white w/ blue gray border for Select Dropdowns
+export const whiteSelectGrayBorder = {
+  ...baseStyles,
+  fontWeight: "500",
+  fontSize: "0.875rem",
+  color: "var(--blue-gray)",
   backgroundColor: "white",
-  border: "2px solid black",
+  border: "2px solid var(--blue-gray)",
   "&:hover": {
+    color: "var(--blue-gray)",
     backgroundColor: "white",
-    color: "black",
+    border: "2px solid var(--blue-gray)",
+  },
+  "& fieldset": { border: "none" },
+  ".MuiSvgIcon-root": {
+    fill: "var(--blue-gray)",
   },
 };
 
-// white with dark gray borders
-export const styledButtonWhiteBlack = {
-  ...styledButton,
-  color: "dimgray",
-  backgroundColor: "white",
-  border: "2px solid dimgray",
-  "&:hover": {
-    backgroundColor: "white",
-    color: "var(--ocean-green)",
-  },
-};
-
-export const styledSelectWhiteBlack = {
-  borderColor: "dimgray",
-  height: "40px",
-  color: "dimgray",
-  backgroundColor: "white",
+// selectOption
+export const selectOptionStyle = {
+  height: "44px",
   boxShadow: "none",
   fontWeight: "500",
   fontSize: "0.875rem",
+  color: "var(--blue-gray)",
+  backgroundColor: "white",
+  "&.Mui-selected": {
+    backgroundColor: "var(--ocean-green)",
+    color: "white",
+    "&.Mui-focusVisible": { background: "var(--ocean-green)", color: "white" },
+    "&:hover": { background: "var(--forest-green)", color: "white" },
+  },
 };
 
 // used in login page
-export const styledInputBoxes = {
-  border: "1px solid black",
-  borderRadius: "8px",
+export const grayBorderTextField = {
   width: 350,
-  height: 40,
+  height: 44,
+  borderRadius: "10px",
+  border: "2px solid var(--blue-gray)",
   "& fieldset": { border: "none" },
 };
 
-export const styledLibrarySearchBar = {
-  border: "2px solid var(--blue-gray)",
-  borderRadius: "10px",
+// Search Bar
+export const grayBorderSearchBar = {
+  ...baseStyles,
   width: "55%",
-  height: 40,
+  border: "2px solid var(--blue-gray)",
   "& fieldset": { border: "none" },
 };

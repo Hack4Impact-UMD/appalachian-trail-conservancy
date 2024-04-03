@@ -5,9 +5,10 @@ import Certificate from "../../components/CertificateCard/Certificate";
 import { Select, MenuItem, Button } from "@mui/material";
 import { useState, useEffect } from "react";
 import {
-  darkGreenButton,
-  whiteEmptyButton,
-  styledSelectWhiteBlack,
+  forestGreenButtonPadding,
+  whiteButtonGrayBorder,
+  selectOptionStyle,
+  whiteSelectGrayBorder,
 } from "../../muiTheme";
 
 function AchievementsPage() {
@@ -96,14 +97,22 @@ function AchievementsPage() {
           <div className={styles.leftButtonContainer}>
             <Button
               onClick={() => setBadgesSelected(true)}
-              sx={badgesSelected ? darkGreenButton : whiteEmptyButton}
-            >
+              sx={
+                badgesSelected
+                  ? forestGreenButtonPadding
+                  : whiteButtonGrayBorder
+              }
+              variant="contained">
               Pathway Badges
             </Button>
             <Button
               onClick={() => setBadgesSelected(false)}
-              sx={!badgesSelected ? darkGreenButton : whiteEmptyButton}
-            >
+              sx={
+                !badgesSelected
+                  ? forestGreenButtonPadding
+                  : whiteButtonGrayBorder
+              }
+              variant="contained">
               Training Certificates
             </Button>
           </div>
@@ -113,30 +122,27 @@ function AchievementsPage() {
               onChange={handleChange}
               size="small"
               sx={{
-                ...styledSelectWhiteBlack,
-                border: "2px solid dimgray",
-                "&:hover": {
-                  backgroundColor: "white",
-                  color: "dimgray",
-                },
-                borderRadius: "10px",
-                "& fieldset": { border: "none" },
+                ...whiteSelectGrayBorder,
+                // ...selectOptionStyle,
+                // border: "2px solid dimgray",
+                // "&:hover": {
+                //   backgroundColor: "white",
+                //   color: "dimgray",
+                // },
+                // borderRadius: "10px",
+                // "& fieldset": { border: "none" },
                 width: "154px",
-              }}
-            >
-              <MenuItem value={"newest"} sx={styledSelectWhiteBlack}>
+              }}>
+              <MenuItem value={"newest"} sx={selectOptionStyle}>
                 SORT: NEWEST
               </MenuItem>
-              <MenuItem value={"oldest"} sx={styledSelectWhiteBlack}>
+              <MenuItem value={"oldest"} sx={selectOptionStyle}>
                 SORT: OLDEST
               </MenuItem>
-              <MenuItem value={"alphabetically"} sx={styledSelectWhiteBlack}>
+              <MenuItem value={"alphabetically"} sx={selectOptionStyle}>
                 SORT: A-Z
               </MenuItem>
-              <MenuItem
-                value={"reverseAlphabetically"}
-                sx={styledSelectWhiteBlack}
-              >
+              <MenuItem value={"reverseAlphabetically"} sx={selectOptionStyle}>
                 SORT: Z-A
               </MenuItem>
             </Select>

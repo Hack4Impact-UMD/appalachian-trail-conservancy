@@ -1,11 +1,11 @@
-import styles from "./TrainingLibrary.module.css";
+import styles from "./TrainingLibraryPage.module.css";
 import { useState, useEffect } from "react";
 import { IoIosSearch } from "react-icons/io";
 import { Button, TextField, InputAdornment } from "@mui/material";
 import {
-  darkGreenButton,
-  whiteEmptyButton,
-  styledLibrarySearchBar,
+  forestGreenButtonPadding,
+  whiteButtonGrayBorder,
+  grayBorderSearchBar,
 } from "../../muiTheme";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import debounce from "lodash.debounce";
@@ -78,7 +78,7 @@ function TrainingLibrary() {
 
         <div className={styles.searchBarContainer}>
           <TextField
-            sx={styledLibrarySearchBar}
+            sx={grayBorderSearchBar}
             variant="outlined"
             size="small"
             placeholder="Search..."
@@ -94,27 +94,32 @@ function TrainingLibrary() {
 
           <div className={styles.buttonContainer}>
             <Button
-              sx={filterType === "all" ? darkGreenButton : whiteEmptyButton}
+              sx={
+                filterType === "all"
+                  ? forestGreenButtonPadding
+                  : whiteButtonGrayBorder
+              }
+              variant="contained"
               onClick={() => setFilterType("all")}>
               All
             </Button>
             <Button
-              style={{
-                backgroundColor:
-                  filterType === "inProgress" ? "var(--forest-green)" : "white",
-                color:
-                  filterType === "inProgress" ? "white" : "var(--blue-gray)",
-              }}
               sx={
-                filterType === "inProgress" ? darkGreenButton : whiteEmptyButton
+                filterType === "inProgress"
+                  ? forestGreenButtonPadding
+                  : whiteButtonGrayBorder
               }
+              variant="contained"
               onClick={() => setFilterType("inProgress")}>
               In Progress
             </Button>
             <Button
               sx={
-                filterType === "completed" ? darkGreenButton : whiteEmptyButton
+                filterType === "completed"
+                  ? forestGreenButtonPadding
+                  : whiteButtonGrayBorder
               }
+              variant="contained"
               onClick={() => setFilterType("completed")}>
               Completed
             </Button>

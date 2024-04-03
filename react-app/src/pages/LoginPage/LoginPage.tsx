@@ -1,15 +1,13 @@
 import { Link } from "react-router-dom";
 import styles from "./LoginPage.module.css";
 import primaryLogo from "../../assets/atc-primary-logo.png";
-import { styledButtonGreen, styledButtonWhiteGreen } from "../../muiTheme";
+import { forestGreenButton, whiteButtonGreenBorder } from "../../muiTheme";
 import { Button } from "@mui/material";
 import loginBanner from "../../assets/login-banner.jpeg";
 
 const styledRectButton = {
-  height: 40,
   width: 350,
   marginTop: "5%",
-  padding: "1%",
 };
 
 function LoginPage() {
@@ -26,16 +24,16 @@ function LoginPage() {
             </div>
             {/* welcome label */}
             <h1 className={styles.heading}>Welcome!</h1>
-            <Link to="/login/user">
+            <Link to="/login/volunteer">
               <Button
-                sx={{ ...styledRectButton, ...styledButtonGreen }}
+                sx={{ ...styledRectButton, ...forestGreenButton }}
                 variant="contained">
                 Sign in as volunteer
               </Button>
             </Link>
             <Link to="/login/admin">
               <Button
-                sx={{ ...styledRectButton, ...styledButtonWhiteGreen }}
+                sx={{ ...styledRectButton, ...whiteButtonGreenBorder }}
                 variant="contained"
                 href="#contained-buttons">
                 Sign in as admin
