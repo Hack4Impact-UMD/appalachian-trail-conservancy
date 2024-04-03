@@ -17,8 +17,13 @@
 .right {
   right: 0;
   left: 250px;
-  padding-left: 10%;
-  padding-right: 10%;
+  overflow: hidden;
+}
+
+.bodyContainer {
+  margin-left: 10%;
+  margin-right: 10%;
+  height: 90vh;
 }
 
 /* have space between header and view all link  */
@@ -37,32 +42,10 @@
   font-size: 3.5em;
 }
 
-.imgContainer {
-  display: flex;
-  align-items: center;
-  width: 9%;
-  height: 9%;
-  min-width: 50px;
-  min-height: 50px;
-  overflow: hidden;
-}
-
-.imgContainer img {
-  width: 100%;
-  height: auto;
-  border-radius: 50%;
-  object-fit: contain;
-}
-
-.contentContainer {
-}
-
 /* Negative Margin has to be changed */
 .stepContainer {
   background-color: lightblue;
   text-align: center;
-  margin-left: -17.2%;
-  margin-right: -17.2%;
-  margin-top: 3%;
-  padding: 3%;
+  height: 10vh;
+  padding: 0px 150px 0px 150px;
 }

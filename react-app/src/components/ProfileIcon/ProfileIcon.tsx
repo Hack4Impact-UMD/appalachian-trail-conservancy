@@ -1,4 +1,3 @@
-import React from "react";
 import { Volunteer } from "../../types/UserType.ts";
 import styles from "./ProfileIcon.module.css";
 
