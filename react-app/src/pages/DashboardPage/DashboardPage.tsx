@@ -6,6 +6,7 @@ import styles from "./Dashboard.module.css";
 import Certificate from "../../components/CertificateCard/Certificate";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import TrainingPopup from "../../components/TrainingPopup/TrainingPopup";
+import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 
 function Dashboard() {
   const [openTrainingPopup, setOpenTrainingPopup] = useState<boolean>(false);
@@ -30,16 +31,14 @@ function Dashboard() {
     { title: "Title 3", date: "MARCH 24 2024" },
     { title: "Title 4", date: "MARCH 24 2024" },
   ];
+
   return (
     <>
       <NavigationBar />
       <div className={`${styles.split} ${styles.right}`}>
         <div className={styles.header}>
           <h1 className={styles.nameHeading}>Hello, Name!</h1>
-          {/* PLACEHOLDER IMAGE */}
-          <div className={styles.imgContainer}>
-            <img src="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg" />
-          </div>
+          <ProfileIcon />
         </div>
         <div className={styles.subHeader}>
           <h2>Pathways in Progress</h2>
