@@ -8,7 +8,6 @@ import StepLabel from "@mui/material/StepLabel";
 import ResourceComponent from "../../components/ResourceComponent/ResourceComponent";
 import { TrainingResource } from "../../types/TrainingType";
 
-const steps = ["", "", "", ""];
 const resources: TrainingResource[] = [
   {
     type: "VIDEO",
@@ -33,8 +32,10 @@ const resources: TrainingResource[] = [
 ];
 
 function TrainingPage() {
-  const [stepIndex, setStepIndex] = useState(3);
+  const [stepIndex, setStepIndex] = useState(0);
 
+  // TODO: The last resource should show "start quiz" button
+  // or confirmation
   const handleContinueButton = () => {
     if (stepIndex < resources.length - 1) {
       setStepIndex(stepIndex + 1);
