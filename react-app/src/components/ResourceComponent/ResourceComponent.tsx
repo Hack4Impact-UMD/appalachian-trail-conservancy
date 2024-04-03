@@ -1,6 +1,6 @@
 import Button from "@mui/material/Button";
 import styles from "./ResourceComponent.module.css";
-import { styledButtonWhiteBlack } from "../../muiTheme";
+import { whiteButtonGrayBorder } from "../../muiTheme";
 import { TrainingResource } from "../../types/TrainingType";
 
 interface ResourceProps {
@@ -31,14 +31,11 @@ const ResourceComponent: React.FC<ResourceProps> = ({
 
         {/* Buttons */}
         <div className={styles.buttonContainer}>
-          <Button
-            sx={styledButtonWhiteBlack}
-            onClick={() => handleBackButton()}
-          >
+          <Button sx={whiteButtonGrayBorder} onClick={() => handleBackButton()}>
             Back
           </Button>
           <Button
-            sx={styledButtonWhiteBlack}
+            sx={whiteButtonGrayBorder}
             onClick={() => handleContinueButton()}
           >
             Continue
