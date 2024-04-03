@@ -5,7 +5,7 @@ import { Button, TextField, InputAdornment } from "@mui/material";
 import {
   forestGreenButtonPadding,
   whiteButtonGrayBorder,
-  styledLibrarySearchBar,
+  grayBorderSearchBar,
 } from "../../muiTheme";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import debounce from "lodash.debounce";
@@ -78,7 +78,7 @@ function TrainingLibrary() {
 
         <div className={styles.searchBarContainer}>
           <TextField
-            sx={styledLibrarySearchBar}
+            sx={grayBorderSearchBar}
             variant="outlined"
             size="small"
             placeholder="Search..."

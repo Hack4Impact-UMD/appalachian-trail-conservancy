@@ -134,19 +134,18 @@ export const selectOptionStyle = {
 };
 
 // used in login page
-export const styledInputBoxes = {
-  border: "1px solid black",
-  borderRadius: "8px",
+export const grayBorderTextField = {
   width: 350,
-  height: 40,
+  height: 44,
+  borderRadius: "10px",
+  border: "2px solid var(--blue-gray)",
   "& fieldset": { border: "none" },
 };
 
 // Search Bar
-export const styledLibrarySearchBar = {
-  border: "2px solid var(--blue-gray)",
-  borderRadius: "15px",
+export const grayBorderSearchBar = {
+  ...baseStyles,
   width: "55%",
-  height: 40,
+  border: "2px solid var(--blue-gray)",
   "& fieldset": { border: "none" },
 };

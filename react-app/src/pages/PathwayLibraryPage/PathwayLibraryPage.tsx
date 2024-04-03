@@ -5,7 +5,7 @@ import { TextField, InputAdornment, Button } from "@mui/material";
 import {
   forestGreenButtonPadding,
   whiteButtonGrayBorder,
-  styledLibrarySearchBar,
+  grayBorderSearchBar,
 } from "../../muiTheme";
 import debounce from "lodash.debounce";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
@@ -76,7 +76,7 @@ function PathwayLibrary() {
 
         <div className={styles.searchBarContainer}>
           <TextField
-            sx={styledLibrarySearchBar}
+            sx={grayBorderSearchBar}
             variant="outlined"
             size="small"
             placeholder="Search..."

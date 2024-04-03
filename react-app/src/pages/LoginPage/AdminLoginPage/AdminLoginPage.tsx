@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 import Loading from "../../../components/LoadingScreen/Loading";
 import styles from "./AdminLoginPage.module.css";
 import primaryLogo from "../../../assets/atc-primary-logo.png";
-import { forestGreenButton, styledInputBoxes } from "../../../muiTheme";
+import { forestGreenButton, grayBorderTextField } from "../../../muiTheme";
 import loginBanner from "../../../assets/login-banner.jpeg";
 import ForgotPasswordModal from "../ForgotPasswordModal/ForgotPasswordModal";
 
@@ -79,7 +79,7 @@ function AdminLoginPage() {
               </div>
               <TextField
                 value={email}
-                sx={styledInputBoxes}
+                sx={grayBorderTextField}
                 label=""
                 variant="outlined"
                 size="small"
@@ -96,7 +96,7 @@ function AdminLoginPage() {
                 <InputLabel htmlFor="outlined-adornment-password"></InputLabel>
                 <OutlinedInput
                   value={password}
-                  sx={styledInputBoxes}
+                  sx={grayBorderTextField}
                   id="outlined-adornment-password"
                   type={showPassword ? "text" : "password"}
                   onChange={(event) => {

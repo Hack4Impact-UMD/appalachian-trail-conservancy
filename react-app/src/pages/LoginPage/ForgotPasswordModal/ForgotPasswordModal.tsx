@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Modal from "../../../components/ModalWrapper/Modal";
 import { TextField, Button } from "@mui/material";
-import { forestGreenButton, styledInputBoxes } from "../../../muiTheme";
+import { forestGreenButton, grayBorderTextField } from "../../../muiTheme";
 import styles from "./ForgotPasswordModal.module.css";
 import { IoMdClose } from "react-icons/io";
 
@@ -41,7 +41,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
             </div>
             <TextField
               value={email}
-              sx={styledInputBoxes}
+              sx={grayBorderTextField}
               label=""
               variant="outlined"
               size="small"
