@@ -1,0 +1,89 @@
+/* split screen in two */
+.split {
+  height: 100%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+}
+
+.right {
+  right: 0;
+  left: 250px;
+  padding-left: 10%;
+  padding-right: 10%;
+}
+
+/* have space between header and view all link  */
+.header {
+  font-size: 1.3rem;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.5%;
+}
+
+.nameHeading {
+  color: var(--forest-green);
+}
+
+.imgContainer {
+  display: flex;
+  align-items: center;
+  width: 9%;
+  height: 9%;
+  min-width: 50px;
+  min-height: 50px;
+  overflow: hidden;
+}
+
+.imgContainer img {
+  width: 100%;
+  height: auto;
+  border-radius: 50%;
+  object-fit: contain;
+}
+
+.searchBarContainer {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.buttonContainer {
+  display: flex;
+  gap: 20px;
+}
+
+.cardsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  row-gap: 1rem;
+  column-gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.card {
+  width: calc(
+    50% - 10px
+  ); /* Set the width to 50% of the container minus margin */
+  margin-bottom: 1%; /* Add margin between items */
+}
+
+.recommendedContainer {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  row-gap: 1rem;
+  column-gap: 1rem;
+}
+
+.subHeader h2 {
+  margin: 50px 0px 25px 0px;
+}

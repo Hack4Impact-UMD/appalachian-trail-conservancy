@@ -1,58 +1,84 @@
 import "./index.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import TrainingsInProgressPage from "./pages/TrainingsInProgressPage/TrainingsInProgressPage.tsx";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import Dashboard from "./pages/DashboardPage/DashboardPage.tsx";
-import TrainingsCompletedPage from "./pages/TrainingsCompletedPage/TrainingsCompletedPage.tsx";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage.tsx";
 import TrainingLibrary from "./pages/TrainingLibraryPage/TrainingLibraryPage.tsx";
+import PathwayLibrary from "./pages/PathwayLibraryPage/PathwayLibraryPage.tsx";
 import { ThemeProvider } from "@mui/material";
 import theme from "./muiTheme.ts";
 import VolunteerLoginPage from "./pages/LoginPage/VolunteerLoginPage/VolunteerLoginPage.tsx";
 import AdminLoginPage from "./pages/LoginPage/AdminLoginPage/AdminLoginPage.tsx";
-import NavigationBar from "./components/NavigationBar/NavigationBar.tsx";
-import { useState } from "react";
+import AchievementsPage from "./pages/AchievementsPage/AchievementsPage.tsx";
+import RequireAuth from "./auth/RequireAuth/RequireAuth.tsx";
+import { AuthProvider } from "./auth/AuthProvider.tsx";
 
 function App() {
-  const [activeItem, setActiveItem] = useState("Dashboard");
-
-  // Function to handle item click
-  const handleItemClick = (item: string) => {
-    setActiveItem(item);
-  };
-
   return (
-    <>
-      <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
+      <AuthProvider>
         <BrowserRouter>
           <Routes>
-            <Route
-              path="/nav"
-              element={
-                <NavigationBar
-                  activeItem={activeItem}
-                  onItemClick={handleItemClick}
-                />
-              }
-            />
-            <Route path="/" element={<Dashboard />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/login/user" element={<VolunteerLoginPage />} />
             <Route path="/login/admin" element={<AdminLoginPage />} />
             <Route
-              path="/trainingsInProgress"
-              element={<TrainingsInProgressPage />}
+              path="/"
+              element={
+                <RequireAuth>
+                  <Dashboard />
+                </RequireAuth>
+              }
             />
             <Route
-              path="/trainingsCompleted"
-              element={<TrainingsCompletedPage />}
+              path="/trainings"
+              element={
+                <RequireAuth>
+                  <TrainingLibrary />
+                </RequireAuth>
+              }
             />
-            <Route path="/trainingLibrary" element={<TrainingLibrary />} />
-            <Route path="/*" element={<NotFoundPage />}></Route>
+            <Route
+              path="/pathways"
+              element={
+                <RequireAuth>
+                  <PathwayLibrary />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/achievements"
+              element={
+                <RequireAuth>
+                  <AchievementsPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/*"
+              element={
+                <RequireAuth>
+                  <NotFoundPage />
+                </RequireAuth>
+              }></Route>
+
+            <Route
+              path="/testfunctions"
+              element={
+                <RequireAuth>
+                  <button
+                    onClick={() => {
+                      //your function
+                    }}>
+                    TEST
+                  </button>
+                </RequireAuth>
+              }
+            />
           </Routes>
         </BrowserRouter>
-      </ThemeProvider>
-    </>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

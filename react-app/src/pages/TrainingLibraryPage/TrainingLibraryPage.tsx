@@ -1,20 +1,16 @@
 import styles from "./TrainingLibrary.module.css";
 import { IoIosSearch } from "react-icons/io";
 import { TextField, InputAdornment } from "@mui/material";
-import TrainingCard from "../../components/TrainingCard/Training";
-import { useState } from "react";
-import React from "react";
+import TrainingCard from "../../components/TrainingCard/TrainingCard";
+import { useState, useEffect } from "react";
+import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import debounce from "lodash.debounce";
-
-const styledSearchBar = {
-  border: "2px solid var(--blue-gray)",
-  borderRadius: "10px",
-  width: "100%",
-  height: 38,
-  "& fieldset": { border: "none" },
-};
+import { Button } from "@mui/material";
+import { styledLibrarySearchBar } from "../../muiTheme";
+import { darkGreenButton, whiteEmptyButton } from "../../muiTheme";
 
 function TrainingLibrary() {
+  const [filterType, setFilterType] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredTrainings, setFilteredTrainings] = useState<
     { title: string; subtitle: string; progress: number }[]
@@ -22,13 +18,13 @@ function TrainingLibrary() {
 
   const trainingCards = [
     { title: "Cat", subtitle: "Subtitle 1", progress: 23 },
+    { title: "NotInProgress", subtitle: "Subtitle 2", progress: 0 },
+    { title: "Complete", subtitle: "Subtitle 3", progress: 100 },
+    { title: "Dog", subtitle: "Subtitle 4", progress: 10 },
+    { title: "NotInProgress2", subtitle: "Subtitle 1", progress: 0 },
     { title: "Catfish", subtitle: "Subtitle 2", progress: 50 },
     { title: "C", subtitle: "Subtitle 3", progress: 76 },
-    { title: "Dog", subtitle: "Subtitle 4", progress: 10 },
-    { title: "Cat", subtitle: "Subtitle 1", progress: 23 },
-    { title: "Catfish", subtitle: "Subtitle 2", progress: 50 },
-    { title: "C", subtitle: "Subtitle 3", progress: 76 },
-    { title: "Dog", subtitle: "Subtitle 4", progress: 10 },
+    { title: "Cat", subtitle: "Subtitle 4", progress: 100 },
     { title: "Cat", subtitle: "Subtitle 1", progress: 23 },
     { title: "Catfish", subtitle: "Subtitle 2", progress: 50 },
     { title: "C", subtitle: "Subtitle 3", progress: 76 },
@@ -37,27 +33,41 @@ function TrainingLibrary() {
   ];
 
   const filterTrainings = () => {
-    const filtered = trainingCards.filter((training) =>
-      training.title.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    let filtered = trainingCards;
+
+    if (searchQuery) {
+      filtered = filtered.filter((training) =>
+        training.title.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    if (filterType === "inProgress") {
+      filtered = filtered.filter(
+        (training) => training.progress > 0 && training.progress < 100
+      );
+    } else if (filterType === "completed") {
+      filtered = filtered.filter((training) => training.progress === 100);
+    }
+
     setFilteredTrainings(filtered);
   };
-  React.useEffect(() => {
+
+  useEffect(() => {
     filterTrainings();
-  }, [searchQuery]);
+  }, [searchQuery, filterType]);
 
   const updateQuery = (e: {
     target: { value: React.SetStateAction<string> };
   }) => setSearchQuery(e.target.value);
 
-  const debouncedOnChange = debounce(updateQuery, 500);
+  const debouncedOnChange = debounce(updateQuery, 200);
 
   return (
     <>
-      <div className={`${styles.split} ${styles.left}`}></div>
+      <NavigationBar />
       <div className={`${styles.split} ${styles.right}`}>
         <div className={styles.header}>
-          <h1 className={styles.nameHeading}>Training Library</h1>
+          <h1 className={styles.nameHeading}> Trainings </h1>
           <div className={styles.imgContainer}>
             <img src="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg" />
           </div>
@@ -65,7 +75,7 @@ function TrainingLibrary() {
 
         <div className={styles.searchBarContainer}>
           <TextField
-            sx={styledSearchBar}
+            sx={styledLibrarySearchBar}
             variant="outlined"
             size="small"
             placeholder="Search..."
@@ -78,18 +88,67 @@ function TrainingLibrary() {
               ),
             }}
           />
+
+          <div className={styles.buttonContainer}>
+            <Button
+              sx={filterType === "all" ? darkGreenButton : whiteEmptyButton}
+              onClick={() => setFilterType("all")}
+            >
+              All
+            </Button>
+            <Button
+              style={{
+                backgroundColor:
+                  filterType === "inProgress" ? "var(--forest-green)" : "white",
+                color:
+                  filterType === "inProgress" ? "white" : "var(--blue-gray)",
+              }}
+              sx={
+                filterType === "inProgress" ? darkGreenButton : whiteEmptyButton
+              }
+              onClick={() => setFilterType("inProgress")}
+            >
+              In Progress
+            </Button>
+            <Button
+              sx={
+                filterType === "completed" ? darkGreenButton : whiteEmptyButton
+              }
+              onClick={() => setFilterType("completed")}
+            >
+              Completed
+            </Button>
+          </div>
         </div>
+
         <div className={styles.cardsContainer}>
           {filteredTrainings.map((training, index) => (
             <div className={styles.card} key={index}>
               <TrainingCard
                 image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
                 title={training.title}
-                subtitle={training.subtitle}
                 progress={training.progress}
               />
             </div>
           ))}
+        </div>
+
+        <div className={styles.subHeader}>
+          <h2>Recommended</h2>
+        </div>
+        <div className={styles.cardsContainer}>
+          <TrainingCard
+            image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+            title="Title"
+          />
+          <TrainingCard
+            image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+            title="Title"
+          />
+          <TrainingCard
+            image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+            title="Title"
+          />
         </div>
       </div>
     </>
