@@ -69,7 +69,7 @@ function App() {
                 <RequireAuth>
                   <button
                     onClick={() => {
-                      //your function
+                      //Test function
                     }}
                   >
                     TEST
