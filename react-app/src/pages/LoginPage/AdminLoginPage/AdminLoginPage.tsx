@@ -16,6 +16,7 @@ import styles from "./AdminLoginPage.module.css";
 import primaryLogo from "../../../assets/atc-primary-logo.png";
 import { styledButtonGreen, styledInputBoxes } from "../../../muiTheme";
 import loginBanner from "../../../assets/login-banner.jpeg";
+import ForgotPasswordModal from "../ForgotPasswordModal/ForgotPasswordModal";
 
 const styledRectButton = {
   height: 40,
@@ -29,6 +30,14 @@ function AdminLoginPage() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   //Add Forgot Password Popup
   const [openForgotModal, setOpenForgotModal] = useState<boolean>(false);
+
+  const handleOpenForgotModal = () => {
+    setOpenForgotModal(true);
+  };
+  const handleCloseForgotModal = () => {
+    setOpenForgotModal(false);
+  };
+
   const [showLoading, setShowLoading] = useState<boolean>(false);
   //Add Error Handling
   const [failureMessage, setFailureMessage] = useState<string>("");
@@ -65,8 +74,7 @@ function AdminLoginPage() {
                 if (!openForgotModal) {
                   handleSignIn(event);
                 }
-              }}
-            >
+              }}>
               {/* email field */}
               <div className={styles.alignLeft}>
                 <h3 className={styles.label}>Email</h3>
@@ -102,8 +110,7 @@ function AdminLoginPage() {
                         aria-label="toggle password visibility"
                         onClick={handleClickShowPassword}
                         onMouseDown={handleMouseDownPassword}
-                        edge="end"
-                      >
+                        edge="end">
                         {showPassword ? <VisibilityOff /> : <Visibility />}
                       </IconButton>
                     </InputAdornment>
@@ -121,7 +128,7 @@ function AdminLoginPage() {
                     margin: "8px 0px 8px 0px",
                   }}
                   variant="text"
-                >
+                  onClick={handleOpenForgotModal}>
                   Forgot Password?
                 </Button>
               </div>
@@ -130,8 +137,7 @@ function AdminLoginPage() {
               <Button
                 type="submit"
                 sx={{ ...styledRectButton, ...styledButtonGreen }}
-                variant="contained"
-              >
+                variant="contained">
                 {showLoading ? <Loading></Loading> : "Sign In"}
               </Button>
 
@@ -141,19 +147,23 @@ function AdminLoginPage() {
                   failureMessage
                     ? styles.showFailureMessage
                     : styles.errorContainer
-                }
-              >
+                }>
                 {failureMessage}
               </p>
             </form>
 
             {/* switch to user link */}
             <Link to="/login/user">
-              <button className={styles.switch}>Switch to User Log In</button>
+              <button className={styles.switch}>
+                Switch to Volunteer Log In
+              </button>
             </Link>
           </div>
         </div>
       </div>
+      <ForgotPasswordModal
+        open={openForgotModal}
+        onClose={handleCloseForgotModal}></ForgotPasswordModal>
     </div>
   );
 }

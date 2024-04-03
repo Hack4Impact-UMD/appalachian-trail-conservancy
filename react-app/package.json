@@ -16,6 +16,7 @@
     "@mui/material": "^5.15.11",
     "@types/lodash.debounce": "^4.0.9",
     "axios": "^1.6.7",
+    "lodash": "^4.17.21",
     "firebase": "^10.9.0",
     "lodash.debounce": "^4.0.8",
     "mui": "^0.0.1",
