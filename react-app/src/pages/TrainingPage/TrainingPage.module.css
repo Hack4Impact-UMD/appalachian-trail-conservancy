@@ -54,12 +54,10 @@
   object-fit: contain;
 }
 
-/* ^HEADER^ */
-
-.contentContainer{
-  
+.contentContainer {
 }
 
+/* Negative Margin has to be changed */
 .stepContainer {
   background-color: lightblue;
   text-align: center;
