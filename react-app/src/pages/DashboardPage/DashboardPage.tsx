@@ -1,21 +1,30 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import TrainingCard from "../../components/TrainingCard/TrainingCard";
 import PathwayCard from "../../components/PathwayCard/PathwayCard";
 import styles from "./Dashboard.module.css";
 import Certificate from "../../components/CertificateCard/Certificate";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
-import { Link } from "react-router-dom";
+import TrainingPopup from "../../components/TrainingPopup/TrainingPopup";
 import { Volunteer } from "../../types/UserType";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 
 function Dashboard() {
+  const [openTrainingPopup, setOpenTrainingPopup] = useState<boolean>(false);
   const pathwayCards = [
     { title: "Title 1", progress: 73 },
     { title: "Title 2" },
   ];
   const trainingCards = [
-    { title: "Title 1", progress: 100 },
+    {
+      title: "Title 1",
+      progress: 100,
+    },
     { title: "Title 2" },
-    { title: "Title 3", progress: 76 },
+    {
+      title: "Title 3",
+      progress: 76,
+    },
   ];
   const certificateCards = [
     { title: "Title 1", date: "MARCH 24 2024" },
@@ -34,10 +43,15 @@ function Dashboard() {
         </div>
         <div className={styles.subHeader}>
           <h2>Pathways in Progress</h2>
-          <Link className={styles.viewAllLink} to="/">
+          <Link className={styles.viewAllLink} to="/pathways">
             VIEW ALL
           </Link>
         </div>
+        <TrainingPopup
+          open={openTrainingPopup}
+          onClose={setOpenTrainingPopup}
+          image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+        />
         <div className={styles.cardsContainer}>
           {pathwayCards.map((pathway, index) => (
             <div className={styles.card} key={index}>
@@ -51,7 +65,7 @@ function Dashboard() {
         </div>
         <div className={styles.subHeader}>
           <h2>Trainings in Progress</h2>
-          <Link className={styles.viewAllLink} to="/trainingsInProgress">
+          <Link className={styles.viewAllLink} to="/trainings">
             VIEW ALL
           </Link>
         </div>
@@ -62,13 +76,14 @@ function Dashboard() {
                 image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
                 title={training.title}
                 progress={training.progress}
+                setOpenTrainingPopup={setOpenTrainingPopup}
               />
             </div>
           ))}
         </div>
         <div className={styles.subHeader}>
           <h2>Recent Badges</h2>
-          <Link className={styles.viewAllLink} to="/">
+          <Link className={styles.viewAllLink} to="/achievements">
             VIEW ALL
           </Link>
         </div>
@@ -85,7 +100,7 @@ function Dashboard() {
         </div>
         <div className={styles.subHeader}>
           <h2>Recent Certifications</h2>
-          <Link className={styles.viewAllLink} to="/trainingsCompleted">
+          <Link className={styles.viewAllLink} to="/achievements">
             VIEW ALL
           </Link>
         </div>

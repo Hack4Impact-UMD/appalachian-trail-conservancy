@@ -16,6 +16,7 @@ import styles from "./AdminLoginPage.module.css";
 import primaryLogo from "../../../assets/atc-primary-logo.png";
 import { styledButtonGreen, styledInputBoxes } from "../../../muiTheme";
 import loginBanner from "../../../assets/login-banner.jpeg";
+import ForgotPasswordModal from "../ForgotPasswordModal/ForgotPasswordModal";
 
 const styledRectButton = {
   height: 40,
@@ -29,6 +30,14 @@ function AdminLoginPage() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   //Add Forgot Password Popup
   const [openForgotModal, setOpenForgotModal] = useState<boolean>(false);
+
+  const handleOpenForgotModal = () => {
+    setOpenForgotModal(true);
+  };
+  const handleCloseForgotModal = () => {
+    setOpenForgotModal(false);
+  };
+
   const [showLoading, setShowLoading] = useState<boolean>(false);
   //Add Error Handling
   const [failureMessage, setFailureMessage] = useState<string>("");
@@ -118,7 +127,8 @@ function AdminLoginPage() {
                     padding: "0px",
                     margin: "8px 0px 8px 0px",
                   }}
-                  variant="text">
+                  variant="text"
+                  onClick={handleOpenForgotModal}>
                   Forgot Password?
                 </Button>
               </div>
@@ -144,11 +154,16 @@ function AdminLoginPage() {
 
             {/* switch to user link */}
             <Link to="/login/user">
-              <button className={styles.switch}>Switch to User Log In</button>
+              <button className={styles.switch}>
+                Switch to Volunteer Log In
+              </button>
             </Link>
           </div>
         </div>
       </div>
+      <ForgotPasswordModal
+        open={openForgotModal}
+        onClose={handleCloseForgotModal}></ForgotPasswordModal>
     </div>
   );
 }

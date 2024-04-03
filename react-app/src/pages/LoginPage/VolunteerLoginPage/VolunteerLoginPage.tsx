@@ -18,6 +18,7 @@ import styles from "./VolunteerLoginPage.module.css";
 import primaryLogo from "../../../assets/atc-primary-logo.png";
 import { styledButtonGreen, styledInputBoxes } from "../../../muiTheme";
 import loginBanner from "../../../assets/login-banner.jpeg";
+import ForgotPasswordModal from "../ForgotPasswordModal/ForgotPasswordModal";
 
 const styledRectButton = {
   width: 350,
@@ -31,6 +32,12 @@ function VolunteerLoginPage() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   //Add Forgot Password Popup
   const [openForgotModal, setOpenForgotModal] = useState<boolean>(false);
+  const handleOpenForgotModal = () => {
+    setOpenForgotModal(true);
+  };
+  const handleCloseForgotModal = () => {
+    setOpenForgotModal(false);
+  };
   const [showLoading, setShowLoading] = useState<boolean>(false);
   //Add Error Handling
   const [failureMessage, setFailureMessage] = useState<string>("");
@@ -84,7 +91,8 @@ function VolunteerLoginPage() {
                 if (!openForgotModal) {
                   handleSignIn(event);
                 }
-              }}>
+              }}
+            >
               {/* email field */}
               <div className={styles.alignLeft}>
                 <h3 className={styles.label}>Email</h3>
@@ -120,7 +128,8 @@ function VolunteerLoginPage() {
                         aria-label="toggle password visibility"
                         onClick={() => setShowPassword(!showPassword)}
                         onMouseDown={() => setShowPassword(!showPassword)}
-                        edge="end">
+                        edge="end"
+                      >
                         {showPassword ? <VisibilityOff /> : <Visibility />}
                       </IconButton>
                     </InputAdornment>
@@ -137,7 +146,9 @@ function VolunteerLoginPage() {
                     padding: "0px",
                     margin: "8px 0px 18px 0px",
                   }}
-                  variant="text">
+                  variant="text"
+                  onClick={handleOpenForgotModal}
+                >
                   Forgot Password?
                 </Button>
               </div>
@@ -147,7 +158,8 @@ function VolunteerLoginPage() {
                 type="submit"
                 sx={{ ...styledRectButton, ...styledButtonGreen }}
                 variant="contained"
-                onClick={(e) => handleSignIn(e)}>
+                onClick={(e) => handleSignIn(e)}
+              >
                 {showLoading ? <Loading></Loading> : "Sign In"}
               </Button>
 
@@ -157,7 +169,8 @@ function VolunteerLoginPage() {
                   failureMessage
                     ? styles.showFailureMessage
                     : styles.errorContainer
-                }>
+                }
+              >
                 {failureMessage}
               </p>
             </form>
@@ -169,6 +182,10 @@ function VolunteerLoginPage() {
           </div>
         </div>
       </div>
+      <ForgotPasswordModal
+        open={openForgotModal}
+        onClose={handleCloseForgotModal}
+      />
     </div>
   );
 }
