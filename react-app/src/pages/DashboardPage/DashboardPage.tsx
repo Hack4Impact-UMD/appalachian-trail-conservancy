@@ -14,9 +14,15 @@ function Dashboard() {
     { title: "Title 2" },
   ];
   const trainingCards = [
-    { title: "Title 1", progress: 100 },
+    {
+      title: "Title 1",
+      progress: 100,
+    },
     { title: "Title 2" },
-    { title: "Title 3", progress: 76 },
+    {
+      title: "Title 3",
+      progress: 76,
+    },
   ];
   const certificateCards = [
     { title: "Title 1", date: "MARCH 24 2024" },
@@ -70,6 +76,7 @@ function Dashboard() {
                 image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
                 title={training.title}
                 progress={training.progress}
+                setOpenTrainingPopup={setOpenTrainingPopup}
               />
             </div>
           ))}
