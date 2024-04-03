@@ -99,12 +99,6 @@ function TrainingLibrary() {
               All
             </Button>
             <Button
-              style={{
-                backgroundColor:
-                  filterType === "inProgress" ? "var(--forest-green)" : "white",
-                color:
-                  filterType === "inProgress" ? "white" : "var(--blue-gray)",
-              }}
               sx={
                 filterType === "inProgress" ? darkGreenButton : whiteEmptyButton
               }

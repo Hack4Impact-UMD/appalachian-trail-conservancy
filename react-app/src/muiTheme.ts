@@ -74,8 +74,9 @@ export const styledButtonWhiteGreen = {
   },
 };
 
+// Filter button
 export const darkGreenButton = {
-  borderRadius: "20px",
+  borderRadius: "15px",
   boxShadow: "none",
   color: "white",
   paddingLeft: "20px",
@@ -89,18 +90,20 @@ export const darkGreenButton = {
   },
 };
 
+// Filter button
 export const whiteEmptyButton = {
-  borderRadius: "20px",
+  borderRadius: "15px",
   boxShadow: "none",
-  color: "black",
+  color: "var(--blue-gray)",
   paddingLeft: "20px",
   paddingRight: "20px",
   height: 44,
   backgroundColor: "white",
-  border: "2px solid black",
+  border: "2px solid var(--blue-gray)",
   "&:hover": {
-    backgroundColor: "white",
-    color: "black",
+    backgroundColor: "var(--ocean-green)",
+    color: "white",
+    border: "2px solid var(--ocean-green)",
   },
 };
 
@@ -135,9 +138,10 @@ export const styledInputBoxes = {
   "& fieldset": { border: "none" },
 };
 
+// Search Bar
 export const styledLibrarySearchBar = {
   border: "2px solid var(--blue-gray)",
-  borderRadius: "10px",
+  borderRadius: "15px",
   width: "55%",
   height: 40,
   "& fieldset": { border: "none" },

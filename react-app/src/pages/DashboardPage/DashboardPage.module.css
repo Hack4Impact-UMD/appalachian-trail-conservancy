@@ -28,6 +28,7 @@
 .nameHeading {
   color: var(--forest-green);
   font-size: 3.5rem;
+  margin-top: 0;
   margin-bottom: 0;
 }
 

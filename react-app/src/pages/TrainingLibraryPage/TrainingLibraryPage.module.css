@@ -16,18 +16,19 @@
 
 /* have space between header and view all link  */
 .header {
-  font-size: 1.3em;
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-top: 1.5%;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .nameHeading {
   color: var(--forest-green);
   font-size: 3.5rem;
+  margin-top: 0;
   margin-bottom: 0;
 }
 
@@ -58,5 +59,7 @@
 }
 
 .subHeader h2 {
-  margin: 50px 0px 25px 0px;
+  font-size: 2rem;
+  margin-left: 0;
+  margin-bottom: 1rem;
 }
