@@ -5,8 +5,8 @@ import Certificate from "../../components/CertificateCard/Certificate";
 import { Select, MenuItem, Button } from "@mui/material";
 import { useState, useEffect } from "react";
 import {
-  styledButtonGreen,
-  styledButtonWhiteBlack,
+  darkGreenButton,
+  whiteEmptyButton,
   styledSelectWhiteBlack,
 } from "../../muiTheme";
 
@@ -94,24 +94,18 @@ function AchievementsPage() {
         </div>
         <div className={styles.buttonContainer}>
           <div className={styles.leftButtonContainer}>
-            <div className={styles.button}>
-              <Button
-                onClick={() => setBadgesSelected(true)}
-                sx={
-                  badgesSelected ? styledButtonGreen : styledButtonWhiteBlack
-                }>
-                Pathway Badges
-              </Button>
-            </div>
-            <div className={styles.button}>
-              <Button
-                onClick={() => setBadgesSelected(false)}
-                sx={
-                  !badgesSelected ? styledButtonGreen : styledButtonWhiteBlack
-                }>
-                Training Certificates
-              </Button>
-            </div>
+            <Button
+              onClick={() => setBadgesSelected(true)}
+              sx={badgesSelected ? darkGreenButton : whiteEmptyButton}
+            >
+              Pathway Badges
+            </Button>
+            <Button
+              onClick={() => setBadgesSelected(false)}
+              sx={!badgesSelected ? darkGreenButton : whiteEmptyButton}
+            >
+              Training Certificates
+            </Button>
           </div>
           <div className={styles.rightButtonContainer}>
             <Select
@@ -128,7 +122,8 @@ function AchievementsPage() {
                 borderRadius: "10px",
                 "& fieldset": { border: "none" },
                 width: "154px",
-              }}>
+              }}
+            >
               <MenuItem value={"newest"} sx={styledSelectWhiteBlack}>
                 SORT: NEWEST
               </MenuItem>
@@ -140,7 +135,8 @@ function AchievementsPage() {
               </MenuItem>
               <MenuItem
                 value={"reverseAlphabetically"}
-                sx={styledSelectWhiteBlack}>
+                sx={styledSelectWhiteBlack}
+              >
                 SORT: Z-A
               </MenuItem>
             </Select>

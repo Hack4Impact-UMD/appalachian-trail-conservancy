@@ -55,15 +55,7 @@
 
 .leftButtonContainer {
   display: flex;
-}
-
-.rightButtonContainer {
-  display: flex;
-  margin: 5px;
-}
-
-.button {
-  margin: 5px;
+  gap: 20px;
 }
 
 .cardsContainer {
