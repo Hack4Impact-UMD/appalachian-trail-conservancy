@@ -27,6 +27,8 @@
 
 .nameHeading {
   color: var(--forest-green);
+  font-size: 3.5rem;
+  margin-bottom: 0;
 }
 
 .searchBarContainer {
