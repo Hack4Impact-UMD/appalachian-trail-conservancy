@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { logOut } from "../../backend/AuthFunctions";
 import styles from "./NavigationBar.module.css";
 import atcprimarylogo from "../../assets/atc-primary-logo.png";
@@ -12,7 +11,6 @@ import pathwaysActive from "../../assets/pathwaysWhite.svg";
 import pathwaysInactive from "../../assets/pathwaysGray.svg";
 import achievementsActive from "../../assets/achievementsWhite.svg";
 import achievementInactive from "../../assets/achievementsGray.svg";
-
 import logout from "../../assets/logout.svg";
 
 function NavigationBar() {
@@ -43,8 +41,7 @@ function NavigationBar() {
               isActive
                 ? `${styles.tab} ${styles.tabActive}`
                 : `${styles.tab} ${styles.tabInActive}`
-            }
-          >
+            }>
             <div>
               <img
                 className={styles.iconActive}
@@ -68,8 +65,7 @@ function NavigationBar() {
               isActive
                 ? `${styles.tab} ${styles.tabActive}`
                 : `${styles.tab} ${styles.tabInActive}`
-            }
-          >
+            }>
             <div>
               <img
                 className={styles.iconActive}
@@ -93,8 +89,7 @@ function NavigationBar() {
               isActive
                 ? `${styles.tab} ${styles.tabActive}`
                 : `${styles.tab} ${styles.tabInActive}`
-            }
-          >
+            }>
             <div>
               <img
                 className={styles.iconActive}
@@ -118,8 +113,7 @@ function NavigationBar() {
               isActive
                 ? `${styles.tab} ${styles.tabActive}`
                 : `${styles.tab} ${styles.tabInActive}`
-            }
-          >
+            }>
             <div>
               <img
                 className={styles.iconActive}
@@ -141,8 +135,7 @@ function NavigationBar() {
           onClick={() => {
             handleLogOut();
           }}
-          className={styles.menuItem}
-        >
+          className={styles.menuItem}>
           <img src={logout} alt="Logout" />
           Log Out
         </button>

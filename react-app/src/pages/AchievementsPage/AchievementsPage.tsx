@@ -1,7 +1,7 @@
 import styles from "./AchievementsPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
-import Certificate from "../../components/CertificateCard/Certificate";
+import Certificate from "../../components/CertificateCard/CertificateCard";
 import { Select, MenuItem, Button } from "@mui/material";
 import { useState, useEffect } from "react";
 import {

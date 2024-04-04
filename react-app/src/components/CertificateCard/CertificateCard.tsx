@@ -1,4 +1,4 @@
-import styles from "./Certificate.module.css";
+import styles from "./CertificateCard.module.css";
 
 interface CertificateProps {
   image: string;
