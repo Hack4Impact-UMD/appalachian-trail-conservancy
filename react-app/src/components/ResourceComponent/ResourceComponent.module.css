@@ -25,13 +25,12 @@
   justify-content: space-between;
 }
 
+.contentLabel h2 {
+  font-size: 1.8rem;
+  margin: 0px;
+}
+
 .buttonContainer {
   display: flex;
   gap: 20px;
-}
-
-h2 {
-  font-size: 1.8rem;
-  margin: 0px;
-  max-width: 70%;
 }

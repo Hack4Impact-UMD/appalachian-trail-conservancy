@@ -76,7 +76,8 @@ function TrainingPage() {
         <Stepper
           activeStep={stepIndex}
           className={styles.stepContainer}
-          sx={stepperStyle}>
+          sx={stepperStyle}
+        >
           {resources.map((resource, idx) => (
             <Step key={idx} sx={{ padding: "0" }}>
               <StepLabel
