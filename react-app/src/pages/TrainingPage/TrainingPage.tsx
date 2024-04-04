@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { stepperStyle } from "../../muiTheme";
+import { TrainingResource } from "../../types/TrainingType";
 import styles from "./TrainingPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
@@ -6,8 +8,6 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import ResourceComponent from "../../components/ResourceComponent/ResourceComponent";
-import { TrainingResource } from "../../types/TrainingType";
-import { stepperStyle } from "../../muiTheme";
 
 const resources: TrainingResource[] = [
   {
@@ -76,8 +76,7 @@ function TrainingPage() {
         <Stepper
           activeStep={stepIndex}
           className={styles.stepContainer}
-          sx={stepperStyle}
-        >
+          sx={stepperStyle}>
           {resources.map((resource, idx) => (
             <Step key={idx} sx={{ padding: "0" }}>
               <StepLabel

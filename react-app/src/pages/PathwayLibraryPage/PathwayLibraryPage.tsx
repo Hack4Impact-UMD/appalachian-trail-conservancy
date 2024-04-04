@@ -1,4 +1,3 @@
-import styles from "./PathwayLibraryPage.module.css";
 import { useState, useEffect } from "react";
 import { IoIosSearch } from "react-icons/io";
 import { TextField, InputAdornment, Button } from "@mui/material";
@@ -7,6 +6,7 @@ import {
   whiteButtonGrayBorder,
   grayBorderSearchBar,
 } from "../../muiTheme";
+import styles from "./PathwayLibraryPage.module.css";
 import debounce from "lodash.debounce";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import PathwayCard from "../../components/PathwayCard/PathwayCard";

@@ -1,4 +1,9 @@
-import { addTraining, addPathway, getAllTrainings, getAllPathways } from "../backend/FirestoreCalls";
+import {
+  addTraining,
+  addPathway,
+  getAllTrainings,
+  getAllPathways,
+} from "../backend/FirestoreCalls";
 import { type Training, TrainingID } from "../types/TrainingType";
 import { type Pathway } from "../types/PathwayType";
 
@@ -7,7 +12,7 @@ export const addSampleTraining = ({
   description = "desc",
   coverImage = "https://media.newyorker.com/photos/5c0195240591e72cf6b59d12/1:1/w_1465,h_1465,c_limit/Duke-Spongebob_01.jpg",
   resources = [],
-  quiz = "",
+  quizID = "",
   associatedPathways = [],
   certificationImage = "https://media.newyorker.com/photos/5c0195240591e72cf6b59d12/1:1/w_1465,h_1465,c_limit/Duke-Spongebob_01.jpg",
 }) => {
@@ -16,7 +21,7 @@ export const addSampleTraining = ({
     description,
     coverImage,
     resources,
-    quiz,
+    quizID,
     associatedPathways,
     certificationImage,
   };
@@ -33,14 +38,14 @@ export const addSamplePathway = ({
   name = "Pathway",
   description = "desc",
   coverImage = "https://media.newyorker.com/photos/5c0195240591e72cf6b59d12/1:1/w_1465,h_1465,c_limit/Duke-Spongebob_01.jpg",
-  trainings = [],
+  trainingIDs = [],
   badgeImage = "https://media.newyorker.com/photos/5c0195240591e72cf6b59d12/1:1/w_1465,h_1465,c_limit/Duke-Spongebob_01.jpg",
 }) => {
   const pathway: Pathway = {
     name,
     description,
     coverImage,
-    trainings,
+    trainingIDs,
     badgeImage,
   };
   addPathway(pathway)

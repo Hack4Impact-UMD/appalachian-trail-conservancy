@@ -1,7 +1,7 @@
-import Button from "@mui/material/Button";
-import styles from "./ResourceComponent.module.css";
+import { Button } from "@mui/material";
 import { whiteButtonGrayBorder } from "../../muiTheme";
 import { TrainingResource } from "../../types/TrainingType";
+import styles from "./ResourceComponent.module.css";
 
 interface ResourceProps {
   resource: TrainingResource;

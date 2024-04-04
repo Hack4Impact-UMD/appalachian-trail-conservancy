@@ -1,8 +1,8 @@
-import styles from "./ForgotPasswordModal.module.css";
 import { useState } from "react";
 import { TextField, Button } from "@mui/material";
 import { forestGreenButton, grayBorderTextField } from "../../../muiTheme";
 import { IoCloseOutline } from "react-icons/io5";
+import styles from "./ForgotPasswordModal.module.css";
 import Modal from "../../../components/ModalWrapper/Modal";
 
 const styledRectButton = {

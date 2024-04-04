@@ -4,7 +4,7 @@ import {
   type User,
   type IdTokenResult,
 } from "@firebase/auth";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import app from "../config/firebase";
 
 interface Props {

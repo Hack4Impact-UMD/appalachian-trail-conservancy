@@ -1,8 +1,8 @@
-import styles from "./NotFoundPage.module.css";
-import primaryLogo from "../../assets/atc-primary-logo.png";
 import { forestGreenButton } from "../../muiTheme";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
+import styles from "./NotFoundPage.module.css";
+import primaryLogo from "../../assets/atc-primary-logo.png";
 
 const buttonStyle = {
   ...forestGreenButton,

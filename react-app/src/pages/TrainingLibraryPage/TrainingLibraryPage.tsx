@@ -1,4 +1,3 @@
-import styles from "./TrainingLibraryPage.module.css";
 import { useState, useEffect } from "react";
 import { IoIosSearch } from "react-icons/io";
 import { Button, TextField, InputAdornment } from "@mui/material";
@@ -7,8 +6,9 @@ import {
   whiteButtonGrayBorder,
   grayBorderSearchBar,
 } from "../../muiTheme";
-import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import styles from "./TrainingLibraryPage.module.css";
 import debounce from "lodash.debounce";
+import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import TrainingCard from "../../components/TrainingCard/TrainingCard";
 import TrainingPopup from "../../components/TrainingPopup/TrainingPopup";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
@@ -100,8 +100,7 @@ function TrainingLibrary() {
                   : whiteButtonGrayBorder
               }
               variant="contained"
-              onClick={() => setFilterType("all")}
-            >
+              onClick={() => setFilterType("all")}>
               All
             </Button>
             <Button
@@ -111,8 +110,7 @@ function TrainingLibrary() {
                   : whiteButtonGrayBorder
               }
               variant="contained"
-              onClick={() => setFilterType("inProgress")}
-            >
+              onClick={() => setFilterType("inProgress")}>
               In Progress
             </Button>
             <Button
@@ -122,8 +120,7 @@ function TrainingLibrary() {
                   : whiteButtonGrayBorder
               }
               variant="contained"
-              onClick={() => setFilterType("completed")}
-            >
+              onClick={() => setFilterType("completed")}>
               Completed
             </Button>
           </div>
