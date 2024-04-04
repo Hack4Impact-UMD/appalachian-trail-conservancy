@@ -123,14 +123,6 @@ function AchievementsPage() {
               size="small"
               sx={{
                 ...whiteSelectGrayBorder,
-                // ...selectOptionStyle,
-                // border: "2px solid dimgray",
-                // "&:hover": {
-                //   backgroundColor: "white",
-                //   color: "dimgray",
-                // },
-                // borderRadius: "10px",
-                // "& fieldset": { border: "none" },
                 width: "154px",
               }}>
               <MenuItem value={"newest"} sx={selectOptionStyle}>
