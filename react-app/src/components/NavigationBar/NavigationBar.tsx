@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { logOut } from "../../backend/AuthFunctions";
 import styles from "./NavigationBar.module.css";
 import atcprimarylogo from "../../assets/atc-primary-logo.png";
@@ -17,6 +17,7 @@ function NavigationBar() {
   // Add Error Handling
   const [submittedError, setSubmittedError] = useState<boolean>(false);
   const navigate = useNavigate();
+  const location = useLocation().pathname;
 
   const handleLogOut = (): void => {
     logOut()
@@ -41,7 +42,8 @@ function NavigationBar() {
               isActive
                 ? `${styles.tab} ${styles.tabActive}`
                 : `${styles.tab} ${styles.tabInActive}`
-            }>
+            }
+          >
             <div>
               <img
                 className={styles.iconActive}
@@ -62,10 +64,11 @@ function NavigationBar() {
           <NavLink
             to="/trainings"
             className={({ isActive }) =>
-              isActive
+              isActive || location === "/trainingpage"
                 ? `${styles.tab} ${styles.tabActive}`
                 : `${styles.tab} ${styles.tabInActive}`
-            }>
+            }
+          >
             <div>
               <img
                 className={styles.iconActive}
@@ -89,7 +92,8 @@ function NavigationBar() {
               isActive
                 ? `${styles.tab} ${styles.tabActive}`
                 : `${styles.tab} ${styles.tabInActive}`
-            }>
+            }
+          >
             <div>
               <img
                 className={styles.iconActive}
@@ -113,7 +117,8 @@ function NavigationBar() {
               isActive
                 ? `${styles.tab} ${styles.tabActive}`
                 : `${styles.tab} ${styles.tabInActive}`
-            }>
+            }
+          >
             <div>
               <img
                 className={styles.iconActive}
@@ -135,7 +140,8 @@ function NavigationBar() {
           onClick={() => {
             handleLogOut();
           }}
-          className={styles.menuItem}>
+          className={styles.menuItem}
+        >
           <img src={logout} alt="Logout" />
           Log Out
         </button>
