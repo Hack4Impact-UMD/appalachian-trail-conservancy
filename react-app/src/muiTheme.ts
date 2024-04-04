@@ -148,8 +148,11 @@ export const stepperStyle = {
     color: "white", // circle color (DISABLED)
     padding: "0",
   },
+  "& .MuiStepLabel-root .MuiStepLabel-iconContainer": {
+    padding: "0", // remove padding next to step label
+  },
   "& .MuiStepConnector-line": {
-    borderTopWidth: "2px",
+    borderTopWidth: "2px", // connector width
   },
   "& .MuiStepConnector-root.Mui-completed .MuiStepConnector-line": {
     borderColor: "var(--blue-gray)", // connector color (COMPLETED)
