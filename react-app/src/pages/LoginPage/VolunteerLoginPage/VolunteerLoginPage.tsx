@@ -33,6 +33,19 @@ function VolunteerLoginPage() {
 
   const [email, setEmail] = useState<string>("");
 
+  const handleSendLink = async (event: any) => {
+    event.preventDefault();
+
+    const pattern: RegExp = /^\S+@\S+$/;
+
+    if (! pattern.test(email)) {
+      setFailureMessage("*Not a valid email");
+    }
+    else {
+      setFailureMessage("");
+    }
+  };
+
   return (
     <div className={styles.pageContainer}>
       <div className={styles.split}>
@@ -48,7 +61,10 @@ function VolunteerLoginPage() {
             {/* welcome label */}
             <h1 className={styles.heading}>Welcome!</h1>
 
-            <form>
+            <form
+              onSubmit={(event) => {
+                handleSendLink(event);
+              }}>
               {/* email field */}
               <div className={styles.alignLeft}>
                 <h3 className={styles.label}>Email</h3>
@@ -68,7 +84,8 @@ function VolunteerLoginPage() {
               <Button
                 type="submit"
                 sx={{ ...styledRectButton, ...forestGreenButton }}
-                variant="contained">
+                variant="contained"
+                onClick={(e) => handleSendLink(e)}>
                 {showLoading ? <Loading></Loading> : "Send Link"}
               </Button>
 
