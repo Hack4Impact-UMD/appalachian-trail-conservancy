@@ -18,7 +18,6 @@ import styles from "./VolunteerLoginPage.module.css";
 import primaryLogo from "../../../assets/atc-primary-logo.png";
 import { forestGreenButton, grayBorderTextField } from "../../../muiTheme";
 import loginBanner from "../../../assets/login-banner.jpeg";
-import ForgotPasswordModal from "../ForgotPasswordModal/ForgotPasswordModal";
 
 const styledRectButton = {
   width: 350,
@@ -28,14 +27,7 @@ const styledRectButton = {
 function VolunteerLoginPage() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  //Add Forgot Password Popup
-  const [openForgotModal, setOpenForgotModal] = useState<boolean>(false);
-  const handleOpenForgotModal = () => {
-    setOpenForgotModal(true);
-  };
-  const handleCloseForgotModal = () => {
-    setOpenForgotModal(false);
-  };
+
   const [showLoading, setShowLoading] = useState<boolean>(false);
   //Add Error Handling
   const [failureMessage, setFailureMessage] = useState<string>("");
@@ -86,9 +78,7 @@ function VolunteerLoginPage() {
 
             <form
               onSubmit={(event) => {
-                if (!openForgotModal) {
-                  handleSignIn(event);
-                }
+                handleSignIn(event);
               }}>
               {/* email field */}
               <div className={styles.alignLeft}>
@@ -134,20 +124,6 @@ function VolunteerLoginPage() {
                 />
               </FormControl>
 
-              {/* forgot password button */}
-              <div className={styles.alignLeft}>
-                <Button
-                  sx={{
-                    color: "var(--forest-green)",
-                    padding: "0px",
-                    margin: "8px 0px 18px 0px",
-                  }}
-                  variant="text"
-                  onClick={handleOpenForgotModal}>
-                  Forgot Password?
-                </Button>
-              </div>
-
               {/* sign in button */}
               <Button
                 type="submit"
@@ -175,10 +151,6 @@ function VolunteerLoginPage() {
           </div>
         </div>
       </div>
-      <ForgotPasswordModal
-        open={openForgotModal}
-        onClose={handleCloseForgotModal}
-      />
     </div>
   );
 }
