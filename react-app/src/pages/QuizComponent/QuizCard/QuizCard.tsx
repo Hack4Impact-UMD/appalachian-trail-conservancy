@@ -6,6 +6,7 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import styles from "./QuizCard.module.css";
+import { grayRadioButton } from "../../../muiTheme";
 
 interface QuizCardProps {
   currentQuestion: number;
@@ -26,20 +27,6 @@ const QuizCard: React.FC<QuizCardProps> = ({
     setSelectedValue(event.target.value);
   };
 
-  const controlProps = (item: string) => ({
-    checked: selectedValue === item,
-    onChange: handleChange,
-    value: item,
-    name: "color-radio-button-demo",
-    inputProps: { "aria-label": item },
-    style: {
-      color: "black", // Change color to black
-      "&.Mui-checked": {
-        color: "black", // Change color to black when checked
-      },
-    },
-  });
-
   return (
     <div className={styles.quizCard}>
       <div className={styles.question}>
@@ -49,13 +36,13 @@ const QuizCard: React.FC<QuizCardProps> = ({
         <p className={styles.questionText}>{question}</p>
       </div>
       <div>
-        <FormControl component="fieldset">
-          <RadioGroup>
+        <FormControl>
+          <RadioGroup value={selectedValue} onChange={handleChange}>
             {answerOptions.map((option, index) => (
               <FormControlLabel
                 key={index}
                 value={option}
-                control={<Radio {...controlProps(option)} />}
+                control={<Radio sx={grayRadioButton} />}
                 label={option}
               />
             ))}

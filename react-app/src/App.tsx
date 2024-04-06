@@ -13,6 +13,7 @@ import AchievementsPage from "./pages/AchievementsPage/AchievementsPage.tsx";
 import RequireAuth from "./auth/RequireAuth/RequireAuth.tsx";
 import { AuthProvider } from "./auth/AuthProvider.tsx";
 import QuizResult from "./components/QuizResult/QuizResult.tsx";
+import QuizCard from "./pages/QuizComponent/QuizCard/QuizCard.tsx";
 
 function App() {
   return (
@@ -63,7 +64,6 @@ function App() {
                 </RequireAuth>
               }
             ></Route>
-
             <Route
               path="/testfunctions"
               element={
@@ -75,6 +75,19 @@ function App() {
                   >
                     TEST
                   </button>
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/quizcard"
+              element={
+                <RequireAuth>
+                  <QuizCard
+                    currentQuestion={1}
+                    totalQuestions={10}
+                    question={"What is 2 + 2?"}
+                    answerOptions={["1", "9", "-2", "4"]}
+                  />
                 </RequireAuth>
               }
             />

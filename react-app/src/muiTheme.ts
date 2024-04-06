@@ -149,3 +149,11 @@ export const grayBorderSearchBar = {
   border: "2px solid var(--blue-gray)",
   "& fieldset": { border: "none" },
 };
+
+// Radio Button, used in quiz component
+export const grayRadioButton = {
+  color: "var( --blue-gray)",
+  "&.Mui-checked": {
+    color: "var( --blue-gray)",
+  },
+};
