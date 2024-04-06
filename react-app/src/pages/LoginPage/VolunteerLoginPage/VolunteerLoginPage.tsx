@@ -44,7 +44,7 @@ function VolunteerLoginPage() {
             <div className={styles.rightImgContainer}>
               <img src={primaryLogo} alt="ATC Logo" />
             </div>
-            
+
             {/* welcome label */}
             <h1 className={styles.heading}>Welcome!</h1>
 
@@ -55,7 +55,7 @@ function VolunteerLoginPage() {
               </div>
               <TextField
                 value={email}
-                sx={grayBorderTextField}
+                sx={{ ...grayBorderTextField, marginBottom:'15px' }}
                 label=""
                 variant="outlined"
                 size="small"
@@ -64,12 +64,12 @@ function VolunteerLoginPage() {
                 }}
               />
 
-              {/* sign in button */}
+              {/* send link button */}
               <Button
                 type="submit"
                 sx={{ ...styledRectButton, ...forestGreenButton }}
                 variant="contained">
-                {showLoading ? <Loading></Loading> : "Sign In"}
+                {showLoading ? <Loading></Loading> : "Send Link"}
               </Button>
 
               {/* error message */}
