@@ -7,6 +7,8 @@ import Certificate from "../../components/CertificateCard/Certificate";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import TrainingPopup from "../../components/TrainingPopup/TrainingPopup";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
+import Footer from "../../components/Footer/Footer";
+
 
 function Dashboard() {
   const [openTrainingPopup, setOpenTrainingPopup] = useState<boolean>(false);
@@ -115,6 +117,7 @@ function Dashboard() {
           ))}
         </div>
       </div>
+      <Footer />
     </>
   );
 }

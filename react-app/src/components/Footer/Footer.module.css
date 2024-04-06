@@ -1,0 +1,36 @@
+.footerContainer{
+    box-sizing: content-box;
+  height: 100px;
+  position:absolute;
+  background-color: var(--forest-green);
+  bottom: 0px;
+  right: 0px;
+  left: 250px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 4%;
+  padding-right: 8%;
+  padding-left: 6%;
+}
+
+.ATClogo{
+    border-radius: 50%;
+}
+
+.textDiv{
+    color: white;
+    line-height: 1.6;
+}
+
+.iconsDiv{
+    flex-grow: 0.3;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.white-icon {
+    color: white;
+  }
