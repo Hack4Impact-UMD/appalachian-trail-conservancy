@@ -26,41 +26,12 @@ const styledRectButton = {
 
 function VolunteerLoginPage() {
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const [showLoading, setShowLoading] = useState<boolean>(false);
   //Add Error Handling
   const [failureMessage, setFailureMessage] = useState<string>("");
 
   const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-
-  const handleSignIn = async (event: any) => {
-    event.preventDefault();
-    setShowLoading(true);
-
-    if (email && password) {
-      authenticateUser(email, password)
-        .then(() => {
-          setShowLoading(false);
-          navigate("/");
-        })
-        .catch((error) => {
-          setShowLoading(false);
-          const code = (error as AuthError).code;
-          if (code === "auth/too-many-requests") {
-            setFailureMessage(
-              "*Access to this account has been temporarily disabled due to many failed login attempts. You can reset your password or try again later."
-            );
-          } else {
-            setFailureMessage("*Incorrect email address or password");
-          }
-        });
-    } else {
-      setFailureMessage("*Incorrect email address or password");
-      setShowLoading(false);
-    }
-  };
 
   return (
     <div className={styles.pageContainer}>
@@ -73,13 +44,11 @@ function VolunteerLoginPage() {
             <div className={styles.rightImgContainer}>
               <img src={primaryLogo} alt="ATC Logo" />
             </div>
+            
             {/* welcome label */}
             <h1 className={styles.heading}>Welcome!</h1>
 
-            <form
-              onSubmit={(event) => {
-                handleSignIn(event);
-              }}>
+            <form>
               {/* email field */}
               <div className={styles.alignLeft}>
                 <h3 className={styles.label}>Email</h3>
@@ -95,41 +64,11 @@ function VolunteerLoginPage() {
                 }}
               />
 
-              {/* password field */}
-              <div className={styles.alignLeft}>
-                <h3 className={styles.label}>Password</h3>
-              </div>
-              <FormControl variant="outlined">
-                <InputLabel htmlFor="outlined-adornment-password"></InputLabel>
-                <OutlinedInput
-                  value={password}
-                  sx={grayBorderTextField}
-                  id="outlined-adornment-password"
-                  type={showPassword ? "text" : "password"}
-                  onChange={(event) => {
-                    setPassword(event.target.value);
-                  }}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={() => setShowPassword(!showPassword)}
-                        onMouseDown={() => setShowPassword(!showPassword)}
-                        edge="end">
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  }
-                  label="Password"
-                />
-              </FormControl>
-
               {/* sign in button */}
               <Button
                 type="submit"
                 sx={{ ...styledRectButton, ...forestGreenButton }}
-                variant="contained"
-                onClick={(e) => handleSignIn(e)}>
+                variant="contained">
                 {showLoading ? <Loading></Loading> : "Sign In"}
               </Button>
 
