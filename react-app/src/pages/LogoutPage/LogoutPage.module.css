@@ -1,4 +1,4 @@
-.centered-container {
+.centeredContainer {
     text-align: center;
     margin-top: 100px;
   }
@@ -18,13 +18,13 @@
     margin-right: auto; 
   }
   
-  .logout-text {
+  .logoutText {
     margin-top: 20px;
     font-weight: bold;
     font-size: 35px;
   }
   
-  .sign-in-button {
+  .signInButton {
     background-color: var(--forest-green);;
     color: white;
     border-radius: 15px;
