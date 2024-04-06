@@ -56,7 +56,14 @@ function AdminLoginPage() {
     setShowLoading(true);
 
     if (email && password) {
-      authenticateUser(email, password)
+
+      const pattern: RegExp = /^\S+@\S+$/;
+      if (! pattern.test(email)) {
+        setShowLoading(false);
+        setFailureMessage("*Not a valid email");
+      }
+      else {
+        authenticateUser(email, password)
         .then(() => {
           setShowLoading(false);
           navigate("/");
@@ -72,10 +79,11 @@ function AdminLoginPage() {
             setFailureMessage("*Incorrect email address or password");
           }
         });
-    } else {
-      setFailureMessage("*Incorrect email address or password");
-      setShowLoading(false);
-    }
+      }
+      } else {
+        setFailureMessage("*Incorrect email address or password");
+        setShowLoading(false);
+      }
   };
 
   return (
