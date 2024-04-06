@@ -13,6 +13,7 @@ import AchievementsPage from "./pages/AchievementsPage/AchievementsPage.tsx";
 import RequireAuth from "./auth/RequireAuth/RequireAuth.tsx";
 import { AuthProvider } from "./auth/AuthProvider.tsx";
 import QuizResult from "./components/QuizResult/QuizResult.tsx";
+import LogoutPage from "./pages/LogoutPage/LogoutPage.tsx";
 
 function App() {
   return (
@@ -61,7 +62,8 @@ function App() {
                 <RequireAuth>
                   <NotFoundPage />
                 </RequireAuth>
-              }></Route>
+              }
+            ></Route>
 
             <Route
               path="/testfunctions"
@@ -70,7 +72,8 @@ function App() {
                   <button
                     onClick={() => {
                       //Test function
-                    }}>
+                    }}
+                  >
                     TEST
                   </button>
                 </RequireAuth>

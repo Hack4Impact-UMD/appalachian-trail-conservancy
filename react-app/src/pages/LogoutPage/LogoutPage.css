@@ -1,0 +1,38 @@
+.centered-container {
+    text-align: center;
+    margin-top: 100px;
+  }
+  
+  .logo {
+    margin-top: 110px;
+    width: 7%;
+    height: auto; 
+  }
+  
+  .checkmark {
+    margin-top: 30px;
+    display: block; 
+    width: 80px; 
+    height: auto; 
+    margin-left: auto; 
+    margin-right: auto; 
+  }
+  
+  .logout-text {
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 35px;
+  }
+  
+  .sign-in-button {
+    background-color: var(--forest-green);;
+    color: white;
+    border-radius: 15px;
+    padding: 15px 120px;
+    border: none;
+    font-weight: bold;
+    font-size: 14px;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+  
