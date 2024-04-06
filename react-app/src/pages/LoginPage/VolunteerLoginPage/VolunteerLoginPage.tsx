@@ -8,11 +8,11 @@ import {
   TextField,
   Button,
 } from "@mui/material";
+import { useNavigate } from "react-router";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { authenticateUser } from "../../../backend/AuthFunctions";
 import { AuthError } from "firebase/auth";
-import { useNavigate } from "react-router";
 import Loading from "../../../components/LoadingScreen/Loading";
 import styles from "./VolunteerLoginPage.module.css";
 import primaryLogo from "../../../assets/atc-primary-logo.png";
