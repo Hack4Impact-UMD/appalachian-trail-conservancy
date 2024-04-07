@@ -1,19 +1,23 @@
-import { useState } from "react";
+import { useState, useCallback, useContext } from "react";
 import { TextField, Button } from "@mui/material";
 import { useNavigate } from "react-router";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { forestGreenButton, grayBorderTextField } from "../../../muiTheme";
+import { authenticateUserEmailLink } from "../../../backend/AuthFunctions";
+import { getAuth, sendSignInLinkToEmail } from "firebase/auth";
+import { useAuth } from "../../../auth/AuthProvider";
 import styles from "./VolunteerLoginPage.module.css";
 import Loading from "../../../components/LoadingScreen/Loading";
 import primaryLogo from "../../../assets/atc-primary-logo.png";
 import loginBanner from "../../../assets/login-banner.jpeg";
+import app from "../../../config/firebase";
 
 const styledRectButton = {
   width: 350,
   marginTop: "5%",
 };
 
-function VolunteerLoginPage() {
+function VolunteerLoginPage(history: any) {
   const navigate = useNavigate();
 
   const [showLoading, setShowLoading] = useState<boolean>(false);
@@ -30,9 +34,32 @@ function VolunteerLoginPage() {
     if (!pattern.test(email)) {
       setFailureMessage("*Not a valid email");
     } else {
-      setFailureMessage("");
+      console.log(email);
+      handleLogin();
     }
   };
+
+  const handleLogin = async () => {
+    const actionCodeSettings = {
+      url: window.location.href,
+      handleCodeInApp: true,
+    };
+
+    try {
+      const auth = getAuth(app);
+      await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+      console.log(email);
+      window.localStorage.setItem("emailForSignIn", email);
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  const { user } = useAuth();
+
+  if (user) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <div className={styles.pageContainer}>
@@ -52,7 +79,8 @@ function VolunteerLoginPage() {
             <form
               onSubmit={(event) => {
                 handleSendLink(event);
-              }}>
+              }}
+            >
               {/* email field */}
               <div className={styles.alignLeft}>
                 <h3 className={styles.label}>Email</h3>
@@ -73,7 +101,8 @@ function VolunteerLoginPage() {
                 type="submit"
                 sx={{ ...styledRectButton, ...forestGreenButton }}
                 variant="contained"
-                onClick={(e) => handleSendLink(e)}>
+                onClick={(e) => handleSendLink(e)}
+              >
                 {showLoading ? <Loading></Loading> : "Send Link"}
               </Button>
 
@@ -83,7 +112,8 @@ function VolunteerLoginPage() {
                   failureMessage
                     ? styles.showFailureMessage
                     : styles.errorContainer
-                }>
+                }
+              >
                 {failureMessage}
               </p>
             </form>
