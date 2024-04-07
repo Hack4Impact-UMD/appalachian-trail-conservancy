@@ -50,6 +50,7 @@ function VolunteerLoginPage() {
             <h1 className={styles.heading}>Welcome!</h1>
 
             <form
+              className={styles.centered}
               onSubmit={(event) => {
                 handleSendLink(event);
               }}>
