@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
+import { Button } from "@mui/material";
+import { forestGreenButton, whiteButtonGreenBorder } from "../../muiTheme";
 import styles from "./LoginPage.module.css";
 import primaryLogo from "../../assets/atc-primary-logo.png";
-import { forestGreenButton, whiteButtonGreenBorder } from "../../muiTheme";
-import { Button } from "@mui/material";
 import loginBanner from "../../assets/login-banner.jpeg";
 
 const styledRectButton = {

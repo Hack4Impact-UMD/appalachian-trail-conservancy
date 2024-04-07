@@ -8,15 +8,15 @@ import {
   TextField,
   Button,
 } from "@mui/material";
-import { useNavigate } from "react-router";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { forestGreenButton, grayBorderTextField } from "../../../muiTheme";
+import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import { authenticateUser } from "../../../backend/AuthFunctions";
 import { AuthError } from "firebase/auth";
-import Loading from "../../../components/LoadingScreen/Loading";
 import styles from "./AdminLoginPage.module.css";
+import Loading from "../../../components/LoadingScreen/Loading";
 import primaryLogo from "../../../assets/atc-primary-logo.png";
-import { forestGreenButton, grayBorderTextField } from "../../../muiTheme";
 import loginBanner from "../../../assets/login-banner.jpeg";
 import ForgotPasswordModal from "../ForgotPasswordModal/ForgotPasswordModal";
 

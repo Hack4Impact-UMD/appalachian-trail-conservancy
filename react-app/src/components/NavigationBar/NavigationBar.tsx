@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { logOut } from "../../backend/AuthFunctions";
 import styles from "./NavigationBar.module.css";
 import atcprimarylogo from "../../assets/atc-primary-logo.png";
@@ -12,13 +11,13 @@ import pathwaysActive from "../../assets/pathwaysWhite.svg";
 import pathwaysInactive from "../../assets/pathwaysGray.svg";
 import achievementsActive from "../../assets/achievementsWhite.svg";
 import achievementInactive from "../../assets/achievementsGray.svg";
-
 import logout from "../../assets/logout.svg";
 
 function NavigationBar() {
   // Add Error Handling
   const [submittedError, setSubmittedError] = useState<boolean>(false);
   const navigate = useNavigate();
+  const location = useLocation().pathname;
 
   const handleLogOut = (): void => {
     logOut()
@@ -65,7 +64,7 @@ function NavigationBar() {
           <NavLink
             to="/trainings"
             className={({ isActive }) =>
-              isActive
+              isActive || location === "/trainingpage"
                 ? `${styles.tab} ${styles.tabActive}`
                 : `${styles.tab} ${styles.tabInActive}`
             }

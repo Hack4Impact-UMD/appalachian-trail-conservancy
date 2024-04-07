@@ -1,18 +1,20 @@
 import "./index.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { ThemeProvider } from "@mui/material";
+import { AuthProvider } from "./auth/AuthProvider.tsx";
+import theme from "./muiTheme.ts";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import Dashboard from "./pages/DashboardPage/DashboardPage.tsx";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage.tsx";
 import TrainingLibrary from "./pages/TrainingLibraryPage/TrainingLibraryPage.tsx";
 import PathwayLibrary from "./pages/PathwayLibraryPage/PathwayLibraryPage.tsx";
-import { ThemeProvider } from "@mui/material";
-import theme from "./muiTheme.ts";
 import VolunteerLoginPage from "./pages/LoginPage/VolunteerLoginPage/VolunteerLoginPage.tsx";
 import AdminLoginPage from "./pages/LoginPage/AdminLoginPage/AdminLoginPage.tsx";
 import AchievementsPage from "./pages/AchievementsPage/AchievementsPage.tsx";
+import TrainingPage from "./pages/TrainingPage/TrainingPage.tsx";
 import RequireAuth from "./auth/RequireAuth/RequireAuth.tsx";
-import { AuthProvider } from "./auth/AuthProvider.tsx";
-import QuizResult from "./components/QuizResult/QuizResult.tsx";
+import QuizResult from "./pages/TrainingPage/QuizComponent/QuizResult/QuizResult.tsx";
+import QuizCard from "./pages/TrainingPage/QuizComponent/QuizCard/QuizCard.tsx";
 
 function App() {
   return (
@@ -40,6 +42,14 @@ function App() {
               }
             />
             <Route
+              path="/trainingpage"
+              element={
+                <RequireAuth>
+                  <TrainingPage />
+                </RequireAuth>
+              }
+            />
+            <Route
               path="/pathways"
               element={
                 <RequireAuth>
@@ -62,7 +72,6 @@ function App() {
                   <NotFoundPage />
                 </RequireAuth>
               }></Route>
-
             <Route
               path="/testfunctions"
               element={
@@ -73,6 +82,19 @@ function App() {
                     }}>
                     TEST
                   </button>
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/quizcard"
+              element={
+                <RequireAuth>
+                  <QuizCard
+                    currentQuestion={1}
+                    totalQuestions={10}
+                    question={"What is 2 + 2?"}
+                    answerOptions={["1", "9", "-2", "4"]}
+                  />
                 </RequireAuth>
               }
             />
