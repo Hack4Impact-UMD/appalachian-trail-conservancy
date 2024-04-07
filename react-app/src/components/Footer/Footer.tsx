@@ -43,7 +43,7 @@ function Footer() {
           </div>
         </div>
         <div className={styles.textDiv}>
-          <p>hello</p>
+          <p className={styles.smallText}>These trainings are presented by the Appalachian Trail Conservancy for A.T. partners and volunteers.</p>
         </div>
       </div>
     </div>

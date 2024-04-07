@@ -3,17 +3,16 @@
   background-color: var(--forest-green);
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: space-around;
   padding: 4%;
-  padding-right: 8%;
-  padding-left: 6%;
   margin-top: auto;
 }
-
 .informationContainer {
+  flex-grow: 0.4;
   display: flex;
   flex-direction: column;
 }
+
 .informationInnerContainer {
   display: flex;
   flex-direction: row;
@@ -22,6 +21,8 @@
 
 .ATClogo {
   border-radius: 50%;
+  height: 100px;
+  width: 100px;
 }
 
 .textDiv {
@@ -37,6 +38,10 @@
   justify-content: space-around;
 }
 
-.white-icon {
+.whiteIcon {
   color: white;
+}
+
+.smallText {
+  font-size: 100%; 
 }
