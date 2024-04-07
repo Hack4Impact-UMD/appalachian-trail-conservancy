@@ -135,6 +135,15 @@ export const grayBorderSearchBar = {
   "& fieldset": { border: "none" },
 };
 
+// Radio Button, used in quiz component
+export const grayRadioButton = {
+  color: "var( --blue-gray)",
+  "&.Mui-checked": {
+    color: "var( --blue-gray)",
+  },
+};
+
+// stepper, used in training page
 export const stepperStyle = {
   "& .MuiStepLabel-root .Mui-completed": {
     color: "var(--blue-gray)", // circle color (COMPLETED)
