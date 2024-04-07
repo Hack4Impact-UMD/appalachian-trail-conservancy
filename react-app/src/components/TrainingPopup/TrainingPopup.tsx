@@ -2,6 +2,7 @@ import styles from "./TrainingPopup.module.css";
 import { Button } from "@mui/material";
 import { IoCloseOutline } from "react-icons/io5";
 import { whiteButtonGrayBorder } from "../../muiTheme";
+import { Link } from "react-router-dom";
 
 interface modalPropsType {
   open: boolean;
@@ -19,7 +20,8 @@ const TrainingPopup = ({
       className={styles.modalContainer}
       onClick={(e) => {
         e.stopPropagation();
-      }}>
+      }}
+    >
       {open ? (
         <>
           <div className={styles.background} onClick={() => onClose()} />
@@ -36,8 +38,11 @@ const TrainingPopup = ({
                 <div className={styles.learnMoreButton}>
                   <Button
                     variant="contained"
-                    sx={{ ...whiteButtonGrayBorder, width: "150px" }}>
-                    Learn More
+                    sx={{ ...whiteButtonGrayBorder, width: "150px" }}
+                  >
+                    <Link className={styles.viewAllLink} to="/trainingpage">
+                      Learn More
+                    </Link>
                   </Button>
                 </div>
               </div>
