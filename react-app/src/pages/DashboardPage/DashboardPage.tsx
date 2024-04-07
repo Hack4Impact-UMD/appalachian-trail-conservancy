@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import TrainingCard from "../../components/TrainingCard/TrainingCard";
 import PathwayCard from "../../components/PathwayCard/PathwayCard";
 import styles from "./DashboardPage.module.css";
-import Certificate from "../../components/CertificateCard/Certificate";
+import Certificate from "../../components/CertificateCard/CertificateCard";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import TrainingPopup from "../../components/TrainingPopup/TrainingPopup";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";

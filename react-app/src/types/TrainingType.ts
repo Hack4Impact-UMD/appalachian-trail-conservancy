@@ -5,16 +5,16 @@ export interface TrainingID extends Training {
 export interface Training {
   name: string;
   description: string;
-  coverImage: string;
+  coverImage: string; // URL
   resources: TrainingResource[];
-  quiz: string;
-  associatedPathways: string[];
-  certificationImage: string;
+  quizID: string;
+  associatedPathways: string[]; // pathway IDs
+  certificationImage: string; // URL
 }
 
 export interface TrainingResource {
   type: Resource;
-  link: string;
+  link: string; // URL
   title: string;
 }
 
