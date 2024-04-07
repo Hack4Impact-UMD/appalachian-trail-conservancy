@@ -10,9 +10,11 @@
 .right {
   right: 0;
   left: 250px;
+}
+
+.content {
   padding-left: 10%;
   padding-right: 10%;
-  margin-bottom: 200px;
 }
 
 /* have space between header and view all link  */

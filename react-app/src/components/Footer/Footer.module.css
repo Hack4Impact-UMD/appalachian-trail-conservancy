@@ -1,11 +1,6 @@
 .footerContainer {
-  box-sizing: content-box;
   height: 100px;
-  position: absolute;
   background-color: var(--forest-green);
-  bottom: 0;
-  right: 0;
-  left: 250px;
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
