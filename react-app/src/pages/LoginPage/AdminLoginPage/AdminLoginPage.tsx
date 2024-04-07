@@ -56,34 +56,32 @@ function AdminLoginPage() {
     setShowLoading(true);
 
     if (email && password) {
-
       const pattern: RegExp = /^\S+@\S+$/;
-      if (! pattern.test(email)) {
+      if (!pattern.test(email)) {
         setShowLoading(false);
         setFailureMessage("*Not a valid email");
-      }
-      else {
-        authenticateUser(email, password)
-        .then(() => {
-          setShowLoading(false);
-          navigate("/");
-        })
-        .catch((error) => {
-          setShowLoading(false);
-          const code = (error as AuthError).code;
-          if (code === "auth/too-many-requests") {
-            setFailureMessage(
-              "*Access to this account has been temporarily disabled due to many failed login attempts. You can reset your password or try again later."
-            );
-          } else {
-            setFailureMessage("*Incorrect email address or password");
-          }
-        });
-      }
       } else {
-        setFailureMessage("*Incorrect email address or password");
-        setShowLoading(false);
+        authenticateUser(email, password)
+          .then(() => {
+            setShowLoading(false);
+            navigate("/");
+          })
+          .catch((error) => {
+            setShowLoading(false);
+            const code = (error as AuthError).code;
+            if (code === "auth/too-many-requests") {
+              setFailureMessage(
+                "*Access to this account has been temporarily disabled due to many failed login attempts. You can reset your password or try again later."
+              );
+            } else {
+              setFailureMessage("*Incorrect email address or password");
+            }
+          });
       }
+    } else {
+      setFailureMessage("*Incorrect email address or password");
+      setShowLoading(false);
+    }
   };
 
   return (

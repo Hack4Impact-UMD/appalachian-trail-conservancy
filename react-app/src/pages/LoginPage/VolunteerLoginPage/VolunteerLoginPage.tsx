@@ -1,22 +1,11 @@
 import { useState } from "react";
-import {
-  FormControl,
-  IconButton,
-  InputAdornment,
-  InputLabel,
-  OutlinedInput,
-  TextField,
-  Button,
-} from "@mui/material";
+import { TextField, Button } from "@mui/material";
 import { useNavigate } from "react-router";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Link } from "react-router-dom";
-import { authenticateUser } from "../../../backend/AuthFunctions";
-import { AuthError } from "firebase/auth";
+import { forestGreenButton, grayBorderTextField } from "../../../muiTheme";
 import Loading from "../../../components/LoadingScreen/Loading";
 import styles from "./VolunteerLoginPage.module.css";
 import primaryLogo from "../../../assets/atc-primary-logo.png";
-import { forestGreenButton, grayBorderTextField } from "../../../muiTheme";
 import loginBanner from "../../../assets/login-banner.jpeg";
 
 const styledRectButton = {
@@ -38,10 +27,9 @@ function VolunteerLoginPage() {
 
     const pattern: RegExp = /^\S+@\S+$/;
 
-    if (! pattern.test(email)) {
+    if (!pattern.test(email)) {
       setFailureMessage("*Not a valid email");
-    }
-    else {
+    } else {
       setFailureMessage("");
     }
   };
@@ -71,7 +59,7 @@ function VolunteerLoginPage() {
               </div>
               <TextField
                 value={email}
-                sx={{ ...grayBorderTextField, marginBottom:'15px' }}
+                sx={{ ...grayBorderTextField, marginBottom: "15px" }}
                 label=""
                 variant="outlined"
                 size="small"
