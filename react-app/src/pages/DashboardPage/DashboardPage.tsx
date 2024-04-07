@@ -9,7 +9,6 @@ import TrainingPopup from "../../components/TrainingPopup/TrainingPopup";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Footer from "../../components/Footer/Footer";
 
-
 function Dashboard() {
   const [openTrainingPopup, setOpenTrainingPopup] = useState<boolean>(false);
   const pathwayCards = [
@@ -37,6 +36,7 @@ function Dashboard() {
   return (
     <>
       <NavigationBar />
+
       <div className={`${styles.split} ${styles.right}`}>
         <div className={styles.header}>
           <h1 className={styles.nameHeading}>Hello, Name!</h1>

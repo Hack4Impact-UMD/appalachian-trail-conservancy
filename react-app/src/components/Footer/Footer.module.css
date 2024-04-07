@@ -1,36 +1,47 @@
-.footerContainer{
-    box-sizing: content-box;
+.footerContainer {
+  box-sizing: content-box;
   height: 100px;
-  position:absolute;
+  position: absolute;
   background-color: var(--forest-green);
-  bottom: 0px;
-  right: 0px;
+  bottom: 0;
+  right: 0;
   left: 250px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-evenly;
   padding: 4%;
   padding-right: 8%;
   padding-left: 6%;
+  margin-top: auto;
 }
 
-.ATClogo{
-    border-radius: 50%;
+.informationContainer {
+  display: flex;
+  flex-direction: column;
+}
+.informationInnerContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
-.textDiv{
-    color: white;
-    line-height: 1.6;
+.ATClogo {
+  border-radius: 50%;
 }
 
-.iconsDiv{
-    flex-grow: 0.3;
-    color: white;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+.textDiv {
+  color: white;
+  line-height: 1.6;
+}
+
+.iconsDiv {
+  flex-grow: 0.3;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }
 
 .white-icon {
-    color: white;
-  }
+  color: white;
+}

@@ -67,3 +67,7 @@
   text-align: center;
   text-decoration: underline;
 }
+
+.mainContainer {
+  min-height: calc(100vh - 150px);
+}
