@@ -27,7 +27,7 @@
 
 .nameHeading {
   color: var(--forest-green);
-  font-size: 3.5rem;
+  font-size: 3rem;
   margin-top: 0;
   margin-bottom: 0;
 }
@@ -71,7 +71,6 @@
 }
 
 .subHeader h2 {
-  font-size: 2rem;
-  margin-left: 0;
-  margin-bottom: 1rem;
+  font-size: 1.8rem;
+  margin: 1.5rem 0 1rem 0;
 }

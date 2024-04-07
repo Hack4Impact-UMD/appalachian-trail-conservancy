@@ -5,7 +5,7 @@ export interface PathwayID extends Pathway {
 export interface Pathway {
   name: string;
   description: string;
-  coverImage: string;
-  trainings: string[];
-  badgeImage: string;
+  coverImage: string; // URL
+  trainingIDs: string[];
+  badgeImage: string; // URL
 }

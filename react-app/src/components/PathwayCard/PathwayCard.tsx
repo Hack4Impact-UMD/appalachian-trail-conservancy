@@ -1,6 +1,5 @@
-import React from "react";
-import LinearProgressWithLabel from "../LinearProgressWithLabel/LinearProgressWithLabel";
 import styles from "./PathwayCard.module.css";
+import LinearProgressWithLabel from "../LinearProgressWithLabel/LinearProgressWithLabel";
 
 interface PathwayCardProps {
   image: string;

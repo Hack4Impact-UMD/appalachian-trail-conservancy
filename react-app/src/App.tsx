@@ -10,6 +10,7 @@ import theme from "./muiTheme.ts";
 import VolunteerLoginPage from "./pages/LoginPage/VolunteerLoginPage/VolunteerLoginPage.tsx";
 import AdminLoginPage from "./pages/LoginPage/AdminLoginPage/AdminLoginPage.tsx";
 import AchievementsPage from "./pages/AchievementsPage/AchievementsPage.tsx";
+import TrainingPage from "./pages/TrainingPage/TrainingPage.tsx";
 import RequireAuth from "./auth/RequireAuth/RequireAuth.tsx";
 import { AuthProvider } from "./auth/AuthProvider.tsx";
 import QuizResult from "./components/QuizResult/QuizResult.tsx";
@@ -37,6 +38,14 @@ function App() {
               element={
                 <RequireAuth>
                   <TrainingLibrary />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/trainingpage"
+              element={
+                <RequireAuth>
+                  <TrainingPage />
                 </RequireAuth>
               }
             />
