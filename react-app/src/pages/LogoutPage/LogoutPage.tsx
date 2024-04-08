@@ -16,8 +16,8 @@ const buttonStyle = {
 const LogoutPage: React.FC = () => {
   return (
     <div className={styles.centeredContainer}>
-      <img src={logo} alt="Logo" className={styles.logo} />
-      <img src={greenCheck} alt="Green Check" className={styles.checkmark} />
+      <img src={logo} className={styles.logo} alt="Logo" />
+      <img src={greenCheck} className={styles.checkmark} alt="Green Check" />
       <h1 className={styles.logoutText}>You have been logged out</h1>
 
       <Link to="/login">

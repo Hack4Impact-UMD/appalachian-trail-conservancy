@@ -7,34 +7,31 @@
 }
 
 .logo {
-  margin-top: 110px;
-  width: 7%;
-  height: auto;
+  width: 240px;
+  height: 240px;
 }
 
 .checkmark {
-  margin-top: 30px;
-  display: block;
+  margin-top: 2.5%;
   width: 80px;
   height: auto;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .logoutText {
-  margin-top: 20px;
+  margin-top: 2.5%;
   font-weight: bold;
-  font-size: 35px;
+  font-size: 3rem;
 }
 
-.signInButton {
-  background-color: var(--forest-green);
-  color: white;
-  border-radius: 15px;
-  padding: 15px 120px;
-  border: none;
-  font-weight: bold;
-  font-size: 14px;
-  margin-top: 10px;
-  cursor: pointer;
+@media screen and (max-height: 750px) {
+  .logo {
+    width: 150px;
+    height: 150px;
+  }
+
+  .content h1 {
+    font-size: 4rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
 }
