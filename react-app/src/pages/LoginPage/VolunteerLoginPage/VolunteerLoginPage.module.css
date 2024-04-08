@@ -93,6 +93,21 @@
   object-fit: cover;
 }
 
+.greenCheck {
+  margin-top: 5%;
+}
+
+.greenText {
+  color: var(--ocean-green);
+}
+
+.emailText {
+  display: 'flex'; 
+  justify-content: 'center';
+  font-size: small;
+  color:black;
+}
+
 /* mobile */
 @media screen and (max-width: 850px) {
   .left {
