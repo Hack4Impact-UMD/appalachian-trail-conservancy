@@ -1,5 +1,5 @@
 import { LinearProgress, Button } from "@mui/material";
-import { forestGreenButton, whiteButtonGrayBorder } from "../../../../muiTheme";
+import { forestGreenButton, whiteButtonGrayBorder } from "../../../muiTheme";
 import styles from "./QuizResult.module.css";
 
 const styledProgressShape = {
