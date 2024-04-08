@@ -13,6 +13,7 @@ import AdminLoginPage from "./pages/LoginPage/AdminLoginPage/AdminLoginPage.tsx"
 import AchievementsPage from "./pages/AchievementsPage/AchievementsPage.tsx";
 import TrainingPage from "./pages/TrainingPage/TrainingPage.tsx";
 import RequireAuth from "./auth/RequireAuth/RequireAuth.tsx";
+import LogoutPage from "./pages/LogoutPage/LogoutPage.tsx";
 import QuizResult from "./pages/TrainingPage/QuizComponent/QuizResult/QuizResult.tsx";
 import QuizCard from "./pages/TrainingPage/QuizComponent/QuizCard/QuizCard.tsx";
 
@@ -72,6 +73,15 @@ function App() {
                   <NotFoundPage />
                 </RequireAuth>
               }></Route>
+            <Route
+              path="/logout"
+              element={
+                <RequireAuth>
+                  <LogoutPage />
+                </RequireAuth>
+              }
+            />
+
             <Route
               path="/testfunctions"
               element={
