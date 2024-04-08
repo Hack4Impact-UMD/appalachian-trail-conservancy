@@ -41,7 +41,6 @@
 .heading {
   font-size: 2.5rem;
   color: var(--blue-gray);
-  margin-bottom: 0%;
 }
 
 /* login text */
@@ -93,19 +92,18 @@
   object-fit: cover;
 }
 
-.greenCheck {
-  margin-top: 5%;
+.subheader {
+  font-size: 1.8rem;
+  color: var(--blue-gray);
 }
 
 .greenText {
   color: var(--ocean-green);
 }
 
-.emailText {
-  display: 'flex'; 
-  justify-content: 'center';
-  font-size: small;
-  color:black;
+.emailText p {
+  margin-top: 0.75rem;
+  margin-bottom: 0;
 }
 
 /* mobile */
