@@ -61,6 +61,10 @@
   margin-bottom: 1%; /* Add margin between items */
 }
 
+.emptyMessage {
+  font-weight: bold;
+}
+
 .recommendedContainer {
   display: flex;
   flex-wrap: wrap;
