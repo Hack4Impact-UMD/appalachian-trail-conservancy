@@ -41,7 +41,6 @@
 .heading {
   font-size: 2.5rem;
   color: var(--blue-gray);
-  margin-bottom: 0%;
 }
 
 /* login text */
@@ -91,6 +90,20 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.subheader {
+  font-size: 1.8rem;
+  color: var(--blue-gray);
+}
+
+.greenText {
+  color: var(--ocean-green);
+}
+
+.emailText p {
+  margin-top: 0.75rem;
+  margin-bottom: 0;
 }
 
 /* mobile */
