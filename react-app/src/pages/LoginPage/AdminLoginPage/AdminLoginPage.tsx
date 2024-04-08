@@ -8,13 +8,15 @@ import {
   TextField,
   Button,
 } from "@mui/material";
-import { useNavigate } from "react-router";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { Link } from "react-router-dom";
-import Loading from "../../../components/LoadingScreen/Loading";
-import styles from "./AdminLoginPage.module.css";
-import primaryLogo from "../../../assets/atc-primary-logo.png";
 import { forestGreenButton, grayBorderTextField } from "../../../muiTheme";
+import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
+import { authenticateUserEmailAndPassword } from "../../../backend/AuthFunctions";
+import { AuthError } from "firebase/auth";
+import styles from "./AdminLoginPage.module.css";
+import Loading from "../../../components/LoadingScreen/Loading";
+import primaryLogo from "../../../assets/atc-primary-logo.png";
 import loginBanner from "../../../assets/login-banner.jpeg";
 import ForgotPasswordModal from "../ForgotPasswordModal/ForgotPasswordModal";
 
@@ -28,14 +30,12 @@ function AdminLoginPage() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   //Add Forgot Password Popup
   const [openForgotModal, setOpenForgotModal] = useState<boolean>(false);
-
   const handleOpenForgotModal = () => {
     setOpenForgotModal(true);
   };
   const handleCloseForgotModal = () => {
     setOpenForgotModal(false);
   };
-
   const [showLoading, setShowLoading] = useState<boolean>(false);
   //Add Error Handling
   const [failureMessage, setFailureMessage] = useState<string>("");
@@ -51,7 +51,38 @@ function AdminLoginPage() {
     event.preventDefault();
   };
 
-  const handleSignIn = async (event: React.FormEvent<HTMLFormElement>) => {};
+  const handleSignIn = async (event: any) => {
+    event.preventDefault();
+    setShowLoading(true);
+
+    if (email && password) {
+      const pattern: RegExp = /^\S+@\S+$/;
+      if (!pattern.test(email)) {
+        setShowLoading(false);
+        setFailureMessage("*Not a valid email");
+      } else {
+        authenticateUserEmailAndPassword(email, password)
+          .then(() => {
+            setShowLoading(false);
+            navigate("/");
+          })
+          .catch((error) => {
+            setShowLoading(false);
+            const code = (error as AuthError).code;
+            if (code === "auth/too-many-requests") {
+              setFailureMessage(
+                "*Access to this account has been temporarily disabled due to many failed login attempts. You can reset your password or try again later."
+              );
+            } else {
+              setFailureMessage("*Incorrect email address or password");
+            }
+          });
+      }
+    } else {
+      setFailureMessage("*Incorrect email address or password");
+      setShowLoading(false);
+    }
+  };
 
   return (
     <div className={styles.pageContainer}>
@@ -72,7 +103,8 @@ function AdminLoginPage() {
                 if (!openForgotModal) {
                   handleSignIn(event);
                 }
-              }}>
+              }}
+            >
               {/* email field */}
               <div className={styles.alignLeft}>
                 <h3 className={styles.label}>Email</h3>
@@ -108,7 +140,8 @@ function AdminLoginPage() {
                         aria-label="toggle password visibility"
                         onClick={handleClickShowPassword}
                         onMouseDown={handleMouseDownPassword}
-                        edge="end">
+                        edge="end"
+                      >
                         {showPassword ? <VisibilityOff /> : <Visibility />}
                       </IconButton>
                     </InputAdornment>
@@ -126,7 +159,8 @@ function AdminLoginPage() {
                     margin: "8px 0px 8px 0px",
                   }}
                   variant="text"
-                  onClick={handleOpenForgotModal}>
+                  onClick={handleOpenForgotModal}
+                >
                   Forgot Password?
                 </Button>
               </div>
@@ -135,7 +169,9 @@ function AdminLoginPage() {
               <Button
                 type="submit"
                 sx={{ ...styledRectButton, ...forestGreenButton }}
-                variant="contained">
+                variant="contained"
+                onClick={(e) => handleSignIn(e)}
+              >
                 {showLoading ? <Loading></Loading> : "Sign In"}
               </Button>
 
@@ -145,7 +181,8 @@ function AdminLoginPage() {
                   failureMessage
                     ? styles.showFailureMessage
                     : styles.errorContainer
-                }>
+                }
+              >
                 {failureMessage}
               </p>
             </form>
@@ -161,7 +198,8 @@ function AdminLoginPage() {
       </div>
       <ForgotPasswordModal
         open={openForgotModal}
-        onClose={handleCloseForgotModal}></ForgotPasswordModal>
+        onClose={handleCloseForgotModal}
+      ></ForgotPasswordModal>
     </div>
   );
 }

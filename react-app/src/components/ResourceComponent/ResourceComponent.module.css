@@ -1,0 +1,36 @@
+.mainContainer {
+  height: calc(100% - 130px);
+  width: 100%;
+}
+
+.iframeContainer {
+  height: 80%;
+  width: 100%;
+  padding-bottom: 2%;
+}
+
+.iframeContainer iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 20px;
+}
+
+.contentLabel {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  white-space: nowrap;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.contentLabel h2 {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.buttonContainer {
+  display: flex;
+  gap: 20px;
+}

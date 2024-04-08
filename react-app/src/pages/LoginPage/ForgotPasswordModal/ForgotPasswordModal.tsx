@@ -1,9 +1,9 @@
 import { useState } from "react";
-import Modal from "../../../components/ModalWrapper/Modal";
 import { TextField, Button } from "@mui/material";
 import { forestGreenButton, grayBorderTextField } from "../../../muiTheme";
+import { IoCloseOutline } from "react-icons/io5";
 import styles from "./ForgotPasswordModal.module.css";
-import { IoMdClose } from "react-icons/io";
+import Modal from "../../../components/ModalWrapper/Modal";
 
 const styledRectButton = {
   width: 350,
@@ -25,7 +25,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
     <div>
       <Modal open={open} onClose={onClose} height={350} width={550}>
         {/* x button to close */}
-        <IoMdClose
+        <IoCloseOutline
           color="var(--blue-gray)"
           className={styles.closeButton}
           onClick={onClose}

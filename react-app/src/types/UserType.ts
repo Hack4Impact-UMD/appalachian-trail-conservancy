@@ -1,7 +1,13 @@
 export interface User {
   auth_id: string;
   email: string;
+  firstName: string;
+  lastName: string;
   type: Role;
+}
+
+export interface Admin extends User {
+  id: string;
 }
 
 export interface VolunteerID extends Volunteer {
@@ -9,8 +15,6 @@ export interface VolunteerID extends Volunteer {
 }
 
 export interface Volunteer extends User {
-  firstName: string;
-  lastName: string;
   trainingInformation: VolunteerTraining[];
   pathwayInformation: VolunteerPathway[];
 }
@@ -18,6 +22,7 @@ export interface Volunteer extends User {
 export interface VolunteerTraining {
   trainingID: string;
   progress: Progress;
+  dateCompleted: string; // YYYY-MM-DD
   numCompletedResources: number;
   numTotalResources: number;
   quizScoreRecieved: number;
@@ -26,14 +31,10 @@ export interface VolunteerTraining {
 export interface VolunteerPathway {
   pathwayID: string;
   progress: Progress;
-  trainingsCompleted: string[];
+  dateCompleted: string; // YYYY-MM-DD
+  trainingsCompleted: string[]; // training IDs
   numTrainingsCompleted: number;
   numTotalTrainings: number;
-}
-
-export interface Admin extends User {
-  name: string;
-  id: string;
 }
 
 // Should correspond with firestore & cloud functions
