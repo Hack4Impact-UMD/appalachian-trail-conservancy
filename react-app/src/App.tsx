@@ -62,8 +62,15 @@ function App() {
                 <RequireAuth>
                   <NotFoundPage />
                 </RequireAuth>
+              }></Route>
+            <Route
+              path="/logout"
+              element={
+                <RequireAuth>
+                  <LogoutPage />
+                </RequireAuth>
               }
-            ></Route>
+            />
 
             <Route
               path="/testfunctions"
@@ -72,8 +79,7 @@ function App() {
                   <button
                     onClick={() => {
                       //Test function
-                    }}
-                  >
+                    }}>
                     TEST
                   </button>
                 </RequireAuth>
