@@ -1,5 +1,5 @@
 import "./index.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import { ThemeProvider } from "@mui/material";
 import { AuthProvider } from "./auth/AuthProvider.tsx";
 import theme from "./muiTheme.ts";
@@ -20,7 +20,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <AuthProvider>
-        <BrowserRouter>
+        <HashRouter>
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/login/volunteer" element={<VolunteerLoginPage />} />
@@ -71,7 +71,8 @@ function App() {
                 <RequireAuth>
                   <NotFoundPage />
                 </RequireAuth>
-              }></Route>
+              }
+            ></Route>
             <Route
               path="/testfunctions"
               element={
@@ -79,7 +80,8 @@ function App() {
                   <button
                     onClick={() => {
                       //Test function
-                    }}>
+                    }}
+                  >
                     TEST
                   </button>
                 </RequireAuth>
@@ -111,7 +113,7 @@ function App() {
               }
             />
           </Routes>
-        </BrowserRouter>
+        </HashRouter>
       </AuthProvider>
     </ThemeProvider>
   );
