@@ -10,8 +10,9 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { forestGreenButton, grayBorderTextField } from "../../../muiTheme";
-import { useNavigate } from "react-router";
+import { Navigate } from "react-router";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../../auth/AuthProvider";
 import { authenticateUserEmailAndPassword } from "../../../backend/AuthFunctions";
 import { AuthError } from "firebase/auth";
 import styles from "./AdminLoginPage.module.css";
@@ -26,7 +27,12 @@ const styledRectButton = {
 };
 
 function AdminLoginPage() {
-  const navigate = useNavigate();
+  const { user } = useAuth();
+  // If user is logged in, navigate to Dashboard
+  if (user) {
+    return <Navigate to="/" />;
+  }
+
   const [showPassword, setShowPassword] = useState<boolean>(false);
   //Add Forgot Password Popup
   const [openForgotModal, setOpenForgotModal] = useState<boolean>(false);
@@ -64,7 +70,7 @@ function AdminLoginPage() {
         authenticateUserEmailAndPassword(email, password)
           .then(() => {
             setShowLoading(false);
-            navigate("/");
+            <Navigate to="/" />;
           })
           .catch((error) => {
             setShowLoading(false);

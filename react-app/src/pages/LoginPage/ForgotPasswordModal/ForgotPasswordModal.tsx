@@ -53,7 +53,8 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
             <Button
               type="submit"
               sx={{ ...styledRectButton, ...forestGreenButton }}
-              variant="contained">
+              variant="contained"
+            >
               Reset Password
             </Button>
           </form>

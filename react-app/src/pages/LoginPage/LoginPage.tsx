@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { useAuth } from "../../auth/AuthProvider";
+import { Navigate, Link } from "react-router-dom";
 import { Button } from "@mui/material";
 import { forestGreenButton, whiteButtonGreenBorder } from "../../muiTheme";
 import styles from "./LoginPage.module.css";
@@ -11,6 +12,12 @@ const styledRectButton = {
 };
 
 function LoginPage() {
+  const { user } = useAuth();
+  // If user is logged in, navigate to Dashboard
+  if (user) {
+    return <Navigate to="/" />;
+  }
+
   return (
     <div className={styles.pageContainer}>
       <div className={styles.split}>
@@ -27,7 +34,8 @@ function LoginPage() {
             <Link to="/login/volunteer">
               <Button
                 sx={{ ...styledRectButton, ...forestGreenButton }}
-                variant="contained">
+                variant="contained"
+              >
                 Sign in as volunteer
               </Button>
             </Link>
@@ -35,7 +43,8 @@ function LoginPage() {
               <Button
                 sx={{ ...styledRectButton, ...whiteButtonGreenBorder }}
                 variant="contained"
-                href="#contained-buttons">
+                href="#contained-buttons"
+              >
                 Sign in as admin
               </Button>
             </Link>

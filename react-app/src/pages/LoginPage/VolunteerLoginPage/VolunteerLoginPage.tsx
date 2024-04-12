@@ -1,13 +1,10 @@
 import { useState } from "react";
 import { TextField, Button } from "@mui/material";
 import { forestGreenButton, grayBorderTextField } from "../../../muiTheme";
-import { useNavigate } from "react-router";
 import { Link, Navigate } from "react-router-dom";
-import { authenticateUserEmailLink } from "../../../backend/AuthFunctions";
 import { getAuth, sendSignInLinkToEmail } from "firebase/auth";
 import { useAuth } from "../../../auth/AuthProvider";
 import styles from "./VolunteerLoginPage.module.css";
-import Loading from "../../../components/LoadingScreen/Loading";
 import primaryLogo from "../../../assets/atc-primary-logo.png";
 import loginBanner from "../../../assets/login-banner.jpeg";
 import app from "../../../config/firebase";
@@ -18,10 +15,13 @@ const styledRectButton = {
   marginTop: "5%",
 };
 
-function VolunteerLoginPage(history: any) {
-  const navigate = useNavigate();
+function VolunteerLoginPage() {
+  const { user } = useAuth();
+  // If user is logged in, navigate to Dashboard
+  if (user) {
+    return <Navigate to="/" />;
+  }
 
-  const [showLoading, setShowLoading] = useState<boolean>(false);
   const [failureMessage, setFailureMessage] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [viewElements, setViewElements] = useState<boolean>(false);
@@ -58,19 +58,14 @@ function VolunteerLoginPage(history: any) {
     }
   };
 
-  const { user } = useAuth();
-
-  if (user) {
-    return <Navigate to="/" />;
-  }
-
   const beforeEmail = (
     <div>
       <form
         className={styles.centered}
         onSubmit={(event) => {
           handleSendLink(event);
-        }}>
+        }}
+      >
         {/* email field */}
         <div className={styles.alignLeft}>
           <h3 className={styles.label}>Email</h3>
@@ -91,15 +86,17 @@ function VolunteerLoginPage(history: any) {
           type="submit"
           sx={{ ...styledRectButton, ...forestGreenButton }}
           variant="contained"
-          onClick={(e) => handleSendLink(e)}>
-          {showLoading ? <Loading></Loading> : "Send Link"}
+          onClick={(e) => handleSendLink(e)}
+        >
+          Send Link
         </Button>
 
         {/* error message */}
         <p
           className={
             failureMessage ? styles.showFailureMessage : styles.errorContainer
-          }>
+          }
+        >
           {failureMessage}
         </p>
       </form>
