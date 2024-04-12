@@ -3,12 +3,11 @@ import { TextField, Button } from "@mui/material";
 import { forestGreenButton, grayBorderTextField } from "../../../muiTheme";
 import { styledRectButton } from "../LoginPage";
 import { Link, Navigate } from "react-router-dom";
-import { getAuth, sendSignInLinkToEmail } from "firebase/auth";
+import { sendSignInLink } from "../../../backend/AuthFunctions";
 import { useAuth } from "../../../auth/AuthProvider";
 import styles from "./VolunteerLoginPage.module.css";
 import primaryLogo from "../../../assets/atc-primary-logo.png";
 import loginBanner from "../../../assets/login-banner.jpeg";
-import app from "../../../config/firebase";
 import greenCheck from "../../../assets/greenCircleCheck.svg";
 
 function VolunteerLoginPage() {
@@ -20,7 +19,7 @@ function VolunteerLoginPage() {
 
   const [failureMessage, setFailureMessage] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-  const [viewElements, setViewElements] = useState<boolean>(false);
+  const [viewConfirmation, setViewConfirmation] = useState<boolean>(false);
   const [displayText, setDisplayText] = useState<string>("");
 
   const handleSendLink = async (event: any) => {
@@ -31,26 +30,15 @@ function VolunteerLoginPage() {
     if (!pattern.test(email)) {
       setFailureMessage("*Not a valid email");
     } else {
-      setDisplayText(email);
-      setViewElements(true);
-      setFailureMessage("");
-      handleLogin();
-    }
-  };
-
-  const handleLogin = async () => {
-    const actionCodeSettings = {
-      url: window.location.href,
-      handleCodeInApp: true,
-    };
-
-    try {
-      const auth = getAuth(app);
-      await sendSignInLinkToEmail(auth, email, actionCodeSettings);
-      // add error handling if email does not exist
-      window.localStorage.setItem("emailForSignIn", email);
-    } catch (error) {
-      alert(error);
+      sendSignInLink(email)
+        .then(() => {
+          setDisplayText(email);
+          setViewConfirmation(true);
+          setFailureMessage("");
+        })
+        .catch(() => {
+          setFailureMessage("Failed to send email.");
+        });
     }
   };
 
@@ -131,7 +119,7 @@ function VolunteerLoginPage() {
             <h1 className={styles.heading}>Welcome!</h1>
 
             {/* display check message if valid email is submitted */}
-            {viewElements ? sentEmail : beforeEmail}
+            {viewConfirmation ? sentEmail : beforeEmail}
           </div>
         </div>
       </div>
