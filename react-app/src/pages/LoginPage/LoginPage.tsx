@@ -6,7 +6,7 @@ import styles from "./LoginPage.module.css";
 import primaryLogo from "../../assets/atc-primary-logo.png";
 import loginBanner from "../../assets/login-banner.jpeg";
 
-// used in admin and volunteer login pages
+// Used in admin and volunteer login pages
 export const styledRectButton = {
   width: 350,
   marginTop: "5%",

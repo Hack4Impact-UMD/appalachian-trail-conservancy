@@ -3,9 +3,7 @@ import {
   FormControl,
   IconButton,
   InputAdornment,
-  InputLabel,
   OutlinedInput,
-  TextField,
   Button,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
@@ -111,12 +109,9 @@ function AdminLoginPage() {
               <div className={styles.alignLeft}>
                 <h3 className={styles.label}>Email</h3>
               </div>
-              <TextField
+              <OutlinedInput
                 value={email}
                 sx={grayBorderTextField}
-                label=""
-                variant="outlined"
-                size="small"
                 onChange={(event) => {
                   setEmail(event.target.value);
                 }}
@@ -126,12 +121,10 @@ function AdminLoginPage() {
               <div className={styles.alignLeft}>
                 <h3 className={styles.label}>Password</h3>
               </div>
-              <FormControl variant="outlined">
-                <InputLabel htmlFor="outlined-adornment-password"></InputLabel>
+              <FormControl>
                 <OutlinedInput
                   value={password}
                   sx={grayBorderTextField}
-                  id="outlined-adornment-password"
                   type={showPassword ? "text" : "password"}
                   onChange={(event) => {
                     setPassword(event.target.value);

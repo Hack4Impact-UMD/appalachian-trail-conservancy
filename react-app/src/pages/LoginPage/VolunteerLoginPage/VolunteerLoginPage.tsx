@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TextField, Button } from "@mui/material";
+import { OutlinedInput, Button } from "@mui/material";
 import { forestGreenButton, grayBorderTextField } from "../../../muiTheme";
 import { styledRectButton } from "../LoginPage";
 import { Link, Navigate } from "react-router-dom";
@@ -54,12 +54,9 @@ function VolunteerLoginPage() {
         <div className={styles.alignLeft}>
           <h3 className={styles.label}>Email</h3>
         </div>
-        <TextField
+        <OutlinedInput
           value={email}
           sx={{ ...grayBorderTextField, marginBottom: "15px" }}
-          label=""
-          variant="outlined"
-          size="small"
           onChange={(event) => {
             setEmail(event.target.value);
           }}
