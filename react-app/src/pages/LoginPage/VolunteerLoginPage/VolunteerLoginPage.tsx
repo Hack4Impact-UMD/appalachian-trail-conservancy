@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { TextField, Button } from "@mui/material";
 import { forestGreenButton, grayBorderTextField } from "../../../muiTheme";
+import { styledRectButton } from "../LoginPage";
 import { Link, Navigate } from "react-router-dom";
 import { getAuth, sendSignInLinkToEmail } from "firebase/auth";
 import { useAuth } from "../../../auth/AuthProvider";
@@ -9,11 +10,6 @@ import primaryLogo from "../../../assets/atc-primary-logo.png";
 import loginBanner from "../../../assets/login-banner.jpeg";
 import app from "../../../config/firebase";
 import greenCheck from "../../../assets/greenCircleCheck.svg";
-
-const styledRectButton = {
-  width: 350,
-  marginTop: "5%",
-};
 
 function VolunteerLoginPage() {
   const { user } = useAuth();
@@ -99,6 +95,10 @@ function VolunteerLoginPage() {
         >
           {failureMessage}
         </p>
+        {/* switch to admin link */}
+        <Link to="/login/admin" className={styles.switch}>
+          Switch to Admin Log In
+        </Link>
       </form>
     </div>
   );
@@ -132,11 +132,6 @@ function VolunteerLoginPage() {
 
             {/* display check message if valid email is submitted */}
             {viewElements ? sentEmail : beforeEmail}
-
-            {/* switch to admin link */}
-            <Link to="/login/admin">
-              <button className={styles.switch}>Switch to Admin Log In</button>
-            </Link>
           </div>
         </div>
       </div>

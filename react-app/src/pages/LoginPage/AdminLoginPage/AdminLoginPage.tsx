@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { forestGreenButton, grayBorderTextField } from "../../../muiTheme";
+import { styledRectButton } from "../LoginPage";
 import { Navigate } from "react-router";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../../auth/AuthProvider";
@@ -20,11 +21,6 @@ import Loading from "../../../components/LoadingScreen/Loading";
 import primaryLogo from "../../../assets/atc-primary-logo.png";
 import loginBanner from "../../../assets/login-banner.jpeg";
 import ForgotPasswordModal from "../ForgotPasswordModal/ForgotPasswordModal";
-
-const styledRectButton = {
-  width: 350,
-  marginTop: "5%",
-};
 
 function AdminLoginPage() {
   const { user } = useAuth();
@@ -193,11 +189,9 @@ function AdminLoginPage() {
               </p>
             </form>
 
-            {/* switch to user link */}
-            <Link to="/login/volunteer">
-              <button className={styles.switch}>
-                Switch to Volunteer Log In
-              </button>
+            {/* switch to volunteer link */}
+            <Link to="/login/volunteer" className={styles.switch}>
+              Switch to Volunteer Log In
             </Link>
           </div>
         </div>
