@@ -16,6 +16,7 @@ import RequireAuth from "./auth/RequireAuth/RequireAuth.tsx";
 import LogoutPage from "./pages/LogoutPage/LogoutPage.tsx";
 import QuizResult from "./pages/QuizPage/QuizResult/QuizResult.tsx";
 import QuizCard from "./pages/QuizPage/QuizComponent/QuizCard/QuizCard.tsx";
+import QuizPage from "./pages/QuizPage/QuizPage.tsx";
 
 function App() {
   return (
@@ -117,6 +118,14 @@ function App() {
                     totalScore={10}
                     passingScore={5}
                   />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/quiz"
+              element={
+                <RequireAuth>
+                  <QuizPage />
                 </RequireAuth>
               }
             />
