@@ -21,7 +21,7 @@ function QuizPage() {
                 <Button
                 sx={{ ...forestGreenButton, ...styledButtons}}
                 variant="contained">
-                Retake quiz
+                Submit
                 </Button>
             </div>
             
