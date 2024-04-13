@@ -142,6 +142,18 @@ export const grayRadioButton = {
     color: "var( --blue-gray)",
   },
 };
+export const greenRadioButton = {
+  color: "var(--forest-green)",
+  "&.Mui-checked": {
+    color: "var(--forest-green)",
+  },
+};
+export const redRadioButton = {
+  color: "red",
+  "&.Mui-checked": {
+    color: "red",
+  },
+};
 
 // stepper, used in training page
 export const stepperStyle = {

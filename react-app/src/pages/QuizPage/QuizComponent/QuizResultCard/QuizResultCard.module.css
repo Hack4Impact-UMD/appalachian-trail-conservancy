@@ -1,0 +1,26 @@
+.quizCard {
+    background-color: white;
+    border-radius: 20px;
+    margin: 2rem;
+  }
+  
+  .questionNumber {
+    font-size: 1.8rem;
+    font-weight: bold;
+  }
+  
+  .questionText {
+    font-size: 1.4rem;
+    font-weight: bold;
+  }
+  .greenIcon {
+    color: green;
+    font-size: 24px; 
+
+  }
+  
+  .redIcon {
+    color: red;
+    font-size: 24px; 
+
+  }

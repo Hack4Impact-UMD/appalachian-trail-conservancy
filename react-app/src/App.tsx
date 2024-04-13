@@ -16,8 +16,15 @@ import RequireAuth from "./auth/RequireAuth/RequireAuth.tsx";
 import LogoutPage from "./pages/LogoutPage/LogoutPage.tsx";
 import QuizResult from "./pages/QuizPage/QuizResult/QuizResult.tsx";
 import QuizCard from "./pages/QuizPage/QuizComponent/QuizCard/QuizCard.tsx";
+import QuizResultCard from "./pages/QuizPage/QuizComponent/QuizResultCard/QuizResultCard.tsx";
 
 function App() {
+  const currentQuestion = 1;
+  const totalQuestions = 3;
+  const question = "What is the capital of France?";
+  const answerOptions = ["London", "Paris", "Berlin"];
+  const selectedAnswer = "Paris"; // Choose one of the answer options
+  const correctAnswer = "London";
   return (
     <ThemeProvider theme={theme}>
       <AuthProvider>
@@ -29,9 +36,17 @@ function App() {
             <Route
               path="/"
               element={
-                <RequireAuth>
-                  <Dashboard />
-                </RequireAuth>
+                <QuizResultCard
+                  currentQuestion={currentQuestion}
+                  totalQuestions={totalQuestions}
+                  question={question}
+                  answerOptions={answerOptions}
+                  selectedAnswer={selectedAnswer}
+                  correctAnswer={correctAnswer}
+                />
+                // <RequireAuth>
+                //   <Dashboard />
+                // </RequireAuth>
               }
             />
             <Route
@@ -72,7 +87,8 @@ function App() {
                 <RequireAuth>
                   <NotFoundPage />
                 </RequireAuth>
-              }></Route>
+              }
+            ></Route>
             <Route
               path="/logout"
               element={
@@ -89,7 +105,8 @@ function App() {
                   <button
                     onClick={() => {
                       //Test function
-                    }}>
+                    }}
+                  >
                     TEST
                   </button>
                 </RequireAuth>
