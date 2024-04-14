@@ -12,8 +12,12 @@ function Footer() {
         <div className={styles.informationInnerContainer}>
           {/* everything in informationInnerContainer is organized by row */}
           <div className={styles.textDiv}>
-            ABOUT US
-            <br />
+            <a
+              href="https://appalachiantrail.org/"
+              target="_blank"
+              rel="noopener noreferrer">
+              About Us
+            </a>
             <a
               href="https://wildeast.appalachiantrail.org/our-work/about-us/contact-us/"
               target="_blank"
@@ -27,9 +31,8 @@ function Footer() {
               href="https://appalachiantrail.org/get-involved/volunteer/"
               target="_blank"
               rel="noopener noreferrer">
-              GET INVOLVED
+              Get Involved
             </a>
-            <br />
             <a
               href="https://appalachiantrail.org/waystovolunteer"
               target="_blank"
@@ -39,18 +42,41 @@ function Footer() {
           </div>
 
           <div className={styles.iconsDiv}>
-            <FaFacebookF className={styles.whiteIcon} />
-            <FaInstagram className={styles.whiteIcon} />
-            <FaTiktok className={styles.whiteIcon} />
-            <FaXTwitter className={styles.whiteIcon} />
-            <FaYoutube className={styles.whiteIcon} />
+            <a
+              href="https://www.facebook.com/ATHike"
+              target="_blank"
+              rel="noopener noreferrer">
+              <FaFacebookF className={styles.whiteIcon} />
+            </a>
+            <a
+              href="https://www.instagram.com/appalachiantrail/"
+              target="_blank"
+              rel="noopener noreferrer">
+              <FaInstagram className={styles.whiteIcon} />
+            </a>
+            <a
+              href="https://www.tiktok.com/@appalachiantrail"
+              target="_blank"
+              rel="noopener noreferrer">
+              <FaTiktok className={styles.whiteIcon} />
+            </a>
+            <a
+              href="https://twitter.com/at_conservancy"
+              target="_blank"
+              rel="noopener noreferrer">
+              <FaXTwitter className={styles.whiteIcon} />
+            </a>
+            <a
+              href="https://www.youtube.com/user/atconservancy"
+              target="_blank"
+              rel="noopener noreferrer">
+              <FaYoutube className={styles.whiteIcon} />
+            </a>
           </div>
         </div>
-        <div className={styles.textDiv}>
-          <p className={styles.smallText}>
-            These trainings are presented by the Appalachian Trail Conservancy
-            for A.T. partners and volunteers.
-          </p>
+        <div className={styles.statement}>
+          These trainings are presented by the Appalachian Trail Conservancy for
+          A.T. partners and volunteers.
         </div>
       </div>
     </div>
