@@ -28,23 +28,23 @@
 .textDiv {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 1rem;
   color: white;
   font-size: 1rem;
 }
 
-.textDiv a {
-  display: block;
+/* Link underline styles */
+.textDiv a span {
   position: relative;
   padding: 0 0 0.2rem 0;
 }
 
-.textDiv a:after {
+.textDiv a span:after {
   content: "";
   position: absolute;
   width: 100%;
   transform: scaleX(0);
-  height: 2px;
+  height: 1px;
   bottom: 0;
   left: 0;
   background-color: white;
@@ -52,13 +52,7 @@
   transition: transform 0.25s ease-out;
 }
 
-.textDiv a:hover::after,
-.textDiv a:focus::after {
-  opacity: 1;
-  transform: translate3d(0, 0.2em, 0);
-}
-
-.textDiv a:hover:after {
+a:hover span:after {
   transform: scaleX(1);
   transform-origin: bottom left;
 }

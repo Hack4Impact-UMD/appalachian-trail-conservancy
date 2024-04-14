@@ -15,14 +15,16 @@ function Footer() {
             <a
               href="https://appalachiantrail.org/"
               target="_blank"
-              rel="noopener noreferrer">
-              About Us
+              rel="noopener noreferrer"
+            >
+              <span>About Us</span>
             </a>
             <a
               href="https://wildeast.appalachiantrail.org/our-work/about-us/contact-us/"
               target="_blank"
-              rel="noopener noreferrer">
-              Contact Us
+              rel="noopener noreferrer"
+            >
+              <span>Contact Us</span>
             </a>
           </div>
 
@@ -30,14 +32,16 @@ function Footer() {
             <a
               href="https://appalachiantrail.org/get-involved/volunteer/"
               target="_blank"
-              rel="noopener noreferrer">
-              Get Involved
+              rel="noopener noreferrer"
+            >
+              <span>Get Involved</span>
             </a>
             <a
               href="https://appalachiantrail.org/waystovolunteer"
               target="_blank"
-              rel="noopener noreferrer">
-              Volunteer
+              rel="noopener noreferrer"
+            >
+              <span>Volunteer</span>
             </a>
           </div>
 
@@ -45,31 +49,36 @@ function Footer() {
             <a
               href="https://www.facebook.com/ATHike"
               target="_blank"
-              rel="noopener noreferrer">
+              rel="noopener noreferrer"
+            >
               <FaFacebookF className={styles.whiteIcon} />
             </a>
             <a
               href="https://www.instagram.com/appalachiantrail/"
               target="_blank"
-              rel="noopener noreferrer">
+              rel="noopener noreferrer"
+            >
               <FaInstagram className={styles.whiteIcon} />
             </a>
             <a
               href="https://www.tiktok.com/@appalachiantrail"
               target="_blank"
-              rel="noopener noreferrer">
+              rel="noopener noreferrer"
+            >
               <FaTiktok className={styles.whiteIcon} />
             </a>
             <a
               href="https://twitter.com/at_conservancy"
               target="_blank"
-              rel="noopener noreferrer">
+              rel="noopener noreferrer"
+            >
               <FaXTwitter className={styles.whiteIcon} />
             </a>
             <a
               href="https://www.youtube.com/user/atconservancy"
               target="_blank"
-              rel="noopener noreferrer">
+              rel="noopener noreferrer"
+            >
               <FaYoutube className={styles.whiteIcon} />
             </a>
           </div>
