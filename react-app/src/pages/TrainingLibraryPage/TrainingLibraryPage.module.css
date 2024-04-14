@@ -58,8 +58,11 @@
   margin-bottom: 1%;
 }
 
-.emptyMessage {
+.emptySearchMessage {
+  width: 100%;
   font-weight: bold;
+  text-align: center;
+  font-size: 1.1rem;
 }
 
 .subHeader h2 {

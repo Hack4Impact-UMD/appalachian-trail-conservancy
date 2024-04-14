@@ -100,7 +100,8 @@ function TrainingLibrary() {
                   : whiteButtonGrayBorder
               }
               variant="contained"
-              onClick={() => setFilterType("all")}>
+              onClick={() => setFilterType("all")}
+            >
               All
             </Button>
             <Button
@@ -110,7 +111,8 @@ function TrainingLibrary() {
                   : whiteButtonGrayBorder
               }
               variant="contained"
-              onClick={() => setFilterType("inProgress")}>
+              onClick={() => setFilterType("inProgress")}
+            >
               In Progress
             </Button>
             <Button
@@ -120,28 +122,31 @@ function TrainingLibrary() {
                   : whiteButtonGrayBorder
               }
               variant="contained"
-              onClick={() => setFilterType("completed")}>
+              onClick={() => setFilterType("completed")}
+            >
               Completed
             </Button>
           </div>
         </div>
 
-        <div className={styles.cardsContainer}>
-          {filteredTrainings.length === 0 ? (
-              <div className={styles.emptyMessage}>No Trainings Matching “{searchQuery}”</div>
-            ) : (
-              filteredTrainings.map((training, index) => (
-                <div className={styles.card} key={index}>
-                  <TrainingCard
-                    image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-                    title={training.title}
-                    progress={training.progress}
-                    setOpenTrainingPopup={setOpenTrainingPopup}
-                  />
-                </div>
-              ))
-            )}
+        {filteredTrainings.length === 0 ? (
+          <div className={styles.emptySearchMessage}>
+            No Trainings Matching “{searchQuery}”
           </div>
+        ) : (
+          <div className={styles.cardsContainer}>
+            {filteredTrainings.map((training, index) => (
+              <div className={styles.card} key={index}>
+                <TrainingCard
+                  image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+                  title={training.title}
+                  progress={training.progress}
+                  setOpenTrainingPopup={setOpenTrainingPopup}
+                />
+              </div>
+            ))}
+          </div>
+        )}
 
         <div className={styles.subHeader}>
           <h2>Recommended</h2>

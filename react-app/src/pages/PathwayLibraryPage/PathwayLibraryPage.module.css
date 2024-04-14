@@ -61,8 +61,11 @@
   margin-bottom: 1%; /* Add margin between items */
 }
 
-.emptyMessage {
+.emptySearchMessage {
+  width: 100%;
   font-weight: bold;
+  text-align: center;
+  font-size: 1.1rem;
 }
 
 .recommendedContainer {
