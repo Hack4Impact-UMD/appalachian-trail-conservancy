@@ -122,17 +122,23 @@ function PathwayLibrary() {
           </div>
         </div>
 
-        <div className={styles.cardsContainer}>
-          {filteredTrainings.map((training, index) => (
-            <div className={styles.card} key={index}>
-              <PathwayCard
-                image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-                title={training.title}
-                progress={training.progress}
-              />
-            </div>
-          ))}
-        </div>
+        {filteredTrainings.length === 0 ? (
+          <div className={styles.emptySearchMessage}>
+            No Trainings Matching “{searchQuery}”
+          </div>
+        ) : (
+          <div className={styles.cardsContainer}>
+            {filteredTrainings.map((training, index) => (
+              <div className={styles.card} key={index}>
+                <PathwayCard
+                  image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+                  title={training.title}
+                  progress={training.progress}
+                />
+              </div>
+            ))}
+          </div>
+        )}
 
         <div className={styles.subHeader}>
           <h2>Recommended</h2>
