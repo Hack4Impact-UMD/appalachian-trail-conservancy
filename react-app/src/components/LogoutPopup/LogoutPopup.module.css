@@ -1,0 +1,128 @@
+.modalContainer {
+  height: 100%;
+  position: fixed;
+  z-index: 2;
+  top: 0;
+  overflow-x: hidden;
+}
+
+.closeButton {
+  display: flex;
+  position: absolute;
+  background: white;
+  top: 20px;
+  right: 20px;
+  border-radius: 50%;
+  color: var(--blue-gray);
+  text-align: center;
+  font-size: 2.25rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.left {
+  width: 450px;
+  color: black;
+  left: 0;
+  margin-left: 20%;
+  margin-top: 10%;
+  /* display: flex; */
+  /* justify-content: center; */
+  /* align-items: center; */
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+  margin-left: 19%;
+  max-width: 275px;
+  text-align: center;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.textContainer {
+  font-size: 1rem;
+  margin: 25px 0px 40px 0px;
+}
+
+.learnMoreButton {
+  position: absolute;
+  bottom: 40px;
+}
+
+.content {
+  display: flex;
+  align-items:center;
+  justify-self: space-between;
+}
+
+.buttons {
+  display: flex;
+  align-items:center;
+  justify-content: center;
+}
+
+.leftButton {
+  margin-right: 5%; 
+}
+
+.rightButton {
+  margin-left: 5%;
+}
+
+.right {
+  right: 0;
+  width: 340px;
+  border-radius: 0 16px 16px 0;
+  background-color: gray;
+  overflow: hidden;
+}
+
+
+
+.background {
+  background-color: rgba(0, 0, 0, 0.4);
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: fixed;
+}
+
+.centered {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.modal {
+  width: 700px;
+  height: 400px;
+  background: white;
+  color: white;
+  z-index: 10;
+  border-radius: 16px;
+  box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.04);
+  display: flex;
+}
+
+@media screen and (max-width: 600px) {
+  .modal {
+    width: 300px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .modal {
+    width: 250px;
+  }
+}

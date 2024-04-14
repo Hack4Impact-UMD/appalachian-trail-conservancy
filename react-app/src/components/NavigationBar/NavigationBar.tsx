@@ -13,20 +13,21 @@ import achievementsActive from "../../assets/achievementsWhite.svg";
 import achievementInactive from "../../assets/achievementsGray.svg";
 import logout from "../../assets/logout.svg";
 
-function NavigationBar() {
+interface NavigationBarProps {
+  setOpenLogoutPopup: any;  
+}
+
+const NavigationBar: React.FC<NavigationBarProps> = ({
+  setOpenLogoutPopup,
+}) => {
   // Add Error Handling
   const [submittedError, setSubmittedError] = useState<boolean>(false);
+
   const navigate = useNavigate();
   const location = useLocation().pathname;
 
   const handleLogOut = (): void => {
-    logOut()
-      .then(() => {
-        navigate("/");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    setOpenLogoutPopup(true);
   };
 
   return (

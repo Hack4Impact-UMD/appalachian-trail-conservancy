@@ -11,9 +11,11 @@ import debounce from "lodash.debounce";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import PathwayCard from "../../components/PathwayCard/PathwayCard";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
+import LogoutPopup from "../../components/LogoutPopup/LogoutPopup";
 
 function PathwayLibrary() {
   const [filterType, setFilterType] = useState("all");
+  const [openLogoutPopup, setOpenLogoutPopup] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredTrainings, setFilteredTrainings] = useState<
     { title: string; subtitle: string; progress: number }[]
@@ -67,7 +69,7 @@ function PathwayLibrary() {
 
   return (
     <>
-      <NavigationBar />
+      <NavigationBar setOpenLogoutPopup={setOpenLogoutPopup} />
       <div className={`${styles.split} ${styles.right}`}>
         <div className={styles.header}>
           <h1 className={styles.nameHeading}>Pathways</h1>
@@ -153,6 +155,12 @@ function PathwayLibrary() {
             />
           </div>
         </div>
+        <div>
+          <LogoutPopup 
+            open={openLogoutPopup} 
+            onClose={setOpenLogoutPopup} 
+          />
+      </div>
       </div>
     </>
   );

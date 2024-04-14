@@ -7,9 +7,11 @@ import Certificate from "../../components/CertificateCard/CertificateCard";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import TrainingPopup from "../../components/TrainingPopup/TrainingPopup";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
+import LogoutPopup from "../../components/LogoutPopup/LogoutPopup";
 
 function Dashboard() {
   const [openTrainingPopup, setOpenTrainingPopup] = useState<boolean>(false);
+  const [openLogoutPopup, setOpenLogoutPopup] = useState<boolean>(false);
   const pathwayCards = [
     { title: "Title 1", progress: 73 },
     { title: "Title 2" },
@@ -34,7 +36,7 @@ function Dashboard() {
 
   return (
     <>
-      <NavigationBar />
+      <NavigationBar setOpenLogoutPopup={setOpenLogoutPopup} />
       <div className={`${styles.split} ${styles.right}`}>
         <div className={styles.header}>
           <h1 className={styles.nameHeading}>Hello, Name!</h1>
@@ -114,6 +116,12 @@ function Dashboard() {
             </div>
           ))}
         </div>
+        <div>
+          <LogoutPopup 
+            open={openLogoutPopup} 
+            onClose={setOpenLogoutPopup} 
+          />
+      </div>
       </div>
     </>
   );

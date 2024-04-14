@@ -12,9 +12,11 @@ import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import TrainingCard from "../../components/TrainingCard/TrainingCard";
 import TrainingPopup from "../../components/TrainingPopup/TrainingPopup";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
+import LogoutPopup from "../../components/LogoutPopup/LogoutPopup";
 
 function TrainingLibrary() {
   const [openTrainingPopup, setOpenTrainingPopup] = useState<boolean>(false);
+  const [openLogoutPopup, setOpenLogoutPopup] = useState<boolean>(false);
   const [filterType, setFilterType] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredTrainings, setFilteredTrainings] = useState<
@@ -69,7 +71,7 @@ function TrainingLibrary() {
 
   return (
     <>
-      <NavigationBar />
+      <NavigationBar setOpenLogoutPopup={setOpenLogoutPopup} />
       <div className={`${styles.split} ${styles.right}`}>
         <div className={styles.header}>
           <h1 className={styles.nameHeading}> Trainings </h1>
@@ -100,7 +102,8 @@ function TrainingLibrary() {
                   : whiteButtonGrayBorder
               }
               variant="contained"
-              onClick={() => setFilterType("all")}>
+              onClick={() => setFilterType("all")}
+            >
               All
             </Button>
             <Button
@@ -110,7 +113,8 @@ function TrainingLibrary() {
                   : whiteButtonGrayBorder
               }
               variant="contained"
-              onClick={() => setFilterType("inProgress")}>
+              onClick={() => setFilterType("inProgress")}
+            >
               In Progress
             </Button>
             <Button
@@ -120,7 +124,8 @@ function TrainingLibrary() {
                   : whiteButtonGrayBorder
               }
               variant="contained"
-              onClick={() => setFilterType("completed")}>
+              onClick={() => setFilterType("completed")}
+            >
               Completed
             </Button>
           </div>
@@ -160,11 +165,19 @@ function TrainingLibrary() {
           />
         </div>
       </div>
-      <TrainingPopup
-        open={openTrainingPopup}
-        onClose={setOpenTrainingPopup}
-        image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-      />
+      <div>
+        <TrainingPopup
+          open={openTrainingPopup}
+          onClose={setOpenTrainingPopup}
+          image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+        />
+      </div>
+      <div>
+        <LogoutPopup 
+          open={openLogoutPopup} 
+          onClose={setOpenLogoutPopup} 
+        />
+      </div>
     </>
   );
 }

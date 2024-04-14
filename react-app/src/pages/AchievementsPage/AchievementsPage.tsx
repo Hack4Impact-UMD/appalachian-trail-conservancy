@@ -10,6 +10,7 @@ import styles from "./AchievementsPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Certificate from "../../components/CertificateCard/CertificateCard";
+import LogoutPopup from "../../components/LogoutPopup/LogoutPopup";
 
 function AchievementsPage() {
   const months = [
@@ -36,6 +37,7 @@ function AchievementsPage() {
   ];
 
   const [badgesSelected, setBadgesSelected] = useState<boolean>(true);
+  const [openLogoutPopup, setOpenLogoutPopup] = useState<boolean>(false);
   const [sortMode, setSortMode] = useState<string>("newest");
   const [sortedCards, setSortedCards] = useState<
     { title: string; date: string; image: string }[]
@@ -87,7 +89,7 @@ function AchievementsPage() {
 
   return (
     <>
-      <NavigationBar />
+      <NavigationBar setOpenLogoutPopup={setOpenLogoutPopup} />
       <div className={`${styles.split} ${styles.right}`}>
         <div className={styles.header}>
           <h1 className={styles.nameHeading}>Achievements</h1>
@@ -150,6 +152,12 @@ function AchievementsPage() {
             />
           ))}
         </div>
+        <div>
+          <LogoutPopup 
+            open={openLogoutPopup} 
+            onClose={setOpenLogoutPopup} 
+          />
+      </div>
       </div>
     </>
   );
