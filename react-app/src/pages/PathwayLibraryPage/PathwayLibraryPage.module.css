@@ -27,7 +27,7 @@
 
 .nameHeading {
   color: var(--forest-green);
-  font-size: 3.5rem;
+  font-size: 3rem;
   margin-top: 0;
   margin-bottom: 0;
 }
@@ -61,6 +61,13 @@
   margin-bottom: 1%; /* Add margin between items */
 }
 
+.emptySearchMessage {
+  width: 100%;
+  font-weight: bold;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
 .recommendedContainer {
   display: flex;
   flex-wrap: wrap;
@@ -71,7 +78,6 @@
 }
 
 .subHeader h2 {
-  font-size: 2rem;
-  margin-left: 0;
-  margin-bottom: 1rem;
+  font-size: 1.8rem;
+  margin: 1.5rem 0 1rem 0;
 }

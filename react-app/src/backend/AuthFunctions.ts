@@ -5,12 +5,13 @@ import {
   EmailAuthProvider,
   signOut,
   signInWithEmailAndPassword,
+  sendSignInLinkToEmail,
   sendPasswordResetEmail,
   type AuthError,
   type User,
-} from 'firebase/auth';
-import app, { functions } from '../config/firebase';
-import { httpsCallable } from 'firebase/functions';
+} from "firebase/auth";
+import app, { functions } from "../config/firebase";
+import { httpsCallable } from "firebase/functions";
 
 /*
 Updates the logged-in user's password.
@@ -20,7 +21,7 @@ TODO: make error messages change properly.
  */
 export async function updateUserPassword(
   newPassword: string,
-  oldPassword: string,
+  oldPassword: string
 ): Promise<string> {
   return await new Promise((resolve, reject) => {
     const auth = getAuth(app);
@@ -32,30 +33,30 @@ export async function updateUserPassword(
         .then(async () => {
           updatePassword(user, newPassword)
             .then(() => {
-              resolve('Successfully updated password');
+              resolve("Successfully updated password");
             })
             .catch((error: any) => {
               const code = (error as AuthError).code;
-              if (code === 'auth/weak-password') {
-                reject('New password should be at least 6 characters');
+              if (code === "auth/weak-password") {
+                reject("New password should be at least 6 characters");
               } else {
-                reject('Error updating password. Please try again later.');
+                reject("Error updating password. Please try again later.");
               }
             });
         })
         .catch((error: any) => {
           const code = (error as AuthError).code;
-          if (code === 'auth/wrong-password') {
-            reject('Your original password is incorrect.');
-          } else if (code === 'auth/too-many-request') {
+          if (code === "auth/wrong-password") {
+            reject("Your original password is incorrect.");
+          } else if (code === "auth/too-many-request") {
             reject(`Access to this account has been temporarily disabled due to many failed
             login attempts or due to too many failed password resets. Please try again later`);
           } else {
-            reject('Failed to authenticate user. Please log in again.');
+            reject("Failed to authenticate user. Please log in again.");
           }
         });
     } else {
-      reject('Session expired. Please sign in again.');
+      reject("Session expired. Please sign in again.");
     }
   });
 }
@@ -66,10 +67,10 @@ export async function updateUserPassword(
 export function createUser(newEmail: string, newRole: string): Promise<void> {
   return new Promise((resolve, reject) => {
     /* If role isn't one of the expected ones, reject it.*/
-    if (newRole != 'TEACHER' && newRole != 'ADMIN') {
+    if (newRole != "TEACHER" && newRole != "ADMIN") {
       reject();
     }
-    const createUserCloudFunction = httpsCallable(functions, 'createUser');
+    const createUserCloudFunction = httpsCallable(functions, "createUser");
     const auth = getAuth(app);
 
     createUserCloudFunction({ email: newEmail, role: newRole })
@@ -94,10 +95,10 @@ export function createUser(newEmail: string, newRole: string): Promise<void> {
 export function setUserRole(auth_id: string, newRole: string): Promise<void> {
   return new Promise((resolve, reject) => {
     /* If roles are not one of the expected ones, reject it*/
-    if (newRole != 'TEACHER' && newRole != 'ADMIN') {
-      reject('Role must be TEACHER or ADMIN');
+    if (newRole != "TEACHER" && newRole != "ADMIN") {
+      reject("Role must be TEACHER or ADMIN");
     }
-    const setUserCloudFunction = httpsCallable(functions, 'setUserRole');
+    const setUserCloudFunction = httpsCallable(functions, "setUserRole");
     setUserCloudFunction({ firebase_id: auth_id, role: newRole })
       .then(() => {
         resolve();
@@ -113,7 +114,7 @@ export function setUserRole(auth_id: string, newRole: string): Promise<void> {
  */
 export function deleteUser(auth_id: string): Promise<void> {
   return new Promise((resolve, reject) => {
-    const deleteUserCloudFunction = httpsCallable(functions, 'deleteUser');
+    const deleteUserCloudFunction = httpsCallable(functions, "deleteUser");
 
     deleteUserCloudFunction({ firebase_id: auth_id })
       .then(() => {
@@ -127,12 +128,12 @@ export function deleteUser(auth_id: string): Promise<void> {
 
 export function updateUserEmail(
   oldEmail: string,
-  currentEmail: string,
+  currentEmail: string
 ): Promise<void> {
   return new Promise((resolve, reject) => {
     const updateUserEmailCloudFunction = httpsCallable(
       functions,
-      'updateUserEmail',
+      "updateUserEmail"
     );
 
     updateUserEmailCloudFunction({ email: oldEmail, newEmail: currentEmail })
@@ -146,9 +147,9 @@ export function updateUserEmail(
   });
 }
 
-export function authenticateUser(
+export function authenticateUserEmailAndPassword(
   email: string,
-  password: string,
+  password: string
 ): Promise<User> {
   return new Promise((resolve, reject) => {
     const auth = getAuth(app);
@@ -157,6 +158,32 @@ export function authenticateUser(
         resolve(userCredential.user);
       })
       .catch((error: AuthError) => {
+        reject(error);
+      });
+  });
+}
+
+/*
+ Used to authenticate Volunteers
+ This is only called from the Volunteer login page
+ AuthContext provider handles authentication of the token sent in the email link
+*/
+export function sendSignInLink(email: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const actionCodeSettings = {
+      url: window.location.href,
+      handleCodeInApp: true,
+    };
+
+    const auth = getAuth(app);
+    sendSignInLinkToEmail(auth, email, actionCodeSettings)
+      .then(() => {
+        // Add email to local storage, email is removed from
+        // local storage when volunteer is signed in
+        window.localStorage.setItem("emailForSignIn", email);
+        resolve();
+      })
+      .catch((error: any) => {
         reject(error);
       });
   });

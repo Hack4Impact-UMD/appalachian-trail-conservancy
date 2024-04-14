@@ -1,10 +1,12 @@
 import {
   getAuth,
   onIdTokenChanged,
+  isSignInWithEmailLink,
+  signInWithEmailLink,
   type User,
   type IdTokenResult,
 } from "@firebase/auth";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import app from "../config/firebase";
 
 interface Props {
@@ -30,6 +32,16 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
 
   useEffect(() => {
     const auth = getAuth(app);
+    let email = window.localStorage.getItem("emailForSignIn");
+
+    if (isSignInWithEmailLink(auth, window.location.href)) {
+      signInWithEmailLink(auth, email ?? "", window.location.href)
+        .then(() => {
+          window.localStorage.removeItem("emailForSignIn");
+        })
+        .catch(() => {});
+    }
+
     onIdTokenChanged(auth, (newUser) => {
       setUser(newUser);
       if (newUser != null) {

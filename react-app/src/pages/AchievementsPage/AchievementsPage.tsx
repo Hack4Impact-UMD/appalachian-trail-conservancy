@@ -1,7 +1,3 @@
-import styles from "./AchievementsPage.module.css";
-import NavigationBar from "../../components/NavigationBar/NavigationBar";
-import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
-import Certificate from "../../components/CertificateCard/Certificate";
 import { Select, MenuItem, Button } from "@mui/material";
 import { useState, useEffect } from "react";
 import {
@@ -10,6 +6,10 @@ import {
   selectOptionStyle,
   whiteSelectGrayBorder,
 } from "../../muiTheme";
+import styles from "./AchievementsPage.module.css";
+import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
+import Certificate from "../../components/CertificateCard/CertificateCard";
 
 function AchievementsPage() {
   const months = [
@@ -123,14 +123,6 @@ function AchievementsPage() {
               size="small"
               sx={{
                 ...whiteSelectGrayBorder,
-                // ...selectOptionStyle,
-                // border: "2px solid dimgray",
-                // "&:hover": {
-                //   backgroundColor: "white",
-                //   color: "dimgray",
-                // },
-                // borderRadius: "10px",
-                // "& fieldset": { border: "none" },
                 width: "154px",
               }}>
               <MenuItem value={"newest"} sx={selectOptionStyle}>

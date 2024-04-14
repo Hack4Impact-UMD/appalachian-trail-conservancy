@@ -28,21 +28,6 @@ let theme = createTheme({
   },
 });
 
-//These colors should mirror the colors found in "index.css"
-theme = createTheme(theme, {
-  palette: {
-    primary: {
-      forestGreen: "#0a7650",
-      skyBlue: "#b1d7e8",
-      blueGray: "#263843",
-      oceanGreen: "#49a772",
-      shadowGreen: "#6cb29a",
-      mintGreen: "#82c9a0",
-      icebergBlue: "#cde3e4",
-    },
-  },
-});
-
 export default theme;
 
 // common styles
@@ -136,16 +121,56 @@ export const selectOptionStyle = {
 // used in login page
 export const grayBorderTextField = {
   width: 350,
-  height: 44,
+  fontSize: "1.1rem",
+  height: 48,
   borderRadius: "10px",
   border: "2px solid var(--blue-gray)",
   "& fieldset": { border: "none" },
 };
 
-// Search Bar
+// search bar
 export const grayBorderSearchBar = {
   ...baseStyles,
   width: "55%",
   border: "2px solid var(--blue-gray)",
   "& fieldset": { border: "none" },
+};
+
+// Radio Button, used in quiz component
+export const grayRadioButton = {
+  color: "var( --blue-gray)",
+  "&.Mui-checked": {
+    color: "var( --blue-gray)",
+  },
+};
+
+// stepper, used in training page
+export const stepperStyle = {
+  "& .MuiStepLabel-root .Mui-completed": {
+    color: "var(--blue-gray)", // circle color (COMPLETED)
+    padding: "0",
+  },
+  "& .MuiStepLabel-root .Mui-active": {
+    color: "var(--blue-gray)", // circle color (ACTIVE)
+    padding: "0",
+  },
+  "& .Mui-disabled .MuiStepIcon-root": {
+    color: "white", // circle color (DISABLED)
+    padding: "0",
+  },
+  "& .MuiStepLabel-root .MuiStepLabel-iconContainer": {
+    padding: "0", // remove padding next to step label
+  },
+  "& .MuiStepConnector-line": {
+    borderTopWidth: "2px", // connector width
+  },
+  "& .MuiStepConnector-root.Mui-completed .MuiStepConnector-line": {
+    borderColor: "var(--blue-gray)", // connector color (COMPLETED)
+  },
+  "& .MuiStepConnector-root.Mui-active .MuiStepConnector-line": {
+    borderColor: "var(--blue-gray)", // connector color (ACTIVE)
+  },
+  "& .MuiStepConnector-root.Mui-disabled .MuiStepConnector-line": {
+    borderColor: "var(--blue-gray)", // connector color (DISABLED)
+  },
 };

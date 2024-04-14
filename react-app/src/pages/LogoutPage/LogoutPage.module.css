@@ -1,5 +1,4 @@
-/* center on page */
-.container {
+.centeredContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -7,37 +6,25 @@
   height: 100vh;
 }
 
-.logoImg {
+.logo {
   width: 240px;
   height: 240px;
-  margin: auto;
 }
 
-/* center content */
-.content {
-  text-align: center;
+.checkmark {
+  margin-top: 2.5%;
+  width: 80px;
+  height: auto;
 }
 
-/* 404 */
-.content h1 {
-  font-size: 4rem;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-}
-
-/* page not found */
-.content h2 {
+.logoutText {
+  margin-top: 2.5%;
+  font-weight: bold;
   font-size: 3rem;
-  margin: 1%;
-}
-
-/* message */
-.content p {
-  font-size: 1.25rem;
 }
 
 @media screen and (max-height: 750px) {
-  .logoImg {
+  .logo {
     width: 150px;
     height: 150px;
   }

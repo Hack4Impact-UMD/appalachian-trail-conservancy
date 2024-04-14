@@ -1,12 +1,12 @@
-import styles from "./PathwayLibraryPage.module.css";
 import { useState, useEffect } from "react";
 import { IoIosSearch } from "react-icons/io";
-import { TextField, InputAdornment, Button } from "@mui/material";
+import { Button, InputAdornment, OutlinedInput } from "@mui/material";
 import {
   forestGreenButtonPadding,
   whiteButtonGrayBorder,
   grayBorderSearchBar,
 } from "../../muiTheme";
+import styles from "./PathwayLibraryPage.module.css";
 import debounce from "lodash.debounce";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import PathwayCard from "../../components/PathwayCard/PathwayCard";
@@ -75,19 +75,15 @@ function PathwayLibrary() {
         </div>
 
         <div className={styles.searchBarContainer}>
-          <TextField
+          <OutlinedInput
             sx={grayBorderSearchBar}
-            variant="outlined"
-            size="small"
             placeholder="Search..."
             onChange={debouncedOnChange}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <IoIosSearch />
-                </InputAdornment>
-              ),
-            }}
+            startAdornment={
+              <InputAdornment position="start">
+                <IoIosSearch />
+              </InputAdornment>
+            }
           />
           <div className={styles.buttonContainer}>
             <Button
@@ -97,7 +93,8 @@ function PathwayLibrary() {
                   : whiteButtonGrayBorder
               }
               variant="contained"
-              onClick={() => setFilterType("all")}>
+              onClick={() => setFilterType("all")}
+            >
               All
             </Button>
             <Button
@@ -107,7 +104,8 @@ function PathwayLibrary() {
                   : whiteButtonGrayBorder
               }
               variant="contained"
-              onClick={() => setFilterType("inProgress")}>
+              onClick={() => setFilterType("inProgress")}
+            >
               In Progress
             </Button>
             <Button
@@ -117,23 +115,30 @@ function PathwayLibrary() {
                   : whiteButtonGrayBorder
               }
               variant="contained"
-              onClick={() => setFilterType("completed")}>
+              onClick={() => setFilterType("completed")}
+            >
               Completed
             </Button>
           </div>
         </div>
 
-        <div className={styles.cardsContainer}>
-          {filteredTrainings.map((training, index) => (
-            <div className={styles.card} key={index}>
-              <PathwayCard
-                image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-                title={training.title}
-                progress={training.progress}
-              />
-            </div>
-          ))}
-        </div>
+        {filteredTrainings.length === 0 ? (
+          <div className={styles.emptySearchMessage}>
+            No Trainings Matching “{searchQuery}”
+          </div>
+        ) : (
+          <div className={styles.cardsContainer}>
+            {filteredTrainings.map((training, index) => (
+              <div className={styles.card} key={index}>
+                <PathwayCard
+                  image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+                  title={training.title}
+                  progress={training.progress}
+                />
+              </div>
+            ))}
+          </div>
+        )}
 
         <div className={styles.subHeader}>
           <h2>Recommended</h2>
