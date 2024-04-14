@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { IoIosSearch } from "react-icons/io";
-import { Button, TextField, InputAdornment } from "@mui/material";
+import { Button, InputAdornment, OutlinedInput } from "@mui/material";
 import {
   forestGreenButtonPadding,
   whiteButtonGrayBorder,
@@ -77,19 +77,15 @@ function TrainingLibrary() {
         </div>
 
         <div className={styles.searchBarContainer}>
-          <TextField
+          <OutlinedInput
             sx={grayBorderSearchBar}
-            variant="outlined"
-            size="small"
             placeholder="Search..."
             onChange={debouncedOnChange}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <IoIosSearch />
-                </InputAdornment>
-              ),
-            }}
+            startAdornment={
+              <InputAdornment position="start">
+                <IoIosSearch />
+              </InputAdornment>
+            }
           />
 
           <div className={styles.buttonContainer}>
@@ -100,7 +96,8 @@ function TrainingLibrary() {
                   : whiteButtonGrayBorder
               }
               variant="contained"
-              onClick={() => setFilterType("all")}>
+              onClick={() => setFilterType("all")}
+            >
               All
             </Button>
             <Button
@@ -110,7 +107,8 @@ function TrainingLibrary() {
                   : whiteButtonGrayBorder
               }
               variant="contained"
-              onClick={() => setFilterType("inProgress")}>
+              onClick={() => setFilterType("inProgress")}
+            >
               In Progress
             </Button>
             <Button
@@ -120,7 +118,8 @@ function TrainingLibrary() {
                   : whiteButtonGrayBorder
               }
               variant="contained"
-              onClick={() => setFilterType("completed")}>
+              onClick={() => setFilterType("completed")}
+            >
               Completed
             </Button>
           </div>

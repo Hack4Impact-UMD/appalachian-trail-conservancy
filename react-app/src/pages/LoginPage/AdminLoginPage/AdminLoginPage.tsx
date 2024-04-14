@@ -3,15 +3,15 @@ import {
   FormControl,
   IconButton,
   InputAdornment,
-  InputLabel,
   OutlinedInput,
-  TextField,
   Button,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { forestGreenButton, grayBorderTextField } from "../../../muiTheme";
-import { useNavigate } from "react-router";
+import { styledRectButton } from "../LoginPage";
+import { Navigate } from "react-router";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../../auth/AuthProvider";
 import { authenticateUserEmailAndPassword } from "../../../backend/AuthFunctions";
 import { AuthError } from "firebase/auth";
 import styles from "./AdminLoginPage.module.css";
@@ -20,13 +20,13 @@ import primaryLogo from "../../../assets/atc-primary-logo.png";
 import loginBanner from "../../../assets/login-banner.jpeg";
 import ForgotPasswordModal from "../ForgotPasswordModal/ForgotPasswordModal";
 
-const styledRectButton = {
-  width: 350,
-  marginTop: "5%",
-};
-
 function AdminLoginPage() {
-  const navigate = useNavigate();
+  const { user } = useAuth();
+  // If user is logged in, navigate to Dashboard
+  if (user) {
+    return <Navigate to="/" />;
+  }
+
   const [showPassword, setShowPassword] = useState<boolean>(false);
   //Add Forgot Password Popup
   const [openForgotModal, setOpenForgotModal] = useState<boolean>(false);
@@ -64,7 +64,7 @@ function AdminLoginPage() {
         authenticateUserEmailAndPassword(email, password)
           .then(() => {
             setShowLoading(false);
-            navigate("/");
+            <Navigate to="/" />;
           })
           .catch((error) => {
             setShowLoading(false);
@@ -109,12 +109,9 @@ function AdminLoginPage() {
               <div className={styles.alignLeft}>
                 <h3 className={styles.label}>Email</h3>
               </div>
-              <TextField
+              <OutlinedInput
                 value={email}
                 sx={grayBorderTextField}
-                label=""
-                variant="outlined"
-                size="small"
                 onChange={(event) => {
                   setEmail(event.target.value);
                 }}
@@ -124,12 +121,10 @@ function AdminLoginPage() {
               <div className={styles.alignLeft}>
                 <h3 className={styles.label}>Password</h3>
               </div>
-              <FormControl variant="outlined">
-                <InputLabel htmlFor="outlined-adornment-password"></InputLabel>
+              <FormControl>
                 <OutlinedInput
                   value={password}
                   sx={grayBorderTextField}
-                  id="outlined-adornment-password"
                   type={showPassword ? "text" : "password"}
                   onChange={(event) => {
                     setPassword(event.target.value);
@@ -187,11 +182,9 @@ function AdminLoginPage() {
               </p>
             </form>
 
-            {/* switch to user link */}
-            <Link to="/login/volunteer">
-              <button className={styles.switch}>
-                Switch to Volunteer Log In
-              </button>
+            {/* switch to volunteer link */}
+            <Link to="/login/volunteer" className={styles.switch}>
+              Switch to Volunteer Log In
             </Link>
           </div>
         </div>
