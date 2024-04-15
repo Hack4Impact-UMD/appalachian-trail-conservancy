@@ -33,28 +33,28 @@
   font-size: 1rem;
 }
 
-/* Link underline styles */
-.textDiv a span {
+/* link underline styles */
+.hoverUnderline a span {
   position: relative;
   padding: 0 0 0.2rem 0;
 }
 
-.textDiv a span:after {
+.hoverUnderline a span:after {
   content: "";
   position: absolute;
   width: 100%;
-  transform: scaleX(0);
   height: 1px;
   bottom: 0;
   left: 0;
   background-color: white;
-  transform-origin: bottom right;
   transition: transform 0.25s ease-out;
+  opacity: 1;
+  transform: scale(0);
+  transform-origin: center;
 }
 
-a:hover span:after {
-  transform: scaleX(1);
-  transform-origin: bottom left;
+.hoverUnderline a:hover span:after {
+  transform: scale(1);
 }
 
 .iconsDiv {
