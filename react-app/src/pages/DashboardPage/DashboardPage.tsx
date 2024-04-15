@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useAuth } from "../../auth/AuthProvider";
 import { Link } from "react-router-dom";
 import TrainingCard from "../../components/TrainingCard/TrainingCard";
 import PathwayCard from "../../components/PathwayCard/PathwayCard";
@@ -10,6 +11,8 @@ import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Footer from "../../components/Footer/Footer";
 
 function Dashboard() {
+  const auth = useAuth();
+
   const [openTrainingPopup, setOpenTrainingPopup] = useState<boolean>(false);
   const pathwayCards = [
     { title: "Title 1", progress: 73 },
@@ -40,7 +43,7 @@ function Dashboard() {
       <div className={`${styles.split} ${styles.right}`}>
         <div className={styles.content}>
           <div className={styles.header}>
-            <h1 className={styles.nameHeading}>Hello, Name!</h1>
+            <h1 className={styles.nameHeading}>Hello, {auth.firstName}!</h1>
             <ProfileIcon />
           </div>
           <div className={styles.subHeader}>
