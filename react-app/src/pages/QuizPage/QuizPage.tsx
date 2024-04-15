@@ -3,6 +3,7 @@ import { forestGreenButton, whiteButtonGrayBorder } from "../../muiTheme";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import styles from "./QuizPage.module.css";
 import { Question } from "../../types/TrainingType";
+import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import Quiz from "./QuizComponent/QuizComponent.tsx";
 
 const styledButtons = {
@@ -29,24 +30,29 @@ const testQuestions = [
 
 function QuizPage() {
   return (
-    <div className={styles.bodyContainer}>
-      {/* header - title & profile icon */}
-      <div className={styles.header}>
-        <h1 className={styles.nameHeading}>Training Title - Quiz</h1>
-        <ProfileIcon />
-      </div>
+    <>
+      <NavigationBar />
+      <div className={`${styles.split} ${styles.right}`}>
+        <div className={styles.bodyContainer}>
+          {/* HEADER */}
+          <div className={styles.header}>
+            <h1 className={styles.nameHeading}>Training Title - Quiz</h1>
+            <ProfileIcon />
+          </div>
+          <Quiz totalQuestions={2} questions={testQuestions} />
+        </div>
 
-      {/* footer */}
-      <div className={styles.footer}>
-        <Button
-          sx={{ ...forestGreenButton, ...styledButtons }}
-          variant="contained"
-        >
-          Submit
-        </Button>
+        {/* footer */}
+        <div className={styles.footer}>
+          <Button
+            sx={{ ...forestGreenButton, ...styledButtons }}
+            variant="contained"
+          >
+            Submit
+          </Button>
+        </div>
       </div>
-      <Quiz totalQuestions={2} questions={testQuestions} />
-    </div>
+    </>
   );
 }
 

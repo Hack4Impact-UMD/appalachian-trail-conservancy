@@ -1,0 +1,6 @@
+.container {
+  background-color: var(--blue-purple);
+  padding: 2%;
+  border-radius: 2%;
+  margin-top: 3%;
+}
