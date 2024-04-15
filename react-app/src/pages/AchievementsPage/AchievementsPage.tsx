@@ -104,7 +104,8 @@ function AchievementsPage() {
                     ? forestGreenButtonPadding
                     : whiteButtonGrayBorder
                 }
-                variant="contained">
+                variant="contained"
+              >
                 Pathway Badges
               </Button>
               <Button
@@ -114,7 +115,8 @@ function AchievementsPage() {
                     ? forestGreenButtonPadding
                     : whiteButtonGrayBorder
                 }
-                variant="contained">
+                variant="contained"
+              >
                 Training Certificates
               </Button>
             </div>
@@ -126,7 +128,8 @@ function AchievementsPage() {
                 sx={{
                   ...whiteSelectGrayBorder,
                   width: "154px",
-                }}>
+                }}
+              >
                 <MenuItem value={"newest"} sx={selectOptionStyle}>
                   SORT: NEWEST
                 </MenuItem>
@@ -138,7 +141,8 @@ function AchievementsPage() {
                 </MenuItem>
                 <MenuItem
                   value={"reverseAlphabetically"}
-                  sx={selectOptionStyle}>
+                  sx={selectOptionStyle}
+                >
                   SORT: Z-A
                 </MenuItem>
               </Select>
@@ -155,9 +159,7 @@ function AchievementsPage() {
             ))}
           </div>
         </div>
-        <div className={styles.footer}>
-          <Footer />
-        </div>
+        <Footer />
       </div>
     </>
   );

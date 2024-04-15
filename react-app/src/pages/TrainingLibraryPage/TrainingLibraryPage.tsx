@@ -98,7 +98,8 @@ function TrainingLibrary() {
                     : whiteButtonGrayBorder
                 }
                 variant="contained"
-                onClick={() => setFilterType("all")}>
+                onClick={() => setFilterType("all")}
+              >
                 All
               </Button>
               <Button
@@ -108,7 +109,8 @@ function TrainingLibrary() {
                     : whiteButtonGrayBorder
                 }
                 variant="contained"
-                onClick={() => setFilterType("inProgress")}>
+                onClick={() => setFilterType("inProgress")}
+              >
                 In Progress
               </Button>
               <Button
@@ -118,7 +120,8 @@ function TrainingLibrary() {
                     : whiteButtonGrayBorder
                 }
                 variant="contained"
-                onClick={() => setFilterType("completed")}>
+                onClick={() => setFilterType("completed")}
+              >
                 Completed
               </Button>
             </div>
@@ -164,9 +167,7 @@ function TrainingLibrary() {
             />
           </div>
         </div>
-        <div className={styles.footer}>
-          <Footer />
-        </div>
+        <Footer />
       </div>
       <TrainingPopup
         open={openTrainingPopup}

@@ -118,9 +118,7 @@ function Dashboard() {
             ))}
           </div>
         </div>
-        <div className={styles.footer}>
-          <Footer />
-        </div>
+        <Footer />
       </div>
     </>
   );
