@@ -10,8 +10,15 @@
 .right {
   right: 0;
   left: 250px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
   padding-left: 10%;
   padding-right: 10%;
+  padding-bottom: 3%;
 }
 
 /* have space between header and view all link  */
@@ -80,4 +87,8 @@
 .subHeader h2 {
   font-size: 1.8rem;
   margin: 1.5rem 0 1rem 0;
+}
+
+.footer {
+  margin-top: auto;
 }
