@@ -90,7 +90,38 @@ export function createUser(newEmail: string, newRole: string): Promise<void> {
 }
 
 /*
- * Creates a user and sends a password reset email to that user.
+ * Creates a volunteer user
+ */
+export function createVolunteerUser(
+  newEmail: string,
+  newFirstName: string,
+  newLastName: string,
+  code: number
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const createUserCloudFunction = httpsCallable(
+      functions,
+      "createVolunteerUser"
+    );
+    console.log("reached");
+    createUserCloudFunction({
+      email: newEmail,
+      firstName: newFirstName,
+      lastName: newLastName,
+      code: code,
+    })
+      .then(async () => {
+        console.log("resolved");
+        resolve();
+      })
+      .catch((error: any) => {
+        reject(error);
+      });
+  });
+}
+
+/*
+ * Set user role
  */
 export function setUserRole(auth_id: string, newRole: string): Promise<void> {
   return new Promise((resolve, reject) => {

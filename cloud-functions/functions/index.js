@@ -194,7 +194,7 @@ exports.createVolunteerUser = onCall(
 
                 await db
                   .collection("Users")
-                  .where("auth_id", "==", data.firebase_id)
+                  .where("auth_id", "==", userRecord.uid)
                   .get()
                   .then(async (querySnapshot) => {
                     if (querySnapshot.docs.length == 0) {
@@ -235,10 +235,13 @@ exports.createVolunteerUser = onCall(
                   });
               })
               .catch((error) => {
-                reject({
-                  reason: "Role Set Failed",
-                  text: "User has been created, but their role was not set properly",
-                });
+                reject(
+                  error
+                  //   {
+                  //   reason: "Role Set Failed",
+                  //   text: "User has been created, but their role was not set properly",
+                  // }
+                );
                 throw new functions.https.HttpsError(
                   "Unknown",
                   "Failed to set user's role"
