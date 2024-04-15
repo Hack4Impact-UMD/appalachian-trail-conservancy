@@ -157,6 +157,121 @@ exports.createUser = onCall(
   }
 );
 
+/*
+ * Creates a new volunteer.
+ * Takes an object as a parameter that should contain an email, first name, and last name.
+ * A volunteer will only be created if the join code is correct.
+ * Arguments: email: string, the user's email
+ *            first name: string, the user's first name
+ *            last name: string, the user's last name
+ */
+
+exports.createVolunteerUser = onCall(
+  { region: "us-east4", cors: true },
+  async ({ auth, data }) => {
+    return new Promise(async (resolve, reject) => {
+      const authorization = admin.auth();
+      if (data?.code === 123) {
+        await authorization
+          .createUser({
+            email: data.email,
+          })
+          .then(async (userRecord) => {
+            await authorization
+              .setCustomUserClaims(userRecord.uid, {
+                role: "VOLUNTEER",
+              })
+              .then(async () => {
+                const collectionObject = {
+                  auth_id: userRecord.uid,
+                  email: data.email,
+                  firstName: data.firstName,
+                  lastName: data.lastName,
+                  type: "VOLUNTEER",
+                  trainingInformation: [],
+                  pathwayInformation: [],
+                };
+
+                await db
+                  .collection("Users")
+                  .where("auth_id", "==", userRecord.uid)
+                  .get()
+                  .then(async (querySnapshot) => {
+                    if (querySnapshot.docs.length == 0) {
+                      await db
+                        .collection("Users")
+                        .add(collectionObject)
+                        .then(async () => {
+                          resolve({ reason: "Success", text: "Success" });
+                        })
+                        .catch((error) => {
+                          reject({
+                            reason: "Database Add Failed",
+                            text: "User has been created in login, but has not been added to database.",
+                          });
+                          throw new functions.https.HttpsError(
+                            "Unknown",
+                            "Failed to add user to database"
+                          );
+                        });
+                    } else {
+                      // User already in database
+                      reject({
+                        reason: "Database Add Failed",
+                        text: "User already in database.",
+                      });
+                      throw new functions.https.HttpsError(
+                        "Unknown",
+                        "Failed to add user to database"
+                      );
+                    }
+                  })
+                  .catch((error) => {
+                    reject({
+                      reason: "Database Deletion Failed",
+                      text: "Unable to find user in the database. Make sure they exist.",
+                    });
+                    throw new functions.https.HttpsError("unknown", `${error}`);
+                  });
+              })
+              .catch((error) => {
+                reject(
+                  error
+                  //   {
+                  //   reason: "Role Set Failed",
+                  //   text: "User has been created, but their role was not set properly",
+                  // }
+                );
+                throw new functions.https.HttpsError(
+                  "Unknown",
+                  "Failed to set user's role"
+                );
+              });
+          })
+          .catch((error) => {
+            reject({
+              reason: "Creation Failed",
+              text: "Failed to create user. Please make sure the email is not already in use.",
+            });
+            throw new functions.https.HttpsError(
+              "Unknown",
+              "Failed to create user in the auth."
+            );
+          });
+      } else {
+        reject({
+          reason: "Permission Denied",
+          text: "Invalid join code.",
+        });
+        throw new functions.https.HttpsError(
+          "permission-denied",
+          "Invalid join code."
+        );
+      }
+    });
+  }
+);
+
 /**
  * Deletes the user
  * Argument: firebase_id - the user's firebase_id
