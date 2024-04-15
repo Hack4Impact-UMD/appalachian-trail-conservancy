@@ -19,12 +19,6 @@ import QuizCard from "./pages/QuizPage/QuizComponent/QuizCard/QuizCard.tsx";
 import QuizResultCard from "./pages/QuizPage/QuizComponent/QuizResultCard/QuizResultCard.tsx";
 
 function App() {
-  const currentQuestion = 1;
-  const totalQuestions = 3;
-  const question = "What is the capital of France?";
-  const answerOptions = ["London", "Paris", "Berlin"];
-  const selectedAnswer = "Paris"; // Choose one of the answer options
-  const correctAnswer = "London";
   return (
     <ThemeProvider theme={theme}>
       <AuthProvider>
@@ -36,17 +30,9 @@ function App() {
             <Route
               path="/"
               element={
-                <QuizResultCard
-                  currentQuestion={currentQuestion}
-                  totalQuestions={totalQuestions}
-                  question={question}
-                  answerOptions={answerOptions}
-                  selectedAnswer={selectedAnswer}
-                  correctAnswer={correctAnswer}
-                />
-                // <RequireAuth>
-                //   <Dashboard />
-                // </RequireAuth>
+                <RequireAuth>
+                  <Dashboard />
+                </RequireAuth>
               }
             />
             <Route
@@ -87,8 +73,7 @@ function App() {
                 <RequireAuth>
                   <NotFoundPage />
                 </RequireAuth>
-              }
-            ></Route>
+              }></Route>
             <Route
               path="/logout"
               element={
@@ -105,8 +90,7 @@ function App() {
                   <button
                     onClick={() => {
                       //Test function
-                    }}
-                  >
+                    }}>
                     TEST
                   </button>
                 </RequireAuth>
@@ -121,6 +105,21 @@ function App() {
                     totalQuestions={10}
                     question={"What is 2 + 2?"}
                     answerOptions={["1", "9", "-2", "4"]}
+                  />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/quizresultcard"
+              element={
+                <RequireAuth>
+                  <QuizResultCard
+                    currentQuestion={2}
+                    totalQuestions={3}
+                    question={"What is the capital of France?"}
+                    answerOptions={["London", "Paris", "Berlin"]}
+                    selectedAnswer={"Paris"}
+                    correctAnswer={"Berlin"}
                   />
                 </RequireAuth>
               }

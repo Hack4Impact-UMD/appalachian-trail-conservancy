@@ -141,16 +141,27 @@ export const grayRadioButton = {
   "&.Mui-checked": {
     color: "var( --blue-gray)",
   },
+  "&.Mui-disabled": {
+    color: "var(--blue-gray)",
+  },
 };
+
 export const greenRadioButton = {
   color: "var(--forest-green)",
   "&.Mui-checked": {
     color: "var(--forest-green)",
   },
+  "&.Mui-disabled": {
+    color: "var(--forest-green)",
+  },
 };
+
 export const redRadioButton = {
   color: "red",
   "&.Mui-checked": {
+    color: "red",
+  },
+  "&.Mui-disabled": {
     color: "red",
   },
 };

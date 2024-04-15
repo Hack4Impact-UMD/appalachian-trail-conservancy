@@ -45,6 +45,7 @@ const QuizResultCard: React.FC<QuizResultCardProps> = ({
           <RadioGroup value={selectedAnswer}>
             {answerOptions.map((option, index) => (
               <FormControlLabel
+                disabled={true}
                 key={index}
                 value={option}
                 control={
@@ -56,23 +57,33 @@ const QuizResultCard: React.FC<QuizResultCardProps> = ({
                           : redRadioButton // red style if selected answer incorrect
                         : correctAnswer === option
                         ? greenRadioButton //green style to the correct answer's button
-                        : {}
+                        : grayRadioButton
                     }
                   />
                 }
                 label={
-                  <>
-                    {option}
-                    {isAnswerCorrect && selectedAnswer === option && (
-                      <IoCheckmark className={`${styles.greenIcon}`} />
+                  <div className={styles.choices}>
+                    {selectedAnswer !== option && correctAnswer !== option && (
+                      <span className={styles.otherChoiceText}>{option}</span>
+                    )}
+                    {((isAnswerCorrect && selectedAnswer === option) ||
+                      (!isAnswerCorrect && correctAnswer === option)) && (
+                      <>
+                        <span className={styles.correctChoiceText}>
+                          {option}
+                        </span>
+                        <IoCheckmark className={`${styles.greenIcon}`} />
+                      </>
                     )}
                     {!isAnswerCorrect && selectedAnswer === option && (
-                      <IoCloseOutline className={`${styles.redIcon}`} />
+                      <>
+                        <span className={styles.incorrectChoiceText}>
+                          {option}
+                        </span>
+                        <IoCloseOutline className={`${styles.redIcon}`} />
+                      </>
                     )}
-                    {!isAnswerCorrect && correctAnswer === option && (
-                      <IoCheckmark className={`${styles.greenIcon}`} />
-                    )}
-                  </>
+                  </div>
                 }
               />
             ))}

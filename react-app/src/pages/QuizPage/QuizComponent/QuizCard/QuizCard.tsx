@@ -43,7 +43,7 @@ const QuizCard: React.FC<QuizCardProps> = ({
                 key={index}
                 value={option}
                 control={<Radio sx={grayRadioButton} />}
-                label={option}
+                label={<div className={styles.choiceText}>{option}</div>}
               />
             ))}
           </RadioGroup>
