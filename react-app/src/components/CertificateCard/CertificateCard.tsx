@@ -12,7 +12,7 @@ const Certificate: React.FC<CertificateProps> = ({ image, title, date }) => {
   const parsedDate = DateTime.fromISO(date);
 
   // re-format
-  const formattedDate = parsedDate.toFormat("MMMM dd, yyyy");
+  const formattedDate = parsedDate.toFormat("MMMM dd, yyyy").toUpperCase();
   return (
     <div className={styles.certificateCard}>
       <div className={styles.certificateImage}>
