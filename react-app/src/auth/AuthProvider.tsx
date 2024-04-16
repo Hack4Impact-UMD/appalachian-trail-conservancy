@@ -8,6 +8,7 @@ import {
 } from "@firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
 import app from "../config/firebase";
+import { getVolunteerWithAuth } from "../backend/FirestoreCalls";
 
 interface Props {
   children: JSX.Element;
@@ -16,6 +17,9 @@ interface Props {
 interface AuthContextType {
   user: User;
   token: IdTokenResult;
+  firstName: String;
+  lastName: String;
+  id: String;
   loading: boolean;
 }
 
@@ -27,7 +31,9 @@ const AuthContext = createContext<AuthContextType>(null!);
 export const AuthProvider = ({ children }: Props): React.ReactElement => {
   const [user, setUser] = useState<User | any>(null!);
   const [token, setToken] = useState<IdTokenResult>(null!);
-  // The loading state is used by RequireAuth/RequireAdminAuth
+  const [firstName, setFirstName] = useState<String>("");
+  const [lastName, setLastName] = useState<String>("");
+  const [id, setID] = useState<String>("");
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -43,12 +49,28 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
     }
 
     onIdTokenChanged(auth, (newUser) => {
+      newUser?.getIdToken();
       setUser(newUser);
       if (newUser != null) {
         newUser
           .getIdTokenResult()
           .then((newToken) => {
             setToken(newToken);
+            if (newToken.claims.role === "VOLUNTEER") {
+              // Volunteer User
+              getVolunteerWithAuth(newUser.uid)
+                .then((volunteerData) => {
+                  const { id, firstName, lastName } = volunteerData;
+                  setID(id);
+                  setFirstName(firstName);
+                  setLastName(lastName);
+                })
+                .catch((error) => {
+                  // Failed to get Volunteer information
+                  console.log(error);
+                });
+            } else {
+            }
           })
           .catch(() => {});
       }
@@ -57,7 +79,9 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, token, loading }}>
+    <AuthContext.Provider
+      value={{ user, token, firstName, lastName, id, loading }}
+    >
       {children}
     </AuthContext.Provider>
   );
