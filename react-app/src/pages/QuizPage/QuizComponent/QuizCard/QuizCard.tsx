@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import {
   Radio,
   RadioGroup,
@@ -21,7 +21,7 @@ const QuizCard: React.FC<QuizCardProps> = ({
   question,
   answerOptions,
 }) => {
-  const [selectedValue, setSelectedValue] = React.useState("");
+  const [selectedValue, setSelectedValue] = useState("");
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedValue(event.target.value);

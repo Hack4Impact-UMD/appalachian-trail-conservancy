@@ -74,7 +74,8 @@ function App() {
                 <RequireAuth>
                   <NotFoundPage />
                 </RequireAuth>
-              }></Route>
+              }
+            ></Route>
             <Route
               path="/logout"
               element={
@@ -97,7 +98,8 @@ function App() {
                         "Patil",
                         123
                       );
-                    }}>
+                    }}
+                  >
                     TEST
                   </button>
                 </RequireAuth>
@@ -122,7 +124,6 @@ function App() {
                 <RequireAuth>
                   <QuizResultCard
                     currentQuestion={2}
-                    totalQuestions={3}
                     question={"What is the capital of France?"}
                     answerOptions={["London", "Paris", "Berlin"]}
                     selectedAnswer={"Paris"}

@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Radio,
   RadioGroup,
@@ -15,7 +14,6 @@ import { IoCloseOutline, IoCheckmark } from "react-icons/io5";
 
 interface QuizResultCardProps {
   currentQuestion: number;
-  totalQuestions: number;
   question: string;
   answerOptions: string[];
   selectedAnswer: string;
@@ -24,7 +22,6 @@ interface QuizResultCardProps {
 
 const QuizResultCard: React.FC<QuizResultCardProps> = ({
   currentQuestion,
-  totalQuestions,
   question,
   answerOptions,
   selectedAnswer,
@@ -35,9 +32,7 @@ const QuizResultCard: React.FC<QuizResultCardProps> = ({
   return (
     <div className={styles.quizCard}>
       <div className={styles.question}>
-        <h2 className={styles.questionNumber}>
-          Question {currentQuestion} of {totalQuestions}
-        </h2>
+        <h2 className={styles.questionNumber}>Question {currentQuestion}</h2>
         <p className={styles.questionText}>{question}</p>
       </div>
       <div>
