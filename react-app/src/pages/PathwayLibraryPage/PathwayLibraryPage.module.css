@@ -10,8 +10,15 @@
 .right {
   right: 0;
   left: 250px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
   padding-left: 10%;
   padding-right: 10%;
+  padding-bottom: 3%;
 }
 
 /* have space between header and view all link  */
@@ -59,6 +66,13 @@
     50% - 10px
   ); /* Set the width to 50% of the container minus margin */
   margin-bottom: 1%; /* Add margin between items */
+}
+
+.emptySearchMessage {
+  width: 100%;
+  font-weight: bold;
+  text-align: center;
+  font-size: 1.1rem;
 }
 
 .recommendedContainer {

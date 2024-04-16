@@ -15,6 +15,10 @@ For inquiries about the project, contact
 
 Our project aims to help the Appalachian Trail Conservancy streamline and gamify training processes for their staff and volunteers.
 
+## Hosting
+
+We are currently using Firebase Hosting. You can view a dev deployment of the application at [https://atc-training-aa43c.web.app/](https://atc-training-aa43c.web.app/)
+
 # Tech Stack
 
 **Frontend:**
@@ -25,7 +29,21 @@ Our project aims to help the Appalachian Trail Conservancy streamline and gamify
 - Libraries: [MaterialUI](https://mui.com/material-ui/), [Axios](https://axios-http.com/docs/intro)
 - Build Tool: [Vite](https://vitejs.dev/)
 
-**Backend:** TBD
+**Backend:** [Firebase](https://firebase.google.com/)
+
+- Authentication, Database, and Hosting
+
+Contact Akash or Sophie to gain access to our Firebase Console.
+
+Once logged in to the Firebase Console, you can view our stored data by clicking on the "Firestore Database" tab.
+
+We currently have 4 collections that correspond to our project Types:
+
+- Quizzes
+- Trainings
+- Pathways
+- Users (Volunteer and Admin accounts)
+  <img width="2064" alt="ATC Types Diagram" src="https://github.com/Hack4Impact-UMD/appalachian-trail-conservancy/assets/67646012/eabb3e56-0a0d-4695-bcd2-7efd2bda4d5c">
 
 # Running the Repo Locally
 

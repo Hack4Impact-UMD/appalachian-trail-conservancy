@@ -5,11 +5,10 @@ import {
   EmailAuthProvider,
   signOut,
   signInWithEmailAndPassword,
-  signInWithEmailLink,
+  sendSignInLinkToEmail,
   sendPasswordResetEmail,
   type AuthError,
   type User,
-  isSignInWithEmailLink,
 } from "firebase/auth";
 import app, { functions } from "../config/firebase";
 import { httpsCallable } from "firebase/functions";
@@ -91,7 +90,38 @@ export function createUser(newEmail: string, newRole: string): Promise<void> {
 }
 
 /*
- * Creates a user and sends a password reset email to that user.
+ * Creates a volunteer user
+ */
+export function createVolunteerUser(
+  newEmail: string,
+  newFirstName: string,
+  newLastName: string,
+  code: number
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const createUserCloudFunction = httpsCallable(
+      functions,
+      "createVolunteerUser"
+    );
+    console.log("reached");
+    createUserCloudFunction({
+      email: newEmail,
+      firstName: newFirstName,
+      lastName: newLastName,
+      code: code,
+    })
+      .then(async () => {
+        console.log("resolved");
+        resolve();
+      })
+      .catch((error: any) => {
+        reject(error);
+      });
+  });
+}
+
+/*
+ * Set user role
  */
 export function setUserRole(auth_id: string, newRole: string): Promise<void> {
   return new Promise((resolve, reject) => {
@@ -164,28 +194,29 @@ export function authenticateUserEmailAndPassword(
   });
 }
 
-export function authenticateUserEmailLink(email: string): Promise<User> {
+/*
+ Used to authenticate Volunteers
+ This is only called from the Volunteer login page
+ AuthContext provider handles authentication of the token sent in the email link
+*/
+export function sendSignInLink(email: string): Promise<void> {
   return new Promise((resolve, reject) => {
-    const auth = getAuth(app);
-    if (isSignInWithEmailLink(auth, window.location.href)) {
-      // Pull email from local storage
-      let email = window.localStorage.getItem("emailForSignIn");
+    const actionCodeSettings = {
+      url: window.location.href,
+      handleCodeInApp: true,
+    };
 
-      // Check if email is in local storage, conduct sign in if so
-      if (!email) {
-        email = window.prompt("Please provide your email for confirmation");
-      } else {
-        signInWithEmailLink(auth, email, window.location.href)
-          .then((userCredential: any) => {
-            // Authentication is successfully done
-            window.localStorage.removeItem("emailForSignIn");
-            resolve(userCredential.user);
-          })
-          .catch((error) => {
-            reject(error);
-          });
-      }
-    }
+    const auth = getAuth(app);
+    sendSignInLinkToEmail(auth, email, actionCodeSettings)
+      .then(() => {
+        // Add email to local storage, email is removed from
+        // local storage when volunteer is signed in
+        window.localStorage.setItem("emailForSignIn", email);
+        resolve();
+      })
+      .catch((error: any) => {
+        reject(error);
+      });
   });
 }
 

@@ -5,7 +5,6 @@ import {
   signInWithEmailLink,
   type User,
   type IdTokenResult,
-  onAuthStateChanged,
 } from "@firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
 import app from "../config/firebase";
@@ -36,9 +35,6 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
     let email = window.localStorage.getItem("emailForSignIn");
 
     if (isSignInWithEmailLink(auth, window.location.href)) {
-      if (!email) {
-        email = window.prompt("Please provide your email for confirmation");
-      }
       signInWithEmailLink(auth, email ?? "", window.location.href)
         .then(() => {
           window.localStorage.removeItem("emailForSignIn");
