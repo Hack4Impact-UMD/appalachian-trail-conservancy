@@ -58,7 +58,7 @@ function TrainingPage() {
 
   return (
     <>
-      <NavigationBar setOpenLogoutPopup={setOpenLogoutPopup} />
+      <NavigationBar/>
       <div className={`${styles.split} ${styles.right}`}>
         <div className={styles.bodyContainer}>
           {/* HEADER */}

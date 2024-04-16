@@ -69,7 +69,7 @@ function PathwayLibrary() {
 
   return (
     <>
-      <NavigationBar setOpenLogoutPopup={setOpenLogoutPopup} />
+      <NavigationBar/>
       <div className={`${styles.split} ${styles.right}`}>
         <div className={styles.header}>
           <h1 className={styles.nameHeading}>Pathways</h1>

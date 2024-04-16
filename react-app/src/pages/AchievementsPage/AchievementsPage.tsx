@@ -89,7 +89,7 @@ function AchievementsPage() {
 
   return (
     <>
-      <NavigationBar setOpenLogoutPopup={setOpenLogoutPopup} />
+      <NavigationBar />
       <div className={`${styles.split} ${styles.right}`}>
         <div className={styles.header}>
           <h1 className={styles.nameHeading}>Achievements</h1>
@@ -104,7 +104,8 @@ function AchievementsPage() {
                   ? forestGreenButtonPadding
                   : whiteButtonGrayBorder
               }
-              variant="contained">
+              variant="contained"
+            >
               Pathway Badges
             </Button>
             <Button
@@ -114,7 +115,8 @@ function AchievementsPage() {
                   ? forestGreenButtonPadding
                   : whiteButtonGrayBorder
               }
-              variant="contained">
+              variant="contained"
+            >
               Training Certificates
             </Button>
           </div>
@@ -126,7 +128,8 @@ function AchievementsPage() {
               sx={{
                 ...whiteSelectGrayBorder,
                 width: "154px",
-              }}>
+              }}
+            >
               <MenuItem value={"newest"} sx={selectOptionStyle}>
                 SORT: NEWEST
               </MenuItem>
@@ -153,11 +156,8 @@ function AchievementsPage() {
           ))}
         </div>
         <div>
-          <LogoutPopup 
-            open={openLogoutPopup} 
-            onClose={setOpenLogoutPopup} 
-          />
-      </div>
+          <LogoutPopup open={openLogoutPopup} onClose={setOpenLogoutPopup} />
+        </div>
       </div>
     </>
   );

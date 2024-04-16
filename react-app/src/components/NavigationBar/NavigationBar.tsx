@@ -12,16 +12,13 @@ import pathwaysInactive from "../../assets/pathwaysGray.svg";
 import achievementsActive from "../../assets/achievementsWhite.svg";
 import achievementInactive from "../../assets/achievementsGray.svg";
 import logout from "../../assets/logout.svg";
+import LogoutPopup from "../LogoutPopup/LogoutPopup";
 
-interface NavigationBarProps {
-  setOpenLogoutPopup: any;  
-}
 
-const NavigationBar: React.FC<NavigationBarProps> = ({
-  setOpenLogoutPopup,
-}) => {
+const NavigationBar = () => {
   // Add Error Handling
   const [submittedError, setSubmittedError] = useState<boolean>(false);
+  const [openLogoutPopup, setOpenLogoutPopup] = useState<boolean>(false);
 
   const navigate = useNavigate();
   const location = useLocation().pathname;
@@ -147,6 +144,10 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
           Log Out
         </button>
       </div>
+        <LogoutPopup 
+          open={openLogoutPopup} 
+          onClose={setOpenLogoutPopup} 
+        />
     </div>
   );
 }
