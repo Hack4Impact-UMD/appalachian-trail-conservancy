@@ -17,6 +17,7 @@ import RequireAuth from "./auth/RequireAuth/RequireAuth.tsx";
 import LogoutPage from "./pages/LogoutPage/LogoutPage.tsx";
 import QuizResult from "./pages/QuizPage/QuizResult/QuizResult.tsx";
 import QuizCard from "./pages/QuizPage/QuizComponent/QuizCard/QuizCard.tsx";
+import QuizResultCard from "./pages/QuizPage/QuizComponent/QuizResultCard/QuizResultCard.tsx";
 
 function App() {
   return (
@@ -73,7 +74,8 @@ function App() {
                 <RequireAuth>
                   <NotFoundPage />
                 </RequireAuth>
-              }></Route>
+              }
+            ></Route>
             <Route
               path="/logout"
               element={
@@ -96,7 +98,8 @@ function App() {
                         "Patil",
                         123
                       );
-                    }}>
+                    }}
+                  >
                     TEST
                   </button>
                 </RequireAuth>
@@ -111,6 +114,20 @@ function App() {
                     totalQuestions={10}
                     question={"What is 2 + 2?"}
                     answerOptions={["1", "9", "-2", "4"]}
+                  />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/quizresultcard"
+              element={
+                <RequireAuth>
+                  <QuizResultCard
+                    currentQuestion={2}
+                    question={"What is the capital of France?"}
+                    answerOptions={["London", "Paris", "Berlin"]}
+                    selectedAnswer={"Paris"}
+                    correctAnswer={"Berlin"}
                   />
                 </RequireAuth>
               }
