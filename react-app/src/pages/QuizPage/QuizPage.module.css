@@ -36,6 +36,13 @@
   margin-bottom: 1rem;
 }
 
+.questionContainer {
+  background-color: var(--blue-purple);
+  padding: 2%;
+  border-radius: 2%;
+  margin-top: 3%;
+}
+
 .footer {
   display: flex;
   justify-content: flex-end;

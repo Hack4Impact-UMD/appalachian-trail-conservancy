@@ -15,10 +15,9 @@ import AchievementsPage from "./pages/AchievementsPage/AchievementsPage.tsx";
 import TrainingPage from "./pages/TrainingPage/TrainingPage.tsx";
 import RequireAuth from "./auth/RequireAuth/RequireAuth.tsx";
 import LogoutPage from "./pages/LogoutPage/LogoutPage.tsx";
-import QuizResult from "./pages/QuizPage/QuizResult/QuizResult.tsx";
-import QuizCard from "./pages/QuizPage/QuizComponent/QuizCard/QuizCard.tsx";
 import QuizPage from "./pages/QuizPage/QuizPage.tsx";
-import QuizResultCard from "./pages/QuizPage/QuizComponent/QuizResultCard/QuizResultCard.tsx";
+import QuizResult from "./pages/QuizResultPage/QuizResultPage.tsx";
+import QuizResultCard from "./pages/QuizResultPage/QuizResultCard/QuizResultCard.tsx";
 
 function App() {
   return (
@@ -103,19 +102,6 @@ function App() {
                   >
                     TEST
                   </button>
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/quizcard"
-              element={
-                <RequireAuth>
-                  <QuizCard
-                    currentQuestion={1}
-                    totalQuestions={10}
-                    question={"What is 2 + 2?"}
-                    answerOptions={["1", "9", "-2", "4"]}
-                  />
                 </RequireAuth>
               }
             />

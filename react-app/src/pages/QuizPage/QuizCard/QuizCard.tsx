@@ -5,19 +5,17 @@ import {
   FormControl,
   FormControlLabel,
 } from "@mui/material";
-import { grayRadioButton } from "../../../../muiTheme";
+import { grayRadioButton } from "../../../muiTheme";
 import styles from "./QuizCard.module.css";
 
 interface QuizCardProps {
   currentQuestion: number;
-  totalQuestions: number;
   question: string;
   answerOptions: string[];
 }
 
 const QuizCard: React.FC<QuizCardProps> = ({
   currentQuestion,
-  totalQuestions,
   question,
   answerOptions,
 }) => {
@@ -30,9 +28,7 @@ const QuizCard: React.FC<QuizCardProps> = ({
   return (
     <div className={styles.quizCard}>
       <div className={styles.question}>
-        <h2 className={styles.questionNumber}>
-          Question {currentQuestion} of {totalQuestions}
-        </h2>
+        <h2 className={styles.questionNumber}>Question {currentQuestion}</h2>
         <p className={styles.questionText}>{question}</p>
       </div>
       <div>

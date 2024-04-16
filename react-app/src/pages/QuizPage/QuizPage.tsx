@@ -1,16 +1,16 @@
 import { Button } from "@mui/material";
-import { forestGreenButton, whiteButtonGrayBorder } from "../../muiTheme";
+import { forestGreenButton } from "../../muiTheme";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import styles from "./QuizPage.module.css";
 import { Question } from "../../types/TrainingType";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
-import Quiz from "./QuizComponent/QuizComponent.tsx";
+import QuizCard from "./QuizCard/QuizCard";
 
 const styledButtons = {
   marginRight: "10%",
 };
 
-const testQuestions = [
+const testQuestions: Question[] = [
   {
     question: "How many toes do feet normally have?",
     choices: ["20", "10", "2", "3"],
@@ -39,7 +39,16 @@ function QuizPage() {
             <h1 className={styles.nameHeading}>Training Title - Quiz</h1>
             <ProfileIcon />
           </div>
-          <Quiz totalQuestions={2} questions={testQuestions} />
+          <div className={styles.questionContainer}>
+            {testQuestions.map((option, index) => (
+              <QuizCard
+                key={index}
+                currentQuestion={index + 1}
+                question={option.question}
+                answerOptions={option.choices}
+              />
+            ))}
+          </div>
         </div>
 
         {/* footer */}
