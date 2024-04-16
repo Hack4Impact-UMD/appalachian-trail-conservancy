@@ -1,30 +1,25 @@
 import { useState } from "react";
-import { TextField, Button } from "@mui/material";
+import { OutlinedInput, Button } from "@mui/material";
 import { forestGreenButton, grayBorderTextField } from "../../../muiTheme";
-import { useNavigate } from "react-router";
+import { styledRectButton } from "../LoginPage";
 import { Link, Navigate } from "react-router-dom";
-import { authenticateUserEmailLink } from "../../../backend/AuthFunctions";
-import { getAuth, sendSignInLinkToEmail } from "firebase/auth";
+import { sendSignInLink } from "../../../backend/AuthFunctions";
 import { useAuth } from "../../../auth/AuthProvider";
 import styles from "./VolunteerLoginPage.module.css";
-import Loading from "../../../components/LoadingScreen/Loading";
 import primaryLogo from "../../../assets/atc-primary-logo.png";
 import loginBanner from "../../../assets/login-banner.jpeg";
-import app from "../../../config/firebase";
 import greenCheck from "../../../assets/greenCircleCheck.svg";
 
-const styledRectButton = {
-  width: 350,
-  marginTop: "5%",
-};
+function VolunteerLoginPage() {
+  const { user } = useAuth();
+  // If user is logged in, navigate to Dashboard
+  if (user) {
+    return <Navigate to="/" />;
+  }
 
-function VolunteerLoginPage(history: any) {
-  const navigate = useNavigate();
-
-  const [showLoading, setShowLoading] = useState<boolean>(false);
   const [failureMessage, setFailureMessage] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-  const [viewElements, setViewElements] = useState<boolean>(false);
+  const [viewConfirmation, setViewConfirmation] = useState<boolean>(false);
   const [displayText, setDisplayText] = useState<string>("");
 
   const handleSendLink = async (event: any) => {
@@ -35,34 +30,17 @@ function VolunteerLoginPage(history: any) {
     if (!pattern.test(email)) {
       setFailureMessage("*Not a valid email");
     } else {
-      setDisplayText(email);
-      setViewElements(true);
-      setFailureMessage("");
-      handleLogin();
+      sendSignInLink(email)
+        .then(() => {
+          setDisplayText(email);
+          setViewConfirmation(true);
+          setFailureMessage("");
+        })
+        .catch(() => {
+          setFailureMessage("Failed to send email.");
+        });
     }
   };
-
-  const handleLogin = async () => {
-    const actionCodeSettings = {
-      url: window.location.href,
-      handleCodeInApp: true,
-    };
-
-    try {
-      const auth = getAuth(app);
-      await sendSignInLinkToEmail(auth, email, actionCodeSettings);
-      // add error handling if email does not exist
-      window.localStorage.setItem("emailForSignIn", email);
-    } catch (error) {
-      alert(error);
-    }
-  };
-
-  const { user } = useAuth();
-
-  if (user) {
-    return <Navigate to="/" />;
-  }
 
   const beforeEmail = (
     <div>
@@ -70,17 +48,15 @@ function VolunteerLoginPage(history: any) {
         className={styles.centered}
         onSubmit={(event) => {
           handleSendLink(event);
-        }}>
+        }}
+      >
         {/* email field */}
         <div className={styles.alignLeft}>
           <h3 className={styles.label}>Email</h3>
         </div>
-        <TextField
+        <OutlinedInput
           value={email}
           sx={{ ...grayBorderTextField, marginBottom: "15px" }}
-          label=""
-          variant="outlined"
-          size="small"
           onChange={(event) => {
             setEmail(event.target.value);
           }}
@@ -91,17 +67,23 @@ function VolunteerLoginPage(history: any) {
           type="submit"
           sx={{ ...styledRectButton, ...forestGreenButton }}
           variant="contained"
-          onClick={(e) => handleSendLink(e)}>
-          {showLoading ? <Loading></Loading> : "Send Link"}
+          onClick={(e) => handleSendLink(e)}
+        >
+          Send Link
         </Button>
 
         {/* error message */}
         <p
           className={
             failureMessage ? styles.showFailureMessage : styles.errorContainer
-          }>
+          }
+        >
           {failureMessage}
         </p>
+        {/* switch to admin link */}
+        <Link to="/login/admin" className={styles.switch}>
+          Switch to Admin Log In
+        </Link>
       </form>
     </div>
   );
@@ -134,12 +116,7 @@ function VolunteerLoginPage(history: any) {
             <h1 className={styles.heading}>Welcome!</h1>
 
             {/* display check message if valid email is submitted */}
-            {viewElements ? sentEmail : beforeEmail}
-
-            {/* switch to admin link */}
-            <Link to="/login/admin">
-              <button className={styles.switch}>Switch to Admin Log In</button>
-            </Link>
+            {viewConfirmation ? sentEmail : beforeEmail}
           </div>
         </div>
       </div>

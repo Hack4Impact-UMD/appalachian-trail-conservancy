@@ -10,8 +10,15 @@
 .right {
   right: 0;
   left: 250px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
   padding-left: 10%;
   padding-right: 10%;
+  padding-bottom: 3%;
 }
 
 /* have space between header and view all link  */
@@ -56,6 +63,13 @@
 
 .card {
   margin-bottom: 1%;
+}
+
+.emptySearchMessage {
+  width: 100%;
+  font-weight: bold;
+  text-align: center;
+  font-size: 1.1rem;
 }
 
 .subHeader h2 {

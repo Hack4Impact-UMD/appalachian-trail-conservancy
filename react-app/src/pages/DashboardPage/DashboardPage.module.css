@@ -10,8 +10,15 @@
 .right {
   right: 0;
   left: 250px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
   padding-left: 10%;
   padding-right: 10%;
+  padding-bottom: 3%;
 }
 
 /* have space between header and view all link  */
@@ -64,4 +71,8 @@
   font-weight: 700;
   text-align: center;
   text-decoration: underline;
+}
+
+.footer {
+  margin-top: auto;
 }
