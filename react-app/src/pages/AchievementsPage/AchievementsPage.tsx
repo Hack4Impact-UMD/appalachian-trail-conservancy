@@ -11,29 +11,15 @@ import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Certificate from "../../components/CertificateCard/CertificateCard";
+import { DateTime } from "luxon";
 
 function AchievementsPage() {
-  const months = [
-    "JANUARY",
-    "FEBRUARY",
-    "MARCH",
-    "APRIL",
-    "MAY",
-    "JUNE",
-    "JULY",
-    "AUGUST",
-    "SEPTEMBER",
-    "OCTOBER",
-    "NOVEMBER",
-    "DECEMBER",
-  ];
-
   const certificates = [
-    { title: "Appalachian", date: "FEBRUARY 1, 2024", image: "" },
-    { title: "Beach", date: "DECEMBER 4, 2023", image: "" },
-    { title: "Ocean", date: "AUGUST 17, 2022", image: "" },
-    { title: "Savanahh", date: "JANUARY 5, 2020", image: "" },
-    { title: "Yosemite", date: "MAY 4, 2023", image: "" },
+    { title: "Appalachian", date: "2024-02-01", image: "" },
+    { title: "Beach", date: "2023-12-04", image: "" },
+    { title: "Ocean", date: "2022-08-17", image: "" },
+    { title: "Savanahh", date: "2020-01-05", image: "" },
+    { title: "Yosemite", date: "2023-05-04", image: "" },
   ];
 
   const [badgesSelected, setBadgesSelected] = useState<boolean>(true);
@@ -42,14 +28,8 @@ function AchievementsPage() {
     { title: string; date: string; image: string }[]
   >([]);
 
-  const parseDate = (dateString: string) => {
-    const [month, day, year] = dateString.split(" ");
-    const monthIndex = months.indexOf(month.toUpperCase()) + 1;
-    return `${year}-${monthIndex < 10 ? "0" + monthIndex : monthIndex}-${day}`;
-  };
-
   const sortCards = () => {
-    let sortedCardsCopy = certificates;
+    let sortedCardsCopy = certificates.slice();
 
     switch (sortMode) {
       case "alphabetically":
@@ -60,17 +40,19 @@ function AchievementsPage() {
         break;
       case "newest":
         sortedCardsCopy.sort((a, b) => {
-          const dateA = new Date(parseDate(a.date));
-          const dateB = new Date(parseDate(b.date));
-          return dateB.getTime() - dateA.getTime();
+          const dateA = DateTime.fromISO(a.date);
+          const dateB = DateTime.fromISO(b.date);
+          return dateB.toMillis() - dateA.toMillis();
         });
         break;
       case "oldest":
         sortedCardsCopy.sort((a, b) => {
-          const dateA = new Date(parseDate(a.date));
-          const dateB = new Date(parseDate(b.date));
-          return dateA.getTime() - dateB.getTime();
+          const dateA = DateTime.fromISO(a.date);
+          const dateB = DateTime.fromISO(b.date);
+          return dateA.toMillis() - dateB.toMillis();
         });
+        break;
+      default:
         break;
     }
 

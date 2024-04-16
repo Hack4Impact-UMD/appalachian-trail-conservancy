@@ -30,10 +30,10 @@ function Dashboard() {
     },
   ];
   const certificateCards = [
-    { title: "Title 1", date: "MARCH 24 2024" },
-    { title: "Title 2", date: "MARCH 24 2024" },
-    { title: "Title 3", date: "MARCH 24 2024" },
-    { title: "Title 4", date: "MARCH 24 2024" },
+    { title: "Title 1", date: "2024-03-19" },
+    { title: "Title 2", date: "2024-03-19" },
+    { title: "Title 3", date: "2024-03-19" },
+    { title: "Title 4", date: "2024-03-19" },
   ];
 
   return (
