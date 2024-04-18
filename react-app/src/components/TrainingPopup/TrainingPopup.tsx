@@ -7,12 +7,14 @@ import { Link } from "react-router-dom";
 interface modalPropsType {
   open: boolean;
   onClose: any;
+  title: string;
   image: string;
 }
 
 const TrainingPopup = ({
   open,
   onClose,
+  title,
   image,
 }: modalPropsType): React.ReactElement => {
   return (
@@ -28,7 +30,7 @@ const TrainingPopup = ({
           <div className={styles.centered}>
             <div className={styles.modal}>
               <div className={styles.left}>
-                <p className={styles.title}>Training Title</p>
+                <p className={styles.title}>{title}</p>
                 <p className={styles.textContainer}>
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
                   do eiusmod tempor incididunt ut labore et dolore magna aliqua.
