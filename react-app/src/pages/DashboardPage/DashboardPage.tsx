@@ -11,6 +11,7 @@ import training1 from "../../assets/training1.jpg";
 import training2 from "../../assets/training2.jpg";
 import training3 from "../../assets/training3.png";
 import training4 from "../../assets/training4.jpg";
+import badge from "../../assets/badge.svg";
 
 function Dashboard() {
   const auth = useAuth();
@@ -97,7 +98,7 @@ function Dashboard() {
             {certificateCards.map((cert, index) => (
               <div className={styles.card} key={index}>
                 <Certificate
-                  image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+                  image={badge}
                   title={cert.title}
                   date={cert.date}
                 />
@@ -114,7 +115,7 @@ function Dashboard() {
             {certificateCards.map((cert, index) => (
               <div className={styles.card} key={index}>
                 <Certificate
-                  image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+                  image={badge}
                   title={cert.title}
                   date={cert.date}
                 />
