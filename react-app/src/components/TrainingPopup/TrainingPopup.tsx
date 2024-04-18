@@ -38,14 +38,14 @@ const TrainingPopup = ({
                   laboris nisi ut aliquip ex ea commodo consequat.
                 </p>
                 <div className={styles.learnMoreButton}>
-                  <Button
-                    variant="contained"
-                    sx={{ ...whiteButtonGrayBorder, width: "150px" }}
-                  >
-                    <Link className={styles.viewAllLink} to="/trainingpage">
+                  <Link className={styles.viewAllLink} to="/trainingpage">
+                    <Button
+                      variant="contained"
+                      sx={{ ...whiteButtonGrayBorder, width: "150px" }}
+                    >
                       Learn More
-                    </Link>
-                  </Button>
+                    </Button>
+                  </Link>
                 </div>
               </div>
               <div className={styles.right}>
