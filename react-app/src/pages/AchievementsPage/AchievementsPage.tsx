@@ -12,6 +12,7 @@ import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Certificate from "../../components/CertificateCard/CertificateCard";
 import { DateTime } from "luxon";
+import badge from "../../assets/badge.svg";
 
 function AchievementsPage() {
   const certificates = [
@@ -134,7 +135,7 @@ function AchievementsPage() {
             {sortedCards.map((card, index) => (
               <Certificate
                 key={index}
-                image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+                image={badge}
                 title={card.title}
                 date={card.date}
               />
