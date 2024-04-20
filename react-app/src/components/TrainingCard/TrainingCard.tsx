@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./TrainingCard.module.css";
 import LinearProgressWithLabel from "../LinearProgressWithLabel/LinearProgressWithLabel";
 import TrainingPopup from "../TrainingPopup/TrainingPopup";
@@ -15,6 +16,8 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
   progress,
 }) => {
   const [openTrainingPopup, setOpenTrainingPopup] = useState<boolean>(false);
+
+  const navigate = useNavigate();
 
   const renderMarker = () => {
     if (progress === undefined || progress === 0) {
@@ -41,7 +44,13 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
     <>
       <div
         className={styles.trainingCard}
-        onClick={() => setOpenTrainingPopup(true)}
+        onClick={() => {
+          if (progress === undefined || progress === 0) {
+            setOpenTrainingPopup(true);
+          } else {
+            navigate("/trainingpage");
+          }
+        }}
       >
         <div className={styles.trainingImage}>
           <img src={image} alt="Training" />
