@@ -1,10 +1,11 @@
 import {
   addTraining,
   addPathway,
+  addQuiz,
   getAllTrainings,
   getAllPathways,
 } from "../backend/FirestoreCalls";
-import { type Training, TrainingID } from "../types/TrainingType";
+import { type Training, TrainingID, Quiz } from "../types/TrainingType";
 import { type Pathway } from "../types/PathwayType";
 
 export const addSampleTraining = ({
@@ -55,4 +56,38 @@ export const addSamplePathway = ({
     .catch((error) => {
       console.log(error);
     });
+};
+
+export const addSampleQuiz = ({
+  id = "id",
+  trainingID = "trainingId",
+  questions = [
+    {
+      question: "What is the capital of France?",
+      choices: ["London", "Paris", "Berlin"],
+      answer: "Paris"
+    },
+    {
+      question: "What is 2 + 2?",
+      choices: ["3", "4", "5"],
+      answer: "4"
+    }
+  ],
+  numQuestions = 2,
+  passingScore = 1,
+}) => {
+  const quiz: Quiz = {
+    id,
+    trainingID,
+    questions,
+    numQuestions,
+    passingScore,
+  };
+  addQuiz(quiz)
+    .then(() => {
+      console.log("quiz added");
+    })
+    .catch((error) => {
+      console.log(error);
+    })
 };
