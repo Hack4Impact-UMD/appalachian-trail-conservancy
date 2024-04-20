@@ -12,38 +12,34 @@
   cursor: pointer;
 }
 
-
-.title {
+.content {
+  width: 100%;
+  height: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.title {
   font-size: 1.5rem;
   font-weight: bold;
-  margin: 0;
-  padding: 0;
-  margin-left: 27%;
-  margin-top: 20%;
   max-width: 275px;
   text-align: center;
-  display: inline-block;
-  vertical-align: middle;
   color: black;
 }
 
-
-
 .buttons {
   display: flex;
-  align-items:center;
+  align-items: center;
   justify-content: center;
+  gap: 10%;
 }
 
-.leftButton {
-  margin-right: 5%; 
+/* .leftButton {
+  margin-right: 5%;
 }
 
 .rightButton {
   margin-left: 5%;
-}
-
-
+} */

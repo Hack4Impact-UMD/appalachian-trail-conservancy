@@ -26,6 +26,8 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/login/volunteer" element={<VolunteerLoginPage />} />
             <Route path="/login/admin" element={<AdminLoginPage />} />
+            <Route path="/logout" element={<LogoutPage />} />
+
             <Route
               path="/"
               element={
@@ -73,14 +75,6 @@ function App() {
                   <NotFoundPage />
                 </RequireAuth>
               }></Route>
-            <Route
-              path="/logout"
-              element={
-                <RequireAuth>
-                  <LogoutPage />
-                </RequireAuth>
-              }
-            />
 
             <Route
               path="/testfunctions"
