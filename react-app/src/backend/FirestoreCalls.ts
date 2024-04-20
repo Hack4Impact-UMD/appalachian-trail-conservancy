@@ -12,7 +12,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { Volunteer, VolunteerID } from "../types/UserType";
-import { Training, TrainingID } from "../types/TrainingType";
+import { Training, TrainingID, Quiz } from "../types/TrainingType";
 import { Pathway, PathwayID } from "../types/PathwayType";
 
 /* These can be edited depending on collection name and types */
@@ -60,6 +60,18 @@ export function getTraining(id: string): Promise<TrainingID> {
         } else {
           reject(new Error("Training does not exist"));
         }
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+}
+
+export function addQuiz(quiz: Quiz): Promise<string> {
+  return new Promise((resolve, reject) => {
+    addDoc(collection(db, "Quizzes"), quiz)
+      .then((docRef) => {
+        resolve(docRef.id);
       })
       .catch((e) => {
         reject(e);
