@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, Navigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import { forestGreenButton } from "../../muiTheme";
 import logo from "../../assets/atc-primary-logo.png";
@@ -14,6 +14,12 @@ const buttonStyle = {
 };
 
 const LogoutPage: React.FC = () => {
+  const location = useLocation();
+
+  if (!location.state?.fromApp) {
+    return <Navigate to="/" />;
+  }
+
   return (
     <div className={styles.centeredContainer}>
       <img src={logo} className={styles.logo} alt="Logo" />

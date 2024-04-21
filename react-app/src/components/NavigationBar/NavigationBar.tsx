@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { NavLink, useNavigate, useLocation } from "react-router-dom";
-import { logOut } from "../../backend/AuthFunctions";
+import { NavLink, useLocation } from "react-router-dom";
 import styles from "./NavigationBar.module.css";
 import atcprimarylogo from "../../assets/atc-primary-logo.png";
 import dashboardActive from "../../assets/dashboardWhite.svg";
@@ -12,21 +11,15 @@ import pathwaysInactive from "../../assets/pathwaysGray.svg";
 import achievementsActive from "../../assets/achievementsWhite.svg";
 import achievementInactive from "../../assets/achievementsGray.svg";
 import logout from "../../assets/logout.svg";
+import LogoutPopup from "./LogoutPopup/LogoutPopup";
 
-function NavigationBar() {
-  // Add Error Handling
-  const [submittedError, setSubmittedError] = useState<boolean>(false);
-  const navigate = useNavigate();
+const NavigationBar = () => {
+  const [openLogoutPopup, setOpenLogoutPopup] = useState<boolean>(false);
+
   const location = useLocation().pathname;
 
   const handleLogOut = (): void => {
-    logOut()
-      .then(() => {
-        navigate("/");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    setOpenLogoutPopup(true);
   };
 
   return (
@@ -64,7 +57,10 @@ function NavigationBar() {
           <NavLink
             to="/trainings"
             className={({ isActive }) =>
-              isActive || location === "/trainingpage" || location === "/quiz"
+              isActive ||
+              location === "/trainingpage" ||
+              location === "/quiz" ||
+              location === "/quizresult"
                 ? `${styles.tab} ${styles.tabActive}`
                 : `${styles.tab} ${styles.tabInActive}`
             }
@@ -146,8 +142,9 @@ function NavigationBar() {
           Log Out
         </button>
       </div>
+      <LogoutPopup open={openLogoutPopup} onClose={setOpenLogoutPopup} />
     </div>
   );
-}
+};
 
 export default NavigationBar;

@@ -20,8 +20,11 @@ export interface TrainingResource {
 
 export type Resource = "VIDEO" | "PDF";
 
-export interface Quiz {
+export interface QuizID extends Quiz {
   id: string;
+}
+
+export interface Quiz {
   trainingID: string;
   questions: Question[];
   numQuestions: number;

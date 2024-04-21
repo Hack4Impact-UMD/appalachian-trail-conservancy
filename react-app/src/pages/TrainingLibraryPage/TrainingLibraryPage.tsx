@@ -11,31 +11,82 @@ import debounce from "lodash.debounce";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import Footer from "../../components/Footer/Footer";
 import TrainingCard from "../../components/TrainingCard/TrainingCard";
-import TrainingPopup from "../../components/TrainingPopup/TrainingPopup";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
+import training1 from "../../assets/training1.jpg";
+import training2 from "../../assets/training2.jpg";
+import training3 from "../../assets/training3.png";
+import training4 from "../../assets/training4.jpg";
 
 function TrainingLibrary() {
-  const [openTrainingPopup, setOpenTrainingPopup] = useState<boolean>(false);
   const [filterType, setFilterType] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredTrainings, setFilteredTrainings] = useState<
-    { title: string; subtitle: string; progress: number }[]
+    { title: string; progress: number; image: string }[]
   >([]);
 
+  const images = [training1, training2, training3, training4];
+
   const trainingCards = [
-    { title: "Cat", subtitle: "Subtitle 1", progress: 23 },
-    { title: "NotInProgress", subtitle: "Subtitle 2", progress: 0 },
-    { title: "Complete", subtitle: "Subtitle 3", progress: 100 },
-    { title: "Dog", subtitle: "Subtitle 4", progress: 10 },
-    { title: "NotInProgress2", subtitle: "Subtitle 1", progress: 0 },
-    { title: "Catfish", subtitle: "Subtitle 2", progress: 50 },
-    { title: "C", subtitle: "Subtitle 3", progress: 76 },
-    { title: "Cat", subtitle: "Subtitle 4", progress: 100 },
-    { title: "Cat", subtitle: "Subtitle 1", progress: 23 },
-    { title: "Catfish", subtitle: "Subtitle 2", progress: 50 },
-    { title: "C", subtitle: "Subtitle 3", progress: 76 },
-    { title: "Dog", subtitle: "Subtitle 4", progress: 10 },
-    // Add more training card data as needed
+    {
+      title: "Cat",
+      progress: 23,
+      image: images[Math.floor(Math.random() * images.length)],
+    },
+    {
+      title: "NotInProgress",
+      progress: 0,
+      image: images[Math.floor(Math.random() * images.length)],
+    },
+    {
+      title: "Complete",
+      progress: 100,
+      image: images[Math.floor(Math.random() * images.length)],
+    },
+    {
+      title: "Dog",
+      progress: 10,
+      image: images[Math.floor(Math.random() * images.length)],
+    },
+    {
+      title: "NotInProgress2",
+      progress: 0,
+      image: images[Math.floor(Math.random() * images.length)],
+    },
+    {
+      title: "Catfish",
+      progress: 50,
+      image: images[Math.floor(Math.random() * images.length)],
+    },
+    {
+      title: "C",
+      progress: 76,
+      image: images[Math.floor(Math.random() * images.length)],
+    },
+    {
+      title: "Cat",
+      progress: 100,
+      image: images[Math.floor(Math.random() * images.length)],
+    },
+    {
+      title: "Cat",
+      progress: 23,
+      image: images[Math.floor(Math.random() * images.length)],
+    },
+    {
+      title: "Catfish",
+      progress: 50,
+      image: images[Math.floor(Math.random() * images.length)],
+    },
+    {
+      title: "C",
+      progress: 76,
+      image: images[Math.floor(Math.random() * images.length)],
+    },
+    {
+      title: "Dog",
+      progress: 10,
+      image: images[Math.floor(Math.random() * images.length)],
+    },
   ];
 
   const filterTrainings = () => {
@@ -72,108 +123,98 @@ function TrainingLibrary() {
     <>
       <NavigationBar />
       <div className={`${styles.split} ${styles.right}`}>
-        <div className={styles.content}>
-          <div className={styles.header}>
-            <h1 className={styles.nameHeading}> Trainings </h1>
-            <ProfileIcon />
-          </div>
-
-          <div className={styles.searchBarContainer}>
-            <OutlinedInput
-              sx={grayBorderSearchBar}
-              placeholder="Search..."
-              onChange={debouncedOnChange}
-              startAdornment={
-                <InputAdornment position="start">
-                  <IoIosSearch />
-                </InputAdornment>
-              }
-            />
-
-            <div className={styles.buttonContainer}>
-              <Button
-                sx={
-                  filterType === "all"
-                    ? forestGreenButtonPadding
-                    : whiteButtonGrayBorder
-                }
-                variant="contained"
-                onClick={() => setFilterType("all")}
-              >
-                All
-              </Button>
-              <Button
-                sx={
-                  filterType === "inProgress"
-                    ? forestGreenButtonPadding
-                    : whiteButtonGrayBorder
-                }
-                variant="contained"
-                onClick={() => setFilterType("inProgress")}
-              >
-                In Progress
-              </Button>
-              <Button
-                sx={
-                  filterType === "completed"
-                    ? forestGreenButtonPadding
-                    : whiteButtonGrayBorder
-                }
-                variant="contained"
-                onClick={() => setFilterType("completed")}
-              >
-                Completed
-              </Button>
+        <div className={styles.outerContainer}>
+          <div className={styles.content}>
+            <div className={styles.header}>
+              <h1 className={styles.nameHeading}> Trainings </h1>
+              <ProfileIcon />
             </div>
-          </div>
 
-          {filteredTrainings.length === 0 ? (
-            <div className={styles.emptySearchMessage}>
-              No Trainings Matching “{searchQuery}”
+            <div className={styles.searchBarContainer}>
+              <OutlinedInput
+                sx={grayBorderSearchBar}
+                placeholder="Search..."
+                onChange={debouncedOnChange}
+                startAdornment={
+                  <InputAdornment position="start">
+                    <IoIosSearch />
+                  </InputAdornment>
+                }
+              />
+
+              <div className={styles.buttonContainer}>
+                <Button
+                  sx={
+                    filterType === "all"
+                      ? forestGreenButtonPadding
+                      : whiteButtonGrayBorder
+                  }
+                  variant="contained"
+                  onClick={() => setFilterType("all")}>
+                  All
+                </Button>
+                <Button
+                  sx={
+                    filterType === "inProgress"
+                      ? forestGreenButtonPadding
+                      : whiteButtonGrayBorder
+                  }
+                  variant="contained"
+                  onClick={() => setFilterType("inProgress")}>
+                  In Progress
+                </Button>
+                <Button
+                  sx={
+                    filterType === "completed"
+                      ? forestGreenButtonPadding
+                      : whiteButtonGrayBorder
+                  }
+                  variant="contained"
+                  onClick={() => setFilterType("completed")}>
+                  Completed
+                </Button>
+              </div>
             </div>
-          ) : (
+
+            {filteredTrainings.length === 0 ? (
+              <div className={styles.emptySearchMessage}>
+                No Trainings Matching “{searchQuery}”
+              </div>
+            ) : (
+              <div className={styles.cardsContainer}>
+                {filteredTrainings.map((training, index) => (
+                  <div className={styles.card} key={index}>
+                    <TrainingCard
+                      image={training.image}
+                      title={training.title}
+                      progress={training.progress}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className={styles.subHeader}>
+              <h2>Recommended</h2>
+            </div>
             <div className={styles.cardsContainer}>
-              {filteredTrainings.map((training, index) => (
-                <div className={styles.card} key={index}>
-                  <TrainingCard
-                    image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-                    title={training.title}
-                    progress={training.progress}
-                    setOpenTrainingPopup={setOpenTrainingPopup}
-                  />
-                </div>
-              ))}
+              <TrainingCard
+                image={images[Math.floor(Math.random() * images.length)]}
+                title="Title"
+              />
+              <TrainingCard
+                image={images[Math.floor(Math.random() * images.length)]}
+                title="Title"
+              />
+              <TrainingCard
+                image={images[Math.floor(Math.random() * images.length)]}
+                title="Title"
+              />
             </div>
-          )}
-
-          <div className={styles.subHeader}>
-            <h2>Recommended</h2>
-          </div>
-          <div className={styles.cardsContainer}>
-            <TrainingCard
-              image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-              title="Title"
-              setOpenTrainingPopup={setOpenTrainingPopup}
-            />
-            <TrainingCard
-              image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-              title="Title"
-              setOpenTrainingPopup={setOpenTrainingPopup}
-            />
-            <TrainingCard
-              image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-              title="Title"
-              setOpenTrainingPopup={setOpenTrainingPopup}
-            />
           </div>
         </div>
         <Footer />
       </div>
-      <TrainingPopup
-        open={openTrainingPopup}
-        onClose={setOpenTrainingPopup}
-        image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-      />
     </>
   );
 }

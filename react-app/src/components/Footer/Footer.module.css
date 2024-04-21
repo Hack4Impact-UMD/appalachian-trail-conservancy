@@ -8,6 +8,14 @@
   margin-top: auto;
 }
 
+.content {
+  width: 875px;
+  display: flex;
+  margin: 0;
+  padding: 0;
+  gap: 5%;
+}
+
 .informationContainer {
   flex-grow: 0.4;
   display: flex;
