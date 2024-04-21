@@ -95,8 +95,7 @@ function PathwayLibrary() {
                     : whiteButtonGrayBorder
                 }
                 variant="contained"
-                onClick={() => setFilterType("all")}
-              >
+                onClick={() => setFilterType("all")}>
                 All
               </Button>
               <Button
@@ -106,8 +105,7 @@ function PathwayLibrary() {
                     : whiteButtonGrayBorder
                 }
                 variant="contained"
-                onClick={() => setFilterType("inProgress")}
-              >
+                onClick={() => setFilterType("inProgress")}>
                 In Progress
               </Button>
               <Button
@@ -117,8 +115,7 @@ function PathwayLibrary() {
                     : whiteButtonGrayBorder
                 }
                 variant="contained"
-                onClick={() => setFilterType("completed")}
-              >
+                onClick={() => setFilterType("completed")}>
                 Completed
               </Button>
             </div>

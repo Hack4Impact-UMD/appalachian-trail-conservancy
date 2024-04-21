@@ -30,134 +30,6 @@ exports.generalCloudFunction = onCall(
 );
 
 /*
- * Creates a new user.
- * Takes an object as a parameter that should contain an email, name, and a role field.
- * This function can only be called by a user with admin status
- * Arguments: email: string, the user's email
- *            name: string, the user's name
- *            role: string, (Options: "ADMIN", "TEACHER")
- */
-
-exports.createUser = onCall(
-  { region: "us-east4", cors: true },
-  async ({ auth, data }) => {
-    return new Promise(async (resolve, reject) => {
-      const authorization = admin.auth();
-      if (
-        // Validate parameters
-        // Validate auth and role
-        auth &&
-        auth.token &&
-        auth.token.role.toLowerCase() == "admin"
-      ) {
-        const pass = crypto.randomBytes(32).toString("hex");
-        await authorization
-          .createUser({
-            email: data.email,
-            password: pass,
-          })
-          .then(async (userRecord) => {
-            await authorization
-              .setCustomUserClaims(userRecord.uid, {
-                role: data.role,
-              })
-              .then(async () => {
-                // Add to database if needed. Set the fields you want
-                const collectionObject = {
-                  auth_id: userRecord.uid,
-                  email: data.email,
-                  name: data.name,
-                  type: data.role.toUpperCase(),
-                };
-
-                await db
-                  .collection("Users")
-                  .where("auth_id", "==", data.firebase_id)
-                  .get()
-                  .then(async (querySnapshot) => {
-                    if (querySnapshot.docs.length == 0) {
-                      await db
-                        .collection("Users")
-                        .add(collectionObject)
-                        .then(async () => {
-                          resolve({ reason: "Success", text: "Success" });
-                        })
-                        .catch((error) => {
-                          reject({
-                            reason: "Database Add Failed",
-                            text: "User has been created in login, but has not been added to database.",
-                          });
-                          throw new functions.https.HttpsError(
-                            "Unknown",
-                            "Failed to add user to database"
-                          );
-                        });
-                    } else {
-                      // User already in database, so let's just update their fields
-                      const doc = querySnapshot[0];
-                      await doc.ref
-                        .update({
-                          /*add the fields you need */
-                        })
-                        .then(async () => {
-                          resolve({ reason: "Success", text: "Success" });
-                        })
-                        .catch((error) => {
-                          reject({
-                            reason: "Database Add Failed",
-                            text: "User has been created in login, but has not been added to database.",
-                          });
-                          throw new functions.https.HttpsError(
-                            "Unknown",
-                            "Failed to add user to database"
-                          );
-                        });
-                    }
-                  })
-                  .catch((error) => {
-                    reject({
-                      reason: "Database Deletion Failed",
-                      text: "Unable to find user in the database. Make sure they exist.",
-                    });
-                    throw new functions.https.HttpsError("unknown", `${error}`);
-                  });
-              })
-              .catch((error) => {
-                reject({
-                  reason: "Role Set Failed",
-                  text: "User has been created, but their role was not set properly",
-                });
-                throw new functions.https.HttpsError(
-                  "Unknown",
-                  "Failed to set user's role"
-                );
-              });
-          })
-          .catch((error) => {
-            reject({
-              reason: "Creation Failed",
-              text: "Failed to create user. Please make sure the email is not already in use.",
-            });
-            throw new functions.https.HttpsError(
-              "Unknown",
-              "Failed to create user in the auth."
-            );
-          });
-      } else {
-        reject({
-          reason: "Permission Denied",
-          text: "Only an admin user can create users. If you are an admin, make sure the email and name passed in are correct.",
-        });
-        throw new functions.https.HttpsError(
-          "permission-denied",
-          "Only an admin user can create users. If you are an admin, make sure the email and name passed into the function are correct."
-        );
-      }
-    });
-  }
-);
-
-/*
  * Creates a new volunteer.
  * Takes an object as a parameter that should contain an email, first name, and last name.
  * A volunteer will only be created if the join code is correct.
@@ -235,13 +107,10 @@ exports.createVolunteerUser = onCall(
                   });
               })
               .catch((error) => {
-                reject(
-                  error
-                  //   {
-                  //   reason: "Role Set Failed",
-                  //   text: "User has been created, but their role was not set properly",
-                  // }
-                );
+                reject({
+                  reason: "Role Set Failed",
+                  text: "User has been created, but their role was not set properly",
+                });
                 throw new functions.https.HttpsError(
                   "Unknown",
                   "Failed to set user's role"
@@ -266,6 +135,115 @@ exports.createVolunteerUser = onCall(
         throw new functions.https.HttpsError(
           "permission-denied",
           "Invalid join code."
+        );
+      }
+    });
+  }
+);
+
+/*
+ * Creates a new admin.
+ * Takes an object as a parameter that should contain an email, first name, and last name.
+ * Arguments: email: string, the user's email
+ *            first name: string, the user's first name
+ *            last name: string, the user's last name
+ */
+exports.createAdminUser = onCall(
+  { region: "us-east4", cors: true },
+  async ({ auth, data }) => {
+    return new Promise(async (resolve, reject) => {
+      if (auth && auth.token && auth.token.role == "ADMIN") {
+        const authorization = admin.auth();
+        const pass = crypto.randomBytes(32).toString("hex");
+        await authorization
+          .createUser({
+            email: data.email,
+            password: pass,
+          })
+          .then(async (userRecord) => {
+            await authorization
+              .setCustomUserClaims(userRecord.uid, {
+                role: "ADMIN",
+              })
+              .then(async () => {
+                const collectionObject = {
+                  auth_id: userRecord.uid,
+                  email: data.email,
+                  firstName: data.firstName,
+                  lastName: data.lastName,
+                  type: "ADMIN",
+                };
+                await db
+                  .collection("Users")
+                  .where("auth_id", "==", userRecord.uid)
+                  .get()
+                  .then(async (querySnapshot) => {
+                    if (querySnapshot.docs.length == 0) {
+                      await db
+                        .collection("Users")
+                        .add(collectionObject)
+                        .then(async () => {
+                          resolve({ reason: "Success", text: "Success" });
+                        })
+                        .catch((error) => {
+                          reject({
+                            reason: "Database Add Failed",
+                            text: "User has been created in login, but has not been added to database.",
+                          });
+                          throw new functions.https.HttpsError(
+                            "Unknown",
+                            "Failed to add user to database"
+                          );
+                        });
+                    } else {
+                      // User already in database
+                      reject({
+                        reason: "Database Add Failed",
+                        text: "User already in database.",
+                      });
+                      throw new functions.https.HttpsError(
+                        "Unknown",
+                        "Failed to add user to database"
+                      );
+                    }
+                  })
+                  .catch((error) => {
+                    reject({
+                      reason: "Database Deletion Failed",
+                      text: "Unable to find user in the database. Make sure they exist.",
+                    });
+                    throw new functions.https.HttpsError("unknown", `${error}`);
+                  });
+              })
+              .catch((error) => {
+                reject({
+                  reason: "Role Set Failed",
+                  text: "User has been created, but their role was not set properly",
+                });
+                throw new functions.https.HttpsError(
+                  "Unknown",
+                  "Failed to set user's role"
+                );
+              });
+          })
+          .catch((error) => {
+            reject({
+              reason: "Creation Failed",
+              text: "Failed to create user. Please make sure the email is not already in use.",
+            });
+            throw new functions.https.HttpsError(
+              "Unknown",
+              "Failed to create user in the auth."
+            );
+          });
+      } else {
+        reject({
+          reason: "Permission Denied",
+          text: "Only an admin user can create admin users. If you are an admin, make sure the email and name passed in are correct.",
+        });
+        throw new functions.https.HttpsError(
+          "permission-denied",
+          "Only an admin user can create admin users. If you are an admin, make sure the email and name passed into the function are correct."
         );
       }
     });

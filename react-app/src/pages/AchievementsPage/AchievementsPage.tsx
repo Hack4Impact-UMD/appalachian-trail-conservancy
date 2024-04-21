@@ -6,12 +6,13 @@ import {
   selectOptionStyle,
   whiteSelectGrayBorder,
 } from "../../muiTheme";
+import { DateTime } from "luxon";
 import styles from "./AchievementsPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Certificate from "../../components/CertificateCard/CertificateCard";
-import { DateTime } from "luxon";
+import badge from "../../assets/badge.svg";
 
 function AchievementsPage() {
   const certificates = [
@@ -29,7 +30,7 @@ function AchievementsPage() {
   >([]);
 
   const sortCards = () => {
-    let sortedCardsCopy = certificates.slice();
+    const sortedCardsCopy = certificates.slice();
 
     switch (sortMode) {
       case "alphabetically":
@@ -86,8 +87,7 @@ function AchievementsPage() {
                     ? forestGreenButtonPadding
                     : whiteButtonGrayBorder
                 }
-                variant="contained"
-              >
+                variant="contained">
                 Pathway Badges
               </Button>
               <Button
@@ -97,8 +97,7 @@ function AchievementsPage() {
                     ? forestGreenButtonPadding
                     : whiteButtonGrayBorder
                 }
-                variant="contained"
-              >
+                variant="contained">
                 Training Certificates
               </Button>
             </div>
@@ -110,8 +109,7 @@ function AchievementsPage() {
                 sx={{
                   ...whiteSelectGrayBorder,
                   width: "154px",
-                }}
-              >
+                }}>
                 <MenuItem value={"newest"} sx={selectOptionStyle}>
                   SORT: NEWEST
                 </MenuItem>
@@ -123,8 +121,7 @@ function AchievementsPage() {
                 </MenuItem>
                 <MenuItem
                   value={"reverseAlphabetically"}
-                  sx={selectOptionStyle}
-                >
+                  sx={selectOptionStyle}>
                   SORT: Z-A
                 </MenuItem>
               </Select>
@@ -134,7 +131,7 @@ function AchievementsPage() {
             {sortedCards.map((card, index) => (
               <Certificate
                 key={index}
-                image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+                image={badge}
                 title={card.title}
                 date={card.date}
               />
