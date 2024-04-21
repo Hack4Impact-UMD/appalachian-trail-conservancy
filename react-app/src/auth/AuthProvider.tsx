@@ -8,7 +8,7 @@ import {
 } from "@firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
 import app from "../config/firebase";
-import { getVolunteerWithAuth } from "../backend/FirestoreCalls";
+import { getUserWithAuth } from "../backend/FirestoreCalls";
 
 interface Props {
   children: JSX.Element;
@@ -56,21 +56,17 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
           .getIdTokenResult()
           .then((newToken) => {
             setToken(newToken);
-            if (newToken.claims.role === "VOLUNTEER") {
-              // Volunteer User
-              getVolunteerWithAuth(newUser.uid)
-                .then((volunteerData) => {
-                  const { id, firstName, lastName } = volunteerData;
-                  setID(id);
-                  setFirstName(firstName);
-                  setLastName(lastName);
-                })
-                .catch((error) => {
-                  // Failed to get Volunteer information
-                  console.log(error);
-                });
-            } else {
-            }
+            getUserWithAuth(newUser.uid)
+              .then((volunteerData) => {
+                const { id, firstName, lastName } = volunteerData;
+                setID(id);
+                setFirstName(firstName);
+                setLastName(lastName);
+              })
+              .catch((error) => {
+                // Failed to get Volunteer information
+                console.log(error);
+              });
           })
           .catch(() => {});
       }
