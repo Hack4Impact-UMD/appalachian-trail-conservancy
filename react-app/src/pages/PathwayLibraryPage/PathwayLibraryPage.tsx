@@ -12,11 +12,9 @@ import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import Footer from "../../components/Footer/Footer";
 import PathwayCard from "../../components/PathwayCard/PathwayCard";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
-import LogoutPopup from "../../components/LogoutPopup/LogoutPopup";
 
 function PathwayLibrary() {
   const [filterType, setFilterType] = useState("all");
-  const [openLogoutPopup, setOpenLogoutPopup] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredTrainings, setFilteredTrainings] = useState<
     { title: string; subtitle: string; progress: number }[]

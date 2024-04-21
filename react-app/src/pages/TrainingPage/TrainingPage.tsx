@@ -8,7 +8,6 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import ResourceComponent from "../../components/ResourceComponent/ResourceComponent";
-import LogoutPopup from "../../components/LogoutPopup/LogoutPopup";
 
 const resources: TrainingResource[] = [
   {
@@ -35,7 +34,6 @@ const resources: TrainingResource[] = [
 
 function TrainingPage() {
   const [stepIndex, setStepIndex] = useState(0);
-  const [openLogoutPopup, setOpenLogoutPopup] = useState<boolean>(false);
 
   // TODO: The last resource should show "start quiz" button
   // or confirmation
@@ -58,7 +56,7 @@ function TrainingPage() {
 
   return (
     <>
-      <NavigationBar/>
+      <NavigationBar />
       <div className={`${styles.split} ${styles.right}`}>
         <div className={styles.bodyContainer}>
           {/* HEADER */}
@@ -89,12 +87,6 @@ function TrainingPage() {
             </Step>
           ))}
         </Stepper>
-      </div>
-      <div>
-        <LogoutPopup 
-          open={openLogoutPopup} 
-          onClose={setOpenLogoutPopup} 
-        />
       </div>
     </>
   );
