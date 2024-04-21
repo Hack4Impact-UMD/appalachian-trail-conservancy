@@ -1,9 +1,7 @@
 import { LinearProgress, Button } from "@mui/material";
 import { forestGreenButton, whiteButtonGrayBorder } from "../../muiTheme";
 import styles from "./QuizResultPage.module.css";
-import QuizCard from "../QuizPage/QuizCard/QuizCard";
 import QuizResultCard from "./QuizResultCard/QuizResultCard";
-import React from "react";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import atclogo from "../../assets/atc-primary-logo.png";
@@ -62,58 +60,62 @@ const QuizResultPage = (props: {
     <>
       <NavigationBar />
       <div className={`${styles.split} ${styles.right}`}>
-        <div className={styles.bodyContainer}>
-          {/* <div className={styles.feedback}> */}
-          {/* HEADER */}
-          <div className={styles.header}>
-            <h1 className={styles.nameHeading}>Training Title - Quiz</h1>
-            <div className={styles.profileIconContainer}>
-              <ProfileIcon />
-            </div>
-          </div>
-
-          <div className={styles.feedbackRight}>
-            {/* message about score */}
-
-            {/* This placeholder image still needs proper positioning */}
-            <img src={atclogo} alt="atc-logo" className={styles.atcLogo} />
-
-            <div>
-              {scoredFull ? (
-                <h3>Perfect score, you passed!</h3>
-              ) : passed ? (
-                <h3>Nice job, you passed!</h3>
-              ) : (
-                <h3>You got this, try again!</h3>
-              )}
-            </div>
-            {/* score */}
-            <div className={styles.score}>
-              <div className={styles.bigNum}>{achievedScore}</div>
-              <div className={styles.smallNum}>/ {totalScore}</div>
+        <div className={styles.outerContainer}>
+          <div className={styles.bodyContainer}>
+            {/* HEADER */}
+            <div className={styles.header}>
+              <h1 className={styles.nameHeading}>Training Title - Quiz</h1>
+              <div className={styles.profileIconContainer}>
+                <ProfileIcon />
+              </div>
             </div>
 
-            {/* progress bar */}
-            <LinearProgress
-              variant="determinate"
-              value={achievedScore * 10}
-              sx={achievedScore == 0 ? styledProgressFail : styledProgressPass}
-            />
+            <div className={styles.feedback}>
+              <img src={atclogo} alt="atc-logo" className={styles.atcLogo} />
+
+              {/* message about score */}
+              <div className={styles.feedbackRight}>
+                <div>
+                  {scoredFull ? (
+                    <h3>Perfect score, you passed!</h3>
+                  ) : passed ? (
+                    <h3>Nice job, you passed!</h3>
+                  ) : (
+                    <h3>You got this, try again!</h3>
+                  )}
+                </div>
+                {/* score */}
+                <div className={styles.score}>
+                  <div className={styles.bigNum}>{achievedScore}</div>
+                  <div className={styles.smallNum}>/ {totalScore}</div>
+                </div>
+
+                {/* progress bar */}
+                <LinearProgress
+                  variant="determinate"
+                  value={achievedScore * 10}
+                  sx={
+                    achievedScore == 0 ? styledProgressFail : styledProgressPass
+                  }
+                />
+              </div>
+            </div>
+
+            <div className={styles.questionContainer}>
+              {quizResults.map((result, index) => (
+                <QuizResultCard
+                  key={index}
+                  currentQuestion={result.currentQuestion}
+                  question={result.question}
+                  answerOptions={result.answerOptions}
+                  selectedAnswer={result.selectedAnswer}
+                  correctAnswer={result.correctAnswer}
+                />
+              ))}
+            </div>
           </div>
         </div>
 
-        <div className={styles.questionContainer}>
-          {quizResults.map((result, index) => (
-            <QuizResultCard
-              key={index}
-              currentQuestion={result.currentQuestion}
-              question={result.question}
-              answerOptions={result.answerOptions}
-              selectedAnswer={result.selectedAnswer}
-              correctAnswer={result.correctAnswer}
-            />
-          ))}
-        </div>
         {/* footer */}
         <div className={styles.footer}>
           {/* buttons */}
@@ -126,20 +128,17 @@ const QuizResultPage = (props: {
               <div>
                 <Button
                   sx={{ ...whiteButtonGrayBorder, ...styledButtons }}
-                  variant="contained"
-                >
+                  variant="contained">
                   Exit training
                 </Button>
                 <Button
                   sx={{ ...whiteButtonGrayBorder, ...styledButtons }}
-                  variant="contained"
-                >
+                  variant="contained">
                   Restart training
                 </Button>
                 <Button
                   sx={{ ...forestGreenButton, ...styledButtons }}
-                  variant="contained"
-                >
+                  variant="contained">
                   Retake quiz
                 </Button>
               </div>
