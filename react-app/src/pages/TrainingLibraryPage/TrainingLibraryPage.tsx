@@ -18,7 +18,6 @@ import training3 from "../../assets/training3.png";
 import training4 from "../../assets/training4.jpg";
 
 function TrainingLibrary() {
-  const [openTrainingPopup, setOpenTrainingPopup] = useState<boolean>(false);
   const [filterType, setFilterType] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredTrainings, setFilteredTrainings] = useState<
