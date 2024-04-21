@@ -121,7 +121,8 @@ export const selectOptionStyle = {
 // used in login page
 export const grayBorderTextField = {
   width: 350,
-  height: 44,
+  fontSize: "1.1rem",
+  height: 48,
   borderRadius: "10px",
   border: "2px solid var(--blue-gray)",
   "& fieldset": { border: "none" },
@@ -140,6 +141,29 @@ export const grayRadioButton = {
   color: "var( --blue-gray)",
   "&.Mui-checked": {
     color: "var( --blue-gray)",
+  },
+  "&.Mui-disabled": {
+    color: "var(--blue-gray)",
+  },
+};
+
+export const greenRadioButton = {
+  color: "var(--forest-green)",
+  "&.Mui-checked": {
+    color: "var(--forest-green)",
+  },
+  "&.Mui-disabled": {
+    color: "var(--forest-green)",
+  },
+};
+
+export const redRadioButton = {
+  color: "red",
+  "&.Mui-checked": {
+    color: "red",
+  },
+  "&.Mui-disabled": {
+    color: "red",
   },
 };
 

@@ -1,18 +1,14 @@
 import { Volunteer } from "../../types/UserType.ts";
 import styles from "./ProfileIcon.module.css";
-
-const user: Volunteer = {
-  auth_id: "example_auth_id",
-  email: "example@example.com",
-  type: "VOLUNTEER",
-  firstName: "Rahul",
-  lastName: "Anantuni",
-  trainingInformation: [],
-  pathwayInformation: [],
-};
+import { useAuth } from "../../auth/AuthProvider.tsx";
 
 const ProfileIcon = () => {
-  const initials = `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`;
+  // Subscribe to auth provider, pull first and last name
+  const auth = useAuth();
+  if (auth.loading) {
+    return <></>;
+  }
+  const initials = `${auth.firstName.charAt(0)}${auth.lastName.charAt(0)}`;
 
   return <div className={styles.profileIcon}>{initials}</div>;
 };

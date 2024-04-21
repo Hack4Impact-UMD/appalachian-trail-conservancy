@@ -62,7 +62,7 @@ const NavigationBar = () => {
           <NavLink
             to="/trainings"
             className={({ isActive }) =>
-              isActive || location === "/trainingpage"
+              isActive || location === "/trainingpage" || location === "/quiz"
                 ? `${styles.tab} ${styles.tabActive}`
                 : `${styles.tab} ${styles.tabInActive}`
             }

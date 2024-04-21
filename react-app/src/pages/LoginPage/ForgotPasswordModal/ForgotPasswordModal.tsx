@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TextField, Button } from "@mui/material";
+import { OutlinedInput, Button } from "@mui/material";
 import { forestGreenButton, grayBorderTextField } from "../../../muiTheme";
 import { IoCloseOutline } from "react-icons/io5";
 import styles from "./ForgotPasswordModal.module.css";
@@ -39,12 +39,9 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
             <div className={styles.alignLeft}>
               <h3 className={styles.label}>Email</h3>
             </div>
-            <TextField
+            <OutlinedInput
               value={email}
               sx={grayBorderTextField}
-              label=""
-              variant="outlined"
-              size="small"
               onChange={(event) => {
                 setEmail(event.target.value);
               }}
@@ -53,7 +50,8 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
             <Button
               type="submit"
               sx={{ ...styledRectButton, ...forestGreenButton }}
-              variant="contained">
+              variant="contained"
+            >
               Reset Password
             </Button>
           </form>

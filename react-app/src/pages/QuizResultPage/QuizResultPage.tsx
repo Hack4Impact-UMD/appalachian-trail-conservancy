@@ -1,6 +1,6 @@
 import { LinearProgress, Button } from "@mui/material";
-import { forestGreenButton, whiteButtonGrayBorder } from "../../../muiTheme";
-import styles from "./QuizResult.module.css";
+import { forestGreenButton, whiteButtonGrayBorder } from "../../muiTheme";
+import styles from "./QuizResultPage.module.css";
 
 const styledProgressShape = {
   height: 24,
@@ -26,7 +26,7 @@ const styledButtons = {
   margin: "0 10px 0 10px",
 };
 
-const QuizResult = (props: {
+const QuizResultPage = (props: {
   achievedScore: number;
   totalScore: number;
   passingScore: number;
@@ -81,17 +81,20 @@ const QuizResult = (props: {
           <div>
             <Button
               sx={{ ...whiteButtonGrayBorder, ...styledButtons }}
-              variant="contained">
+              variant="contained"
+            >
               Exit training
             </Button>
             <Button
               sx={{ ...whiteButtonGrayBorder, ...styledButtons }}
-              variant="contained">
+              variant="contained"
+            >
               Restart training
             </Button>
             <Button
               sx={{ ...forestGreenButton, ...styledButtons }}
-              variant="contained">
+              variant="contained"
+            >
               Retake quiz
             </Button>
           </div>
@@ -101,4 +104,4 @@ const QuizResult = (props: {
   );
 };
 
-export default QuizResult;
+export default QuizResultPage;

@@ -1,7 +1,8 @@
 import "./index.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import { ThemeProvider } from "@mui/material";
 import { AuthProvider } from "./auth/AuthProvider.tsx";
+import { createVolunteerUser } from "./backend/AuthFunctions";
 import theme from "./muiTheme.ts";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import Dashboard from "./pages/DashboardPage/DashboardPage.tsx";
@@ -14,14 +15,15 @@ import AchievementsPage from "./pages/AchievementsPage/AchievementsPage.tsx";
 import TrainingPage from "./pages/TrainingPage/TrainingPage.tsx";
 import RequireAuth from "./auth/RequireAuth/RequireAuth.tsx";
 import LogoutPage from "./pages/LogoutPage/LogoutPage.tsx";
-import QuizResult from "./pages/QuizPage/QuizResult/QuizResult.tsx";
-import QuizCard from "./pages/QuizPage/QuizComponent/QuizCard/QuizCard.tsx";
+import QuizPage from "./pages/QuizPage/QuizPage.tsx";
+import QuizResult from "./pages/QuizResultPage/QuizResultPage.tsx";
+import QuizResultCard from "./pages/QuizResultPage/QuizResultCard/QuizResultCard.tsx";
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <AuthProvider>
-        <BrowserRouter>
+        <HashRouter>
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/login/volunteer" element={<VolunteerLoginPage />} />
@@ -83,6 +85,12 @@ function App() {
                   <button
                     onClick={() => {
                       //Test function
+                      createVolunteerUser(
+                        "h4iatctest@gmail.com",
+                        "Akash",
+                        "Patil",
+                        123
+                      );
                     }}>
                     TEST
                   </button>
@@ -90,14 +98,15 @@ function App() {
               }
             />
             <Route
-              path="/quizcard"
+              path="/quizresultcard"
               element={
                 <RequireAuth>
-                  <QuizCard
-                    currentQuestion={1}
-                    totalQuestions={10}
-                    question={"What is 2 + 2?"}
-                    answerOptions={["1", "9", "-2", "4"]}
+                  <QuizResultCard
+                    currentQuestion={2}
+                    question={"What is the capital of France?"}
+                    answerOptions={["London", "Paris", "Berlin"]}
+                    selectedAnswer={"Paris"}
+                    correctAnswer={"Berlin"}
                   />
                 </RequireAuth>
               }
@@ -114,8 +123,16 @@ function App() {
                 </RequireAuth>
               }
             />
+            <Route
+              path="/quiz"
+              element={
+                <RequireAuth>
+                  <QuizPage />
+                </RequireAuth>
+              }
+            />
           </Routes>
-        </BrowserRouter>
+        </HashRouter>
       </AuthProvider>
     </ThemeProvider>
   );

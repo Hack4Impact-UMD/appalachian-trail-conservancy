@@ -2,14 +2,22 @@
   background-color: white;
   border-radius: 20px;
   margin: 2rem;
+  padding: 2rem;
 }
 
 .questionNumber {
+  margin-top: 0;
   font-size: 1.8rem;
   font-weight: bold;
+  color: var(--blue-gray);
 }
 
 .questionText {
   font-size: 1.4rem;
   font-weight: bold;
+  color: var(--blue-gray);
+}
+
+.choiceText {
+  color: var(--blue-gray);
 }

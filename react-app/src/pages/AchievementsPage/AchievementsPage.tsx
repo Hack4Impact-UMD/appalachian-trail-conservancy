@@ -6,51 +6,31 @@ import {
   selectOptionStyle,
   whiteSelectGrayBorder,
 } from "../../muiTheme";
+import { DateTime } from "luxon";
 import styles from "./AchievementsPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Certificate from "../../components/CertificateCard/CertificateCard";
-import LogoutPopup from "../../components/LogoutPopup/LogoutPopup";
+import badge from "../../assets/badge.svg";
 
 function AchievementsPage() {
-  const months = [
-    "JANUARY",
-    "FEBRUARY",
-    "MARCH",
-    "APRIL",
-    "MAY",
-    "JUNE",
-    "JULY",
-    "AUGUST",
-    "SEPTEMBER",
-    "OCTOBER",
-    "NOVEMBER",
-    "DECEMBER",
-  ];
-
   const certificates = [
-    { title: "Appalachian", date: "FEBRUARY 1, 2024", image: "" },
-    { title: "Beach", date: "DECEMBER 4, 2023", image: "" },
-    { title: "Ocean", date: "AUGUST 17, 2022", image: "" },
-    { title: "Savanahh", date: "JANUARY 5, 2020", image: "" },
-    { title: "Yosemite", date: "MAY 4, 2023", image: "" },
+    { title: "Appalachian", date: "2024-02-01", image: "" },
+    { title: "Beach", date: "2023-12-04", image: "" },
+    { title: "Ocean", date: "2022-08-17", image: "" },
+    { title: "Savanahh", date: "2020-01-05", image: "" },
+    { title: "Yosemite", date: "2023-05-04", image: "" },
   ];
 
   const [badgesSelected, setBadgesSelected] = useState<boolean>(true);
-  const [openLogoutPopup, setOpenLogoutPopup] = useState<boolean>(false);
   const [sortMode, setSortMode] = useState<string>("newest");
   const [sortedCards, setSortedCards] = useState<
     { title: string; date: string; image: string }[]
   >([]);
 
-  const parseDate = (dateString: string) => {
-    const [month, day, year] = dateString.split(" ");
-    const monthIndex = months.indexOf(month.toUpperCase()) + 1;
-    return `${year}-${monthIndex < 10 ? "0" + monthIndex : monthIndex}-${day}`;
-  };
-
   const sortCards = () => {
-    let sortedCardsCopy = certificates;
+    const sortedCardsCopy = certificates.slice();
 
     switch (sortMode) {
       case "alphabetically":
@@ -61,17 +41,19 @@ function AchievementsPage() {
         break;
       case "newest":
         sortedCardsCopy.sort((a, b) => {
-          const dateA = new Date(parseDate(a.date));
-          const dateB = new Date(parseDate(b.date));
-          return dateB.getTime() - dateA.getTime();
+          const dateA = DateTime.fromISO(a.date);
+          const dateB = DateTime.fromISO(b.date);
+          return dateB.toMillis() - dateA.toMillis();
         });
         break;
       case "oldest":
         sortedCardsCopy.sort((a, b) => {
-          const dateA = new Date(parseDate(a.date));
-          const dateB = new Date(parseDate(b.date));
-          return dateA.getTime() - dateB.getTime();
+          const dateA = DateTime.fromISO(a.date);
+          const dateB = DateTime.fromISO(b.date);
+          return dateA.toMillis() - dateB.toMillis();
         });
+        break;
+      default:
         break;
     }
 
@@ -91,73 +73,72 @@ function AchievementsPage() {
     <>
       <NavigationBar />
       <div className={`${styles.split} ${styles.right}`}>
-        <div className={styles.header}>
-          <h1 className={styles.nameHeading}>Achievements</h1>
-          <ProfileIcon />
-        </div>
-        <div className={styles.buttonContainer}>
-          <div className={styles.leftButtonContainer}>
-            <Button
-              onClick={() => setBadgesSelected(true)}
-              sx={
-                badgesSelected
-                  ? forestGreenButtonPadding
-                  : whiteButtonGrayBorder
-              }
-              variant="contained"
-            >
-              Pathway Badges
-            </Button>
-            <Button
-              onClick={() => setBadgesSelected(false)}
-              sx={
-                !badgesSelected
-                  ? forestGreenButtonPadding
-                  : whiteButtonGrayBorder
-              }
-              variant="contained"
-            >
-              Training Certificates
-            </Button>
+        <div className={styles.content}>
+          <div className={styles.header}>
+            <h1 className={styles.nameHeading}>Achievements</h1>
+            <ProfileIcon />
           </div>
-          <div className={styles.rightButtonContainer}>
-            <Select
-              value={sortMode}
-              onChange={handleChange}
-              size="small"
-              sx={{
-                ...whiteSelectGrayBorder,
-                width: "154px",
-              }}
-            >
-              <MenuItem value={"newest"} sx={selectOptionStyle}>
-                SORT: NEWEST
-              </MenuItem>
-              <MenuItem value={"oldest"} sx={selectOptionStyle}>
-                SORT: OLDEST
-              </MenuItem>
-              <MenuItem value={"alphabetically"} sx={selectOptionStyle}>
-                SORT: A-Z
-              </MenuItem>
-              <MenuItem value={"reverseAlphabetically"} sx={selectOptionStyle}>
-                SORT: Z-A
-              </MenuItem>
-            </Select>
+          <div className={styles.buttonContainer}>
+            <div className={styles.leftButtonContainer}>
+              <Button
+                onClick={() => setBadgesSelected(true)}
+                sx={
+                  badgesSelected
+                    ? forestGreenButtonPadding
+                    : whiteButtonGrayBorder
+                }
+                variant="contained">
+                Pathway Badges
+              </Button>
+              <Button
+                onClick={() => setBadgesSelected(false)}
+                sx={
+                  !badgesSelected
+                    ? forestGreenButtonPadding
+                    : whiteButtonGrayBorder
+                }
+                variant="contained">
+                Training Certificates
+              </Button>
+            </div>
+            <div className={styles.rightButtonContainer}>
+              <Select
+                value={sortMode}
+                onChange={handleChange}
+                size="small"
+                sx={{
+                  ...whiteSelectGrayBorder,
+                  width: "154px",
+                }}>
+                <MenuItem value={"newest"} sx={selectOptionStyle}>
+                  SORT: NEWEST
+                </MenuItem>
+                <MenuItem value={"oldest"} sx={selectOptionStyle}>
+                  SORT: OLDEST
+                </MenuItem>
+                <MenuItem value={"alphabetically"} sx={selectOptionStyle}>
+                  SORT: A-Z
+                </MenuItem>
+                <MenuItem
+                  value={"reverseAlphabetically"}
+                  sx={selectOptionStyle}>
+                  SORT: Z-A
+                </MenuItem>
+              </Select>
+            </div>
+          </div>
+          <div className={styles.cardsContainer}>
+            {sortedCards.map((card, index) => (
+              <Certificate
+                key={index}
+                image={badge}
+                title={card.title}
+                date={card.date}
+              />
+            ))}
           </div>
         </div>
-        <div className={styles.cardsContainer}>
-          {sortedCards.map((card, index) => (
-            <Certificate
-              key={index}
-              image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-              title={card.title}
-              date={card.date}
-            />
-          ))}
-        </div>
-        <div>
-          <LogoutPopup open={openLogoutPopup} onClose={setOpenLogoutPopup} />
-        </div>
+        <Footer />
       </div>
     </>
   );
