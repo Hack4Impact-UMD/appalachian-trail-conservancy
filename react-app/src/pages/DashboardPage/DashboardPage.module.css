@@ -13,13 +13,16 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+.outerContainer {
+  display: flex;
+  flex-direction: column;
   align-items: center;
 }
 
 .content {
-  width: 925px;
-  /* padding-left: 10%;
-  padding-right: 10%; */
+  width: 875px;
   padding-bottom: 3%;
 }
 

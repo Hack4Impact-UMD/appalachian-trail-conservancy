@@ -4,7 +4,7 @@
   flex-direction: column;
   border-radius: 20px;
   overflow: hidden;
-  width: 450px;
+  width: 425px;
   height: 185px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.3); /* Adding drop shadow */
   cursor: pointer;
