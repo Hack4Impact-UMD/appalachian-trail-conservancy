@@ -18,7 +18,7 @@ const LogoutPopup = ({ open, onClose }: modalPropsType): React.ReactElement => {
   function startLogOut() {
     logOut()
       .then(() => {
-        navigate("/logout");
+        navigate("/logout", { state: { fromApp: true } });
       })
       .catch((error) => {
         console.log(error);
