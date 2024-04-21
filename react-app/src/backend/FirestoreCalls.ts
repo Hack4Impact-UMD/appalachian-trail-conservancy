@@ -83,7 +83,7 @@ export function addQuiz(quiz: Quiz): Promise<string> {
   });
 }
 
-export function getQuiz(id: string): Promise<Quiz> {
+export function getQuiz(id: string): Promise<QuizID> {
   return new Promise((resolve, reject) => {
     getDoc(doc(db, "Quizzes", id))
       .then((quizSnapshot) => {
@@ -167,15 +167,15 @@ export function getAllPathways(): Promise<PathwayID[]> {
   });
 }
 
-export function getAllQuizzes(): Promise<Quiz[]> {
+export function getAllQuizzes(): Promise<QuizID[]> {
   const quizzesRef = collection(db, 'Quizzes');
   return new Promise((resolve, reject) => {
     getDocs(quizzesRef)
       .then((quizSnapshot) => {
-        const allQuizzes: Quiz[] = [];
+        const allQuizzes: QuizID[] = [];
         const quizzes = quizSnapshot.docs.map((doc) => {
           const quiz: Quiz = doc.data() as Quiz;
-          const newQuiz: Quiz = { ...quiz, id: doc.id };
+          const newQuiz: QuizID = { ...quiz, id: doc.id };
           allQuizzes.push(newQuiz);
         });
         resolve( allQuizzes );

@@ -59,7 +59,6 @@ export const addSamplePathway = ({
 };
 
 export const addSampleQuiz = ({
-  id = "id",
   trainingID = "trainingId",
   questions = [
     {
@@ -77,7 +76,6 @@ export const addSampleQuiz = ({
   passingScore = 1,
 }) => {
   const quiz: Quiz = {
-    id,
     trainingID,
     questions,
     numQuestions,
