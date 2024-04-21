@@ -58,18 +58,20 @@ function TrainingPage() {
     <>
       <NavigationBar />
       <div className={`${styles.split} ${styles.right}`}>
-        <div className={styles.bodyContainer}>
-          {/* HEADER */}
-          <div className={styles.header}>
-            <h1 className={styles.nameHeading}>Training Title</h1>
-            <ProfileIcon />
-          </div>
+        <div className={styles.outerContainer}>
+          <div className={styles.bodyContainer}>
+            {/* HEADER */}
+            <div className={styles.header}>
+              <h1 className={styles.nameHeading}>Training Title</h1>
+              <ProfileIcon />
+            </div>
 
-          <ResourceComponent
-            handleBackButton={handleBackButton}
-            handleContinueButton={handleContinueButton}
-            resource={resources[stepIndex]}
-          />
+            <ResourceComponent
+              handleBackButton={handleBackButton}
+              handleContinueButton={handleContinueButton}
+              resource={resources[stepIndex]}
+            />
+          </div>
         </div>
 
         {/* Stepper */}

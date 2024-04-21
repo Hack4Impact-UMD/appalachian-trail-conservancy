@@ -123,92 +123,94 @@ function TrainingLibrary() {
     <>
       <NavigationBar />
       <div className={`${styles.split} ${styles.right}`}>
-        <div className={styles.content}>
-          <div className={styles.header}>
-            <h1 className={styles.nameHeading}> Trainings </h1>
-            <ProfileIcon />
-          </div>
-
-          <div className={styles.searchBarContainer}>
-            <OutlinedInput
-              sx={grayBorderSearchBar}
-              placeholder="Search..."
-              onChange={debouncedOnChange}
-              startAdornment={
-                <InputAdornment position="start">
-                  <IoIosSearch />
-                </InputAdornment>
-              }
-            />
-
-            <div className={styles.buttonContainer}>
-              <Button
-                sx={
-                  filterType === "all"
-                    ? forestGreenButtonPadding
-                    : whiteButtonGrayBorder
-                }
-                variant="contained"
-                onClick={() => setFilterType("all")}>
-                All
-              </Button>
-              <Button
-                sx={
-                  filterType === "inProgress"
-                    ? forestGreenButtonPadding
-                    : whiteButtonGrayBorder
-                }
-                variant="contained"
-                onClick={() => setFilterType("inProgress")}>
-                In Progress
-              </Button>
-              <Button
-                sx={
-                  filterType === "completed"
-                    ? forestGreenButtonPadding
-                    : whiteButtonGrayBorder
-                }
-                variant="contained"
-                onClick={() => setFilterType("completed")}>
-                Completed
-              </Button>
+        <div className={styles.outerContainer}>
+          <div className={styles.content}>
+            <div className={styles.header}>
+              <h1 className={styles.nameHeading}> Trainings </h1>
+              <ProfileIcon />
             </div>
-          </div>
 
-          {filteredTrainings.length === 0 ? (
-            <div className={styles.emptySearchMessage}>
-              No Trainings Matching “{searchQuery}”
+            <div className={styles.searchBarContainer}>
+              <OutlinedInput
+                sx={grayBorderSearchBar}
+                placeholder="Search..."
+                onChange={debouncedOnChange}
+                startAdornment={
+                  <InputAdornment position="start">
+                    <IoIosSearch />
+                  </InputAdornment>
+                }
+              />
+
+              <div className={styles.buttonContainer}>
+                <Button
+                  sx={
+                    filterType === "all"
+                      ? forestGreenButtonPadding
+                      : whiteButtonGrayBorder
+                  }
+                  variant="contained"
+                  onClick={() => setFilterType("all")}>
+                  All
+                </Button>
+                <Button
+                  sx={
+                    filterType === "inProgress"
+                      ? forestGreenButtonPadding
+                      : whiteButtonGrayBorder
+                  }
+                  variant="contained"
+                  onClick={() => setFilterType("inProgress")}>
+                  In Progress
+                </Button>
+                <Button
+                  sx={
+                    filterType === "completed"
+                      ? forestGreenButtonPadding
+                      : whiteButtonGrayBorder
+                  }
+                  variant="contained"
+                  onClick={() => setFilterType("completed")}>
+                  Completed
+                </Button>
+              </div>
             </div>
-          ) : (
+
+            {filteredTrainings.length === 0 ? (
+              <div className={styles.emptySearchMessage}>
+                No Trainings Matching “{searchQuery}”
+              </div>
+            ) : (
+              <div className={styles.cardsContainer}>
+                {filteredTrainings.map((training, index) => (
+                  <div className={styles.card} key={index}>
+                    <TrainingCard
+                      image={training.image}
+                      title={training.title}
+                      progress={training.progress}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className={styles.subHeader}>
+              <h2>Recommended</h2>
+            </div>
             <div className={styles.cardsContainer}>
-              {filteredTrainings.map((training, index) => (
-                <div className={styles.card} key={index}>
-                  <TrainingCard
-                    image={training.image}
-                    title={training.title}
-                    progress={training.progress}
-                  />
-                </div>
-              ))}
+              <TrainingCard
+                image={images[Math.floor(Math.random() * images.length)]}
+                title="Title"
+              />
+              <TrainingCard
+                image={images[Math.floor(Math.random() * images.length)]}
+                title="Title"
+              />
+              <TrainingCard
+                image={images[Math.floor(Math.random() * images.length)]}
+                title="Title"
+              />
             </div>
-          )}
-
-          <div className={styles.subHeader}>
-            <h2>Recommended</h2>
-          </div>
-          <div className={styles.cardsContainer}>
-            <TrainingCard
-              image={images[Math.floor(Math.random() * images.length)]}
-              title="Title"
-            />
-            <TrainingCard
-              image={images[Math.floor(Math.random() * images.length)]}
-              title="Title"
-            />
-            <TrainingCard
-              image={images[Math.floor(Math.random() * images.length)]}
-              title="Title"
-            />
           </div>
         </div>
         <Footer />

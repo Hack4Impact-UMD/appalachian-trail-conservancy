@@ -13,9 +13,16 @@
   overflow: hidden;
 }
 
+.outerContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .bodyContainer {
-  margin-left: 10%;
-  margin-right: 10%;
+  /* margin-left: 10%;
+  margin-right: 10%; */
+  width: 875px;
   height: 90vh;
 }
 
