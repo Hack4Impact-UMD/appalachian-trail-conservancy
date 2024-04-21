@@ -1,6 +1,12 @@
 import { LinearProgress, Button } from "@mui/material";
 import { forestGreenButton, whiteButtonGrayBorder } from "../../muiTheme";
 import styles from "./QuizResultPage.module.css";
+import QuizCard from "../QuizPage/QuizCard/QuizCard";
+import QuizResultCard from "./QuizResultCard/QuizResultCard";
+import React from "react";
+import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
+import atclogo from "../../assets/atc-primary-logo.png";
 
 const styledProgressShape = {
   height: 24,
@@ -26,6 +32,23 @@ const styledButtons = {
   margin: "0 10px 0 10px",
 };
 
+const quizResults = [
+  {
+    currentQuestion: 1,
+    question: "How do you spell Akash's name?",
+    answerOptions: ["Akish Patel", "Akesh Pital", "Akash Patil", "Akish Pitil"],
+    selectedAnswer: "Akash Patil",
+    correctAnswer: "Akish Pitil",
+  },
+  {
+    currentQuestion: 2,
+    question: "How many feet do toes normally have?",
+    answerOptions: ["20", "Five", "0", "-3"],
+    selectedAnswer: "0",
+    correctAnswer: "-3",
+  },
+];
+
 const QuizResultPage = (props: {
   achievedScore: number;
   totalScore: number;
@@ -36,71 +59,95 @@ const QuizResultPage = (props: {
   const scoredFull = achievedScore == totalScore;
 
   return (
-    <div className={styles.body}>
-      <div className={styles.feedback}>
-        {/* badge */}
-        <div className={styles.imgContainer}>
-          <img src="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg" />
-        </div>
-
-        <div className={styles.feedbackRight}>
-          {/* message about score */}
-          {scoredFull ? (
-            <h3>Perfect score, you passed!</h3>
-          ) : passed ? (
-            <h3>Nice job, you passed!</h3>
-          ) : (
-            <h3>You got this, try again!</h3>
-          )}
-
-          {/* score */}
-          <div className={styles.score}>
-            <div className={styles.bigNum}>{achievedScore}</div>
-            <div className={styles.smallNum}>/ {totalScore}</div>
+    <>
+      <NavigationBar />
+      <div className={`${styles.split} ${styles.right}`}>
+        <div className={styles.bodyContainer}>
+          {/* <div className={styles.feedback}> */}
+          {/* HEADER */}
+          <div className={styles.header}>
+            <h1 className={styles.nameHeading}>Training Title - Quiz</h1>
+            <div className={styles.profileIconContainer}>
+              <ProfileIcon />
+            </div>
           </div>
 
-          {/* progress bar */}
-          <LinearProgress
-            variant="determinate"
-            value={achievedScore * 10}
-            sx={achievedScore == 0 ? styledProgressFail : styledProgressPass}
-          />
+          <div className={styles.feedbackRight}>
+            {/* message about score */}
+
+            {/* This placeholder image still needs proper positioning */}
+            <img src={atclogo} alt="atc-logo" className={styles.atcLogo} />
+
+            <div>
+              {scoredFull ? (
+                <h3>Perfect score, you passed!</h3>
+              ) : passed ? (
+                <h3>Nice job, you passed!</h3>
+              ) : (
+                <h3>You got this, try again!</h3>
+              )}
+            </div>
+            {/* score */}
+            <div className={styles.score}>
+              <div className={styles.bigNum}>{achievedScore}</div>
+              <div className={styles.smallNum}>/ {totalScore}</div>
+            </div>
+
+            {/* progress bar */}
+            <LinearProgress
+              variant="determinate"
+              value={achievedScore * 10}
+              sx={achievedScore == 0 ? styledProgressFail : styledProgressPass}
+            />
+          </div>
+        </div>
+
+        <div className={styles.questionContainer}>
+          {quizResults.map((result, index) => (
+            <QuizResultCard
+              key={index}
+              currentQuestion={result.currentQuestion}
+              question={result.question}
+              answerOptions={result.answerOptions}
+              selectedAnswer={result.selectedAnswer}
+              correctAnswer={result.correctAnswer}
+            />
+          ))}
+        </div>
+        {/* footer */}
+        <div className={styles.footer}>
+          {/* buttons */}
+          <div className={styles.buttons}>
+            {passed ? (
+              <Button sx={forestGreenButton} variant="contained">
+                Exit training
+              </Button>
+            ) : (
+              <div>
+                <Button
+                  sx={{ ...whiteButtonGrayBorder, ...styledButtons }}
+                  variant="contained"
+                >
+                  Exit training
+                </Button>
+                <Button
+                  sx={{ ...whiteButtonGrayBorder, ...styledButtons }}
+                  variant="contained"
+                >
+                  Restart training
+                </Button>
+                <Button
+                  sx={{ ...forestGreenButton, ...styledButtons }}
+                  variant="contained"
+                >
+                  Retake quiz
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-
-      {/* add quiz card here... this just blocks out a section of space*/}
-      <div className={styles.quizCardPlaceholder}></div>
-
-      {/* buttons */}
-      <div className={styles.buttons}>
-        {passed ? (
-          <Button sx={forestGreenButton} variant="contained">
-            Exit training
-          </Button>
-        ) : (
-          <div>
-            <Button
-              sx={{ ...whiteButtonGrayBorder, ...styledButtons }}
-              variant="contained"
-            >
-              Exit training
-            </Button>
-            <Button
-              sx={{ ...whiteButtonGrayBorder, ...styledButtons }}
-              variant="contained"
-            >
-              Restart training
-            </Button>
-            <Button
-              sx={{ ...forestGreenButton, ...styledButtons }}
-              variant="contained"
-            >
-              Retake quiz
-            </Button>
-          </div>
-        )}
-      </div>
-    </div>
+    </>
   );
 };
 
