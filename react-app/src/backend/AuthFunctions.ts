@@ -103,7 +103,6 @@ export function createVolunteerUser(
       functions,
       "createVolunteerUser"
     );
-    console.log("reached");
     createUserCloudFunction({
       email: newEmail,
       firstName: newFirstName,
@@ -111,8 +110,38 @@ export function createVolunteerUser(
       code: code,
     })
       .then(async () => {
-        console.log("resolved");
         resolve();
+      })
+      .catch((error: any) => {
+        reject(error);
+      });
+  });
+}
+
+/*
+ * Creates a admin user
+ */
+export function createAdminUser(
+  newEmail: string,
+  newFirstName: string,
+  newLastName: string
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const auth = getAuth(app);
+    const createUserCloudFunction = httpsCallable(functions, "createAdminUser");
+    createUserCloudFunction({
+      email: newEmail,
+      firstName: newFirstName,
+      lastName: newLastName,
+    })
+      .then(async () => {
+        await sendPasswordResetEmail(auth, newEmail)
+          .then(() => {
+            resolve();
+          })
+          .catch((error: any) => {
+            reject();
+          });
       })
       .catch((error: any) => {
         reject(error);
