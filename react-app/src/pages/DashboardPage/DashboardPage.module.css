@@ -13,11 +13,13 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .content {
-  padding-left: 10%;
-  padding-right: 10%;
+  width: 925px;
+  /* padding-left: 10%;
+  padding-right: 10%; */
   padding-bottom: 3%;
 }
 
