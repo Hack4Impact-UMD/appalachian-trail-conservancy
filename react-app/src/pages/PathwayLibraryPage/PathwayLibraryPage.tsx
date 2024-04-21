@@ -70,91 +70,93 @@ function PathwayLibrary() {
     <>
       <NavigationBar />
       <div className={`${styles.split} ${styles.right}`}>
-        <div className={styles.content}>
-          <div className={styles.header}>
-            <h1 className={styles.nameHeading}>Pathways</h1>
-            <ProfileIcon />
-          </div>
-
-          <div className={styles.searchBarContainer}>
-            <OutlinedInput
-              sx={grayBorderSearchBar}
-              placeholder="Search..."
-              onChange={debouncedOnChange}
-              startAdornment={
-                <InputAdornment position="start">
-                  <IoIosSearch />
-                </InputAdornment>
-              }
-            />
-            <div className={styles.buttonContainer}>
-              <Button
-                sx={
-                  filterType === "all"
-                    ? forestGreenButtonPadding
-                    : whiteButtonGrayBorder
-                }
-                variant="contained"
-                onClick={() => setFilterType("all")}>
-                All
-              </Button>
-              <Button
-                sx={
-                  filterType === "inProgress"
-                    ? forestGreenButtonPadding
-                    : whiteButtonGrayBorder
-                }
-                variant="contained"
-                onClick={() => setFilterType("inProgress")}>
-                In Progress
-              </Button>
-              <Button
-                sx={
-                  filterType === "completed"
-                    ? forestGreenButtonPadding
-                    : whiteButtonGrayBorder
-                }
-                variant="contained"
-                onClick={() => setFilterType("completed")}>
-                Completed
-              </Button>
+        <div className={styles.outerContainer}>
+          <div className={styles.content}>
+            <div className={styles.header}>
+              <h1 className={styles.nameHeading}>Pathways</h1>
+              <ProfileIcon />
             </div>
-          </div>
 
-          {filteredTrainings.length === 0 ? (
-            <div className={styles.emptySearchMessage}>
-              No Trainings Matching “{searchQuery}”
-            </div>
-          ) : (
-            <div className={styles.cardsContainer}>
-              {filteredTrainings.map((training, index) => (
-                <div className={styles.card} key={index}>
-                  <PathwayCard
-                    image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-                    title={training.title}
-                    progress={training.progress}
-                  />
-                </div>
-              ))}
-            </div>
-          )}
-
-          <div className={styles.subHeader}>
-            <h2>Recommended</h2>
-          </div>
-
-          <div className={styles.recommendedContainer}>
-            <div className={styles.card}>
-              <PathwayCard
-                image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-                title="Title"
+            <div className={styles.searchBarContainer}>
+              <OutlinedInput
+                sx={grayBorderSearchBar}
+                placeholder="Search..."
+                onChange={debouncedOnChange}
+                startAdornment={
+                  <InputAdornment position="start">
+                    <IoIosSearch />
+                  </InputAdornment>
+                }
               />
+              <div className={styles.buttonContainer}>
+                <Button
+                  sx={
+                    filterType === "all"
+                      ? forestGreenButtonPadding
+                      : whiteButtonGrayBorder
+                  }
+                  variant="contained"
+                  onClick={() => setFilterType("all")}>
+                  All
+                </Button>
+                <Button
+                  sx={
+                    filterType === "inProgress"
+                      ? forestGreenButtonPadding
+                      : whiteButtonGrayBorder
+                  }
+                  variant="contained"
+                  onClick={() => setFilterType("inProgress")}>
+                  In Progress
+                </Button>
+                <Button
+                  sx={
+                    filterType === "completed"
+                      ? forestGreenButtonPadding
+                      : whiteButtonGrayBorder
+                  }
+                  variant="contained"
+                  onClick={() => setFilterType("completed")}>
+                  Completed
+                </Button>
+              </div>
             </div>
-            <div className={styles.card}>
-              <PathwayCard
-                image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-                title="Title"
-              />
+
+            {filteredTrainings.length === 0 ? (
+              <div className={styles.emptySearchMessage}>
+                No Trainings Matching “{searchQuery}”
+              </div>
+            ) : (
+              <div className={styles.cardsContainer}>
+                {filteredTrainings.map((training, index) => (
+                  <div className={styles.card} key={index}>
+                    <PathwayCard
+                      image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+                      title={training.title}
+                      progress={training.progress}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className={styles.subHeader}>
+              <h2>Recommended</h2>
+            </div>
+
+            <div className={styles.recommendedContainer}>
+              <div className={styles.card}>
+                <PathwayCard
+                  image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+                  title="Title"
+                />
+              </div>
+              <div className={styles.card}>
+                <PathwayCard
+                  image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+                  title="Title"
+                />
+              </div>
             </div>
           </div>
         </div>
