@@ -3,6 +3,7 @@ import { HashRouter, Route, Routes } from "react-router-dom";
 import { ThemeProvider } from "@mui/material";
 import { AuthProvider } from "./auth/AuthProvider.tsx";
 import { createVolunteerUser } from "./backend/AuthFunctions";
+import { getQuiz } from "./backend/FirestoreCalls.ts"
 import theme from "./muiTheme.ts";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import Dashboard from "./pages/DashboardPage/DashboardPage.tsx";
@@ -18,6 +19,7 @@ import LogoutPage from "./pages/LogoutPage/LogoutPage.tsx";
 import QuizPage from "./pages/QuizPage/QuizPage.tsx";
 import QuizResult from "./pages/QuizResultPage/QuizResultPage.tsx";
 import QuizResultCard from "./pages/QuizResultPage/QuizResultCard/QuizResultCard.tsx";
+import { addSampleQuiz } from "./backendTesting/test.ts";
 
 function App() {
   return (
@@ -91,13 +93,26 @@ function App() {
                 <RequireAuth>
                   <button
                     onClick={() => {
-                      //Test function
-                      createVolunteerUser(
-                        "h4iatctest@gmail.com",
-                        "Akash",
-                        "Patil",
-                        123
-                      );
+                      // test getQuiz
+                      const quizId = "id";
+                      getQuiz(quizId)
+                      .then((quiz) => {
+                        console.log("Quiz:", quiz);
+                        // Do something with the retrieved quiz data
+                      })
+                      .catch((error) => {
+                        console.error("Error fetching quiz with ID", quizId, ":", error);
+                        // Handle error if quiz retrieval fails
+                      });
+                      // test addQuiz
+                      // addSampleQuiz({});
+                      // Test function create volunteer user
+                      // createVolunteerUser(
+                      //   "h4iatctest@gmail.com",
+                      //   "Akash",
+                      //   "Patil",
+                      //   123
+                      // );
                     }}
                   >
                     TEST
