@@ -2,7 +2,7 @@ import "./index.css";
 import { HashRouter, Route, Routes } from "react-router-dom";
 import { ThemeProvider } from "@mui/material";
 import { AuthProvider } from "./auth/AuthProvider.tsx";
-import { createVolunteerUser } from "./backend/AuthFunctions";
+import { createAdminUser } from "./backend/AuthFunctions";
 import theme from "./muiTheme.ts";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import Dashboard from "./pages/DashboardPage/DashboardPage.tsx";
@@ -92,12 +92,17 @@ function App() {
                   <button
                     onClick={() => {
                       //Test function
-                      createVolunteerUser(
-                        "h4iatctest@gmail.com",
-                        "Akash",
-                        "Patil",
-                        123
-                      );
+                      createAdminUser(
+                        "sophietsai31@gmail.com",
+                        "Sophie",
+                        "Tsai"
+                      )
+                        .then(() => {
+                          console.log("Success");
+                        })
+                        .catch(() => {
+                          console.log("Failed");
+                        });
                     }}
                   >
                     TEST
