@@ -3,7 +3,7 @@ import { HashRouter, Route, Routes } from "react-router-dom";
 import { ThemeProvider } from "@mui/material";
 import { AuthProvider } from "./auth/AuthProvider.tsx";
 import { createVolunteerUser } from "./backend/AuthFunctions";
-import { getQuiz } from "./backend/FirestoreCalls.ts"
+import { getQuiz, getAllQuizzes } from "./backend/FirestoreCalls.ts"
 import theme from "./muiTheme.ts";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import Dashboard from "./pages/DashboardPage/DashboardPage.tsx";
@@ -87,18 +87,21 @@ function App() {
                   <button
                     onClick={() => {
                       // test getQuiz
-                      const quizId = "id";
-                      getQuiz(quizId)
+                      // const quizId = "id";
+                      getQuiz("7sRSmdVXo0PKWk6xvfXh")
+                      // getAllQuizzes()
                       .then((quiz) => {
                         console.log("Quiz:", quiz);
                         // Do something with the retrieved quiz data
                       })
                       .catch((error) => {
-                        console.error("Error fetching quiz with ID", quizId, ":", error);
+                        console.error(error);
                         // Handle error if quiz retrieval fails
                       });
+
                       // test addQuiz
                       // addSampleQuiz({});
+
                       // Test function create volunteer user
                       // createVolunteerUser(
                       //   "h4iatctest@gmail.com",
