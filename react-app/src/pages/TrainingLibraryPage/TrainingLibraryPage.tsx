@@ -18,7 +18,6 @@ import training3 from "../../assets/training3.png";
 import training4 from "../../assets/training4.jpg";
 
 function TrainingLibrary() {
-  const [openTrainingPopup, setOpenTrainingPopup] = useState<boolean>(false);
   const [filterType, setFilterType] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredTrainings, setFilteredTrainings] = useState<
@@ -150,8 +149,7 @@ function TrainingLibrary() {
                     : whiteButtonGrayBorder
                 }
                 variant="contained"
-                onClick={() => setFilterType("all")}
-              >
+                onClick={() => setFilterType("all")}>
                 All
               </Button>
               <Button
@@ -161,8 +159,7 @@ function TrainingLibrary() {
                     : whiteButtonGrayBorder
                 }
                 variant="contained"
-                onClick={() => setFilterType("inProgress")}
-              >
+                onClick={() => setFilterType("inProgress")}>
                 In Progress
               </Button>
               <Button
@@ -172,8 +169,7 @@ function TrainingLibrary() {
                     : whiteButtonGrayBorder
                 }
                 variant="contained"
-                onClick={() => setFilterType("completed")}
-              >
+                onClick={() => setFilterType("completed")}>
                 Completed
               </Button>
             </div>

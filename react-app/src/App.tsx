@@ -28,6 +28,8 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/login/volunteer" element={<VolunteerLoginPage />} />
             <Route path="/login/admin" element={<AdminLoginPage />} />
+            <Route path="/logout" element={<LogoutPage />} />
+
             <Route
               path="/"
               element={
@@ -74,16 +76,7 @@ function App() {
                 <RequireAuth>
                   <NotFoundPage />
                 </RequireAuth>
-              }
-            ></Route>
-            <Route
-              path="/logout"
-              element={
-                <RequireAuth>
-                  <LogoutPage />
-                </RequireAuth>
-              }
-            />
+              }></Route>
 
             <Route
               path="/testfunctions"
@@ -92,19 +85,7 @@ function App() {
                   <button
                     onClick={() => {
                       //Test function
-                      createAdminUser(
-                        "sophietsai31@gmail.com",
-                        "Sophie",
-                        "Tsai"
-                      )
-                        .then(() => {
-                          console.log("Success");
-                        })
-                        .catch(() => {
-                          console.log("Failed");
-                        });
-                    }}
-                  >
+                    }}>
                     TEST
                   </button>
                 </RequireAuth>

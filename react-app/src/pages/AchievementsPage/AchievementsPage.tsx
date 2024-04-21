@@ -6,12 +6,12 @@ import {
   selectOptionStyle,
   whiteSelectGrayBorder,
 } from "../../muiTheme";
+import { DateTime } from "luxon";
 import styles from "./AchievementsPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Certificate from "../../components/CertificateCard/CertificateCard";
-import { DateTime } from "luxon";
 import badge from "../../assets/badge.svg";
 
 function AchievementsPage() {
@@ -30,7 +30,7 @@ function AchievementsPage() {
   >([]);
 
   const sortCards = () => {
-    let sortedCardsCopy = certificates.slice();
+    const sortedCardsCopy = certificates.slice();
 
     switch (sortMode) {
       case "alphabetically":
@@ -87,8 +87,7 @@ function AchievementsPage() {
                     ? forestGreenButtonPadding
                     : whiteButtonGrayBorder
                 }
-                variant="contained"
-              >
+                variant="contained">
                 Pathway Badges
               </Button>
               <Button
@@ -98,8 +97,7 @@ function AchievementsPage() {
                     ? forestGreenButtonPadding
                     : whiteButtonGrayBorder
                 }
-                variant="contained"
-              >
+                variant="contained">
                 Training Certificates
               </Button>
             </div>
@@ -111,8 +109,7 @@ function AchievementsPage() {
                 sx={{
                   ...whiteSelectGrayBorder,
                   width: "154px",
-                }}
-              >
+                }}>
                 <MenuItem value={"newest"} sx={selectOptionStyle}>
                   SORT: NEWEST
                 </MenuItem>
@@ -124,8 +121,7 @@ function AchievementsPage() {
                 </MenuItem>
                 <MenuItem
                   value={"reverseAlphabetically"}
-                  sx={selectOptionStyle}
-                >
+                  sx={selectOptionStyle}>
                   SORT: Z-A
                 </MenuItem>
               </Select>
