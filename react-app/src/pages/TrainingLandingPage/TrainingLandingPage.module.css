@@ -81,17 +81,12 @@
   margin: -8px 0 -5px 0;
 }
 
-.notStartedMarker {
+.progressMarker {
   border-color: var(--blue-gray);
   color: var(--blue-gray);
 }
 
-.completedMarker {
-  background-color: var(--blue-gray);
-  color: white;
-}
-
-.trainingRow{
+.trainingRow {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -100,7 +95,7 @@
   border-bottom: 2px solid black;
 }
 
-.trainingRowFinal{
+.trainingRowFinal {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -108,7 +103,7 @@
   align-items: baseline;
 }
 
-.trainingInfo{
+.trainingInfo {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -116,7 +111,7 @@
   align-items: baseline;
 }
 
-.trainingNumber{
+.trainingNumber {
   padding-right: 3%;
   margin-right: 3%;
   color: var(--forest-green);
@@ -124,7 +119,7 @@
   font-weight: bold;
 }
 
-.trainingTitle{
+.trainingTitle {
   padding-left: 3%;
   padding-right: 3%;
   margin-left: 3%;
@@ -134,19 +129,23 @@
   font-weight: bold;
 }
 
-.trainingType{
+.trainingType {
+  display: inline-block;
   background-color: var(--sky-blue);
-  margin-left: 3%;
-  margin-right: 3%;
-  padding-left: 3%;
-  padding-right: 3%;
-  padding-top:0.3%;
-  padding-bottom:0.3%;
-  font-size: 100%;
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-size: 0.9em;
   font-weight: bold;
-  border-radius: 20%;
+  text-align: center;
+  margin: -8px 0 -5px 0;
 }
 
-.completedIcon{
+.completedIcon {
   flex-shrink: 0.5;
+  height: 50px;
+  width: 50px;
+}
+
+.opacityContainer {
+  opacity: 0.5;
 }
