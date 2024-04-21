@@ -41,8 +41,13 @@
   margin-bottom: 1rem;
 }
 
-.atcLogo {
-  width: 150px;
+.certificateImg {
+  width: 200px;
+}
+
+.certificateImg img {
+  width: 100%;
+  height: 100%;
 }
 
 .feedback {

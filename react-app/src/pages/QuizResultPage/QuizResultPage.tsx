@@ -71,8 +71,9 @@ const QuizResultPage = (props: {
             </div>
 
             <div className={styles.feedback}>
-              <img src={atclogo} alt="atc-logo" className={styles.atcLogo} />
-
+              <div className={styles.certificateImg}>
+                <img src={atclogo} alt="certificate image" />
+              </div>
               {/* message about score */}
               <div className={styles.feedbackRight}>
                 <div>
