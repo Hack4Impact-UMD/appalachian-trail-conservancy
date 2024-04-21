@@ -13,6 +13,7 @@ import VolunteerLoginPage from "./pages/LoginPage/VolunteerLoginPage/VolunteerLo
 import AdminLoginPage from "./pages/LoginPage/AdminLoginPage/AdminLoginPage.tsx";
 import AchievementsPage from "./pages/AchievementsPage/AchievementsPage.tsx";
 import TrainingPage from "./pages/TrainingPage/TrainingPage.tsx";
+import TrainingLandingPage from "./pages/TrainingLandingPage/TrainingLandingPage.tsx"
 import RequireAuth from "./auth/RequireAuth/RequireAuth.tsx";
 import LogoutPage from "./pages/LogoutPage/LogoutPage.tsx";
 import QuizPage from "./pages/QuizPage/QuizPage.tsx";
@@ -122,6 +123,14 @@ function App() {
               element={
                 <RequireAuth>
                   <QuizPage />
+                </RequireAuth>
+              }
+            />
+              <Route
+              path="/traininglanding"
+              element={
+                <RequireAuth>
+                  <TrainingLandingPage />
                 </RequireAuth>
               }
             />

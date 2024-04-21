@@ -1,0 +1,152 @@
+/* split screen in two */
+.split {
+  height: 100%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+}
+
+.right {
+  right: 0;
+  left: 250px;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.outerContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bodyContainer {
+  width: 875px;
+  margin-bottom: 10%;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.nameHeading {
+  color: var(--forest-green);
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.questionContainer {
+  background-color: var(--blue-purple);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 4%;
+  border-radius: 20px;
+  margin-top: 3%;
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  width: calc(100% - 250px);
+  margin-bottom: 0;
+  position: fixed;
+  bottom: 0;
+  left: 250px;
+  box-shadow: 2px 0px 2px rgb(90, 90, 90);
+  background-color: white;
+  padding-top: 1.5%;
+  padding-bottom: 1.5%;
+}
+
+.progressBar {
+  margin: 10px 0 10px 5px;
+}
+
+.marker {
+  display: inline-block;
+  background-color: white;
+  padding: 6px 15px;
+  border: 1.5px solid var(--blue-gray);
+  border-radius: 20px;
+  font-size: 0.9em;
+  font-weight: bold;
+  text-align: center;
+  margin: -8px 0 -5px 0;
+}
+
+.notStartedMarker {
+  border-color: var(--blue-gray);
+  color: var(--blue-gray);
+}
+
+.completedMarker {
+  background-color: var(--blue-gray);
+  color: white;
+}
+
+.trainingRow{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  align-items: baseline;
+  border-bottom: 2px solid black;
+}
+
+.trainingRowFinal{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  align-items: baseline;
+}
+
+.trainingInfo{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  flex-grow: 2;
+  align-items: baseline;
+}
+
+.trainingNumber{
+  padding-right: 3%;
+  margin-right: 3%;
+  color: var(--forest-green);
+  font-size: 150%;
+  font-weight: bold;
+}
+
+.trainingTitle{
+  padding-left: 3%;
+  padding-right: 3%;
+  margin-left: 3%;
+  margin-right: 3%;
+  margin: 3%;
+  font-size: 110%;
+  font-weight: bold;
+}
+
+.trainingType{
+  background-color: var(--sky-blue);
+  margin-left: 3%;
+  margin-right: 3%;
+  padding-left: 3%;
+  padding-right: 3%;
+  padding-top:0.3%;
+  padding-bottom:0.3%;
+  font-size: 100%;
+  font-weight: bold;
+  border-radius: 20%;
+}
+
+.completedIcon{
+  flex-shrink: 0.5;
+}
