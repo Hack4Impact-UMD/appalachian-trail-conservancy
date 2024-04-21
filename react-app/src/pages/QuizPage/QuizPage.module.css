@@ -43,8 +43,11 @@
 
 .questionContainer {
   background-color: var(--blue-purple);
-  padding: 2%;
-  border-radius: 2%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 4%;
+  border-radius: 20px;
   margin-top: 3%;
 }
 

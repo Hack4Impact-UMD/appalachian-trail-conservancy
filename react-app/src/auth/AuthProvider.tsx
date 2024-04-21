@@ -31,14 +31,14 @@ const AuthContext = createContext<AuthContextType>(null!);
 export const AuthProvider = ({ children }: Props): React.ReactElement => {
   const [user, setUser] = useState<User | any>(null!);
   const [token, setToken] = useState<IdTokenResult>(null!);
-  const [firstName, setFirstName] = useState<String>("");
-  const [lastName, setLastName] = useState<String>("");
-  const [id, setID] = useState<String>("");
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
+  const [id, setID] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const auth = getAuth(app);
-    let email = window.localStorage.getItem("emailForSignIn");
+    const email = window.localStorage.getItem("emailForSignIn");
 
     if (isSignInWithEmailLink(auth, window.location.href)) {
       signInWithEmailLink(auth, email ?? "", window.location.href)
@@ -76,8 +76,7 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
 
   return (
     <AuthContext.Provider
-      value={{ user, token, firstName, lastName, id, loading }}
-    >
+      value={{ user, token, firstName, lastName, id, loading }}>
       {children}
     </AuthContext.Provider>
   );
