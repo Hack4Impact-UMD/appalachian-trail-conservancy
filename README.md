@@ -37,13 +37,12 @@ Contact Akash or Sophie to gain access to our Firebase Console.
 
 Once logged in to the Firebase Console, you can view our stored data by clicking on the "Firestore Database" tab.
 
-We currently have 4 collections that correspond to our project Types:
+We currently have 3 collections that correspond to our project Types:
 
-- Quizzes
 - Trainings
 - Pathways
 - Users (Volunteer and Admin accounts)
-  <img width="2064" alt="ATC Types Diagram" src="https://github.com/Hack4Impact-UMD/appalachian-trail-conservancy/assets/67646012/eabb3e56-0a0d-4695-bcd2-7efd2bda4d5c">
+  <img width="2064" alt="ATC Types" src="https://github.com/Hack4Impact-UMD/y-knot/assets/67646012/54581e4b-e962-4a81-8c1c-622e2ea13517">
 
 # Running the Repo Locally
 
