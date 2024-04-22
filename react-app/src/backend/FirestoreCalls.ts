@@ -71,27 +71,12 @@ export function getTraining(id: string): Promise<TrainingID> {
   });
 }
 
-export function addQuiz(quiz: Quiz): Promise<string> {
+export function getQuiz(trainingId: string): Promise<Quiz> {
   return new Promise((resolve, reject) => {
-    addDoc(collection(db, "Quizzes"), quiz)
-      .then((docRef) => {
-        resolve(docRef.id);
-      })
-      .catch((e) => {
-        reject(e);
-      });
-  });
-}
-
-export function getQuiz(id: string): Promise<QuizID> {
-  return new Promise((resolve, reject) => {
-    getDoc(doc(db, "Quizzes", id))
-      .then((quizSnapshot) => {
-        if (quizSnapshot.exists()) {
-          const quiz: Quiz = quizSnapshot.data() as Quiz;
-          resolve({ ...quiz, id});
-        } else {
-          reject(new Error("Quiz does not exist"));
+    getTraining(trainingId)
+      .then((data) => {
+        if (data.quiz) {
+          resolve(data.quiz);
         }
       })
       .catch((e) => {
@@ -160,25 +145,6 @@ export function getAllPathways(): Promise<PathwayID[]> {
           allPathways.push(newPathway);
         });
         resolve(allPathways);
-      })
-      .catch((e) => {
-        reject(e);
-      });
-  });
-}
-
-export function getAllQuizzes(): Promise<QuizID[]> {
-  const quizzesRef = collection(db, 'Quizzes');
-  return new Promise((resolve, reject) => {
-    getDocs(quizzesRef)
-      .then((quizSnapshot) => {
-        const allQuizzes: QuizID[] = [];
-        const quizzes = quizSnapshot.docs.map((doc) => {
-          const quiz: Quiz = doc.data() as Quiz;
-          const newQuiz: QuizID = { ...quiz, id: doc.id };
-          allQuizzes.push(newQuiz);
-        });
-        resolve( allQuizzes );
       })
       .catch((e) => {
         reject(e);

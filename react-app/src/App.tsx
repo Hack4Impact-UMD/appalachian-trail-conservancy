@@ -2,8 +2,6 @@ import "./index.css";
 import { HashRouter, Route, Routes } from "react-router-dom";
 import { ThemeProvider } from "@mui/material";
 import { AuthProvider } from "./auth/AuthProvider.tsx";
-import { createVolunteerUser } from "./backend/AuthFunctions";
-import { getQuiz, getAllQuizzes } from "./backend/FirestoreCalls.ts"
 import theme from "./muiTheme.ts";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import Dashboard from "./pages/DashboardPage/DashboardPage.tsx";
@@ -19,7 +17,6 @@ import LogoutPage from "./pages/LogoutPage/LogoutPage.tsx";
 import QuizPage from "./pages/QuizPage/QuizPage.tsx";
 import QuizResult from "./pages/QuizResultPage/QuizResultPage.tsx";
 import QuizResultCard from "./pages/QuizResultPage/QuizResultCard/QuizResultCard.tsx";
-import { addSampleQuiz } from "./backendTesting/test.ts";
 
 function App() {
   return (
@@ -86,31 +83,8 @@ function App() {
                 <RequireAuth>
                   <button
                     onClick={() => {
-                      // test getQuiz
-                      // const quizId = "id";
-                      getQuiz("7sRSmdVXo0PKWk6xvfXh")
-                      // getAllQuizzes()
-                      .then((quiz) => {
-                        console.log("Quiz:", quiz);
-                        // Do something with the retrieved quiz data
-                      })
-                      .catch((error) => {
-                        console.error(error);
-                        // Handle error if quiz retrieval fails
-                      });
-
-                      // test addQuiz
-                      // addSampleQuiz({});
-
-                      // Test function create volunteer user
-                      // createVolunteerUser(
-                      //   "h4iatctest@gmail.com",
-                      //   "Akash",
-                      //   "Patil",
-                      //   123
-                      // );
-                    }}
-                  >
+                      // Add test function
+                    }}>
                     TEST
                   </button>
                 </RequireAuth>
