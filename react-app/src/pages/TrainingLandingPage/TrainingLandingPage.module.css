@@ -41,6 +41,10 @@
   margin-bottom: 1rem;
 }
 
+.container{
+  margin-top: 5%;
+}
+
 .progressContainer {
   display: flex;
   justify-content: space-between;
@@ -52,16 +56,6 @@
   display: flex;
   gap: 1%;
   flex-grow: 1;
-}
-
-.questionContainer {
-  background-color: var(--blue-purple);
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  padding: 4%;
-  border-radius: 20px;
-  margin-top: 3%;
 }
 
 .footer {
@@ -100,8 +94,8 @@
   flex-direction: row;
   justify-content: space-between;
   flex-wrap: nowrap;
-  align-items: baseline;
   border-bottom: 2px solid black;
+  align-items: center;
 }
 
 .trainingRowFinal {
@@ -161,4 +155,8 @@
 
 .opacityContainer {
   opacity: 0.5;
+}
+
+h2{
+  font-size: 155%;
 }

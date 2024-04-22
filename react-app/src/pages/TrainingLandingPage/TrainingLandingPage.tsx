@@ -30,16 +30,12 @@ const styledProgressPass = {
   },
 };
 
-const isCompleted = (volunteer: VolunteerTraining): boolean => {
-  return volunteer.numCompletedResources === volunteer.numTotalResources;
-};
-
 function TrainingLandingPage() {
   const volunteer: VolunteerTraining = {
     trainingID: "",
     progress: "INPROGRESS",
     dateCompleted: "",
-    numCompletedResources: 1,
+    numCompletedResources: 3,
     numTotalResources: 4,
     quizScoreRecieved: 0,
   };
@@ -52,6 +48,7 @@ function TrainingLandingPage() {
       { type: "VIDEO", link: "https://example.com/video1", title: "Video 1" },
       { type: "PDF", link: "https://example.com/article1", title: "Article 1" },
       { type: "PDF", link: "https://example.com/article1", title: "Article 2" },
+      { type: "PDF", link: "https://example.com/article1", title: "Article 3" },
     ],
     quizID: "",
     associatedPathways: [],
@@ -74,6 +71,7 @@ function TrainingLandingPage() {
               <p className={styles.trainingTitle}>{resource.title}</p>
               <p className={styles.trainingType}>{resource.type}</p>
             </div>
+            <div>
             {/* Conditionally render an image if training is completed */}
             {(index + 1 <= volunteer.numCompletedResources && (
               <img
@@ -81,14 +79,8 @@ function TrainingLandingPage() {
                 src={CompletedIcon}
                 alt="Completed"
               />
-            )) ||
-              (index + 1 == volunteer.numCompletedResources + 1 && (
-                <img
-                  className={styles.completedIcon}
-                  src={CompletedIcon} // change to progress icon
-                  alt="Completed"
-                />
-              ))}
+            ))}
+            </div>
           </div>
         </div>
       )
