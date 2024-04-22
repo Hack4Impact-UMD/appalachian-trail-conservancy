@@ -1,13 +1,8 @@
-import { useState } from "react";
-import { stepperStyle, whiteButtonGrayBorder } from "../../muiTheme";
+import { whiteButtonGrayBorder } from "../../muiTheme";
 import { TrainingResource } from "../../types/TrainingType";
 import styles from "./TrainingLandingPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
-import ResourceComponent from "../../components/ResourceComponent/ResourceComponent";
-import LinearProgressWithLabel from "../../components/LinearProgressWithLabel/LinearProgressWithLabel";
+import { LinearProgress, Box, Typography } from "@mui/material";
 import { type Training } from "../../types/TrainingType";
 import { type VolunteerTraining } from "../../types/UserType";
 import { Button } from "@mui/material";
@@ -18,6 +13,21 @@ import CompletedIcon from "../../assets/greenCircleCheck.svg";
 const styledButtons = {
   marginRight: "10%",
   marginLeft: "1%",
+};
+
+const styledProgressShape = {
+  height: 24,
+  borderRadius: 12,
+  width: "100%",
+};
+
+// if score > 0, dark green & light gray
+const styledProgressPass = {
+  ...styledProgressShape,
+  backgroundColor: "lightgray",
+  "& .MuiLinearProgress-bar": {
+    backgroundColor: "var(--forest-green)",
+  },
 };
 
 const isCompleted = (volunteer: VolunteerTraining): boolean => {
@@ -155,16 +165,24 @@ function TrainingLandingPage() {
               <ProfileIcon />
             </div>
 
-            <div className={styles.header}>
-              <LinearProgressWithLabel
-                value={
-                  (volunteer.numCompletedResources /
-                    volunteer.numTotalResources) *
-                  100
-                }
-                sx={{ width: 100 }}
-              />
-              <div className={styles.progressBar}>{renderMarker()}</div>
+            <div className={styles.progressContainer}>
+              <div className={styles.progressBar}>
+                <LinearProgress
+                  variant="determinate"
+                  value={50}
+                  sx={styledProgressPass}
+                />
+                <Box sx={{ minWidth: 35 }}>
+                  <Typography
+                    variant="body2"
+                    color="var(--blue-gray)"
+                    sx={{ fontSize: "15px" }}
+                  >
+                    {"50%"}
+                  </Typography>
+                </Box>
+              </div>
+              <div>{renderMarker()}</div>
             </div>
 
             {/* ABOUT */}

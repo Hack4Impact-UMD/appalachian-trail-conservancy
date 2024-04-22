@@ -41,6 +41,19 @@
   margin-bottom: 1rem;
 }
 
+.progressContainer {
+  display: flex;
+  justify-content: space-between;
+  gap: 2%;
+  width: 100%;
+}
+
+.progressBar {
+  display: flex;
+  gap: 1%;
+  flex-grow: 1;
+}
+
 .questionContainer {
   background-color: var(--blue-purple);
   display: flex;
@@ -63,10 +76,6 @@
   background-color: white;
   padding-top: 1.5%;
   padding-bottom: 1.5%;
-}
-
-.progressBar {
-  margin: 10px 0 10px 5px;
 }
 
 .marker {
