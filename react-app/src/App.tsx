@@ -2,7 +2,6 @@ import "./index.css";
 import { HashRouter, Route, Routes } from "react-router-dom";
 import { ThemeProvider } from "@mui/material";
 import { AuthProvider } from "./auth/AuthProvider.tsx";
-import { createAdminUser } from "./backend/AuthFunctions";
 import theme from "./muiTheme.ts";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import Dashboard from "./pages/DashboardPage/DashboardPage.tsx";
@@ -84,7 +83,7 @@ function App() {
                 <RequireAuth>
                   <button
                     onClick={() => {
-                      //Test function
+                      // Add test function
                     }}>
                     TEST
                   </button>

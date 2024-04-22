@@ -4,10 +4,11 @@ export interface TrainingID extends Training {
 
 export interface Training {
   name: string;
+  shortBlurb: string;
   description: string;
   coverImage: string; // URL
   resources: TrainingResource[];
-  quizID: string;
+  quiz: Quiz;
   associatedPathways: string[]; // pathway IDs
   certificationImage: string; // URL
 }
@@ -20,12 +21,7 @@ export interface TrainingResource {
 
 export type Resource = "VIDEO" | "PDF";
 
-export interface QuizID extends Quiz {
-  id: string;
-}
-
 export interface Quiz {
-  trainingID: string;
   questions: Question[];
   numQuestions: number;
   passingScore: number;
