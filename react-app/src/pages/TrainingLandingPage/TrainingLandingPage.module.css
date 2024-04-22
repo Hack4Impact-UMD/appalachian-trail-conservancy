@@ -146,6 +146,10 @@
   width: 50px;
 }
 
+.completedIcon img {
+  padding-top: 100px;
+}
+
 .opacityContainer {
   opacity: 0.5;
 }

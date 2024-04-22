@@ -29,7 +29,7 @@ function TrainingLandingPage() {
     trainingID: "",
     progress: "INPROGRESS",
     dateCompleted: "",
-    numCompletedResources: 2,
+    numCompletedResources: 1,
     numTotalResources: 4,
     quizScoreRecieved: 0,
   };
@@ -65,13 +65,20 @@ function TrainingLandingPage() {
               <p className={styles.trainingType}>{resource.type}</p>
             </div>
             {/* Conditionally render an image if training is completed */}
-            {index + 1 <= volunteer.numCompletedResources && (
+            {(index + 1 <= volunteer.numCompletedResources && (
               <img
                 className={styles.completedIcon}
                 src={CompletedIcon}
                 alt="Completed"
               />
-            )}
+            )) ||
+              (index + 1 == volunteer.numCompletedResources + 1 && (
+                <img
+                  className={styles.completedIcon}
+                  src={CompletedIcon} // change to progress icon
+                  alt="Completed"
+                />
+              ))}
           </div>
         </div>
       )
@@ -148,15 +155,17 @@ function TrainingLandingPage() {
               <ProfileIcon />
             </div>
 
-            <LinearProgressWithLabel
-              value={
-                (volunteer.numCompletedResources /
-                  volunteer.numTotalResources) *
-                100
-              }
-              sx={{ width: 50 }}
-            />
-            <div className={styles.progressBar}>{renderMarker()}</div>
+            <div className={styles.header}>
+              <LinearProgressWithLabel
+                value={
+                  (volunteer.numCompletedResources /
+                    volunteer.numTotalResources) *
+                  100
+                }
+                sx={{ width: 100 }}
+              />
+              <div className={styles.progressBar}>{renderMarker()}</div>
+            </div>
 
             {/* ABOUT */}
             <div className={styles.container}>
