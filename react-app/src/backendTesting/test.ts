@@ -3,6 +3,8 @@ import {
   addPathway,
   getAllTrainings,
   getAllPathways,
+  addVolunteerTraining,
+  addVolunteerPathway,
 } from "../backend/FirestoreCalls";
 import { type Training, Resource } from "../types/TrainingType";
 import { type Pathway } from "../types/PathwayType";
@@ -97,5 +99,31 @@ export const addSamplePathway = ({
     })
     .catch((error) => {
       console.log(error);
+    });
+};
+
+export const addSampleVolunteerTraining = ({
+  volunteerId = "ZpfkIPPdBuaeA6iFyhaR",
+  trainingId = "GQf4rBgvJ4uU9Is89wXp"
+}) => {
+  addVolunteerTraining(volunteerId, trainingId)
+    .then(() => {
+      console.log("Volunteer training added successfully.");
+    })
+    .catch((error) => {
+      console.error("Error adding volunteer training:", error);
+    });
+};
+
+export const addSampleVolunteerPathway = ({
+  volunteerId = "ZpfkIPPdBuaeA6iFyhaR",
+  pathwayId = "9m2Ar9kUtY9zciD3V5KO"
+}) => {
+  addVolunteerPathway(volunteerId, pathwayId)
+    .then(() => {
+      console.log("Volunteer pathway added successfully.");
+    }) 
+    .catch((error) => {
+      console.error("Error adding volunteer pathway:", error);
     });
 };

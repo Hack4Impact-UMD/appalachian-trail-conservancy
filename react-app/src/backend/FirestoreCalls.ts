@@ -151,3 +151,55 @@ export function getAllPathways(): Promise<PathwayID[]> {
       });
   });
 }
+
+export function addVolunteerTraining(
+  volunteerId: string,
+  trainingId: string
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const volunteerRef = db.collection("Users").doc(volunteerId);
+    volunteerRef
+      .update({
+        trainingInformation: db.FieldValue.arrayUnion({
+          trainingID: trainingId,
+          progress: "INPROGRESS", // Assuming initial progress is "INPROGRESS"
+          dateCompleted: "", // Initialize with empty string
+          numCompletedResources: 0, // Initialize with 0
+          numTotalResources: 0, // Initialize with 0
+          quizScoreReceived: 0, // Initialize with 0
+        }),
+      })
+      .then(() => {
+        resolve();
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}
+
+export function addVolunteerPathway(
+  volunteerId: string,
+  pathwayId: string
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const volunteerRef = db.collection("Users").doc(volunteerId);
+    volunteerRef
+      .update({
+        pathwayInformation: db.FieldValue.arrayUnion({
+          pathwayID: pathwayId,
+          progress: "INPROGRESS", // Assuming initial progress is "INPROGRESS"
+          dateCompleted: "", // Initialize with empty string
+          trainingsCompleted: [], // Initialize with empty array
+          numTrainingsCompleted: 0, // Initialize with 0
+          numTotalTrainings: 0, // Initialize with 0
+        }),
+      })
+      .then(() => {
+        resolve();
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}
