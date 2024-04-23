@@ -17,7 +17,6 @@ import LogoutPage from "./pages/LogoutPage/LogoutPage.tsx";
 import QuizPage from "./pages/QuizPage/QuizPage.tsx";
 import QuizResult from "./pages/QuizResultPage/QuizResultPage.tsx";
 import QuizResultCard from "./pages/QuizResultPage/QuizResultCard/QuizResultCard.tsx";
-
 function App() {
   return (
     <ThemeProvider theme={theme}>
