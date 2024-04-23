@@ -103,7 +103,7 @@
   flex-direction: row;
   justify-content: space-between;
   flex-wrap: nowrap;
-  align-items: baseline;
+  align-items: center;
 }
 
 .trainingInfo {
@@ -111,19 +111,24 @@
   flex-direction: row;
   justify-content: flex-start;
   flex-grow: 2;
-  align-items: baseline;
+  align-items: center;
 }
 
 .trainingNumber {
-  width: 40px;
+  padding-right: 3%;
+  margin-right: 3%;
   color: var(--forest-green);
   font-size: 150%;
   font-weight: bold;
 }
 
 .trainingTitle {
+  padding-left: 3%;
+  padding-right: 3%;
+  margin-left: 3%;
   margin-right: 3%;
-  font-size: 1.1rem;
+  margin: 3%;
+  font-size: 110%;
   font-weight: bold;
 }
 
