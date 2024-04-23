@@ -49,58 +49,58 @@ export function addTraining(training: Training): Promise<void> {
        all of these writes succeed or none of them do.
     */
     runTransaction(db, async (transaction) => {
-      let trainingId;
-
       // add training
       await addDoc(collection(db, "Trainings"), training)
-        .then((docRef) => {
-          trainingId = docRef.id;
+        .then(async (docRef) => {
+          const trainingId = docRef.id;
+
+          // get pathways associated with training
+          const pathwayPromises = [];
+          for (const pathwayId of training.associatedPathways) {
+            pathwayPromises.push(
+              transaction.get(doc(db, "Pathways", pathwayId))
+            );
+          }
+
+          let pathwayRefList: any[] = [];
+          await Promise.all(pathwayPromises)
+            .then((pathwayRef) => {
+              pathwayRefList = pathwayRef;
+            })
+            .catch(() => {
+              reject(new Error("A pathway does not exist"));
+            });
+
+          if (trainingId) {
+            const updatePromises = [];
+
+            // add pathway to training's pathway list
+            for (let i = 0; i < pathwayRefList.length; i++) {
+              const pathwayRef = pathwayRefList[i];
+              const pathway: Pathway = pathwayRef.data() as Pathway;
+              pathway.trainingIDs.push(trainingId);
+              updatePromises.push(
+                transaction.update(
+                  doc(db, "Pathways", training.associatedPathways[i]),
+                  {
+                    trainingIDs: pathway.trainingIDs,
+                  }
+                )
+              );
+            }
+
+            await Promise.all(updatePromises)
+              .then(() => {
+                resolve();
+              })
+              .catch(() => {
+                reject();
+              });
+          }
         })
         .catch((e) => {
           reject(e);
         });
-
-      // get pathways associated with training
-      const pathwayPromises = [];
-      for (const pathwayId of training.associatedPathways) {
-        pathwayPromises.push(transaction.get(doc(db, "Pathways", pathwayId)));
-      }
-
-      let pathwayRefList: any[] = [];
-      await Promise.all(pathwayPromises)
-        .then((pathwayRef) => {
-          pathwayRefList = pathwayRef;
-        })
-        .catch(() => {
-          reject(new Error("A pathway does not exist"));
-        });
-
-      if (trainingId) {
-        const updatePromises = [];
-
-        // add pathway to training's pathway list
-        for (let i = 0; i < pathwayRefList.length; i++) {
-          const pathwayRef = pathwayRefList[i];
-          const pathway: Pathway = pathwayRef.data() as Pathway;
-          pathway.trainingIDs.push(trainingId);
-          updatePromises.push(
-            transaction.update(
-              doc(db, "Pathways", training.associatedPathways[i]),
-              {
-                trainingIDs: pathway.trainingIDs,
-              }
-            )
-          );
-        }
-
-        await Promise.all(updatePromises)
-          .then(() => {
-            resolve();
-          })
-          .catch(() => {
-            reject();
-          });
-      }
     })
       .then(() => {
         resolve();
@@ -167,57 +167,57 @@ export function addPathway(pathway: Pathway): Promise<void> {
        all of these writes succeed or none of them do.
     */
     runTransaction(db, async (transaction) => {
-      let pathwayId: string;
-
       // add pathway
       await addDoc(collection(db, "Pathways"), pathway)
-        .then((docRef) => {
-          pathwayId = docRef.id;
+        .then(async (docRef) => {
+          const pathwayId = docRef.id;
+          // get trainings associated with pathway
+          const trainingPromises = [];
+          for (const trainingId of pathway.trainingIDs) {
+            trainingPromises.push(
+              transaction.get(doc(db, "Trainings", trainingId))
+            );
+          }
+
+          let trainingRefList: any[] = [];
+          await Promise.all(trainingPromises)
+            .then((trainingRef) => {
+              trainingRefList = trainingRef;
+            })
+            .catch(() => {
+              reject(new Error("A training does not exist"));
+            });
+
+          if (pathwayId) {
+            const updatePromises = [];
+
+            // add trainings to pathway's training list
+            for (let i = 0; i < trainingRefList.length; i++) {
+              const trainingRef = trainingRefList[i];
+              const training: Training = trainingRef.data() as Training;
+              training.associatedPathways.push(pathwayId);
+              updatePromises.push(
+                transaction.update(
+                  doc(db, "Trainings", pathway.trainingIDs[i]),
+                  {
+                    associatedPathways: training.associatedPathways,
+                  }
+                )
+              );
+            }
+
+            await Promise.all(updatePromises)
+              .then(() => {
+                resolve();
+              })
+              .catch(() => {
+                reject();
+              });
+          }
         })
         .catch((e) => {
           reject(e);
         });
-
-      // get trainings associated with pathway
-      const trainingPromises = [];
-      for (const trainingId of pathway.trainingIDs) {
-        trainingPromises.push(
-          transaction.get(doc(db, "Trainings", trainingId))
-        );
-      }
-
-      let trainingRefList: any[] = [];
-      await Promise.all(trainingPromises)
-        .then((trainingRef) => {
-          trainingRefList = trainingRef;
-        })
-        .catch(() => {
-          reject(new Error("A training does not exist"));
-        });
-
-      if (pathwayId) {
-        const updatePromises = [];
-
-        // add trainings to pathway's training list
-        for (let i = 0; i < trainingRefList.length; i++) {
-          const trainingRef = trainingRefList[i];
-          const training: Training = trainingRef.data() as Training;
-          training.associatedPathways.push(pathwayId);
-          updatePromises.push(
-            transaction.update(doc(db, "Trainings", pathway.trainingIDs[i]), {
-              associatedPathways: training.associatedPathways,
-            })
-          );
-        }
-
-        await Promise.all(updatePromises)
-          .then(() => {
-            resolve();
-          })
-          .catch(() => {
-            reject();
-          });
-      }
     })
       .then(() => {
         resolve();
