@@ -35,8 +35,8 @@ function TrainingLandingPage() {
     trainingID: "",
     progress: "INPROGRESS",
     dateCompleted: "",
-    numCompletedResources: 3,
-    numTotalResources: 4,
+    numCompletedResources: 4,
+    numTotalResources: 5,
     quizScoreRecieved: 0,
   };
 
@@ -72,14 +72,19 @@ function TrainingLandingPage() {
               <p className={styles.trainingType}>{resource.type}</p>
             </div>
             <div>
-            {/* Conditionally render an image if training is completed */}
-            {(index + 1 <= volunteer.numCompletedResources && (
-              <img
-                className={styles.completedIcon}
-                src={CompletedIcon}
-                alt="Completed"
-              />
-            ))}
+              {/* Conditionally render an image if training is completed */}
+              {(index + 1 <= volunteer.numCompletedResources && (
+                <img
+                  className={styles.completedIcon}
+                  src={CompletedIcon}
+                  alt="Completed"
+                />
+              )) ||
+                (index + 1 === volunteer.numCompletedResources + 1 && (
+                  <div className={`${styles.marker} ${styles.progressMarker}`}>
+                    IN PROGRESS
+                  </div>
+                ))}
             </div>
           </div>
         </div>
@@ -161,7 +166,11 @@ function TrainingLandingPage() {
               <div className={styles.progressBar}>
                 <LinearProgress
                   variant="determinate"
-                  value={50}
+                  value={
+                    (volunteer.numCompletedResources /
+                      volunteer.numTotalResources) *
+                    100
+                  }
                   sx={styledProgressPass}
                 />
                 <Box sx={{ minWidth: 35 }}>
@@ -170,7 +179,10 @@ function TrainingLandingPage() {
                     color="var(--blue-gray)"
                     sx={{ fontSize: "15px" }}
                   >
-                    {"50%"}
+                    {(volunteer.numCompletedResources /
+                      volunteer.numTotalResources) *
+                      100 +
+                      "%"}
                   </Typography>
                 </Box>
               </div>

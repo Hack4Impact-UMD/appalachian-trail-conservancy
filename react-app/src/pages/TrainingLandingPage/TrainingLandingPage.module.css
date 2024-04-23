@@ -41,7 +41,7 @@
   margin-bottom: 1rem;
 }
 
-.container{
+.container {
   margin-top: 5%;
 }
 
@@ -115,20 +115,15 @@
 }
 
 .trainingNumber {
-  padding-right: 3%;
-  margin-right: 3%;
+  width: 40px;
   color: var(--forest-green);
   font-size: 150%;
   font-weight: bold;
 }
 
 .trainingTitle {
-  padding-left: 3%;
-  padding-right: 3%;
-  margin-left: 3%;
   margin-right: 3%;
-  margin: 3%;
-  font-size: 110%;
+  font-size: 1.1rem;
   font-weight: bold;
 }
 
@@ -157,6 +152,6 @@
   opacity: 0.5;
 }
 
-h2{
+h2 {
   font-size: 155%;
 }
