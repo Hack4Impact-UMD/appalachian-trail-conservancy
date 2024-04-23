@@ -42,6 +42,7 @@ function TrainingLandingPage() {
 
   const training: Training = {
     name: "How to pet a cat",
+    shortBlurb: "",
     description: "blah blah blah",
     coverImage: "",
     resources: [
@@ -50,7 +51,11 @@ function TrainingLandingPage() {
       { type: "PDF", link: "https://example.com/article1", title: "Article 2" },
       { type: "PDF", link: "https://example.com/article1", title: "Article 3" },
     ],
-    quizID: "",
+    quiz: {
+      questions: [],
+      numQuestions: 0,
+      passingScore: 0,
+    },
     associatedPathways: [],
     certificationImage: "",
   };
