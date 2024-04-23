@@ -4,6 +4,7 @@ export interface PathwayID extends Pathway {
 
 export interface Pathway {
   name: string;
+  shortBlurb: string;
   description: string;
   coverImage: string; // URL
   trainingIDs: string[];

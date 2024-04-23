@@ -54,6 +54,24 @@ export function addTraining(training: Training): Promise<string> {
   });
 }
 
+export function updateTraining(training: Training, id: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (id === "" || !id) {
+      reject(new Error("Invalid id"));
+      return;
+    }
+
+    const trainingRef = doc(db, "Trainings", id);
+    updateDoc(trainingRef, { ...training })
+      .then(() => {
+        resolve();
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+}
+
 export function getTraining(id: string): Promise<TrainingID> {
   return new Promise((resolve, reject) => {
     getDoc(doc(db, "Trainings", id))
@@ -90,6 +108,24 @@ export function addPathway(pathway: Pathway): Promise<string> {
     addDoc(collection(db, "Pathways"), pathway)
       .then((docRef) => {
         resolve(docRef.id);
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+}
+
+export function updatePathway(pathway: Pathway, id: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (id === "" || !id) {
+      reject(new Error("Invalid id"));
+      return;
+    }
+
+    const pathwayRef = doc(db, "Pathways", id);
+    updateDoc(pathwayRef, { ...pathway })
+      .then(() => {
+        resolve();
       })
       .catch((e) => {
         reject(e);
