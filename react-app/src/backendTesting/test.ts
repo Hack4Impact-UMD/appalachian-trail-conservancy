@@ -8,6 +8,7 @@ import {
 } from "../backend/FirestoreCalls";
 import { type Training, Resource } from "../types/TrainingType";
 import { type Pathway } from "../types/PathwayType";
+import { type User } from "../types/UserType";
 
 export const addSampleTraining = ({
   name = "Training",
@@ -102,11 +103,8 @@ export const addSamplePathway = ({
     });
 };
 
-export const addSampleVolunteerTraining = ({
-  volunteerId = "ZpfkIPPdBuaeA6iFyhaR",
-  trainingId = "GQf4rBgvJ4uU9Is89wXp"
-}) => {
-  addVolunteerTraining(volunteerId, trainingId)
+export const addSampleVolunteerTraining = () => {
+  addVolunteerTraining("wZO7L1uS1dc9YIrq7FU6YXzZk1J3", "IinPHCPMtSnDsPfjeUDs")
     .then(() => {
       console.log("Volunteer training added successfully.");
     })
@@ -115,11 +113,8 @@ export const addSampleVolunteerTraining = ({
     });
 };
 
-export const addSampleVolunteerPathway = ({
-  volunteerId = "ZpfkIPPdBuaeA6iFyhaR",
-  pathwayId = "9m2Ar9kUtY9zciD3V5KO"
-}) => {
-  addVolunteerPathway(volunteerId, pathwayId)
+export const addSampleVolunteerPathway = () => {
+  addVolunteerPathway("wZO7L1uS1dc9YIrq7FU6YXzZk1J3", "MTEJDxKOqMW3s7wkOfL1")
     .then(() => {
       console.log("Volunteer pathway added successfully.");
     }) 

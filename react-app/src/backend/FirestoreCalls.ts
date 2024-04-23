@@ -9,6 +9,7 @@ import {
   runTransaction,
   query,
   where,
+  arrayUnion,
 } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { Volunteer, VolunteerID, User, Admin } from "../types/UserType";
@@ -157,23 +158,30 @@ export function addVolunteerTraining(
   trainingId: string
 ): Promise<void> {
   return new Promise((resolve, reject) => {
-    const volunteerRef = db.collection("Users").doc(volunteerId);
-    volunteerRef
-      .update({
-        trainingInformation: db.FieldValue.arrayUnion({
-          trainingID: trainingId,
-          progress: "INPROGRESS", // Assuming initial progress is "INPROGRESS"
-          dateCompleted: "", // Initialize with empty string
-          numCompletedResources: 0, // Initialize with 0
-          numTotalResources: 0, // Initialize with 0
-          quizScoreReceived: 0, // Initialize with 0
-        }),
-      })
-      .then(() => {
-        resolve();
+    // Retrieve the Firestore document reference for the volunteer user
+    getUserWithAuth(volunteerId)
+      .then((userData: VolunteerID) => {
+        // Construct the Firestore document reference
+        const volunteerDocRef = doc(db, 'Users', userData.id);
+        // Update the document with the new training information
+        updateDoc(volunteerDocRef, {
+          // Use "arrayUnion" to append to the existing array
+          trainingInformation: arrayUnion({
+            trainingID: trainingId,
+            progress: 'INPROGRESS',
+            dateCompleted: '',
+            numCompletedResources: 0,
+            numTotalResources: 0,
+            quizScoreReceived: 0,
+          })
+        }).then(() => {
+          resolve(); // Successful
+        }).catch((error) => {
+          reject(error); // Error
+        });
       })
       .catch((error) => {
-        reject(error);
+        reject(error); // Error retrieving user data
       });
   });
 }
@@ -183,23 +191,30 @@ export function addVolunteerPathway(
   pathwayId: string
 ): Promise<void> {
   return new Promise((resolve, reject) => {
-    const volunteerRef = db.collection("Users").doc(volunteerId);
-    volunteerRef
-      .update({
-        pathwayInformation: db.FieldValue.arrayUnion({
-          pathwayID: pathwayId,
-          progress: "INPROGRESS", // Assuming initial progress is "INPROGRESS"
-          dateCompleted: "", // Initialize with empty string
-          trainingsCompleted: [], // Initialize with empty array
-          numTrainingsCompleted: 0, // Initialize with 0
-          numTotalTrainings: 0, // Initialize with 0
-        }),
-      })
-      .then(() => {
-        resolve();
+    // Retrieve the Firestore document reference for the volunteer user
+    getUserWithAuth(volunteerId)
+      .then((userData: VolunteerID) => {
+        // Construct the Firestore document reference
+        const volunteerDocRef = doc(db, 'Users', userData.id);
+        // Update the document with the new pathway information
+        updateDoc(volunteerDocRef, {
+          // Use "arrayUnion" to append to the existing array
+          pathwayInformation: arrayUnion({
+            pathwayID: pathwayId,
+            progress: "INPROGRESS", // Assuming initial progress is "INPROGRESS"
+            dateCompleted: "", // Initialize with empty string
+            trainingsCompleted: [], // Initialize with empty array
+            numTrainingsCompleted: 0, // Initialize with 0
+            numTotalTrainings: 0, // Initialize with 0
+          })
+        }).then(() => {
+          resolve(); // Successful
+        }).catch((error) => {
+          reject(error); // Error
+        });
       })
       .catch((error) => {
-        reject(error);
+        reject(error); // Error retrieving user data
       });
   });
 }
