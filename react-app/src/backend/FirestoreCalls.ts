@@ -12,7 +12,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { Volunteer, VolunteerID, User, Admin } from "../types/UserType";
-import { Training, TrainingID } from "../types/TrainingType";
+import { Training, TrainingID, Quiz } from "../types/TrainingType";
 import { Pathway, PathwayID } from "../types/PathwayType";
 
 export function getUserWithAuth(auth_id: string): Promise<Admin | VolunteerID> {
@@ -63,6 +63,20 @@ export function getTraining(id: string): Promise<TrainingID> {
           resolve({ ...training, id });
         } else {
           reject(new Error("Training does not exist"));
+        }
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+}
+
+export function getQuiz(trainingId: string): Promise<Quiz> {
+  return new Promise((resolve, reject) => {
+    getTraining(trainingId)
+      .then((data) => {
+        if (data.quiz) {
+          resolve(data.quiz);
         }
       })
       .catch((e) => {
