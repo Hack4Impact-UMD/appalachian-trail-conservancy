@@ -1,0 +1,149 @@
+/* split screen in two */
+.split {
+  height: 100%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+}
+
+.right {
+  right: 0;
+  left: 250px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  padding-left: 10%;
+  padding-right: 10%;
+  padding-bottom: 3%;
+}
+
+/* have space between header and view all link  */
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.nameHeading {
+  color: var(--forest-green);
+  font-size: 3rem;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.subHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--blue-gray);
+  margin-top: 0.5rem;
+}
+
+.subHeader h2 {
+  font-size: 1.8rem;
+  margin: 1.5rem 0 2rem 0;
+}
+
+.instructionsTitle  h2{
+  font-size: 1.8rem;
+  margin: 1.5rem 0 0 0;
+}
+
+.noAttemptContainer {
+  background-color: var(--light-grey);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border-radius: 20px;
+  color: black;
+  font-weight: bold;
+}
+
+.passedAttemptContainer {
+  background-color: var(--forest-green);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border-radius: 20px;
+  color: white;
+  font-weight: bold;
+}
+
+.failedAttemptsContainer {
+  background-color: var(--sky-blue);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border-radius: 20px;
+  color: black;
+  font-weight: bold;
+}
+
+.date {
+  display: flex;
+  gap: 2%;
+  flex-direction: row;
+  align-items: center;
+  margin-right: auto;
+}
+
+.dateText {
+  width: 200px;
+}
+
+.result{
+  justify-content: flex-end;
+}
+
+
+.score {
+  margin-right: 65%;
+  font-weight: bold;
+  
+}
+
+.leftContent{
+  margin-left: 5;
+}
+
+.cardsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  row-gap: 1em;
+  column-gap: 1em;
+  margin-bottom: 1rem;
+}
+
+/* ALL ABOVE IS SAME ON EVERY PAGE (with minor spacing modifications) */
+
+.viewAllLink {
+  color: var(--blue-gray);
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: underline;
+}
+
+.footer {
+  margin-top: auto;
+}

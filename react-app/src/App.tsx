@@ -2,7 +2,7 @@ import "./index.css";
 import { HashRouter, Route, Routes } from "react-router-dom";
 import { ThemeProvider } from "@mui/material";
 import { AuthProvider } from "./auth/AuthProvider.tsx";
-import { createVolunteerUser } from "./backend/AuthFunctions";
+// import { createVolunteerUser } from "./backend/AuthFunctions";
 import theme from "./muiTheme.ts";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import Dashboard from "./pages/DashboardPage/DashboardPage.tsx";
@@ -18,6 +18,7 @@ import LogoutPage from "./pages/LogoutPage/LogoutPage.tsx";
 import QuizPage from "./pages/QuizPage/QuizPage.tsx";
 import QuizResult from "./pages/QuizResultPage/QuizResultPage.tsx";
 import QuizResultCard from "./pages/QuizResultPage/QuizResultCard/QuizResultCard.tsx";
+import QuizLandingPage from "./pages/QuizLandingPage/QuizLandingPage.tsx";
 
 function App() {
   return (
@@ -41,6 +42,14 @@ function App() {
               element={
                 <RequireAuth>
                   <TrainingLibrary />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/quizlandingpage"
+              element={
+                <RequireAuth>
+                  <QuizLandingPage/>
                 </RequireAuth>
               }
             />
@@ -92,12 +101,7 @@ function App() {
                   <button
                     onClick={() => {
                       //Test function
-                      createVolunteerUser(
-                        "h4iatctest@gmail.com",
-                        "Akash",
-                        "Patil",
-                        123
-                      );
+                      
                     }}
                   >
                     TEST
