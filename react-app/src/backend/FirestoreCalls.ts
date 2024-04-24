@@ -43,6 +43,22 @@ export function getUserWithAuth(auth_id: string): Promise<Admin | VolunteerID> {
   });
 }
 
+export function getVolunteer(id: string): Promise<Volunteer> {
+  return new Promise((resolve, reject) => {
+    getDoc(doc(db, "Users", id))
+      .then((volunteerSnapshot) => {
+        if (volunteerSnapshot.exists()) {
+          resolve(volunteerSnapshot.data() as Volunteer);
+        } else {
+          reject(new Error("Volunteer does not exist"));
+        }
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+}
+
 export function addTraining(training: Training): Promise<string> {
   return new Promise((resolve, reject) => {
     addDoc(collection(db, "Trainings"), training)
@@ -160,25 +176,27 @@ export function addVolunteerTraining(
   return new Promise((resolve, reject) => {
     // Retrieve the Firestore document reference for the volunteer user
     getUserWithAuth(volunteerId)
-      .then((userData: VolunteerID) => {
+      .then((userData) => {
         // Construct the Firestore document reference
-        const volunteerDocRef = doc(db, 'Users', userData.id);
+        const volunteerDocRef = doc(db, "Users", userData.id);
         // Update the document with the new training information
         updateDoc(volunteerDocRef, {
           // Use "arrayUnion" to append to the existing array
           trainingInformation: arrayUnion({
             trainingID: trainingId,
-            progress: 'INPROGRESS',
-            dateCompleted: '',
+            progress: "INPROGRESS",
+            dateCompleted: "",
             numCompletedResources: 0,
             numTotalResources: 0,
             quizScoreReceived: 0,
+          }),
+        })
+          .then(() => {
+            resolve(); // Successful
           })
-        }).then(() => {
-          resolve(); // Successful
-        }).catch((error) => {
-          reject(error); // Error
-        });
+          .catch((error) => {
+            reject(error); // Error
+          });
       })
       .catch((error) => {
         reject(error); // Error retrieving user data
@@ -193,9 +211,9 @@ export function addVolunteerPathway(
   return new Promise((resolve, reject) => {
     // Retrieve the Firestore document reference for the volunteer user
     getUserWithAuth(volunteerId)
-      .then((userData: VolunteerID) => {
+      .then((userData) => {
         // Construct the Firestore document reference
-        const volunteerDocRef = doc(db, 'Users', userData.id);
+        const volunteerDocRef = doc(db, "Users", userData.id);
         // Update the document with the new pathway information
         updateDoc(volunteerDocRef, {
           // Use "arrayUnion" to append to the existing array
@@ -206,12 +224,14 @@ export function addVolunteerPathway(
             trainingsCompleted: [], // Initialize with empty array
             numTrainingsCompleted: 0, // Initialize with 0
             numTotalTrainings: 0, // Initialize with 0
+          }),
+        })
+          .then(() => {
+            resolve(); // Successful
           })
-        }).then(() => {
-          resolve(); // Successful
-        }).catch((error) => {
-          reject(error); // Error
-        });
+          .catch((error) => {
+            reject(error); // Error
+          });
       })
       .catch((error) => {
         reject(error); // Error retrieving user data
