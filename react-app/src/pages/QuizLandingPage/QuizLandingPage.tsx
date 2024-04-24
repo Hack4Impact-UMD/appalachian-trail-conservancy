@@ -33,7 +33,7 @@ function QuizLandingPage() {
     dateCompleted: "2024-04-20",
     numCompletedResources: 0,
     numTotalResources: 0,
-    quizScoreRecieved: 10,
+    quizScoreRecieved: 0,
   };
 
   const parsedDate = DateTime.fromISO(testDefaultTraining.dateCompleted);
@@ -72,9 +72,9 @@ function QuizLandingPage() {
           <div className={styles.subHeader}>
             <h2>Best Attempt</h2>
           </div>
-          {testDefaultTraining.quizScoreRecieved === null ? (
+          {null === null ? (
             <>
-              <div className={styles.noAttemptsContainer}>
+              <div className={styles.noAttemptContainer}>
                 <p>No Recent Attempt</p>
               </div>
             </>

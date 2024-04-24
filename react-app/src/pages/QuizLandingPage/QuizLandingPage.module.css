@@ -63,6 +63,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
   margin-top: 1.5rem;
   margin-bottom: 1rem;
   padding: 1rem;
@@ -84,7 +85,7 @@
   font-weight: bold;
 }
 
-.failedAttemptsContainer {
+.failedAttemptContainer {
   background-color: var(--sky-blue);
   display: flex;
   flex-direction: row;
@@ -97,7 +98,7 @@
   font-weight: bold;
 }
 
-.date {
+.leftContent {
   display: flex;
   gap: 2%;
   flex-direction: row;
@@ -109,30 +110,10 @@
   width: 200px;
 }
 
-.result{
-  justify-content: flex-end;
-}
 
 
-.score {
-  margin-right: 65%;
-  font-weight: bold;
-  
-}
 
-.leftContent{
-  margin-left: 5;
-}
 
-.cardsContainer {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  justify-content: space-between;
-  row-gap: 1em;
-  column-gap: 1em;
-  margin-bottom: 1rem;
-}
 
 /* ALL ABOVE IS SAME ON EVERY PAGE (with minor spacing modifications) */
 
