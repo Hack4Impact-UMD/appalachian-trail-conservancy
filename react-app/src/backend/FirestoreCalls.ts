@@ -9,7 +9,6 @@ import {
   runTransaction,
   query,
   where,
-  arrayUnion,
 } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { Volunteer, VolunteerID, User, Admin } from "../types/UserType";
