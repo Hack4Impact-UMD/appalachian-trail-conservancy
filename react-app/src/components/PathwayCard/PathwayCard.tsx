@@ -1,5 +1,6 @@
 import styles from "./PathwayCard.module.css";
 import LinearProgressWithLabel from "../LinearProgressWithLabel/LinearProgressWithLabel";
+import pathwayCard from "../../assets/pathwayCard.svg";
 
 interface PathwayCardProps {
   image: string;
@@ -36,7 +37,7 @@ const PathwayCard: React.FC<PathwayCardProps> = ({
   return (
     <div className={styles.pathwayCard}>
       <div className={styles.pathwayImage}>
-        <img src={image} alt="Pathway" />
+        <img src={pathwayCard} alt="Pathway" />
       </div>
       <div className={styles.pathwayContent}>
         <div className={styles.pathwayTitle}>{title}</div>

@@ -6,12 +6,13 @@ import {
   selectOptionStyle,
   whiteSelectGrayBorder,
 } from "../../muiTheme";
+import { DateTime } from "luxon";
 import styles from "./AchievementsPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Certificate from "../../components/CertificateCard/CertificateCard";
-import { DateTime } from "luxon";
+import badge from "../../assets/badge.svg";
 
 function AchievementsPage() {
   const certificates = [
@@ -29,7 +30,7 @@ function AchievementsPage() {
   >([]);
 
   const sortCards = () => {
-    let sortedCardsCopy = certificates.slice();
+    const sortedCardsCopy = certificates.slice();
 
     switch (sortMode) {
       case "alphabetically":
@@ -72,73 +73,71 @@ function AchievementsPage() {
     <>
       <NavigationBar />
       <div className={`${styles.split} ${styles.right}`}>
-        <div className={styles.content}>
-          <div className={styles.header}>
-            <h1 className={styles.nameHeading}>Achievements</h1>
-            <ProfileIcon />
-          </div>
-          <div className={styles.buttonContainer}>
-            <div className={styles.leftButtonContainer}>
-              <Button
-                onClick={() => setBadgesSelected(true)}
-                sx={
-                  badgesSelected
-                    ? forestGreenButtonPadding
-                    : whiteButtonGrayBorder
-                }
-                variant="contained"
-              >
-                Pathway Badges
-              </Button>
-              <Button
-                onClick={() => setBadgesSelected(false)}
-                sx={
-                  !badgesSelected
-                    ? forestGreenButtonPadding
-                    : whiteButtonGrayBorder
-                }
-                variant="contained"
-              >
-                Training Certificates
-              </Button>
+        <div className={styles.outerContainer}>
+          <div className={styles.content}>
+            <div className={styles.header}>
+              <h1 className={styles.nameHeading}>Achievements</h1>
+              <ProfileIcon />
             </div>
-            <div className={styles.rightButtonContainer}>
-              <Select
-                value={sortMode}
-                onChange={handleChange}
-                size="small"
-                sx={{
-                  ...whiteSelectGrayBorder,
-                  width: "154px",
-                }}
-              >
-                <MenuItem value={"newest"} sx={selectOptionStyle}>
-                  SORT: NEWEST
-                </MenuItem>
-                <MenuItem value={"oldest"} sx={selectOptionStyle}>
-                  SORT: OLDEST
-                </MenuItem>
-                <MenuItem value={"alphabetically"} sx={selectOptionStyle}>
-                  SORT: A-Z
-                </MenuItem>
-                <MenuItem
-                  value={"reverseAlphabetically"}
-                  sx={selectOptionStyle}
-                >
-                  SORT: Z-A
-                </MenuItem>
-              </Select>
+            <div className={styles.buttonContainer}>
+              <div className={styles.leftButtonContainer}>
+                <Button
+                  onClick={() => setBadgesSelected(true)}
+                  sx={
+                    badgesSelected
+                      ? forestGreenButtonPadding
+                      : whiteButtonGrayBorder
+                  }
+                  variant="contained">
+                  Pathway Badges
+                </Button>
+                <Button
+                  onClick={() => setBadgesSelected(false)}
+                  sx={
+                    !badgesSelected
+                      ? forestGreenButtonPadding
+                      : whiteButtonGrayBorder
+                  }
+                  variant="contained">
+                  Training Certificates
+                </Button>
+              </div>
+              <div className={styles.rightButtonContainer}>
+                <Select
+                  value={sortMode}
+                  onChange={handleChange}
+                  size="small"
+                  sx={{
+                    ...whiteSelectGrayBorder,
+                    width: "154px",
+                  }}>
+                  <MenuItem value={"newest"} sx={selectOptionStyle}>
+                    SORT: NEWEST
+                  </MenuItem>
+                  <MenuItem value={"oldest"} sx={selectOptionStyle}>
+                    SORT: OLDEST
+                  </MenuItem>
+                  <MenuItem value={"alphabetically"} sx={selectOptionStyle}>
+                    SORT: A-Z
+                  </MenuItem>
+                  <MenuItem
+                    value={"reverseAlphabetically"}
+                    sx={selectOptionStyle}>
+                    SORT: Z-A
+                  </MenuItem>
+                </Select>
+              </div>
             </div>
-          </div>
-          <div className={styles.cardsContainer}>
-            {sortedCards.map((card, index) => (
-              <Certificate
-                key={index}
-                image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-                title={card.title}
-                date={card.date}
-              />
-            ))}
+            <div className={styles.cardsContainer}>
+              {sortedCards.map((card, index) => (
+                <Certificate
+                  key={index}
+                  image={badge}
+                  title={card.title}
+                  date={card.date}
+                />
+              ))}
+            </div>
           </div>
         </div>
         <Footer />

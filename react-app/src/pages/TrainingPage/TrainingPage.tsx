@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { stepperStyle } from "../../muiTheme";
 import { TrainingResource } from "../../types/TrainingType";
+import { useLocation, Navigate } from "react-router-dom";
 import styles from "./TrainingPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
@@ -35,6 +36,12 @@ const resources: TrainingResource[] = [
 function TrainingPage() {
   const [stepIndex, setStepIndex] = useState(0);
 
+  const location = useLocation();
+
+  if (!location.state?.fromApp) {
+    return <Navigate to="/trainings" />;
+  }
+
   // TODO: The last resource should show "start quiz" button
   // or confirmation
   const handleContinueButton = () => {
@@ -58,18 +65,20 @@ function TrainingPage() {
     <>
       <NavigationBar />
       <div className={`${styles.split} ${styles.right}`}>
-        <div className={styles.bodyContainer}>
-          {/* HEADER */}
-          <div className={styles.header}>
-            <h1 className={styles.nameHeading}>Training Title</h1>
-            <ProfileIcon />
-          </div>
+        <div className={styles.outerContainer}>
+          <div className={styles.bodyContainer}>
+            {/* HEADER */}
+            <div className={styles.header}>
+              <h1 className={styles.nameHeading}>Training Title</h1>
+              <ProfileIcon />
+            </div>
 
-          <ResourceComponent
-            handleBackButton={handleBackButton}
-            handleContinueButton={handleContinueButton}
-            resource={resources[stepIndex]}
-          />
+            <ResourceComponent
+              handleBackButton={handleBackButton}
+              handleContinueButton={handleContinueButton}
+              resource={resources[stepIndex]}
+            />
+          </div>
         </div>
 
         {/* Stepper */}

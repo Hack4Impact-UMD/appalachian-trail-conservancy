@@ -15,9 +15,14 @@
   flex-direction: column;
 }
 
+.outerContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .content {
-  padding-left: 10%;
-  padding-right: 10%;
+  width: 875px;
   padding-bottom: 3%;
 }
 
@@ -28,15 +33,14 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-top: 1.5rem;
-  margin-bottom: 1rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 .nameHeading {
   color: var(--forest-green);
   font-size: 3rem;
-  margin-top: 0;
-  margin-bottom: 0;
+  margin: 0;
 }
 
 .buttonContainer {

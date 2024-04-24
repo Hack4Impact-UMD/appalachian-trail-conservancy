@@ -2,7 +2,6 @@ import "./index.css";
 import { HashRouter, Route, Routes } from "react-router-dom";
 import { ThemeProvider } from "@mui/material";
 import { AuthProvider } from "./auth/AuthProvider.tsx";
-// import { createVolunteerUser } from "./backend/AuthFunctions";
 import theme from "./muiTheme.ts";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import Dashboard from "./pages/DashboardPage/DashboardPage.tsx";
@@ -13,6 +12,7 @@ import VolunteerLoginPage from "./pages/LoginPage/VolunteerLoginPage/VolunteerLo
 import AdminLoginPage from "./pages/LoginPage/AdminLoginPage/AdminLoginPage.tsx";
 import AchievementsPage from "./pages/AchievementsPage/AchievementsPage.tsx";
 import TrainingPage from "./pages/TrainingPage/TrainingPage.tsx";
+import TrainingLandingPage from "./pages/TrainingLandingPage/TrainingLandingPage.tsx";
 import RequireAuth from "./auth/RequireAuth/RequireAuth.tsx";
 import LogoutPage from "./pages/LogoutPage/LogoutPage.tsx";
 import QuizPage from "./pages/QuizPage/QuizPage.tsx";
@@ -29,6 +29,8 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/login/volunteer" element={<VolunteerLoginPage />} />
             <Route path="/login/admin" element={<AdminLoginPage />} />
+            <Route path="/logout" element={<LogoutPage />} />
+
             <Route
               path="/"
               element={
@@ -49,15 +51,43 @@ function App() {
               path="/quizlandingpage"
               element={
                 <RequireAuth>
-                  <QuizLandingPage/>
+                  <QuizLandingPage />
                 </RequireAuth>
               }
             />
             <Route
-              path="/trainingpage"
+              path="/trainings/:id"
+              element={
+                <RequireAuth>
+                  <TrainingLandingPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/trainings/resources/:idx"
               element={
                 <RequireAuth>
                   <TrainingPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/trainings/quizresult"
+              element={
+                <RequireAuth>
+                  <QuizResult
+                    achievedScore={5}
+                    totalScore={10}
+                    passingScore={5}
+                  />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/trainings/quiz"
+              element={
+                <RequireAuth>
+                  <QuizPage />
                 </RequireAuth>
               }
             />
@@ -84,14 +114,6 @@ function App() {
                   <NotFoundPage />
                 </RequireAuth>
               }
-            ></Route>
-            <Route
-              path="/logout"
-              element={
-                <RequireAuth>
-                  <LogoutPage />
-                </RequireAuth>
-              }
             />
 
             <Route
@@ -100,46 +122,10 @@ function App() {
                 <RequireAuth>
                   <button
                     onClick={() => {
-                      //Test function
-                      
-                    }}
-                  >
+                      // Add test function
+                    }}>
                     TEST
                   </button>
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/quizresultcard"
-              element={
-                <RequireAuth>
-                  <QuizResultCard
-                    currentQuestion={2}
-                    question={"What is the capital of France?"}
-                    answerOptions={["London", "Paris", "Berlin"]}
-                    selectedAnswer={"Paris"}
-                    correctAnswer={"Berlin"}
-                  />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/quizresult"
-              element={
-                <RequireAuth>
-                  <QuizResult
-                    achievedScore={5}
-                    totalScore={10}
-                    passingScore={5}
-                  />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/quiz"
-              element={
-                <RequireAuth>
-                  <QuizPage />
                 </RequireAuth>
               }
             />

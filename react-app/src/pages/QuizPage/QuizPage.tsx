@@ -1,9 +1,10 @@
 import { Button } from "@mui/material";
 import { forestGreenButton } from "../../muiTheme";
-import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
-import styles from "./QuizPage.module.css";
 import { Question } from "../../types/TrainingType";
+import { useLocation, Navigate } from "react-router-dom";
+import styles from "./QuizPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import QuizCard from "./QuizCard/QuizCard";
 
 const styledButtons = {
@@ -29,25 +30,33 @@ const testQuestions: Question[] = [
 ];
 
 function QuizPage() {
+  const location = useLocation();
+
+  if (!location.state?.fromApp) {
+    return <Navigate to="/trainings" />;
+  }
+
   return (
     <>
       <NavigationBar />
       <div className={`${styles.split} ${styles.right}`}>
-        <div className={styles.bodyContainer}>
-          {/* HEADER */}
-          <div className={styles.header}>
-            <h1 className={styles.nameHeading}>Training Title - Quiz</h1>
-            <ProfileIcon />
-          </div>
-          <div className={styles.questionContainer}>
-            {testQuestions.map((option, index) => (
-              <QuizCard
-                key={index}
-                currentQuestion={index + 1}
-                question={option.question}
-                answerOptions={option.choices}
-              />
-            ))}
+        <div className={styles.outerContainer}>
+          <div className={styles.bodyContainer}>
+            {/* HEADER */}
+            <div className={styles.header}>
+              <h1 className={styles.nameHeading}>Training Title - Quiz</h1>
+              <ProfileIcon />
+            </div>
+            <div className={styles.questionContainer}>
+              {testQuestions.map((option, index) => (
+                <QuizCard
+                  key={index}
+                  currentQuestion={index + 1}
+                  question={option.question}
+                  answerOptions={option.choices}
+                />
+              ))}
+            </div>
           </div>
         </div>
 
@@ -55,8 +64,7 @@ function QuizPage() {
         <div className={styles.footer}>
           <Button
             sx={{ ...forestGreenButton, ...styledButtons }}
-            variant="contained"
-          >
+            variant="contained">
             Submit
           </Button>
         </div>
