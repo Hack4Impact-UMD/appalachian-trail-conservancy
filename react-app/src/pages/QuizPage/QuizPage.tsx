@@ -1,9 +1,10 @@
 import { Button } from "@mui/material";
 import { forestGreenButton } from "../../muiTheme";
-import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
-import styles from "./QuizPage.module.css";
 import { Question } from "../../types/TrainingType";
+import { useLocation, Navigate } from "react-router-dom";
+import styles from "./QuizPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import QuizCard from "./QuizCard/QuizCard";
 
 const styledButtons = {
@@ -29,6 +30,12 @@ const testQuestions: Question[] = [
 ];
 
 function QuizPage() {
+  const location = useLocation();
+
+  if (!location.state?.fromApp) {
+    return <Navigate to="/trainings" />;
+  }
+
   return (
     <>
       <NavigationBar />

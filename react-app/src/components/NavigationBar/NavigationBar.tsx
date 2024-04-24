@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import styles from "./NavigationBar.module.css";
 import atcprimarylogo from "../../assets/atc-primary-logo.png";
 import dashboardActive from "../../assets/dashboardWhite.svg";
@@ -15,8 +15,6 @@ import LogoutPopup from "./LogoutPopup/LogoutPopup";
 
 const NavigationBar = () => {
   const [openLogoutPopup, setOpenLogoutPopup] = useState<boolean>(false);
-
-  const location = useLocation().pathname;
 
   const handleLogOut = (): void => {
     setOpenLogoutPopup(true);
@@ -35,8 +33,7 @@ const NavigationBar = () => {
               isActive
                 ? `${styles.tab} ${styles.tabActive}`
                 : `${styles.tab} ${styles.tabInActive}`
-            }
-          >
+            }>
             <div>
               <img
                 className={styles.iconActive}
@@ -57,14 +54,10 @@ const NavigationBar = () => {
           <NavLink
             to="/trainings"
             className={({ isActive }) =>
-              isActive ||
-              location === "/trainingpage" ||
-              location === "/quiz" ||
-              location === "/quizresult"
+              isActive
                 ? `${styles.tab} ${styles.tabActive}`
                 : `${styles.tab} ${styles.tabInActive}`
-            }
-          >
+            }>
             <div>
               <img
                 className={styles.iconActive}
@@ -88,8 +81,7 @@ const NavigationBar = () => {
               isActive
                 ? `${styles.tab} ${styles.tabActive}`
                 : `${styles.tab} ${styles.tabInActive}`
-            }
-          >
+            }>
             <div>
               <img
                 className={styles.iconActive}
@@ -113,8 +105,7 @@ const NavigationBar = () => {
               isActive
                 ? `${styles.tab} ${styles.tabActive}`
                 : `${styles.tab} ${styles.tabInActive}`
-            }
-          >
+            }>
             <div>
               <img
                 className={styles.iconActive}
@@ -136,8 +127,7 @@ const NavigationBar = () => {
           onClick={() => {
             handleLogOut();
           }}
-          className={styles.menuItem}
-        >
+          className={styles.menuItem}>
           <img src={logout} alt="Logout" />
           Log Out
         </button>

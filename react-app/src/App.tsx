@@ -12,11 +12,11 @@ import VolunteerLoginPage from "./pages/LoginPage/VolunteerLoginPage/VolunteerLo
 import AdminLoginPage from "./pages/LoginPage/AdminLoginPage/AdminLoginPage.tsx";
 import AchievementsPage from "./pages/AchievementsPage/AchievementsPage.tsx";
 import TrainingPage from "./pages/TrainingPage/TrainingPage.tsx";
+import TrainingLandingPage from "./pages/TrainingLandingPage/TrainingLandingPage.tsx";
 import RequireAuth from "./auth/RequireAuth/RequireAuth.tsx";
 import LogoutPage from "./pages/LogoutPage/LogoutPage.tsx";
 import QuizPage from "./pages/QuizPage/QuizPage.tsx";
 import QuizResult from "./pages/QuizResultPage/QuizResultPage.tsx";
-import QuizResultCard from "./pages/QuizResultPage/QuizResultCard/QuizResultCard.tsx";
 
 import { getVolunteer } from "./backend/FirestoreCalls";
 
@@ -48,10 +48,38 @@ function App() {
               }
             />
             <Route
-              path="/trainingpage"
+              path="/trainings/:id"
+              element={
+                <RequireAuth>
+                  <TrainingLandingPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/trainings/resources/:idx"
               element={
                 <RequireAuth>
                   <TrainingPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/trainings/quizresult"
+              element={
+                <RequireAuth>
+                  <QuizResult
+                    achievedScore={5}
+                    totalScore={10}
+                    passingScore={5}
+                  />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/trainings/quiz"
+              element={
+                <RequireAuth>
+                  <QuizPage />
                 </RequireAuth>
               }
             />
@@ -77,7 +105,8 @@ function App() {
                 <RequireAuth>
                   <NotFoundPage />
                 </RequireAuth>
-              }></Route>
+              }
+            />
 
             <Route
               path="/testfunctions"
@@ -90,40 +119,6 @@ function App() {
                     }}>
                     TEST
                   </button>
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/quizresultcard"
-              element={
-                <RequireAuth>
-                  <QuizResultCard
-                    currentQuestion={2}
-                    question={"What is the capital of France?"}
-                    answerOptions={["London", "Paris", "Berlin"]}
-                    selectedAnswer={"Paris"}
-                    correctAnswer={"Berlin"}
-                  />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/quizresult"
-              element={
-                <RequireAuth>
-                  <QuizResult
-                    achievedScore={5}
-                    totalScore={10}
-                    passingScore={5}
-                  />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/quiz"
-              element={
-                <RequireAuth>
-                  <QuizPage />
                 </RequireAuth>
               }
             />

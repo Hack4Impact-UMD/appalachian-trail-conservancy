@@ -1,5 +1,6 @@
 import { LinearProgress, Button } from "@mui/material";
 import { forestGreenButton, whiteButtonGrayBorder } from "../../muiTheme";
+import { useLocation, Navigate } from "react-router-dom";
 import styles from "./QuizResultPage.module.css";
 import QuizResultCard from "./QuizResultCard/QuizResultCard";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
@@ -55,6 +56,12 @@ const QuizResultPage = (props: {
   const { achievedScore, totalScore, passingScore } = props;
   const passed = achievedScore >= passingScore;
   const scoredFull = achievedScore == totalScore;
+
+  const location = useLocation();
+
+  if (!location.state?.fromApp) {
+    return <Navigate to="/trainings" />;
+  }
 
   return (
     <>
