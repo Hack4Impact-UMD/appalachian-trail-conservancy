@@ -39,8 +39,8 @@ function TrainingLandingPage() {
       trainingID: "GQf4rBgvJ4uU9Is89wXp",
       progress: "COMPLETED",
       dateCompleted: "",
-      numCompletedResources: 5,
-      numTotalResources: 5,
+      numCompletedResources: 4,
+      numTotalResources: 4,
       quizScoreRecieved: 0,
     }
   );
@@ -249,7 +249,7 @@ function TrainingLandingPage() {
                         : "")
                     }`}>
                     <p className={styles.trainingNumber}>
-                      {volunteerTraining.numTotalResources}
+                      {volunteerTraining.numTotalResources + 1}
                     </p>
                     <p className={styles.trainingTitle}>Quiz</p>
                   </div>
