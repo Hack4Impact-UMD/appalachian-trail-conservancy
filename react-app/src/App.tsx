@@ -17,7 +17,6 @@ import RequireAuth from "./auth/RequireAuth/RequireAuth.tsx";
 import LogoutPage from "./pages/LogoutPage/LogoutPage.tsx";
 import QuizPage from "./pages/QuizPage/QuizPage.tsx";
 import QuizResult from "./pages/QuizResultPage/QuizResultPage.tsx";
-import QuizResultCard from "./pages/QuizResultPage/QuizResultCard/QuizResultCard.tsx";
 import QuizLandingPage from "./pages/QuizLandingPage/QuizLandingPage.tsx";
 
 function App() {
@@ -48,14 +47,6 @@ function App() {
               }
             />
             <Route
-              path="/quizlandingpage"
-              element={
-                <RequireAuth>
-                  <QuizLandingPage />
-                </RequireAuth>
-              }
-            />
-            <Route
               path="/trainings/:id"
               element={
                 <RequireAuth>
@@ -72,14 +63,10 @@ function App() {
               }
             />
             <Route
-              path="/trainings/quizresult"
+              path="/trainings/quizlanding"
               element={
                 <RequireAuth>
-                  <QuizResult
-                    achievedScore={5}
-                    totalScore={10}
-                    passingScore={5}
-                  />
+                  <QuizLandingPage />
                 </RequireAuth>
               }
             />
@@ -88,6 +75,18 @@ function App() {
               element={
                 <RequireAuth>
                   <QuizPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/trainings/quizresult"
+              element={
+                <RequireAuth>
+                  <QuizResult
+                    achievedScore={5}
+                    totalScore={10}
+                    passingScore={5}
+                  />
                 </RequireAuth>
               }
             />
