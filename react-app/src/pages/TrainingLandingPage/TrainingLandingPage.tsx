@@ -1,14 +1,15 @@
-import { whiteButtonGrayBorder } from "../../muiTheme";
-import { TrainingResource } from "../../types/TrainingType";
 import styles from "./TrainingLandingPage.module.css";
-import NavigationBar from "../../components/NavigationBar/NavigationBar";
-import { LinearProgress, Box, Typography } from "@mui/material";
-import { type Training } from "../../types/TrainingType";
+import { useState, useEffect } from "react";
+import { useParams, useLocation } from "react-router-dom";
+import { whiteButtonGrayBorder, forestGreenButton } from "../../muiTheme";
+import { Training, TrainingResource } from "../../types/TrainingType";
 import { type VolunteerTraining } from "../../types/UserType";
-import { Button } from "@mui/material";
-import { forestGreenButton } from "../../muiTheme";
+import { getTraining } from "../../backend/FirestoreCalls";
+import { LinearProgress, Box, Typography, Button } from "@mui/material";
+import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
-import CompletedIcon from "../../assets/greenCircleCheck.svg";
+import CompletedIcon from "../../assets/completedCheck.svg";
+import Loading from "../../components/LoadingScreen/Loading";
 
 const styledButtons = {
   marginRight: "10%",
@@ -31,16 +32,20 @@ const styledProgressPass = {
 };
 
 function TrainingLandingPage() {
-  const volunteer: VolunteerTraining = {
-    trainingID: "",
-    progress: "INPROGRESS",
-    dateCompleted: "",
-    numCompletedResources: 4,
-    numTotalResources: 5,
-    quizScoreRecieved: 0,
-  };
+  const [loading, setLoading] = useState<boolean>(true);
+  // If training & volunteerTraining is passed via state, then set it accordingly. Otherwise, retrieve training via id from url parameter then check if a VolunteerTraining exists for it
+  const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
+    {
+      trainingID: "GQf4rBgvJ4uU9Is89wXp",
+      progress: "COMPLETED",
+      dateCompleted: "",
+      numCompletedResources: 5,
+      numTotalResources: 5,
+      quizScoreRecieved: 0,
+    }
+  );
 
-  const training: Training = {
+  const [training, setTraining] = useState<Training>({
     name: "How to pet a cat",
     shortBlurb: "",
     description: "blah blah blah",
@@ -58,7 +63,26 @@ function TrainingLandingPage() {
     },
     associatedPathways: [],
     certificationImage: "",
-  };
+  });
+
+  const trainingId = useParams().id;
+  const location = useLocation();
+
+  useEffect(() => {
+    if (trainingId !== undefined && !location.state?.training) {
+      getTraining(trainingId)
+        .then(async (trainingData) => {
+          setTraining(trainingData);
+          // Get volunteer training
+        })
+        .catch(() => {
+          console.log("Failed to get training");
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  }, []);
 
   const renderTrainingResources = () => {
     return training.resources.map(
@@ -67,29 +91,32 @@ function TrainingLandingPage() {
           <div className={styles.trainingRow}>
             <div
               className={`${styles.trainingInfo} ${
-                index + 1 <= volunteer.numCompletedResources
+                volunteerTraining.trainingID !== "" &&
+                (index + 1 <= volunteerTraining.numCompletedResources
                   ? styles.opacityContainer
-                  : ""
-              }`}
-            >
+                  : "")
+              }`}>
               <p className={styles.trainingNumber}>{index + 1}</p>
               <p className={styles.trainingTitle}>{resource.title}</p>
               <p className={styles.trainingType}>{resource.type}</p>
             </div>
             <div>
-              {/* Conditionally render an image if training is completed */}
-              {(index + 1 <= volunteer.numCompletedResources && (
-                <img
-                  className={styles.completedIcon}
-                  src={CompletedIcon}
-                  alt="Completed"
-                />
-              )) ||
-                (index + 1 === volunteer.numCompletedResources + 1 && (
-                  <div className={`${styles.marker} ${styles.progressMarker}`}>
-                    IN PROGRESS
-                  </div>
-                ))}
+              {/* Conditionally render an image if resource is completed */}
+              {(volunteerTraining.trainingID !== "" &&
+                index + 1 <= volunteerTraining.numCompletedResources && (
+                  <img
+                    className={styles.completedIcon}
+                    src={CompletedIcon}
+                    alt="Completed"
+                  />
+                )) ||
+                (volunteerTraining.trainingID !== "" &&
+                  volunteerTraining.progress === "INPROGRESS" && (
+                    <div
+                      className={`${styles.marker} ${styles.progressMarker}`}>
+                      IN PROGRESS
+                    </div>
+                  ))}
             </div>
           </div>
         </div>
@@ -98,7 +125,7 @@ function TrainingLandingPage() {
   };
 
   const renderMarker = () => {
-    if (volunteer.numCompletedResources === 0) {
+    if (volunteerTraining.trainingID === "") {
       // Training not started
       return (
         <div className={`${styles.marker} ${styles.notStartedMarker}`}>
@@ -106,7 +133,9 @@ function TrainingLandingPage() {
         </div>
       );
     } else if (
-      volunteer.numCompletedResources === volunteer.numTotalResources
+      volunteerTraining.trainingID !== "" &&
+      volunteerTraining.numCompletedResources ===
+        volunteerTraining.numTotalResources
     ) {
       // Training completed
       return (
@@ -125,21 +154,22 @@ function TrainingLandingPage() {
   };
 
   const renderButton = () => {
-    if (volunteer.numCompletedResources === 0) {
+    if (
+      volunteerTraining.trainingID === "" ||
+      (volunteerTraining && volunteerTraining.numCompletedResources === 0)
+    ) {
       return (
         <Button
           sx={{ ...forestGreenButton, ...styledButtons }}
-          variant="contained"
-        >
+          variant="contained">
           Start
         </Button>
       );
-    } else if (volunteer.quizScoreRecieved != 0) {
+    } else if (volunteerTraining && volunteerTraining.quizScoreRecieved != 0) {
       return (
         <Button
           sx={{ ...forestGreenButton, ...styledButtons }}
-          variant="contained"
-        >
+          variant="contained">
           Restart
         </Button>
       );
@@ -147,8 +177,7 @@ function TrainingLandingPage() {
       return (
         <Button
           sx={{ ...forestGreenButton, ...styledButtons }}
-          variant="contained"
-        >
+          variant="contained">
           Resume
         </Button>
       );
@@ -158,63 +187,88 @@ function TrainingLandingPage() {
   return (
     <>
       <NavigationBar />
+
       <div className={`${styles.split} ${styles.right}`}>
-        <div className={styles.outerContainer}>
-          <div className={styles.bodyContainer}>
-            {/* HEADER */}
-            <div className={styles.header}>
-              <h1 className={styles.nameHeading}>{training.name}</h1>
-              <ProfileIcon />
-            </div>
-
-            <div className={styles.progressContainer}>
-              <div className={styles.progressBar}>
-                <LinearProgress
-                  variant="determinate"
-                  value={
-                    (volunteer.numCompletedResources /
-                      volunteer.numTotalResources) *
-                    100
-                  }
-                  sx={styledProgressPass}
-                />
-                <Box sx={{ minWidth: 35 }}>
-                  <Typography
-                    variant="body2"
-                    color="var(--blue-gray)"
-                    sx={{ fontSize: "15px" }}
-                  >
-                    {(volunteer.numCompletedResources /
-                      volunteer.numTotalResources) *
-                      100 +
-                      "%"}
-                  </Typography>
-                </Box>
+        {loading ? (
+          <Loading />
+        ) : (
+          <div className={styles.outerContainer}>
+            <div className={styles.bodyContainer}>
+              {/* HEADER */}
+              <div className={styles.header}>
+                <h1 className={styles.nameHeading}>{training.name}</h1>
+                <ProfileIcon />
               </div>
-              <div>{renderMarker()}</div>
-            </div>
 
-            {/* ABOUT */}
-            <div className={styles.container}>
-              <h2>About</h2>
-              <p>{training.description}</p>
-            </div>
+              <div className={styles.progressContainer}>
+                <div className={styles.progressBar}>
+                  <LinearProgress
+                    variant="determinate"
+                    value={
+                      (volunteerTraining &&
+                        (volunteerTraining.numCompletedResources /
+                          volunteerTraining.numTotalResources) *
+                          100) ||
+                      0
+                    }
+                    sx={styledProgressPass}
+                  />
+                  <Box sx={{ minWidth: 35 }}>
+                    <Typography
+                      variant="body2"
+                      color="var(--blue-gray)"
+                      sx={{ fontSize: "15px" }}>
+                      {(volunteerTraining &&
+                        (volunteerTraining.numCompletedResources /
+                          volunteerTraining.numTotalResources) *
+                          100 +
+                          "%") ||
+                        "0%"}
+                    </Typography>
+                  </Box>
+                </div>
+                <div>{renderMarker()}</div>
+              </div>
 
-            {/* OVERVIEW */}
-            <div className={styles.container}>
-              <h2>Overview</h2>
-              {renderTrainingResources()}
-              <div className={styles.trainingRowFinal}>
-                <div className={styles.trainingInfo}>
-                  <p className={styles.trainingNumber}>
-                    {volunteer.numTotalResources}
-                  </p>
-                  <p className={styles.trainingTitle}>Quiz</p>
+              {/* ABOUT */}
+              <div className={styles.container}>
+                <h2>About</h2>
+                <p>{training.description}</p>
+              </div>
+
+              {/* OVERVIEW */}
+              <div className={styles.container}>
+                <h2>Overview</h2>
+                {renderTrainingResources()}
+                <div className={styles.trainingRowFinal}>
+                  <div
+                    className={`${styles.trainingInfo} ${
+                      volunteerTraining.trainingID !== "" &&
+                      (volunteerTraining.progress === "COMPLETED"
+                        ? styles.opacityContainer
+                        : "")
+                    }`}>
+                    <p className={styles.trainingNumber}>
+                      {volunteerTraining.numTotalResources}
+                    </p>
+                    <p className={styles.trainingTitle}>Quiz</p>
+                  </div>
+                  <div>
+                    {/* Conditionally render an image if quiz is completed */}
+                    {volunteerTraining.trainingID !== "" &&
+                      volunteerTraining.progress === "COMPLETED" && (
+                        <img
+                          className={styles.completedIcon}
+                          src={CompletedIcon}
+                          alt="Completed"
+                        />
+                      )}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* footer */}
         <div className={styles.footer}>

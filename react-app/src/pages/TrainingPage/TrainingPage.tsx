@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { stepperStyle } from "../../muiTheme";
 import { TrainingResource } from "../../types/TrainingType";
+import { useLocation, Navigate } from "react-router-dom";
 import styles from "./TrainingPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
@@ -34,6 +35,12 @@ const resources: TrainingResource[] = [
 
 function TrainingPage() {
   const [stepIndex, setStepIndex] = useState(0);
+
+  const location = useLocation();
+
+  if (!location.state?.fromApp) {
+    return <Navigate to="/trainings" />;
+  }
 
   // TODO: The last resource should show "start quiz" button
   // or confirmation

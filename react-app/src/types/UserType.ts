@@ -25,7 +25,7 @@ export interface VolunteerTraining {
   dateCompleted: string; // YYYY-MM-DD
   numCompletedResources: number;
   numTotalResources: number;
-  quizScoreRecieved: number;
+  quizScoreRecieved?: number;
 }
 
 export interface VolunteerPathway {

@@ -31,18 +31,24 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-top: 0;
-  margin-bottom: 0;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 .nameHeading {
   color: var(--forest-green);
   font-size: 3rem;
-  margin-bottom: 1rem;
+  margin: 0;
 }
 
 .container {
   margin-top: 5%;
+}
+
+.container h2 {
+  font-size: 1.8rem;
+  margin: 1.5rem 0 1rem 0;
+  color: var(--blue-gray);
 }
 
 .progressContainer {
@@ -141,8 +147,7 @@
 
 .completedIcon {
   flex-shrink: 0.5;
-  height: 50px;
-  width: 50px;
+  height: 40px;
 }
 
 .completedIcon img {
