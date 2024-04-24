@@ -18,8 +18,6 @@ import LogoutPage from "./pages/LogoutPage/LogoutPage.tsx";
 import QuizPage from "./pages/QuizPage/QuizPage.tsx";
 import QuizResult from "./pages/QuizResultPage/QuizResultPage.tsx";
 
-import { getVolunteer } from "./backend/FirestoreCalls";
-
 function App() {
   return (
     <ThemeProvider theme={theme}>
@@ -115,7 +113,6 @@ function App() {
                   <button
                     onClick={() => {
                       // Add test function
-                      console.log(getVolunteer("ZpfkIPPdBuaeA6iFyhaR"));
                     }}>
                     TEST
                   </button>
