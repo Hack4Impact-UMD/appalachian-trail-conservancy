@@ -16,13 +16,22 @@ import training1 from "../../assets/training1.jpg";
 import training2 from "../../assets/training2.jpg";
 import training3 from "../../assets/training3.png";
 import training4 from "../../assets/training4.jpg";
-
+import { getAllTrainings, getVolunteer } from "../../backend/FirestoreCalls"
+import { TrainingID } from "../../types/TrainingType";
+import { getAll } from "firebase/remote-config";
+import { VolunteerTraining } from "../../types/UserType";
+import { useAuth } from "../../auth/AuthProvider.tsx";
+ 
 function TrainingLibrary() {
   const [filterType, setFilterType] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredTrainings, setFilteredTrainings] = useState<
-    { title: string; progress: number; image: string }[]
+    { title: string; progress: number; image: string }[] 
   >([]);
+  const [allTrainings, setAllTrainings] = useState<
+    { volunteerTraining: VolunteerTraining, training: TrainingID } []>([]);
+
+  const auth = useAuth();
 
   const images = [training1, training2, training3, training4];
 
@@ -110,7 +119,28 @@ function TrainingLibrary() {
   };
 
   useEffect(() => {
-    filterTrainings();
+    getAllTrainings()
+      .then((allGenericTrainings) => {
+
+        console.log('allGenericTrainings', allGenericTrainings)
+        
+        getVolunteer(`${auth.id}`)
+          .then((volunteer) => {
+            const volunteerTrainings = volunteer.trainingInformation;
+
+            console.log('volunteer training info', volunteerTrainings)
+
+            // match up the allGenericTrainings and volunteerTrainings, setAllTrainings to set
+
+          })
+          .catch((error) => {
+            console.error('Error fetching volunteer:', error);
+          })
+        filterTrainings();
+      })
+      .catch((error) => {
+        console.error('Error fetching trainings:', error);
+      })
   }, [searchQuery, filterType]);
 
   const updateQuery = (e: {
