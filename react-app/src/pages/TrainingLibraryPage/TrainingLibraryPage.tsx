@@ -23,96 +23,38 @@ import { VolunteerTraining } from "../../types/UserType";
 import { useAuth } from "../../auth/AuthProvider.tsx";
  
 function TrainingLibrary() {
+  const auth = useAuth();
+
   const [filterType, setFilterType] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredTrainings, setFilteredTrainings] = useState<
-    { title: string; progress: number; image: string }[] 
-  >([]);
-  const [allTrainings, setAllTrainings] = useState<
+    { training: TrainingID, volunteerTraining?: VolunteerTraining }[]>([]);
+  const [allCorrelatedTrainings, setAllCorrelatedTrainings] = useState<
     { training: TrainingID, volunteerTraining?: VolunteerTraining } []>([]);
 
-  const auth = useAuth();
+  
+  // if (auth.loading) {
+  //   return <></>;
+  // }
 
   const images = [training1, training2, training3, training4];
 
-  const trainingCards = [
-    {
-      title: "Cat",
-      progress: 23,
-      image: images[Math.floor(Math.random() * images.length)],
-    },
-    {
-      title: "NotInProgress",
-      progress: 0,
-      image: images[Math.floor(Math.random() * images.length)],
-    },
-    {
-      title: "Complete",
-      progress: 100,
-      image: images[Math.floor(Math.random() * images.length)],
-    },
-    {
-      title: "Dog",
-      progress: 10,
-      image: images[Math.floor(Math.random() * images.length)],
-    },
-    {
-      title: "NotInProgress2",
-      progress: 0,
-      image: images[Math.floor(Math.random() * images.length)],
-    },
-    {
-      title: "Catfish",
-      progress: 50,
-      image: images[Math.floor(Math.random() * images.length)],
-    },
-    {
-      title: "C",
-      progress: 76,
-      image: images[Math.floor(Math.random() * images.length)],
-    },
-    {
-      title: "Cat",
-      progress: 100,
-      image: images[Math.floor(Math.random() * images.length)],
-    },
-    {
-      title: "Cat",
-      progress: 23,
-      image: images[Math.floor(Math.random() * images.length)],
-    },
-    {
-      title: "Catfish",
-      progress: 50,
-      image: images[Math.floor(Math.random() * images.length)],
-    },
-    {
-      title: "C",
-      progress: 76,
-      image: images[Math.floor(Math.random() * images.length)],
-    },
-    {
-      title: "Dog",
-      progress: 10,
-      image: images[Math.floor(Math.random() * images.length)],
-    },
-  ];
-
   const filterTrainings = () => {
-    let filtered = trainingCards;
+    let filtered = allCorrelatedTrainings;
+    console.log('at filtering start', filtered);
 
     if (searchQuery) {
-      filtered = filtered.filter((training) =>
-        training.title.toLowerCase().includes(searchQuery.toLowerCase())
+      filtered = filtered.filter((corrTraining) =>
+        corrTraining.training.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
     if (filterType === "inProgress") {
       filtered = filtered.filter(
-        (training) => training.progress > 0 && training.progress < 100
+        (corrTraining) => corrTraining.volunteerTraining && corrTraining.volunteerTraining.progress == "INPROGRESS"
       );
     } else if (filterType === "completed") {
-      filtered = filtered.filter((training) => training.progress === 100);
+      filtered = filtered.filter((corrTraining) => corrTraining.volunteerTraining && corrTraining.volunteerTraining.progress == "COMPLETED");
     }
 
     setFilteredTrainings(filtered);
@@ -134,6 +76,7 @@ function TrainingLibrary() {
             let allCorrelatedTrainings: { training: TrainingID; volunteerTraining?: VolunteerTraining }[] = [];
 
             for (const genericTraining of genericTrainings){
+              // if training in volunteer.trainingInformation, then we include that. otherwise, it's undefined
               let startedByVolunteer = false;
               for (const volunteerTraining of volunteerTrainings) {
                 if (genericTraining.id == volunteerTraining.trainingID) {
@@ -145,8 +88,8 @@ function TrainingLibrary() {
                 allCorrelatedTrainings.push({training: genericTraining, volunteerTraining: undefined})
               }
             }
-            setAllTrainings(allCorrelatedTrainings)
-            console.log(allTrainings)
+            setAllCorrelatedTrainings(allCorrelatedTrainings)
+            // console.log(allCorrelatedTrainings)
 
           })
           .catch((error) => {
@@ -228,12 +171,17 @@ function TrainingLibrary() {
               </div>
             ) : (
               <div className={styles.cardsContainer}>
-                {filteredTrainings.map((training, index) => (
+                {filteredTrainings.map((corrTraining, index) => (
                   <div className={styles.card} key={index}>
                     <TrainingCard
-                      image={training.image}
-                      title={training.title}
-                      progress={training.progress}
+                      image={corrTraining.training.coverImage}
+                      title={corrTraining.training.name}
+                      // if there exists volunteer training, pass in the percentage completion. if doesn't exist, give 0
+                      progress={
+                        corrTraining.volunteerTraining?
+                        (corrTraining.volunteerTraining.numCompletedResources / corrTraining.volunteerTraining.numTotalResources * 100)
+                        : 0
+                      }
                     />
                   </div>
                 ))}
