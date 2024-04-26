@@ -7,10 +7,6 @@ import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import QuizCard from "./QuizCard/QuizCard";
 
-const styledButtons = {
-  marginRight: "10%",
-};
-
 const testQuestions: Question[] = [
   {
     question: "How many toes do feet normally have?",
@@ -62,11 +58,11 @@ function QuizPage() {
 
         {/* footer */}
         <div className={styles.footer}>
-          <Button
-            sx={{ ...forestGreenButton, ...styledButtons }}
-            variant="contained">
-            Submit
-          </Button>
+          <div className={styles.footerButtons}>
+            <Button sx={{ ...forestGreenButton }} variant="contained">
+              Submit
+            </Button>
+          </div>
         </div>
       </div>
     </>
