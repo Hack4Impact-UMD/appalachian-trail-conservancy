@@ -193,24 +193,6 @@ function TrainingLibrary() {
                 ))}
               </div>
             )}
-
-            <div className={styles.subHeader}>
-              <h2>Recommended</h2>
-            </div>
-            <div className={styles.cardsContainer}>
-              <TrainingCard
-                image={images[Math.floor(Math.random() * images.length)]}
-                title="Title"
-              />
-              <TrainingCard
-                image={images[Math.floor(Math.random() * images.length)]}
-                title="Title"
-              />
-              <TrainingCard
-                image={images[Math.floor(Math.random() * images.length)]}
-                title="Title"
-              />
-            </div>
           </div>
         </div>
         <Footer />
