@@ -11,11 +11,6 @@ import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import CompletedIcon from "../../assets/completedCheck.svg";
 import Loading from "../../components/LoadingScreen/Loading";
 
-const styledButtons = {
-  marginRight: "10%",
-  marginLeft: "1%",
-};
-
 const styledProgressShape = {
   height: 24,
   borderRadius: 12,
@@ -33,7 +28,8 @@ const styledProgressPass = {
 
 function TrainingLandingPage() {
   const [loading, setLoading] = useState<boolean>(true);
-  // If training & volunteerTraining is passed via state, then set it accordingly. Otherwise, retrieve training via id from url parameter then check if a VolunteerTraining exists for it
+  // If training & volunteerTraining is passed via state, then set it accordingly.
+  // Otherwise, retrieve training via id from url parameter then check if a VolunteerTraining exists for it
   const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
     {
       trainingID: "GQf4rBgvJ4uU9Is89wXp",
@@ -95,7 +91,8 @@ function TrainingLandingPage() {
                 (index + 1 <= volunteerTraining.numCompletedResources
                   ? styles.opacityContainer
                   : "")
-              }`}>
+              }`}
+            >
               <p className={styles.trainingNumber}>{index + 1}</p>
               <p className={styles.trainingTitle}>{resource.title}</p>
               <p className={styles.trainingType}>{resource.type}</p>
@@ -113,7 +110,8 @@ function TrainingLandingPage() {
                 (volunteerTraining.trainingID !== "" &&
                   volunteerTraining.progress === "INPROGRESS" && (
                     <div
-                      className={`${styles.marker} ${styles.progressMarker}`}>
+                      className={`${styles.marker} ${styles.progressMarker}`}
+                    >
                       IN PROGRESS
                     </div>
                   ))}
@@ -159,25 +157,19 @@ function TrainingLandingPage() {
       (volunteerTraining && volunteerTraining.numCompletedResources === 0)
     ) {
       return (
-        <Button
-          sx={{ ...forestGreenButton, ...styledButtons }}
-          variant="contained">
+        <Button sx={{ ...forestGreenButton }} variant="contained">
           Start
         </Button>
       );
     } else if (volunteerTraining && volunteerTraining.quizScoreRecieved != 0) {
       return (
-        <Button
-          sx={{ ...forestGreenButton, ...styledButtons }}
-          variant="contained">
+        <Button sx={{ ...forestGreenButton }} variant="contained">
           Restart
         </Button>
       );
     } else {
       return (
-        <Button
-          sx={{ ...forestGreenButton, ...styledButtons }}
-          variant="contained">
+        <Button sx={{ ...forestGreenButton }} variant="contained">
           Resume
         </Button>
       );
@@ -217,7 +209,8 @@ function TrainingLandingPage() {
                     <Typography
                       variant="body2"
                       color="var(--blue-gray)"
-                      sx={{ fontSize: "15px" }}>
+                      sx={{ fontSize: "15px" }}
+                    >
                       {(volunteerTraining &&
                         (volunteerTraining.numCompletedResources /
                           volunteerTraining.numTotalResources) *
@@ -247,7 +240,8 @@ function TrainingLandingPage() {
                       (volunteerTraining.progress === "COMPLETED"
                         ? styles.opacityContainer
                         : "")
-                    }`}>
+                    }`}
+                  >
                     <p className={styles.trainingNumber}>
                       {volunteerTraining.numTotalResources + 1}
                     </p>
@@ -272,10 +266,12 @@ function TrainingLandingPage() {
 
         {/* footer */}
         <div className={styles.footer}>
-          <Button sx={{ ...whiteButtonGrayBorder }} variant="contained">
-            Back
-          </Button>
-          {renderButton()}
+          <div className={styles.footerButtons}>
+            <Button sx={{ ...whiteButtonGrayBorder }} variant="contained">
+              Back
+            </Button>
+            {renderButton()}
+          </div>
         </div>
       </div>
     </>

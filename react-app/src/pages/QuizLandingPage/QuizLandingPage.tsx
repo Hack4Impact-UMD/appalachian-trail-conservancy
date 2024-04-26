@@ -10,10 +10,6 @@ import styles from "./QuizLandingPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 
-const styledButtons = {
-  margin: "0 10px 0 10px",
-};
-
 function QuizLandingPage() {
   const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
     {
@@ -26,6 +22,8 @@ function QuizLandingPage() {
     }
   );
 
+  // This training should represent the current training corresponding to the current quiz
+  // This data should be recieved from navigation state
   const [training, setTraining] = useState<Training>({
     name: "How to pet a cat",
     shortBlurb: "",
@@ -70,11 +68,6 @@ function QuizLandingPage() {
 
   const parsedDate = DateTime.fromISO(volunteerTraining.dateCompleted);
   const formattedDate = parsedDate.toFormat("MMMM dd, yyyy").toUpperCase();
-
-  // const [trainingTitle, setTrainingTitle] = useState("Training Title - Quiz");
-  // const [numberOfQuestions, setNumberOfQuestions] = useState(10);
-  // const [passingScore, setPassingScore] = useState("10/10");
-  // const [lastAttempt, setLastAttempt] = useState(null);
 
   return (
     <>
@@ -142,19 +135,13 @@ function QuizLandingPage() {
           {/* footer */}
           <div className={styles.footer}>
             {/* buttons */}
-            <div className={styles.buttons}>
-              <div>
-                <Button
-                  sx={{ ...whiteButtonGrayBorder, ...styledButtons }}
-                  variant="contained">
-                  BACK
-                </Button>
-                <Button
-                  sx={{ ...forestGreenButton, ...styledButtons }}
-                  variant="contained">
-                  START QUIZ
-                </Button>
-              </div>
+            <div className={styles.footerButtons}>
+              <Button sx={{ ...whiteButtonGrayBorder }} variant="contained">
+                BACK
+              </Button>
+              <Button sx={{ ...forestGreenButton }} variant="contained">
+                START QUIZ
+              </Button>
             </div>
           </div>
         </div>

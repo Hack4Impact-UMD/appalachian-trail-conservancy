@@ -27,10 +27,6 @@ const styledProgressFail = {
   backgroundColor: "dimgray",
 };
 
-const styledButtons = {
-  margin: "0 10px 0 10px",
-};
-
 const quizResults = [
   {
     currentQuestion: 1,
@@ -127,26 +123,20 @@ const QuizResultPage = (props: {
         {/* footer */}
         <div className={styles.footer}>
           {/* buttons */}
-          <div className={styles.buttons}>
+          <div className={styles.footerButtons}>
             {passed ? (
               <Button sx={forestGreenButton} variant="contained">
                 Exit training
               </Button>
             ) : (
               <div>
-                <Button
-                  sx={{ ...whiteButtonGrayBorder, ...styledButtons }}
-                  variant="contained">
+                <Button sx={{ ...whiteButtonGrayBorder }} variant="contained">
                   Exit training
                 </Button>
-                <Button
-                  sx={{ ...whiteButtonGrayBorder, ...styledButtons }}
-                  variant="contained">
+                <Button sx={{ ...whiteButtonGrayBorder }} variant="contained">
                   Restart training
                 </Button>
-                <Button
-                  sx={{ ...forestGreenButton, ...styledButtons }}
-                  variant="contained">
+                <Button sx={{ ...forestGreenButton }} variant="contained">
                   Retake quiz
                 </Button>
               </div>
