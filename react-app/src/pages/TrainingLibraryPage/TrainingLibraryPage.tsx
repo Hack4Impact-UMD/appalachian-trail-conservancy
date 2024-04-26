@@ -29,18 +29,17 @@ function TrainingLibrary() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredTrainings, setFilteredTrainings] = useState<
     { training: TrainingID, volunteerTraining?: VolunteerTraining }[]>([]);
-  const [allCorrelatedTrainings, setAllCorrelatedTrainings] = useState<
+  const [correlatedTrainings, setCorrelatedTrainings] = useState<
     { training: TrainingID, volunteerTraining?: VolunteerTraining } []>([]);
-
-  
-  // if (auth.loading) {
-  //   return <></>;
-  // }
 
   const images = [training1, training2, training3, training4];
 
-  const filterTrainings = () => {
-    let filtered = allCorrelatedTrainings;
+  const filterTrainings = (trainings?: { training: TrainingID, volunteerTraining?: VolunteerTraining }[]) => {
+    
+    let filtered = correlatedTrainings;
+    if (correlatedTrainings.length === 0 && trainings) {
+      filtered = trainings;
+    }
     console.log('at filtering start', filtered);
 
     if (searchQuery) {
@@ -64,13 +63,17 @@ function TrainingLibrary() {
     getAllTrainings()
       .then((genericTrainings) => {
 
-        // console.log('allGenericTrainings', genericTrainings)
+        console.log('allGenericTrainings', genericTrainings)
+        console.log(auth.loading)
+
         
-        getVolunteer(`${auth.id}`)
+        if (!auth.loading && auth.id) {
+          console.log('not loading', auth.id)
+          getVolunteer(auth.id.toString())
           .then((volunteer) => {
             const volunteerTrainings = volunteer.trainingInformation;
 
-            // console.log('volunteer training info', volunteerTrainings)
+            console.log('volunteer training info', volunteerTrainings)
 
             // match up the allGenericTrainings and volunteerTrainings, setAllTrainings to set
             let allCorrelatedTrainings: { training: TrainingID; volunteerTraining?: VolunteerTraining }[] = [];
@@ -88,19 +91,21 @@ function TrainingLibrary() {
                 allCorrelatedTrainings.push({training: genericTraining, volunteerTraining: undefined})
               }
             }
-            setAllCorrelatedTrainings(allCorrelatedTrainings)
-            // console.log(allCorrelatedTrainings)
+            setCorrelatedTrainings(allCorrelatedTrainings)
+            console.log('has it been set yet', correlatedTrainings)
+            filterTrainings(allCorrelatedTrainings);
 
           })
           .catch((error) => {
             console.error('Error fetching volunteer:', error);
           })
-        filterTrainings();
+        }
+        
       })
       .catch((error) => {
         console.error('Error fetching trainings:', error);
       })
-  }, [searchQuery, filterType]);
+  }, [searchQuery, filterType, auth.loading, auth.id]);
 
   const updateQuery = (e: {
     target: { value: React.SetStateAction<string> };
