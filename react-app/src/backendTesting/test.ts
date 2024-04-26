@@ -173,6 +173,7 @@ export const addSampleVolunteerPathway = () => {
     id: "test",
     name: "Pathway",
     description: "desc",
+    shortBlurb: "shortBlurb",
     coverImage:
       "https://media.newyorker.com/photos/5c0195240591e72cf6b59d12/1:1/w_1465,h_1465,c_limit/Duke-Spongebob_01.jpg",
     trainingIDs: ["test1", "test2", "test3"],
