@@ -58,11 +58,86 @@ export function getVolunteer(id: string): Promise<Volunteer> {
   });
 }
 
-export function addTraining(training: Training): Promise<string> {
+export function addTraining(training: Training): Promise<void> {
   return new Promise((resolve, reject) => {
-    addDoc(collection(db, "Trainings"), training)
-      .then((docRef) => {
-        resolve(docRef.id);
+    /* runTransaction provides protection against race conditions where
+       2 people are modifying the data at once. It also ensures that either
+       all of these writes succeed or none of them do.
+    */
+    runTransaction(db, async (transaction) => {
+      // add training
+      await addDoc(collection(db, "Trainings"), training)
+        .then(async (docRef) => {
+          const trainingId = docRef.id;
+
+          // get pathways associated with training
+          const pathwayPromises = [];
+          for (const pathwayId of training.associatedPathways) {
+            pathwayPromises.push(
+              transaction.get(doc(db, "Pathways", pathwayId))
+            );
+          }
+
+          let pathwayRefList: any[] = [];
+          await Promise.all(pathwayPromises)
+            .then((pathwayRef) => {
+              pathwayRefList = pathwayRef;
+            })
+            .catch(() => {
+              reject(new Error("A pathway does not exist"));
+            });
+
+          if (trainingId) {
+            const updatePromises = [];
+
+            // add pathway to training's pathway list
+            for (let i = 0; i < pathwayRefList.length; i++) {
+              const pathwayRef = pathwayRefList[i];
+              const pathway: Pathway = pathwayRef.data() as Pathway;
+              pathway.trainingIDs.push(trainingId);
+              updatePromises.push(
+                transaction.update(
+                  doc(db, "Pathways", training.associatedPathways[i]),
+                  {
+                    trainingIDs: pathway.trainingIDs,
+                  }
+                )
+              );
+            }
+
+            await Promise.all(updatePromises)
+              .then(() => {
+                resolve();
+              })
+              .catch(() => {
+                reject();
+              });
+          }
+        })
+        .catch((e) => {
+          reject(e);
+        });
+    })
+      .then(() => {
+        resolve();
+      })
+      .catch(() => {
+        reject();
+      });
+  });
+}
+
+export function updateTraining(training: Training, id: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (id === "" || !id) {
+      reject(new Error("Invalid id"));
+      return;
+    }
+
+    const trainingRef = doc(db, "Trainings", id);
+    updateDoc(trainingRef, { ...training })
+      .then(() => {
+        resolve();
       })
       .catch((e) => {
         reject(e);
@@ -101,11 +176,85 @@ export function getQuiz(trainingId: string): Promise<Quiz> {
   });
 }
 
-export function addPathway(pathway: Pathway): Promise<string> {
+export function addPathway(pathway: Pathway): Promise<void> {
   return new Promise((resolve, reject) => {
-    addDoc(collection(db, "Pathways"), pathway)
-      .then((docRef) => {
-        resolve(docRef.id);
+    /* runTransaction provides protection against race conditions where
+       2 people are modifying the data at once. It also ensures that either
+       all of these writes succeed or none of them do.
+    */
+    runTransaction(db, async (transaction) => {
+      // add pathway
+      await addDoc(collection(db, "Pathways"), pathway)
+        .then(async (docRef) => {
+          const pathwayId = docRef.id;
+          // get trainings associated with pathway
+          const trainingPromises = [];
+          for (const trainingId of pathway.trainingIDs) {
+            trainingPromises.push(
+              transaction.get(doc(db, "Trainings", trainingId))
+            );
+          }
+
+          let trainingRefList: any[] = [];
+          await Promise.all(trainingPromises)
+            .then((trainingRef) => {
+              trainingRefList = trainingRef;
+            })
+            .catch(() => {
+              reject(new Error("A training does not exist"));
+            });
+
+          if (pathwayId) {
+            const updatePromises = [];
+
+            // add trainings to pathway's training list
+            for (let i = 0; i < trainingRefList.length; i++) {
+              const trainingRef = trainingRefList[i];
+              const training: Training = trainingRef.data() as Training;
+              training.associatedPathways.push(pathwayId);
+              updatePromises.push(
+                transaction.update(
+                  doc(db, "Trainings", pathway.trainingIDs[i]),
+                  {
+                    associatedPathways: training.associatedPathways,
+                  }
+                )
+              );
+            }
+
+            await Promise.all(updatePromises)
+              .then(() => {
+                resolve();
+              })
+              .catch(() => {
+                reject();
+              });
+          }
+        })
+        .catch((e) => {
+          reject(e);
+        });
+    })
+      .then(() => {
+        resolve();
+      })
+      .catch(() => {
+        reject();
+      });
+  });
+}
+
+export function updatePathway(pathway: Pathway, id: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (id === "" || !id) {
+      reject(new Error("Invalid id"));
+      return;
+    }
+
+    const pathwayRef = doc(db, "Pathways", id);
+    updateDoc(pathwayRef, { ...pathway })
+      .then(() => {
+        resolve();
       })
       .catch((e) => {
         reject(e);

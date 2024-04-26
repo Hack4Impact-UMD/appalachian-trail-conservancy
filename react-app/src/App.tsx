@@ -122,7 +122,8 @@ function App() {
                   <button
                     onClick={() => {
                       // Add test function
-                    }}>
+                    }}
+                  >
                     TEST
                   </button>
                 </RequireAuth>

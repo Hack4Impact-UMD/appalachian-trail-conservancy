@@ -59,7 +59,7 @@ export const addSampleTraining = ({
     passingScore: 1,
   },
   associatedPathways = [],
-  certificationImage = "https://media.newyorker.com/photos/5c0195240591e72cf6b59d12/1:1/w_1465,h_1465,c_limit/Duke-Spongebob_01.jpg",
+  certificationImage = "https://github.com/Hack4Impact-UMD/y-knot/assets/67646012/fd89b897-4d20-4604-93a4-c28370cbdc2e",
 }) => {
   const training: Training = {
     name,
@@ -82,13 +82,15 @@ export const addSampleTraining = ({
 
 export const addSamplePathway = ({
   name = "Pathway",
+  shortBlurb = "blurb",
   description = "desc",
   coverImage = "https://media.newyorker.com/photos/5c0195240591e72cf6b59d12/1:1/w_1465,h_1465,c_limit/Duke-Spongebob_01.jpg",
   trainingIDs = [],
-  badgeImage = "https://media.newyorker.com/photos/5c0195240591e72cf6b59d12/1:1/w_1465,h_1465,c_limit/Duke-Spongebob_01.jpg",
+  badgeImage = "https://github.com/Hack4Impact-UMD/y-knot/assets/67646012/fd89b897-4d20-4604-93a4-c28370cbdc2e",
 }) => {
   const pathway: Pathway = {
     name,
+    shortBlurb,
     description,
     coverImage,
     trainingIDs,
@@ -171,6 +173,7 @@ export const addSampleVolunteerPathway = () => {
     id: "test",
     name: "Pathway",
     description: "desc",
+    shortBlurb: "shortBlurb",
     coverImage:
       "https://media.newyorker.com/photos/5c0195240591e72cf6b59d12/1:1/w_1465,h_1465,c_limit/Duke-Spongebob_01.jpg",
     trainingIDs: ["test1", "test2", "test3"],
