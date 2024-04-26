@@ -139,25 +139,6 @@ function PathwayLibrary() {
                 ))}
               </div>
             )}
-
-            <div className={styles.subHeader}>
-              <h2>Recommended</h2>
-            </div>
-
-            <div className={styles.recommendedContainer}>
-              <div className={styles.card}>
-                <PathwayCard
-                  image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-                  title="Title"
-                />
-              </div>
-              <div className={styles.card}>
-                <PathwayCard
-                  image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-                  title="Title"
-                />
-              </div>
-            </div>
           </div>
         </div>
         <Footer />
