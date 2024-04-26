@@ -29,7 +29,7 @@ function TrainingLibrary() {
     { title: string; progress: number; image: string }[] 
   >([]);
   const [allTrainings, setAllTrainings] = useState<
-    { volunteerTraining: VolunteerTraining, training: TrainingID } []>([]);
+    { training: TrainingID, volunteerTraining?: VolunteerTraining } []>([]);
 
   const auth = useAuth();
 
@@ -120,17 +120,33 @@ function TrainingLibrary() {
 
   useEffect(() => {
     getAllTrainings()
-      .then((allGenericTrainings) => {
+      .then((genericTrainings) => {
 
-        console.log('allGenericTrainings', allGenericTrainings)
+        // console.log('allGenericTrainings', genericTrainings)
         
         getVolunteer(`${auth.id}`)
           .then((volunteer) => {
             const volunteerTrainings = volunteer.trainingInformation;
 
-            console.log('volunteer training info', volunteerTrainings)
+            // console.log('volunteer training info', volunteerTrainings)
 
             // match up the allGenericTrainings and volunteerTrainings, setAllTrainings to set
+            let allCorrelatedTrainings: { training: TrainingID; volunteerTraining?: VolunteerTraining }[] = [];
+
+            for (const genericTraining of genericTrainings){
+              let startedByVolunteer = false;
+              for (const volunteerTraining of volunteerTrainings) {
+                if (genericTraining.id == volunteerTraining.trainingID) {
+                  startedByVolunteer = true;
+                  allCorrelatedTrainings.push({training: genericTraining, volunteerTraining: volunteerTraining})
+                }
+              }
+              if (!startedByVolunteer) {
+                allCorrelatedTrainings.push({training: genericTraining, volunteerTraining: undefined})
+              }
+            }
+            setAllTrainings(allCorrelatedTrainings)
+            console.log(allTrainings)
 
           })
           .catch((error) => {
