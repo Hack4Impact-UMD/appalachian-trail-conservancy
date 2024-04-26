@@ -48,10 +48,10 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
           if (progress === undefined || progress === 0) {
             setOpenTrainingPopup(true);
           } else {
-            navigate("/trainingpage");
+            // TODO: Navigate to training landing page and pass Training and VolunteerTraining as state
+            navigate("/trainings/resources/0", { state: { fromApp: true } });
           }
-        }}
-      >
+        }}>
         <div className={styles.trainingImage}>
           <img src={image} alt="Training" />
         </div>

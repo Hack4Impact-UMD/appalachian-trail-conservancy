@@ -2,7 +2,7 @@ import styles from "./TrainingPopup.module.css";
 import { Button } from "@mui/material";
 import { IoCloseOutline } from "react-icons/io5";
 import { whiteButtonGrayBorder } from "../../muiTheme";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface modalPropsType {
   open: boolean;
@@ -17,13 +17,13 @@ const TrainingPopup = ({
   title,
   image,
 }: modalPropsType): React.ReactElement => {
+  const navigate = useNavigate();
   return (
     <div
       className={styles.modalContainer}
       onClick={(e) => {
         e.stopPropagation();
-      }}
-    >
+      }}>
       {open ? (
         <>
           <div className={styles.background} onClick={() => onClose()} />
@@ -38,14 +38,17 @@ const TrainingPopup = ({
                   laboris nisi ut aliquip ex ea commodo consequat.
                 </p>
                 <div className={styles.learnMoreButton}>
-                  <Link className={styles.viewAllLink} to="/trainingpage">
-                    <Button
-                      variant="contained"
-                      sx={{ ...whiteButtonGrayBorder, width: "150px" }}
-                    >
-                      Learn More
-                    </Button>
-                  </Link>
+                  {/* TODO: Navigate to training landing page and pass Training and VolunteerTraining as state */}
+                  <Button
+                    variant="contained"
+                    sx={{ ...whiteButtonGrayBorder, width: "150px" }}
+                    onClick={() =>
+                      navigate("/trainings/resources/0", {
+                        state: { fromApp: true },
+                      })
+                    }>
+                    Learn More
+                  </Button>
                 </div>
               </div>
               <div className={styles.right}>

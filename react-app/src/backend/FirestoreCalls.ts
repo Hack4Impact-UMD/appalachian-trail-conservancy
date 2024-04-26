@@ -42,6 +42,22 @@ export function getUserWithAuth(auth_id: string): Promise<Admin | VolunteerID> {
   });
 }
 
+export function getVolunteer(id: string): Promise<Volunteer> {
+  return new Promise((resolve, reject) => {
+    getDoc(doc(db, "Users", id))
+      .then((volunteerSnapshot) => {
+        if (volunteerSnapshot.exists()) {
+          resolve(volunteerSnapshot.data() as Volunteer);
+        } else {
+          reject(new Error("Volunteer does not exist"));
+        }
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+}
+
 export function addTraining(training: Training): Promise<void> {
   return new Promise((resolve, reject) => {
     /* runTransaction provides protection against race conditions where
@@ -294,6 +310,118 @@ export function getAllPathways(): Promise<PathwayID[]> {
           allPathways.push(newPathway);
         });
         resolve(allPathways);
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+}
+
+export function updateVolunteer(
+  volunteer: Volunteer,
+  id: string
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (id === "" || !id) {
+      reject(new Error("Invalid id"));
+      return;
+    }
+
+    const volunteerRef = doc(db, "Users", id);
+    updateDoc(volunteerRef, { ...volunteer })
+      .then(() => {
+        resolve();
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+}
+
+export function addVolunteerTraining(
+  volunteerId: string,
+  training: TrainingID
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    // Construct the Firestore document reference
+    const volunteerRef = doc(db, "Users", volunteerId);
+    getDoc(volunteerRef)
+      .then((volunteerSnapshot) => {
+        if (volunteerSnapshot.exists()) {
+          const volunteer = volunteerSnapshot.data() as Volunteer;
+
+          // Determine if training already exists in volunteer
+          if (
+            !volunteer.trainingInformation.some(
+              (trainingInformation) =>
+                trainingInformation.trainingID === training.id
+            )
+          ) {
+            // Append new VolunteerTraining to existing volunteerInformation array
+            volunteer.trainingInformation.push({
+              trainingID: training.id,
+              progress: "INPROGRESS",
+              dateCompleted: "",
+              numCompletedResources: 0,
+              numTotalResources: training.resources.length, // total number of resources in training
+            });
+
+            // Add new training to volunteer's training information
+            updateDoc(volunteerRef, {
+              trainingInformation: volunteer.trainingInformation,
+            });
+          } else {
+            reject(new Error("Training already exists in Volunteer"));
+          }
+        } else {
+          reject(new Error("Volunteer does not exist"));
+        }
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+}
+
+export function addVolunteerPathway(
+  volunteerId: string,
+  pathway: PathwayID
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    // Construct the Firestore document reference
+    const volunteerRef = doc(db, "Users", volunteerId);
+    getDoc(volunteerRef)
+      .then((volunteerSnapshot) => {
+        if (volunteerSnapshot.exists()) {
+          const volunteer = volunteerSnapshot.data() as Volunteer;
+
+          // Determine if pathway already exists in volunteer
+          if (
+            !volunteer.pathwayInformation.some(
+              (pathwayInformation) =>
+                pathwayInformation.pathwayID === pathway.id
+            )
+          ) {
+            // Append new VolunteerTraining to existing volunteerInformation array
+            volunteer.pathwayInformation.push({
+              pathwayID: pathway.id,
+              progress: "INPROGRESS", // Assuming initial progress is "INPROGRESS"
+              dateCompleted: "", // Initialize with empty string
+              trainingsCompleted: [], // Initialize with empty array
+              numTrainingsCompleted: 0, // Initialize with 0
+              numTotalTrainings: pathway.trainingIDs.length, // Initialize with number of trainings in pathway
+            });
+
+            // Add new training to volunteer's training information
+            updateDoc(volunteerRef, {
+              pathwayInformation: volunteer.pathwayInformation,
+            });
+          } else {
+            reject(new Error("Pathway already exists in Volunteer"));
+          }
+        } else {
+          reject(new Error("Volunteer does not exist"));
+        }
       })
       .catch((e) => {
         reject(e);

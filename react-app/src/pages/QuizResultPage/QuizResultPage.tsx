@@ -1,5 +1,6 @@
 import { LinearProgress, Button } from "@mui/material";
 import { forestGreenButton, whiteButtonGrayBorder } from "../../muiTheme";
+import { useLocation, Navigate } from "react-router-dom";
 import styles from "./QuizResultPage.module.css";
 import QuizResultCard from "./QuizResultCard/QuizResultCard";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
@@ -24,10 +25,6 @@ const styledProgressPass = {
 const styledProgressFail = {
   ...styledProgressShape,
   backgroundColor: "dimgray",
-};
-
-const styledButtons = {
-  margin: "0 10px 0 10px",
 };
 
 const quizResults = [
@@ -55,6 +52,12 @@ const QuizResultPage = (props: {
   const { achievedScore, totalScore, passingScore } = props;
   const passed = achievedScore >= passingScore;
   const scoredFull = achievedScore == totalScore;
+
+  const location = useLocation();
+
+  if (!location.state?.fromApp) {
+    return <Navigate to="/trainings" />;
+  }
 
   return (
     <>
@@ -120,26 +123,20 @@ const QuizResultPage = (props: {
         {/* footer */}
         <div className={styles.footer}>
           {/* buttons */}
-          <div className={styles.buttons}>
+          <div className={styles.footerButtons}>
             {passed ? (
               <Button sx={forestGreenButton} variant="contained">
                 Exit training
               </Button>
             ) : (
               <div>
-                <Button
-                  sx={{ ...whiteButtonGrayBorder, ...styledButtons }}
-                  variant="contained">
+                <Button sx={{ ...whiteButtonGrayBorder }} variant="contained">
                   Exit training
                 </Button>
-                <Button
-                  sx={{ ...whiteButtonGrayBorder, ...styledButtons }}
-                  variant="contained">
+                <Button sx={{ ...whiteButtonGrayBorder }} variant="contained">
                   Restart training
                 </Button>
-                <Button
-                  sx={{ ...forestGreenButton, ...styledButtons }}
-                  variant="contained">
+                <Button sx={{ ...forestGreenButton }} variant="contained">
                   Retake quiz
                 </Button>
               </div>
