@@ -12,6 +12,12 @@
   z-index: 2;
 }
 
+.arrowBox {
+  display: flex;
+  justify-content: right;
+  margin: 5%;
+}
+
 .logoContainer {
   text-align: center;
   margin-top: 15%;

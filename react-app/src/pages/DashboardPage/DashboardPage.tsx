@@ -12,10 +12,12 @@ import training2 from "../../assets/training2.jpg";
 import training3 from "../../assets/training3.png";
 import training4 from "../../assets/training4.jpg";
 import badge from "../../assets/badge.svg";
+import { useState } from "react";
 
 function Dashboard() {
   const auth = useAuth();
   const images = [training1, training2, training3, training4];
+  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
 
   const pathwayCards = [
     { title: "Title 1", progress: 73 },
@@ -46,7 +48,7 @@ function Dashboard() {
 
   return (
     <>
-      <NavigationBar />
+      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen}/>
 
       <div className={`${styles.split} ${styles.right}`}>
         <div className={styles.outerContainer}>

@@ -12,8 +12,15 @@ import achievementsActive from "../../assets/achievementsWhite.svg";
 import achievementInactive from "../../assets/achievementsGray.svg";
 import logout from "../../assets/logout.svg";
 import LogoutPopup from "./LogoutPopup/LogoutPopup";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { MdOutlineKeyboardDoubleArrowLeft } from "react-icons/md";
 
-const NavigationBar = () => {
+interface navigationBarPropsType {
+  open: boolean;
+  setOpen: Function;
+}
+
+const NavigationBar = ({open, setOpen}: navigationBarPropsType): React.ReactElement => {
   const [openLogoutPopup, setOpenLogoutPopup] = useState<boolean>(false);
 
   const handleLogOut = (): void => {
@@ -21,7 +28,14 @@ const NavigationBar = () => {
   };
 
   return (
-    <div className={styles.navigationContainer}>
+    <div>
+    {open ? (
+      <> 
+      <div className={styles.navigationContainer}>
+      <div className={styles.arrowBox}>
+        <MdOutlineKeyboardDoubleArrowLeft
+          onClick={() => setOpen(false)}/>
+      </div>
       <div className={styles.logoContainer}>
         <img src={atcprimarylogo} alt="ATC Logo" className={styles.logo} />
       </div>
@@ -133,6 +147,9 @@ const NavigationBar = () => {
         </button>
       </div>
       <LogoutPopup open={openLogoutPopup} onClose={setOpenLogoutPopup} />
+    </div>
+      </>) 
+      : (<> </>)}    
     </div>
   );
 };
