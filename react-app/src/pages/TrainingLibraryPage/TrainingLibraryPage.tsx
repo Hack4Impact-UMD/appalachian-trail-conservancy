@@ -16,9 +16,9 @@ import training1 from "../../assets/training1.jpg";
 import training2 from "../../assets/training2.jpg";
 import training3 from "../../assets/training3.png";
 import training4 from "../../assets/training4.jpg";
+import { getAll } from "firebase/remote-config";
 import { getAllTrainings, getVolunteer } from "../../backend/FirestoreCalls"
 import { TrainingID } from "../../types/TrainingType";
-import { getAll } from "firebase/remote-config";
 import { VolunteerTraining } from "../../types/UserType";
 import { useAuth } from "../../auth/AuthProvider.tsx";
  
@@ -27,10 +27,10 @@ function TrainingLibrary() {
 
   const [filterType, setFilterType] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredTrainings, setFilteredTrainings] = useState<
-    { training: TrainingID, volunteerTraining?: VolunteerTraining }[]>([]);
   const [correlatedTrainings, setCorrelatedTrainings] = useState<
     { training: TrainingID, volunteerTraining?: VolunteerTraining } []>([]);
+  const [filteredTrainings, setFilteredTrainings] = useState<
+    { training: TrainingID, volunteerTraining?: VolunteerTraining }[]>([]);
 
   const images = [training1, training2, training3, training4];
 
@@ -75,7 +75,7 @@ function TrainingLibrary() {
           .then((volunteer) => {
             const volunteerTrainings = volunteer.trainingInformation;
 
-            // match up the allGenericTrainings and volunteerTrainings, use setAllTrainings to set
+            // match up the allGenericTrainings and volunteerTrainings, use setCorrelatedTrainings to set
             let allCorrelatedTrainings: { training: TrainingID; volunteerTraining?: VolunteerTraining }[] = [];
 
             for (const genericTraining of genericTrainings){
@@ -92,7 +92,7 @@ function TrainingLibrary() {
                 allCorrelatedTrainings.push({training: genericTraining, volunteerTraining: undefined})
               }
             }
-            setCorrelatedTrainings(allCorrelatedTrainings)
+            setCorrelatedTrainings(allCorrelatedTrainings);
             // also pass allCorrelatedTrainings into filterTrainings, in case it hasn't been set yet
             filterTrainings(allCorrelatedTrainings);
           })
