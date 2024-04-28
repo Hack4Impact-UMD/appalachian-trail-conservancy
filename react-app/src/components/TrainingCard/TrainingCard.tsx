@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import styles from "./TrainingCard.module.css";
 import LinearProgressWithLabel from "../LinearProgressWithLabel/LinearProgressWithLabel";
 import TrainingPopup from "../TrainingPopup/TrainingPopup";
-import { getTraining } from "../../backend/FirestoreCalls"
 import { Training } from "../../types/TrainingType";
 import { VolunteerTraining } from "../../types/UserType";
 
@@ -28,7 +27,10 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
           NOT STARTED
         </div>
       );
-    } else if (volunteerTraining.numCompletedResources === volunteerTraining.numTotalResources) {
+    } else if (
+      volunteerTraining.numCompletedResources ===
+      volunteerTraining.numTotalResources
+    ) {
       // Training completed
       return (
         <div className={`${styles.marker} ${styles.completedMarker}`}>
@@ -37,7 +39,14 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
       );
     } else {
       // Training in progress
-      return <LinearProgressWithLabel value={volunteerTraining.numCompletedResources / volunteerTraining.numTotalResources} />;
+      return (
+        <LinearProgressWithLabel
+          value={
+            volunteerTraining.numCompletedResources /
+            volunteerTraining.numTotalResources
+          }
+        />
+      );
     }
   };
 
@@ -52,14 +61,15 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
             // TODO: Navigate to training landing page and pass Training and VolunteerTraining as state
             navigate("/trainings/resources/0", {
               state: {
-                training: training, 
+                training: training,
                 volunteerTraining: volunteerTraining,
-              }
-            });         
-           }
-        }}>
+              },
+            });
+          }
+        }}
+      >
         <div className={styles.trainingImage}>
-          <img src={"http://pngimg.com/uploads/spongebob/spongebob_PNG38.png"} alt="Training" />
+          <img src={training.coverImage} alt="Training" />
         </div>
         <div className={styles.trainingContent}>
           <div className={styles.trainingTitle}>{training.name}</div>

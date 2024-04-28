@@ -16,26 +16,31 @@ import training1 from "../../assets/training1.jpg";
 import training2 from "../../assets/training2.jpg";
 import training3 from "../../assets/training3.png";
 import training4 from "../../assets/training4.jpg";
-import { getAll } from "firebase/remote-config";
-import { getAllTrainings, getVolunteer } from "../../backend/FirestoreCalls"
+import { getAllTrainings, getVolunteer } from "../../backend/FirestoreCalls";
 import { TrainingID } from "../../types/TrainingType";
 import { VolunteerTraining } from "../../types/UserType";
 import { useAuth } from "../../auth/AuthProvider.tsx";
- 
+
 function TrainingLibrary() {
   const auth = useAuth();
 
   const [filterType, setFilterType] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [correlatedTrainings, setCorrelatedTrainings] = useState<
-    { genericTraining: TrainingID, volunteerTraining?: VolunteerTraining } []>([]);
+    { genericTraining: TrainingID; volunteerTraining?: VolunteerTraining }[]
+  >([]);
   const [filteredTrainings, setFilteredTrainings] = useState<
-    { genericTraining: TrainingID, volunteerTraining?: VolunteerTraining }[]>([]);
+    { genericTraining: TrainingID; volunteerTraining?: VolunteerTraining }[]
+  >([]);
 
   const images = [training1, training2, training3, training4];
 
-  const filterTrainings = (trainings?: { genericTraining: TrainingID, volunteerTraining?: VolunteerTraining }[]) => {
-    
+  const filterTrainings = (
+    trainings?: {
+      genericTraining: TrainingID;
+      volunteerTraining?: VolunteerTraining;
+    }[]
+  ) => {
     // if correlatedTrainings hasn't been set yet, use what's passed in, which is correlatedTrainings
     let filtered = correlatedTrainings;
     if (correlatedTrainings.length === 0 && trainings) {
@@ -45,65 +50,79 @@ function TrainingLibrary() {
     // search bar filter
     if (searchQuery) {
       filtered = filtered.filter((corrTraining) =>
-        corrTraining.genericTraining.name.toLowerCase().includes(searchQuery.toLowerCase())
+        corrTraining.genericTraining.name
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase())
       );
     }
 
     // in progress / completed filters
     if (filterType === "inProgress") {
       filtered = filtered.filter(
-        (corrTraining) => corrTraining.volunteerTraining && corrTraining.volunteerTraining.progress == "INPROGRESS"
+        (corrTraining) =>
+          corrTraining.volunteerTraining &&
+          corrTraining.volunteerTraining.progress == "INPROGRESS"
       );
     } else if (filterType === "completed") {
-      filtered = filtered.filter((corrTraining) => corrTraining.volunteerTraining && corrTraining.volunteerTraining.progress == "COMPLETED");
+      filtered = filtered.filter(
+        (corrTraining) =>
+          corrTraining.volunteerTraining &&
+          corrTraining.volunteerTraining.progress == "COMPLETED"
+      );
     }
 
     setFilteredTrainings(filtered);
   };
 
   useEffect(() => {
-
     // get all trainings from firebase
     getAllTrainings()
       .then((genericTrainings) => {
-
         // only use auth if it is finished loading
         if (!auth.loading && auth.id) {
-
-          // get volunteer info from firebase. will contain volunteer progress on trainings 
+          // get volunteer info from firebase. will contain volunteer progress on trainings
           getVolunteer(auth.id.toString())
-          .then((volunteer) => {
-            const volunteerTrainings = volunteer.trainingInformation;
+            .then((volunteer) => {
+              const volunteerTrainings = volunteer.trainingInformation;
 
-            // match up the allGenericTrainings and volunteerTrainings, use setCorrelatedTrainings to set
-            let allCorrelatedTrainings: { genericTraining: TrainingID; volunteerTraining?: VolunteerTraining }[] = [];
+              // match up the allGenericTrainings and volunteerTrainings, use setCorrelatedTrainings to set
+              let allCorrelatedTrainings: {
+                genericTraining: TrainingID;
+                volunteerTraining?: VolunteerTraining;
+              }[] = [];
 
-            for (const genericTraining of genericTrainings){
-              // if genericTraining in volunteer.trainingInformation (has been started by volunteer), then we include that. 
-              // otherwise, it's undefined
-              let startedByVolunteer = false;
-              for (const volunteerTraining of volunteerTrainings) {
-                if (genericTraining.id == volunteerTraining.trainingID) {
-                  startedByVolunteer = true;
-                  allCorrelatedTrainings.push({genericTraining: genericTraining, volunteerTraining: volunteerTraining})
+              for (const genericTraining of genericTrainings) {
+                // if genericTraining in volunteer.trainingInformation (has been started by volunteer), then we include that.
+                // otherwise, it's undefined
+                let startedByVolunteer = false;
+                for (const volunteerTraining of volunteerTrainings) {
+                  if (genericTraining.id == volunteerTraining.trainingID) {
+                    startedByVolunteer = true;
+                    allCorrelatedTrainings.push({
+                      genericTraining: genericTraining,
+                      volunteerTraining: volunteerTraining,
+                    });
+                  }
+                }
+                if (!startedByVolunteer) {
+                  allCorrelatedTrainings.push({
+                    genericTraining: genericTraining,
+                    volunteerTraining: undefined,
+                  });
                 }
               }
-              if (!startedByVolunteer) {
-                allCorrelatedTrainings.push({genericTraining: genericTraining, volunteerTraining: undefined})
-              }
-            }
-            setCorrelatedTrainings(allCorrelatedTrainings);
-            // also pass allCorrelatedTrainings into filterTrainings, in case it hasn't been set yet
-            filterTrainings(allCorrelatedTrainings);
-          })
-          .catch((error) => {
-            console.error('Error fetching volunteer:', error);
-          })
+              setCorrelatedTrainings(allCorrelatedTrainings);
+              // also pass allCorrelatedTrainings into filterTrainings, in case it hasn't been set yet
+              filterTrainings(allCorrelatedTrainings);
+            })
+            .catch((error) => {
+              console.error("Error fetching volunteer:", error);
+            });
         }
       })
       .catch((error) => {
-        console.error('Error fetching trainings:', error);
-      })
+        console.error("Error fetching trainings:", error);
+      });
   }, [searchQuery, filterType, auth.loading, auth.id]);
 
   const updateQuery = (e: {
@@ -143,7 +162,8 @@ function TrainingLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("all")}>
+                  onClick={() => setFilterType("all")}
+                >
                   All
                 </Button>
                 <Button
@@ -153,7 +173,8 @@ function TrainingLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("inProgress")}>
+                  onClick={() => setFilterType("inProgress")}
+                >
                   In Progress
                 </Button>
                 <Button
@@ -163,7 +184,8 @@ function TrainingLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("completed")}>
+                  onClick={() => setFilterType("completed")}
+                >
                   Completed
                 </Button>
               </div>
@@ -181,7 +203,7 @@ function TrainingLibrary() {
                       training={training.genericTraining}
                       volunteerTraining={training.volunteerTraining}
                     />
-                 </div>
+                  </div>
                 ))}
               </div>
             )}
