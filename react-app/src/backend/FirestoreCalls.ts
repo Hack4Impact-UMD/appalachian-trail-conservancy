@@ -10,10 +10,12 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { db } from "../config/firebase";
+import { httpsCallable } from "firebase/functions";
+import { db, functions } from "../config/firebase";
 import { Volunteer, VolunteerID, User, Admin } from "../types/UserType";
 import { Training, TrainingID, Quiz } from "../types/TrainingType";
 import { Pathway, PathwayID } from "../types/PathwayType";
+import { reject } from "lodash";
 
 export function getUserWithAuth(auth_id: string): Promise<Admin | VolunteerID> {
   return new Promise((resolve, reject) => {
@@ -173,6 +175,21 @@ export function getQuiz(trainingId: string): Promise<Quiz> {
       .catch((e) => {
         reject(e);
       });
+  });
+}
+
+export function validateQuiz(
+  trainingId: string,
+  volunteerId: string,
+  volunteerAnswers: string[]
+): Promise<any> {
+  return new Promise((resolve, reject) => {
+    const validateQuizResults = httpsCallable(functions, "validateQuizResults");
+    validateQuizResults({ trainingId, volunteerId, volunteerAnswers })
+      .then((numAnswersCorrect) => {
+        resolve(numAnswersCorrect);
+      })
+      .catch(() => {});
   });
 }
 
