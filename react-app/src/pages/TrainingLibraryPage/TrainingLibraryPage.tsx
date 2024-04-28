@@ -28,13 +28,13 @@ function TrainingLibrary() {
   const [filterType, setFilterType] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [correlatedTrainings, setCorrelatedTrainings] = useState<
-    { training: TrainingID, volunteerTraining?: VolunteerTraining } []>([]);
+    { genericTraining: TrainingID, volunteerTraining?: VolunteerTraining } []>([]);
   const [filteredTrainings, setFilteredTrainings] = useState<
-    { training: TrainingID, volunteerTraining?: VolunteerTraining }[]>([]);
+    { genericTraining: TrainingID, volunteerTraining?: VolunteerTraining }[]>([]);
 
   const images = [training1, training2, training3, training4];
 
-  const filterTrainings = (trainings?: { training: TrainingID, volunteerTraining?: VolunteerTraining }[]) => {
+  const filterTrainings = (trainings?: { genericTraining: TrainingID, volunteerTraining?: VolunteerTraining }[]) => {
     
     // if correlatedTrainings hasn't been set yet, use what's passed in, which is correlatedTrainings
     let filtered = correlatedTrainings;
@@ -45,7 +45,7 @@ function TrainingLibrary() {
     // search bar filter
     if (searchQuery) {
       filtered = filtered.filter((corrTraining) =>
-        corrTraining.training.name.toLowerCase().includes(searchQuery.toLowerCase())
+        corrTraining.genericTraining.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
@@ -76,7 +76,7 @@ function TrainingLibrary() {
             const volunteerTrainings = volunteer.trainingInformation;
 
             // match up the allGenericTrainings and volunteerTrainings, use setCorrelatedTrainings to set
-            let allCorrelatedTrainings: { training: TrainingID; volunteerTraining?: VolunteerTraining }[] = [];
+            let allCorrelatedTrainings: { genericTraining: TrainingID; volunteerTraining?: VolunteerTraining }[] = [];
 
             for (const genericTraining of genericTrainings){
               // if genericTraining in volunteer.trainingInformation (has been started by volunteer), then we include that. 
@@ -85,11 +85,11 @@ function TrainingLibrary() {
               for (const volunteerTraining of volunteerTrainings) {
                 if (genericTraining.id == volunteerTraining.trainingID) {
                   startedByVolunteer = true;
-                  allCorrelatedTrainings.push({training: genericTraining, volunteerTraining: volunteerTraining})
+                  allCorrelatedTrainings.push({genericTraining: genericTraining, volunteerTraining: volunteerTraining})
                 }
               }
               if (!startedByVolunteer) {
-                allCorrelatedTrainings.push({training: genericTraining, volunteerTraining: undefined})
+                allCorrelatedTrainings.push({genericTraining: genericTraining, volunteerTraining: undefined})
               }
             }
             setCorrelatedTrainings(allCorrelatedTrainings);
@@ -175,15 +175,15 @@ function TrainingLibrary() {
               </div>
             ) : (
               <div className={styles.cardsContainer}>
-                {filteredTrainings.map((corrTraining, index) => (
+                {filteredTrainings.map((training, index) => (
                   <div className={styles.card} key={index}>
                     <TrainingCard
-                      image={corrTraining.training.coverImage}
-                      title={corrTraining.training.name}
+                      image={training.genericTraining.coverImage}
+                      title={training.genericTraining.name}
                       // if there exists volunteer training, pass in the percentage completion. if doesn't exist, give 0
                       progress={
-                        corrTraining.volunteerTraining?
-                        (corrTraining.volunteerTraining.numCompletedResources / corrTraining.volunteerTraining.numTotalResources * 100)
+                        training.volunteerTraining?
+                        (training.volunteerTraining.numCompletedResources / training.volunteerTraining.numTotalResources * 100)
                         : 0
                       }
                     />
