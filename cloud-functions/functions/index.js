@@ -497,3 +497,156 @@ exports.setUserRole = onCall(
     });
   }
 );
+
+/**
+ * This function validates a Volunteer's quiz answers
+ *
+ * Arguments: trainingId, volunteerAnswers, volunteerID
+ *
+ * Retrieves training information, then checks the volunteers answers against
+ * the quiz answers from the Training data. Retrieves and updates the Volunteer's
+ * volunteerTraining data corresponding to the current Training given that
+ * they recieved a higher score or was their first time taking the quiz
+ */
+exports.validateQuizResults = onCall(
+  { region: "us-east4", cors: true },
+  async ({ auth, data }) => {
+    return new Promise(async (resolve, reject) => {
+      const { trainingId, volunteerAnswers, volunteerId } = data;
+      if (
+        // Validate auth
+        auth &&
+        auth.token &&
+        auth.token.role.toLowerCase() == "volunteer" &&
+        // Validate parameters here
+        trainingId &&
+        volunteerAnswers &&
+        volunteerId
+      ) {
+        await db
+          .collection("Trainings")
+          .doc(trainingId)
+          .get()
+          .then(async (trainingSnapshot) => {
+            if (trainingSnapshot.exists) {
+              const trainingData = trainingSnapshot.data();
+              const { quiz } = trainingData;
+              const { questions } = quiz;
+
+              if (questions.length === volunteerAnswers.length) {
+                // Check Volunteer answers against quiz answers
+                const numAnswersCorrect = questions.reduce(
+                  (acc, question, idx) => {
+                    return volunteerAnswers[idx] === question.answer
+                      ? acc + 1
+                      : acc;
+                  },
+                  0
+                );
+
+                // Get Volunteer data
+                const volunteerData = await db
+                  .collection("Users")
+                  .doc(volunteerId)
+                  .get()
+                  .then((volunteerSnapshot) => volunteerSnapshot.data())
+                  .catch((error) => {
+                    reject({
+                      reason: "database-retrieval-failed",
+                      text: "Unable to find volunteer in the database. Make sure they exist.",
+                    });
+                    throw new functions.https.HttpsError("unknown", `${error}`);
+                  });
+
+                let volunteerTrainingInfo =
+                  volunteerData.trainingInformation.find(
+                    (volunteerTraining) =>
+                      volunteerTraining.trainingID === trainingId
+                  );
+
+                if (volunteerTrainingInfo) {
+                  if (
+                    volunteerTrainingInfo.quizScoreRecieved == undefined ||
+                    volunteerTrainingInfo.quizScoreRecieved <= numAnswersCorrect
+                  ) {
+                    // Update volunteerTraining if quiz score does not exist or higher score is recieved
+                    volunteerTrainingInfo.quizScoreRecieved = numAnswersCorrect;
+                    volunteerTrainingInfo.dateCompleted = new Date()
+                      .toISOString()
+                      .slice(0, 10);
+                    volunteerTrainingInfo.progress =
+                      numAnswersCorrect >= quiz.passingScore
+                        ? "COMPLETED"
+                        : "INPROGRESS";
+
+                    // Update VolunteerTraining list
+                    let newVolunteerTraining = [];
+                    volunteerData.trainingInformation.forEach(
+                      (volunteerTraining) => {
+                        newVolunteerTraining.push(
+                          volunteerTraining.trainingID === trainingId
+                            ? volunteerTrainingInfo
+                            : volunteerTraining
+                        );
+                      }
+                    );
+
+                    // Update the Volunteer document in firestore
+                    const updateVolunteer = await db
+                      .collection("Users")
+                      .doc(volunteerId)
+                      .update({ trainingInformation: newVolunteerTraining })
+                      .catch((error) => {
+                        reject({
+                          reason: "database-update-failed",
+                          text: "Unable to update Volunteer in the database.",
+                        });
+                        throw new functions.https.HttpsError(
+                          "unknown",
+                          `${error}`
+                        );
+                      });
+                  }
+
+                  // Resolve with score
+                  resolve(numAnswersCorrect);
+                } else {
+                  // Volunteer is not enrolled in Training
+                  throw new functions.https.HttpsError(
+                    "volunteer-not-enrolled-in-training",
+                    "the volunteer is not enrolled in the training"
+                  );
+                }
+
+                resolve(numAnswersCorrect);
+              } else {
+                // Training quiz length and volunteer list of answers are unequal length
+                throw new functions.https.HttpsError(
+                  "invalid-volunteer-answers",
+                  "the volunteer's answers is of wrong length"
+                );
+              }
+            } else {
+              // Training does not exist given the Training id parameter
+              throw new functions.https.HttpsError(
+                "invalid-parameter",
+                "Training does not exist with the given id"
+              );
+            }
+          })
+          .catch((error) => {
+            reject({
+              reason: "database-retrieval-failed",
+              text: "Unable to find training in the database. Make sure it exists.",
+            });
+            throw new functions.https.HttpsError("unknown", `${error}`);
+          });
+      } else {
+        throw new functions.https.HttpsError(
+          "invalid-parameters",
+          "Function was called with invalid parameters."
+        );
+      }
+    });
+  }
+);
