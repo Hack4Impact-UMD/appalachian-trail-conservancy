@@ -3,19 +3,21 @@ import { Button } from "@mui/material";
 import { IoCloseOutline } from "react-icons/io5";
 import { whiteButtonGrayBorder } from "../../muiTheme";
 import { useNavigate } from "react-router-dom";
+import { Training } from "../../types/TrainingType";
+import { VolunteerTraining } from "../../types/UserType";
+
 
 interface modalPropsType {
   open: boolean;
   onClose: any;
-  title: string;
-  image: string;
+  training: Training;
+  volunteerTraining: VolunteerTraining | undefined;
 }
 
 const TrainingPopup = ({
   open,
   onClose,
-  title,
-  image,
+  training,
 }: modalPropsType): React.ReactElement => {
   const navigate = useNavigate();
   return (
@@ -30,12 +32,9 @@ const TrainingPopup = ({
           <div className={styles.centered}>
             <div className={styles.modal}>
               <div className={styles.left}>
-                <p className={styles.title}>{title}</p>
+                <p className={styles.title}>{training.name}</p>
                 <p className={styles.textContainer}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat.
+                  {training.shortBlurb}
                 </p>
                 <div className={styles.learnMoreButton}>
                   {/* TODO: Navigate to training landing page and pass Training and VolunteerTraining as state */}
@@ -55,7 +54,7 @@ const TrainingPopup = ({
                 <div className={styles.closeButton}>
                   <IoCloseOutline onClick={() => onClose()} />
                 </div>
-                <img src={image} />
+                <img src={training.coverImage} />
               </div>
             </div>
           </div>

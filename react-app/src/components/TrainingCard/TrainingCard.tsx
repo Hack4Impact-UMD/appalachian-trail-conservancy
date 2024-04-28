@@ -3,31 +3,32 @@ import { useNavigate } from "react-router-dom";
 import styles from "./TrainingCard.module.css";
 import LinearProgressWithLabel from "../LinearProgressWithLabel/LinearProgressWithLabel";
 import TrainingPopup from "../TrainingPopup/TrainingPopup";
+import { getTraining } from "../../backend/FirestoreCalls"
+import { Training } from "../../types/TrainingType";
+import { VolunteerTraining } from "../../types/UserType";
 
 interface TrainingCardProps {
-  image: string;
-  title: string;
-  progress?: number; // Optional progress value
+  training: Training;
+  volunteerTraining?: VolunteerTraining | undefined;
 }
 
 const TrainingCard: React.FC<TrainingCardProps> = ({
-  image,
-  title,
-  progress,
+  training,
+  volunteerTraining,
 }) => {
   const [openTrainingPopup, setOpenTrainingPopup] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
   const renderMarker = () => {
-    if (progress === undefined || progress === 0) {
+    if (volunteerTraining == undefined) {
       // Training not started
       return (
         <div className={`${styles.marker} ${styles.notStartedMarker}`}>
           NOT STARTED
         </div>
       );
-    } else if (progress === 100) {
+    } else if (volunteerTraining.numCompletedResources === volunteerTraining.numTotalResources) {
       // Training completed
       return (
         <div className={`${styles.marker} ${styles.completedMarker}`}>
@@ -36,7 +37,7 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
       );
     } else {
       // Training in progress
-      return <LinearProgressWithLabel value={progress} />;
+      return <LinearProgressWithLabel value={volunteerTraining.numCompletedResources / volunteerTraining.numTotalResources} />;
     }
   };
 
@@ -45,26 +46,31 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
       <div
         className={styles.trainingCard}
         onClick={() => {
-          if (progress === undefined || progress === 0) {
+          if (volunteerTraining == undefined) {
             setOpenTrainingPopup(true);
           } else {
             // TODO: Navigate to training landing page and pass Training and VolunteerTraining as state
-            navigate("/trainings/resources/0", { state: { fromApp: true } });
-          }
+            navigate("/trainings/resources/0", {
+              state: {
+                training: training, 
+                volunteerTraining: volunteerTraining,
+              }
+            });         
+           }
         }}>
         <div className={styles.trainingImage}>
-          <img src={image} alt="Training" />
+          <img src={"http://pngimg.com/uploads/spongebob/spongebob_PNG38.png"} alt="Training" />
         </div>
         <div className={styles.trainingContent}>
-          <div className={styles.trainingTitle}>{title}</div>
+          <div className={styles.trainingTitle}>{training.name}</div>
           <div className={styles.progressBar}>{renderMarker()}</div>
         </div>
       </div>
       <TrainingPopup
         open={openTrainingPopup}
         onClose={setOpenTrainingPopup}
-        title={title}
-        image={image}
+        training={training}
+        volunteerTraining={volunteerTraining}
       />
     </>
   );

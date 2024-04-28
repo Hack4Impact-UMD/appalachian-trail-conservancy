@@ -178,16 +178,10 @@ function TrainingLibrary() {
                 {filteredTrainings.map((training, index) => (
                   <div className={styles.card} key={index}>
                     <TrainingCard
-                      image={training.genericTraining.coverImage}
-                      title={training.genericTraining.name}
-                      // if there exists volunteer training, pass in the percentage completion. if doesn't exist, give 0
-                      progress={
-                        training.volunteerTraining?
-                        (training.volunteerTraining.numCompletedResources / training.volunteerTraining.numTotalResources * 100)
-                        : 0
-                      }
+                      training={training.genericTraining}
+                      volunteerTraining={training.volunteerTraining}
                     />
-                  </div>
+                 </div>
                 ))}
               </div>
             )}
