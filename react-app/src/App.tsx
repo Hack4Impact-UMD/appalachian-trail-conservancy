@@ -18,7 +18,6 @@ import LogoutPage from "./pages/LogoutPage/LogoutPage.tsx";
 import QuizPage from "./pages/QuizPage/QuizPage.tsx";
 import QuizResult from "./pages/QuizResultPage/QuizResultPage.tsx";
 import QuizLandingPage from "./pages/QuizLandingPage/QuizLandingPage.tsx";
-import { validateQuiz } from "./backend/FirestoreCalls.ts";
 
 function App() {
   return (
@@ -120,23 +119,7 @@ function App() {
               path="/testfunctions"
               element={
                 <RequireAuth>
-                  <button
-                    onClick={() => {
-                      validateQuiz(
-                        "GQf4rBgvJ4uU9Is89wXp",
-                        "ZpfkIPPdBuaeA6iFyhaR",
-                        ["Paris", "1"]
-                      )
-                        .then((res) => {
-                          console.log(res);
-                        })
-                        .catch((error) => {
-                          console.log(error);
-                        });
-                    }}
-                  >
-                    TEST
-                  </button>
+                  <button onClick={() => {}}>TEST</button>
                 </RequireAuth>
               }
             />
