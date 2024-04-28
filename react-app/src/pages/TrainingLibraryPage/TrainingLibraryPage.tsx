@@ -16,9 +16,9 @@ import training1 from "../../assets/training1.jpg";
 import training2 from "../../assets/training2.jpg";
 import training3 from "../../assets/training3.png";
 import training4 from "../../assets/training4.jpg";
+import { getAll } from "firebase/remote-config";
 import { getAllTrainings, getVolunteer } from "../../backend/FirestoreCalls"
 import { TrainingID } from "../../types/TrainingType";
-import { getAll } from "firebase/remote-config";
 import { VolunteerTraining } from "../../types/UserType";
 import { useAuth } from "../../auth/AuthProvider.tsx";
  
@@ -27,27 +27,29 @@ function TrainingLibrary() {
 
   const [filterType, setFilterType] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredTrainings, setFilteredTrainings] = useState<
-    { training: TrainingID, volunteerTraining?: VolunteerTraining }[]>([]);
   const [correlatedTrainings, setCorrelatedTrainings] = useState<
     { training: TrainingID, volunteerTraining?: VolunteerTraining } []>([]);
+  const [filteredTrainings, setFilteredTrainings] = useState<
+    { training: TrainingID, volunteerTraining?: VolunteerTraining }[]>([]);
 
   const images = [training1, training2, training3, training4];
 
   const filterTrainings = (trainings?: { training: TrainingID, volunteerTraining?: VolunteerTraining }[]) => {
     
+    // if correlatedTrainings hasn't been set yet, use what's passed in, which is correlatedTrainings
     let filtered = correlatedTrainings;
     if (correlatedTrainings.length === 0 && trainings) {
       filtered = trainings;
     }
-    console.log('at filtering start', filtered);
 
+    // search bar filter
     if (searchQuery) {
       filtered = filtered.filter((corrTraining) =>
         corrTraining.training.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
+    // in progress / completed filters
     if (filterType === "inProgress") {
       filtered = filtered.filter(
         (corrTraining) => corrTraining.volunteerTraining && corrTraining.volunteerTraining.progress == "INPROGRESS"
@@ -60,26 +62,25 @@ function TrainingLibrary() {
   };
 
   useEffect(() => {
+
+    // get all trainings from firebase
     getAllTrainings()
       .then((genericTrainings) => {
 
-        console.log('allGenericTrainings', genericTrainings)
-        console.log(auth.loading)
-
-        
+        // only use auth if it is finished loading
         if (!auth.loading && auth.id) {
-          console.log('not loading', auth.id)
+
+          // get volunteer info from firebase. will contain volunteer progress on trainings 
           getVolunteer(auth.id.toString())
           .then((volunteer) => {
             const volunteerTrainings = volunteer.trainingInformation;
 
-            console.log('volunteer training info', volunteerTrainings)
-
-            // match up the allGenericTrainings and volunteerTrainings, setAllTrainings to set
+            // match up the allGenericTrainings and volunteerTrainings, use setCorrelatedTrainings to set
             let allCorrelatedTrainings: { training: TrainingID; volunteerTraining?: VolunteerTraining }[] = [];
 
             for (const genericTraining of genericTrainings){
-              // if training in volunteer.trainingInformation, then we include that. otherwise, it's undefined
+              // if genericTraining in volunteer.trainingInformation (has been started by volunteer), then we include that. 
+              // otherwise, it's undefined
               let startedByVolunteer = false;
               for (const volunteerTraining of volunteerTrainings) {
                 if (genericTraining.id == volunteerTraining.trainingID) {
@@ -91,16 +92,14 @@ function TrainingLibrary() {
                 allCorrelatedTrainings.push({training: genericTraining, volunteerTraining: undefined})
               }
             }
-            setCorrelatedTrainings(allCorrelatedTrainings)
-            console.log('has it been set yet', correlatedTrainings)
+            setCorrelatedTrainings(allCorrelatedTrainings);
+            // also pass allCorrelatedTrainings into filterTrainings, in case it hasn't been set yet
             filterTrainings(allCorrelatedTrainings);
-
           })
           .catch((error) => {
             console.error('Error fetching volunteer:', error);
           })
         }
-        
       })
       .catch((error) => {
         console.error('Error fetching trainings:', error);
