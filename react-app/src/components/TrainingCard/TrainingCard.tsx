@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 import styles from "./TrainingCard.module.css";
 import LinearProgressWithLabel from "../LinearProgressWithLabel/LinearProgressWithLabel";
 import TrainingPopup from "../TrainingPopup/TrainingPopup";
-import { Training } from "../../types/TrainingType";
+import { Training, TrainingID } from "../../types/TrainingType";
 import { VolunteerTraining } from "../../types/UserType";
 
 interface TrainingCardProps {
-  training: Training;
+  training: TrainingID;
   volunteerTraining?: VolunteerTraining | undefined;
 }
 
@@ -59,12 +59,9 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
             setOpenTrainingPopup(true);
           } else {
             // TODO: Navigate to training landing page and pass Training and VolunteerTraining as state
-            navigate("/trainings/resources/0", {
-              state: {
-                training: training,
-                volunteerTraining: volunteerTraining,
-              },
-            });
+            navigate(`/trainings/:${training.id}`, {
+              state: { training: training, volunteerTraining: volunteerTraining }
+            })
           }
         }}
       >

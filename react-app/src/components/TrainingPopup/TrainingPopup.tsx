@@ -3,14 +3,14 @@ import { Button } from "@mui/material";
 import { IoCloseOutline } from "react-icons/io5";
 import { whiteButtonGrayBorder } from "../../muiTheme";
 import { useNavigate } from "react-router-dom";
-import { Training } from "../../types/TrainingType";
+import { Training, TrainingID } from "../../types/TrainingType";
 import { VolunteerTraining } from "../../types/UserType";
 
 
 interface modalPropsType {
   open: boolean;
   onClose: any;
-  training: Training;
+  training: TrainingID;
   volunteerTraining: VolunteerTraining | undefined;
 }
 
@@ -18,6 +18,7 @@ const TrainingPopup = ({
   open,
   onClose,
   training,
+  volunteerTraining,
 }: modalPropsType): React.ReactElement => {
   const navigate = useNavigate();
   return (
@@ -42,8 +43,8 @@ const TrainingPopup = ({
                     variant="contained"
                     sx={{ ...whiteButtonGrayBorder, width: "150px" }}
                     onClick={() =>
-                      navigate("/trainings/resources/0", {
-                        state: { fromApp: true },
+                      navigate(`/trainings/:${training.id}`, {
+                        state: { training: training, volunteerTraining: volunteerTraining }
                       })
                     }>
                     Learn More

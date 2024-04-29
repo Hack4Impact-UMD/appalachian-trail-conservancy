@@ -28,7 +28,11 @@ const styledProgressPass = {
 
 function TrainingLandingPage() {
   const [loading, setLoading] = useState<boolean>(true);
-  // If training & volunteerTraining is passed via state, then set it accordingly.
+
+  const trainingId = useParams().id;
+  const location = useLocation();
+
+   // If training & volunteerTraining is passed via state, then set it accordingly.
   // Otherwise, retrieve training via id from url parameter then check if a VolunteerTraining exists for it
   const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
     {
@@ -61,8 +65,11 @@ function TrainingLandingPage() {
     certificationImage: "",
   });
 
-  const trainingId = useParams().id;
-  const location = useLocation();
+
+  if(!location.state?.training && !location.state?.volunteerTraining){
+    setTraining(location.state.training);
+    setVolunteerTraining(location.state.volunteerTraining);
+  }
 
   useEffect(() => {
     if (trainingId !== undefined && !location.state?.training) {
