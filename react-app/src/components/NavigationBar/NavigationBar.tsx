@@ -37,7 +37,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
         {open ? (
           <MdOutlineKeyboardDoubleArrowLeft onClick={handleToggleNavbar} />
         ) : (
-          <GiHamburgerMenu onClick={handleToggleNavbar} />
+          <GiHamburgerMenu className={styles.hamburger} onClick={handleToggleNavbar} />
         )}
       </div>
       {open && (
