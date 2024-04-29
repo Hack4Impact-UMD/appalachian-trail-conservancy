@@ -126,13 +126,14 @@ function TrainingPage() {
 
   return (
     <>
+    
       <NavigationBar />
       <div className={`${styles.split} ${styles.right}`}>
         <div className={styles.outerContainer}>
           <div className={styles.bodyContainer}>
             {/* HEADER */}
             <div className={styles.header}>
-              <h1 className={styles.nameHeading}>Training Title</h1>
+              <h1 className={styles.nameHeading}>{training.name}</h1>
               <ProfileIcon />
             </div>
 
