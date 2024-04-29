@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { stepperStyle } from "../../muiTheme";
-import { TrainingResource } from "../../types/TrainingType";
-import { useLocation, Navigate } from "react-router-dom";
+import { TrainingID } from "../../types/TrainingType";
+import { useLocation, Navigate, useParams } from "react-router-dom";
 import styles from "./TrainingPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
@@ -9,34 +9,77 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import ResourceComponent from "../../components/ResourceComponent/ResourceComponent";
+import { getTraining } from "../../backend/FirestoreCalls";
+import { type VolunteerTraining } from "../../types/UserType";
 
-const resources: TrainingResource[] = [
-  {
-    type: "VIDEO",
-    link: "https://www.youtube.com/embed/Cvn96VkhbjE?si=ySyjq6tCmBlqPpT7",
-    title: "SpongeBob Employee",
-  },
-  {
-    type: "PDF",
-    link: "https://bayes.wustl.edu/etj/articles/random.pdf",
-    title: "Random Observations",
-  },
-  {
-    type: "VIDEO",
-    link: "https://youtube.com/embed/R4qDveKoGvA?si=z7CHAnRgu5TPMWpt",
-    title: "Campfire Song",
-  },
-  {
-    type: "PDF",
-    link: "https://philpapers.org/archive/DOROIO.pdf",
-    title: "Being Rational and Being Wrong",
-  },
-];
+
 
 function TrainingPage() {
   const [stepIndex, setStepIndex] = useState(0);
 
   const location = useLocation();
+  const trainingId = useParams().id;
+
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
+    {
+      trainingID: "GQf4rBgvJ4uU9Is89wXp",
+      progress: "COMPLETED",
+      dateCompleted: "",
+      numCompletedResources: 4,
+      numTotalResources: 4,
+      quizScoreRecieved: 0,
+    }
+  );
+
+  const [training, setTraining] = useState<TrainingID>({
+    name: "How to pet a cat",
+    id: "1233",
+    shortBlurb: "",
+    description: "blah blah blah",
+    coverImage: "",
+    resources: [
+      { type: "VIDEO", link: "https://example.com/video1", title: "Video 1" },
+      { type: "PDF", link: "https://example.com/article1", title: "Article 1" },
+      { type: "PDF", link: "https://example.com/article1", title: "Article 2" },
+      { type: "PDF", link: "https://example.com/article1", title: "Article 3" },
+    ],
+    quiz: {
+      questions: [],
+      numQuestions: 0,
+      passingScore: 0,
+    },
+    associatedPathways: [],
+    certificationImage: "",
+  });
+
+  useEffect(() => {
+    if (!location.state || (!location.state.training && !location.state.volunteerTraining)) {
+      // Fetch data only if trainingId is available
+      if (trainingId !== undefined) {
+        getTraining(trainingId)
+          .then((trainingData) => {
+            setTraining(trainingData);
+          })
+          .catch(() => {
+            console.log("Failed to get training");
+          })
+          .finally(() => {
+            setLoading(false);
+          });
+      }
+    } else {
+      // Update state with data from location's state
+      if (location.state.training) {
+        setTraining(location.state.training);
+      }
+      if (location.state.volunteerTraining) {
+        setVolunteerTraining(location.state.volunteerTraining);
+      }
+      setLoading(false);
+    }
+  }, [trainingId, location.state]);
 
   if (!location.state?.fromApp) {
     return <Navigate to="/trainings" />;
@@ -45,7 +88,7 @@ function TrainingPage() {
   // TODO: The last resource should show "start quiz" button
   // or confirmation
   const handleContinueButton = () => {
-    if (stepIndex < resources.length - 1) {
+    if (stepIndex < training.resources.length - 1) {
       setStepIndex(stepIndex + 1);
     } else {
       //TODO: Quiz
@@ -76,7 +119,7 @@ function TrainingPage() {
             <ResourceComponent
               handleBackButton={handleBackButton}
               handleContinueButton={handleContinueButton}
-              resource={resources[stepIndex]}
+              resource={training.resources[stepIndex]}
             />
           </div>
         </div>
@@ -86,7 +129,7 @@ function TrainingPage() {
           activeStep={stepIndex}
           className={styles.stepContainer}
           sx={stepperStyle}>
-          {resources.map((resource, idx) => (
+          {training.resources.map((resource, idx) => (
             <Step key={idx} sx={{ padding: "0" }}>
               <StepLabel
                 sx={{

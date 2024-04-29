@@ -2,7 +2,7 @@ import styles from "./TrainingLandingPage.module.css";
 import { useState, useEffect } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import { whiteButtonGrayBorder, forestGreenButton } from "../../muiTheme";
-import { Training, TrainingResource } from "../../types/TrainingType";
+import { TrainingID, TrainingResource } from "../../types/TrainingType";
 import { type VolunteerTraining } from "../../types/UserType";
 import { getTraining } from "../../backend/FirestoreCalls";
 import { LinearProgress, Box, Typography, Button } from "@mui/material";
@@ -10,6 +10,8 @@ import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import CompletedIcon from "../../assets/completedCheck.svg";
 import Loading from "../../components/LoadingScreen/Loading";
+import { useNavigate } from "react-router-dom";
+
 
 const styledProgressShape = {
   height: 24,
@@ -27,12 +29,13 @@ const styledProgressPass = {
 };
 
 function TrainingLandingPage() {
-  const [loading, setLoading] = useState<boolean>(true);
+  const navigate = useNavigate();
 
+  const [loading, setLoading] = useState<boolean>(true);
   const trainingId = useParams().id;
   const location = useLocation();
 
-   // If training & volunteerTraining is passed via state, then set it accordingly.
+  // If training & volunteerTraining is passed via state, then set it accordingly.
   // Otherwise, retrieve training via id from url parameter then check if a VolunteerTraining exists for it
   const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
     {
@@ -45,8 +48,9 @@ function TrainingLandingPage() {
     }
   );
 
-  const [training, setTraining] = useState<Training>({
+  const [training, setTraining] = useState<TrainingID>({
     name: "How to pet a cat",
+    id: "1233",
     shortBlurb: "",
     description: "blah blah blah",
     coverImage: "",
@@ -65,27 +69,32 @@ function TrainingLandingPage() {
     certificationImage: "",
   });
 
-
-  if(!location.state?.training && !location.state?.volunteerTraining){
-    setTraining(location.state.training);
-    setVolunteerTraining(location.state.volunteerTraining);
-  }
-
   useEffect(() => {
-    if (trainingId !== undefined && !location.state?.training) {
-      getTraining(trainingId)
-        .then(async (trainingData) => {
-          setTraining(trainingData);
-          // Get volunteer training
-        })
-        .catch(() => {
-          console.log("Failed to get training");
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+    if (!location.state || (!location.state.training && !location.state.volunteerTraining)) {
+      // Fetch data only if trainingId is available
+      if (trainingId !== undefined) {
+        getTraining(trainingId)
+          .then((trainingData) => {
+            setTraining(trainingData);
+          })
+          .catch(() => {
+            console.log("Failed to get training");
+          })
+          .finally(() => {
+            setLoading(false);
+          });
+      }
+    } else {
+      // Update state with data from location's state
+      if (location.state.training) {
+        setTraining(location.state.training);
+      }
+      if (location.state.volunteerTraining) {
+        setVolunteerTraining(location.state.volunteerTraining);
+      }
+      setLoading(false);
     }
-  }, []);
+  }, [trainingId, location.state]);
 
   const renderTrainingResources = () => {
     return training.resources.map(
@@ -164,19 +173,41 @@ function TrainingLandingPage() {
       (volunteerTraining && volunteerTraining.numCompletedResources === 0)
     ) {
       return (
-        <Button sx={{ ...forestGreenButton }} variant="contained">
+        <Button 
+          sx={{ ...forestGreenButton }} 
+          variant="contained"
+          onClick={() =>
+            navigate(`/trainings/resources/${training.id + volunteerTraining.numCompletedResources}`, {
+              state: { training: training, volunteerTraining: volunteerTraining }
+            })
+          }>
           Start
         </Button>
       );
     } else if (volunteerTraining && volunteerTraining.quizScoreRecieved != 0) {
       return (
-        <Button sx={{ ...forestGreenButton }} variant="contained">
+        <Button 
+        sx={{ ...forestGreenButton }} 
+        variant="contained"
+        onClick={() =>
+          navigate(`/trainings/resources/${training.id + 0}`, {
+            state: { training: training, volunteerTraining: volunteerTraining }
+          })
+        }
+        >
           Restart
         </Button>
       );
     } else {
       return (
-        <Button sx={{ ...forestGreenButton }} variant="contained">
+        <Button 
+        sx={{ ...forestGreenButton }} 
+        variant="contained"
+        onClick={() =>
+          navigate(`/trainings/resources/${training.id + volunteerTraining.numCompletedResources}`, {
+            state: { training: training, volunteerTraining: volunteerTraining }
+          })
+        }>
           Resume
         </Button>
       );
