@@ -16,11 +16,11 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { MdOutlineKeyboardDoubleArrowLeft } from "react-icons/md";
 
 interface NavigationBarProps {
-  open: boolean;
+  openBar: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
+const NavigationBar: React.FC<NavigationBarProps> = ({ openBar, setOpen }) => {
   const [openLogoutPopup, setOpenLogoutPopup] = useState<boolean>(false);
 
   const handleLogOut = (): void => {
@@ -32,15 +32,17 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
   };
 
   return (
-    <div className={`${styles.navigationContainer} ${open ? "" : styles.closed}`}>
-      <div className={styles.arrowBox}>
-        {open ? (
-          <MdOutlineKeyboardDoubleArrowLeft onClick={handleToggleNavbar} />
+    <div className={`${styles.navigationContainer} ${openBar ? "" : styles.closed}`}>
+        {openBar ? (
+          <div className={styles.arrowBox}>
+            <MdOutlineKeyboardDoubleArrowLeft onClick={handleToggleNavbar} />
+          </div>
         ) : (
+          <div className={styles.hamburgerBox}> 
           <GiHamburgerMenu onClick={handleToggleNavbar} />
+          </div>
         )}
-      </div>
-      {open && (
+      {openBar && (
         <>
           <div className={styles.logoContainer}>
             <img src={atcprimarylogo} alt="ATC Logo" className={styles.logo} />

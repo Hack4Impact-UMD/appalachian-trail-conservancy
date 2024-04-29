@@ -23,6 +23,12 @@
   margin: 5%;
 }
 
+.hamburgerBox {
+  display: flex;
+  justify-content: center;
+  margin-top: 15%;
+}
+
 .logoContainer {
   text-align: center;
   margin-top: 15%;
