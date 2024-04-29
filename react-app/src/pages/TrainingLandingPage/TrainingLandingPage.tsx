@@ -12,7 +12,6 @@ import CompletedIcon from "../../assets/completedCheck.svg";
 import Loading from "../../components/LoadingScreen/Loading";
 import { useNavigate } from "react-router-dom";
 
-
 const styledProgressShape = {
   height: 24,
   borderRadius: 12,
@@ -175,41 +174,58 @@ function TrainingLandingPage() {
       (volunteerTraining && volunteerTraining.numCompletedResources === 0)
     ) {
       return (
-        <Button 
-          sx={{ ...forestGreenButton }} 
+        <Button
+          sx={{ ...forestGreenButton }}
           variant="contained"
           onClick={() =>
-            navigate(`/trainings/resources/:${training.id}/${0}`, {
-              state: { training: training, volunteerTraining: volunteerTraining }
+            navigate(`/trainings/resources/0`, {
+              state: {
+                training: training,
+                volunteerTraining: volunteerTraining,
+                fromApp: true,
+              },
             })
-          }>
+          }
+        >
           Start
         </Button>
       );
-    } else if (volunteerTraining.numCompletedResources == volunteerTraining.numTotalResources) {
+    } else if (
+      volunteerTraining.numCompletedResources ==
+      volunteerTraining.numTotalResources
+    ) {
       return (
-        <Button 
-        sx={{ ...forestGreenButton }} 
-        variant="contained"
-        onClick={() =>
-          navigate(`/trainings/resources/:${training.id}/${0}`, {
-            state: { training: training, volunteerTraining: volunteerTraining }
-          })
-        }
+        <Button
+          sx={{ ...forestGreenButton }}
+          variant="contained"
+          onClick={() =>
+            navigate(`/trainings/resources/0`, {
+              state: {
+                training: training,
+                volunteerTraining: volunteerTraining,
+                fromApp: true,
+              },
+            })
+          }
         >
           Restart
         </Button>
       );
     } else {
       return (
-        <Button 
-        sx={{ ...forestGreenButton }} 
-        variant="contained"
-        onClick={() =>
-          navigate(`/trainings/resources/:${training.id}/${volunteerTraining.numCompletedResources}}`, {
-            state: { training: training, volunteerTraining: volunteerTraining }
-          })
-        }>
+        <Button
+          sx={{ ...forestGreenButton }}
+          variant="contained"
+          onClick={() =>
+            navigate(`/trainings/resources/0`, {
+              state: {
+                training: training,
+                volunteerTraining: volunteerTraining,
+                fromApp: true,
+              },
+            })
+          }
+        >
           Resume
         </Button>
       );

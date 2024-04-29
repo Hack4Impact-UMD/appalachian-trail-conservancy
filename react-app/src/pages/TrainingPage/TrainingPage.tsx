@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
 import { stepperStyle } from "../../muiTheme";
 import { TrainingID } from "../../types/TrainingType";
-import { useLocation, Navigate, useParams } from "react-router-dom";
+import {
+  useLocation,
+  Navigate,
+  useParams,
+  useNavigate,
+} from "react-router-dom";
 import styles from "./TrainingPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
@@ -12,9 +17,8 @@ import ResourceComponent from "../../components/ResourceComponent/ResourceCompon
 import { getTraining } from "../../backend/FirestoreCalls";
 import { type VolunteerTraining } from "../../types/UserType";
 
-
-
 function TrainingPage() {
+  const navigate = useNavigate();
   const [stepIndex, setStepIndex] = useState(0);
 
   const location = useLocation();
@@ -55,7 +59,10 @@ function TrainingPage() {
   });
 
   useEffect(() => {
-    if (!location.state || (!location.state.training && !location.state.volunteerTraining)) {
+    if (
+      !location.state ||
+      (!location.state.training && !location.state.volunteerTraining)
+    ) {
       // Fetch data only if trainingId is available
       if (trainingId !== undefined) {
         getTraining(trainingId)
@@ -91,7 +98,13 @@ function TrainingPage() {
     if (stepIndex < training.resources.length - 1) {
       setStepIndex(stepIndex + 1);
     } else {
-      //TODO: Quiz
+      navigate(`/trainings/quizlanding`, {
+        state: {
+          training: training,
+          volunteerTraining: volunteerTraining,
+          fromApp: true,
+        },
+      });
     }
   };
 
@@ -101,6 +114,13 @@ function TrainingPage() {
       setStepIndex(stepIndex - 1);
     } else {
       //TODO: Quiz
+      navigate(`/trainings/${training.id}`, {
+        state: {
+          training: training,
+          volunteerTraining: volunteerTraining,
+          fromApp: true,
+        },
+      });
     }
   };
 
@@ -128,7 +148,8 @@ function TrainingPage() {
         <Stepper
           activeStep={stepIndex}
           className={styles.stepContainer}
-          sx={stepperStyle}>
+          sx={stepperStyle}
+        >
           {training.resources.map((resource, idx) => (
             <Step key={idx} sx={{ padding: "0" }}>
               <StepLabel

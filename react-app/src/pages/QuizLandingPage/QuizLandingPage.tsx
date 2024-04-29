@@ -1,7 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import { forestGreenButton, whiteButtonGrayBorder } from "../../muiTheme";
-import { useLocation, Navigate } from "react-router-dom";
+import {
+  useLocation,
+  Navigate,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import { DateTime } from "luxon";
 import { FaCheck, FaXmark } from "react-icons/fa6";
 import { Training } from "../../types/TrainingType";
@@ -11,6 +16,8 @@ import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 
 function QuizLandingPage() {
+  const navigate = useNavigate();
+
   const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
     {
       trainingID: "GQf4rBgvJ4uU9Is89wXp",
@@ -18,7 +25,7 @@ function QuizLandingPage() {
       dateCompleted: "2024-04-12",
       numCompletedResources: 4,
       numTotalResources: 4,
-      quizScoreRecieved: 1, // field would not exist if user has never taken quiz
+      quizScoreRecieved: 2, // field would not exist if user has never taken quiz
     }
   );
 
@@ -61,10 +68,29 @@ function QuizLandingPage() {
   });
 
   const location = useLocation();
+  const redirectTo = location.state?.from;
+  console.log("is" + redirectTo);
 
   if (!location.state?.fromApp) {
     return <Navigate to="/trainings" />;
   }
+
+  useEffect(() => {
+    if (
+      !location.state ||
+      (!location.state.training && !location.state.volunteerTraining)
+    ) {
+      //idk
+    } else {
+      // Update state with data from location's state
+      if (location.state.training) {
+        setTraining(location.state.training);
+      }
+      if (location.state.volunteerTraining) {
+        setVolunteerTraining(location.state.volunteerTraining);
+      }
+    }
+  });
 
   const parsedDate = DateTime.fromISO(volunteerTraining.dateCompleted);
   const formattedDate = parsedDate.toFormat("MMMM dd, yyyy").toUpperCase();
@@ -136,10 +162,33 @@ function QuizLandingPage() {
           <div className={styles.footer}>
             {/* buttons */}
             <div className={styles.footerButtons}>
-              <Button sx={{ ...whiteButtonGrayBorder }} variant="contained">
+              <Button
+                sx={{ ...whiteButtonGrayBorder }}
+                variant="contained"
+                onClick={() =>
+                  //this is totally wrong
+                  navigate(redirectTo, {
+                    state: {
+                      training: training,
+                      fromApp: true,
+                    },
+                  })
+                }
+              >
                 BACK
               </Button>
-              <Button sx={{ ...forestGreenButton }} variant="contained">
+              <Button
+                sx={{ ...forestGreenButton }}
+                variant="contained"
+                onClick={() =>
+                  navigate(`/trainings/quiz`, {
+                    state: {
+                      training: training,
+                      fromApp: true,
+                    },
+                  })
+                }
+              >
                 START QUIZ
               </Button>
             </div>
