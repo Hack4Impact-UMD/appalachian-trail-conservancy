@@ -1,15 +1,13 @@
-/* split screen in two */
 .split {
   height: 100%;
   position: fixed;
   z-index: 1;
   top: 0;
   overflow-x: hidden;
+  transition: left 0.3s ease; /* Add transition for smooth animation */
 }
 
 .right {
-  right: 0;
-  left: 250px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -21,12 +19,25 @@
   align-items: center;
 }
 
+
 .content {
-  width: 875px;
+  width: calc(100% - 250px);
   padding-bottom: 3%;
 }
 
-/* have space between header and view all link  */
+.pageNoSplit .content {
+  width: 100%; /* Subtract the width of the navbar when it's closed */
+}
+
+.pageNoSplit .right {
+  left: 0;
+}
+
+.pageNoSplit .outerContainer {
+  width: 100%;
+  justify-content: center;
+}
+
 .header {
   display: flex;
   flex-wrap: wrap;
@@ -65,8 +76,6 @@
   column-gap: 1em;
   margin-bottom: 1rem;
 }
-
-/* ALL ABOVE IS SAME ON EVERY PAGE (with minor spacing modifications) */
 
 .viewAllLink {
   color: var(--blue-gray);

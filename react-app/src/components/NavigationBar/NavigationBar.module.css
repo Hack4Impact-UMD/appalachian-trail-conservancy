@@ -12,6 +12,11 @@
   z-index: 2;
 }
 
+.closed {
+  width: 60px;
+  transition: width 0.3s ease;
+}
+
 .arrowBox {
   display: flex;
   justify-content: right;
