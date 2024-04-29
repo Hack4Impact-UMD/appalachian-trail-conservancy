@@ -69,7 +69,6 @@ function QuizLandingPage() {
 
   const location = useLocation();
   const redirectTo = location.state?.from;
-  console.log("is" + redirectTo);
 
   if (!location.state?.fromApp) {
     return <Navigate to="/trainings" />;
@@ -167,7 +166,7 @@ function QuizLandingPage() {
                 variant="contained"
                 onClick={() =>
                   //this is totally wrong
-                  navigate(redirectTo, {
+                  navigate(location.state.from, {
                     state: {
                       training: training,
                       fromApp: true,

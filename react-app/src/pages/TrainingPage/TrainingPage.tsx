@@ -103,6 +103,7 @@ function TrainingPage() {
           training: training,
           volunteerTraining: volunteerTraining,
           fromApp: true,
+          from: location,
         },
       });
     }
@@ -126,7 +127,6 @@ function TrainingPage() {
 
   return (
     <>
-    
       <NavigationBar />
       <div className={`${styles.split} ${styles.right}`}>
         <div className={styles.outerContainer}>
