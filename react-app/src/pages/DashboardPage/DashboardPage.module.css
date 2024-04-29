@@ -8,6 +8,8 @@
 }
 
 .right {
+  right: 0;
+  left: 250px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -23,19 +25,8 @@
 .content {
   width: calc(100% - 250px);
   padding-bottom: 3%;
-}
-
-.pageNoSplit .content {
-  width: 100%; /* Subtract the width of the navbar when it's closed */
-}
-
-.pageNoSplit .right {
-  left: 0;
-}
-
-.pageNoSplit .outerContainer {
-  width: 100%;
-  justify-content: center;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
 .header {
