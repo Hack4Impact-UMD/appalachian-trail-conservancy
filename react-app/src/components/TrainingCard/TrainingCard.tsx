@@ -43,7 +43,8 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
         <LinearProgressWithLabel
           value={
             (volunteerTraining.numCompletedResources /
-            volunteerTraining.numTotalResources) * 100
+              volunteerTraining.numTotalResources) *
+            100
           }
         />
       );
@@ -60,8 +61,11 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
           } else {
             // TODO: Navigate to training landing page and pass Training and VolunteerTraining as state
             navigate(`/trainings/:${training.id}`, {
-              state: { training: training, volunteerTraining: volunteerTraining }
-            })
+              state: {
+                training: training,
+                volunteerTraining: volunteerTraining,
+              },
+            });
           }
         }}
       >
@@ -69,7 +73,10 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
           <img src={training.coverImage} alt="Training" />
         </div>
         <div className={styles.trainingContent}>
-          <div className={styles.trainingTitle}>{training.name}</div>
+          <div className={styles.trainingTitle}>
+            {training.name.substring(0, 31)}
+            {training.name.length > 30 ? "..." : ""}
+          </div>
           <div className={styles.progressBar}>{renderMarker()}</div>
         </div>
       </div>

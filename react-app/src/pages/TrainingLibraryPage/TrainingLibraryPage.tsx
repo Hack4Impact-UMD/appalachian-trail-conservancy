@@ -7,6 +7,7 @@ import {
   grayBorderSearchBar,
 } from "../../muiTheme";
 import styles from "./TrainingLibraryPage.module.css";
+import Loading from "../../components/LoadingScreen/Loading.tsx";
 import debounce from "lodash.debounce";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import Footer from "../../components/Footer/Footer";
@@ -24,6 +25,7 @@ import { useAuth } from "../../auth/AuthProvider.tsx";
 function TrainingLibrary() {
   const auth = useAuth();
 
+  const [loading, setLoading] = useState<boolean>(true);
   const [filterType, setFilterType] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [correlatedTrainings, setCorrelatedTrainings] = useState<
@@ -84,13 +86,11 @@ function TrainingLibrary() {
           getVolunteer(auth.id.toString())
             .then((volunteer) => {
               const volunteerTrainings = volunteer.trainingInformation;
-
               // match up the allGenericTrainings and volunteerTrainings, use setCorrelatedTrainings to set
               let allCorrelatedTrainings: {
                 genericTraining: TrainingID;
                 volunteerTraining?: VolunteerTraining;
               }[] = [];
-
               for (const genericTraining of genericTrainings) {
                 // if genericTraining in volunteer.trainingInformation (has been started by volunteer), then we include that.
                 // otherwise, it's undefined
@@ -114,6 +114,7 @@ function TrainingLibrary() {
               setCorrelatedTrainings(allCorrelatedTrainings);
               // also pass allCorrelatedTrainings into filterTrainings, in case it hasn't been set yet
               filterTrainings(allCorrelatedTrainings);
+              setLoading(false);
             })
             .catch((error) => {
               console.error("Error fetching volunteer:", error);
@@ -191,21 +192,27 @@ function TrainingLibrary() {
               </div>
             </div>
 
-            {filteredTrainings.length === 0 ? (
-              <div className={styles.emptySearchMessage}>
-                No Trainings Matching “{searchQuery}”
-              </div>
+            {loading ? (
+              <Loading />
             ) : (
-              <div className={styles.cardsContainer}>
-                {filteredTrainings.map((training, index) => (
-                  <div className={styles.card} key={index}>
-                    <TrainingCard
-                      training={training.genericTraining}
-                      volunteerTraining={training.volunteerTraining}
-                    />
+              <>
+                {filteredTrainings.length === 0 ? (
+                  <div className={styles.emptySearchMessage}>
+                    No Trainings Matching “{searchQuery}”
                   </div>
-                ))}
-              </div>
+                ) : (
+                  <div className={styles.cardsContainer}>
+                    {filteredTrainings.map((training, index) => (
+                      <div className={styles.card} key={index}>
+                        <TrainingCard
+                          training={training.genericTraining}
+                          volunteerTraining={training.volunteerTraining}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>

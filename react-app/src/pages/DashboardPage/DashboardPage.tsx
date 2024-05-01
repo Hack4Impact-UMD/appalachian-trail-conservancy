@@ -21,22 +21,7 @@ function Dashboard() {
     { title: "Title 1", progress: 73 },
     { title: "Title 2" },
   ];
-  // const trainingCards = [
-  //   {
-  //     title: "Title 1",
-  //     progress: 100,
-  //     image: images[Math.floor(Math.random() * images.length)],
-  //   },
-  //   {
-  //     title: "Title 2",
-  //     image: images[Math.floor(Math.random() * images.length)],
-  //   },
-  //   {
-  //     title: "Title 3",
-  //     progress: 76,
-  //     image: images[Math.floor(Math.random() * images.length)],
-  //   },
-  // ];
+
   const certificateCards = [
     { title: "Title 1", date: "2024-03-19" },
     { title: "Title 2", date: "2024-03-19" },
