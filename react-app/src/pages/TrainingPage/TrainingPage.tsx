@@ -23,26 +23,20 @@ function TrainingPage() {
   const [stepIndex, setStepIndex] = useState(0);
   const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
     {
-      trainingID: "GQf4rBgvJ4uU9Is89wXp",
-      progress: "COMPLETED",
+      trainingID: "",
+      progress: "",
       dateCompleted: "",
-      numCompletedResources: 4,
-      numTotalResources: 4,
-      quizScoreRecieved: 0,
+      numCompletedResources: 0,
+      numTotalResources: 0,
     }
   );
   const [training, setTraining] = useState<TrainingID>({
-    name: "How to pet a cat",
-    id: "1233",
+    name: "",
+    id: "",
     shortBlurb: "",
-    description: "blah blah blah",
+    description: "",
     coverImage: "",
-    resources: [
-      { type: "VIDEO", link: "https://example.com/video1", title: "Video 1" },
-      { type: "PDF", link: "https://example.com/article1", title: "Article 1" },
-      { type: "PDF", link: "https://example.com/article1", title: "Article 2" },
-      { type: "PDF", link: "https://example.com/article1", title: "Article 3" },
-    ],
+    resources: [],
     quiz: {
       questions: [],
       numQuestions: 0,
@@ -123,8 +117,7 @@ function TrainingPage() {
         <Stepper
           activeStep={stepIndex}
           className={styles.stepContainer}
-          sx={stepperStyle}
-        >
+          sx={stepperStyle}>
           {training.resources.map((resource, idx) => (
             <Step key={idx} sx={{ padding: "0" }}>
               <StepLabel

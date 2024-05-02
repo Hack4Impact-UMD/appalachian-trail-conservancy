@@ -6,16 +6,16 @@ import {
   whiteButtonGrayBorder,
   grayBorderSearchBar,
 } from "../../muiTheme";
+import { getAllPathways, getVolunteer } from "../../backend/FirestoreCalls";
+import { PathwayID } from "../../types/PathwayType";
+import { VolunteerPathway } from "../../types/UserType";
+import { useAuth } from "../../auth/AuthProvider.tsx";
 import styles from "./PathwayLibraryPage.module.css";
 import debounce from "lodash.debounce";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import Footer from "../../components/Footer/Footer";
 import PathwayCard from "../../components/PathwayCard/PathwayCard";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
-import { getAllPathways, getVolunteer } from "../../backend/FirestoreCalls";
-import { PathwayID } from "../../types/PathwayType";
-import { VolunteerPathway } from "../../types/UserType";
-import { useAuth } from "../../auth/AuthProvider.tsx";
 
 function PathwayLibrary() {
   const auth = useAuth();
@@ -23,27 +23,18 @@ function PathwayLibrary() {
   const [filterType, setFilterType] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [correlatedPathways, setCorrelatedPathways] = useState<
-    { genericPathway: PathwayID, volunteerPathway?: VolunteerPathway } []>([]);
+    { genericPathway: PathwayID; volunteerPathway?: VolunteerPathway }[]
+  >([]);
   const [filteredPathways, setFilteredPathways] = useState<
-    { genericPathway: PathwayID, volunteerPathway?: VolunteerPathway }[]>([]);
+    { genericPathway: PathwayID; volunteerPathway?: VolunteerPathway }[]
+  >([]);
 
-  const pathwayCards = [
-    { title: "Cat", subtitle: "Subtitle 1", progress: 23 },
-    { title: "Catfish", subtitle: "Subtitle 2", progress: 100 },
-    { title: "C", subtitle: "Subtitle 3", progress: 0 },
-    { title: "Dog", subtitle: "Subtitle 4", progress: 10 },
-    { title: "Cat", subtitle: "Subtitle 1", progress: 23 },
-    { title: "Cat2", subtitle: "Subtitle 2", progress: 100 },
-    { title: "C", subtitle: "Subtitle 3", progress: 76 },
-    { title: "Dog", subtitle: "Subtitle 4", progress: 10 },
-    { title: "NotInProgress", subtitle: "Subtitle 1", progress: 0 },
-    { title: "Catfish", subtitle: "Subtitle 2", progress: 50 },
-    { title: "C", subtitle: "Subtitle 3", progress: 76 },
-    { title: "NotInProgress", subtitle: "Subtitle 4", progress: 0 },
-    // Add more training card data as needed
-  ];
-
-  const filterPathways = (pathways?: { genericPathway: PathwayID, volunteerPathway?: VolunteerPathway }[]) => {
+  const filterPathways = (
+    pathways?: {
+      genericPathway: PathwayID;
+      volunteerPathway?: VolunteerPathway;
+    }[]
+  ) => {
     let filtered = correlatedPathways;
     if (correlatedPathways.length === 0 && pathways) {
       filtered = pathways;
@@ -51,16 +42,24 @@ function PathwayLibrary() {
 
     if (searchQuery) {
       filtered = filtered.filter((pathway) =>
-        pathway.genericPathway.name.toLowerCase().includes(searchQuery.toLowerCase())
+        pathway.genericPathway.name
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase())
       );
     }
 
     if (filterType === "inProgress") {
       filtered = filtered.filter(
-        (pathway) => pathway.volunteerPathway && pathway.volunteerPathway.progress == "INPROGRESS"
+        (pathway) =>
+          pathway.volunteerPathway &&
+          pathway.volunteerPathway.progress == "INPROGRESS"
       );
     } else if (filterType === "completed") {
-      filtered = filtered.filter((pathway) => pathway.volunteerPathway && pathway.volunteerPathway.progress == "COMPLETED");
+      filtered = filtered.filter(
+        (pathway) =>
+          pathway.volunteerPathway &&
+          pathway.volunteerPathway.progress == "COMPLETED"
+      );
     }
 
     setFilteredPathways(filtered);
@@ -70,28 +69,35 @@ function PathwayLibrary() {
     // get all pathways from firebase
     getAllPathways()
       .then((genericPathways) => {
-
         // only use auth if it is finished loading
         if (!auth.loading && auth.id) {
-          
-          // get volunteer info from firebase. will contain volunteer progress on pathways 
+          // get volunteer info from firebase. will contain volunteer progress on pathways
           getVolunteer(auth.id.toString())
             .then((volunteer) => {
               const volunteerPathways = volunteer.pathwayInformation;
 
               // match up the genericPathways and volunteerPathways
-              let allCorrelatedPathways: { genericPathway: PathwayID; volunteerPathway?: VolunteerPathway }[] = [];
-              
+              let allCorrelatedPathways: {
+                genericPathway: PathwayID;
+                volunteerPathway?: VolunteerPathway;
+              }[] = [];
+
               for (const genericPathway of genericPathways) {
                 let startedByVolunteer = false;
                 for (const volunteerPathway of volunteerPathways) {
                   if (genericPathway.id == volunteerPathway.pathwayID) {
                     startedByVolunteer = true;
-                    allCorrelatedPathways.push({genericPathway: genericPathway, volunteerPathway: volunteerPathway})
+                    allCorrelatedPathways.push({
+                      genericPathway: genericPathway,
+                      volunteerPathway: volunteerPathway,
+                    });
                   }
                 }
                 if (!startedByVolunteer) {
-                  allCorrelatedPathways.push({genericPathway: genericPathway, volunteerPathway: undefined})
+                  allCorrelatedPathways.push({
+                    genericPathway: genericPathway,
+                    volunteerPathway: undefined,
+                  });
                 }
               }
               setCorrelatedPathways(allCorrelatedPathways);
@@ -99,13 +105,13 @@ function PathwayLibrary() {
               filterPathways(allCorrelatedPathways);
             })
             .catch((error) => {
-              console.error('Error fetching volunteer:', error);
-            })
+              console.error("Error fetching volunteer:", error);
+            });
         }
       })
-      .catch((error) =>{
-        console.error('Error fetching pathways:', error);
-      })
+      .catch((error) => {
+        console.error("Error fetching pathways:", error);
+      });
   }, [searchQuery, filterType, auth.loading, auth.id]);
 
   const updateQuery = (e: {
@@ -182,9 +188,12 @@ function PathwayLibrary() {
                       image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
                       title={pathway.genericPathway.name}
                       progress={
-                        pathway.volunteerPathway?
-                        (pathway.volunteerPathway.numTrainingsCompleted / pathway.volunteerPathway.numTotalTrainings * 100)
-                        : 0}
+                        pathway.volunteerPathway
+                          ? (pathway.volunteerPathway.numTrainingsCompleted /
+                              pathway.volunteerPathway.numTotalTrainings) *
+                            100
+                          : 0
+                      }
                     />
                   </div>
                 ))}

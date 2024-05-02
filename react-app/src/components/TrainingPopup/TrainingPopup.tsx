@@ -10,7 +10,7 @@ interface modalPropsType {
   open: boolean;
   onClose: any;
   training: TrainingID;
-  volunteerTraining: VolunteerTraining | undefined;
+  volunteerTraining?: VolunteerTraining;
 }
 
 const TrainingPopup = ({
@@ -25,8 +25,7 @@ const TrainingPopup = ({
       className={styles.modalContainer}
       onClick={(e) => {
         e.stopPropagation();
-      }}
-    >
+      }}>
       {open ? (
         <>
           <div className={styles.background} onClick={() => onClose()} />
@@ -36,7 +35,6 @@ const TrainingPopup = ({
                 <p className={styles.title}>{training.name}</p>
                 <p className={styles.textContainer}>{training.shortBlurb}</p>
                 <div className={styles.learnMoreButton}>
-                  {/* TODO: Navigate to training landing page and pass Training and VolunteerTraining as state */}
                   <Button
                     variant="contained"
                     sx={{ ...whiteButtonGrayBorder, width: "150px" }}
@@ -47,8 +45,7 @@ const TrainingPopup = ({
                           volunteerTraining: volunteerTraining,
                         },
                       })
-                    }
-                  >
+                    }>
                     Learn More
                   </Button>
                 </div>

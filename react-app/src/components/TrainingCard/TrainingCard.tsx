@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import styles from "./TrainingCard.module.css";
 import LinearProgressWithLabel from "../LinearProgressWithLabel/LinearProgressWithLabel";
 import TrainingPopup from "../TrainingPopup/TrainingPopup";
-import { Training, TrainingID } from "../../types/TrainingType";
+import { TrainingID } from "../../types/TrainingType";
 import { VolunteerTraining } from "../../types/UserType";
 
 interface TrainingCardProps {
   training: TrainingID;
-  volunteerTraining?: VolunteerTraining | undefined;
+  volunteerTraining?: VolunteerTraining;
 }
 
 const TrainingCard: React.FC<TrainingCardProps> = ({
@@ -67,8 +67,7 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
               },
             });
           }
-        }}
-      >
+        }}>
         <div className={styles.trainingImage}>
           <img src={training.coverImage} alt="Training" />
         </div>

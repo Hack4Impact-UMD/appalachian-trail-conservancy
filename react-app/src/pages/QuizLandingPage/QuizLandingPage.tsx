@@ -32,47 +32,19 @@ function QuizLandingPage() {
   // This training should represent the current training corresponding to the current quiz
   // This data should be recieved from navigation state
   const [training, setTraining] = useState<Training>({
-    name: "How to pet a cat",
+    name: "",
     shortBlurb: "",
-    description: "blah blah blah",
+    description: "",
     coverImage: "",
-    resources: [
-      { type: "VIDEO", link: "https://example.com/video1", title: "Video 1" },
-      { type: "PDF", link: "https://example.com/article1", title: "Article 1" },
-      { type: "PDF", link: "https://example.com/article1", title: "Article 2" },
-      { type: "PDF", link: "https://example.com/article1", title: "Article 3" },
-    ],
+    resources: [],
     quiz: {
-      questions: [
-        {
-          question: "How many toes do feet normally have?",
-          choices: ["20", "10", "2", "3"],
-          answer: "10",
-        },
-        {
-          question: "How many compressions should you do when performing CPR?",
-          choices: [
-            "100000",
-            "3",
-            "30",
-            "Do not do any compressions and just breathe",
-          ],
-          answer: "30",
-        },
-      ],
-      numQuestions: 2,
-      passingScore: 1,
+      questions: [],
+      numQuestions: 0,
+      passingScore: 0,
     },
     associatedPathways: [],
     certificationImage: "",
   });
-
-  const location = useLocation();
-  const redirectTo = location.state?.from;
-
-  if (!location.state?.fromApp) {
-    return <Navigate to="/trainings" />;
-  }
 
   useEffect(() => {
     if (
@@ -89,7 +61,14 @@ function QuizLandingPage() {
         setVolunteerTraining(location.state.volunteerTraining);
       }
     }
-  });
+  }, []);
+
+  const location = useLocation();
+  const redirectTo = location.state?.from;
+
+  if (!location.state?.fromApp) {
+    return <Navigate to="/trainings" />;
+  }
 
   const parsedDate = DateTime.fromISO(volunteerTraining.dateCompleted);
   const formattedDate = parsedDate.toFormat("MMMM dd, yyyy").toUpperCase();
@@ -165,7 +144,6 @@ function QuizLandingPage() {
                 sx={{ ...whiteButtonGrayBorder }}
                 variant="contained"
                 onClick={() =>
-                  //this is totally wrong
                   navigate("/trainings/resources", {
                     state: {
                       training: training,
@@ -173,8 +151,7 @@ function QuizLandingPage() {
                       fromApp: true,
                     },
                   })
-                }
-              >
+                }>
                 BACK
               </Button>
               <Button
@@ -187,8 +164,7 @@ function QuizLandingPage() {
                       fromApp: true,
                     },
                   })
-                }
-              >
+                }>
                 START QUIZ
               </Button>
             </div>

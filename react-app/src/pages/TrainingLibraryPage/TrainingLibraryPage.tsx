@@ -6,6 +6,10 @@ import {
   whiteButtonGrayBorder,
   grayBorderSearchBar,
 } from "../../muiTheme";
+import { getAllTrainings, getVolunteer } from "../../backend/FirestoreCalls";
+import { TrainingID } from "../../types/TrainingType";
+import { VolunteerTraining } from "../../types/UserType";
+import { useAuth } from "../../auth/AuthProvider.tsx";
 import styles from "./TrainingLibraryPage.module.css";
 import Loading from "../../components/LoadingScreen/Loading.tsx";
 import debounce from "lodash.debounce";
@@ -13,14 +17,6 @@ import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import Footer from "../../components/Footer/Footer";
 import TrainingCard from "../../components/TrainingCard/TrainingCard";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
-import training1 from "../../assets/training1.jpg";
-import training2 from "../../assets/training2.jpg";
-import training3 from "../../assets/training3.png";
-import training4 from "../../assets/training4.jpg";
-import { getAllTrainings, getVolunteer } from "../../backend/FirestoreCalls";
-import { TrainingID } from "../../types/TrainingType";
-import { VolunteerTraining } from "../../types/UserType";
-import { useAuth } from "../../auth/AuthProvider.tsx";
 
 function TrainingLibrary() {
   const auth = useAuth();
@@ -34,8 +30,6 @@ function TrainingLibrary() {
   const [filteredTrainings, setFilteredTrainings] = useState<
     { genericTraining: TrainingID; volunteerTraining?: VolunteerTraining }[]
   >([]);
-
-  const images = [training1, training2, training3, training4];
 
   const filterTrainings = (
     trainings?: {
@@ -163,8 +157,7 @@ function TrainingLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("all")}
-                >
+                  onClick={() => setFilterType("all")}>
                   All
                 </Button>
                 <Button
@@ -174,8 +167,7 @@ function TrainingLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("inProgress")}
-                >
+                  onClick={() => setFilterType("inProgress")}>
                   In Progress
                 </Button>
                 <Button
@@ -185,8 +177,7 @@ function TrainingLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("completed")}
-                >
+                  onClick={() => setFilterType("completed")}>
                   Completed
                 </Button>
               </div>
