@@ -21,15 +21,8 @@ function TrainingPage() {
   const location = useLocation();
 
   const [stepIndex, setStepIndex] = useState(0);
-  const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
-    {
-      trainingID: "",
-      progress: "",
-      dateCompleted: "",
-      numCompletedResources: 0,
-      numTotalResources: 0,
-    }
-  );
+  const [volunteerTraining, setVolunteerTraining] =
+    useState<VolunteerTraining>();
   const [training, setTraining] = useState<TrainingID>({
     name: "",
     id: "",

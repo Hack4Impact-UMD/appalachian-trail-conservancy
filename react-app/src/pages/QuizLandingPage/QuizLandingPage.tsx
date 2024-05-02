@@ -18,16 +18,8 @@ import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 function QuizLandingPage() {
   const navigate = useNavigate();
 
-  const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
-    {
-      trainingID: "GQf4rBgvJ4uU9Is89wXp",
-      progress: "COMPLETED",
-      dateCompleted: "2024-04-12",
-      numCompletedResources: 4,
-      numTotalResources: 4,
-      quizScoreRecieved: 2, // field would not exist if user has never taken quiz
-    }
-  );
+  const [volunteerTraining, setVolunteerTraining] =
+    useState<VolunteerTraining>();
 
   // This training should represent the current training corresponding to the current quiz
   // This data should be recieved from navigation state
