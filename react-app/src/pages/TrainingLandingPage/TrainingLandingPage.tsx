@@ -58,7 +58,6 @@ function TrainingLandingPage() {
       dateCompleted: "",
       numCompletedResources: 0,
       numTotalResources: training.resources.length,
-      quizScoreRecieved: 0,
     }
   );
 
