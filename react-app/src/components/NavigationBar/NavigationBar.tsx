@@ -30,7 +30,6 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
   return (
     <div
       className={`${styles.navigationContainer} ${open ? "" : styles.closed}`}>
-      {/* <div className={styles.arrowBox}> */}
       {open ? (
         <>
           <div className={styles.logoContainer}>
@@ -149,17 +148,17 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
                   </NavLink>
                 </div>
               </div>
+              <div className={styles.logoutContainer}>
+                <button
+                  onClick={() => {
+                    handleLogOut();
+                  }}
+                  className={styles.menuItem}>
+                  <img src={logout} alt="Logout" />
+                  Log Out
+                </button>
+              </div>
             </div>
-          </div>
-          <div className={styles.logoutContainer}>
-            <button
-              onClick={() => {
-                handleLogOut();
-              }}
-              className={styles.menuItem}>
-              <img src={logout} alt="Logout" />
-              Log Out
-            </button>
           </div>
           <LogoutPopup open={openLogoutPopup} onClose={setOpenLogoutPopup} />
         </>
@@ -173,7 +172,6 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
           />
         </div>
       )}
-      {/* </div> */}
     </div>
   );
 };

@@ -97,16 +97,16 @@
   display: block;
 }
 
-.logoutContainer img {
-  margin-right: 10px;
-}
-
 .logoutContainer {
   position: absolute;
   bottom: 20px;
   left: 25px;
   display: flex;
   align-items: center;
+}
+
+.logoutContainer img {
+  margin-right: 10px;
 }
 
 .logoutContainer button {
