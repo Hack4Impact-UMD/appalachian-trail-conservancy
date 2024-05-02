@@ -130,7 +130,7 @@ const QuizResultPage = () => {
                 Exit training
               </Button>
             ) : (
-              <div>
+              <>
                 <Button
                   sx={{ ...whiteButtonGrayBorder }}
                   variant="contained"
@@ -143,7 +143,7 @@ const QuizResultPage = () => {
                 <Button sx={{ ...forestGreenButton }} variant="contained">
                   Retake quiz
                 </Button>
-              </div>
+              </>
             )}
           </div>
         </div>

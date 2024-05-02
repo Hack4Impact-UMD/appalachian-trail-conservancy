@@ -243,11 +243,11 @@ function TrainingLandingPage() {
                   <LinearProgress
                     variant="determinate"
                     value={
-                      (volunteerTraining &&
-                        (volunteerTraining.numCompletedResources /
-                          volunteerTraining.numTotalResources) *
-                          100) ||
-                      0
+                      volunteerTraining.trainingID !== ""
+                        ? (volunteerTraining.numCompletedResources /
+                            volunteerTraining.numTotalResources) *
+                          100
+                        : 0
                     }
                     sx={styledProgressPass}
                   />
@@ -256,12 +256,12 @@ function TrainingLandingPage() {
                       variant="body2"
                       color="var(--blue-gray)"
                       sx={{ fontSize: "15px" }}>
-                      {(volunteerTraining &&
-                        (volunteerTraining.numCompletedResources /
-                          volunteerTraining.numTotalResources) *
-                          100 +
-                          "%") ||
-                        "0%"}
+                      {volunteerTraining.trainingID !== ""
+                        ? (volunteerTraining.numCompletedResources /
+                            volunteerTraining.numTotalResources) *
+                            100 +
+                          "%"
+                        : "0%"}
                     </Typography>
                   </Box>
                 </div>

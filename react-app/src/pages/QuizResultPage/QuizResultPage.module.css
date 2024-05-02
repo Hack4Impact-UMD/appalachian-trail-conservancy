@@ -40,6 +40,8 @@
   color: var(--forest-green);
   font-size: 3rem;
   margin: 0;
+  max-width: 90%;
+  white-space: normal;
 }
 
 .certificateImg {
