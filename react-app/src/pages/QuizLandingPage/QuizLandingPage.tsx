@@ -12,7 +12,6 @@ import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 
 function QuizLandingPage() {
   const navigate = useNavigate();
-
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
   const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
     {

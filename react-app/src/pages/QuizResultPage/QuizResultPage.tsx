@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { LinearProgress, Button } from "@mui/material";
 import { forestGreenButton, whiteButtonGrayBorder } from "../../muiTheme";
-import { useLocation, useNavigate, Navigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./QuizResultPage.module.css";
 import QuizResultCard from "./QuizResultCard/QuizResultCard";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import atclogo from "../../assets/atc-primary-logo.png";
-import { Quiz, Training } from "../../types/TrainingType";
+import { Training } from "../../types/TrainingType";
 
 const styledProgressShape = {
   height: 24,

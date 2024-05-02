@@ -1,16 +1,15 @@
-import styles from "./TrainingLandingPage.module.css";
 import { useState, useEffect } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { whiteButtonGrayBorder, forestGreenButton } from "../../muiTheme";
 import { TrainingID, TrainingResource } from "../../types/TrainingType";
 import { type VolunteerTraining } from "../../types/UserType";
 import { getTraining } from "../../backend/FirestoreCalls";
 import { LinearProgress, Box, Typography, Button } from "@mui/material";
+import styles from "./TrainingLandingPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import CompletedIcon from "../../assets/completedCheck.svg";
 import Loading from "../../components/LoadingScreen/Loading";
-import { useNavigate } from "react-router-dom";
 
 const styledProgressShape = {
   height: 24,
@@ -29,27 +28,20 @@ const styledProgressPass = {
 
 function TrainingLandingPage() {
   const navigate = useNavigate();
-
-  const [loading, setLoading] = useState<boolean>(true);
   const trainingId = useParams().id;
   const location = useLocation();
-
+  const [loading, setLoading] = useState<boolean>(true);
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+
   // If training & volunteerTraining is passed via state, then set it accordingly.
   // Otherwise, retrieve training via id from url parameter then check if a VolunteerTraining exists for it
-
   const [training, setTraining] = useState<TrainingID>({
-    name: "How to pet a cat",
+    name: "",
     id: "",
     shortBlurb: "",
-    description: "blah blah blah",
+    description: "",
     coverImage: "",
-    resources: [
-      { type: "VIDEO", link: "https://example.com/video1", title: "Video 1" },
-      { type: "PDF", link: "https://example.com/article1", title: "Article 1" },
-      { type: "PDF", link: "https://example.com/article1", title: "Article 2" },
-      { type: "PDF", link: "https://example.com/article1", title: "Article 3" },
-    ],
+    resources: [],
     quiz: {
       questions: [],
       numQuestions: 0,

@@ -13,9 +13,9 @@ import ResourceComponent from "../../components/ResourceComponent/ResourceCompon
 
 function TrainingPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [stepIndex, setStepIndex] = useState(0);
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
-  const location = useLocation();
   const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
     {
       trainingID: "",
