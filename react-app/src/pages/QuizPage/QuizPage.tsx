@@ -10,6 +10,8 @@ import QuizCard from "./QuizCard/QuizCard";
 
 function QuizPage() {
   const navigate = useNavigate();
+  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+
   const location = useLocation();
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
 
@@ -50,8 +52,10 @@ function QuizPage() {
 
   return (
     <>
-      <NavigationBar />
-      <div className={`${styles.split} ${styles.right}`}>
+      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <div
+        className={`${styles.split} ${styles.right}`}
+        style={{ left: navigationBarOpen ? "250px" : "0" }}>
         <div className={styles.outerContainer}>
           <div className={styles.bodyContainer}>
             {/* HEADER */}

@@ -32,7 +32,7 @@ const styledProgressFail = {
 const QuizResultPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-
+  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
   const [training, setTraining] = useState<Training>();
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
   const [achievedScore, setAchievedScore] = useState<number>(0);
@@ -53,8 +53,10 @@ const QuizResultPage = () => {
 
   return (
     <>
-      <NavigationBar />
-      <div className={`${styles.split} ${styles.right}`}>
+      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <div
+        className={`${styles.split} ${styles.right}`}
+        style={{ left: navigationBarOpen ? "250px" : "0" }}>
         <div className={styles.outerContainer}>
           <div className={styles.bodyContainer}>
             {/* HEADER */}
@@ -124,8 +126,7 @@ const QuizResultPage = () => {
               <Button
                 sx={forestGreenButton}
                 variant="contained"
-                onClick={() => navigate("/trainings")}
-              >
+                onClick={() => navigate("/trainings")}>
                 Exit training
               </Button>
             ) : (
@@ -133,8 +134,7 @@ const QuizResultPage = () => {
                 <Button
                   sx={{ ...whiteButtonGrayBorder }}
                   variant="contained"
-                  onClick={() => navigate("/trainings")}
-                >
+                  onClick={() => navigate("/trainings")}>
                   Exit training
                 </Button>
                 <Button sx={{ ...whiteButtonGrayBorder }} variant="contained">

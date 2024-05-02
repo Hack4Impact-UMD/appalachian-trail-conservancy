@@ -30,6 +30,7 @@ function PathwayLibrary() {
   const [filteredPathways, setFilteredPathways] = useState<
     { genericPathway: PathwayID; volunteerPathway?: VolunteerPathway }[]
   >([]);
+  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
 
   const filterPathways = (
     pathways?: {
@@ -124,8 +125,10 @@ function PathwayLibrary() {
 
   return (
     <>
-      <NavigationBar />
-      <div className={`${styles.split} ${styles.right}`}>
+      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <div
+        className={`${styles.split} ${styles.right}`}
+        style={{ left: navigationBarOpen ? "250px" : "0" }}>
         <div className={styles.outerContainer}>
           <div className={styles.content}>
             <div className={styles.header}>

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useAuth } from "../../auth/AuthProvider";
 import { Link } from "react-router-dom";
 import TrainingCard from "../../components/TrainingCard/TrainingCard";
@@ -7,15 +8,11 @@ import Certificate from "../../components/CertificateCard/CertificateCard";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Footer from "../../components/Footer/Footer";
-import training1 from "../../assets/training1.jpg";
-import training2 from "../../assets/training2.jpg";
-import training3 from "../../assets/training3.png";
-import training4 from "../../assets/training4.jpg";
 import badge from "../../assets/badge.svg";
 
 function Dashboard() {
   const auth = useAuth();
-  const images = [training1, training2, training3, training4];
+  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
 
   const pathwayCards = [
     { title: "Title 1", progress: 73 },
@@ -31,15 +28,18 @@ function Dashboard() {
 
   return (
     <>
-      <NavigationBar />
+      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
 
-      <div className={`${styles.split} ${styles.right}`}>
+      <div
+        className={`${styles.split} ${styles.right}`}
+        style={{ left: navigationBarOpen ? "250px" : "0" }}>
         <div className={styles.outerContainer}>
           <div className={styles.content}>
             <div className={styles.header}>
               <h1 className={styles.nameHeading}>Hello, {auth.firstName}!</h1>
               <ProfileIcon />
             </div>
+
             <div className={styles.subHeader}>
               <h2>Pathways in Progress</h2>
               <Link className={styles.viewAllLink} to="/pathways">
