@@ -1,12 +1,8 @@
 import { useState, useEffect } from "react";
 import { stepperStyle } from "../../muiTheme";
 import { TrainingID } from "../../types/TrainingType";
-import {
-  useLocation,
-  Navigate,
-  useParams,
-  useNavigate,
-} from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { type VolunteerTraining } from "../../types/UserType";
 import styles from "./TrainingPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
@@ -14,15 +10,21 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import ResourceComponent from "../../components/ResourceComponent/ResourceComponent";
-import { type VolunteerTraining } from "../../types/UserType";
 
 function TrainingPage() {
   const navigate = useNavigate();
   const location = useLocation();
 
   const [stepIndex, setStepIndex] = useState(0);
-  const [volunteerTraining, setVolunteerTraining] =
-    useState<VolunteerTraining>();
+  const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
+    {
+      trainingID: "",
+      progress: "INPROGRESS",
+      dateCompleted: "0000-00-00",
+      numCompletedResources: 0,
+      numTotalResources: 0,
+    }
+  );
   const [training, setTraining] = useState<TrainingID>({
     name: "",
     id: "",
