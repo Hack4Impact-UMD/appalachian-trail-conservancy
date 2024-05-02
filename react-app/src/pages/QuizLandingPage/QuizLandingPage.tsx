@@ -1,12 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import { forestGreenButton, whiteButtonGrayBorder } from "../../muiTheme";
-import {
-  useLocation,
-  Navigate,
-  useNavigate,
-  useParams,
-} from "react-router-dom";
+import { useLocation, Navigate, useNavigate } from "react-router-dom";
 import { DateTime } from "luxon";
 import { FaCheck, FaXmark } from "react-icons/fa6";
 import { Training } from "../../types/TrainingType";
