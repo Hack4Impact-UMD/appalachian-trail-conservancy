@@ -28,6 +28,7 @@ function AchievementsPage() {
   const [sortedCards, setSortedCards] = useState<
     { title: string; date: string; image: string }[]
   >([]);
+  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
 
   const sortCards = () => {
     const sortedCardsCopy = certificates.slice();
@@ -71,8 +72,10 @@ function AchievementsPage() {
 
   return (
     <>
-      <NavigationBar />
-      <div className={`${styles.split} ${styles.right}`}>
+      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <div
+        className={`${styles.split} ${styles.right}`}
+        style={{ left: navigationBarOpen ? "250px" : "0" }}>
         <div className={styles.outerContainer}>
           <div className={styles.content}>
             <div className={styles.header}>

@@ -25,15 +25,13 @@
 }
 
 .hamburger {
-  position: relative;
-  margin: 5%;
-  top: 13px;
-  right: 12.5px;
+  color: var(--blue-gray);
+  font-size: 1.5rem;
+  margin: 1.5rem;
 }
 
 .logoContainer {
   text-align: center;
-  margin-top: 15%;
 }
 
 .logo {

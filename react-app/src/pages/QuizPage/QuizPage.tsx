@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@mui/material";
 import { forestGreenButton } from "../../muiTheme";
 import { Question } from "../../types/TrainingType";
@@ -26,6 +27,8 @@ const testQuestions: Question[] = [
 ];
 
 function QuizPage() {
+  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+
   const location = useLocation();
 
   if (!location.state?.fromApp) {
@@ -34,8 +37,10 @@ function QuizPage() {
 
   return (
     <>
-      <NavigationBar />
-      <div className={`${styles.split} ${styles.right}`}>
+      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <div
+        className={`${styles.split} ${styles.right}`}
+        style={{ left: navigationBarOpen ? "250px" : "0" }}>
         <div className={styles.outerContainer}>
           <div className={styles.bodyContainer}>
             {/* HEADER */}

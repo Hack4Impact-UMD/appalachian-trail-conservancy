@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useAuth } from "../../auth/AuthProvider";
 import { Link } from "react-router-dom";
 import TrainingCard from "../../components/TrainingCard/TrainingCard";
@@ -18,10 +18,6 @@ function Dashboard() {
   const auth = useAuth();
   const images = [training1, training2, training3, training4];
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
-
-  const toggleNavigationBar = () => {
-    setNavigationBarOpen((prevOpen) => !prevOpen);
-  };
 
   const pathwayCards = [
     { title: "Title 1", progress: 73 },
@@ -54,16 +50,18 @@ function Dashboard() {
 
   return (
     <>
-      <NavigationBar open={navigationBarOpen} setOpen={toggleNavigationBar} />
+      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
 
-      <div className={`${styles.split} ${styles.right}`} style={{ left: navigationBarOpen ? "250px" : "0" }}>
+      <div
+        className={`${styles.split} ${styles.right}`}
+        style={{ left: navigationBarOpen ? "250px" : "0" }}>
         <div className={styles.outerContainer}>
           <div className={styles.content}>
             <div className={styles.header}>
               <h1 className={styles.nameHeading}>Hello, {auth.firstName}!</h1>
               <ProfileIcon />
             </div>
-  
+
             <div className={styles.subHeader}>
               <h2>Pathways in Progress</h2>
               <Link className={styles.viewAllLink} to="/pathways">
@@ -132,7 +130,6 @@ function Dashboard() {
                 </div>
               ))}
             </div>
-
           </div>
         </div>
         <Footer />

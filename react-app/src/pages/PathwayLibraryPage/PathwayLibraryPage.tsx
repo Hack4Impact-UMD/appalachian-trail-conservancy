@@ -19,6 +19,7 @@ function PathwayLibrary() {
   const [filteredTrainings, setFilteredTrainings] = useState<
     { title: string; subtitle: string; progress: number }[]
   >([]);
+  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
 
   const trainingCards = [
     { title: "Cat", subtitle: "Subtitle 1", progress: 23 },
@@ -68,8 +69,10 @@ function PathwayLibrary() {
 
   return (
     <>
-      <NavigationBar />
-      <div className={`${styles.split} ${styles.right}`}>
+      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <div
+        className={`${styles.split} ${styles.right}`}
+        style={{ left: navigationBarOpen ? "250px" : "0" }}>
         <div className={styles.outerContainer}>
           <div className={styles.content}>
             <div className={styles.header}>

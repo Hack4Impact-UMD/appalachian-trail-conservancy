@@ -28,6 +28,7 @@ const styledProgressPass = {
 
 function TrainingLandingPage() {
   const [loading, setLoading] = useState<boolean>(true);
+  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
   // If training & volunteerTraining is passed via state, then set it accordingly.
   // Otherwise, retrieve training via id from url parameter then check if a VolunteerTraining exists for it
   const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
@@ -91,8 +92,7 @@ function TrainingLandingPage() {
                 (index + 1 <= volunteerTraining.numCompletedResources
                   ? styles.opacityContainer
                   : "")
-              }`}
-            >
+              }`}>
               <p className={styles.trainingNumber}>{index + 1}</p>
               <p className={styles.trainingTitle}>{resource.title}</p>
               <p className={styles.trainingType}>{resource.type}</p>
@@ -110,8 +110,7 @@ function TrainingLandingPage() {
                 (volunteerTraining.trainingID !== "" &&
                   volunteerTraining.progress === "INPROGRESS" && (
                     <div
-                      className={`${styles.marker} ${styles.progressMarker}`}
-                    >
+                      className={`${styles.marker} ${styles.progressMarker}`}>
                       IN PROGRESS
                     </div>
                   ))}
@@ -178,9 +177,11 @@ function TrainingLandingPage() {
 
   return (
     <>
-      <NavigationBar />
+      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
 
-      <div className={`${styles.split} ${styles.right}`}>
+      <div
+        className={`${styles.split} ${styles.right}`}
+        style={{ left: navigationBarOpen ? "250px" : "0" }}>
         {loading ? (
           <Loading />
         ) : (
@@ -209,8 +210,7 @@ function TrainingLandingPage() {
                     <Typography
                       variant="body2"
                       color="var(--blue-gray)"
-                      sx={{ fontSize: "15px" }}
-                    >
+                      sx={{ fontSize: "15px" }}>
                       {(volunteerTraining &&
                         (volunteerTraining.numCompletedResources /
                           volunteerTraining.numTotalResources) *
@@ -240,8 +240,7 @@ function TrainingLandingPage() {
                       (volunteerTraining.progress === "COMPLETED"
                         ? styles.opacityContainer
                         : "")
-                    }`}
-                  >
+                    }`}>
                     <p className={styles.trainingNumber}>
                       {volunteerTraining.numTotalResources + 1}
                     </p>

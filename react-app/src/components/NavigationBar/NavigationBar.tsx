@@ -12,8 +12,8 @@ import achievementsActive from "../../assets/achievementsWhite.svg";
 import achievementInactive from "../../assets/achievementsGray.svg";
 import logout from "../../assets/logout.svg";
 import LogoutPopup from "./LogoutPopup/LogoutPopup";
-import { GiHamburgerMenu } from "react-icons/gi";
-import { MdOutlineKeyboardDoubleArrowLeft } from "react-icons/md";
+import collapseArrow from "../../assets/collapseArrow.svg";
+import hamburger from "../../assets/hamburger.svg";
 
 interface NavigationBarProps {
   open: boolean;
@@ -27,20 +27,11 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
     setOpenLogoutPopup(true);
   };
 
-  const handleToggleNavbar = (): void => {
-    setOpen((prevState) => !prevState);
-  };
-
   return (
-    <div className={`${styles.navigationContainer} ${open ? "" : styles.closed}`}>
-      <div className={styles.arrowBox}>
-        {open ? (
-          <MdOutlineKeyboardDoubleArrowLeft onClick={handleToggleNavbar} />
-        ) : (
-          <GiHamburgerMenu className={styles.hamburger} onClick={handleToggleNavbar} />
-        )}
-      </div>
-      {open && (
+    <div
+      className={`${styles.navigationContainer} ${open ? "" : styles.closed}`}>
+      {/* <div className={styles.arrowBox}> */}
+      {open ? (
         <>
           <div className={styles.logoContainer}>
             <img src={atcprimarylogo} alt="ATC Logo" className={styles.logo} />
@@ -48,11 +39,18 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
           <div className={styles.menuItems}>
             <div className={styles.navigationContainer}>
               <div className={styles.arrowBox}>
-                <MdOutlineKeyboardDoubleArrowLeft
-                  onClick={() => setOpen(false)}/>
+                <img
+                  src={collapseArrow}
+                  width={20}
+                  onClick={() => setOpen(false)}
+                />
               </div>
               <div className={styles.logoContainer}>
-                <img src={atcprimarylogo} alt="ATC Logo" className={styles.logo} />
+                <img
+                  src={atcprimarylogo}
+                  alt="ATC Logo"
+                  className={styles.logo}
+                />
               </div>
               <div className={styles.menuItems}>
                 <div className={styles.tabContainer}>
@@ -151,22 +149,31 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
                   </NavLink>
                 </div>
               </div>
-          </div>
+            </div>
           </div>
           <div className={styles.logoutContainer}>
             <button
               onClick={() => {
                 handleLogOut();
               }}
-              className={styles.menuItem}
-            >
+              className={styles.menuItem}>
               <img src={logout} alt="Logout" />
               Log Out
             </button>
           </div>
           <LogoutPopup open={openLogoutPopup} onClose={setOpenLogoutPopup} />
         </>
+      ) : (
+        <div>
+          <img
+            src={hamburger}
+            className={styles.hamburger}
+            width={30}
+            onClick={() => setOpen(true)}
+          />
+        </div>
       )}
+      {/* </div> */}
     </div>
   );
 };
