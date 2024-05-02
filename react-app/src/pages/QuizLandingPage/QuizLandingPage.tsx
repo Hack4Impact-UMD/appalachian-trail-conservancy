@@ -9,9 +9,11 @@ import { type VolunteerTraining } from "../../types/UserType";
 import styles from "./QuizLandingPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
+import Loading from "../../components/LoadingScreen/Loading.tsx";
 
 function QuizLandingPage() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(true);
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
   const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
     {
@@ -42,23 +44,19 @@ function QuizLandingPage() {
 
   useEffect(() => {
     if (
-      !location.state ||
-      (!location.state.training && !location.state.volunteerTraining)
+      location.state?.fromApp &&
+      location.state.training &&
+      location.state.volunteerTraining
     ) {
-      //idk
+      setTraining(location.state.training);
+      setVolunteerTraining(location.state.volunteerTraining);
+      setLoading(false);
     } else {
-      // Update state with data from location's state
-      if (location.state.training) {
-        setTraining(location.state.training);
-      }
-      if (location.state.volunteerTraining) {
-        setVolunteerTraining(location.state.volunteerTraining);
-      }
+      navigate("/trainings");
     }
   }, []);
 
   const location = useLocation();
-  const redirectTo = location.state?.from;
 
   if (!location.state?.fromApp) {
     return <Navigate to="/trainings" />;
@@ -74,64 +72,70 @@ function QuizLandingPage() {
         className={`${styles.split} ${styles.right}`}
         style={{ left: navigationBarOpen ? "250px" : "0" }}>
         <div className={styles.outerContainer}>
-          <div className={styles.bodyContainer}>
-            {/* header */}
-            <div className={styles.header}>
-              <h1 className={styles.nameHeading}>{training.name}</h1>
-              <ProfileIcon />
-            </div>
-            <div className={styles.subHeader}>
-              <h2>Number of Questions: {training.quiz.numQuestions}</h2>
-              <h2>
-                Passing Score: {training.quiz.passingScore}/
-                {training.quiz.numQuestions}
-              </h2>
-            </div>
-            {/* instructions */}
-            <div className={styles.subHeader}>
-              <h2>Instructions</h2>
-            </div>
-            <p className={styles.instructions}>
-              Instruction text goes right here and we can explain what to do
-              right here yay
-            </p>
-            {/* best attempt */}
-            <div className={styles.subHeader}>
-              <h2>Best Attempt</h2>
-            </div>
-            {!volunteerTraining.quizScoreRecieved &&
-            volunteerTraining.quizScoreRecieved !== 0 ? (
-              <div className={styles.noAttemptContainer}>No Recent Attempt</div>
-            ) : volunteerTraining.quizScoreRecieved >=
-              training.quiz.passingScore ? (
-              <div className={styles.passedAttemptContainer}>
-                <div className={styles.leftContent}>
-                  <span className={styles.dateText}>{formattedDate}</span>
-                  <span>
-                    {volunteerTraining.quizScoreRecieved}/
-                    {training.quiz.numQuestions}
-                  </span>
-                </div>
-                <div className={styles.rightContent}>
-                  Passed <FaCheck className={styles.icon} />
-                </div>
+          {loading ? (
+            <Loading />
+          ) : (
+            <div className={styles.bodyContainer}>
+              {/* header */}
+              <div className={styles.header}>
+                <h1 className={styles.nameHeading}>{training.name}</h1>
+                <ProfileIcon />
               </div>
-            ) : (
-              <div className={styles.failedAttemptContainer}>
-                <div className={styles.leftContent}>
-                  <span className={styles.dateText}>{formattedDate}</span>
-                  <span>
-                    {volunteerTraining.quizScoreRecieved}/
-                    {training.quiz.numQuestions}
-                  </span>
-                </div>
-                <div className={styles.rightContent}>
-                  Did Not Pass
-                  <FaXmark className={styles.icon} />
-                </div>
+              <div className={styles.subHeader}>
+                <h2>Number of Questions: {training.quiz.numQuestions}</h2>
+                <h2>
+                  Passing Score: {training.quiz.passingScore}/
+                  {training.quiz.numQuestions}
+                </h2>
               </div>
-            )}
-          </div>
+              {/* instructions */}
+              <div className={styles.subHeader}>
+                <h2>Instructions</h2>
+              </div>
+              <p className={styles.instructions}>
+                Instruction text goes right here and we can explain what to do
+                right here yay
+              </p>
+              {/* best attempt */}
+              <div className={styles.subHeader}>
+                <h2>Best Attempt</h2>
+              </div>
+              {!volunteerTraining.quizScoreRecieved &&
+              volunteerTraining.quizScoreRecieved !== 0 ? (
+                <div className={styles.noAttemptContainer}>
+                  No Recent Attempt
+                </div>
+              ) : volunteerTraining.quizScoreRecieved >=
+                training.quiz.passingScore ? (
+                <div className={styles.passedAttemptContainer}>
+                  <div className={styles.leftContent}>
+                    <span className={styles.dateText}>{formattedDate}</span>
+                    <span>
+                      {volunteerTraining.quizScoreRecieved}/
+                      {training.quiz.numQuestions}
+                    </span>
+                  </div>
+                  <div className={styles.rightContent}>
+                    Passed <FaCheck className={styles.icon} />
+                  </div>
+                </div>
+              ) : (
+                <div className={styles.failedAttemptContainer}>
+                  <div className={styles.leftContent}>
+                    <span className={styles.dateText}>{formattedDate}</span>
+                    <span>
+                      {volunteerTraining.quizScoreRecieved}/
+                      {training.quiz.numQuestions}
+                    </span>
+                  </div>
+                  <div className={styles.rightContent}>
+                    Did Not Pass
+                    <FaXmark className={styles.icon} />
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
           {/* footer */}
           <div className={styles.footer}>
             {/* buttons */}

@@ -10,11 +10,13 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import ResourceComponent from "../../components/ResourceComponent/ResourceComponent";
+import Loading from "../../components/LoadingScreen/Loading.tsx";
 
 function TrainingPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const [stepIndex, setStepIndex] = useState(0);
+  const [loading, setLoading] = useState<boolean>(true);
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
   const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
     {
@@ -50,6 +52,7 @@ function TrainingPage() {
     ) {
       setTraining(location.state.training);
       setVolunteerTraining(location.state.volunteerTraining);
+      setLoading(false);
     } else {
       navigate("/trainings");
     }
@@ -102,11 +105,15 @@ function TrainingPage() {
               <ProfileIcon />
             </div>
 
-            <ResourceComponent
-              handleBackButton={handleBackButton}
-              handleContinueButton={handleContinueButton}
-              resource={training.resources[stepIndex]}
-            />
+            {loading ? (
+              <Loading />
+            ) : (
+              <ResourceComponent
+                handleBackButton={handleBackButton}
+                handleContinueButton={handleContinueButton}
+                resource={training.resources[stepIndex]}
+              />
+            )}
           </div>
         </div>
 
