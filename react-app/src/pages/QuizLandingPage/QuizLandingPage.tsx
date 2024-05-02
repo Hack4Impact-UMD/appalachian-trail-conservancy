@@ -11,6 +11,7 @@ import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 
 function QuizLandingPage() {
+  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
   const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
     {
       trainingID: "GQf4rBgvJ4uU9Is89wXp",
@@ -71,8 +72,10 @@ function QuizLandingPage() {
 
   return (
     <>
-      <NavigationBar />
-      <div className={`${styles.split} ${styles.right}`}>
+      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <div
+        className={`${styles.split} ${styles.right}`}
+        style={{ left: navigationBarOpen ? "250px" : "0" }}>
         <div className={styles.outerContainer}>
           <div className={styles.bodyContainer}>
             {/* header */}

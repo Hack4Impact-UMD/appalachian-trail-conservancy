@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { LinearProgress, Button } from "@mui/material";
 import { forestGreenButton, whiteButtonGrayBorder } from "../../muiTheme";
 import { useLocation, Navigate } from "react-router-dom";
@@ -49,6 +50,7 @@ const QuizResultPage = (props: {
   totalScore: number;
   passingScore: number;
 }) => {
+  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
   const { achievedScore, totalScore, passingScore } = props;
   const passed = achievedScore >= passingScore;
   const scoredFull = achievedScore == totalScore;
@@ -61,8 +63,10 @@ const QuizResultPage = (props: {
 
   return (
     <>
-      <NavigationBar />
-      <div className={`${styles.split} ${styles.right}`}>
+      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <div
+        className={`${styles.split} ${styles.right}`}
+        style={{ left: navigationBarOpen ? "250px" : "0" }}>
         <div className={styles.outerContainer}>
           <div className={styles.bodyContainer}>
             {/* HEADER */}

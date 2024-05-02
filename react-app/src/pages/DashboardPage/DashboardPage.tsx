@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useAuth } from "../../auth/AuthProvider";
 import { Link } from "react-router-dom";
 import TrainingCard from "../../components/TrainingCard/TrainingCard";
@@ -16,11 +17,13 @@ import badge from "../../assets/badge.svg";
 function Dashboard() {
   const auth = useAuth();
   const images = [training1, training2, training3, training4];
+  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
 
   const pathwayCards = [
     { title: "Title 1", progress: 73 },
     { title: "Title 2" },
   ];
+
   const trainingCards = [
     {
       title: "Title 1",
@@ -37,6 +40,7 @@ function Dashboard() {
       image: images[Math.floor(Math.random() * images.length)],
     },
   ];
+
   const certificateCards = [
     { title: "Title 1", date: "2024-03-19" },
     { title: "Title 2", date: "2024-03-19" },
@@ -46,15 +50,18 @@ function Dashboard() {
 
   return (
     <>
-      <NavigationBar />
+      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
 
-      <div className={`${styles.split} ${styles.right}`}>
+      <div
+        className={`${styles.split} ${styles.right}`}
+        style={{ left: navigationBarOpen ? "250px" : "0" }}>
         <div className={styles.outerContainer}>
           <div className={styles.content}>
             <div className={styles.header}>
               <h1 className={styles.nameHeading}>Hello, {auth.firstName}!</h1>
               <ProfileIcon />
             </div>
+
             <div className={styles.subHeader}>
               <h2>Pathways in Progress</h2>
               <Link className={styles.viewAllLink} to="/pathways">
