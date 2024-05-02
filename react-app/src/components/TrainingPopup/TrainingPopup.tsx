@@ -3,19 +3,21 @@ import { Button } from "@mui/material";
 import { IoCloseOutline } from "react-icons/io5";
 import { whiteButtonGrayBorder } from "../../muiTheme";
 import { useNavigate } from "react-router-dom";
+import { Training, TrainingID } from "../../types/TrainingType";
+import { VolunteerTraining } from "../../types/UserType";
 
 interface modalPropsType {
   open: boolean;
   onClose: any;
-  title: string;
-  image: string;
+  training: TrainingID;
+  volunteerTraining?: VolunteerTraining;
 }
 
 const TrainingPopup = ({
   open,
   onClose,
-  title,
-  image,
+  training,
+  volunteerTraining,
 }: modalPropsType): React.ReactElement => {
   const navigate = useNavigate();
   return (
@@ -30,21 +32,18 @@ const TrainingPopup = ({
           <div className={styles.centered}>
             <div className={styles.modal}>
               <div className={styles.left}>
-                <p className={styles.title}>{title}</p>
-                <p className={styles.textContainer}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat.
-                </p>
+                <p className={styles.title}>{training.name}</p>
+                <p className={styles.textContainer}>{training.shortBlurb}</p>
                 <div className={styles.learnMoreButton}>
-                  {/* TODO: Navigate to training landing page and pass Training and VolunteerTraining as state */}
                   <Button
                     variant="contained"
                     sx={{ ...whiteButtonGrayBorder, width: "150px" }}
                     onClick={() =>
-                      navigate("/trainings/resources/0", {
-                        state: { fromApp: true },
+                      navigate(`/trainings/:${training.id}`, {
+                        state: {
+                          training: training,
+                          volunteerTraining: volunteerTraining,
+                        },
                       })
                     }>
                     Learn More
@@ -55,7 +54,7 @@ const TrainingPopup = ({
                 <div className={styles.closeButton}>
                   <IoCloseOutline onClick={() => onClose()} />
                 </div>
-                <img src={image} />
+                <img src={training.coverImage} />
               </div>
             </div>
           </div>

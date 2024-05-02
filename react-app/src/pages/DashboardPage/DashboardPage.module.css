@@ -61,9 +61,8 @@
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
-  justify-content: space-between;
-  row-gap: 1em;
-  column-gap: 1em;
+  row-gap: 1rem;
+  column-gap: 1.5rem;
   margin-bottom: 1rem;
 }
 

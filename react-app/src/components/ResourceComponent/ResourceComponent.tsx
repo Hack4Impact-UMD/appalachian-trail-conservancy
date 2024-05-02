@@ -21,25 +21,28 @@ const ResourceComponent: React.FC<ResourceProps> = ({
         <iframe
           title="Video Player"
           src={resource.link}
-          allowFullScreen></iframe>
+          allowFullScreen
+        ></iframe>
       </div>
 
       <div className={styles.contentLabel}>
         {/* Video title */}
-        <h2>{resource.title}</h2>
+        <div className={styles.resourceTitle}>{resource.title}</div>
 
         {/* Buttons */}
         <div className={styles.buttonContainer}>
           <Button
             sx={whiteButtonGrayBorder}
             onClick={() => handleBackButton()}
-            variant="contained">
+            variant="contained"
+          >
             Back
           </Button>
           <Button
             sx={whiteButtonGrayBorder}
             onClick={() => handleContinueButton()}
-            variant="contained">
+            variant="contained"
+          >
             Continue
           </Button>
         </div>

@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import { forestGreenButton, whiteButtonGrayBorder } from "../../muiTheme";
-import { useLocation, Navigate } from "react-router-dom";
+import { useLocation, Navigate, useNavigate } from "react-router-dom";
 import { DateTime } from "luxon";
 import { FaCheck, FaXmark } from "react-icons/fa6";
 import { Training } from "../../types/TrainingType";
@@ -9,57 +9,52 @@ import { type VolunteerTraining } from "../../types/UserType";
 import styles from "./QuizLandingPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
+import Loading from "../../components/LoadingScreen/Loading.tsx";
 
 function QuizLandingPage() {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(true);
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
   const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
     {
-      trainingID: "GQf4rBgvJ4uU9Is89wXp",
-      progress: "COMPLETED",
-      dateCompleted: "2024-04-12",
-      numCompletedResources: 4,
-      numTotalResources: 4,
-      quizScoreRecieved: 1, // field would not exist if user has never taken quiz
+      trainingID: "",
+      progress: "INPROGRESS",
+      dateCompleted: "0000-00-00",
+      numCompletedResources: 0,
+      numTotalResources: 0,
     }
   );
 
   // This training should represent the current training corresponding to the current quiz
   // This data should be recieved from navigation state
   const [training, setTraining] = useState<Training>({
-    name: "How to pet a cat",
+    name: "",
     shortBlurb: "",
-    description: "blah blah blah",
+    description: "",
     coverImage: "",
-    resources: [
-      { type: "VIDEO", link: "https://example.com/video1", title: "Video 1" },
-      { type: "PDF", link: "https://example.com/article1", title: "Article 1" },
-      { type: "PDF", link: "https://example.com/article1", title: "Article 2" },
-      { type: "PDF", link: "https://example.com/article1", title: "Article 3" },
-    ],
+    resources: [],
     quiz: {
-      questions: [
-        {
-          question: "How many toes do feet normally have?",
-          choices: ["20", "10", "2", "3"],
-          answer: "10",
-        },
-        {
-          question: "How many compressions should you do when performing CPR?",
-          choices: [
-            "100000",
-            "3",
-            "30",
-            "Do not do any compressions and just breathe",
-          ],
-          answer: "30",
-        },
-      ],
-      numQuestions: 2,
-      passingScore: 1,
+      questions: [],
+      numQuestions: 0,
+      passingScore: 0,
     },
     associatedPathways: [],
     certificationImage: "",
   });
+
+  useEffect(() => {
+    if (
+      location.state?.fromApp &&
+      location.state.training &&
+      location.state.volunteerTraining
+    ) {
+      setTraining(location.state.training);
+      setVolunteerTraining(location.state.volunteerTraining);
+      setLoading(false);
+    } else {
+      navigate("/trainings");
+    }
+  }, []);
 
   const location = useLocation();
 
@@ -77,72 +72,99 @@ function QuizLandingPage() {
         className={`${styles.split} ${styles.right}`}
         style={{ left: navigationBarOpen ? "250px" : "0" }}>
         <div className={styles.outerContainer}>
-          <div className={styles.bodyContainer}>
-            {/* header */}
-            <div className={styles.header}>
-              <h1 className={styles.nameHeading}>{training.name}</h1>
-              <ProfileIcon />
-            </div>
-            <div className={styles.subHeader}>
-              <h2>Number of Questions: {training.quiz.numQuestions}</h2>
-              <h2>
-                Passing Score: {training.quiz.passingScore}/
-                {training.quiz.numQuestions}
-              </h2>
-            </div>
-            {/* instructions */}
-            <div className={styles.subHeader}>
-              <h2>Instructions</h2>
-            </div>
-            <p className={styles.instructions}>
-              Instruction text goes right here and we can explain what to do
-              right here yay
-            </p>
-            {/* best attempt */}
-            <div className={styles.subHeader}>
-              <h2>Best Attempt</h2>
-            </div>
-            {!volunteerTraining.quizScoreRecieved &&
-            volunteerTraining.quizScoreRecieved !== 0 ? (
-              <div className={styles.noAttemptContainer}>No Recent Attempt</div>
-            ) : volunteerTraining.quizScoreRecieved >=
-              training.quiz.passingScore ? (
-              <div className={styles.passedAttemptContainer}>
-                <div className={styles.leftContent}>
-                  <span className={styles.dateText}>{formattedDate}</span>
-                  <span>
-                    {volunteerTraining.quizScoreRecieved}/
-                    {training.quiz.numQuestions}
-                  </span>
-                </div>
-                <div className={styles.rightContent}>
-                  Passed <FaCheck className={styles.icon} />
-                </div>
+          {loading ? (
+            <Loading />
+          ) : (
+            <div className={styles.bodyContainer}>
+              {/* header */}
+              <div className={styles.header}>
+                <h1 className={styles.nameHeading}>{training.name}</h1>
+                <ProfileIcon />
               </div>
-            ) : (
-              <div className={styles.failedAttemptContainer}>
-                <div className={styles.leftContent}>
-                  <span className={styles.dateText}>{formattedDate}</span>
-                  <span>
-                    {volunteerTraining.quizScoreRecieved}/
-                    {training.quiz.numQuestions}
-                  </span>
-                </div>
-                <div className={styles.rightContent}>
-                  Did Not Pass
-                  <FaXmark className={styles.icon} />
-                </div>
+              <div className={styles.subHeader}>
+                <h2>Number of Questions: {training.quiz.numQuestions}</h2>
+                <h2>
+                  Passing Score: {training.quiz.passingScore}/
+                  {training.quiz.numQuestions}
+                </h2>
               </div>
-            )}
-          </div>
+              {/* instructions */}
+              <div className={styles.subHeader}>
+                <h2>Instructions</h2>
+              </div>
+              <p className={styles.instructions}>
+                Instruction text goes right here and we can explain what to do
+                right here yay
+              </p>
+              {/* best attempt */}
+              <div className={styles.subHeader}>
+                <h2>Best Attempt</h2>
+              </div>
+              {!volunteerTraining.quizScoreRecieved &&
+              volunteerTraining.quizScoreRecieved !== 0 ? (
+                <div className={styles.noAttemptContainer}>
+                  No Recent Attempt
+                </div>
+              ) : volunteerTraining.quizScoreRecieved >=
+                training.quiz.passingScore ? (
+                <div className={styles.passedAttemptContainer}>
+                  <div className={styles.leftContent}>
+                    <span className={styles.dateText}>{formattedDate}</span>
+                    <span>
+                      {volunteerTraining.quizScoreRecieved}/
+                      {training.quiz.numQuestions}
+                    </span>
+                  </div>
+                  <div className={styles.rightContent}>
+                    Passed <FaCheck className={styles.icon} />
+                  </div>
+                </div>
+              ) : (
+                <div className={styles.failedAttemptContainer}>
+                  <div className={styles.leftContent}>
+                    <span className={styles.dateText}>{formattedDate}</span>
+                    <span>
+                      {volunteerTraining.quizScoreRecieved}/
+                      {training.quiz.numQuestions}
+                    </span>
+                  </div>
+                  <div className={styles.rightContent}>
+                    Did Not Pass
+                    <FaXmark className={styles.icon} />
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
           {/* footer */}
           <div className={styles.footer}>
             {/* buttons */}
             <div className={styles.footerButtons}>
-              <Button sx={{ ...whiteButtonGrayBorder }} variant="contained">
+              <Button
+                sx={{ ...whiteButtonGrayBorder }}
+                variant="contained"
+                onClick={() =>
+                  navigate("/trainings/resources", {
+                    state: {
+                      training: training,
+                      volunteerTraining: volunteerTraining,
+                      fromApp: true,
+                    },
+                  })
+                }>
                 BACK
               </Button>
-              <Button sx={{ ...forestGreenButton }} variant="contained">
+              <Button
+                sx={{ ...forestGreenButton }}
+                variant="contained"
+                onClick={() =>
+                  navigate(`/trainings/quiz`, {
+                    state: {
+                      training: training,
+                      fromApp: true,
+                    },
+                  })
+                }>
                 START QUIZ
               </Button>
             </div>

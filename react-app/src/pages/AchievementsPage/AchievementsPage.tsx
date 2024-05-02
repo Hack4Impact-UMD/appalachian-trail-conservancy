@@ -21,6 +21,7 @@ function AchievementsPage() {
     { title: "Ocean", date: "2022-08-17", image: "" },
     { title: "Savanahh", date: "2020-01-05", image: "" },
     { title: "Yosemite", date: "2023-05-04", image: "" },
+    { title: "Sophie", date: "2023-08-04", image: "" },
   ];
 
   const [badgesSelected, setBadgesSelected] = useState<boolean>(true);
@@ -91,7 +92,8 @@ function AchievementsPage() {
                       ? forestGreenButtonPadding
                       : whiteButtonGrayBorder
                   }
-                  variant="contained">
+                  variant="contained"
+                >
                   Pathway Badges
                 </Button>
                 <Button
@@ -101,7 +103,8 @@ function AchievementsPage() {
                       ? forestGreenButtonPadding
                       : whiteButtonGrayBorder
                   }
-                  variant="contained">
+                  variant="contained"
+                >
                   Training Certificates
                 </Button>
               </div>
@@ -113,7 +116,8 @@ function AchievementsPage() {
                   sx={{
                     ...whiteSelectGrayBorder,
                     width: "154px",
-                  }}>
+                  }}
+                >
                   <MenuItem value={"newest"} sx={selectOptionStyle}>
                     SORT: NEWEST
                   </MenuItem>
@@ -125,7 +129,8 @@ function AchievementsPage() {
                   </MenuItem>
                   <MenuItem
                     value={"reverseAlphabetically"}
-                    sx={selectOptionStyle}>
+                    sx={selectOptionStyle}
+                  >
                     SORT: Z-A
                   </MenuItem>
                 </Select>

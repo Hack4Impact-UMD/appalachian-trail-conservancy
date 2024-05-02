@@ -1,11 +1,11 @@
-import styles from "./TrainingLandingPage.module.css";
 import { useState, useEffect } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { whiteButtonGrayBorder, forestGreenButton } from "../../muiTheme";
-import { Training, TrainingResource } from "../../types/TrainingType";
+import { TrainingID, TrainingResource } from "../../types/TrainingType";
 import { type VolunteerTraining } from "../../types/UserType";
 import { getTraining } from "../../backend/FirestoreCalls";
 import { LinearProgress, Box, Typography, Button } from "@mui/material";
+import styles from "./TrainingLandingPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import CompletedIcon from "../../assets/completedCheck.svg";
@@ -27,32 +27,21 @@ const styledProgressPass = {
 };
 
 function TrainingLandingPage() {
+  const navigate = useNavigate();
+  const trainingId = useParams().id;
+  const location = useLocation();
   const [loading, setLoading] = useState<boolean>(true);
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+
   // If training & volunteerTraining is passed via state, then set it accordingly.
   // Otherwise, retrieve training via id from url parameter then check if a VolunteerTraining exists for it
-  const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
-    {
-      trainingID: "GQf4rBgvJ4uU9Is89wXp",
-      progress: "COMPLETED",
-      dateCompleted: "",
-      numCompletedResources: 4,
-      numTotalResources: 4,
-      quizScoreRecieved: 0,
-    }
-  );
-
-  const [training, setTraining] = useState<Training>({
-    name: "How to pet a cat",
+  const [training, setTraining] = useState<TrainingID>({
+    name: "",
+    id: "",
     shortBlurb: "",
-    description: "blah blah blah",
+    description: "",
     coverImage: "",
-    resources: [
-      { type: "VIDEO", link: "https://example.com/video1", title: "Video 1" },
-      { type: "PDF", link: "https://example.com/article1", title: "Article 1" },
-      { type: "PDF", link: "https://example.com/article1", title: "Article 2" },
-      { type: "PDF", link: "https://example.com/article1", title: "Article 3" },
-    ],
+    resources: [],
     quiz: {
       questions: [],
       numQuestions: 0,
@@ -62,24 +51,43 @@ function TrainingLandingPage() {
     certificationImage: "",
   });
 
-  const trainingId = useParams().id;
-  const location = useLocation();
+  const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
+    {
+      trainingID: "",
+      progress: "INPROGRESS",
+      dateCompleted: "",
+      numCompletedResources: 0,
+      numTotalResources: training.resources.length,
+    }
+  );
 
   useEffect(() => {
     if (trainingId !== undefined && !location.state?.training) {
-      getTraining(trainingId)
-        .then(async (trainingData) => {
-          setTraining(trainingData);
-          // Get volunteer training
-        })
-        .catch(() => {
-          console.log("Failed to get training");
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+      // Fetch data only if trainingId is available
+      if (trainingId !== undefined) {
+        getTraining(trainingId)
+          .then((trainingData) => {
+            setTraining(trainingData);
+            setVolunteerTraining(location.state.volunteerTraining);
+          })
+          .catch(() => {
+            console.log("Failed to get training");
+          })
+          .finally(() => {
+            setLoading(false);
+          });
+      }
+    } else {
+      // Update state with data from location's state
+      if (location.state.training) {
+        setTraining(location.state.training);
+      }
+      if (location.state.volunteerTraining) {
+        setVolunteerTraining(location.state.volunteerTraining);
+      }
+      setLoading(false);
     }
-  }, []);
+  }, [trainingId, location.state]);
 
   const renderTrainingResources = () => {
     return training.resources.map(
@@ -156,19 +164,55 @@ function TrainingLandingPage() {
       (volunteerTraining && volunteerTraining.numCompletedResources === 0)
     ) {
       return (
-        <Button sx={{ ...forestGreenButton }} variant="contained">
+        <Button
+          sx={{ ...forestGreenButton }}
+          variant="contained"
+          onClick={() =>
+            navigate(`/trainings/resources`, {
+              state: {
+                training: training,
+                volunteerTraining: volunteerTraining,
+                fromApp: true,
+              },
+            })
+          }>
           Start
         </Button>
       );
-    } else if (volunteerTraining && volunteerTraining.quizScoreRecieved != 0) {
+    } else if (
+      volunteerTraining.numCompletedResources ==
+      volunteerTraining.numTotalResources
+    ) {
       return (
-        <Button sx={{ ...forestGreenButton }} variant="contained">
+        <Button
+          sx={{ ...forestGreenButton }}
+          variant="contained"
+          onClick={() =>
+            navigate(`/trainings/resources`, {
+              state: {
+                training: training,
+                volunteerTraining: volunteerTraining,
+                fromApp: true,
+              },
+            })
+          }>
           Restart
         </Button>
       );
     } else {
       return (
-        <Button sx={{ ...forestGreenButton }} variant="contained">
+        <Button
+          sx={{ ...forestGreenButton }}
+          variant="contained"
+          onClick={() =>
+            navigate(`/trainings/resources`, {
+              state: {
+                training: training,
+                volunteerTraining: volunteerTraining,
+                fromApp: true,
+              },
+            })
+          }>
           Resume
         </Button>
       );
@@ -198,11 +242,11 @@ function TrainingLandingPage() {
                   <LinearProgress
                     variant="determinate"
                     value={
-                      (volunteerTraining &&
-                        (volunteerTraining.numCompletedResources /
-                          volunteerTraining.numTotalResources) *
-                          100) ||
-                      0
+                      volunteerTraining.trainingID !== ""
+                        ? (volunteerTraining.numCompletedResources /
+                            volunteerTraining.numTotalResources) *
+                          100
+                        : 0
                     }
                     sx={styledProgressPass}
                   />
@@ -211,12 +255,12 @@ function TrainingLandingPage() {
                       variant="body2"
                       color="var(--blue-gray)"
                       sx={{ fontSize: "15px" }}>
-                      {(volunteerTraining &&
-                        (volunteerTraining.numCompletedResources /
-                          volunteerTraining.numTotalResources) *
-                          100 +
-                          "%") ||
-                        "0%"}
+                      {volunteerTraining.trainingID !== ""
+                        ? (volunteerTraining.numCompletedResources /
+                            volunteerTraining.numTotalResources) *
+                            100 +
+                          "%"
+                        : "0%"}
                     </Typography>
                   </Box>
                 </div>
@@ -266,7 +310,10 @@ function TrainingLandingPage() {
         {/* footer */}
         <div className={styles.footer}>
           <div className={styles.footerButtons}>
-            <Button sx={{ ...whiteButtonGrayBorder }} variant="contained">
+            <Button
+              sx={{ ...whiteButtonGrayBorder }}
+              variant="contained"
+              onClick={() => navigate(-1)}>
               Back
             </Button>
             {renderButton()}

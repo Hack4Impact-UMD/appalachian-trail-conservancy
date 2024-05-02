@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { stepperStyle } from "../../muiTheme";
-import { TrainingResource } from "../../types/TrainingType";
-import { useLocation, Navigate } from "react-router-dom";
+import { TrainingID } from "../../types/TrainingType";
+import { useLocation, useNavigate } from "react-router-dom";
+import { type VolunteerTraining } from "../../types/UserType";
 import styles from "./TrainingPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
@@ -9,46 +10,68 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import ResourceComponent from "../../components/ResourceComponent/ResourceComponent";
-
-const resources: TrainingResource[] = [
-  {
-    type: "VIDEO",
-    link: "https://www.youtube.com/embed/Cvn96VkhbjE?si=ySyjq6tCmBlqPpT7",
-    title: "SpongeBob Employee",
-  },
-  {
-    type: "PDF",
-    link: "https://bayes.wustl.edu/etj/articles/random.pdf",
-    title: "Random Observations",
-  },
-  {
-    type: "VIDEO",
-    link: "https://youtube.com/embed/R4qDveKoGvA?si=z7CHAnRgu5TPMWpt",
-    title: "Campfire Song",
-  },
-  {
-    type: "PDF",
-    link: "https://philpapers.org/archive/DOROIO.pdf",
-    title: "Being Rational and Being Wrong",
-  },
-];
+import Loading from "../../components/LoadingScreen/Loading.tsx";
 
 function TrainingPage() {
-  const [stepIndex, setStepIndex] = useState(0);
-  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+  const navigate = useNavigate();
   const location = useLocation();
+  const [stepIndex, setStepIndex] = useState(0);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+  const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
+    {
+      trainingID: "",
+      progress: "INPROGRESS",
+      dateCompleted: "0000-00-00",
+      numCompletedResources: 0,
+      numTotalResources: 0,
+    }
+  );
+  const [training, setTraining] = useState<TrainingID>({
+    name: "",
+    id: "",
+    shortBlurb: "",
+    description: "",
+    coverImage: "",
+    resources: [],
+    quiz: {
+      questions: [],
+      numQuestions: 0,
+      passingScore: 0,
+    },
+    associatedPathways: [],
+    certificationImage: "",
+  });
 
-  if (!location.state?.fromApp) {
-    return <Navigate to="/trainings" />;
-  }
+  useEffect(() => {
+    // Get data from navigation state
+    if (
+      location.state?.fromApp &&
+      location.state.training &&
+      location.state.volunteerTraining
+    ) {
+      setTraining(location.state.training);
+      setVolunteerTraining(location.state.volunteerTraining);
+      setLoading(false);
+    } else {
+      navigate("/trainings");
+    }
+  }, []);
 
   // TODO: The last resource should show "start quiz" button
   // or confirmation
   const handleContinueButton = () => {
-    if (stepIndex < resources.length - 1) {
+    if (stepIndex < training.resources.length - 1) {
       setStepIndex(stepIndex + 1);
     } else {
-      //TODO: Quiz
+      navigate(`/trainings/quizlanding`, {
+        state: {
+          training: training,
+          volunteerTraining: volunteerTraining,
+          fromApp: true,
+          from: location,
+        },
+      });
     }
   };
 
@@ -58,6 +81,13 @@ function TrainingPage() {
       setStepIndex(stepIndex - 1);
     } else {
       //TODO: Quiz
+      navigate(`/trainings/${training.id}`, {
+        state: {
+          training: training,
+          volunteerTraining: volunteerTraining,
+          fromApp: true,
+        },
+      });
     }
   };
 
@@ -71,15 +101,19 @@ function TrainingPage() {
           <div className={styles.bodyContainer}>
             {/* HEADER */}
             <div className={styles.header}>
-              <h1 className={styles.nameHeading}>Training Title</h1>
+              <h1 className={styles.nameHeading}>{training.name}</h1>
               <ProfileIcon />
             </div>
 
-            <ResourceComponent
-              handleBackButton={handleBackButton}
-              handleContinueButton={handleContinueButton}
-              resource={resources[stepIndex]}
-            />
+            {loading ? (
+              <Loading />
+            ) : (
+              <ResourceComponent
+                handleBackButton={handleBackButton}
+                handleContinueButton={handleContinueButton}
+                resource={training.resources[stepIndex]}
+              />
+            )}
           </div>
         </div>
 
@@ -88,7 +122,7 @@ function TrainingPage() {
           activeStep={stepIndex}
           className={styles.stepContainer}
           sx={stepperStyle}>
-          {resources.map((resource, idx) => (
+          {training.resources.map((resource, idx) => (
             <Step key={idx} sx={{ padding: "0" }}>
               <StepLabel
                 sx={{

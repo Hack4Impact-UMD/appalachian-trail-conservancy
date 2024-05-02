@@ -55,7 +55,7 @@ function App() {
               }
             />
             <Route
-              path="/trainings/resources/:idx"
+              path="/trainings/resources"
               element={
                 <RequireAuth>
                   <TrainingPage />
@@ -82,11 +82,7 @@ function App() {
               path="/trainings/quizresult"
               element={
                 <RequireAuth>
-                  <QuizResult
-                    achievedScore={5}
-                    totalScore={10}
-                    passingScore={5}
-                  />
+                  <QuizResult />
                 </RequireAuth>
               }
             />

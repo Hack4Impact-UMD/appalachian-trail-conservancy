@@ -36,7 +36,8 @@
 
 .textContainer {
   font-size: 1rem;
-  margin: 25px 0px 40px 0px;
+  height: 130px;
+  overflow-y: auto;
 }
 
 .learnMoreButton {

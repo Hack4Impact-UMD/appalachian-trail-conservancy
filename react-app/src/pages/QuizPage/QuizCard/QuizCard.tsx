@@ -12,17 +12,27 @@ interface QuizCardProps {
   currentQuestion: number;
   question: string;
   answerOptions: string[];
+  selectedAnswers: string[];
+  setSelectedAnswers: any;
+  index: number;
 }
 
 const QuizCard: React.FC<QuizCardProps> = ({
   currentQuestion,
   question,
   answerOptions,
+  selectedAnswers,
+  setSelectedAnswers,
+  index,
 }) => {
   const [selectedValue, setSelectedValue] = useState("");
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedValue(event.target.value);
+    // Copy selected answers list, then edit answer at current index, then replace
+    const copyAnswers = selectedAnswers.slice();
+    copyAnswers[index] = event.target.value;
+    setSelectedAnswers(copyAnswers);
   };
 
   return (

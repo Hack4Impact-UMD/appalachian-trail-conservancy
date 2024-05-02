@@ -59,9 +59,8 @@
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
-  justify-content: space-between;
-  row-gap: 1em;
-  column-gap: 1em;
+  row-gap: 1rem;
+  column-gap: 1.5rem;
   margin-bottom: 1rem;
 }
 
@@ -74,9 +73,4 @@
   font-weight: bold;
   text-align: center;
   font-size: 1.1rem;
-}
-
-.subHeader h2 {
-  font-size: 1.8rem;
-  margin: 1.5rem 0 1rem 0;
 }

@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { LinearProgress, Button } from "@mui/material";
 import { forestGreenButton, whiteButtonGrayBorder } from "../../muiTheme";
-import { useLocation, Navigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./QuizResultPage.module.css";
 import QuizResultCard from "./QuizResultCard/QuizResultCard";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import atclogo from "../../assets/atc-primary-logo.png";
+import { Training } from "../../types/TrainingType";
 
 const styledProgressShape = {
   height: 24,
@@ -28,38 +29,27 @@ const styledProgressFail = {
   backgroundColor: "dimgray",
 };
 
-const quizResults = [
-  {
-    currentQuestion: 1,
-    question: "How do you spell Akash's name?",
-    answerOptions: ["Akish Patel", "Akesh Pital", "Akash Patil", "Akish Pitil"],
-    selectedAnswer: "Akash Patil",
-    correctAnswer: "Akish Pitil",
-  },
-  {
-    currentQuestion: 2,
-    question: "How many feet do toes normally have?",
-    answerOptions: ["20", "Five", "0", "-3"],
-    selectedAnswer: "0",
-    correctAnswer: "-3",
-  },
-];
-
-const QuizResultPage = (props: {
-  achievedScore: number;
-  totalScore: number;
-  passingScore: number;
-}) => {
-  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
-  const { achievedScore, totalScore, passingScore } = props;
-  const passed = achievedScore >= passingScore;
-  const scoredFull = achievedScore == totalScore;
-
+const QuizResultPage = () => {
+  const navigate = useNavigate();
   const location = useLocation();
+  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+  const [training, setTraining] = useState<Training>();
+  const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
+  const [achievedScore, setAchievedScore] = useState<number>(0);
 
-  if (!location.state?.fromApp) {
-    return <Navigate to="/trainings" />;
-  }
+  useEffect(() => {
+    // Get data from navigation state
+    if (location.state?.fromApp) {
+      setTraining(location.state.training);
+      setSelectedAnswers(location.state.selectedAnswers);
+      setAchievedScore(location.state.achievedScore);
+    } else {
+      navigate("/trainings");
+    }
+  }, []);
+
+  const passed = achievedScore >= (training?.quiz.passingScore ?? 0);
+  const scoredFull = achievedScore == training?.quiz.numQuestions;
 
   return (
     <>
@@ -95,13 +85,17 @@ const QuizResultPage = (props: {
                 {/* score */}
                 <div className={styles.score}>
                   <div className={styles.bigNum}>{achievedScore}</div>
-                  <div className={styles.smallNum}>/ {totalScore}</div>
+                  <div className={styles.smallNum}>
+                    / {training?.quiz.numQuestions}
+                  </div>
                 </div>
 
                 {/* progress bar */}
                 <LinearProgress
                   variant="determinate"
-                  value={achievedScore * 10}
+                  value={
+                    (achievedScore / (training?.quiz.numQuestions ?? 1)) * 100
+                  }
                   sx={
                     achievedScore == 0 ? styledProgressFail : styledProgressPass
                   }
@@ -110,14 +104,14 @@ const QuizResultPage = (props: {
             </div>
 
             <div className={styles.questionContainer}>
-              {quizResults.map((result, index) => (
+              {training?.quiz?.questions.map((question, index) => (
                 <QuizResultCard
                   key={index}
-                  currentQuestion={result.currentQuestion}
-                  question={result.question}
-                  answerOptions={result.answerOptions}
-                  selectedAnswer={result.selectedAnswer}
-                  correctAnswer={result.correctAnswer}
+                  currentQuestion={index}
+                  question={question.question}
+                  answerOptions={question.choices}
+                  selectedAnswer={selectedAnswers[index]}
+                  correctAnswer={question.answer}
                 />
               ))}
             </div>
@@ -129,12 +123,18 @@ const QuizResultPage = (props: {
           {/* buttons */}
           <div className={styles.footerButtons}>
             {passed ? (
-              <Button sx={forestGreenButton} variant="contained">
+              <Button
+                sx={forestGreenButton}
+                variant="contained"
+                onClick={() => navigate("/trainings")}>
                 Exit training
               </Button>
             ) : (
-              <div>
-                <Button sx={{ ...whiteButtonGrayBorder }} variant="contained">
+              <>
+                <Button
+                  sx={{ ...whiteButtonGrayBorder }}
+                  variant="contained"
+                  onClick={() => navigate("/trainings")}>
                   Exit training
                 </Button>
                 <Button sx={{ ...whiteButtonGrayBorder }} variant="contained">
@@ -143,7 +143,7 @@ const QuizResultPage = (props: {
                 <Button sx={{ ...forestGreenButton }} variant="contained">
                   Retake quiz
                 </Button>
-              </div>
+              </>
             )}
           </div>
         </div>

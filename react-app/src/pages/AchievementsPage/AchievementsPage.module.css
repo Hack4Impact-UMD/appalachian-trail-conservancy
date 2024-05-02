@@ -58,7 +58,6 @@
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
-  justify-content: space-between;
   row-gap: 1em;
   column-gap: 1em;
   margin-bottom: 1rem;

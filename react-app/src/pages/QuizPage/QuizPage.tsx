@@ -1,35 +1,52 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@mui/material";
 import { forestGreenButton } from "../../muiTheme";
-import { Question } from "../../types/TrainingType";
-import { useLocation, Navigate } from "react-router-dom";
+import { useLocation, Navigate, useNavigate } from "react-router-dom";
+import { Training } from "../../types/TrainingType";
 import styles from "./QuizPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import QuizCard from "./QuizCard/QuizCard";
-
-const testQuestions: Question[] = [
-  {
-    question: "How many toes do feet normally have?",
-    choices: ["20", "10", "2", "3"],
-    answer: "10",
-  },
-  {
-    question: "How many compressions should you do when performing CPR?",
-    choices: [
-      "100000",
-      "3",
-      "30",
-      "Do not do any compressions and just breathe",
-    ],
-    answer: "30",
-  },
-];
+import Loading from "../../components/LoadingScreen/Loading";
 
 function QuizPage() {
-  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
-
+  const navigate = useNavigate();
   const location = useLocation();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+  const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
+
+  // This training should represent the current training corresponding to the current quiz
+  // This data should be recieved from navigation state
+  const [training, setTraining] = useState<Training>({
+    name: "",
+    shortBlurb: "",
+    description: "",
+    coverImage: "",
+    resources: [],
+    quiz: {
+      questions: [],
+      numQuestions: 0,
+      passingScore: 0,
+    },
+    associatedPathways: [],
+    certificationImage: "",
+  });
+
+  useEffect(() => {
+    if (!location.state || !location.state.training) {
+      navigate("/trainings");
+    } else {
+      // Update state with data from location's state
+      if (location.state.training) {
+        setTraining(location.state.training);
+        setSelectedAnswers(
+          Array(location.state.training.quiz.questions.length)
+        );
+        setLoading(false);
+      }
+    }
+  }, []);
 
   if (!location.state?.fromApp) {
     return <Navigate to="/trainings" />;
@@ -44,27 +61,57 @@ function QuizPage() {
         <div className={styles.outerContainer}>
           <div className={styles.bodyContainer}>
             {/* HEADER */}
-            <div className={styles.header}>
-              <h1 className={styles.nameHeading}>Training Title - Quiz</h1>
-              <ProfileIcon />
-            </div>
-            <div className={styles.questionContainer}>
-              {testQuestions.map((option, index) => (
-                <QuizCard
-                  key={index}
-                  currentQuestion={index + 1}
-                  question={option.question}
-                  answerOptions={option.choices}
-                />
-              ))}
-            </div>
+            {loading ? (
+              <Loading />
+            ) : (
+              <>
+                <div className={styles.header}>
+                  <h1 className={styles.nameHeading}>{training.name} - Quiz</h1>
+                  <ProfileIcon />
+                </div>
+
+                <div className={styles.questionContainer}>
+                  {training.quiz.questions.map((option, index) => (
+                    <QuizCard
+                      key={index}
+                      currentQuestion={index + 1}
+                      question={option.question}
+                      answerOptions={option.choices}
+                      selectedAnswers={selectedAnswers}
+                      setSelectedAnswers={setSelectedAnswers}
+                      index={index}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </div>
 
         {/* footer */}
         <div className={styles.footer}>
           <div className={styles.footerButtons}>
-            <Button sx={{ ...forestGreenButton }} variant="contained">
+            <Button
+              sx={{ ...forestGreenButton }}
+              variant="contained"
+              onClick={() => {
+                const numAnswersCorrect = training.quiz.questions.reduce(
+                  (acc, question, idx) => {
+                    return selectedAnswers[idx] === question.answer
+                      ? acc + 1
+                      : acc;
+                  },
+                  0
+                );
+                navigate(`/trainings/quizresult`, {
+                  state: {
+                    training: training,
+                    selectedAnswers: selectedAnswers,
+                    achievedScore: numAnswersCorrect,
+                    fromApp: true,
+                  },
+                });
+              }}>
               Submit
             </Button>
           </div>
