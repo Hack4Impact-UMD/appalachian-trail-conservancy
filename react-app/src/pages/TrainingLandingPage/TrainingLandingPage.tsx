@@ -178,7 +178,7 @@ function TrainingLandingPage() {
           sx={{ ...forestGreenButton }}
           variant="contained"
           onClick={() =>
-            navigate(`/trainings/resources/0`, {
+            navigate(`/trainings/resources`, {
               state: {
                 training: training,
                 volunteerTraining: volunteerTraining,
@@ -199,7 +199,7 @@ function TrainingLandingPage() {
           sx={{ ...forestGreenButton }}
           variant="contained"
           onClick={() =>
-            navigate(`/trainings/resources/0`, {
+            navigate(`/trainings/resources`, {
               state: {
                 training: training,
                 volunteerTraining: volunteerTraining,
@@ -217,7 +217,7 @@ function TrainingLandingPage() {
           sx={{ ...forestGreenButton }}
           variant="contained"
           onClick={() =>
-            navigate(`/trainings/resources/0`, {
+            navigate(`/trainings/resources`, {
               state: {
                 training: training,
                 volunteerTraining: volunteerTraining,
@@ -323,7 +323,11 @@ function TrainingLandingPage() {
         {/* footer */}
         <div className={styles.footer}>
           <div className={styles.footerButtons}>
-            <Button sx={{ ...whiteButtonGrayBorder }} variant="contained">
+            <Button
+              sx={{ ...whiteButtonGrayBorder }}
+              variant="contained"
+              onClick={() => navigate(-1)}
+            >
               Back
             </Button>
             {renderButton()}

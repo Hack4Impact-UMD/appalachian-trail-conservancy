@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { Training, TrainingID } from "../../types/TrainingType";
 import { VolunteerTraining } from "../../types/UserType";
 
-
 interface modalPropsType {
   open: boolean;
   onClose: any;
@@ -26,7 +25,8 @@ const TrainingPopup = ({
       className={styles.modalContainer}
       onClick={(e) => {
         e.stopPropagation();
-      }}>
+      }}
+    >
       {open ? (
         <>
           <div className={styles.background} onClick={() => onClose()} />
@@ -34,9 +34,7 @@ const TrainingPopup = ({
             <div className={styles.modal}>
               <div className={styles.left}>
                 <p className={styles.title}>{training.name}</p>
-                <p className={styles.textContainer}>
-                  {training.shortBlurb}
-                </p>
+                <p className={styles.textContainer}>{training.shortBlurb}</p>
                 <div className={styles.learnMoreButton}>
                   {/* TODO: Navigate to training landing page and pass Training and VolunteerTraining as state */}
                   <Button
@@ -44,9 +42,13 @@ const TrainingPopup = ({
                     sx={{ ...whiteButtonGrayBorder, width: "150px" }}
                     onClick={() =>
                       navigate(`/trainings/:${training.id}`, {
-                        state: { training: training, volunteerTraining: volunteerTraining }
+                        state: {
+                          training: training,
+                          volunteerTraining: volunteerTraining,
+                        },
                       })
-                    }>
+                    }
+                  >
                     Learn More
                   </Button>
                 </div>

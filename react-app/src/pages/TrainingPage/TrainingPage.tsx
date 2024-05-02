@@ -14,18 +14,13 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import ResourceComponent from "../../components/ResourceComponent/ResourceComponent";
-import { getTraining } from "../../backend/FirestoreCalls";
 import { type VolunteerTraining } from "../../types/UserType";
 
 function TrainingPage() {
   const navigate = useNavigate();
-  const [stepIndex, setStepIndex] = useState(0);
-
   const location = useLocation();
-  const trainingId = useParams().id;
 
-  const [loading, setLoading] = useState<boolean>(true);
-
+  const [stepIndex, setStepIndex] = useState(0);
   const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
     {
       trainingID: "GQf4rBgvJ4uU9Is89wXp",
@@ -36,7 +31,6 @@ function TrainingPage() {
       quizScoreRecieved: 0,
     }
   );
-
   const [training, setTraining] = useState<TrainingID>({
     name: "How to pet a cat",
     id: "1233",
@@ -59,38 +53,18 @@ function TrainingPage() {
   });
 
   useEffect(() => {
+    // Get data from navigation state
     if (
-      !location.state ||
-      (!location.state.training && !location.state.volunteerTraining)
+      location.state?.fromApp &&
+      location.state.training &&
+      location.state.volunteerTraining
     ) {
-      // Fetch data only if trainingId is available
-      if (trainingId !== undefined) {
-        getTraining(trainingId)
-          .then((trainingData) => {
-            setTraining(trainingData);
-          })
-          .catch(() => {
-            console.log("Failed to get training");
-          })
-          .finally(() => {
-            setLoading(false);
-          });
-      }
+      setTraining(location.state.training);
+      setVolunteerTraining(location.state.volunteerTraining);
     } else {
-      // Update state with data from location's state
-      if (location.state.training) {
-        setTraining(location.state.training);
-      }
-      if (location.state.volunteerTraining) {
-        setVolunteerTraining(location.state.volunteerTraining);
-      }
-      setLoading(false);
+      navigate("/trainings");
     }
-  }, [trainingId, location.state]);
-
-  if (!location.state?.fromApp) {
-    return <Navigate to="/trainings" />;
-  }
+  }, []);
 
   // TODO: The last resource should show "start quiz" button
   // or confirmation

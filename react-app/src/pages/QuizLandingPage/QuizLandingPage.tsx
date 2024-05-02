@@ -166,9 +166,10 @@ function QuizLandingPage() {
                 variant="contained"
                 onClick={() =>
                   //this is totally wrong
-                  navigate(location.state.from, {
+                  navigate("/trainings/resources", {
                     state: {
                       training: training,
+                      volunteerTraining: volunteerTraining,
                       fromApp: true,
                     },
                   })
