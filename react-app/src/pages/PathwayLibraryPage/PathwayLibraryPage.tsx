@@ -11,6 +11,7 @@ import { PathwayID } from "../../types/PathwayType";
 import { VolunteerPathway } from "../../types/UserType";
 import { useAuth } from "../../auth/AuthProvider.tsx";
 import styles from "./PathwayLibraryPage.module.css";
+import Loading from "../../components/LoadingScreen/Loading.tsx";
 import debounce from "lodash.debounce";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import Footer from "../../components/Footer/Footer";
@@ -20,6 +21,7 @@ import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 function PathwayLibrary() {
   const auth = useAuth();
 
+  const [loading, setLoading] = useState<boolean>(true);
   const [filterType, setFilterType] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [correlatedPathways, setCorrelatedPathways] = useState<
@@ -101,8 +103,8 @@ function PathwayLibrary() {
                 }
               }
               setCorrelatedPathways(allCorrelatedPathways);
-
               filterPathways(allCorrelatedPathways);
+              setLoading(false);
             })
             .catch((error) => {
               console.error("Error fetching volunteer:", error);
@@ -175,29 +177,35 @@ function PathwayLibrary() {
                 </Button>
               </div>
             </div>
-
-            {filteredPathways.length === 0 ? (
-              <div className={styles.emptySearchMessage}>
-                No Trainings Matching “{searchQuery}”
-              </div>
+            {loading ? (
+              <Loading />
             ) : (
-              <div className={styles.cardsContainer}>
-                {filteredPathways.map((pathway, index) => (
-                  <div className={styles.card} key={index}>
-                    <PathwayCard
-                      image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
-                      title={pathway.genericPathway.name}
-                      progress={
-                        pathway.volunteerPathway
-                          ? (pathway.volunteerPathway.numTrainingsCompleted /
-                              pathway.volunteerPathway.numTotalTrainings) *
-                            100
-                          : 0
-                      }
-                    />
+              <>
+                {filteredPathways.length === 0 ? (
+                  <div className={styles.emptySearchMessage}>
+                    No Trainings Matching “{searchQuery}”
                   </div>
-                ))}
-              </div>
+                ) : (
+                  <div className={styles.cardsContainer}>
+                    {filteredPathways.map((pathway, index) => (
+                      <div className={styles.card} key={index}>
+                        <PathwayCard
+                          image="https://pyxis.nymag.com/v1/imgs/7aa/21a/c1de2c521f1519c6933fcf0d08e0a26fef-27-spongebob-squarepants.rsquare.w400.jpg"
+                          title={pathway.genericPathway.name}
+                          progress={
+                            pathway.volunteerPathway
+                              ? (pathway.volunteerPathway
+                                  .numTrainingsCompleted /
+                                  pathway.volunteerPathway.numTotalTrainings) *
+                                100
+                              : 0
+                          }
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>
