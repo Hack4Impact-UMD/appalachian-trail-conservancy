@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../auth/AuthProvider";
 import { Link } from "react-router-dom";
-import { getVolunteer, getAllTrainings } from "../../backend/FirestoreCalls";
+import { getVolunteer, getAllTrainings, getPathway, getAllPathways } from "../../backend/FirestoreCalls";
 import { TrainingID } from "../../types/TrainingType";
-import { VolunteerTraining } from "../../types/UserType";
+import { VolunteerPathway, VolunteerTraining } from "../../types/UserType";
 import TrainingCard from "../../components/TrainingCard/TrainingCard";
 import PathwayCard from "../../components/PathwayCard/PathwayCard";
 import styles from "./DashboardPage.module.css";
@@ -13,6 +13,7 @@ import Loading from "../../components/LoadingScreen/Loading";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Footer from "../../components/Footer/Footer";
 import badge from "../../assets/badge.svg";
+import { PathwayID } from "../../types/PathwayType";
 
 function Dashboard() {
   const auth = useAuth();
@@ -21,11 +22,9 @@ function Dashboard() {
   const [correlatedTrainings, setCorrelatedTrainings] = useState<
     { genericTraining: TrainingID; volunteerTraining: VolunteerTraining }[]
   >([]);
-
-  const pathwayCards = [
-    { title: "Title 1", progress: 73 },
-    { title: "Title 2" },
-  ];
+  const [correlatedPathways, setCorrelatedPathways] = useState<
+    { genericPathway: PathwayID; volunteerPathway: VolunteerPathway }[]
+  >([]);
 
   const certificateCards = [
     { title: "Title 1", date: "2024-03-19" },
@@ -75,6 +74,47 @@ function Dashboard() {
       });
   }, [auth.loading, auth.id]);
 
+  useEffect(() => {
+    // get all trainings from firebase
+    getAllPathways()
+      .then((genericPathways) => {
+        // only use auth if it is finished loading
+        if (!auth.loading && auth.id) {
+          // get volunteer info from firebase. will contain volunteer progress on trainings
+          getVolunteer(auth.id.toString())
+            .then((volunteer) => {
+              const volunteerPathways = volunteer.pathwayInformation;
+              // match up the allGenericTrainings and volunteerTrainings, use setCorrelatedTrainings to set
+              let allCorrelatedPathways: {
+                genericPathway: PathwayID;
+                volunteerPathway: VolunteerPathway;
+              }[] = [];
+              for (const genericPathway of genericPathways) {
+                // if genericTraining in volunteer.trainingInformation (has been started by volunteer), then we include that.
+                let startedByVolunteer = false;
+                for (const volunteerPathway of volunteerPathways) {
+                  if (genericPathway.id == volunteerPathway.pathwayID) {
+                    startedByVolunteer = true;
+                    allCorrelatedPathways.push({
+                      genericPathway: genericPathway,
+                      volunteerPathway: volunteerPathway,
+                    });
+                  }
+                }
+              }
+              setCorrelatedPathways(allCorrelatedPathways);
+              setLoading(false);
+            })
+            .catch((error) => {
+              console.error("Error fetching volunteer:", error);
+            });
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching trainings:", error);
+      });
+  }, [auth.loading, auth.id]);
+
   return (
     <>
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
@@ -100,12 +140,11 @@ function Dashboard() {
                   </Link>
                 </div>
                 <div className={styles.cardsContainer}>
-                  {pathwayCards.map((pathway, index) => (
+                {correlatedPathways.map((corrPathway, index) => (
                     <div className={styles.card} key={index}>
                       <PathwayCard
-                        image="../../"
-                        title={pathway.title}
-                        progress={pathway.progress}
+                        pathway={corrPathway.genericPathway}
+                        volunteerPathway={corrPathway.volunteerPathway}
                       />
                     </div>
                   ))}

@@ -1,46 +1,71 @@
 import styles from "./PathwayCard.module.css";
 import LinearProgressWithLabel from "../LinearProgressWithLabel/LinearProgressWithLabel";
 import pathwayCard from "../../assets/pathwayCard.svg";
+import { useNavigate } from "react-router-dom";
+import { PathwayID } from "../../types/PathwayType";
+import { VolunteerPathway } from "../../types/UserType";
+
 
 interface PathwayCardProps {
-  image: string;
-  title: string;
-  progress?: number; // Optional progress value
+  pathway: PathwayID;
+  volunteerPathway?: VolunteerPathway; 
 }
 
 const PathwayCard: React.FC<PathwayCardProps> = ({
-  image,
-  title,
-  progress,
+  pathway,
+  volunteerPathway
 }) => {
+  const navigate = useNavigate();
+
   const renderMarker = () => {
-    if (progress === undefined || progress === 0) {
-      // Pathway not started
+    if (volunteerPathway == undefined) {
+      // Training not started
       return (
         <div className={`${styles.marker} ${styles.notStartedMarker}`}>
           NOT STARTED
         </div>
       );
-    } else if (progress === 100) {
-      // Pathway completed
+    } else if (
+      volunteerPathway.numTrainingsCompleted ===
+      volunteerPathway.numTotalTrainings
+    ) {
+      // Training completed
       return (
         <div className={`${styles.marker} ${styles.completedMarker}`}>
           COMPLETED
         </div>
       );
     } else {
-      // Pathway in progress
-      return <LinearProgressWithLabel value={progress} />;
+      // Training in progress
+      return (
+        <LinearProgressWithLabel
+          value={
+            (volunteerPathway.numTrainingsCompleted /
+              volunteerPathway.numTotalTrainings) *
+            100
+          }
+        />
+      );
     }
   };
 
   return (
-    <div className={styles.pathwayCard}>
+    <div className={styles.pathwayCard}
+      onClick={() => {
+        
+          navigate(`/pathways/:${pathway.id}`, {
+            state: {
+              pathway: pathway,
+              volunteerPathway: volunteerPathway,
+            },
+          });
+        }
+      }>
       <div className={styles.pathwayImage}>
-        <img src={pathwayCard} alt="Pathway" />
+        <img src={pathway.coverImage} alt="Pathway" />
       </div>
       <div className={styles.pathwayContent}>
-        <div className={styles.pathwayTitle}>{title}</div>
+        <div className={styles.pathwayTitle}>{pathway.name}</div>
         <div className={styles.progressBar}>{renderMarker()}</div>
       </div>
     </div>
