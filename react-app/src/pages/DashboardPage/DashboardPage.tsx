@@ -243,7 +243,7 @@ function Dashboard() {
                   </Link>
                 </div>
                 <div className={styles.cardsContainer}>
-                  {pathwaysInProgress.map((pathway, index) => (
+                  {pathwaysInProgress.slice(0, 2).map((pathway, index) => (
                     <div className={styles.card} key={index}>
                       <PathwayCard
                         image="../../"
@@ -262,7 +262,7 @@ function Dashboard() {
                   </Link>
                 </div>
                 <div className={styles.cardsContainer}>
-                  {trainingsInProgress.map((training, index) => (
+                  {trainingsInProgress.slice(0, 3).map((training, index) => (
                     <div className={styles.card} key={index}>
                       <TrainingCard
                         training={training.genericTraining}
