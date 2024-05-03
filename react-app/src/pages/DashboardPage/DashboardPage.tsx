@@ -38,18 +38,6 @@ function Dashboard() {
     { genericPathway: PathwayID; volunteerPathway?: VolunteerPathway }[]
   >([]);
 
-  const pathwayCards = [
-    { title: "Title 1", progress: 73 },
-    { title: "Title 2" },
-  ];
-
-  const certificateCards = [
-    { title: "Title 1", date: "2024-03-19" },
-    { title: "Title 2", date: "2024-03-19" },
-    { title: "Title 3", date: "2024-03-19" },
-    { title: "Title 4", date: "2024-03-19" },
-  ];
-
   const correlateTrainings = (
     genericTrainings: TrainingID[] ,
     volunteerTrainings: VolunteerTraining[] 
@@ -293,12 +281,14 @@ function Dashboard() {
                       </Link>
                     </div>
                     <div className={styles.cardsContainer}>
-                      {certificateCards.map((cert, index) => (
+                      {pathwaysCompleted.slice(0,4).map((pathway, index) => (
                         <div className={styles.card} key={index}>
                           <Certificate
-                            image={badge}
-                            title={cert.title}
-                            date={cert.date}
+                            image={pathway.genericPathway.badgeImage}
+                            title={pathway.genericPathway.name}
+                            date={pathway.volunteerPathway?
+                                pathway.volunteerPathway.dateCompleted
+                                : 'invalid date'}
                           />
                         </div>
                       ))}
@@ -316,12 +306,14 @@ function Dashboard() {
                       </Link>
                     </div>
                     <div className={styles.cardsContainer}>
-                      {certificateCards.map((cert, index) => (
+                      {trainingsCompleted.slice(0,4).map((training, index) => (
                         <div className={styles.card} key={index}>
                           <Certificate
-                            image={badge}
-                            title={cert.title}
-                            date={cert.date}
+                            image={training.genericTraining.certificationImage}
+                            title={training.genericTraining.name}
+                            date={training.volunteerTraining?
+                                training.volunteerTraining.dateCompleted
+                                : 'invalid date'}
                           />
                         </div>
                       ))}
