@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../auth/AuthProvider";
 import { Link } from "react-router-dom";
-import { getVolunteer, getAllTrainings } from "../../backend/FirestoreCalls";
+import { getVolunteer, getAllTrainings, getAllPathways } from "../../backend/FirestoreCalls";
 import { TrainingID } from "../../types/TrainingType";
-import { VolunteerTraining } from "../../types/UserType";
+import { PathwayID } from "../../types/PathwayType";
+import { VolunteerTraining, VolunteerPathway } from "../../types/UserType";
 import TrainingCard from "../../components/TrainingCard/TrainingCard";
 import PathwayCard from "../../components/PathwayCard/PathwayCard";
 import styles from "./DashboardPage.module.css";
@@ -19,7 +20,10 @@ function Dashboard() {
   const [loading, setLoading] = useState<boolean>(true);
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
   const [correlatedTrainings, setCorrelatedTrainings] = useState<
-    { genericTraining: TrainingID; volunteerTraining: VolunteerTraining }[]
+    { genericTraining: TrainingID; volunteerTraining?: VolunteerTraining }[]
+  >([]);
+  const [correlatedPathways, setCorrelatedPathways] = useState<
+    { genericPathway: PathwayID; volunteerPathway?: VolunteerPathway }[]
   >([]);
 
   const pathwayCards = [
@@ -35,6 +39,7 @@ function Dashboard() {
   ];
 
   useEffect(() => {
+
     // get all trainings from firebase
     getAllTrainings()
       .then((genericTrainings) => {
@@ -47,7 +52,7 @@ function Dashboard() {
               // match up the allGenericTrainings and volunteerTrainings, use setCorrelatedTrainings to set
               let allCorrelatedTrainings: {
                 genericTraining: TrainingID;
-                volunteerTraining: VolunteerTraining;
+                volunteerTraining?: VolunteerTraining;
               }[] = [];
               for (const genericTraining of genericTrainings) {
                 // if genericTraining in volunteer.trainingInformation (has been started by volunteer), then we include that.
@@ -61,6 +66,12 @@ function Dashboard() {
                     });
                   }
                 }
+                if (!startedByVolunteer) {
+                  allCorrelatedTrainings.push({
+                    genericTraining: genericTraining,
+                    volunteerTraining: undefined,
+                  });
+                }
               }
               setCorrelatedTrainings(allCorrelatedTrainings);
               setLoading(false);
@@ -73,6 +84,53 @@ function Dashboard() {
       .catch((error) => {
         console.error("Error fetching trainings:", error);
       });
+
+      // get all pathways from firebase
+    getAllPathways()
+    .then((genericPathways) => {
+      // only use auth if it is finished loading
+      if (!auth.loading && auth.id) {
+        // get volunteer info from firebase. will contain volunteer progress on pathways
+        getVolunteer(auth.id.toString())
+          .then((volunteer) => {
+            const volunteerPathways = volunteer.pathwayInformation;
+
+            // match up the genericPathways and volunteerPathways
+            let allCorrelatedPathways: {
+              genericPathway: PathwayID;
+              volunteerPathway?: VolunteerPathway;
+            }[] = [];
+
+            for (const genericPathway of genericPathways) {
+              let startedByVolunteer = false;
+              for (const volunteerPathway of volunteerPathways) {
+                if (genericPathway.id == volunteerPathway.pathwayID) {
+                  startedByVolunteer = true;
+                  allCorrelatedPathways.push({
+                    genericPathway: genericPathway,
+                    volunteerPathway: volunteerPathway,
+                  });
+                }
+              }
+              if (!startedByVolunteer) {
+                allCorrelatedPathways.push({
+                  genericPathway: genericPathway,
+                  volunteerPathway: undefined,
+                });
+              }
+            }
+            setCorrelatedPathways(allCorrelatedPathways);
+            setLoading(false);
+          })
+          .catch((error) => {
+            console.error("Error fetching volunteer:", error);
+          });
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching pathways:", error);
+    });
+
   }, [auth.loading, auth.id]);
 
   return (
