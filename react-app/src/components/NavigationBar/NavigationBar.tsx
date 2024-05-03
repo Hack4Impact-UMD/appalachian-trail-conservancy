@@ -1,19 +1,19 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import styles from "./NavigationBar.module.css";
-import atcprimarylogo from "../../assets/atc-primary-logo.png";
-import dashboardActive from "../../assets/dashboardWhite.svg";
-import dashboardInactive from "../../assets/dashboardGray.svg";
-import trainingsActive from "../../assets/trainingsWhite.svg";
-import trainingsInactive from "../../assets/trainingsGray.svg";
-import pathwaysActive from "../../assets/pathwaysWhite.svg";
-import pathwaysInactive from "../../assets/pathwaysGray.svg";
-import achievementsActive from "../../assets/achievementsWhite.svg";
 import achievementInactive from "../../assets/achievementsGray.svg";
-import logout from "../../assets/logout.svg";
-import LogoutPopup from "./LogoutPopup/LogoutPopup";
+import achievementsActive from "../../assets/achievementsWhite.svg";
+import atcprimarylogo from "../../assets/atc-primary-logo.png";
 import collapseArrow from "../../assets/collapseArrow.svg";
+import dashboardInactive from "../../assets/dashboardGray.svg";
+import dashboardActive from "../../assets/dashboardWhite.svg";
 import hamburger from "../../assets/hamburger.svg";
+import logout from "../../assets/logout.svg";
+import pathwaysInactive from "../../assets/pathwaysGray.svg";
+import pathwaysActive from "../../assets/pathwaysWhite.svg";
+import trainingsInactive from "../../assets/trainingsGray.svg";
+import trainingsActive from "../../assets/trainingsWhite.svg";
+import LogoutPopup from "./LogoutPopup/LogoutPopup";
+import styles from "./NavigationBar.module.css";
 
 interface NavigationBarProps {
   open: boolean;
@@ -29,7 +29,10 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
 
   return (
     <div
-      className={`${styles.navigationContainer} ${open ? "" : styles.closed}`}>
+      className={`${styles.navigationContainer} ${open ? "" : styles.closed} ${
+        openLogoutPopup ? styles.popupOpen : ""
+      }`}
+    >
       {open ? (
         <>
           <div className={styles.logoContainer}>
@@ -59,7 +62,8 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
                       isActive
                         ? `${styles.tab} ${styles.tabActive}`
                         : `${styles.tab} ${styles.tabInActive}`
-                    }>
+                    }
+                  >
                     <div>
                       <img
                         className={styles.iconActive}
@@ -83,7 +87,8 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
                       isActive
                         ? `${styles.tab} ${styles.tabActive}`
                         : `${styles.tab} ${styles.tabInActive}`
-                    }>
+                    }
+                  >
                     <div>
                       <img
                         className={styles.iconActive}
@@ -107,7 +112,8 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
                       isActive
                         ? `${styles.tab} ${styles.tabActive}`
                         : `${styles.tab} ${styles.tabInActive}`
-                    }>
+                    }
+                  >
                     <div>
                       <img
                         className={styles.iconActive}
@@ -131,7 +137,8 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
                       isActive
                         ? `${styles.tab} ${styles.tabActive}`
                         : `${styles.tab} ${styles.tabInActive}`
-                    }>
+                    }
+                  >
                     <div>
                       <img
                         className={styles.iconActive}
@@ -153,7 +160,8 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
                   onClick={() => {
                     handleLogOut();
                   }}
-                  className={styles.menuItem}>
+                  className={styles.menuItem}
+                >
                   <img src={logout} alt="Logout" />
                   Log Out
                 </button>
