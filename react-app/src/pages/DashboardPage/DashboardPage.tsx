@@ -236,75 +236,98 @@ function Dashboard() {
               <Loading />
             ) : (
               <>
-                <div className={styles.subHeader}>
-                  <h2>Pathways in Progress</h2>
-                  <Link className={styles.viewAllLink} to="/pathways">
-                    VIEW ALL
-                  </Link>
-                </div>
-                <div className={styles.cardsContainer}>
-                  {pathwaysInProgress.slice(0, 2).map((pathway, index) => (
-                    <div className={styles.card} key={index}>
-                      <PathwayCard
-                        image="../../"
-                        title={pathway.genericPathway.name}
-                        progress={pathway.volunteerPathway? 
-                          pathway.volunteerPathway.numTrainingsCompleted / pathway.volunteerPathway.numTotalTrainings * 100
-                          : 0}
-                      />
+                {/* display pathways in progress if there exist pathways in progress */}
+                { pathwaysInProgress.length > 0 && (
+                  <div>
+                    <div className={styles.subHeader}>
+                      <h2>Pathways in Progress</h2>
+                      <Link className={styles.viewAllLink} to="/pathways">
+                        VIEW ALL
+                      </Link>
                     </div>
-                  ))}
-                </div>
-                <div className={styles.subHeader}>
-                  <h2>Trainings in Progress</h2>
-                  <Link className={styles.viewAllLink} to="/trainings">
-                    VIEW ALL
-                  </Link>
-                </div>
-                <div className={styles.cardsContainer}>
-                  {trainingsInProgress.slice(0, 3).map((training, index) => (
-                    <div className={styles.card} key={index}>
-                      <TrainingCard
-                        training={training.genericTraining}
-                        volunteerTraining={training.volunteerTraining}
-                      />
+                    <div className={styles.cardsContainer}>
+                      {pathwaysInProgress.slice(0, 2).map((pathway, index) => (
+                        <div className={styles.card} key={index}>
+                          <PathwayCard
+                            image="../../"
+                            title={pathway.genericPathway.name}
+                            progress={pathway.volunteerPathway? 
+                              pathway.volunteerPathway.numTrainingsCompleted / pathway.volunteerPathway.numTotalTrainings * 100
+                              : 0}
+                          />
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-                <div className={styles.subHeader}>
-                  <h2>Recent Badges</h2>
-                  <Link className={styles.viewAllLink} to="/achievements">
-                    VIEW ALL
-                  </Link>
-                </div>
-                <div className={styles.cardsContainer}>
-                  {certificateCards.map((cert, index) => (
-                    <div className={styles.card} key={index}>
-                      <Certificate
-                        image={badge}
-                        title={cert.title}
-                        date={cert.date}
-                      />
+                  </div>
+                )}
+                
+                {/* display trainings in progress if there exist trainings in progress */}
+                { trainingsInProgress.length > 0 && (
+                  <div>
+                    <div className={styles.subHeader}>
+                      <h2>Trainings in Progress</h2>
+                      <Link className={styles.viewAllLink} to="/trainings">
+                        VIEW ALL
+                      </Link>
                     </div>
-                  ))}
-                </div>
-                <div className={styles.subHeader}>
-                  <h2>Recent Certifications</h2>
-                  <Link className={styles.viewAllLink} to="/achievements">
-                    VIEW ALL
-                  </Link>
-                </div>
-                <div className={styles.cardsContainer}>
-                  {certificateCards.map((cert, index) => (
-                    <div className={styles.card} key={index}>
-                      <Certificate
-                        image={badge}
-                        title={cert.title}
-                        date={cert.date}
-                      />
+                    <div className={styles.cardsContainer}>
+                      {trainingsInProgress.slice(0, 3).map((training, index) => (
+                        <div className={styles.card} key={index}>
+                          <TrainingCard
+                            training={training.genericTraining}
+                            volunteerTraining={training.volunteerTraining}
+                          />
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
+                  </div>
+                )}
+                
+                {/* display badges if there exist pathways completed */}
+                { pathwaysCompleted.length > 0 && (
+                  <div>
+                    <div className={styles.subHeader}>
+                      <h2>Recent Badges</h2>
+                      <Link className={styles.viewAllLink} to="/achievements">
+                        VIEW ALL
+                      </Link>
+                    </div>
+                    <div className={styles.cardsContainer}>
+                      {certificateCards.map((cert, index) => (
+                        <div className={styles.card} key={index}>
+                          <Certificate
+                            image={badge}
+                            title={cert.title}
+                            date={cert.date}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                {/* display certifications if there exist trainings completed */}
+                { trainingsCompleted.length > 0 && (
+                  <div>
+                    <div className={styles.subHeader}>
+                      <h2>Recent Certifications</h2>
+                      <Link className={styles.viewAllLink} to="/achievements">
+                        VIEW ALL
+                      </Link>
+                    </div>
+                    <div className={styles.cardsContainer}>
+                      {certificateCards.map((cert, index) => (
+                        <div className={styles.card} key={index}>
+                          <Certificate
+                            image={badge}
+                            title={cert.title}
+                            date={cert.date}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </>
             )}
           </div>
