@@ -40,60 +40,52 @@ function Dashboard() {
 
   useEffect(() => {
 
-    // get all trainings from firebase
-    getAllTrainings()
-      .then((genericTrainings) => {
-        // only use auth if it is finished loading
-        if (!auth.loading && auth.id) {
-          // get volunteer info from firebase. will contain volunteer progress on trainings
-          getVolunteer(auth.id.toString())
-            .then((volunteer) => {
-              const volunteerTrainings = volunteer.trainingInformation;
-              // match up the allGenericTrainings and volunteerTrainings, use setCorrelatedTrainings to set
-              let allCorrelatedTrainings: {
-                genericTraining: TrainingID;
-                volunteerTraining?: VolunteerTraining;
-              }[] = [];
-              for (const genericTraining of genericTrainings) {
-                // if genericTraining in volunteer.trainingInformation (has been started by volunteer), then we include that.
-                let startedByVolunteer = false;
-                for (const volunteerTraining of volunteerTrainings) {
-                  if (genericTraining.id == volunteerTraining.trainingID) {
-                    startedByVolunteer = true;
-                    allCorrelatedTrainings.push({
-                      genericTraining: genericTraining,
-                      volunteerTraining: volunteerTraining,
-                    });
-                  }
-                }
-                if (!startedByVolunteer) {
+    // only use auth if it is finished loading
+    if (!auth.loading && auth.id) {
+
+      // get volunteer info from firebase. will contain volunteer progress on trainings & pathways
+      getVolunteer(auth.id.toString())
+        .then((volunteer) => {
+          const volunteerTrainings = volunteer.trainingInformation;
+          const volunteerPathways = volunteer.pathwayInformation;
+
+          // get all trainings from firebase
+          getAllTrainings()
+          .then((genericTrainings) => {
+              
+            // match up the allGenericTrainings and volunteerTrainings, use setCorrelatedTrainings to set
+            let allCorrelatedTrainings: {
+              genericTraining: TrainingID;
+              volunteerTraining?: VolunteerTraining;
+            }[] = [];
+            for (const genericTraining of genericTrainings) {
+              // if genericTraining in volunteer.trainingInformation (has been started by volunteer), then we include that.
+              let startedByVolunteer = false;
+              for (const volunteerTraining of volunteerTrainings) {
+                if (genericTraining.id == volunteerTraining.trainingID) {
+                  startedByVolunteer = true;
                   allCorrelatedTrainings.push({
                     genericTraining: genericTraining,
-                    volunteerTraining: undefined,
+                    volunteerTraining: volunteerTraining,
                   });
                 }
               }
-              setCorrelatedTrainings(allCorrelatedTrainings);
-              setLoading(false);
-            })
-            .catch((error) => {
-              console.error("Error fetching volunteer:", error);
-            });
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching trainings:", error);
-      });
+              if (!startedByVolunteer) {
+                allCorrelatedTrainings.push({
+                  genericTraining: genericTraining,
+                  volunteerTraining: undefined,
+                });
+              }
+            }
+            setCorrelatedTrainings(allCorrelatedTrainings);
+          })
+          .catch((error) => {
+            console.error("Error fetching trainings:", error);
+          });
 
-      // get all pathways from firebase
-    getAllPathways()
-    .then((genericPathways) => {
-      // only use auth if it is finished loading
-      if (!auth.loading && auth.id) {
-        // get volunteer info from firebase. will contain volunteer progress on pathways
-        getVolunteer(auth.id.toString())
-          .then((volunteer) => {
-            const volunteerPathways = volunteer.pathwayInformation;
+          // get all pathways from firebase
+          getAllPathways()
+          .then((genericPathways) => {
 
             // match up the genericPathways and volunteerPathways
             let allCorrelatedPathways: {
@@ -120,17 +112,18 @@ function Dashboard() {
               }
             }
             setCorrelatedPathways(allCorrelatedPathways);
-            setLoading(false);
           })
           .catch((error) => {
-            console.error("Error fetching volunteer:", error);
+            console.error("Error fetching pathways:", error);
           });
-      }
-    })
-    .catch((error) => {
-      console.error("Error fetching pathways:", error);
-    });
 
+          setLoading(false);
+
+        })
+        .catch((error) => {
+          console.error("Error fetching volunteer:", error);
+        });
+    }
   }, [auth.loading, auth.id]);
 
   return (
@@ -158,12 +151,14 @@ function Dashboard() {
                   </Link>
                 </div>
                 <div className={styles.cardsContainer}>
-                  {pathwayCards.map((pathway, index) => (
+                  {correlatedPathways.map((pathway, index) => (
                     <div className={styles.card} key={index}>
                       <PathwayCard
                         image="../../"
-                        title={pathway.title}
-                        progress={pathway.progress}
+                        title={pathway.genericPathway.name}
+                        progress={pathway.volunteerPathway? 
+                          pathway.volunteerPathway.numTrainingsCompleted / pathway.volunteerPathway.numTotalTrainings * 100
+                          : 0}
                       />
                     </div>
                   ))}
@@ -175,11 +170,11 @@ function Dashboard() {
                   </Link>
                 </div>
                 <div className={styles.cardsContainer}>
-                  {correlatedTrainings.map((corrTraining, index) => (
+                  {correlatedTrainings.map((training, index) => (
                     <div className={styles.card} key={index}>
                       <TrainingCard
-                        training={corrTraining.genericTraining}
-                        volunteerTraining={corrTraining.volunteerTraining}
+                        training={training.genericTraining}
+                        volunteerTraining={training.volunteerTraining}
                       />
                     </div>
                   ))}
