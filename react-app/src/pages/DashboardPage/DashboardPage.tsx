@@ -23,19 +23,19 @@ function Dashboard() {
     { genericTraining: TrainingID; volunteerTraining?: VolunteerTraining }[]
   >([]);
   const [trainingsInProgress, setTrainingsInProgress] = useState<
-    { genericTraining: TrainingID; volunteerTraining?: VolunteerTraining }[]
+    { genericTraining: TrainingID; volunteerTraining: VolunteerTraining }[]
   >([]);
   const [trainingsCompleted, setTrainingsCompleted] = useState<
-    { genericTraining: TrainingID; volunteerTraining?: VolunteerTraining }[]
+    { genericTraining: TrainingID; volunteerTraining: VolunteerTraining }[]
   >([]);
   const [correlatedPathways, setCorrelatedPathways] = useState<
     { genericPathway: PathwayID; volunteerPathway?: VolunteerPathway }[]
   >([]);
   const [pathwaysInProgress, setPathwaysInProgress] = useState<
-    { genericPathway: PathwayID; volunteerPathway?: VolunteerPathway }[]
+    { genericPathway: PathwayID; volunteerPathway: VolunteerPathway }[]
   >([]);
   const [pathwaysCompleted, setPathwaysCompleted] = useState<
-    { genericPathway: PathwayID; volunteerPathway?: VolunteerPathway }[]
+    { genericPathway: PathwayID; volunteerPathway: VolunteerPathway }[]
   >([]);
 
   const correlateTrainings = (
@@ -268,9 +268,7 @@ function Dashboard() {
                           <Certificate
                             image={pathway.genericPathway.badgeImage}
                             title={pathway.genericPathway.name}
-                            date={pathway.volunteerPathway?
-                                pathway.volunteerPathway.dateCompleted
-                                : 'invalid date'}
+                            date={pathway.volunteerPathway.dateCompleted}
                           />
                         </div>
                       ))}
@@ -293,9 +291,7 @@ function Dashboard() {
                           <Certificate
                             image={training.genericTraining.certificationImage}
                             title={training.genericTraining.name}
-                            date={training.volunteerTraining?
-                                training.volunteerTraining.dateCompleted
-                                : 'invalid date'}
+                            date={training.volunteerTraining.dateCompleted}
                           />
                         </div>
                       ))}
