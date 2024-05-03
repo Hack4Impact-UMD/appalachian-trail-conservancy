@@ -22,7 +22,19 @@ function Dashboard() {
   const [correlatedTrainings, setCorrelatedTrainings] = useState<
     { genericTraining: TrainingID; volunteerTraining?: VolunteerTraining }[]
   >([]);
+  const [trainingsInProgress, setTrainingsInProgress] = useState<
+    { genericTraining: TrainingID; volunteerTraining?: VolunteerTraining }[]
+  >([]);
+  const [trainingsCompleted, setTrainingsCompleted] = useState<
+    { genericTraining: TrainingID; volunteerTraining?: VolunteerTraining }[]
+  >([]);
   const [correlatedPathways, setCorrelatedPathways] = useState<
+    { genericPathway: PathwayID; volunteerPathway?: VolunteerPathway }[]
+  >([]);
+  const [pathwaysInProgress, setPathwaysInProgress] = useState<
+    { genericPathway: PathwayID; volunteerPathway?: VolunteerPathway }[]
+  >([]);
+  const [pathwaysCompleted, setPathwaysCompleted] = useState<
     { genericPathway: PathwayID; volunteerPathway?: VolunteerPathway }[]
   >([]);
 
@@ -38,6 +50,68 @@ function Dashboard() {
     { title: "Title 4", date: "2024-03-19" },
   ];
 
+  const correlateTrainings = (
+    genericTrainings: TrainingID[] ,
+    volunteerTrainings: VolunteerTraining[] 
+  ) => {
+    // match up the allGenericTrainings and volunteerTrainings, use setCorrelatedTrainings to set
+    let allCorrelatedTrainings: {
+      genericTraining: TrainingID;
+      volunteerTraining?: VolunteerTraining;
+    }[] = [];
+    for (const genericTraining of genericTrainings) {
+      // if genericTraining in volunteer.trainingInformation (has been started by volunteer), then we include that.
+      let startedByVolunteer = false;
+      for (const volunteerTraining of volunteerTrainings) {
+        if (genericTraining.id == volunteerTraining.trainingID) {
+          startedByVolunteer = true;
+          allCorrelatedTrainings.push({
+            genericTraining: genericTraining,
+            volunteerTraining: volunteerTraining,
+          });
+        }
+      }
+      if (!startedByVolunteer) {
+        allCorrelatedTrainings.push({
+          genericTraining: genericTraining,
+          volunteerTraining: undefined,
+        });
+      }
+    }
+    setCorrelatedTrainings(allCorrelatedTrainings);
+  };
+
+  const correlatePathways = (
+    genericPathways: PathwayID[] ,
+    volunteerPathways: VolunteerPathway[] 
+  ) => {
+    // match up the genericPathways and volunteerPathways
+    let allCorrelatedPathways: {
+      genericPathway: PathwayID;
+      volunteerPathway?: VolunteerPathway;
+    }[] = [];
+
+    for (const genericPathway of genericPathways) {
+      let startedByVolunteer = false;
+      for (const volunteerPathway of volunteerPathways) {
+        if (genericPathway.id == volunteerPathway.pathwayID) {
+          startedByVolunteer = true;
+          allCorrelatedPathways.push({
+            genericPathway: genericPathway,
+            volunteerPathway: volunteerPathway,
+          });
+        }
+      }
+      if (!startedByVolunteer) {
+        allCorrelatedPathways.push({
+          genericPathway: genericPathway,
+          volunteerPathway: undefined,
+        });
+      }
+    }
+    setCorrelatedPathways(allCorrelatedPathways);
+  }
+
   useEffect(() => {
 
     // only use auth if it is finished loading
@@ -52,32 +126,7 @@ function Dashboard() {
           // get all trainings from firebase
           getAllTrainings()
           .then((genericTrainings) => {
-              
-            // match up the allGenericTrainings and volunteerTrainings, use setCorrelatedTrainings to set
-            let allCorrelatedTrainings: {
-              genericTraining: TrainingID;
-              volunteerTraining?: VolunteerTraining;
-            }[] = [];
-            for (const genericTraining of genericTrainings) {
-              // if genericTraining in volunteer.trainingInformation (has been started by volunteer), then we include that.
-              let startedByVolunteer = false;
-              for (const volunteerTraining of volunteerTrainings) {
-                if (genericTraining.id == volunteerTraining.trainingID) {
-                  startedByVolunteer = true;
-                  allCorrelatedTrainings.push({
-                    genericTraining: genericTraining,
-                    volunteerTraining: volunteerTraining,
-                  });
-                }
-              }
-              if (!startedByVolunteer) {
-                allCorrelatedTrainings.push({
-                  genericTraining: genericTraining,
-                  volunteerTraining: undefined,
-                });
-              }
-            }
-            setCorrelatedTrainings(allCorrelatedTrainings);
+            correlateTrainings(genericTrainings, volunteerTrainings);
           })
           .catch((error) => {
             console.error("Error fetching trainings:", error);
@@ -86,32 +135,7 @@ function Dashboard() {
           // get all pathways from firebase
           getAllPathways()
           .then((genericPathways) => {
-
-            // match up the genericPathways and volunteerPathways
-            let allCorrelatedPathways: {
-              genericPathway: PathwayID;
-              volunteerPathway?: VolunteerPathway;
-            }[] = [];
-
-            for (const genericPathway of genericPathways) {
-              let startedByVolunteer = false;
-              for (const volunteerPathway of volunteerPathways) {
-                if (genericPathway.id == volunteerPathway.pathwayID) {
-                  startedByVolunteer = true;
-                  allCorrelatedPathways.push({
-                    genericPathway: genericPathway,
-                    volunteerPathway: volunteerPathway,
-                  });
-                }
-              }
-              if (!startedByVolunteer) {
-                allCorrelatedPathways.push({
-                  genericPathway: genericPathway,
-                  volunteerPathway: undefined,
-                });
-              }
-            }
-            setCorrelatedPathways(allCorrelatedPathways);
+            correlatePathways(genericPathways, volunteerPathways);
           })
           .catch((error) => {
             console.error("Error fetching pathways:", error);
