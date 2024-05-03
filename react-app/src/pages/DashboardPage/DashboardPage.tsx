@@ -79,6 +79,9 @@ function Dashboard() {
       }
     }
     setCorrelatedTrainings(allCorrelatedTrainings);
+
+    // set trainingsInProgress and trainingsCompleted
+    filterTrainings(allCorrelatedTrainings);
   };
 
   const correlatePathways = (
@@ -110,7 +113,72 @@ function Dashboard() {
       }
     }
     setCorrelatedPathways(allCorrelatedPathways);
+    filterPathways(allCorrelatedPathways);
   }
+
+  const filterTrainings = (
+    trainingsParam?: {
+      genericTraining: TrainingID;
+      volunteerTraining?: VolunteerTraining;
+    }[]
+  ) => {
+    // if correlatedTrainings hasn't been set yet, use what's passed in, which is correlatedTrainings
+    let trainingsIP = correlatedTrainings;
+    let trainingsC = correlatedTrainings;
+    if (correlatedTrainings.length === 0 && trainingsParam) {
+      trainingsIP = trainingsParam;
+      trainingsC = trainingsParam;
+    }
+
+    // in progress
+    trainingsIP = trainingsIP.filter(
+      (corrTraining) =>
+        corrTraining.volunteerTraining &&
+        corrTraining.volunteerTraining.progress == "INPROGRESS"
+    );
+    
+    // completed
+    trainingsC = trainingsC.filter(
+      (corrTraining) =>
+        corrTraining.volunteerTraining &&
+        corrTraining.volunteerTraining.progress == "COMPLETED"
+    );
+    
+    setTrainingsInProgress(trainingsIP);
+    setTrainingsCompleted(trainingsC);
+  };
+
+  const filterPathways = (
+    pathwaysParam?: {
+      genericPathway: PathwayID;
+      volunteerPathway?: VolunteerPathway;
+    }[]
+  ) => {
+    // if correlatedPathways hasn't been set yet, use what's passed in, which is correlatedPathways
+    let pathwaysIP = correlatedPathways;
+    let pathwaysC = correlatedPathways;
+    if (correlatedPathways.length === 0 && pathwaysParam) {
+      pathwaysIP = pathwaysParam;
+      pathwaysC = pathwaysParam;
+    }
+
+    // in progress
+    pathwaysIP = pathwaysIP.filter(
+      (corrPathway) =>
+        corrPathway.volunteerPathway &&
+        corrPathway.volunteerPathway.progress == "INPROGRESS"
+    );
+    
+    // completed
+    pathwaysC = pathwaysC.filter(
+      (corrPathway) =>
+        corrPathway.volunteerPathway &&
+        corrPathway.volunteerPathway.progress == "COMPLETED"
+    );
+    
+    setPathwaysInProgress(pathwaysIP);
+    setPathwaysCompleted(pathwaysC);
+  };
 
   useEffect(() => {
 
@@ -175,7 +243,7 @@ function Dashboard() {
                   </Link>
                 </div>
                 <div className={styles.cardsContainer}>
-                  {correlatedPathways.map((pathway, index) => (
+                  {pathwaysInProgress.map((pathway, index) => (
                     <div className={styles.card} key={index}>
                       <PathwayCard
                         image="../../"
@@ -194,7 +262,7 @@ function Dashboard() {
                   </Link>
                 </div>
                 <div className={styles.cardsContainer}>
-                  {correlatedTrainings.map((training, index) => (
+                  {trainingsInProgress.map((training, index) => (
                     <div className={styles.card} key={index}>
                       <TrainingCard
                         training={training.genericTraining}
