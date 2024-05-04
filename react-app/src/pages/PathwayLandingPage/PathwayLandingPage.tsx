@@ -1,10 +1,10 @@
-import { useState, useEffect, SetStateAction } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { whiteButtonGrayBorder, forestGreenButton } from "../../muiTheme";
-import { TrainingID, TrainingResource, Training } from "../../types/TrainingType";
+import { Training } from "../../types/TrainingType";
 import { PathwayID } from "../../types/PathwayType";
-import { type VolunteerTraining, VolunteerPathway } from "../../types/UserType";
-import { getAllPathways, getTraining } from "../../backend/FirestoreCalls";
+import { type VolunteerPathway } from "../../types/UserType";
+import { getTraining } from "../../backend/FirestoreCalls";
 import { getPathway } from "../../backend/FirestoreCalls";
 import { LinearProgress, Box, Typography, Button } from "@mui/material";
 import styles from "./PathwayLandingPage.module.css";
@@ -28,7 +28,7 @@ const styledProgressPass = {
   },
 };
 
- function PathwayLandingPage() {
+function PathwayLandingPage() {
   const navigate = useNavigate();
   const pathwayId = useParams().id;
   const location = useLocation();
@@ -47,30 +47,30 @@ const styledProgressPass = {
     badgeImage: "",
   });
 
-  const [volunteerPathway, setVolunteerPathway] = useState<VolunteerPathway>(
-    {
-        pathwayID: "",
-        progress: "INPROGRESS",
-        dateCompleted: "",
-        trainingsCompleted: [],
-        numTrainingsCompleted: 0,
-        numTotalTrainings: 0,
-    }
-  );
+  const [volunteerPathway, setVolunteerPathway] = useState<VolunteerPathway>({
+    pathwayID: "",
+    progress: "INPROGRESS",
+    dateCompleted: "",
+    trainingsCompleted: [],
+    numTrainingsCompleted: 0,
+    numTotalTrainings: 0,
+  });
 
   const [allTrainings, setAllTrainings] = useState<Training[]>([]);
 
   useEffect(() => {
     if (pathwayId !== undefined && !location.state?.pathway) {
-        setLoading(true); 
+      //fetch data if pathwayId is available
+      setLoading(true);
       if (pathwayId !== undefined) {
         getPathway(pathwayId)
           .then(async (pathwayData) => {
             setPathway(pathwayData);
             setVolunteerPathway(location.state.volunteerPathway);
 
-            //make array of Trainings for pathway
-            const trainingPromises = pathwayData.trainingIDs.map(trainingId => getTraining(trainingId));
+            const trainingPromises = pathwayData.trainingIDs.map((trainingId) =>
+              getTraining(trainingId)
+            );
             const allTrainingsData = await Promise.all(trainingPromises);
             setAllTrainings(allTrainingsData);
           })
@@ -78,37 +78,32 @@ const styledProgressPass = {
             console.log("Failed to get pathway");
           })
           .finally(() => {
-            setLoading(false); 
+            setLoading(false);
           });
       }
     } else {
+      //update data by state
+      setLoading(true);
       if (location.state.pathway) {
         setPathway(location.state.pathway);
       }
       if (location.state.volunteerPathway) {
         setVolunteerPathway(location.state.volunteerPathway);
       }
-      if (location.state.training) {
-        setAllTrainings(location.state.training);
-        setLoading(false); 
-      } else {
-        const trainingPromises = pathway.trainingIDs.map(trainingId => getTraining(trainingId));
-        Promise.all(trainingPromises)
-          .then(allTrainingsData => {
-            setAllTrainings(allTrainingsData);
-          })
-          .catch(() => {
-            console.log("Failed to get training data");
-          })
-          .finally(() => {
-            console.log(pathway);
-            console.log(volunteerPathway);
-            console.log(allTrainings);
-            setLoading(false); 
-          });
-      }
+      const trainingPromises = location.state.pathway.trainingIDs.map(
+        (trainingId: string) => getTraining(trainingId)
+      );
+      Promise.all(trainingPromises)
+        .then((allTrainingsData) => {
+          setAllTrainings(allTrainingsData);
+        })
+        .catch(() => {
+          console.log("Failed to get training data");
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     }
-
   }, [pathwayId, location.state]);
 
   const renderTrainingResources = () => {
@@ -129,23 +124,22 @@ const styledProgressPass = {
             <p className={styles.trainingTitle}>{training.name}</p>
           </div>
           <div>
-              {/* conditionally render completed icon if resource is completed */}
-              {(volunteerPathway.pathwayID !== "" &&
-                index + 1 <= volunteerPathway.numTrainingsCompleted && (
-                  <img
-                    className={styles.completedIcon}
-                    src={CompletedIcon}
-                    alt="Completed"
-                  />
-                )) ||
-                (volunteerPathway.pathwayID !== "" &&
-                  volunteerPathway.progress === "INPROGRESS" && (
-                    <div
-                      className={`${styles.marker} ${styles.progressMarker}`}>
-                      IN PROGRESS
-                    </div>
-                  ))}
-            </div>
+            {/* conditionally render completed icon if resource is completed */}
+            {(volunteerPathway.pathwayID !== "" &&
+              index + 1 <= volunteerPathway.numTrainingsCompleted && (
+                <img
+                  className={styles.completedIcon}
+                  src={CompletedIcon}
+                  alt="Completed"
+                />
+              )) ||
+              (volunteerPathway.pathwayID !== "" &&
+                volunteerPathway.progress === "INPROGRESS" && (
+                  <div className={`${styles.marker} ${styles.progressMarker}`}>
+                    IN PROGRESS
+                  </div>
+                ))}
+          </div>
         </div>
       </div>
     ));
@@ -153,7 +147,7 @@ const styledProgressPass = {
 
   const renderMarker = () => {
     if (volunteerPathway.pathwayID === "") {
-      // Training not started
+      // training not started
       return (
         <div className={`${styles.marker} ${styles.notStartedMarker}`}>
           NOT STARTED
@@ -164,14 +158,14 @@ const styledProgressPass = {
       volunteerPathway.numTrainingsCompleted ===
         volunteerPathway.numTotalTrainings
     ) {
-      // Training completed
+      // training completed
       return (
         <div className={`${styles.marker} ${styles.progressMarker}`}>
           COMPLETED
         </div>
       );
     }
-    // Training in progress
+    // training in progress
     else
       return (
         <div className={`${styles.marker} ${styles.progressMarker}`}>
@@ -187,17 +181,18 @@ const styledProgressPass = {
     ) {
       return (
         <Button
-        sx={{ ...forestGreenButton }}
-        variant="contained"
-        onClick={() =>
-          navigate(`/pathways`, {
-            state: {
-              pathway: pathway,
-              volunteerPathway: volunteerPathway,
-              fromApp: true,
-            },
-          })
-        }>
+          sx={{ ...forestGreenButton }}
+          variant="contained"
+          onClick={() =>
+            navigate(`/pathways`, {
+              state: {
+                pathway: pathway,
+                volunteerPathway: volunteerPathway,
+                fromApp: true,
+              },
+            })
+          }
+        >
           Start
         </Button>
       );
@@ -217,7 +212,8 @@ const styledProgressPass = {
                 fromApp: true,
               },
             })
-          }>
+          }
+        >
           Restart
         </Button>
       );
@@ -234,7 +230,8 @@ const styledProgressPass = {
                 fromApp: true,
               },
             })
-          }>
+          }
+        >
           Resume
         </Button>
       );
@@ -247,7 +244,8 @@ const styledProgressPass = {
 
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        style={{ left: navigationBarOpen ? "250px" : "0" }}
+      >
         {loading ? (
           <Loading />
         ) : (
@@ -276,7 +274,8 @@ const styledProgressPass = {
                     <Typography
                       variant="body2"
                       color="var(--blue-gray)"
-                      sx={{ fontSize: "15px" }}>
+                      sx={{ fontSize: "15px" }}
+                    >
                       {volunteerPathway.pathwayID !== ""
                         ? (volunteerPathway.numTrainingsCompleted /
                             volunteerPathway.numTotalTrainings) *
@@ -306,14 +305,15 @@ const styledProgressPass = {
                       (volunteerPathway.progress === "COMPLETED"
                         ? styles.opacityContainer
                         : "")
-                    }`}>
+                    }`}
+                  >
                     <p className={styles.trainingNumber}>
                       {pathway.trainingIDs.length + 1}
                     </p>
                     <p className={styles.trainingTitle}>Quiz</p>
                   </div>
                   <div>
-                    {/* Conditionally render an image if quiz is completed */}
+                    {/* Conditionally render finished icon on quiz row if pathway is completed */}
                     {volunteerPathway.pathwayID !== "" &&
                       volunteerPathway.progress === "COMPLETED" && (
                         <img
@@ -335,7 +335,8 @@ const styledProgressPass = {
             <Button
               sx={{ ...whiteButtonGrayBorder }}
               variant="contained"
-              onClick={() => navigate(-1)}>
+              onClick={() => navigate(-1)}
+            >
               Back
             </Button>
             {renderButton()}
