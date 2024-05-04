@@ -90,6 +90,7 @@ function Dashboard() {
         });
       }
     }
+    trainingsC = sortTrainingsByDateCompleted(trainingsC);
     setCorrelatedTrainings(allCorrelatedTrainings);
     setTrainingsInProgress(trainingsIP);
     setTrainingsCompleted(trainingsC);
@@ -145,9 +146,38 @@ function Dashboard() {
         });
       }
     }
+    pathwaysC = sortPathwaysByDateCompleted(pathwaysC);
     setCorrelatedPathways(allCorrelatedPathways);
     setPathwaysInProgress(pathwaysIP);
     setPathwaysCompleted(pathwaysC);
+  }
+
+  function sortTrainingsByDateCompleted(trainings: {
+    genericTraining: TrainingID;
+    volunteerTraining: VolunteerTraining;
+  }[]): {
+    genericTraining: TrainingID;
+    volunteerTraining: VolunteerTraining;
+  }[] {
+    return trainings.sort((a, b) => {
+        const dateA = new Date(a.volunteerTraining.dateCompleted);
+        const dateB = new Date(b.volunteerTraining.dateCompleted);
+        return dateB.getTime() - dateA.getTime();
+    });
+  }
+
+  function sortPathwaysByDateCompleted(pathways: {
+    genericPathway: PathwayID;
+    volunteerPathway: VolunteerPathway;
+  }[]): {
+    genericPathway: PathwayID;
+    volunteerPathway: VolunteerPathway;
+  }[] {
+    return pathways.sort((a, b) => {
+        const dateA = new Date(a.volunteerPathway.dateCompleted);
+        const dateB = new Date(b.volunteerPathway.dateCompleted);
+        return dateB.getTime() - dateA.getTime();
+    });
   }
 
   useEffect(() => {
