@@ -19,6 +19,8 @@ function Dashboard() {
   const auth = useAuth();
   const [loading, setLoading] = useState<boolean>(true);
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+
+  // for pathways and trainings, track All, In progress, and Completed
   const [correlatedTrainings, setCorrelatedTrainings] = useState<
     { genericTraining: TrainingID; volunteerTraining?: VolunteerTraining }[]
   >([]);
@@ -38,12 +40,13 @@ function Dashboard() {
     { genericPathway: PathwayID; volunteerPathway: VolunteerPathway }[]
   >([]);
 
+  // match up the allGenericTrainings and volunteerTrainings, use setCorrelatedTrainings to set
+  // keep track of trainings in progress and trainings completed
   const correlateTrainings = (
     genericTrainings: TrainingID[] ,
     volunteerTrainings: VolunteerTraining[] 
   ) => {
 
-    // match up the allGenericTrainings and volunteerTrainings, use setCorrelatedTrainings to set
     let allCorrelatedTrainings: {
       genericTraining: TrainingID;
       volunteerTraining?: VolunteerTraining;
@@ -152,6 +155,7 @@ function Dashboard() {
     setPathwaysCompleted(pathwaysC);
   }
 
+  // sort by reverse date completed. puts most recently completed first.
   function sortTrainingsByDateCompleted(trainings: {
     genericTraining: TrainingID;
     volunteerTraining: VolunteerTraining;
