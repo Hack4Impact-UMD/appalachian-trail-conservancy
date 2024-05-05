@@ -70,7 +70,8 @@ function QuizLandingPage() {
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        style={{ left: navigationBarOpen ? "250px" : "0" }}
+      >
         <div className={styles.outerContainer}>
           {loading ? (
             <Loading />
@@ -151,7 +152,8 @@ function QuizLandingPage() {
                       fromApp: true,
                     },
                   })
-                }>
+                }
+              >
                 BACK
               </Button>
               <Button
@@ -161,10 +163,12 @@ function QuizLandingPage() {
                   navigate(`/trainings/quiz`, {
                     state: {
                       training: training,
+                      volunteerTraining: volunteerTraining,
                       fromApp: true,
                     },
                   })
-                }>
+                }
+              >
                 START QUIZ
               </Button>
             </div>

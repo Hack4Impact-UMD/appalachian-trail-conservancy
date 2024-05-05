@@ -8,13 +8,27 @@ import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import QuizCard from "./QuizCard/QuizCard";
 import Loading from "../../components/LoadingScreen/Loading";
+import { useAuth } from "../../auth/AuthProvider";
+import { validateQuiz } from "../../backend/FirestoreCalls";
+import { type VolunteerTraining } from "../../types/UserType";
 
 function QuizPage() {
+  const auth = useAuth();
+  const volunteerId = auth.id.toString();
   const navigate = useNavigate();
   const location = useLocation();
   const [loading, setLoading] = useState<boolean>(true);
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
+  const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
+    {
+      trainingID: "",
+      progress: "INPROGRESS",
+      dateCompleted: "0000-00-00",
+      numCompletedResources: 0,
+      numTotalResources: 0,
+    }
+  );
 
   // This training should represent the current training corresponding to the current quiz
   // This data should be recieved from navigation state
@@ -34,12 +48,17 @@ function QuizPage() {
   });
 
   useEffect(() => {
-    if (!location.state || !location.state.training) {
+    if (
+      !location.state ||
+      !location.state.training ||
+      !location.state.volunteerTraining
+    ) {
       navigate("/trainings");
     } else {
       // Update state with data from location's state
       if (location.state.training) {
         setTraining(location.state.training);
+        setVolunteerTraining(location.state.volunteerTraining);
         setSelectedAnswers(
           Array(location.state.training.quiz.questions.length)
         );
@@ -57,7 +76,8 @@ function QuizPage() {
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        style={{ left: navigationBarOpen ? "250px" : "0" }}
+      >
         <div className={styles.outerContainer}>
           <div className={styles.bodyContainer}>
             {/* HEADER */}
@@ -95,23 +115,36 @@ function QuizPage() {
               sx={{ ...forestGreenButton }}
               variant="contained"
               onClick={() => {
-                const numAnswersCorrect = training.quiz.questions.reduce(
+                /*const numAnswersCorrect = training.quiz.questions.reduce(
                   (acc, question, idx) => {
                     return selectedAnswers[idx] === question.answer
                       ? acc + 1
                       : acc;
                   },
                   0
-                );
-                navigate(`/trainings/quizresult`, {
-                  state: {
-                    training: training,
-                    selectedAnswers: selectedAnswers,
-                    achievedScore: numAnswersCorrect,
-                    fromApp: true,
-                  },
-                });
-              }}>
+                );*/
+
+                validateQuiz(
+                  volunteerTraining.trainingID,
+                  volunteerId,
+                  selectedAnswers
+                )
+                  .then((validateResults) => {
+                    const numAnswersCorrect = validateResults;
+                    navigate(`/trainings/quizresult`, {
+                      state: {
+                        training: training,
+                        selectedAnswers: selectedAnswers,
+                        achievedScore: numAnswersCorrect,
+                        fromApp: true,
+                      },
+                    });
+                  })
+                  .catch((error) => {
+                    console.error("Error validating quiz:", error);
+                  });
+              }}
+            >
               Submit
             </Button>
           </div>
