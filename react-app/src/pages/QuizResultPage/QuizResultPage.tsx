@@ -33,13 +33,26 @@ const QuizResultPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
-  const [training, setTraining] = useState<Training>();
+  const [training, setTraining] = useState<Training>({
+    name: "",
+    shortBlurb: "",
+    description: "",
+    coverImage: "",
+    resources: [],
+    quiz: {
+      questions: [],
+      numQuestions: 0,
+      passingScore: 0,
+    },
+    associatedPathways: [],
+    certificationImage: "",
+  });
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
   const [achievedScore, setAchievedScore] = useState<number>(0);
 
   useEffect(() => {
     // Get data from navigation state
-    if (location.state?.fromApp) {
+    if (location.state?.fromApp && location.state.training) {
       setTraining(location.state.training);
       setSelectedAnswers(location.state.selectedAnswers);
       setAchievedScore(location.state.achievedScore);
@@ -56,12 +69,13 @@ const QuizResultPage = () => {
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        style={{ left: navigationBarOpen ? "250px" : "0" }}
+      >
         <div className={styles.outerContainer}>
           <div className={styles.bodyContainer}>
             {/* HEADER */}
             <div className={styles.header}>
-              <h1 className={styles.nameHeading}>Training Title - Quiz</h1>
+              <h1 className={styles.nameHeading}>{training.name} - Quiz</h1>
               <div className={styles.profileIconContainer}>
                 <ProfileIcon />
               </div>
@@ -126,7 +140,8 @@ const QuizResultPage = () => {
               <Button
                 sx={forestGreenButton}
                 variant="contained"
-                onClick={() => navigate("/trainings")}>
+                onClick={() => navigate("/trainings")}
+              >
                 Exit training
               </Button>
             ) : (
@@ -134,7 +149,8 @@ const QuizResultPage = () => {
                 <Button
                   sx={{ ...whiteButtonGrayBorder }}
                   variant="contained"
-                  onClick={() => navigate("/trainings")}>
+                  onClick={() => navigate("/trainings")}
+                >
                   Exit training
                 </Button>
                 <Button sx={{ ...whiteButtonGrayBorder }} variant="contained">

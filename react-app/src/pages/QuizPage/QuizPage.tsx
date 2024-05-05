@@ -130,7 +130,7 @@ function QuizPage() {
                   selectedAnswers
                 )
                   .then((validateResults) => {
-                    const numAnswersCorrect = validateResults;
+                    const numAnswersCorrect = validateResults * 1;
                     navigate(`/trainings/quizresult`, {
                       state: {
                         training: training,
