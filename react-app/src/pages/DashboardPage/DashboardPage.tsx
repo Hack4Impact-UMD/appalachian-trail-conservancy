@@ -5,6 +5,10 @@ import { getVolunteer, getAllTrainings, getAllPathways } from "../../backend/Fir
 import { TrainingID } from "../../types/TrainingType";
 import { PathwayID } from "../../types/PathwayType";
 import { VolunteerTraining, VolunteerPathway } from "../../types/UserType";
+import { Button } from "@mui/material";
+import {
+  forestGreenButtonPadding,
+} from "../../muiTheme";
 import TrainingCard from "../../components/TrainingCard/TrainingCard";
 import PathwayCard from "../../components/PathwayCard/PathwayCard";
 import styles from "./DashboardPage.module.css";
@@ -39,6 +43,13 @@ function Dashboard() {
   const [pathwaysCompleted, setPathwaysCompleted] = useState<
     { genericPathway: PathwayID; volunteerPathway: VolunteerPathway }[]
   >([]);
+
+  // Define state variables for recommended trainings and pathways
+  const [recommendedTrainings, setRecommendedTrainings] = useState<TrainingID[]
+  >([]);
+  const [recommendedPathways, setRecommendedPathways] = useState<PathwayID[]
+  >([]);
+
 
   // match up the allGenericTrainings and volunteerTrainings, use setCorrelatedTrainings to set
   // keep track of trainings in progress and trainings completed
@@ -213,6 +224,27 @@ function Dashboard() {
             console.error("Error fetching pathways:", error);
           });
 
+          // Fetch all trainings and pathways
+          Promise.all([getAllTrainings(), getAllPathways()])
+          .then(([allTrainings, allPathways]) => {
+            // Filter out trainings that user has completed or in progress
+            const userCompletedTrainings = trainingsCompleted.map(training => training.id);
+            const userInProgressTrainings = trainingsInProgress.map(training => training.id);
+            const recommendedTrainings = allTrainings.filter(training => !userCompletedTrainings.includes(training.id) && !userInProgressTrainings.includes(training.id));
+
+            // Filter out pathways that user has completed or in progress
+            const userCompletedPathways = pathwaysCompleted.map(pathway => pathway.id);
+            const userInProgressPathways = pathwaysInProgress.map(pathway => pathway.id);
+            const recommendedPathways = allPathways.filter(pathway => !userCompletedPathways.includes(pathway.id) && !userInProgressPathways.includes(pathway.id));
+
+            // Set recommended trainings and pathways state
+            setRecommendedTrainings(recommendedTrainings);
+            setRecommendedPathways(recommendedPathways);
+          })
+          .catch((error) => {
+            console.error("Error fetching recommended trainings and pathways:", error);
+          });
+
           setLoading(false);
 
         })
@@ -240,6 +272,20 @@ function Dashboard() {
               <Loading />
             ) : (
               <>
+                {/* Conditional rendering for no volunteer trainings and pathways */}
+                {(trainingsInProgress.length === 0 && pathwaysInProgress.length === 0) && (
+                  <div>
+                    <div className={styles.subHeader}>
+                      <h2>No Trainings in Progress</h2>
+                    </div>
+                    <Link to="/trainings" style={{ textDecoration: "none" }}>
+                      <Button sx={forestGreenButtonPadding} variant="contained">
+                        GO TO TRAINING LIBRARY
+                      </Button>
+                    </Link>
+                  </div>
+                )}
+
                 {/* display pathways in progress if there exist pathways in progress */}
                 { pathwaysInProgress.length > 0 && (
                   <div>
@@ -326,6 +372,50 @@ function Dashboard() {
                             image={training.genericTraining.certificationImage}
                             title={training.genericTraining.name}
                             date={training.volunteerTraining.dateCompleted}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Render Recommended Trainings */}
+                {recommendedTrainings.length > 0 && trainingsInProgress.length === 0 && (
+                    <div>
+                      <div className={styles.subHeader}>
+                        <h2>Recommended Trainings</h2>
+                        <Link className={styles.viewAllLink} to="/trainings">
+                          VIEW ALL
+                        </Link>
+                      </div>
+                      <div className={styles.cardsContainer}>
+                        {recommendedTrainings.slice(0, 6).map((training, index) => (
+                          <div className={styles.card} key={index}>
+                            <TrainingCard
+                              training={training}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                )}
+
+                {/* Render Recommended Pathways */}
+                {recommendedPathways.length > 0 && pathwaysInProgress.length === 0 && !(trainingsInProgress.length === 0) && (
+                  <div>
+                    <div className={styles.subHeader}>
+                      <h2>Recommended Pathways</h2>
+                      <Link className={styles.viewAllLink} to="/pathways">
+                        VIEW ALL
+                      </Link>
+                    </div>
+                    <div className={styles.cardsContainer}>
+                      {recommendedPathways.slice(0, 2).map((pathway, index) => (
+                        <div className={styles.card} key={index}>
+                          <PathwayCard
+                            image="../../"
+                            title={pathway.name}
+                            progress={0}
                           />
                         </div>
                       ))}
