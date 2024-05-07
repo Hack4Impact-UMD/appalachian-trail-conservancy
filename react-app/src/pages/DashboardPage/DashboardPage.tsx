@@ -389,7 +389,7 @@ function Dashboard() {
                         </Link>
                       </div>
                       <div className={styles.cardsContainer}>
-                        {recommendedTrainings.slice(0, 6).map((training, index) => (
+                        {recommendedTrainings.slice(0, 3).map((training, index) => (
                           <div className={styles.card} key={index}>
                             <TrainingCard
                               training={training}
@@ -401,7 +401,7 @@ function Dashboard() {
                 )}
 
                 {/* Render Recommended Pathways */}
-                {recommendedPathways.length > 0 && pathwaysInProgress.length === 0 && !(trainingsInProgress.length === 0) && (
+                {recommendedPathways.length > 0 && pathwaysInProgress.length === 0 && (
                   <div>
                     <div className={styles.subHeader}>
                       <h2>Recommended Pathways</h2>
