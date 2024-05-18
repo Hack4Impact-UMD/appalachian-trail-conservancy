@@ -300,7 +300,6 @@ function Dashboard() {
                       {pathwaysInProgress.slice(0, 2).map((pathway, index) => (
                         <div className={styles.card} key={index}>
                           <PathwayCard
-                            image="../../"
                             title={pathway.genericPathway.name}
                             progress={
                               pathway.volunteerPathway
@@ -425,11 +424,7 @@ function Dashboard() {
                           .slice(0, 2)
                           .map((pathway, index) => (
                             <div className={styles.card} key={index}>
-                              <PathwayCard
-                                image="../../"
-                                title={pathway.name}
-                                progress={0}
-                              />
+                              <PathwayCard title={pathway.name} progress={0} />
                             </div>
                           ))}
                       </div>

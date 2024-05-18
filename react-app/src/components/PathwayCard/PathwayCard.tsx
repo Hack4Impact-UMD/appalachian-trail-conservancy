@@ -8,11 +8,7 @@ interface PathwayCardProps {
   progress?: number; // Optional progress value
 }
 
-const PathwayCard: React.FC<PathwayCardProps> = ({
-  image,
-  title,
-  progress,
-}) => {
+const PathwayCard: React.FC<PathwayCardProps> = ({ title, progress }) => {
   const renderMarker = () => {
     if (progress === undefined || progress === 0) {
       // Pathway not started
