@@ -22,11 +22,7 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
   const renderMarker = () => {
     if (volunteerTraining == undefined) {
       // Training not started
-      return (
-        <div className={`${styles.marker} ${styles.notStartedMarker}`}>
-          NOT STARTED
-        </div>
-      );
+      return <div className={styles.marker}></div>;
     } else if (
       volunteerTraining.numCompletedResources ===
       volunteerTraining.numTotalResources
@@ -40,14 +36,9 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
     } else {
       // Training in progress
       return (
-        <LinearProgressWithLabel
-          value={
-            ((volunteerTraining.numCompletedResources +
-              (volunteerTraining.quizScoreRecieved ? 1 : 0)) /
-              (volunteerTraining.numTotalResources + 1)) *
-            100
-          }
-        />
+        <div className={`${styles.marker} ${styles.notStartedMarker}`}>
+          IN PROGRESS
+        </div>
       );
     }
   };
