@@ -1,14 +1,12 @@
 import { useState, useEffect } from "react";
-import { stepperStyle } from "../../muiTheme";
-import { TrainingID } from "../../types/TrainingType";
 import { useLocation, useNavigate } from "react-router-dom";
-import { type VolunteerTraining } from "../../types/UserType";
+import { Button } from "@mui/material";
+import { whiteButtonGrayBorder, forestGreenButton } from "../../muiTheme";
+import { TrainingID } from "../../types/TrainingType";
+import { VolunteerTraining } from "../../types/UserType";
 import styles from "./TrainingPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
 import ResourceComponent from "../../components/ResourceComponent/ResourceComponent";
 import Loading from "../../components/LoadingScreen/Loading.tsx";
 
@@ -58,8 +56,6 @@ function TrainingPage() {
     }
   }, []);
 
-  // TODO: The last resource should show "start quiz" button
-  // or confirmation
   const handleContinueButton = () => {
     if (stepIndex < training.resources.length - 1) {
       setStepIndex(stepIndex + 1);
@@ -108,30 +104,28 @@ function TrainingPage() {
             {loading ? (
               <Loading />
             ) : (
-              <ResourceComponent
-                handleBackButton={handleBackButton}
-                handleContinueButton={handleContinueButton}
-                resource={training.resources[stepIndex]}
-              />
+              <ResourceComponent resource={training.resources[stepIndex]} />
             )}
           </div>
         </div>
 
-        {/* Stepper */}
-        <Stepper
-          activeStep={stepIndex}
-          className={styles.stepContainer}
-          sx={stepperStyle}>
-          {training.resources.map((resource, idx) => (
-            <Step key={idx} sx={{ padding: "0" }}>
-              <StepLabel
-                sx={{
-                  ".MuiStepIcon-text": { display: "none" },
-                }}
-              />
-            </Step>
-          ))}
-        </Stepper>
+        {/* footer */}
+        <div className={styles.footer}>
+          <div className={styles.footerButtons}>
+            <Button
+              sx={whiteButtonGrayBorder}
+              onClick={() => handleBackButton()}
+              variant="contained">
+              Back
+            </Button>
+            <Button
+              sx={forestGreenButton}
+              onClick={() => handleContinueButton()}
+              variant="contained">
+              Continue
+            </Button>
+          </div>
+        </div>
       </div>
     </>
   );

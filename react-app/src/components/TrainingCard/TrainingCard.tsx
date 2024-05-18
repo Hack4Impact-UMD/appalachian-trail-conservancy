@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./TrainingCard.module.css";
-import LinearProgressWithLabel from "../LinearProgressWithLabel/LinearProgressWithLabel";
 import TrainingPopup from "../TrainingPopup/TrainingPopup";
 import { TrainingID } from "../../types/TrainingType";
 import { VolunteerTraining } from "../../types/UserType";
