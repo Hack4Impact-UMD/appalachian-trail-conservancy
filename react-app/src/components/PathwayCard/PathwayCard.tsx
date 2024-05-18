@@ -3,7 +3,6 @@ import LinearProgressWithLabel from "../LinearProgressWithLabel/LinearProgressWi
 import pathwayCard from "../../assets/pathwayCard.svg";
 
 interface PathwayCardProps {
-  image: string;
   title: string;
   progress?: number; // Optional progress value
 }

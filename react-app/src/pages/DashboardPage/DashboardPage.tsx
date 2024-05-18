@@ -190,7 +190,7 @@ function Dashboard() {
           // get all trainings from firebase
           getAllTrainings()
             .then((genericTrainings) => {
-              // correlateTrainings(genericTrainings, volunteerTrainings);
+              correlateTrainings(genericTrainings, volunteerTrainings);
             })
             .catch((error) => {
               console.error("Error fetching trainings:", error);
@@ -199,7 +199,7 @@ function Dashboard() {
           // get all pathways from firebase
           getAllPathways()
             .then((genericPathways) => {
-              // correlatePathways(genericPathways, volunteerPathways);
+              correlatePathways(genericPathways, volunteerPathways);
             })
             .catch((error) => {
               console.error("Error fetching pathways:", error);
