@@ -19,11 +19,7 @@ const PathwayCard: React.FC<PathwayCardProps> = ({
   const renderMarker = () => {
     if (volunteerPathway == undefined) {
       // Training not started
-      return (
-        <div className={`${styles.marker} ${styles.notStartedMarker}`}>
-          NOT STARTED
-        </div>
-      );
+      return <div className={styles.marker}></div>;
     } else if (
       volunteerPathway.numTrainingsCompleted ===
       volunteerPathway.numTotalTrainings
@@ -64,7 +60,10 @@ const PathwayCard: React.FC<PathwayCardProps> = ({
         <img src={pathway.coverImage} alt="Pathway" />
       </div>
       <div className={styles.pathwayContent}>
-        <div className={styles.pathwayTitle}>{pathway.name}</div>
+        <div className={styles.pathwayTitle}>
+          {pathway.name.substring(0, 31)}
+          {pathway.name.length > 30 ? "..." : ""}
+        </div>
         <div className={styles.progressBar}>{renderMarker()}</div>
       </div>
     </div>
