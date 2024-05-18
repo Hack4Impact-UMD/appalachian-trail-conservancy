@@ -247,8 +247,9 @@ function PathwayLandingPage() {
                     variant="determinate"
                     value={
                       volunteerPathway.pathwayID !== ""
-                        ? (volunteerPathway.numTrainingsCompleted /
-                            volunteerPathway.numTotalTrainings) *
+                        ? ((volunteerPathway.numTrainingsCompleted +
+                            (volunteerPathway.quizScoreRecieved ? 1 : 0)) /
+                            (volunteerPathway.numTotalTrainings + 1)) *
                           100
                         : 0
                     }
@@ -260,10 +261,12 @@ function PathwayLandingPage() {
                       color="var(--blue-gray)"
                       sx={{ fontSize: "15px" }}>
                       {volunteerPathway.pathwayID !== ""
-                        ? (volunteerPathway.numTrainingsCompleted /
-                            volunteerPathway.numTotalTrainings) *
-                            100 +
-                          "%"
+                        ? Math.round(
+                            ((volunteerPathway.numTrainingsCompleted +
+                              (volunteerPathway.quizScoreRecieved ? 1 : 0)) /
+                              (volunteerPathway.numTotalTrainings + 1)) *
+                              100
+                          ) + "%"
                         : "0%"}
                     </Typography>
                   </Box>

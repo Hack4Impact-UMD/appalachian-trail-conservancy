@@ -42,8 +42,9 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
       return (
         <LinearProgressWithLabel
           value={
-            (volunteerTraining.numCompletedResources /
-              volunteerTraining.numTotalResources) *
+            ((volunteerTraining.numCompletedResources +
+              (volunteerTraining.quizScoreRecieved ? 1 : 0)) /
+              (volunteerTraining.numTotalResources + 1)) *
             100
           }
         />

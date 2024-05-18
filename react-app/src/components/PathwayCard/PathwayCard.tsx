@@ -5,15 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { PathwayID } from "../../types/PathwayType";
 import { VolunteerPathway } from "../../types/UserType";
 
-
 interface PathwayCardProps {
   pathway: PathwayID;
-  volunteerPathway?: VolunteerPathway; 
+  volunteerPathway?: VolunteerPathway;
 }
 
 const PathwayCard: React.FC<PathwayCardProps> = ({
   pathway,
-  volunteerPathway
+  volunteerPathway,
 }) => {
   const navigate = useNavigate();
 
@@ -40,8 +39,9 @@ const PathwayCard: React.FC<PathwayCardProps> = ({
       return (
         <LinearProgressWithLabel
           value={
-            (volunteerPathway.numTrainingsCompleted /
-              volunteerPathway.numTotalTrainings) *
+            ((volunteerPathway.numTrainingsCompleted +
+              (volunteerPathway.quizScoreRecieved ? 1 : 0)) /
+              (volunteerPathway.numTotalTrainings + 1)) *
             100
           }
         />
@@ -50,17 +50,16 @@ const PathwayCard: React.FC<PathwayCardProps> = ({
   };
 
   return (
-    <div className={styles.pathwayCard}
+    <div
+      className={styles.pathwayCard}
       onClick={() => {
-        
-          navigate(`/pathways/:${pathway.id}`, {
-            state: {
-              pathway: pathway,
-              volunteerPathway: volunteerPathway,
-            },
-          });
-        }
-      }>
+        navigate(`/pathways/:${pathway.id}`, {
+          state: {
+            pathway: pathway,
+            volunteerPathway: volunteerPathway,
+          },
+        });
+      }}>
       <div className={styles.pathwayImage}>
         <img src={pathway.coverImage} alt="Pathway" />
       </div>

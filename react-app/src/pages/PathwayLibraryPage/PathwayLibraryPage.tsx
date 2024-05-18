@@ -80,7 +80,7 @@ function PathwayLibrary() {
               const volunteerPathways = volunteer.pathwayInformation;
 
               // match up the genericPathways and volunteerPathways
-              let allCorrelatedPathways: {
+              const allCorrelatedPathways: {
                 genericPathway: PathwayID;
                 volunteerPathway?: VolunteerPathway;
               }[] = [];
