@@ -2,29 +2,14 @@ import { useState, useEffect } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { whiteButtonGrayBorder, forestGreenButton } from "../../muiTheme";
 import { TrainingID, TrainingResource } from "../../types/TrainingType";
-import { type VolunteerTraining } from "../../types/UserType";
-import { getTraining } from "../../backend/FirestoreCalls";
-import { LinearProgress, Box, Typography, Button } from "@mui/material";
+import { VolunteerTraining } from "../../types/UserType";
+import { getTraining, getPathway } from "../../backend/FirestoreCalls";
+import { Button } from "@mui/material";
 import styles from "./TrainingLandingPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import CompletedIcon from "../../assets/completedCheck.svg";
 import Loading from "../../components/LoadingScreen/Loading";
-
-const styledProgressShape = {
-  height: 24,
-  borderRadius: 12,
-  width: "100%",
-};
-
-// if score > 0, dark green & light gray
-const styledProgressPass = {
-  ...styledProgressShape,
-  backgroundColor: "lightgray",
-  "& .MuiLinearProgress-bar": {
-    backgroundColor: "var(--forest-green)",
-  },
-};
 
 function TrainingLandingPage() {
   const navigate = useNavigate();
@@ -32,6 +17,7 @@ function TrainingLandingPage() {
   const location = useLocation();
   const [loading, setLoading] = useState<boolean>(true);
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+  const [pathwayNames, setPathwayNames] = useState<string[]>([]);
 
   // If training & volunteerTraining is passed via state, then set it accordingly.
   // Otherwise, retrieve training via id from url parameter then check if a VolunteerTraining exists for it
@@ -66,9 +52,19 @@ function TrainingLandingPage() {
       // Fetch data only if trainingId is available
       if (trainingId !== undefined) {
         getTraining(trainingId)
-          .then((trainingData) => {
+          .then(async (trainingData) => {
             setTraining(trainingData);
             setVolunteerTraining(location.state.volunteerTraining);
+            const associatedPathwayNames: string[] = [];
+            trainingData.associatedPathways.map(
+              async (pathway) =>
+                await getPathway(pathway)
+                  .then((pathway) => associatedPathwayNames.push(pathway.name))
+                  .catch(() => {
+                    console.log("Failed to get pathway");
+                  })
+            );
+            setPathwayNames(associatedPathwayNames);
           })
           .catch(() => {
             console.log("Failed to get training");
@@ -81,6 +77,17 @@ function TrainingLandingPage() {
       // Update state with data from location's state
       if (location.state.training) {
         setTraining(location.state.training);
+        const associatedPathwayNames: string[] = [];
+        location.state.training.associatedPathways.map(
+          async (pathway) =>
+            await getPathway(pathway)
+              .then((pathway) => associatedPathwayNames.push(pathway.name))
+              .catch(() => {
+                console.log("Failed to get pathway");
+              })
+        );
+        // await Promise.all(pathwayPromises);
+        setPathwayNames(associatedPathwayNames);
       }
       if (location.state.volunteerTraining) {
         setVolunteerTraining(location.state.volunteerTraining);
@@ -132,11 +139,7 @@ function TrainingLandingPage() {
   const renderMarker = () => {
     if (volunteerTraining.trainingID === "") {
       // Training not started
-      return (
-        <div className={`${styles.marker} ${styles.notStartedMarker}`}>
-          NOT STARTED
-        </div>
-      );
+      return <></>;
     } else if (
       volunteerTraining.trainingID !== "" &&
       volunteerTraining.numCompletedResources ===
@@ -144,17 +147,27 @@ function TrainingLandingPage() {
     ) {
       // Training completed
       return (
-        <div className={`${styles.marker} ${styles.progressMarker}`}>
-          COMPLETED
-        </div>
+        <>
+          <div className={`${styles.marker} ${styles.trainingMarker}`}>
+            TRAINING
+          </div>
+          <div className={`${styles.marker} ${styles.progressMarker}`}>
+            COMPLETED
+          </div>
+        </>
       );
     }
     // Training in progress
     else
       return (
-        <div className={`${styles.marker} ${styles.progressMarker}`}>
-          IN PROGRESS
-        </div>
+        <>
+          <div className={`${styles.marker} ${styles.trainingMarker}`}>
+            TRAINING
+          </div>
+          <div className={`${styles.marker} ${styles.progressMarker}`}>
+            IN PROGRESS
+          </div>
+        </>
       );
   };
 
@@ -237,35 +250,7 @@ function TrainingLandingPage() {
                 <ProfileIcon />
               </div>
 
-              <div className={styles.progressContainer}>
-                <div className={styles.progressBar}>
-                  <LinearProgress
-                    variant="determinate"
-                    value={
-                      volunteerTraining.trainingID !== ""
-                        ? (volunteerTraining.numCompletedResources /
-                            volunteerTraining.numTotalResources) *
-                          100
-                        : 0
-                    }
-                    sx={styledProgressPass}
-                  />
-                  <Box sx={{ minWidth: 35 }}>
-                    <Typography
-                      variant="body2"
-                      color="var(--blue-gray)"
-                      sx={{ fontSize: "15px" }}>
-                      {volunteerTraining.trainingID !== ""
-                        ? (volunteerTraining.numCompletedResources /
-                            volunteerTraining.numTotalResources) *
-                            100 +
-                          "%"
-                        : "0%"}
-                    </Typography>
-                  </Box>
-                </div>
-                <div>{renderMarker()}</div>
-              </div>
+              <div className={styles.progressContainer}>{renderMarker()}</div>
 
               {/* ABOUT */}
               <div className={styles.container}>
@@ -302,6 +287,19 @@ function TrainingLandingPage() {
                       )}
                   </div>
                 </div>
+              </div>
+
+              {/* RELATED PATHWAYS */}
+              <div className={styles.container}>
+                <h2>Related Pathways</h2>
+              </div>
+
+              <div className={styles.progressContainer}>
+                {pathwayNames.map((pathway) => (
+                  <div className={`${styles.marker} ${styles.pathwayMarker}`}>
+                    {pathway}
+                  </div>
+                ))}
               </div>
             </div>
           </div>

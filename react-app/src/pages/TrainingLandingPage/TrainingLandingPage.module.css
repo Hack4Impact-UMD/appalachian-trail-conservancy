@@ -56,7 +56,7 @@
 
 .progressContainer {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 2%;
   width: 100%;
 }
@@ -69,9 +69,7 @@
 
 .marker {
   display: inline-block;
-  background-color: white;
   padding: 6px 15px;
-  border: 1.5px solid var(--blue-gray);
   border-radius: 20px;
   font-size: 0.9em;
   font-weight: bold;
@@ -79,8 +77,21 @@
   margin: -8px 0 -5px 0;
 }
 
+.trainingMarker {
+  border: 1.5px solid var(--sky-blue);
+  background-color: var(--sky-blue);
+  color: var(--blue-gray);
+}
+
 .progressMarker {
-  border-color: var(--blue-gray);
+  border: 1.5px solid var(--blue-gray);
+  background-color: white;
+  color: var(--blue-gray);
+}
+
+.pathwayMarker {
+  border: 1.5px solid var(--blue-purple);
+  background-color: var(--blue-purple);
   color: var(--blue-gray);
 }
 
@@ -147,8 +158,13 @@
   opacity: 0.5;
 }
 
-h2 {
-  font-size: 155%;
+.relatedPathways {
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 2%;
+  width: 100%;
 }
 
 .footer {

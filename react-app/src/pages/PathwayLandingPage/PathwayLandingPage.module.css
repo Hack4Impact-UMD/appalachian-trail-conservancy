@@ -1,174 +1,169 @@
 /* split screen in two */
 .split {
-    height: 100%;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    overflow-x: hidden;
-    transition: left 0.3s ease; /* Add transition for smooth animation */
-  }
-  
-  .right {
-    right: 0;
-    left: 250px;
-    overflow: hidden;
-    overflow-y: auto;
-  }
-  
-  .outerContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .bodyContainer {
-    width: 875px;
-    margin-bottom: 10%;
-  }
-  
-  .header {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-  }
-  
-  .nameHeading {
-    color: var(--forest-green);
-    font-size: 3rem;
-    margin: 0;
-    max-width: 90%;
-    white-space: normal;
-  }
-  
-  .container {
-    margin-top: 5%;
-  }
-  
-  .container h2 {
-    font-size: 1.8rem;
-    margin: 1.5rem 0 1rem 0;
-    color: var(--blue-gray);
-  }
-  
-  .progressContainer {
-    display: flex;
-    justify-content: space-between;
-    gap: 2%;
-    width: 100%;
-  }
-  
-  .progressBar {
-    display: flex;
-    gap: 1%;
-    flex-grow: 1;
-  }
-  
-  .marker {
-    display: inline-block;
-    background-color: white;
-    padding: 6px 15px;
-    border: 1.5px solid var(--blue-gray);
-    border-radius: 20px;
-    font-size: 0.9em;
-    font-weight: bold;
-    text-align: center;
-    margin: -8px 0 -5px 0;
-  }
-  
-  .progressMarker {
-    border-color: var(--blue-gray);
-    color: var(--blue-gray);
-  }
-  
-  .trainingRow {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    flex-wrap: nowrap;
-    border-bottom: 2px solid black;
-    align-items: center;
-  }
-  
-  .trainingRowFinal {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    flex-wrap: nowrap;
-    align-items: center;
-  }
-  
-  .trainingInfo {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    flex-grow: 2;
-    align-items: center;
-  }
-  
-  .trainingNumber {
-    width: 40px;
-    color: var(--forest-green);
-    font-size: 150%;
-    font-weight: bold;
-  }
-  
-  .trainingTitle {
-    margin-right: 3%;
-    margin: 3%;
-    font-size: 1.1rem;
-    font-weight: bold;
-  }
-  
-  .trainingType {
-    display: inline-block;
-    background-color: var(--sky-blue);
-    padding: 8px 15px;
-    border-radius: 20px;
-    font-size: 0.9em;
-    font-weight: bold;
-    text-align: center;
-    margin: -8px 0 -5px 0;
-  }
-  
-  .completedIcon {
-    flex-shrink: 0.5;
-    height: 40px;
-  }
-  
-  .completedIcon img {
-    padding-top: 100px;
-  }
-  
-  .opacityContainer {
-    opacity: 0.5;
-  }
-  
-  h2 {
-    font-size: 155%;
-  }
-  
-  .footer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: calc(100% - 250px);
-    height: 100px;
-    margin-bottom: 0;
-    position: fixed;
-    bottom: 0;
-    left: 250px;
-    box-shadow: 2px 0px 2px rgb(90, 90, 90);
-    background-color: white;
-  }
-  
-  .footerButtons {
-    width: 875px;
-    display: flex;
-    justify-content: flex-end;
-    gap: 1%;
-  }
-  
+  height: 100%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  transition: left 0.3s ease; /* Add transition for smooth animation */
+}
+
+.right {
+  right: 0;
+  left: 250px;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.outerContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bodyContainer {
+  width: 875px;
+  margin-bottom: 10%;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.nameHeading {
+  color: var(--forest-green);
+  font-size: 3rem;
+  margin: 0;
+  max-width: 90%;
+  white-space: normal;
+}
+
+.container {
+  margin-top: 5%;
+}
+
+.container h2 {
+  font-size: 1.8rem;
+  margin: 1.5rem 0 1rem 0;
+  color: var(--blue-gray);
+}
+
+.progressContainer {
+  display: flex;
+  justify-content: space-between;
+  gap: 2%;
+  width: 100%;
+}
+
+.progressBar {
+  display: flex;
+  gap: 1%;
+  flex-grow: 1;
+}
+
+.marker {
+  display: inline-block;
+  background-color: white;
+  padding: 6px 15px;
+  border: 1.5px solid var(--blue-gray);
+  border-radius: 20px;
+  font-size: 0.9em;
+  font-weight: bold;
+  text-align: center;
+  margin: -8px 0 -5px 0;
+}
+
+.progressMarker {
+  border-color: var(--blue-gray);
+  color: var(--blue-gray);
+}
+
+.trainingRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  border-bottom: 2px solid black;
+  align-items: center;
+}
+
+.trainingRowFinal {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.trainingInfo {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  flex-grow: 2;
+  align-items: center;
+}
+
+.trainingNumber {
+  width: 40px;
+  color: var(--forest-green);
+  font-size: 150%;
+  font-weight: bold;
+}
+
+.trainingTitle {
+  margin-right: 3%;
+  margin: 3%;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.trainingType {
+  display: inline-block;
+  background-color: var(--sky-blue);
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-size: 0.9em;
+  font-weight: bold;
+  text-align: center;
+  margin: -8px 0 -5px 0;
+}
+
+.completedIcon {
+  flex-shrink: 0.5;
+  height: 40px;
+}
+
+.completedIcon img {
+  padding-top: 100px;
+}
+
+.opacityContainer {
+  opacity: 0.5;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(100% - 250px);
+  height: 100px;
+  margin-bottom: 0;
+  position: fixed;
+  bottom: 0;
+  left: 250px;
+  box-shadow: 2px 0px 2px rgb(90, 90, 90);
+  background-color: white;
+}
+
+.footerButtons {
+  width: 875px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1%;
+}
