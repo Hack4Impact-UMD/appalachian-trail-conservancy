@@ -1,5 +1,5 @@
 .mainContainer {
-  height: calc(100% - 130px);
+  height: calc(100% - 160px);
   width: 100%;
 }
 
@@ -29,11 +29,6 @@
 .resourceTitle {
   font-weight: 600;
   font-size: 1.8rem;
-  max-width: 70%;
+  max-width: 100%;
   white-space: normal;
-}
-
-.buttonContainer {
-  display: flex;
-  gap: 20px;
 }
