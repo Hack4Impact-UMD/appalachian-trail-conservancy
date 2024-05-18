@@ -3,9 +3,8 @@ import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { whiteButtonGrayBorder, forestGreenButton } from "../../muiTheme";
 import { Training } from "../../types/TrainingType";
 import { PathwayID } from "../../types/PathwayType";
-import { type VolunteerPathway } from "../../types/UserType";
-import { getTraining } from "../../backend/FirestoreCalls";
-import { getPathway } from "../../backend/FirestoreCalls";
+import { VolunteerPathway } from "../../types/UserType";
+import { getTraining, getPathway } from "../../backend/FirestoreCalls";
 import { LinearProgress, Box, Typography, Button } from "@mui/material";
 import styles from "./PathwayLandingPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
@@ -44,6 +43,11 @@ function PathwayLandingPage() {
     description: "",
     coverImage: "",
     trainingIDs: [],
+    quiz: {
+      questions: [],
+      numQuestions: 0,
+      passingScore: 0,
+    },
     badgeImage: "",
   });
 
@@ -106,7 +110,7 @@ function PathwayLandingPage() {
     }
   }, [pathwayId, location.state]);
 
-  const renderTrainingResources = () => {
+  const renderTrainings = () => {
     return allTrainings.map((training: Training, index: number) => (
       <div key={index}>
         <div className={styles.trainingRow}>
@@ -117,8 +121,7 @@ function PathwayLandingPage() {
               (index + 1 <= volunteerPathway.numTrainingsCompleted
                 ? styles.opacityContainer
                 : "")
-            }`}
-          >
+            }`}>
             {/* row for each training */}
             <p className={styles.trainingNumber}>{index + 1}</p>
             <p className={styles.trainingTitle}>{training.name}</p>
@@ -184,15 +187,9 @@ function PathwayLandingPage() {
           sx={{ ...forestGreenButton }}
           variant="contained"
           onClick={() =>
-            navigate(`/pathways`, {
-              state: {
-                pathway: pathway,
-                volunteerPathway: volunteerPathway,
-                fromApp: true,
-              },
-            })
-          }
-        >
+            // TODO: Connect to training
+            navigate(`/pathways`)
+          }>
           Start
         </Button>
       );
@@ -205,15 +202,9 @@ function PathwayLandingPage() {
           sx={{ ...forestGreenButton }}
           variant="contained"
           onClick={() =>
-            navigate(`/pathways`, {
-              state: {
-                pathway: pathway,
-                volunteerPathway: volunteerPathway,
-                fromApp: true,
-              },
-            })
-          }
-        >
+            // TODO: Connect to training
+            navigate(`/pathways`)
+          }>
           Restart
         </Button>
       );
@@ -223,15 +214,9 @@ function PathwayLandingPage() {
           sx={{ ...forestGreenButton }}
           variant="contained"
           onClick={() =>
-            navigate(`/pathways`, {
-              state: {
-                pathway: pathway,
-                volunteerPathway: volunteerPathway,
-                fromApp: true,
-              },
-            })
-          }
-        >
+            // TODO: Connect to training
+            navigate(`/pathways`)
+          }>
           Resume
         </Button>
       );
@@ -244,8 +229,7 @@ function PathwayLandingPage() {
 
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}
-      >
+        style={{ left: navigationBarOpen ? "250px" : "0" }}>
         {loading ? (
           <Loading />
         ) : (
@@ -274,8 +258,7 @@ function PathwayLandingPage() {
                     <Typography
                       variant="body2"
                       color="var(--blue-gray)"
-                      sx={{ fontSize: "15px" }}
-                    >
+                      sx={{ fontSize: "15px" }}>
                       {volunteerPathway.pathwayID !== ""
                         ? (volunteerPathway.numTrainingsCompleted /
                             volunteerPathway.numTotalTrainings) *
@@ -297,7 +280,7 @@ function PathwayLandingPage() {
               {/* OVERVIEW */}
               <div className={styles.container}>
                 <h2>Overview</h2>
-                {renderTrainingResources()}
+                {renderTrainings()}
                 <div className={styles.trainingRowFinal}>
                   <div
                     className={`${styles.trainingInfo} ${
@@ -305,8 +288,7 @@ function PathwayLandingPage() {
                       (volunteerPathway.progress === "COMPLETED"
                         ? styles.opacityContainer
                         : "")
-                    }`}
-                  >
+                    }`}>
                     <p className={styles.trainingNumber}>
                       {pathway.trainingIDs.length + 1}
                     </p>
@@ -335,8 +317,7 @@ function PathwayLandingPage() {
             <Button
               sx={{ ...whiteButtonGrayBorder }}
               variant="contained"
-              onClick={() => navigate(-1)}
-            >
+              onClick={() => navigate(-1)}>
               Back
             </Button>
             {renderButton()}
