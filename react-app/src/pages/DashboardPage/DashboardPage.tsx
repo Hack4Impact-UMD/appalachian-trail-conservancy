@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../auth/AuthProvider";
 import { Link } from "react-router-dom";
-import { getVolunteer, getAllTrainings, getAllPathways } from "../../backend/FirestoreCalls";
+import {
+  getVolunteer,
+  getAllTrainings,
+  getAllPathways,
+} from "../../backend/FirestoreCalls";
 import { TrainingID } from "../../types/TrainingType";
 import { PathwayID } from "../../types/PathwayType";
 import { VolunteerTraining, VolunteerPathway } from "../../types/UserType";
 import { Button } from "@mui/material";
-import {
-  forestGreenButtonPadding,
-} from "../../muiTheme";
+import { forestGreenButtonPadding } from "../../muiTheme";
 import TrainingCard from "../../components/TrainingCard/TrainingCard";
 import PathwayCard from "../../components/PathwayCard/PathwayCard";
 import styles from "./DashboardPage.module.css";
@@ -17,7 +19,16 @@ import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import Loading from "../../components/LoadingScreen/Loading";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Footer from "../../components/Footer/Footer";
-import badge from "../../assets/badge.svg";
+
+interface CorrelatedTraining {
+  genericTraining: TrainingID;
+  volunteerTraining?: VolunteerTraining;
+}
+
+interface CorrelatedPathway {
+  genericPathway: PathwayID;
+  volunteerPathway?: VolunteerPathway;
+}
 
 function Dashboard() {
   const auth = useAuth();
@@ -26,52 +37,43 @@ function Dashboard() {
 
   // for pathways and trainings, track All, In progress, and Completed
   const [correlatedTrainings, setCorrelatedTrainings] = useState<
-    { genericTraining: TrainingID; volunteerTraining?: VolunteerTraining }[]
+    CorrelatedTraining[]
   >([]);
   const [trainingsInProgress, setTrainingsInProgress] = useState<
-    { genericTraining: TrainingID; volunteerTraining: VolunteerTraining }[]
+    CorrelatedTraining[]
   >([]);
   const [trainingsCompleted, setTrainingsCompleted] = useState<
-    { genericTraining: TrainingID; volunteerTraining: VolunteerTraining }[]
+    CorrelatedTraining[]
   >([]);
   const [correlatedPathways, setCorrelatedPathways] = useState<
-    { genericPathway: PathwayID; volunteerPathway?: VolunteerPathway }[]
+    CorrelatedPathway[]
   >([]);
   const [pathwaysInProgress, setPathwaysInProgress] = useState<
-    { genericPathway: PathwayID; volunteerPathway: VolunteerPathway }[]
+    CorrelatedPathway[]
   >([]);
   const [pathwaysCompleted, setPathwaysCompleted] = useState<
-    { genericPathway: PathwayID; volunteerPathway: VolunteerPathway }[]
+    CorrelatedPathway[]
   >([]);
 
   // Define state variables for recommended trainings and pathways
-  const [recommendedTrainings, setRecommendedTrainings] = useState<TrainingID[]
+  const [recommendedTrainings, setRecommendedTrainings] = useState<
+    TrainingID[]
   >([]);
-  const [recommendedPathways, setRecommendedPathways] = useState<PathwayID[]
-  >([]);
-
+  const [recommendedPathways, setRecommendedPathways] = useState<PathwayID[]>(
+    []
+  );
 
   // match up the allGenericTrainings and volunteerTrainings, use setCorrelatedTrainings to set
   // keep track of trainings in progress and trainings completed
   const correlateTrainings = (
-    genericTrainings: TrainingID[] ,
-    volunteerTrainings: VolunteerTraining[] 
+    genericTrainings: TrainingID[],
+    volunteerTrainings: VolunteerTraining[]
   ) => {
+    const allCorrelatedTrainings: CorrelatedTraining[] = [];
 
-    let allCorrelatedTrainings: {
-      genericTraining: TrainingID;
-      volunteerTraining?: VolunteerTraining;
-    }[] = [];
+    const trainingsIP: CorrelatedTraining[] = [];
 
-    let trainingsIP: {
-      genericTraining: TrainingID;
-      volunteerTraining: VolunteerTraining;
-    }[] = [];
-
-    let trainingsC: {
-      genericTraining: TrainingID;
-      volunteerTraining: VolunteerTraining;
-    }[] = [];
+    let trainingsC: CorrelatedTraining[] = [];
 
     for (const genericTraining of genericTrainings) {
       // if genericTraining in volunteer.trainingInformation (has been started by volunteer), then we include that.
@@ -88,8 +90,7 @@ function Dashboard() {
               genericTraining: genericTraining,
               volunteerTraining: volunteerTraining,
             });
-          }
-          else if (volunteerTraining.progress == "COMPLETED") {
+          } else if (volunteerTraining.progress == "COMPLETED") {
             trainingsC.push({
               genericTraining: genericTraining,
               volunteerTraining: volunteerTraining,
@@ -111,24 +112,15 @@ function Dashboard() {
   };
 
   const correlatePathways = (
-    genericPathways: PathwayID[] ,
-    volunteerPathways: VolunteerPathway[] 
+    genericPathways: PathwayID[],
+    volunteerPathways: VolunteerPathway[]
   ) => {
     // match up the genericPathways and volunteerPathways
-    let allCorrelatedPathways: {
-      genericPathway: PathwayID;
-      volunteerPathway?: VolunteerPathway;
-    }[] = [];
+    const allCorrelatedPathways: CorrelatedPathway[] = [];
 
-    let pathwaysIP: {
-      genericPathway: PathwayID;
-      volunteerPathway: VolunteerPathway;
-    }[] = [];
+    const pathwaysIP: CorrelatedPathway[] = [];
 
-    let pathwaysC: {
-      genericPathway: PathwayID;
-      volunteerPathway: VolunteerPathway;
-    }[] = [];
+    let pathwaysC: CorrelatedPathway[] = [];
 
     for (const genericPathway of genericPathways) {
       let startedByVolunteer = false;
@@ -144,8 +136,7 @@ function Dashboard() {
               genericPathway: genericPathway,
               volunteerPathway: volunteerPathway,
             });
-          }
-          else if (volunteerPathway.progress == "COMPLETED") {
+          } else if (volunteerPathway.progress == "COMPLETED") {
             pathwaysC.push({
               genericPathway: genericPathway,
               volunteerPathway: volunteerPathway,
@@ -164,42 +155,32 @@ function Dashboard() {
     setCorrelatedPathways(allCorrelatedPathways);
     setPathwaysInProgress(pathwaysIP);
     setPathwaysCompleted(pathwaysC);
-  }
+  };
 
   // sort by reverse date completed. puts most recently completed first.
-  function sortTrainingsByDateCompleted(trainings: {
-    genericTraining: TrainingID;
-    volunteerTraining: VolunteerTraining;
-  }[]): {
-    genericTraining: TrainingID;
-    volunteerTraining: VolunteerTraining;
-  }[] {
+  function sortTrainingsByDateCompleted(
+    trainings: CorrelatedTraining[]
+  ): CorrelatedTraining[] {
     return trainings.sort((a, b) => {
-        const dateA = new Date(a.volunteerTraining.dateCompleted);
-        const dateB = new Date(b.volunteerTraining.dateCompleted);
-        return dateB.getTime() - dateA.getTime();
+      const dateA = new Date(a.volunteerTraining!.dateCompleted);
+      const dateB = new Date(b.volunteerTraining!.dateCompleted);
+      return dateB.getTime() - dateA.getTime();
     });
   }
 
-  function sortPathwaysByDateCompleted(pathways: {
-    genericPathway: PathwayID;
-    volunteerPathway: VolunteerPathway;
-  }[]): {
-    genericPathway: PathwayID;
-    volunteerPathway: VolunteerPathway;
-  }[] {
+  function sortPathwaysByDateCompleted(
+    pathways: CorrelatedPathway[]
+  ): CorrelatedPathway[] {
     return pathways.sort((a, b) => {
-        const dateA = new Date(a.volunteerPathway.dateCompleted);
-        const dateB = new Date(b.volunteerPathway.dateCompleted);
-        return dateB.getTime() - dateA.getTime();
+      const dateA = new Date(a.volunteerPathway!.dateCompleted);
+      const dateB = new Date(b.volunteerPathway!.dateCompleted);
+      return dateB.getTime() - dateA.getTime();
     });
   }
 
   useEffect(() => {
-
     // only use auth if it is finished loading
     if (!auth.loading && auth.id) {
-
       // get volunteer info from firebase. will contain volunteer progress on trainings & pathways
       getVolunteer(auth.id.toString())
         .then((volunteer) => {
@@ -208,45 +189,63 @@ function Dashboard() {
 
           // get all trainings from firebase
           getAllTrainings()
-          .then((genericTrainings) => {
-            correlateTrainings(genericTrainings, volunteerTrainings);
-          })
-          .catch((error) => {
-            console.error("Error fetching trainings:", error);
-          });
+            .then((genericTrainings) => {
+              // correlateTrainings(genericTrainings, volunteerTrainings);
+            })
+            .catch((error) => {
+              console.error("Error fetching trainings:", error);
+            });
 
           // get all pathways from firebase
           getAllPathways()
-          .then((genericPathways) => {
-            correlatePathways(genericPathways, volunteerPathways);
-          })
-          .catch((error) => {
-            console.error("Error fetching pathways:", error);
-          });
+            .then((genericPathways) => {
+              // correlatePathways(genericPathways, volunteerPathways);
+            })
+            .catch((error) => {
+              console.error("Error fetching pathways:", error);
+            });
 
           // Fetch all trainings and pathways
           Promise.all([getAllTrainings(), getAllPathways()])
-          .then(([allTrainings, allPathways]) => {
-            // Filter out trainings that user has completed or in progress
-            const userCompletedTrainings = trainingsCompleted.map(training => training.id);
-            const userInProgressTrainings = trainingsInProgress.map(training => training.id);
-            const recommendedTrainings = allTrainings.filter(training => !userCompletedTrainings.includes(training.id) && !userInProgressTrainings.includes(training.id));
+            .then(([allTrainings, allPathways]) => {
+              // Filter out trainings that user has completed or in progress
+              const userCompletedTrainings = trainingsCompleted.map(
+                (training) => training.genericTraining.id
+              );
+              const userInProgressTrainings = trainingsInProgress.map(
+                (training) => training.genericTraining.id
+              );
+              const recommendedTrainings = allTrainings.filter(
+                (training) =>
+                  !userCompletedTrainings.includes(training.id) &&
+                  !userInProgressTrainings.includes(training.id)
+              );
 
-            // Filter out pathways that user has completed or in progress
-            const userCompletedPathways = pathwaysCompleted.map(pathway => pathway.id);
-            const userInProgressPathways = pathwaysInProgress.map(pathway => pathway.id);
-            const recommendedPathways = allPathways.filter(pathway => !userCompletedPathways.includes(pathway.id) && !userInProgressPathways.includes(pathway.id));
+              // Filter out pathways that user has completed or in progress
+              const userCompletedPathways = pathwaysCompleted.map(
+                (pathway) => pathway.genericPathway.id
+              );
+              const userInProgressPathways = pathwaysInProgress.map(
+                (pathway) => pathway.genericPathway.id
+              );
+              const recommendedPathways = allPathways.filter(
+                (pathway) =>
+                  !userCompletedPathways.includes(pathway.id) &&
+                  !userInProgressPathways.includes(pathway.id)
+              );
 
-            // Set recommended trainings and pathways state
-            setRecommendedTrainings(recommendedTrainings);
-            setRecommendedPathways(recommendedPathways);
-          })
-          .catch((error) => {
-            console.error("Error fetching recommended trainings and pathways:", error);
-          });
+              // Set recommended trainings and pathways state
+              setRecommendedTrainings(recommendedTrainings);
+              setRecommendedPathways(recommendedPathways);
+            })
+            .catch((error) => {
+              console.error(
+                "Error fetching recommended trainings and pathways:",
+                error
+              );
+            });
 
           setLoading(false);
-
         })
         .catch((error) => {
           console.error("Error fetching volunteer:", error);
@@ -260,8 +259,7 @@ function Dashboard() {
 
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}
-      >
+        style={{ left: navigationBarOpen ? "250px" : "0" }}>
         <div className={styles.outerContainer}>
           <div className={styles.content}>
             <div className={styles.header}>
@@ -273,21 +271,24 @@ function Dashboard() {
             ) : (
               <>
                 {/* Conditional rendering for no volunteer trainings and pathways */}
-                {(trainingsInProgress.length === 0 && pathwaysInProgress.length === 0) && (
-                  <div>
-                    <div className={styles.subHeader}>
-                      <h2>No Trainings in Progress</h2>
+                {trainingsInProgress.length === 0 &&
+                  pathwaysInProgress.length === 0 && (
+                    <div>
+                      <div className={styles.subHeader}>
+                        <h2>No Trainings in Progress</h2>
+                      </div>
+                      <Link to="/trainings">
+                        <Button
+                          sx={forestGreenButtonPadding}
+                          variant="contained">
+                          GO TO TRAINING LIBRARY
+                        </Button>
+                      </Link>
                     </div>
-                    <Link to="/trainings" style={{ textDecoration: "none" }}>
-                      <Button sx={forestGreenButtonPadding} variant="contained">
-                        GO TO TRAINING LIBRARY
-                      </Button>
-                    </Link>
-                  </div>
-                )}
+                  )}
 
                 {/* display pathways in progress if there exist pathways in progress */}
-                { pathwaysInProgress.length > 0 && (
+                {pathwaysInProgress.length > 0 && (
                   <div>
                     <div className={styles.subHeader}>
                       <h2>Pathways in Progress</h2>
@@ -301,18 +302,24 @@ function Dashboard() {
                           <PathwayCard
                             image="../../"
                             title={pathway.genericPathway.name}
-                            progress={pathway.volunteerPathway? 
-                              pathway.volunteerPathway.numTrainingsCompleted / pathway.volunteerPathway.numTotalTrainings * 100
-                              : 0}
+                            progress={
+                              pathway.volunteerPathway
+                                ? (pathway.volunteerPathway
+                                    .numTrainingsCompleted /
+                                    pathway.volunteerPathway
+                                      .numTotalTrainings) *
+                                  100
+                                : 0
+                            }
                           />
                         </div>
                       ))}
                     </div>
                   </div>
                 )}
-                
+
                 {/* display trainings in progress if there exist trainings in progress */}
-                { trainingsInProgress.length > 0 && (
+                {trainingsInProgress.length > 0 && (
                   <div>
                     <div className={styles.subHeader}>
                       <h2>Trainings in Progress</h2>
@@ -321,20 +328,22 @@ function Dashboard() {
                       </Link>
                     </div>
                     <div className={styles.cardsContainer}>
-                      {trainingsInProgress.slice(0, 3).map((training, index) => (
-                        <div className={styles.card} key={index}>
-                          <TrainingCard
-                            training={training.genericTraining}
-                            volunteerTraining={training.volunteerTraining}
-                          />
-                        </div>
-                      ))}
+                      {trainingsInProgress
+                        .slice(0, 3)
+                        .map((training, index) => (
+                          <div className={styles.card} key={index}>
+                            <TrainingCard
+                              training={training.genericTraining}
+                              volunteerTraining={training.volunteerTraining}
+                            />
+                          </div>
+                        ))}
                     </div>
                   </div>
                 )}
-                
+
                 {/* display badges if there exist pathways completed */}
-                { pathwaysCompleted.length > 0 && (
+                {pathwaysCompleted.length > 0 && (
                   <div>
                     <div className={styles.subHeader}>
                       <h2>Recent Badges</h2>
@@ -343,21 +352,21 @@ function Dashboard() {
                       </Link>
                     </div>
                     <div className={styles.cardsContainer}>
-                      {pathwaysCompleted.slice(0,4).map((pathway, index) => (
+                      {pathwaysCompleted.slice(0, 4).map((pathway, index) => (
                         <div className={styles.card} key={index}>
                           <Certificate
                             image={pathway.genericPathway.badgeImage}
                             title={pathway.genericPathway.name}
-                            date={pathway.volunteerPathway.dateCompleted}
+                            date={pathway.volunteerPathway!.dateCompleted}
                           />
                         </div>
                       ))}
                     </div>
                   </div>
                 )}
-                
+
                 {/* display certifications if there exist trainings completed */}
-                { trainingsCompleted.length > 0 && (
+                {trainingsCompleted.length > 0 && (
                   <div>
                     <div className={styles.subHeader}>
                       <h2>Recent Certifications</h2>
@@ -366,12 +375,12 @@ function Dashboard() {
                       </Link>
                     </div>
                     <div className={styles.cardsContainer}>
-                      {trainingsCompleted.slice(0,4).map((training, index) => (
+                      {trainingsCompleted.slice(0, 4).map((training, index) => (
                         <div className={styles.card} key={index}>
                           <Certificate
                             image={training.genericTraining.certificationImage}
                             title={training.genericTraining.name}
-                            date={training.volunteerTraining.dateCompleted}
+                            date={training.volunteerTraining!.dateCompleted}
                           />
                         </div>
                       ))}
@@ -380,7 +389,8 @@ function Dashboard() {
                 )}
 
                 {/* Render Recommended Trainings */}
-                {recommendedTrainings.length > 0 && trainingsInProgress.length === 0 && (
+                {recommendedTrainings.length > 0 &&
+                  trainingsInProgress.length === 0 && (
                     <div>
                       <div className={styles.subHeader}>
                         <h2>Recommended Trainings</h2>
@@ -389,39 +399,42 @@ function Dashboard() {
                         </Link>
                       </div>
                       <div className={styles.cardsContainer}>
-                        {recommendedTrainings.slice(0, 3).map((training, index) => (
-                          <div className={styles.card} key={index}>
-                            <TrainingCard
-                              training={training}
-                            />
-                          </div>
-                        ))}
+                        {recommendedTrainings
+                          .slice(0, 3)
+                          .map((training, index) => (
+                            <div className={styles.card} key={index}>
+                              <TrainingCard training={training} />
+                            </div>
+                          ))}
                       </div>
                     </div>
-                )}
+                  )}
 
                 {/* Render Recommended Pathways */}
-                {recommendedPathways.length > 0 && pathwaysInProgress.length === 0 && (
-                  <div>
-                    <div className={styles.subHeader}>
-                      <h2>Recommended Pathways</h2>
-                      <Link className={styles.viewAllLink} to="/pathways">
-                        VIEW ALL
-                      </Link>
+                {recommendedPathways.length > 0 &&
+                  pathwaysInProgress.length === 0 && (
+                    <div>
+                      <div className={styles.subHeader}>
+                        <h2>Recommended Pathways</h2>
+                        <Link className={styles.viewAllLink} to="/pathways">
+                          VIEW ALL
+                        </Link>
+                      </div>
+                      <div className={styles.cardsContainer}>
+                        {recommendedPathways
+                          .slice(0, 2)
+                          .map((pathway, index) => (
+                            <div className={styles.card} key={index}>
+                              <PathwayCard
+                                image="../../"
+                                title={pathway.name}
+                                progress={0}
+                              />
+                            </div>
+                          ))}
+                      </div>
                     </div>
-                    <div className={styles.cardsContainer}>
-                      {recommendedPathways.slice(0, 2).map((pathway, index) => (
-                        <div className={styles.card} key={index}>
-                          <PathwayCard
-                            image="../../"
-                            title={pathway.name}
-                            progress={0}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                  )}
               </>
             )}
           </div>
