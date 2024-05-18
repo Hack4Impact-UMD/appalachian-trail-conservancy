@@ -48,23 +48,29 @@ function TrainingLandingPage() {
   );
 
   useEffect(() => {
+    const fetchPathwayNames = async (associatedPathways: string[]) => {
+      try {
+        const pathwayPromises = associatedPathways.map((pathway) =>
+          getPathway(pathway)
+        );
+        const pathways = await Promise.all(pathwayPromises);
+        const associatedPathwayNames = pathways.map((pathway) =>
+          pathway.name.toUpperCase()
+        );
+        setPathwayNames(associatedPathwayNames);
+      } catch (error) {
+        console.log("Failed to get pathways");
+      }
+    };
+
     if (trainingId !== undefined && !location.state?.training) {
       // Fetch data only if trainingId is available
       if (trainingId !== undefined) {
         getTraining(trainingId)
-          .then(async (trainingData) => {
+          .then((trainingData) => {
             setTraining(trainingData);
             setVolunteerTraining(location.state.volunteerTraining);
-            const associatedPathwayNames: string[] = [];
-            trainingData.associatedPathways.map(
-              async (pathway) =>
-                await getPathway(pathway)
-                  .then((pathway) => associatedPathwayNames.push(pathway.name))
-                  .catch(() => {
-                    console.log("Failed to get pathway");
-                  })
-            );
-            setPathwayNames(associatedPathwayNames);
+            fetchPathwayNames(trainingData.associatedPathways);
           })
           .catch(() => {
             console.log("Failed to get training");
@@ -77,17 +83,7 @@ function TrainingLandingPage() {
       // Update state with data from location's state
       if (location.state.training) {
         setTraining(location.state.training);
-        const associatedPathwayNames: string[] = [];
-        location.state.training.associatedPathways.map(
-          async (pathway) =>
-            await getPathway(pathway)
-              .then((pathway) => associatedPathwayNames.push(pathway.name))
-              .catch(() => {
-                console.log("Failed to get pathway");
-              })
-        );
-        // await Promise.all(pathwayPromises);
-        setPathwayNames(associatedPathwayNames);
+        fetchPathwayNames(location.state.training.associatedPathways);
       }
       if (location.state.volunteerTraining) {
         setVolunteerTraining(location.state.volunteerTraining);
@@ -290,17 +286,24 @@ function TrainingLandingPage() {
               </div>
 
               {/* RELATED PATHWAYS */}
-              <div className={styles.container}>
-                <h2>Related Pathways</h2>
-              </div>
-
-              <div className={styles.progressContainer}>
-                {pathwayNames.map((pathway) => (
-                  <div className={`${styles.marker} ${styles.pathwayMarker}`}>
-                    {pathway}
+              {pathwayNames.length > 0 ? (
+                <>
+                  <div className={styles.container}>
+                    <h2>Related Pathways</h2>
                   </div>
-                ))}
-              </div>
+
+                  <div className={styles.relatedPathways}>
+                    {pathwayNames.map((pathway) => (
+                      <div
+                        className={`${styles.marker} ${styles.pathwayMarker}`}>
+                        {pathway}
+                      </div>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <></>
+              )}
             </div>
           </div>
         )}
