@@ -93,6 +93,14 @@
   border: 1.5px solid var(--blue-purple);
   background-color: var(--blue-purple);
   color: var(--blue-gray);
+  transition: box-shadow 0.15s ease-in-out;
+}
+
+.pathwayMarker:hover {
+  cursor: pointer;
+  background-color: var(--sky-blue);
+  border-color: var(--sky-blue);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.3);
 }
 
 .trainingRow {

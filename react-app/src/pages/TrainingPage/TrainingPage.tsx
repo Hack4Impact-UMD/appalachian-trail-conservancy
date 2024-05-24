@@ -92,7 +92,8 @@ function TrainingPage() {
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        style={{ left: navigationBarOpen ? "250px" : "0" }}
+      >
         <div className={styles.outerContainer}>
           <div className={styles.bodyContainer}>
             {/* HEADER */}
@@ -115,13 +116,15 @@ function TrainingPage() {
             <Button
               sx={whiteButtonGrayBorder}
               onClick={() => handleBackButton()}
-              variant="contained">
+              variant="contained"
+            >
               Back
             </Button>
             <Button
               sx={forestGreenButton}
               onClick={() => handleContinueButton()}
-              variant="contained">
+              variant="contained"
+            >
               Continue
             </Button>
           </div>

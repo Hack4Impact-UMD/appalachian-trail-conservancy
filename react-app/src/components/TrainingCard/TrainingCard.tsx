@@ -51,14 +51,15 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
             setOpenTrainingPopup(true);
           } else {
             // TODO: Navigate to training landing page and pass Training and VolunteerTraining as state
-            navigate(`/trainings/:${training.id}`, {
+            navigate(`/trainings/${training.id}`, {
               state: {
                 training: training,
                 volunteerTraining: volunteerTraining,
               },
             });
           }
-        }}>
+        }}
+      >
         <div className={styles.trainingImage}>
           <img src={training.coverImage} alt="Training" />
         </div>

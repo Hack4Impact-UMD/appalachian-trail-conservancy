@@ -6,6 +6,8 @@ import { PathwayID } from "../../types/PathwayType";
 import { VolunteerPathway } from "../../types/UserType";
 import { getTraining, getPathway } from "../../backend/FirestoreCalls";
 import { LinearProgress, Box, Typography, Button } from "@mui/material";
+import { useAuth } from "../../auth/AuthProvider";
+import { getVolunteer } from "../../backend/FirestoreCalls";
 import styles from "./PathwayLandingPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
@@ -28,11 +30,15 @@ const styledProgressPass = {
 };
 
 function PathwayLandingPage() {
+  const auth = useAuth();
   const navigate = useNavigate();
   const pathwayId = useParams().id;
   const location = useLocation();
   const [loading, setLoading] = useState<boolean>(true);
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+  const [trainingNames, setTrainingNames] = useState<
+    { name: string; id: string }[]
+  >([]);
 
   // If training & volunteerTraining is passed via state, then set it accordingly.
   // Otherwise, retrieve training via id from url parameter then check if a VolunteerTraining exists for it
@@ -60,23 +66,54 @@ function PathwayLandingPage() {
     numTotalTrainings: 0,
   });
 
-  const [allTrainings, setAllTrainings] = useState<Training[]>([]);
+  const fetchTrainingNames = async (trainingIDs: string[]) => {
+    try {
+      const trainingPromises = trainingIDs.map((trainingId) =>
+        getTraining(trainingId)
+      );
+      const allTrainingsData = await Promise.all(trainingPromises);
+      let associatedTrainingNames: { name: string; id: string }[] = [];
+      allTrainingsData.forEach((training) =>
+        associatedTrainingNames.push({ name: training.name, id: training.id })
+      );
+      setTrainingNames(allTrainingsData);
+    } catch (error) {
+      console.log("Failed to get trainings");
+    }
+  };
 
   useEffect(() => {
-    if (pathwayId !== undefined && !location.state?.pathway) {
-      //fetch data if pathwayId is available
+    if (
+      pathwayId !== undefined &&
+      !location.state?.pathway &&
+      !location.state?.volunteerPathway
+    ) {
       setLoading(true);
-      if (pathwayId !== undefined) {
+
+      // fetch data if pathwayId is available and if auth is finished loading
+      if (pathwayId !== undefined && !auth.loading && auth.id) {
         getPathway(pathwayId)
           .then(async (pathwayData) => {
             setPathway(pathwayData);
-            setVolunteerPathway(location.state.volunteerPathway);
+            // since no state is passed from navigation, get current user data
+            getVolunteer(auth.id.toString())
+              .then(async (volunteerData) => {
+                // filter volunteer pathway information to find current pathway
+                const VolunteerPathway =
+                  volunteerData.pathwayInformation.filter(
+                    (volunteerPathway) =>
+                      volunteerPathway.pathwayID === pathwayId
+                  );
 
-            const trainingPromises = pathwayData.trainingIDs.map((trainingId) =>
-              getTraining(trainingId)
-            );
-            const allTrainingsData = await Promise.all(trainingPromises);
-            setAllTrainings(allTrainingsData);
+                // only replace if pathway exists
+                if (VolunteerPathway.length > 0)
+                  setVolunteerPathway(VolunteerPathway[0]);
+
+                fetchTrainingNames(pathwayData.trainingIDs);
+              })
+              .catch(() => {
+                console.log("Failed to get volunteer data");
+              });
           })
           .catch(() => {
             console.log("Failed to get pathway");
@@ -86,32 +123,21 @@ function PathwayLandingPage() {
           });
       }
     } else {
-      //update data by state
+      // Update state with data from location's state
       setLoading(true);
       if (location.state.pathway) {
         setPathway(location.state.pathway);
+        fetchTrainingNames(location.state.pathway.trainingIDs);
       }
       if (location.state.volunteerPathway) {
         setVolunteerPathway(location.state.volunteerPathway);
       }
-      const trainingPromises = location.state.pathway.trainingIDs.map(
-        (trainingId: string) => getTraining(trainingId)
-      );
-      Promise.all(trainingPromises)
-        .then((allTrainingsData) => {
-          setAllTrainings(allTrainingsData);
-        })
-        .catch(() => {
-          console.log("Failed to get training data");
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+      setLoading(false);
     }
-  }, [pathwayId, location.state]);
+  }, [pathwayId, location.state, auth.loading, auth.id]);
 
   const renderTrainings = () => {
-    return allTrainings.map((training: Training, index: number) => (
+    return trainingNames.map((training, index) => (
       <div key={index}>
         <div className={styles.trainingRow}>
           {/* conditionally render opacity of training titles */}
@@ -121,7 +147,8 @@ function PathwayLandingPage() {
               (index + 1 <= volunteerPathway.numTrainingsCompleted
                 ? styles.opacityContainer
                 : "")
-            }`}>
+            }`}
+          >
             {/* row for each training */}
             <p className={styles.trainingNumber}>{index + 1}</p>
             <p className={styles.trainingTitle}>{training.name}</p>
@@ -189,7 +216,8 @@ function PathwayLandingPage() {
           onClick={() =>
             // TODO: Connect to training
             navigate(`/pathways`)
-          }>
+          }
+        >
           Start
         </Button>
       );
@@ -204,7 +232,8 @@ function PathwayLandingPage() {
           onClick={() =>
             // TODO: Connect to training
             navigate(`/pathways`)
-          }>
+          }
+        >
           Restart
         </Button>
       );
@@ -216,7 +245,8 @@ function PathwayLandingPage() {
           onClick={() =>
             // TODO: Connect to training
             navigate(`/pathways`)
-          }>
+          }
+        >
           Resume
         </Button>
       );
@@ -229,7 +259,8 @@ function PathwayLandingPage() {
 
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        style={{ left: navigationBarOpen ? "250px" : "0" }}
+      >
         {loading ? (
           <Loading />
         ) : (
@@ -259,7 +290,8 @@ function PathwayLandingPage() {
                     <Typography
                       variant="body2"
                       color="var(--blue-gray)"
-                      sx={{ fontSize: "15px" }}>
+                      sx={{ fontSize: "15px" }}
+                    >
                       {volunteerPathway.pathwayID !== ""
                         ? Math.round(
                             ((volunteerPathway.numTrainingsCompleted +
@@ -291,7 +323,8 @@ function PathwayLandingPage() {
                       (volunteerPathway.progress === "COMPLETED"
                         ? styles.opacityContainer
                         : "")
-                    }`}>
+                    }`}
+                  >
                     <p className={styles.trainingNumber}>
                       {pathway.trainingIDs.length + 1}
                     </p>
@@ -320,7 +353,8 @@ function PathwayLandingPage() {
             <Button
               sx={{ ...whiteButtonGrayBorder }}
               variant="contained"
-              onClick={() => navigate(-1)}>
+              onClick={() => navigate(-1)}
+            >
               Back
             </Button>
             {renderButton()}

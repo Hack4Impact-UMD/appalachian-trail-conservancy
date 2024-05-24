@@ -3,8 +3,13 @@ import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { whiteButtonGrayBorder, forestGreenButton } from "../../muiTheme";
 import { TrainingID, TrainingResource } from "../../types/TrainingType";
 import { VolunteerTraining } from "../../types/UserType";
-import { getTraining, getPathway } from "../../backend/FirestoreCalls";
+import {
+  getVolunteer,
+  getTraining,
+  getPathway,
+} from "../../backend/FirestoreCalls";
 import { Button } from "@mui/material";
+import { useAuth } from "../../auth/AuthProvider";
 import styles from "./TrainingLandingPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
@@ -12,12 +17,15 @@ import CompletedIcon from "../../assets/completedCheck.svg";
 import Loading from "../../components/LoadingScreen/Loading";
 
 function TrainingLandingPage() {
+  const auth = useAuth();
   const navigate = useNavigate();
   const trainingId = useParams().id;
   const location = useLocation();
   const [loading, setLoading] = useState<boolean>(true);
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
-  const [pathwayNames, setPathwayNames] = useState<string[]>([]);
+  const [pathwayNames, setPathwayNames] = useState<
+    { name: string; id: string }[]
+  >([]);
 
   // If training & volunteerTraining is passed via state, then set it accordingly.
   // Otherwise, retrieve training via id from url parameter then check if a VolunteerTraining exists for it
@@ -47,30 +55,57 @@ function TrainingLandingPage() {
     }
   );
 
-  useEffect(() => {
-    const fetchPathwayNames = async (associatedPathways: string[]) => {
-      try {
-        const pathwayPromises = associatedPathways.map((pathway) =>
-          getPathway(pathway)
-        );
-        const pathways = await Promise.all(pathwayPromises);
-        const associatedPathwayNames = pathways.map((pathway) =>
-          pathway.name.toUpperCase()
-        );
-        setPathwayNames(associatedPathwayNames);
-      } catch (error) {
-        console.log("Failed to get pathways");
-      }
-    };
+  const fetchPathwayNames = async (associatedPathways: string[]) => {
+    try {
+      const pathwayPromises = associatedPathways.map((pathway) =>
+        getPathway(pathway)
+      );
+      const pathways = await Promise.all(pathwayPromises);
+      let associatedPathwayNames: { name: string; id: string }[] = [];
+      pathways.forEach((pathway) =>
+        associatedPathwayNames.push({
+          name: pathway.name.toUpperCase(),
+          id: pathway.id,
+        })
+      );
+      setPathwayNames(associatedPathwayNames);
+    } catch (error) {
+      console.log("Failed to get pathways");
+    }
+  };
 
-    if (trainingId !== undefined && !location.state?.training) {
-      // Fetch data only if trainingId is available
-      if (trainingId !== undefined) {
+  useEffect(() => {
+    if (
+      trainingId !== undefined &&
+      !location.state?.training &&
+      !location.state?.volunteerTraining
+    ) {
+      setLoading(true);
+
+      // fetch data if trainingId is available and if auth is finished loading
+      if (trainingId !== undefined && !auth.loading && auth.id) {
         getTraining(trainingId)
           .then((trainingData) => {
             setTraining(trainingData);
-            setVolunteerTraining(location.state.volunteerTraining);
-            fetchPathwayNames(trainingData.associatedPathways);
+            // since no state is passed from navigation, get current user data
+            getVolunteer(auth.id.toString())
+              .then(async (volunteerData) => {
+                // filter volunteer training information to find current pathway
+                const VolunteerTraining =
+                  volunteerData.trainingInformation.filter(
+                    (volunteerTraining) =>
+                      volunteerTraining.trainingID === trainingId
+                  );
+
+                // only replace if pathway exists
+                if (VolunteerTraining.length > 0)
+                  setVolunteerTraining(VolunteerTraining[0]);
+
+                fetchPathwayNames(trainingData.associatedPathways);
+              })
+              .catch(() => {
+                console.log("Failed to get volunteer data");
+              });
           })
           .catch(() => {
             console.log("Failed to get training");
@@ -90,7 +125,7 @@ function TrainingLandingPage() {
       }
       setLoading(false);
     }
-  }, [trainingId, location.state]);
+  }, [trainingId, location.state, auth.loading, auth.id]);
 
   const renderTrainingResources = () => {
     return training.resources.map(
@@ -103,7 +138,8 @@ function TrainingLandingPage() {
                 (index + 1 <= volunteerTraining.numCompletedResources
                   ? styles.opacityContainer
                   : "")
-              }`}>
+              }`}
+            >
               <p className={styles.trainingNumber}>{index + 1}</p>
               <p className={styles.trainingTitle}>{resource.title}</p>
               <p className={styles.trainingType}>{resource.type}</p>
@@ -121,7 +157,8 @@ function TrainingLandingPage() {
                 (volunteerTraining.trainingID !== "" &&
                   volunteerTraining.progress === "INPROGRESS" && (
                     <div
-                      className={`${styles.marker} ${styles.progressMarker}`}>
+                      className={`${styles.marker} ${styles.progressMarker}`}
+                    >
                       IN PROGRESS
                     </div>
                   ))}
@@ -184,7 +221,8 @@ function TrainingLandingPage() {
                 fromApp: true,
               },
             })
-          }>
+          }
+        >
           Start
         </Button>
       );
@@ -204,7 +242,8 @@ function TrainingLandingPage() {
                 fromApp: true,
               },
             })
-          }>
+          }
+        >
           Restart
         </Button>
       );
@@ -221,7 +260,8 @@ function TrainingLandingPage() {
                 fromApp: true,
               },
             })
-          }>
+          }
+        >
           Resume
         </Button>
       );
@@ -234,7 +274,8 @@ function TrainingLandingPage() {
 
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        style={{ left: navigationBarOpen ? "250px" : "0" }}
+      >
         {loading ? (
           <Loading />
         ) : (
@@ -265,7 +306,8 @@ function TrainingLandingPage() {
                       (volunteerTraining.progress === "COMPLETED"
                         ? styles.opacityContainer
                         : "")
-                    }`}>
+                    }`}
+                  >
                     <p className={styles.trainingNumber}>
                       {volunteerTraining.numTotalResources + 1}
                     </p>
@@ -293,10 +335,15 @@ function TrainingLandingPage() {
                   </div>
 
                   <div className={styles.relatedPathways}>
-                    {pathwayNames.map((pathway) => (
+                    {pathwayNames.map((pathway, idx) => (
                       <div
-                        className={`${styles.marker} ${styles.pathwayMarker}`}>
-                        {pathway}
+                        className={`${styles.marker} ${styles.pathwayMarker}`}
+                        onClick={() => {
+                          navigate(`/pathways/${pathway.id}`);
+                        }}
+                        key={idx}
+                      >
+                        {pathway.name}
                       </div>
                     ))}
                   </div>
@@ -314,7 +361,8 @@ function TrainingLandingPage() {
             <Button
               sx={{ ...whiteButtonGrayBorder }}
               variant="contained"
-              onClick={() => navigate(-1)}>
+              onClick={() => navigate(-1)}
+            >
               Back
             </Button>
             {renderButton()}

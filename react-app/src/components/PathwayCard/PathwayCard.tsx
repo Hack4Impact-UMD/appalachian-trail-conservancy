@@ -49,13 +49,14 @@ const PathwayCard: React.FC<PathwayCardProps> = ({
     <div
       className={styles.pathwayCard}
       onClick={() => {
-        navigate(`/pathways/:${pathway.id}`, {
+        navigate(`/pathways/${pathway.id}`, {
           state: {
             pathway: pathway,
             volunteerPathway: volunteerPathway,
           },
         });
-      }}>
+      }}
+    >
       <div className={styles.pathwayImage}>
         <img src={pathway.coverImage} alt="Pathway" />
       </div>
