@@ -2,15 +2,15 @@ import { useState, useEffect } from "react";
 import { Button } from "@mui/material";
 import { forestGreenButton } from "../../muiTheme";
 import { useLocation, Navigate, useNavigate } from "react-router-dom";
+import { useAuth } from "../../auth/AuthProvider";
+import { validateQuiz } from "../../backend/FirestoreCalls";
 import { Training } from "../../types/TrainingType";
+import { VolunteerTraining } from "../../types/UserType";
 import styles from "./QuizPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import QuizCard from "./QuizCard/QuizCard";
 import Loading from "../../components/LoadingScreen/Loading";
-import { useAuth } from "../../auth/AuthProvider";
-import { validateQuiz } from "../../backend/FirestoreCalls";
-import { type VolunteerTraining } from "../../types/UserType";
 
 function QuizPage() {
   const auth = useAuth();
@@ -76,8 +76,7 @@ function QuizPage() {
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}
-      >
+        style={{ left: navigationBarOpen ? "250px" : "0" }}>
         <div className={styles.outerContainer}>
           <div className={styles.bodyContainer}>
             {/* HEADER */}
@@ -115,15 +114,6 @@ function QuizPage() {
               sx={{ ...forestGreenButton }}
               variant="contained"
               onClick={() => {
-                /*const numAnswersCorrect = training.quiz.questions.reduce(
-                  (acc, question, idx) => {
-                    return selectedAnswers[idx] === question.answer
-                      ? acc + 1
-                      : acc;
-                  },
-                  0
-                );*/
-
                 validateQuiz(
                   volunteerTraining.trainingID,
                   volunteerId,
@@ -131,8 +121,6 @@ function QuizPage() {
                 )
                   .then((validateResults) => {
                     const numAnswersCorrect = validateResults.data;
-                    console.log(validateResults.data);
-                    console.log(numAnswersCorrect);
                     navigate(`/trainings/quizresult`, {
                       state: {
                         training: training,
@@ -146,8 +134,7 @@ function QuizPage() {
                   .catch((error) => {
                     console.error("Error validating quiz:", error);
                   });
-              }}
-            >
+              }}>
               Submit
             </Button>
           </div>
