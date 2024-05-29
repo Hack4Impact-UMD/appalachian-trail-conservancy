@@ -72,7 +72,7 @@ function PathwayLandingPage() {
         getTraining(trainingId)
       );
       const allTrainingsData = await Promise.all(trainingPromises);
-      let associatedTrainingNames: { name: string; id: string }[] = [];
+      const associatedTrainingNames: { name: string; id: string }[] = [];
       allTrainingsData.forEach((training) =>
         associatedTrainingNames.push({ name: training.name, id: training.id })
       );
@@ -147,8 +147,7 @@ function PathwayLandingPage() {
               (index + 1 <= volunteerPathway.numTrainingsCompleted
                 ? styles.opacityContainer
                 : "")
-            }`}
-          >
+            }`}>
             {/* row for each training */}
             <p className={styles.trainingNumber}>{index + 1}</p>
             <p className={styles.trainingTitle}>{training.name}</p>
@@ -216,8 +215,7 @@ function PathwayLandingPage() {
           onClick={() =>
             // TODO: Connect to training
             navigate(`/pathways`)
-          }
-        >
+          }>
           Start
         </Button>
       );
@@ -232,8 +230,7 @@ function PathwayLandingPage() {
           onClick={() =>
             // TODO: Connect to training
             navigate(`/pathways`)
-          }
-        >
+          }>
           Restart
         </Button>
       );
@@ -245,8 +242,7 @@ function PathwayLandingPage() {
           onClick={() =>
             // TODO: Connect to training
             navigate(`/pathways`)
-          }
-        >
+          }>
           Resume
         </Button>
       );
@@ -259,8 +255,7 @@ function PathwayLandingPage() {
 
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}
-      >
+        style={{ left: navigationBarOpen ? "250px" : "0" }}>
         {loading ? (
           <Loading />
         ) : (
@@ -290,8 +285,7 @@ function PathwayLandingPage() {
                     <Typography
                       variant="body2"
                       color="var(--blue-gray)"
-                      sx={{ fontSize: "15px" }}
-                    >
+                      sx={{ fontSize: "15px" }}>
                       {volunteerPathway.pathwayID !== ""
                         ? Math.round(
                             ((volunteerPathway.numTrainingsCompleted +
@@ -323,8 +317,7 @@ function PathwayLandingPage() {
                       (volunteerPathway.progress === "COMPLETED"
                         ? styles.opacityContainer
                         : "")
-                    }`}
-                  >
+                    }`}>
                     <p className={styles.trainingNumber}>
                       {pathway.trainingIDs.length + 1}
                     </p>
@@ -348,13 +341,14 @@ function PathwayLandingPage() {
         )}
 
         {/* footer */}
-        <div className={styles.footer}>
+        <div
+          className={styles.footer}
+          style={{ width: navigationBarOpen ? "calc(100% - 250px)" : "100%" }}>
           <div className={styles.footerButtons}>
             <Button
               sx={{ ...whiteButtonGrayBorder }}
               variant="contained"
-              onClick={() => navigate(-1)}
-            >
+              onClick={() => navigate(-1)}>
               Back
             </Button>
             {renderButton()}

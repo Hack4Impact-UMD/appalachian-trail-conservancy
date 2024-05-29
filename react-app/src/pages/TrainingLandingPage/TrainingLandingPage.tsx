@@ -138,8 +138,7 @@ function TrainingLandingPage() {
                 (index + 1 <= volunteerTraining.numCompletedResources
                   ? styles.opacityContainer
                   : "")
-              }`}
-            >
+              }`}>
               <p className={styles.trainingNumber}>{index + 1}</p>
               <p className={styles.trainingTitle}>{resource.title}</p>
               <p className={styles.trainingType}>{resource.type}</p>
@@ -157,8 +156,7 @@ function TrainingLandingPage() {
                 (volunteerTraining.trainingID !== "" &&
                   volunteerTraining.progress === "INPROGRESS" && (
                     <div
-                      className={`${styles.marker} ${styles.progressMarker}`}
-                    >
+                      className={`${styles.marker} ${styles.progressMarker}`}>
                       IN PROGRESS
                     </div>
                   ))}
@@ -221,8 +219,7 @@ function TrainingLandingPage() {
                 fromApp: true,
               },
             })
-          }
-        >
+          }>
           Start
         </Button>
       );
@@ -242,8 +239,7 @@ function TrainingLandingPage() {
                 fromApp: true,
               },
             })
-          }
-        >
+          }>
           Restart
         </Button>
       );
@@ -260,8 +256,7 @@ function TrainingLandingPage() {
                 fromApp: true,
               },
             })
-          }
-        >
+          }>
           Resume
         </Button>
       );
@@ -274,8 +269,7 @@ function TrainingLandingPage() {
 
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}
-      >
+        style={{ left: navigationBarOpen ? "250px" : "0" }}>
         {loading ? (
           <Loading />
         ) : (
@@ -306,8 +300,7 @@ function TrainingLandingPage() {
                       (volunteerTraining.progress === "COMPLETED"
                         ? styles.opacityContainer
                         : "")
-                    }`}
-                  >
+                    }`}>
                     <p className={styles.trainingNumber}>
                       {volunteerTraining.numTotalResources + 1}
                     </p>
@@ -341,8 +334,7 @@ function TrainingLandingPage() {
                         onClick={() => {
                           navigate(`/pathways/${pathway.id}`);
                         }}
-                        key={idx}
-                      >
+                        key={idx}>
                         {pathway.name}
                       </div>
                     ))}
@@ -356,13 +348,14 @@ function TrainingLandingPage() {
         )}
 
         {/* footer */}
-        <div className={styles.footer}>
+        <div
+          className={styles.footer}
+          style={{ width: navigationBarOpen ? "calc(100% - 250px)" : "100%" }}>
           <div className={styles.footerButtons}>
             <Button
               sx={{ ...whiteButtonGrayBorder }}
               variant="contained"
-              onClick={() => navigate(-1)}
-            >
+              onClick={() => navigate(-1)}>
               Back
             </Button>
             {renderButton()}
