@@ -4,17 +4,11 @@ import { Link } from "react-router-dom";
 import {
   getVolunteer,
   getAllTrainings,
-  getPathway,
-  getAllPathways,
   getAllPathways,
 } from "../../backend/FirestoreCalls";
 import { TrainingID } from "../../types/TrainingType";
 import { PathwayID } from "../../types/PathwayType";
-import {
-  VolunteerPathway,
-  VolunteerTraining,
-  VolunteerPathway,
-} from "../../types/UserType";
+import { VolunteerPathway, VolunteerTraining } from "../../types/UserType";
 import { Button } from "@mui/material";
 import { forestGreenButtonPadding } from "../../muiTheme";
 import TrainingCard from "../../components/TrainingCard/TrainingCard";
@@ -35,7 +29,6 @@ interface CorrelatedPathway {
   genericPathway: PathwayID;
   volunteerPathway?: VolunteerPathway;
 }
-import { PathwayID } from "../../types/PathwayType";
 
 function Dashboard() {
   const auth = useAuth();
@@ -271,7 +264,7 @@ function Dashboard() {
             .then((volunteer) => {
               const volunteerPathways = volunteer.pathwayInformation;
               // match up the allGenericTrainings and volunteerTrainings, use setCorrelatedTrainings to set
-              let allCorrelatedPathways: {
+              const allCorrelatedPathways: {
                 genericPathway: PathwayID;
                 volunteerPathway: VolunteerPathway;
               }[] = [];
@@ -348,16 +341,8 @@ function Dashboard() {
                       {pathwaysInProgress.slice(0, 2).map((pathway, index) => (
                         <div className={styles.card} key={index}>
                           <PathwayCard
-                            title={pathway.genericPathway.name}
-                            progress={
-                              pathway.volunteerPathway
-                                ? (pathway.volunteerPathway
-                                    .numTrainingsCompleted /
-                                    pathway.volunteerPathway
-                                      .numTotalTrainings) *
-                                  100
-                                : 0
-                            }
+                            pathway={pathway.genericPathway}
+                            volunteerPathway={pathway.volunteerPathway}
                           />
                         </div>
                       ))}
@@ -472,7 +457,7 @@ function Dashboard() {
                           .slice(0, 2)
                           .map((pathway, index) => (
                             <div className={styles.card} key={index}>
-                              <PathwayCard title={pathway.name} progress={0} />
+                              <PathwayCard pathway={pathway} />
                             </div>
                           ))}
                       </div>
