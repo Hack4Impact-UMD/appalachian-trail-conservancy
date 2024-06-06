@@ -55,10 +55,9 @@ const PathwayCard: React.FC<PathwayCardProps> = ({
             volunteerPathway: volunteerPathway,
           },
         });
-      }}
-    >
+      }}>
       <div className={styles.pathwayImage}>
-        <img src={pathway.coverImage} alt="Pathway" />
+        <img src={pathwayCard} alt="Pathway" />
       </div>
       <div className={styles.pathwayContent}>
         <div className={styles.pathwayTitle}>
