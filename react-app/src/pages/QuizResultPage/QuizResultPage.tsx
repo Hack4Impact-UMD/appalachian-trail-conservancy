@@ -8,6 +8,7 @@ import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import atclogo from "../../assets/atc-primary-logo.png";
 import { Training } from "../../types/TrainingType";
+import { VolunteerTraining } from "../../types/UserType";
 
 const styledProgressShape = {
   height: 24,
@@ -33,14 +34,37 @@ const QuizResultPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
-  const [training, setTraining] = useState<Training>();
+  const [training, setTraining] = useState<Training>({
+    name: "",
+    shortBlurb: "",
+    description: "",
+    coverImage: "",
+    resources: [],
+    quiz: {
+      questions: [],
+      numQuestions: 0,
+      passingScore: 0,
+    },
+    associatedPathways: [],
+    certificationImage: "",
+  });
+  const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
+    {
+      trainingID: "",
+      progress: "INPROGRESS",
+      dateCompleted: "0000-00-00",
+      numCompletedResources: 0,
+      numTotalResources: 0,
+    }
+  );
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
   const [achievedScore, setAchievedScore] = useState<number>(0);
 
   useEffect(() => {
     // Get data from navigation state
-    if (location.state?.fromApp) {
+    if (location.state?.fromApp && location.state.training) {
       setTraining(location.state.training);
+      setVolunteerTraining(location.state.volunteerTraining);
       setSelectedAnswers(location.state.selectedAnswers);
       setAchievedScore(location.state.achievedScore);
     } else {
@@ -50,18 +74,19 @@ const QuizResultPage = () => {
 
   const passed = achievedScore >= (training?.quiz.passingScore ?? 0);
   const scoredFull = achievedScore == training?.quiz.numQuestions;
-
+  console.log(achievedScore);
   return (
     <>
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        style={{ left: navigationBarOpen ? "250px" : "0" }}
+      >
         <div className={styles.outerContainer}>
           <div className={styles.bodyContainer}>
             {/* HEADER */}
             <div className={styles.header}>
-              <h1 className={styles.nameHeading}>Training Title - Quiz</h1>
+              <h1 className={styles.nameHeading}>{training.name} - Quiz</h1>
               <div className={styles.profileIconContainer}>
                 <ProfileIcon />
               </div>
@@ -128,7 +153,8 @@ const QuizResultPage = () => {
               <Button
                 sx={forestGreenButton}
                 variant="contained"
-                onClick={() => navigate("/trainings")}>
+                onClick={() => navigate("/trainings")}
+              >
                 Exit training
               </Button>
             ) : (
@@ -136,13 +162,38 @@ const QuizResultPage = () => {
                 <Button
                   sx={{ ...whiteButtonGrayBorder }}
                   variant="contained"
-                  onClick={() => navigate("/trainings")}>
+                  onClick={() => navigate("/trainings")}
+                >
                   Exit training
                 </Button>
-                <Button sx={{ ...whiteButtonGrayBorder }} variant="contained">
+                <Button
+                  sx={{ ...whiteButtonGrayBorder }}
+                  variant="contained"
+                  onClick={() =>
+                    navigate(`/trainings/:${volunteerTraining.trainingID}`, {
+                      state: {
+                        volunteerTraining: volunteerTraining,
+                        training: training,
+                        fromApp: true,
+                      },
+                    })
+                  }
+                >
                   Restart training
                 </Button>
-                <Button sx={{ ...forestGreenButton }} variant="contained">
+                <Button
+                  sx={{ ...forestGreenButton }}
+                  variant="contained"
+                  onClick={() =>
+                    navigate(`/trainings/quiz`, {
+                      state: {
+                        volunteerTraining: volunteerTraining,
+                        training: training,
+                        fromApp: true,
+                      },
+                    })
+                  }
+                >
                   Retake quiz
                 </Button>
               </>

@@ -2,7 +2,10 @@ import { useState, useEffect } from "react";
 import { Button } from "@mui/material";
 import { forestGreenButton } from "../../muiTheme";
 import { useLocation, Navigate, useNavigate } from "react-router-dom";
+import { useAuth } from "../../auth/AuthProvider";
+import { validateQuiz } from "../../backend/FirestoreCalls";
 import { Training } from "../../types/TrainingType";
+import { VolunteerTraining } from "../../types/UserType";
 import styles from "./QuizPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
@@ -10,11 +13,22 @@ import QuizCard from "./QuizCard/QuizCard";
 import Loading from "../../components/LoadingScreen/Loading";
 
 function QuizPage() {
+  const auth = useAuth();
+  const volunteerId = auth.id.toString();
   const navigate = useNavigate();
   const location = useLocation();
   const [loading, setLoading] = useState<boolean>(true);
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
+  const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
+    {
+      trainingID: "",
+      progress: "INPROGRESS",
+      dateCompleted: "0000-00-00",
+      numCompletedResources: 0,
+      numTotalResources: 0,
+    }
+  );
 
   // This training should represent the current training corresponding to the current quiz
   // This data should be recieved from navigation state
@@ -34,12 +48,17 @@ function QuizPage() {
   });
 
   useEffect(() => {
-    if (!location.state || !location.state.training) {
+    if (
+      !location.state ||
+      !location.state.training ||
+      !location.state.volunteerTraining
+    ) {
       navigate("/trainings");
     } else {
       // Update state with data from location's state
       if (location.state.training) {
         setTraining(location.state.training);
+        setVolunteerTraining(location.state.volunteerTraining);
         setSelectedAnswers(
           Array(location.state.training.quiz.questions.length)
         );
@@ -97,22 +116,26 @@ function QuizPage() {
               sx={{ ...forestGreenButton }}
               variant="contained"
               onClick={() => {
-                const numAnswersCorrect = training.quiz.questions.reduce(
-                  (acc, question, idx) => {
-                    return selectedAnswers[idx] === question.answer
-                      ? acc + 1
-                      : acc;
-                  },
-                  0
-                );
-                navigate(`/trainings/quizresult`, {
-                  state: {
-                    training: training,
-                    selectedAnswers: selectedAnswers,
-                    achievedScore: numAnswersCorrect,
-                    fromApp: true,
-                  },
-                });
+                validateQuiz(
+                  volunteerTraining.trainingID,
+                  volunteerId,
+                  selectedAnswers
+                )
+                  .then((validateResults) => {
+                    const numAnswersCorrect = validateResults.data;
+                    navigate(`/trainings/quizresult`, {
+                      state: {
+                        training: training,
+                        volunteerTraining: volunteerTraining,
+                        selectedAnswers: selectedAnswers,
+                        achievedScore: numAnswersCorrect,
+                        fromApp: true,
+                      },
+                    });
+                  })
+                  .catch((error) => {
+                    console.error("Error validating quiz:", error);
+                  });
               }}>
               Submit
             </Button>
