@@ -35,6 +35,7 @@ export interface VolunteerPathway {
   trainingsCompleted: string[]; // training IDs
   numTrainingsCompleted: number;
   numTotalTrainings: number;
+  quizScoreRecieved?: number;
 }
 
 // Should correspond with firestore & cloud functions

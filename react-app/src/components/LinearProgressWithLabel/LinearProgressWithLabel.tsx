@@ -30,8 +30,7 @@ export default function LinearProgressWithLabel(
         <Typography
           variant="body2"
           color="var(--blue-gray)"
-          sx={{ fontSize: "15px" }}
-        >
+          sx={{ fontSize: "15px" }}>
           {`${Math.round(props.value)}%`}
         </Typography>
       </Box>

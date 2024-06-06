@@ -166,34 +166,3 @@ export const redRadioButton = {
     color: "red",
   },
 };
-
-// stepper, used in training page
-export const stepperStyle = {
-  "& .MuiStepLabel-root .Mui-completed": {
-    color: "var(--blue-gray)", // circle color (COMPLETED)
-    padding: "0",
-  },
-  "& .MuiStepLabel-root .Mui-active": {
-    color: "var(--blue-gray)", // circle color (ACTIVE)
-    padding: "0",
-  },
-  "& .Mui-disabled .MuiStepIcon-root": {
-    color: "white", // circle color (DISABLED)
-    padding: "0",
-  },
-  "& .MuiStepLabel-root .MuiStepLabel-iconContainer": {
-    padding: "0", // remove padding next to step label
-  },
-  "& .MuiStepConnector-line": {
-    borderTopWidth: "2px", // connector width
-  },
-  "& .MuiStepConnector-root.Mui-completed .MuiStepConnector-line": {
-    borderColor: "var(--blue-gray)", // connector color (COMPLETED)
-  },
-  "& .MuiStepConnector-root.Mui-active .MuiStepConnector-line": {
-    borderColor: "var(--blue-gray)", // connector color (ACTIVE)
-  },
-  "& .MuiStepConnector-root.Mui-disabled .MuiStepConnector-line": {
-    borderColor: "var(--blue-gray)", // connector color (DISABLED)
-  },
-};
