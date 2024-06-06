@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./TrainingCard.module.css";
-import LinearProgressWithLabel from "../LinearProgressWithLabel/LinearProgressWithLabel";
 import TrainingPopup from "../TrainingPopup/TrainingPopup";
 import { TrainingID } from "../../types/TrainingType";
 import { VolunteerTraining } from "../../types/UserType";
@@ -22,11 +21,7 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
   const renderMarker = () => {
     if (volunteerTraining == undefined) {
       // Training not started
-      return (
-        <div className={`${styles.marker} ${styles.notStartedMarker}`}>
-          NOT STARTED
-        </div>
-      );
+      return <div className={styles.marker}></div>;
     } else if (
       volunteerTraining.numCompletedResources ===
       volunteerTraining.numTotalResources
@@ -40,13 +35,9 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
     } else {
       // Training in progress
       return (
-        <LinearProgressWithLabel
-          value={
-            (volunteerTraining.numCompletedResources /
-              volunteerTraining.numTotalResources) *
-            100
-          }
-        />
+        <div className={`${styles.marker} ${styles.notStartedMarker}`}>
+          IN PROGRESS
+        </div>
       );
     }
   };
@@ -60,14 +51,15 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
             setOpenTrainingPopup(true);
           } else {
             // TODO: Navigate to training landing page and pass Training and VolunteerTraining as state
-            navigate(`/trainings/:${training.id}`, {
+            navigate(`/trainings/${training.id}`, {
               state: {
                 training: training,
                 volunteerTraining: volunteerTraining,
               },
             });
           }
-        }}>
+        }}
+      >
         <div className={styles.trainingImage}>
           <img src={training.coverImage} alt="Training" />
         </div>

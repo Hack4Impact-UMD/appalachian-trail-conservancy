@@ -80,7 +80,7 @@ function PathwayLibrary() {
               const volunteerPathways = volunteer.pathwayInformation;
 
               // match up the genericPathways and volunteerPathways
-              let allCorrelatedPathways: {
+              const allCorrelatedPathways: {
                 genericPathway: PathwayID;
                 volunteerPathway?: VolunteerPathway;
               }[] = [];
@@ -193,15 +193,8 @@ function PathwayLibrary() {
                     {filteredPathways.map((pathway, index) => (
                       <div className={styles.card} key={index}>
                         <PathwayCard
-                          title={pathway.genericPathway.name}
-                          progress={
-                            pathway.volunteerPathway
-                              ? (pathway.volunteerPathway
-                                  .numTrainingsCompleted /
-                                  pathway.volunteerPathway.numTotalTrainings) *
-                                100
-                              : 0
-                          }
+                          pathway={pathway.genericPathway}
+                          volunteerPathway={pathway.volunteerPathway}
                         />
                       </div>
                     ))}

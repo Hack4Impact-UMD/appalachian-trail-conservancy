@@ -7,17 +7,18 @@ import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import Dashboard from "./pages/DashboardPage/DashboardPage.tsx";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage.tsx";
 import TrainingLibrary from "./pages/TrainingLibraryPage/TrainingLibraryPage.tsx";
-import PathwayLibrary from "./pages/PathwayLibraryPage/PathwayLibraryPage.tsx";
 import VolunteerLoginPage from "./pages/LoginPage/VolunteerLoginPage/VolunteerLoginPage.tsx";
 import AdminLoginPage from "./pages/LoginPage/AdminLoginPage/AdminLoginPage.tsx";
 import AchievementsPage from "./pages/AchievementsPage/AchievementsPage.tsx";
 import TrainingPage from "./pages/TrainingPage/TrainingPage.tsx";
 import TrainingLandingPage from "./pages/TrainingLandingPage/TrainingLandingPage.tsx";
+import PathwayLandingPage from "./pages/PathwayLandingPage/PathwayLandingPage.tsx";
 import RequireAuth from "./auth/RequireAuth/RequireAuth.tsx";
 import LogoutPage from "./pages/LogoutPage/LogoutPage.tsx";
 import QuizPage from "./pages/QuizPage/QuizPage.tsx";
 import QuizResult from "./pages/QuizResultPage/QuizResultPage.tsx";
 import QuizLandingPage from "./pages/QuizLandingPage/QuizLandingPage.tsx";
+import PathwayLibrary from "./pages/PathwayLibraryPage/PathwayLibraryPage.tsx";
 
 function App() {
   return (
@@ -91,6 +92,14 @@ function App() {
               element={
                 <RequireAuth>
                   <PathwayLibrary />
+                </RequireAuth>
+              }
+            />
+             <Route
+              path="/pathways/:id"
+              element={
+                <RequireAuth>
+                  <PathwayLandingPage />
                 </RequireAuth>
               }
             />

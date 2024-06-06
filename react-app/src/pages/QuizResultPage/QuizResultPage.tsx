@@ -119,7 +119,9 @@ const QuizResultPage = () => {
         </div>
 
         {/* footer */}
-        <div className={styles.footer}>
+        <div
+          className={styles.footer}
+          style={{ width: navigationBarOpen ? "calc(100% - 250px)" : "100%" }}>
           {/* buttons */}
           <div className={styles.footerButtons}>
             {passed ? (

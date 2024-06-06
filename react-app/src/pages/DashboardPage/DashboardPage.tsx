@@ -4,11 +4,17 @@ import { Link } from "react-router-dom";
 import {
   getVolunteer,
   getAllTrainings,
+  getPathway,
+  getAllPathways,
   getAllPathways,
 } from "../../backend/FirestoreCalls";
 import { TrainingID } from "../../types/TrainingType";
 import { PathwayID } from "../../types/PathwayType";
-import { VolunteerTraining, VolunteerPathway } from "../../types/UserType";
+import {
+  VolunteerPathway,
+  VolunteerTraining,
+  VolunteerPathway,
+} from "../../types/UserType";
 import { Button } from "@mui/material";
 import { forestGreenButtonPadding } from "../../muiTheme";
 import TrainingCard from "../../components/TrainingCard/TrainingCard";
@@ -29,6 +35,7 @@ interface CorrelatedPathway {
   genericPathway: PathwayID;
   volunteerPathway?: VolunteerPathway;
 }
+import { PathwayID } from "../../types/PathwayType";
 
 function Dashboard() {
   const auth = useAuth();
@@ -251,6 +258,47 @@ function Dashboard() {
           console.error("Error fetching volunteer:", error);
         });
     }
+  }, [auth.loading, auth.id]);
+
+  useEffect(() => {
+    // get all trainings from firebase
+    getAllPathways()
+      .then((genericPathways) => {
+        // only use auth if it is finished loading
+        if (!auth.loading && auth.id) {
+          // get volunteer info from firebase. will contain volunteer progress on trainings
+          getVolunteer(auth.id.toString())
+            .then((volunteer) => {
+              const volunteerPathways = volunteer.pathwayInformation;
+              // match up the allGenericTrainings and volunteerTrainings, use setCorrelatedTrainings to set
+              let allCorrelatedPathways: {
+                genericPathway: PathwayID;
+                volunteerPathway: VolunteerPathway;
+              }[] = [];
+              for (const genericPathway of genericPathways) {
+                // if genericTraining in volunteer.trainingInformation (has been started by volunteer), then we include that.
+                let startedByVolunteer = false;
+                for (const volunteerPathway of volunteerPathways) {
+                  if (genericPathway.id == volunteerPathway.pathwayID) {
+                    startedByVolunteer = true;
+                    allCorrelatedPathways.push({
+                      genericPathway: genericPathway,
+                      volunteerPathway: volunteerPathway,
+                    });
+                  }
+                }
+              }
+              setCorrelatedPathways(allCorrelatedPathways);
+              setLoading(false);
+            })
+            .catch((error) => {
+              console.error("Error fetching volunteer:", error);
+            });
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching trainings:", error);
+      });
   }, [auth.loading, auth.id]);
 
   return (
