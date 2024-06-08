@@ -6,7 +6,12 @@ import {
   selectOptionStyle,
   whiteSelectGrayBorder,
 } from "../../muiTheme";
-import { getVolunteer, getAllTrainings, getAllPathways, getTraining } from "../../backend/FirestoreCalls";
+import {
+  getVolunteer,
+  getAllTrainings,
+  getAllPathways,
+  getTraining,
+} from "../../backend/FirestoreCalls";
 import { TrainingID } from "../../types/TrainingType";
 import { VolunteerTraining, VolunteerPathway } from "../../types/UserType";
 import { PathwayID } from "../../types/PathwayType";
@@ -36,65 +41,60 @@ function AchievementsPage() {
     { genericPathway: PathwayID; volunteerPathway: VolunteerPathway }[]
   >([]);
 
-
   useEffect(() => {
-    getAllTrainings()
-      .then((genericTrainings) => {
+    getAllTrainings().then((genericTrainings) => {
       if (!auth.loading && auth.id) {
-        getVolunteer(auth.id.toString()) 
-          .then((volunteer) => {
-            const volunteerTrainings = volunteer.trainingInformation;
-            let allCorrelatedTrainings: {
-              genericTraining: TrainingID;
-              volunteerTraining: VolunteerTraining;
-            }[] = [];
-            for (const genericTraining of genericTrainings) {
-              let found = false;
-              for (const volunteerTraining of volunteerTrainings) {
-                if (genericTraining.id == volunteerTraining.trainingID) {
-                  found = true;
-                  if (volunteerTraining.progress === "COMPLETED") {
-                    allCorrelatedTrainings.push({
-                      genericTraining: genericTraining,
-                      volunteerTraining: volunteerTraining,
-                    });
-                  }
+        getVolunteer(auth.id.toString()).then((volunteer) => {
+          const volunteerTrainings = volunteer.trainingInformation;
+          let allCorrelatedTrainings: {
+            genericTraining: TrainingID;
+            volunteerTraining: VolunteerTraining;
+          }[] = [];
+          for (const genericTraining of genericTrainings) {
+            let found = false;
+            for (const volunteerTraining of volunteerTrainings) {
+              if (genericTraining.id == volunteerTraining.trainingID) {
+                found = true;
+                if (volunteerTraining.progress === "COMPLETED") {
+                  allCorrelatedTrainings.push({
+                    genericTraining: genericTraining,
+                    volunteerTraining: volunteerTraining,
+                  });
                 }
               }
             }
-            setCorrelatedTrainings(allCorrelatedTrainings);
-          });
+          }
+          setCorrelatedTrainings(allCorrelatedTrainings);
+        });
       }
     });
 
-    getAllPathways()
-      .then((genericPathways) => {
-        if (!auth.loading && auth.id) {
-          getVolunteer(auth.id.toString())
-            .then((volunteer) => {
-              const volunteerPathways = volunteer.pathwayInformation;
-              let allCorrelatedPathways: {
-                genericPathway: PathwayID;
-                volunteerPathway: VolunteerPathway;
-              }[] = [];
-              for (const genericPathway of genericPathways) {
-                let found = false;
-                for (const volunteerPathway of volunteerPathways) {
-                  if (genericPathway.id == volunteerPathway.pathwayID) {
-                    found = true;
-                    if (volunteerPathway.progress === "COMPLETED") {
-                      allCorrelatedPathways.push({
-                        genericPathway: genericPathway,
-                        volunteerPathway: volunteerPathway,
-                      });
-                    }
-                  }
+    getAllPathways().then((genericPathways) => {
+      if (!auth.loading && auth.id) {
+        getVolunteer(auth.id.toString()).then((volunteer) => {
+          const volunteerPathways = volunteer.pathwayInformation;
+          let allCorrelatedPathways: {
+            genericPathway: PathwayID;
+            volunteerPathway: VolunteerPathway;
+          }[] = [];
+          for (const genericPathway of genericPathways) {
+            let found = false;
+            for (const volunteerPathway of volunteerPathways) {
+              if (genericPathway.id == volunteerPathway.pathwayID) {
+                found = true;
+                if (volunteerPathway.progress === "COMPLETED") {
+                  allCorrelatedPathways.push({
+                    genericPathway: genericPathway,
+                    volunteerPathway: volunteerPathway,
+                  });
                 }
               }
-              setCorrelatedPathways(allCorrelatedPathways);
-            });
-        }
-      });
+            }
+          }
+          setCorrelatedPathways(allCorrelatedPathways);
+        });
+      }
+    });
   });
 
   const sortCards = () => {
@@ -103,12 +103,14 @@ function AchievementsPage() {
       sortedCopy = correlatedPathways.slice();
       switch (sortMode) {
         case "alphabetically":
-          sortedCopy.sort((a, b) =>           
-            a.genericPathway.name.localeCompare(b.genericPathway.name));
+          sortedCopy.sort((a, b) =>
+            a.genericPathway.name.localeCompare(b.genericPathway.name)
+          );
           break;
         case "reverseAlphabetically":
-          sortedCopy.sort((a, b) => 
-            b.genericPathway.name.localeCompare(a.genericPathway.name));
+          sortedCopy.sort((a, b) =>
+            b.genericPathway.name.localeCompare(a.genericPathway.name)
+          );
           break;
         case "newest":
           sortedCopy.sort((a, b) => {
@@ -127,18 +129,19 @@ function AchievementsPage() {
       }
 
       setCorrelatedPathways(sortedCopy);
-    }
-    else {
+    } else {
       sortedCopy = correlatedTrainings.slice();
       switch (sortMode) {
         case "alphabetically":
-          sortedCopy.sort((a, b) =>           
-            a.genericTraining.name.localeCompare(b.genericTraining.name));
-  
+          sortedCopy.sort((a, b) =>
+            a.genericTraining.name.localeCompare(b.genericTraining.name)
+          );
+
           break;
         case "reverseAlphabetically":
-          sortedCopy.sort((a, b) => 
-            b.genericTraining.name.localeCompare(a.genericTraining.name));
+          sortedCopy.sort((a, b) =>
+            b.genericTraining.name.localeCompare(a.genericTraining.name)
+          );
           break;
         case "newest":
           sortedCopy.sort((a, b) => {
@@ -174,7 +177,8 @@ function AchievementsPage() {
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        style={{ left: navigationBarOpen ? "250px" : "0" }}
+      >
         <div className={styles.outerContainer}>
           <div className={styles.content}>
             <div className={styles.header}>
@@ -235,8 +239,7 @@ function AchievementsPage() {
               </div>
             </div>
             <div className={styles.cardsContainer}>
-              {badgesSelected ?
-              (
+              {badgesSelected ? (
                 <>
                   {correlatedPathways.map((pathway, index) => (
                     <Badge
@@ -245,8 +248,7 @@ function AchievementsPage() {
                     />
                   ))}
                 </>
-              ) :
-              (
+              ) : (
                 <>
                   {correlatedTrainings.map((training, index) => (
                     <Certificate
@@ -256,8 +258,7 @@ function AchievementsPage() {
                     />
                   ))}
                 </>
-              )  
-              }
+              )}
             </div>
           </div>
         </div>
