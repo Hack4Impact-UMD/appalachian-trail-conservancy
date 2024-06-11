@@ -1,0 +1,44 @@
+.badgeCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  width: 200px;
+  cursor: pointer;
+}
+
+.badgeImage {
+  width: 175px;
+  height: 175px;
+  overflow: hidden;
+  border-radius: 50%;
+  margin-top: 5px;
+  /* remove border once badge images are added */
+  border: 1px solid black;
+}
+
+.badgeImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.badgeDetails {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.badgeTitle {
+  font-weight: bold;
+  margin: 0 0 5px 0;
+  font-size: 1.1em;
+  color: var(--forest-green);
+}
+
+.badgeDate {
+  margin: 0;
+  color: var(--blue-gray);
+  font-size: 0.8em;
+}
