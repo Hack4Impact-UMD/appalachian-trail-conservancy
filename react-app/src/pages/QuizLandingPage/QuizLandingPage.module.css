@@ -126,14 +126,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: calc(100% - 250px);
   height: 100px;
   margin-bottom: 0;
   position: fixed;
   bottom: 0;
-  left: 250px;
+  right: 0;
   box-shadow: 2px 0px 2px rgb(90, 90, 90);
   background-color: white;
+  transition: 0.3s all ease;
 }
 
 .footerButtons {

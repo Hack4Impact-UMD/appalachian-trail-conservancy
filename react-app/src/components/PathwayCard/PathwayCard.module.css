@@ -43,9 +43,7 @@
 
 .marker {
   display: inline-block;
-  background-color: white;
   padding: 6px 15px;
-  border: 1.5px solid var(--blue-gray);
   border-radius: 20px;
   font-size: 0.9em;
   font-weight: bold;
@@ -53,12 +51,8 @@
   margin: -8px 0 -5px 0;
 }
 
-.notStartedMarker {
-  border-color: var(--blue-gray);
-  color: var(--blue-gray);
-}
-
 .completedMarker {
+  border: 1.5px solid var(--blue-gray);
   background-color: var(--blue-gray);
   color: white;
 }
