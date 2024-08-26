@@ -36,17 +36,11 @@ function Dashboard() {
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
 
   // for pathways and trainings, track All, In progress, and Completed
-  const [correlatedTrainings, setCorrelatedTrainings] = useState<
-    CorrelatedTraining[]
-  >([]);
   const [trainingsInProgress, setTrainingsInProgress] = useState<
     CorrelatedTraining[]
   >([]);
   const [trainingsCompleted, setTrainingsCompleted] = useState<
     CorrelatedTraining[]
-  >([]);
-  const [correlatedPathways, setCorrelatedPathways] = useState<
-    CorrelatedPathway[]
   >([]);
   const [pathwaysInProgress, setPathwaysInProgress] = useState<
     CorrelatedPathway[]
@@ -69,22 +63,13 @@ function Dashboard() {
     genericTrainings: TrainingID[],
     volunteerTrainings: VolunteerTraining[]
   ) => {
-    const allCorrelatedTrainings: CorrelatedTraining[] = [];
-
     const trainingsIP: CorrelatedTraining[] = [];
-
     let trainingsC: CorrelatedTraining[] = [];
 
     for (const genericTraining of genericTrainings) {
       // if genericTraining in volunteer.trainingInformation (has been started by volunteer), then we include that.
-      let startedByVolunteer = false;
       for (const volunteerTraining of volunteerTrainings) {
         if (genericTraining.id == volunteerTraining.trainingID) {
-          startedByVolunteer = true;
-          allCorrelatedTrainings.push({
-            genericTraining: genericTraining,
-            volunteerTraining: volunteerTraining,
-          });
           if (volunteerTraining.progress == "INPROGRESS") {
             trainingsIP.push({
               genericTraining: genericTraining,
@@ -98,15 +83,8 @@ function Dashboard() {
           }
         }
       }
-      if (!startedByVolunteer) {
-        allCorrelatedTrainings.push({
-          genericTraining: genericTraining,
-          volunteerTraining: undefined,
-        });
-      }
     }
     trainingsC = sortTrainingsByDateCompleted(trainingsC);
-    setCorrelatedTrainings(allCorrelatedTrainings);
     setTrainingsInProgress(trainingsIP);
     setTrainingsCompleted(trainingsC);
   };
@@ -116,21 +94,12 @@ function Dashboard() {
     volunteerPathways: VolunteerPathway[]
   ) => {
     // match up the genericPathways and volunteerPathways
-    const allCorrelatedPathways: CorrelatedPathway[] = [];
-
     const pathwaysIP: CorrelatedPathway[] = [];
-
     let pathwaysC: CorrelatedPathway[] = [];
 
     for (const genericPathway of genericPathways) {
-      let startedByVolunteer = false;
       for (const volunteerPathway of volunteerPathways) {
         if (genericPathway.id == volunteerPathway.pathwayID) {
-          startedByVolunteer = true;
-          allCorrelatedPathways.push({
-            genericPathway: genericPathway,
-            volunteerPathway: volunteerPathway,
-          });
           if (volunteerPathway.progress == "INPROGRESS") {
             pathwaysIP.push({
               genericPathway: genericPathway,
@@ -144,15 +113,8 @@ function Dashboard() {
           }
         }
       }
-      if (!startedByVolunteer) {
-        allCorrelatedPathways.push({
-          genericPathway: genericPathway,
-          volunteerPathway: undefined,
-        });
-      }
     }
     pathwaysC = sortPathwaysByDateCompleted(pathwaysC);
-    setCorrelatedPathways(allCorrelatedPathways);
     setPathwaysInProgress(pathwaysIP);
     setPathwaysCompleted(pathwaysC);
   };
@@ -251,47 +213,6 @@ function Dashboard() {
           console.error("Error fetching volunteer:", error);
         });
     }
-  }, [auth.loading, auth.id]);
-
-  useEffect(() => {
-    // get all trainings from firebase
-    getAllPathways()
-      .then((genericPathways) => {
-        // only use auth if it is finished loading
-        if (!auth.loading && auth.id) {
-          // get volunteer info from firebase. will contain volunteer progress on trainings
-          getVolunteer(auth.id.toString())
-            .then((volunteer) => {
-              const volunteerPathways = volunteer.pathwayInformation;
-              // match up the allGenericTrainings and volunteerTrainings, use setCorrelatedTrainings to set
-              const allCorrelatedPathways: {
-                genericPathway: PathwayID;
-                volunteerPathway: VolunteerPathway;
-              }[] = [];
-              for (const genericPathway of genericPathways) {
-                // if genericTraining in volunteer.trainingInformation (has been started by volunteer), then we include that.
-                let startedByVolunteer = false;
-                for (const volunteerPathway of volunteerPathways) {
-                  if (genericPathway.id == volunteerPathway.pathwayID) {
-                    startedByVolunteer = true;
-                    allCorrelatedPathways.push({
-                      genericPathway: genericPathway,
-                      volunteerPathway: volunteerPathway,
-                    });
-                  }
-                }
-              }
-              setCorrelatedPathways(allCorrelatedPathways);
-              setLoading(false);
-            })
-            .catch((error) => {
-              console.error("Error fetching volunteer:", error);
-            });
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching trainings:", error);
-      });
   }, [auth.loading, auth.id]);
 
   return (
