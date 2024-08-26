@@ -10,7 +10,6 @@ import {
   getVolunteer,
   getAllTrainings,
   getAllPathways,
-  getTraining,
 } from "../../backend/FirestoreCalls";
 import { TrainingID } from "../../types/TrainingType";
 import { VolunteerTraining, VolunteerPathway } from "../../types/UserType";
@@ -21,7 +20,6 @@ import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Certificate from "../../components/CertificateCard/CertificateCard";
-import badge from "../../assets/badge.svg";
 import { useAuth } from "../../auth/AuthProvider";
 import Badge from "../../components/BadgeCard/BadgeCard";
 
@@ -29,9 +27,6 @@ function AchievementsPage() {
   const auth = useAuth();
   const [badgesSelected, setBadgesSelected] = useState<boolean>(true);
   const [sortMode, setSortMode] = useState<string>("newest");
-  const [sortedCards, setSortedCards] = useState<
-    { title: string; date: string; image: string }[]
-  >([]);
 
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
   const [correlatedTrainings, setCorrelatedTrainings] = useState<
@@ -163,7 +158,7 @@ function AchievementsPage() {
     }
   };
 
-  const handleChange = (event: any) => {
+  const handleSortChange = (event: any) => {
     setSortMode(event.target.value);
     sortCards();
   };
@@ -213,7 +208,7 @@ function AchievementsPage() {
               <div className={styles.rightButtonContainer}>
                 <Select
                   value={sortMode}
-                  onChange={handleChange}
+                  onChange={handleSortChange}
                   size="small"
                   sx={{
                     ...whiteSelectGrayBorder,
