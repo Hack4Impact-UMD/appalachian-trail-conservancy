@@ -188,7 +188,9 @@ export function validateQuiz(
       .then((numAnswersCorrect) => {
         resolve(numAnswersCorrect);
       })
-      .catch(() => {});
+      .catch((e) => {
+        reject(e);
+      });
   });
 }
 
