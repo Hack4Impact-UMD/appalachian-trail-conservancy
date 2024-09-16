@@ -18,6 +18,7 @@ function QuizPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const [loading, setLoading] = useState<boolean>(true);
+  const [quizLoading, setQuizLoading] = useState<boolean>(false);
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
   const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
@@ -67,6 +68,26 @@ function QuizPage() {
     }
   }, []);
 
+  const handleSubmitQuiz = () => {
+    setQuizLoading(true);
+    validateQuiz(volunteerTraining.trainingID, volunteerId, selectedAnswers)
+      .then((validateResults) => {
+        const numAnswersCorrect = validateResults.data;
+        navigate(`/trainings/quizresult`, {
+          state: {
+            training: training,
+            volunteerTraining: volunteerTraining,
+            selectedAnswers: selectedAnswers,
+            achievedScore: numAnswersCorrect,
+            fromApp: true,
+          },
+        });
+      })
+      .catch((error) => {
+        console.error("Error validating quiz:", error);
+      });
+  };
+
   if (!location.state?.fromApp) {
     return <Navigate to="/trainings" />;
   }
@@ -76,7 +97,8 @@ function QuizPage() {
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        style={{ left: navigationBarOpen ? "250px" : "0" }}
+      >
         <div className={styles.outerContainer}>
           <div className={styles.bodyContainer}>
             {/* HEADER */}
@@ -89,19 +111,23 @@ function QuizPage() {
                   <ProfileIcon />
                 </div>
 
-                <div className={styles.questionContainer}>
-                  {training.quiz.questions.map((option, index) => (
-                    <QuizCard
-                      key={index}
-                      currentQuestion={index + 1}
-                      question={option.question}
-                      answerOptions={option.choices}
-                      selectedAnswers={selectedAnswers}
-                      setSelectedAnswers={setSelectedAnswers}
-                      index={index}
-                    />
-                  ))}
-                </div>
+                {quizLoading ? (
+                  <Loading />
+                ) : (
+                  <div className={styles.questionContainer}>
+                    {training.quiz.questions.map((option, index) => (
+                      <QuizCard
+                        key={index}
+                        currentQuestion={index + 1}
+                        question={option.question}
+                        answerOptions={option.choices}
+                        selectedAnswers={selectedAnswers}
+                        setSelectedAnswers={setSelectedAnswers}
+                        index={index}
+                      />
+                    ))}
+                  </div>
+                )}
               </>
             )}
           </div>
@@ -113,28 +139,8 @@ function QuizPage() {
             <Button
               sx={{ ...forestGreenButton }}
               variant="contained"
-              onClick={() => {
-                validateQuiz(
-                  volunteerTraining.trainingID,
-                  volunteerId,
-                  selectedAnswers
-                )
-                  .then((validateResults) => {
-                    const numAnswersCorrect = validateResults.data;
-                    navigate(`/trainings/quizresult`, {
-                      state: {
-                        training: training,
-                        volunteerTraining: volunteerTraining,
-                        selectedAnswers: selectedAnswers,
-                        achievedScore: numAnswersCorrect,
-                        fromApp: true,
-                      },
-                    });
-                  })
-                  .catch((error) => {
-                    console.error("Error validating quiz:", error);
-                  });
-              }}>
+              onClick={handleSubmitQuiz}
+            >
               Submit
             </Button>
           </div>
