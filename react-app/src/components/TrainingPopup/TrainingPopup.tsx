@@ -3,7 +3,7 @@ import { Button } from "@mui/material";
 import { IoCloseOutline } from "react-icons/io5";
 import { whiteButtonGrayBorder } from "../../muiTheme";
 import { useNavigate } from "react-router-dom";
-import { Training, TrainingID } from "../../types/TrainingType";
+import { TrainingID } from "../../types/TrainingType";
 import { VolunteerTraining } from "../../types/UserType";
 
 interface modalPropsType {
@@ -25,7 +25,8 @@ const TrainingPopup = ({
       className={styles.modalContainer}
       onClick={(e) => {
         e.stopPropagation();
-      }}>
+      }}
+    >
       {open ? (
         <>
           <div className={styles.background} onClick={() => onClose()} />
@@ -45,7 +46,8 @@ const TrainingPopup = ({
                           volunteerTraining: volunteerTraining,
                         },
                       })
-                    }>
+                    }
+                  >
                     Learn More
                   </Button>
                 </div>
