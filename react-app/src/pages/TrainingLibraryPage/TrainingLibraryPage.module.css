@@ -27,6 +27,20 @@
   padding-bottom: 3%;
 }
 
+/* For screen widths below 1000px, adjust the content width */
+@media screen and (max-width: 1200px) {
+  .content {
+    width: 600px;
+  }
+}
+
+/* For screen widths below 650px, adjust the content width */
+@media screen and (max-width: 800px) {
+  .content {
+    width: 300px;
+  }
+}
+
 .header {
   display: flex;
   flex-wrap: wrap;
@@ -53,6 +67,17 @@
 .buttonContainer {
   display: flex;
   gap: 20px;
+}
+
+/* Move filters under the search bar when screen width is below 1000px */
+@media screen and (max-width: 1200px) {
+  .searchBarContainer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .buttonContainer {
+    margin-top: 1rem;
+  }
 }
 
 .cardsContainer {

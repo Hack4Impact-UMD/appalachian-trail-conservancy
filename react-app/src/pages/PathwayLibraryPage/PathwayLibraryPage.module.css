@@ -27,6 +27,13 @@
   padding-bottom: 3%;
 }
 
+/* For screen widths below 650px, adjust the content width */
+@media screen and (max-width: 1200px) {
+  .content {
+    width: 425px;
+  }
+}
+
 /* have space between header and view all link  */
 .header {
   display: flex;
@@ -56,6 +63,17 @@
   gap: 20px;
 }
 
+/* Move filters under the search bar when screen width is below 1000px */
+@media screen and (max-width: 1200px) {
+  .searchBarContainer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .buttonContainer {
+    margin-top: 1rem;
+  }
+}
+
 .cardsContainer {
   display: flex;
   flex-wrap: wrap;
@@ -67,9 +85,6 @@
 }
 
 .card {
-  width: calc(
-    50% - 10px
-  ); /* Set the width to 50% of the container minus margin */
   margin-bottom: 1%; /* Add margin between items */
 }
 
