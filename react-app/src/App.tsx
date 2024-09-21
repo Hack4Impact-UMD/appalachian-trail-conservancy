@@ -95,7 +95,7 @@ function App() {
                 </RequireAuth>
               }
             />
-             <Route
+            <Route
               path="/pathways/:id"
               element={
                 <RequireAuth>
