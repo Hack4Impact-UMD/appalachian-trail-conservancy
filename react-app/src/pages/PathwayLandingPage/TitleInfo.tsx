@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import styles from "./TitleInfo.module.css";
 
 interface TitleInfoProps {
@@ -11,15 +12,25 @@ const TitleInfo: React.FC<TitleInfoProps> = ({ title, description }) => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.blurb}>
+      {/* Profile Icon and Title */}
+      <div className={styles.header}>
+        <h1 className={styles.nameHeading}>{title}</h1>
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className={styles.blurbButton}
+          className={styles.arrowButton}
         >
-          {isOpen ? "Hide Description" : "Show Description"}
+          {isOpen ? "▲" : "▼"} {/* Change arrow direction based on state */}
         </button>
-        {isOpen && <p className={styles.description}>{description}</p>}
+        <ProfileIcon />
       </div>
+
+      {/* Blurb Section */}
+      {isOpen && (
+        <div className={styles.blurb}>
+          <strong className={styles.blurbButton}>Blurb</strong>
+          <p className={styles.description}>{description}</p>
+        </div>
+      )}
     </div>
   );
 };

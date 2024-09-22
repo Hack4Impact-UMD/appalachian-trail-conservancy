@@ -1,0 +1,28 @@
+.pageContainer {
+  display: flex;
+  height: 100vh;
+}
+
+.content {
+  flex-grow: 1;
+  padding: 20px; /* This can remain or be adjusted */
+  background-color: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.nameHeading {
+  color: var(--forest-green);
+  font-size: 3rem;
+  margin: 0;
+  margin-left: 15px;
+}
