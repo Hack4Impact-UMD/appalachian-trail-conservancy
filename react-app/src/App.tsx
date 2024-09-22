@@ -23,8 +23,6 @@ import OldPathwayLandingPage from "./pages/OldPathwayLandingPage/OldPathwayLandi
 
 function App() {
   return (
-    <PathwayLandingPage />
-    /*
     <ThemeProvider theme={theme}>
       <AuthProvider>
         <HashRouter>
@@ -135,7 +133,6 @@ function App() {
         </HashRouter>
       </AuthProvider>
     </ThemeProvider>
-    */
   );
 }
 
