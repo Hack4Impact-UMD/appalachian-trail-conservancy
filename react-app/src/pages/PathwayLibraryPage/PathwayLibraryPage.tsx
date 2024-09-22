@@ -128,7 +128,8 @@ function PathwayLibrary() {
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        style={{ left: navigationBarOpen ? "250px" : "0" }}
+      >
         <div className={styles.outerContainer}>
           <div className={styles.content}>
             <div className={styles.header}>
@@ -155,7 +156,8 @@ function PathwayLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("all")}>
+                  onClick={() => setFilterType("all")}
+                >
                   All
                 </Button>
                 <Button
@@ -165,7 +167,8 @@ function PathwayLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("inProgress")}>
+                  onClick={() => setFilterType("inProgress")}
+                >
                   In Progress
                 </Button>
                 <Button
@@ -175,7 +178,8 @@ function PathwayLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("completed")}>
+                  onClick={() => setFilterType("completed")}
+                >
                   Completed
                 </Button>
               </div>

@@ -19,9 +19,12 @@ import QuizPage from "./pages/QuizPage/QuizPage.tsx";
 import QuizResult from "./pages/QuizResultPage/QuizResultPage.tsx";
 import QuizLandingPage from "./pages/QuizLandingPage/QuizLandingPage.tsx";
 import PathwayLibrary from "./pages/PathwayLibraryPage/PathwayLibraryPage.tsx";
+import OldPathwayLandingPage from "./pages/OldPathwayLandingPage/OldPathwayLandingPage.tsx";
 
 function App() {
   return (
+    <PathwayLandingPage />
+    /*
     <ThemeProvider theme={theme}>
       <AuthProvider>
         <HashRouter>
@@ -132,6 +135,7 @@ function App() {
         </HashRouter>
       </AuthProvider>
     </ThemeProvider>
+    */
   );
 }
 
