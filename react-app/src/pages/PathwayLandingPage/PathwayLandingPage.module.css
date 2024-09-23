@@ -1,3 +1,20 @@
+/* split screen in two */
+.split {
+  height: 100%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  transition: left 0.3s ease; /* Add transition for smooth animation */
+}
+
+.right {
+  right: 0;
+  left: 250px;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
 .pageContainer {
   display: flex;
   height: 100vh;
@@ -13,7 +30,6 @@
   justify-content: flex-start;
 }
 
-
 .header {
   display: flex;
   align-items: center;
@@ -28,5 +44,7 @@
 }
 
 .pathwayTiles {
-
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
 }
