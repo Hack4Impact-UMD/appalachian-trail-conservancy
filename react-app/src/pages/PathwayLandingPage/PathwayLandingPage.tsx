@@ -8,6 +8,8 @@ import { VolunteerPathway } from "../../types/UserType";
 import { PathwayID } from "../../types/PathwayType";
 import { useAuth } from "../../auth/AuthProvider";
 import Loading from "../../components/LoadingScreen/Loading";
+import { getTraining } from "../../backend/FirestoreCalls";
+import { TrainingID } from "../../types/TrainingType";
 
 const PathwayLandingPage: React.FC = () => {
   const auth = useAuth();
@@ -15,7 +17,7 @@ const PathwayLandingPage: React.FC = () => {
   const location = useLocation();
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
   const [divWidth, setDivWidth] = useState<number>();
-  const [loading, setLoading] = useState<boolean>(true);
+  const [trainings, setTrainings] = useState<TrainingID[]>([]);
 
   {
     /*
@@ -44,6 +46,12 @@ const PathwayLandingPage: React.FC = () => {
     badgeImage: "",
   });
 
+  const fetchTrainings = async () => {
+    const trainingPromises = pathway.trainingIDs.map(getTraining);
+    const fetchedTrainings = await Promise.all(trainingPromises);
+    setTrainings(fetchedTrainings);
+  };
+
   // Can this be done better?
   // Gets the current pathway id from url, url in form: .../pathways/<ID#>
   //const pathwayId = window.location.href.substring(
@@ -62,14 +70,14 @@ const PathwayLandingPage: React.FC = () => {
     // not retrieving volunteer pathway information yet
     if (location.state.pathway) {
       setPathway(location.state.pathway);
-      setLoading(false);
+      fetchTrainings(); // set trainings to the list of trainingIDs
     } else {
       navigate("/pathways");
     }
     if (div.current) {
       setDivWidth(div.current.offsetWidth);
     }
-  }, []);
+  }, [pathway.trainingIDs]);
 
   return (
     <>
@@ -78,28 +86,21 @@ const PathwayLandingPage: React.FC = () => {
         className={`${styles.split} ${styles.right}`}
         style={{ left: navigationBarOpen ? "250px" : "0" }}
       >
-        {loading ? (
-          <Loading />
-        ) : (
-          <div className={styles.pageContainer}>
-            <div className={styles.content}>
-              <TitleInfo
-                title={pathway.name}
-                description={pathway.shortBlurb}
-              />
+        <div className={styles.pageContainer}>
+          <div className={styles.content}>
+            <TitleInfo title={pathway.name} description={pathway.shortBlurb} />
 
-              {/* Pathway Tiles Section */}
-              <div className={styles.pathwayTiles} ref={div}>
-                {/* console.log(divWidth)*/}
+            {/* Pathway Tiles Section */}
+            <div className={styles.pathwayTiles} ref={div}>
+              {/* console.log(divWidth)*/}
 
-                {pathway.trainingIDs.map((trainingID, index) => (
-                  /*how to pass in training ID???*/
-                  <PathwayTile tileNum={index + 1} trainingID={trainingID} />
-                ))}
-              </div>
+              {/* Render the Pathway tiles */}
+              {trainings.map((trainingData, index) => (
+                <PathwayTile tileNum={index + 1} trainingID={trainingData} />
+              ))}
             </div>
           </div>
-        )}
+        </div>
       </div>
     </>
   );
