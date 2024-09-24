@@ -16,7 +16,7 @@ const PathwayLandingPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
-  const [divWidth, setDivWidth] = useState<number>();
+  const [divWidth, setDivWidth] = useState<number>(0);
   const [trainings, setTrainings] = useState<TrainingID[]>([]);
 
   {
@@ -52,18 +52,8 @@ const PathwayLandingPage: React.FC = () => {
     setTrainings(fetchedTrainings);
   };
 
-  // Can this be done better?
-  // Gets the current pathway id from url, url in form: .../pathways/<ID#>
-  //const pathwayId = window.location.href.substring(
-  //  window.location.href.length - 20,
-  //  window.location.href.length
-  //);
-
   const div = useRef<HTMLDivElement>(null);
-
-  const trainingNum = 5;
   const imgSize = 55;
-  const width = divWidth;
 
   useEffect(() => {
     // get data from nav state
@@ -74,9 +64,14 @@ const PathwayLandingPage: React.FC = () => {
     } else {
       navigate("/pathways");
     }
-    if (div.current) {
-      setDivWidth(div.current.offsetWidth);
-    }
+    const getWidth = () => {
+      if (div.current)
+        setDivWidth(div.current.offsetWidth);      
+    };
+    window.addEventListener("resize", getWidth);
+    return () => window.removeEventListener("resize", getWidth);
+
+    
   }, [pathway.trainingIDs]);
 
   return (
@@ -96,8 +91,11 @@ const PathwayLandingPage: React.FC = () => {
 
               {/* Render the Pathway tiles */}
               {trainings.map((trainingData, index) => (
-                <PathwayTile tileNum={index + 1} trainingID={trainingData} />
+                <PathwayTile tileNum={index + 1} trainingID={trainingData} space={divWidth} count={trainings.length}
+                />
+                
               ))}
+              {console.log("Width " + divWidth + "\nlength " + trainings.length)}
             </div>
           </div>
         </div>
