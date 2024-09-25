@@ -58,21 +58,27 @@ const PathwayLandingPage: React.FC = () => {
   useEffect(() => {
     // get data from nav state
     // not retrieving volunteer pathway information yet
+    // do the bookmark case - get the pathway id from the url in the browser
     if (location.state.pathway) {
       setPathway(location.state.pathway);
       fetchTrainings(); // set trainings to the list of trainingIDs
     } else {
       navigate("/pathways");
     }
-    const getWidth = () => {
-      if (div.current)
-        setDivWidth(div.current.offsetWidth);      
-    };
-    window.addEventListener("resize", getWidth);
-    return () => window.removeEventListener("resize", getWidth);
-
-    
   }, [pathway.trainingIDs]);
+
+  //console.log("Width " + divWidth + "\nlength " + trainings.length);
+  useEffect(() => {
+    // when the component gets mounted
+    if (div.current) setDivWidth(div.current.offsetWidth);
+    // to handle page resize
+    const getwidth = () => {
+      if (div.current) setDivWidth(div.current.offsetWidth);
+    };
+    window.addEventListener("resize", getwidth);
+    // remove the event listener before the component gets unmounted
+    return () => window.removeEventListener("resize", getwidth);
+  }, []);
 
   return (
     <>
@@ -88,14 +94,23 @@ const PathwayLandingPage: React.FC = () => {
             {/* Pathway Tiles Section */}
             <div className={styles.pathwayTiles} ref={div}>
               {/* console.log(divWidth)*/}
-
               {/* Render the Pathway tiles */}
               {trainings.map((trainingData, index) => (
-                <PathwayTile tileNum={index + 1} trainingID={trainingData} space={divWidth} count={trainings.length}
+                <PathwayTile
+                  tileNum={index + 1}
+                  trainingID={trainingData}
+                  space={divWidth}
+                  count={trainings.length}
                 />
-                
-              ))}
-              {console.log("Width " + divWidth + "\nlength " + trainings.length)}
+              ))}{" "}
+              {/* for loop + 1 */}
+              <PathwayTile
+                tileNum={1}
+                space={divWidth}
+                count={trainings.length}
+              />
+              {/* for loop - even row do 1 2 3, odd row do 6 4 5, etc  */}
+              {divWidth}
             </div>
           </div>
         </div>

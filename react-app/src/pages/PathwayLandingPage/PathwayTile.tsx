@@ -16,30 +16,32 @@ import { TrainingID } from "../../types/TrainingType";
 
 interface PathwayTileProps {
   tileNum: number;
-  trainingID: TrainingID;
+  trainingID?: TrainingID;
   space: number;
   count: number;
 }
 
 function getImage(x, y, row) {
   if (row == 1) {
-
-
+  } else {
   }
-  else {
-
-
-  } 
 }
 
-const PathwayTile: React.FC<PathwayTileProps> = ({ tileNum, trainingID, space, count }) => {
+const PathwayTile: React.FC<PathwayTileProps> = ({
+  tileNum,
+  trainingID,
+  space,
+  count,
+}) => {
   const [openTrainingPopup, setOpenTrainingPopup] = useState<boolean>(false);
   const imgWidth = 429;
 
-  const imagesPerRow = (space / imgWidth);
-  const y = (tileNum) / imagesPerRow;
-  const x = y % 2 == 0 ? tileNum % imagesPerRow : imagesPerRow - (tileNum % imagesPerRow) - 1;
-
+  const imagesPerRow = space / imgWidth;
+  const y = tileNum / imagesPerRow;
+  const x =
+    y % 2 == 0
+      ? tileNum % imagesPerRow
+      : imagesPerRow - (tileNum % imagesPerRow) - 1;
 
   return (
     <>
@@ -67,11 +69,15 @@ const PathwayTile: React.FC<PathwayTileProps> = ({ tileNum, trainingID, space, c
           {tileNum}
         </div>
       </div>
-      <TrainingPopup
-        open={openTrainingPopup}
-        onClose={setOpenTrainingPopup}
-        training={trainingID}
-      />
+      {trainingID ? (
+        <TrainingPopup
+          open={openTrainingPopup}
+          onClose={setOpenTrainingPopup}
+          training={trainingID}
+        />
+      ) : (
+        <></>
+      )}
     </>
   );
 };
