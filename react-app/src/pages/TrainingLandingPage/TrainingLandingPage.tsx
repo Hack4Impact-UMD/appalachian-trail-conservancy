@@ -7,6 +7,7 @@ import {
   getVolunteer,
   getTraining,
   getPathway,
+  addVolunteerTraining,
 } from "../../backend/FirestoreCalls";
 import { Button } from "@mui/material";
 import { useAuth } from "../../auth/AuthProvider";
@@ -81,6 +82,7 @@ function TrainingLandingPage() {
       !location.state?.volunteerTraining
     ) {
       setLoading(true);
+
 
       // fetch data if trainingId is available and if auth is finished loading
       if (trainingId !== undefined && !auth.loading && auth.id) {
@@ -203,30 +205,49 @@ function TrainingLandingPage() {
   };
 
   const renderButton = () => {
-    if (
-      volunteerTraining.trainingID === "" ||
-      (volunteerTraining && volunteerTraining.numCompletedResources === 0)
-    ) {
+    if (volunteerTraining.trainingID === "" ) {
       return (
         <Button
           sx={{ ...forestGreenButton }}
           variant="contained"
-          onClick={() =>
-            navigate(`/trainings/resources`, {
-              state: {
-                training: training,
-                volunteerTraining: volunteerTraining,
-                fromApp: true,
-              },
-            })
-          }>
+          onClick={() => {
+            console.log(auth.id.toString())
+            // Call addVolunteerTraining and wait for the result
+            addVolunteerTraining(auth.id.toString(), training)
+              .then(() => {
+                // Retrieve the volunteer data after adding the training
+                return getVolunteer(auth.id.toString());
+              })
+              .then((volunteerData) => {
+                // Extract the relevant volunteerTraining information
+                const updatedVolunteerTraining = volunteerData.trainingInformation.find(
+                  (trainingInfo) => trainingInfo.trainingID === training.id
+                );
+
+                // If updatedVolunteerTraining is found, use it to set volunteerTraining
+                if (updatedVolunteerTraining) {
+                  setVolunteerTraining(updatedVolunteerTraining);
+                  // Navigate to the training resources page after successful addition
+                  navigate(`/trainings/resources`, {
+                    state: {
+                      training: training,
+                      volunteerTraining: updatedVolunteerTraining,
+                      volunteerId: auth.id.toString(),
+                      fromApp: true,
+                    },
+                  });
+                } else{
+                  throw new Error("Couldn't find updatedVolunteerTraining")
+                }
+              })
+              .catch((error) => {
+                console.error("Error adding volunteer training or retrieving volunteer data:", error);
+              });
+          }}>
           Start
         </Button>
       );
-    } else if (
-      volunteerTraining.numCompletedResources ==
-      volunteerTraining.numTotalResources
-    ) {
+    } else if (volunteerTraining.progress == "COMPLETED") {
       return (
         <Button
           sx={{ ...forestGreenButton }}
@@ -236,6 +257,7 @@ function TrainingLandingPage() {
               state: {
                 training: training,
                 volunteerTraining: volunteerTraining,
+                volunteerId: auth.id.toString(),
                 fromApp: true,
               },
             })
@@ -253,6 +275,7 @@ function TrainingLandingPage() {
               state: {
                 training: training,
                 volunteerTraining: volunteerTraining,
+                volunteerId: auth.id.toString(),
                 fromApp: true,
               },
             })
