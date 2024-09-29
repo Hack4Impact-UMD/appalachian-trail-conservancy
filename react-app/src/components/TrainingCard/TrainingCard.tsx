@@ -76,6 +76,7 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
         onClose={setOpenTrainingPopup}
         training={training}
         volunteerTraining={volunteerTraining}
+        mode={'training'} 
       />
     </>
   );

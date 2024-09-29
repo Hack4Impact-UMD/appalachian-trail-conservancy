@@ -4,13 +4,15 @@ import { IoCloseOutline } from "react-icons/io5";
 import { whiteButtonGrayBorder } from "../../muiTheme";
 import { useNavigate } from "react-router-dom";
 import { TrainingID } from "../../types/TrainingType";
-import { VolunteerTraining } from "../../types/UserType";
+import { PathwayID } from "../../types/PathwayType";
+import { VolunteerTraining, VolunteerPathway } from "../../types/UserType";
 
 interface modalPropsType {
   open: boolean;
   onClose: any;
-  training: TrainingID;
-  volunteerTraining?: VolunteerTraining;
+  training: TrainingID | PathwayID;
+  volunteerTraining?: VolunteerTraining | VolunteerPathway;
+  mode: 'training' | 'pathway';
 }
 
 const TrainingPopup = ({
@@ -18,6 +20,7 @@ const TrainingPopup = ({
   onClose,
   training,
   volunteerTraining,
+  mode,
 }: modalPropsType): React.ReactElement => {
   const navigate = useNavigate();
   return (
@@ -39,14 +42,25 @@ const TrainingPopup = ({
                   <Button
                     variant="contained"
                     sx={{ ...whiteButtonGrayBorder, width: "150px" }}
-                    onClick={() =>
-                      navigate(`/trainings/:${training.id}`, {
-                        state: {
-                          training: training,
-                          volunteerTraining: volunteerTraining,
-                        },
-                      })
-                    }
+                    onClick={() => {
+                      if (mode === 'training') {
+                        navigate(`/trainings/${training.id}`, {
+                          state: {
+                            training: training,
+                            volunteerTraining: volunteerTraining,
+                          },
+                        });
+                      } else if (mode === 'pathway') {
+                        navigate(`/pathways/${training.id}`, {
+                          state: {
+                            pathway: training,
+                            volunteerPathway: volunteerTraining,
+                          },
+                        });
+                      } else {
+                        console.error("Unknown mode");
+                      }
+                    }}
                   >
                     Learn More
                   </Button>
