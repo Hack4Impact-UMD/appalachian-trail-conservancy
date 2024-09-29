@@ -19,6 +19,8 @@ import QuizPage from "./pages/QuizPage/QuizPage.tsx";
 import QuizResult from "./pages/QuizResultPage/QuizResultPage.tsx";
 import QuizLandingPage from "./pages/QuizLandingPage/QuizLandingPage.tsx";
 import PathwayLibrary from "./pages/PathwayLibraryPage/PathwayLibraryPage.tsx";
+import RegistrationPage from "./pages/RegistrationPage/RegistrationPage/RegistrationPage.tsx";
+import RegistrationConfirmationPage from "./pages/RegistrationPage/RegistrationConfirmationPage/RegistrationConfirmationPage.tsx";
 
 function App() {
   return (
@@ -30,6 +32,8 @@ function App() {
             <Route path="/login/volunteer" element={<VolunteerLoginPage />} />
             <Route path="/login/admin" element={<AdminLoginPage />} />
             <Route path="/logout" element={<LogoutPage />} />
+            <Route path="/registration" element={<RegistrationPage />} />
+            <Route path="/registration-confirmation" element={<RegistrationConfirmationPage />} />
 
             <Route
               path="/"
