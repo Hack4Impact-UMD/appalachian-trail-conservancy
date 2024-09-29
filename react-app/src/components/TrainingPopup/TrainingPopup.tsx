@@ -42,25 +42,14 @@ const TrainingPopup = ({
                   <Button
                     variant="contained"
                     sx={{ ...whiteButtonGrayBorder, width: "150px" }}
-                    onClick={() => {
-                      if (mode === 'training') {
-                        navigate(`/trainings/${training.id}`, {
-                          state: {
-                            training: training,
-                            volunteerTraining: volunteerTraining,
-                          },
-                        });
-                      } else if (mode === 'pathway') {
-                        navigate(`/pathways/${training.id}`, {
-                          state: {
-                            pathway: training,
-                            volunteerPathway: volunteerTraining,
-                          },
-                        });
-                      } else {
-                        console.error("Unknown mode");
-                      }
-                    }}
+                    onClick={() => 
+                      navigate(mode === 'training'? `/trainings/${training.id}` : `/pathways/${training.id}`, {
+                        state: {
+                          training: training,
+                          volunteerTraining: volunteerTraining,
+                        },
+                      })
+                    }
                   >
                     Learn More
                   </Button>
