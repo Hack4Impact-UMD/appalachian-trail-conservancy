@@ -37,6 +37,7 @@ function RegistrationConfirmationPage() {
 
               <div className={styles.contentContainer}><h1 className={styles.heading}>Thanks for registering!</h1></div>
               <div className={styles.contentContainer}><img src={greenCheck} className={styles.checkmark} alt="Green Check" /></div>
+              <div className={styles.contentContainer}><p>Please check your email for confirmation.</p></div>
 
               {/* continue button */}
               <div className={`${styles.centered} ${styles.contentContainer}`}>

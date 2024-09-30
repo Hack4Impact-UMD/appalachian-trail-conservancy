@@ -3,10 +3,16 @@
   min-height: 100vh;
 }
 
+/* top image container */
 .top {
   background-size: cover;
   overflow: hidden;
   height: 18vh;
+}
+
+/* top image */
+.loginBanner {
+  margin: -580px 0 0 0;
 }
 
 .bottom {
@@ -27,10 +33,7 @@
 }
 
 .contentContainer {
-  margin: 1rem;
-}
-.loginBanner {
-  margin: -580px 0 0 0;
+  margin: .5rem;
 }
 
 /* Admin */
@@ -52,9 +55,19 @@
   cursor: pointer;
 }
 
+/* checkmark sizing */
 .checkmark {
   width: 200px;
   height: auto;
+}
+
+/* checking email text */
+p {
+  font-size: 1.1rem;
+  color: --var(--blue-gray);
+  font-weight: bold;
+  margin-top: 1.12rem;
+  margin-bottom: .3rem;
 }
 
 /* mobile */

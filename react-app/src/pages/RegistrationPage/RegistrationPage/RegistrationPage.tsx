@@ -7,18 +7,18 @@ import {
   Button,
   Tooltip,
   TextField,
+  createTheme,
+  makeStyles,
 } from "@mui/material";
+
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { forestGreenButton, grayBorderTextField } from "../../../muiTheme.ts";
 import { styledRectButton } from "../../LoginPage/LoginPage.tsx";
 import { Navigate } from "react-router";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../auth/AuthProvider.tsx";
-import { authenticateUserEmailAndPassword } from "../../../backend/AuthFunctions.ts";
-import { AuthError } from "firebase/auth";
 import styles from "./RegistrationPage.module.css";
 import Loading from "../../../components/LoadingScreen/Loading.tsx";
-import primaryLogo from "../../assets/atc-primary-logo.png";
 import loginBanner from "../../../assets/login-banner.jpeg";
 import { IoIosInformationCircleOutline } from "react-icons/io";
 
@@ -31,17 +31,9 @@ function RegistrationPage() {
 
   const navigate = useNavigate();
 
-  //Add Forgot Password Popup
-  const [openForgotModal, setOpenForgotModal] = useState<boolean>(false);
-  const handleOpenForgotModal = () => {
-    setOpenForgotModal(true);
-  };
-  const handleCloseForgotModal = () => {
-    setOpenForgotModal(false);
-  };
   const [showLoading, setShowLoading] = useState<boolean>(false);
+
   //Add Error Handling
-  const [failureMessage, setFailureMessage] = useState<string>("");
   const [invalidEmail, setInvalidEmail] = useState<boolean>(false);
   const [invalidCode, setInvalidCode] = useState<boolean>(false);
 
@@ -80,9 +72,12 @@ function RegistrationPage() {
         />
       </div>
       <div className={styles.centered}>
+
         {/* welcome header */}
         <h1 className={styles.heading}>Welcome! New users register here.</h1>
         <form onSubmit={handleConfirm}>
+
+        <FormControl>
           {/* first name field */}
           <div className={styles.alignLeft}>
             <h3 className={styles.label}>First Name</h3>
@@ -123,9 +118,13 @@ function RegistrationPage() {
           <TextField
             variant="outlined"
             sx={{
-              ...grayBorderTextField,
-              "&.hover": {
-                backgroundColor: "red", 
+              width: 350,
+              fontSize: '1.1rem',
+              height: 48,
+              borderRadius: '10px',
+              border: invalidEmail ? '2px solid #d32f2f' : '2px solid var(--blue-gray)',
+              '& fieldset': {
+                border: 'none',
               },
             }}
             error={invalidEmail} 
@@ -141,11 +140,21 @@ function RegistrationPage() {
             <h3 className={styles.label}>Join Code</h3>
           </div>
             <TextField
-              sx={grayBorderTextField}
+               sx={{
+                width: 350,
+                fontSize: '1.1rem',
+                height: 48,
+                borderRadius: '10px',
+                border: invalidCode ? '2px solid #d32f2f' : '2px solid var(--blue-gray)',
+                '& fieldset': {
+                  border: 'none',
+                },
+              }}
               onChange={(event) => {
                 setJoinCode(event.target.value);
               }}
             />
+          </FormControl>
 
           {/* submit button */}
           <div className={`${styles.alignLeft} ${styles.button}`}>
@@ -160,14 +169,6 @@ function RegistrationPage() {
             </Button>
           </div>
 
-          {/* error message */}
-          <p
-            className={
-              failureMessage ? styles.showFailureMessage : styles.errorContainer
-            }
-          >
-            {failureMessage}
-          </p>
         </form>
 
         {/* switch to sign in */}
