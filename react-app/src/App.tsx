@@ -19,8 +19,13 @@ import QuizPage from "./pages/QuizPage/QuizPage.tsx";
 import QuizResult from "./pages/QuizResultPage/QuizResultPage.tsx";
 import QuizLandingPage from "./pages/QuizLandingPage/QuizLandingPage.tsx";
 import PathwayLibrary from "./pages/PathwayLibraryPage/PathwayLibraryPage.tsx";
+import { useAuth } from "./auth/AuthProvider.tsx";
+
+import { updateVolunteerTraining } from "./backend/FirestoreCalls.ts";
 
 function App() {
+  const auth = useAuth();
+
   return (
     <ThemeProvider theme={theme}>
       <AuthProvider>
@@ -95,7 +100,7 @@ function App() {
                 </RequireAuth>
               }
             />
-             <Route
+            <Route
               path="/pathways/:id"
               element={
                 <RequireAuth>
@@ -124,7 +129,26 @@ function App() {
               path="/testfunctions"
               element={
                 <RequireAuth>
-                  <button onClick={() => {}}>TEST</button>
+                  <button
+                    onClick={() => {
+                      updateVolunteerTraining("ZpfkIPPdBuaeA6iFyhaR", {
+                        trainingID: "kjhasdkjfhajkfhak",
+                        progress: "INPROGRESS",
+                        dateCompleted: "09-30-2024",
+                        numCompletedResources: 90,
+                        numTotalResources: 1,
+                        quizScoreRecieved: 2,
+                      })
+                        .then(() => {
+                          console.log("success");
+                        })
+                        .catch((error) => {
+                          console.log(error);
+                        });
+                    }}
+                  >
+                    TEST
+                  </button>
                 </RequireAuth>
               }
             />
