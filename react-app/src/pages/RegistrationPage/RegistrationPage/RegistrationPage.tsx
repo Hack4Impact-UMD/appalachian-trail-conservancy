@@ -1,17 +1,11 @@
 import { useState } from "react";
 import {
   FormControl,
-  IconButton,
-  InputAdornment,
-  OutlinedInput,
   Button,
   Tooltip,
   TextField,
-  createTheme,
-  makeStyles,
 } from "@mui/material";
 
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { forestGreenButton, grayBorderTextField } from "../../../muiTheme.ts";
 import { styledRectButton } from "../../LoginPage/LoginPage.tsx";
 import { Navigate } from "react-router";
@@ -24,7 +18,7 @@ import { IoIosInformationCircleOutline } from "react-icons/io";
 
 function RegistrationPage() {
   const { user } = useAuth();
-  // If user is logged in, navigate to Dashboard
+  // If user is logged in, navigate to Dashboard (?)
   if (user) {
     return <Navigate to="/" />;
   }
@@ -44,11 +38,13 @@ function RegistrationPage() {
 
   const isFormValid = firstName && lastName && email && joinCode;
 
+  //Check if email is valid
   const validateEmail = (email: string) => {
     const pattern = /^\S+@\S+$/;
     return pattern.test(email);
   };
 
+  //Handle confirm button click
   const handleConfirm = async (event: any) => {
     event.preventDefault();
     setShowLoading(true);
@@ -57,13 +53,15 @@ function RegistrationPage() {
       setInvalidEmail(true);
     } else {
       setShowLoading(false);
-      navigate("/registration-confirmation");
+      navigate("/registration-confirmation"); /* proceed to confirmation */
     }
     setShowLoading(false);
   };
 
   return (
     <div className={styles.pageContainer}>
+
+       {/* banner image */}
       <div className={styles.top}>
         <img
           src={loginBanner}
@@ -71,6 +69,8 @@ function RegistrationPage() {
           alt="Login Image"
         />
       </div>
+
+       {/* form input */}
       <div className={styles.centered}>
 
         {/* welcome header */}
@@ -107,9 +107,18 @@ function RegistrationPage() {
             <h3 className={styles.label}>Email</h3>
             <Tooltip
               title="Use your ATC volunteer email here."
-              arrow
-              placement="right"
-            >
+              arrow={false}
+              placement="right"  
+              componentsProps={{
+                tooltip: {
+                  sx: {
+                    bgcolor: 'white',
+                    color: 'black', 
+                    borderRadius: '8px', 
+                    boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.1)',
+                  },
+                },
+              }}         >
               <span className={styles.icon}>
                 <IoIosInformationCircleOutline />
               </span>
@@ -127,12 +136,13 @@ function RegistrationPage() {
                 border: 'none',
               },
             }}
-            error={invalidEmail} 
-            helperText={invalidEmail ? "Invalid email" : ""}
             value={email}
             onChange={(e) => {
               setEmail(e.target.value);
             }}
+            error={invalidEmail} 
+            helperText={invalidEmail ? "Invalid email" : ""}
+            FormHelperTextProps={{ style: { marginTop: '-0.25rem' }}}
           />
 
           {/* join code field */}
@@ -153,6 +163,9 @@ function RegistrationPage() {
               onChange={(event) => {
                 setJoinCode(event.target.value);
               }}
+              error={invalidCode} 
+              helperText={invalidCode ? "Invalid code" : ""}
+              FormHelperTextProps={{ style: { marginTop: '-0.25rem' }}}
             />
           </FormControl>
 
@@ -168,12 +181,11 @@ function RegistrationPage() {
               {showLoading ? <Loading></Loading> : "Confirm"}
             </Button>
           </div>
-
         </form>
 
         {/* switch to sign in */}
         <Link to="/login/" className={styles.switch}>
-          Already have an account? Sign in here!
+          Already have an account? Log in here!
         </Link>
       </div>
     </div>

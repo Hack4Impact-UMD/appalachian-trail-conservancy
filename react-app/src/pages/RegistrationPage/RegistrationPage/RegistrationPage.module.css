@@ -85,10 +85,6 @@
   margin-top: 1.1rem;
 }
 
-.error {
-  background-color: black;
-}
-
 /* mobile */
 @media screen and (max-width: 850px) {
   .left {
