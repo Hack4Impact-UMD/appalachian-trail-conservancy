@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
 import { Button } from "@mui/material";
 import { forestGreenButton } from "../../muiTheme";
-import { useLocation, Navigate, useNavigate } from "react-router-dom";
+import {
+  useLocation,
+  Navigate,
+  useNavigate,
+  unstable_usePrompt,
+} from "react-router-dom";
 import { useAuth } from "../../auth/AuthProvider";
 import { validateQuiz } from "../../backend/FirestoreCalls";
 import { Training } from "../../types/TrainingType";
@@ -67,6 +72,11 @@ function QuizPage() {
       }
     }
   }, []);
+
+  unstable_usePrompt({
+    message: "Are you sure you want to leave? Your progress will not be saved.",
+    when: selectedAnswers.some((answer) => answer !== ""), // Only prompt if there are selected answers
+  });
 
   const handleSubmitQuiz = () => {
     setQuizLoading(true);
@@ -136,7 +146,8 @@ function QuizPage() {
         {/* footer */}
         <div
           className={styles.footer}
-          style={{ width: navigationBarOpen ? "calc(100% - 250px)" : "100%" }}>
+          style={{ width: navigationBarOpen ? "calc(100% - 250px)" : "100%" }}
+        >
           <div className={styles.footerButtons}>
             <Button
               sx={{ ...forestGreenButton }}
