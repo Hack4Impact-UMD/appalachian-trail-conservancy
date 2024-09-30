@@ -5,7 +5,7 @@ import pathwayCard from "../../assets/pathwayCard.svg";
 import { useNavigate } from "react-router-dom";
 import { PathwayID } from "../../types/PathwayType";
 import { VolunteerPathway } from "../../types/UserType";
-import TrainingPopup from "../TrainingPopup/TrainingPopup";
+import PathwayTrainingPopup from "../PathwayTrainingPopup/PathwayTrainingPopup";
 
 interface PathwayCardProps {
   pathway: PathwayID;
@@ -63,7 +63,8 @@ const PathwayCard: React.FC<PathwayCardProps> = ({
             },
           });
         }
-      }}>
+      }}
+    >
       <div className={styles.pathwayImage}>
         <img src={pathwayCard} alt="Pathway" />
       </div>
@@ -74,12 +75,12 @@ const PathwayCard: React.FC<PathwayCardProps> = ({
         </div>
         <div className={styles.progressBar}>{renderMarker()}</div>
       </div>
-      <TrainingPopup
+      <PathwayTrainingPopup
         open={openTrainingPopup}
         onClose={setOpenTrainingPopup}
-        training={pathway}
-        volunteerTraining={volunteerPathway}
-        mode={'pathway'} 
+        record={pathway}
+        volunteerRecord={volunteerPathway}
+        mode={"pathway"}
       />
     </div>
   );
