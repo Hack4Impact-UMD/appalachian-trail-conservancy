@@ -83,7 +83,6 @@ function TrainingLandingPage() {
     ) {
       setLoading(true);
 
-
       // fetch data if trainingId is available and if auth is finished loading
       if (trainingId !== undefined && !auth.loading && auth.id) {
         getTraining(trainingId)
@@ -140,7 +139,8 @@ function TrainingLandingPage() {
                 (index + 1 <= volunteerTraining.numCompletedResources
                   ? styles.opacityContainer
                   : "")
-              }`}>
+              }`}
+            >
               <p className={styles.trainingNumber}>{index + 1}</p>
               <p className={styles.trainingTitle}>{resource.title}</p>
               <p className={styles.trainingType}>{resource.type}</p>
@@ -158,7 +158,8 @@ function TrainingLandingPage() {
                 (volunteerTraining.trainingID !== "" &&
                   volunteerTraining.progress === "INPROGRESS" && (
                     <div
-                      className={`${styles.marker} ${styles.progressMarker}`}>
+                      className={`${styles.marker} ${styles.progressMarker}`}
+                    >
                       IN PROGRESS
                     </div>
                   ))}
@@ -205,13 +206,12 @@ function TrainingLandingPage() {
   };
 
   const renderButton = () => {
-    if (volunteerTraining.trainingID === "" ) {
+    if (volunteerTraining.trainingID === "") {
       return (
         <Button
           sx={{ ...forestGreenButton }}
           variant="contained"
           onClick={() => {
-            console.log(auth.id.toString())
             // Call addVolunteerTraining and wait for the result
             addVolunteerTraining(auth.id.toString(), training)
               .then(() => {
@@ -220,9 +220,10 @@ function TrainingLandingPage() {
               })
               .then((volunteerData) => {
                 // Extract the relevant volunteerTraining information
-                const updatedVolunteerTraining = volunteerData.trainingInformation.find(
-                  (trainingInfo) => trainingInfo.trainingID === training.id
-                );
+                const updatedVolunteerTraining =
+                  volunteerData.trainingInformation.find(
+                    (trainingInfo) => trainingInfo.trainingID === training.id
+                  );
 
                 // If updatedVolunteerTraining is found, use it to set volunteerTraining
                 if (updatedVolunteerTraining) {
@@ -236,14 +237,18 @@ function TrainingLandingPage() {
                       fromApp: true,
                     },
                   });
-                } else{
-                  throw new Error("Couldn't find updatedVolunteerTraining")
+                } else {
+                  throw new Error("Couldn't find updatedVolunteerTraining");
                 }
               })
               .catch((error) => {
-                console.error("Error adding volunteer training or retrieving volunteer data:", error);
+                console.error(
+                  "Error adding volunteer training or retrieving volunteer data:",
+                  error
+                );
               });
-          }}>
+          }}
+        >
           Start
         </Button>
       );
@@ -261,7 +266,8 @@ function TrainingLandingPage() {
                 fromApp: true,
               },
             })
-          }>
+          }
+        >
           Restart
         </Button>
       );
@@ -279,7 +285,8 @@ function TrainingLandingPage() {
                 fromApp: true,
               },
             })
-          }>
+          }
+        >
           Resume
         </Button>
       );
@@ -292,7 +299,8 @@ function TrainingLandingPage() {
 
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        style={{ left: navigationBarOpen ? "250px" : "0" }}
+      >
         {loading ? (
           <Loading />
         ) : (
@@ -323,7 +331,8 @@ function TrainingLandingPage() {
                       (volunteerTraining.progress === "COMPLETED"
                         ? styles.opacityContainer
                         : "")
-                    }`}>
+                    }`}
+                  >
                     <p className={styles.trainingNumber}>
                       {volunteerTraining.numTotalResources + 1}
                     </p>
@@ -357,7 +366,8 @@ function TrainingLandingPage() {
                         onClick={() => {
                           navigate(`/pathways/${pathway.id}`);
                         }}
-                        key={idx}>
+                        key={idx}
+                      >
                         {pathway.name}
                       </div>
                     ))}
@@ -373,12 +383,14 @@ function TrainingLandingPage() {
         {/* footer */}
         <div
           className={styles.footer}
-          style={{ width: navigationBarOpen ? "calc(100% - 250px)" : "100%" }}>
+          style={{ width: navigationBarOpen ? "calc(100% - 250px)" : "100%" }}
+        >
           <div className={styles.footerButtons}>
             <Button
               sx={{ ...whiteButtonGrayBorder }}
               variant="contained"
-              onClick={() => navigate(-1)}>
+              onClick={() => navigate(-1)}
+            >
               Back
             </Button>
             {renderButton()}

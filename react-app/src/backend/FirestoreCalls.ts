@@ -12,7 +12,13 @@ import {
 } from "firebase/firestore";
 import { httpsCallable } from "firebase/functions";
 import { db, functions } from "../config/firebase";
-import { Volunteer, VolunteerID, VolunteerTraining, User, Admin } from "../types/UserType";
+import {
+  Volunteer,
+  VolunteerID,
+  VolunteerTraining,
+  User,
+  Admin,
+} from "../types/UserType";
 import { Training, TrainingID, Quiz } from "../types/TrainingType";
 import { Pathway, PathwayID } from "../types/PathwayType";
 
@@ -368,54 +374,56 @@ export function updateVolunteerTraining(
 
     const volunteerRef = doc(db, "Users", volunteerId);
     getDoc(volunteerRef)
-    .then((volunteerSnapshot) => {
-      if (volunteerSnapshot.exists()) {
-        const volunteer = volunteerSnapshot.data() as Volunteer;
+      .then((volunteerSnapshot) => {
+        if (volunteerSnapshot.exists()) {
+          const volunteer = volunteerSnapshot.data() as Volunteer;
 
-        // Determine if training already exists in volunteer
-        const existingTraining = volunteer.trainingInformation.find(
-          (trainingInfo) => trainingInfo.trainingID === training.trainingID
-        );
-
-        if (existingTraining) {
-          // Update the existing training record with new volunteerTraining data
-          const updatedTrainingInformation = volunteer.trainingInformation.map(
-            (trainingInfo) => {
-              if (trainingInfo.trainingID === training.trainingID) {
-                // Return updated training information
-                return {
-                  ...trainingInfo,
-                  ...training, // Spread the new training data here
-                };
-              }
-              return trainingInfo; // Return unchanged training info for other records
-            }
+          // Determine if training already exists in volunteer
+          const existingTraining = volunteer.trainingInformation.find(
+            (trainingInfo) => trainingInfo.trainingID === training.trainingID
           );
 
-          // Update the volunteer object with the new training information
-          const updatedVolunteer = {
-            ...volunteer,
-            trainingInformation: updatedTrainingInformation,
-          };
+          if (existingTraining) {
+            // Update the existing training record with new volunteerTraining data
+            const updatedTrainingInformation =
+              volunteer.trainingInformation.map((trainingInfo) => {
+                if (trainingInfo.trainingID === training.trainingID) {
+                  // Return updated training information
+                  return {
+                    ...trainingInfo,
+                    ...training, // Spread the new training data here
+                  };
+                }
+                return trainingInfo; // Return unchanged training info for other records
+              });
 
-          // Now, save the updated volunteer object back to Firestore
-          updateDoc(volunteerRef, updatedVolunteer)
-            .then(() => {
-              console.log("Volunteer training updated successfully");
-            })
-            .catch((error) => {
-              console.error("Error updating volunteer training:", error);
-            });
+            // Update the volunteer object with the new training information
+            const updatedVolunteer = {
+              ...volunteer,
+              trainingInformation: updatedTrainingInformation,
+            };
+
+            // Now, save the updated volunteer object back to Firestore
+            updateDoc(volunteerRef, updatedVolunteer)
+              .then(() => {
+                resolve();
+                console.log("Volunteer training updated successfully");
+              })
+              .catch((error) => {
+                reject("Error updating volunteer training:");
+                console.error("Error updating volunteer training:", error);
+              });
+          } else {
+            reject("Training not found in volunteer's training information.");
+          }
         } else {
-          console.log("Training not found in volunteer's training information.");
+          reject("Volunteer does not exist.");
         }
-      } else {
-        console.log("Volunteer does not exist.");
-      }
-    })
-    .catch((error) => {
-      console.error("Error fetching volunteer:", error);
-    });
+      })
+      .catch((error) => {
+        reject("Error fetching volunteer");
+        console.error("Error fetching volunteer:", error);
+      });
   });
 }
 
