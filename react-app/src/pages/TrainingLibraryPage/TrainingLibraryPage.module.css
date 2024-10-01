@@ -27,20 +27,6 @@
   padding-bottom: 3%;
 }
 
-/* For screen widths below 1000px, adjust the content width */
-@media screen and (max-width: 1200px) {
-  .content {
-    width: 600px;
-  }
-}
-
-/* For screen widths below 650px, adjust the content width */
-@media screen and (max-width: 800px) {
-  .content {
-    width: 300px;
-  }
-}
-
 .header {
   display: flex;
   flex-wrap: wrap;
@@ -105,6 +91,23 @@
     width: 1200px;
   }
 }
-/* 
-@media screen and (max-width: 600px) {
-} */
+
+@media screen and (max-width: 650px) {
+  .content {
+    width: 300px;
+  }
+
+  .cardsContainer {
+    justify-content: space-around;
+  }
+}
+
+@media screen and (max-width: 950px) {
+  .content {
+    width: 600px;
+  }
+
+  .cardsContainer {
+    justify-content: space-between;
+  }
+}
