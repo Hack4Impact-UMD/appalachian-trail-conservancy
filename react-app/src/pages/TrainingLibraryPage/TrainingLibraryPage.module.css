@@ -92,16 +92,6 @@
   }
 }
 
-@media screen and (max-width: 650px) {
-  .content {
-    width: 300px;
-  }
-
-  .cardsContainer {
-    justify-content: space-around;
-  }
-}
-
 @media screen and (max-width: 950px) {
   .content {
     width: 600px;
@@ -109,5 +99,15 @@
 
   .cardsContainer {
     justify-content: space-between;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .content {
+    width: 300px;
+  }
+
+  .cardsContainer {
+    justify-content: space-around;
   }
 }
