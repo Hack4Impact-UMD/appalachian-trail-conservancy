@@ -1,5 +1,6 @@
 import styles from "./CertificateCard.module.css";
 import { DateTime } from "luxon";
+import certificateFrame from "/src/assets/certificateFrame.svg";
 
 interface CertificateProps {
   image: string;
@@ -10,13 +11,13 @@ interface CertificateProps {
 const Certificate: React.FC<CertificateProps> = ({ image, title, date }) => {
   // Parse input date
   const parsedDate = DateTime.fromISO(date);
-
-  // re-format
   const formattedDate = parsedDate.toFormat("MMMM dd, yyyy").toUpperCase();
+
   return (
     <div className={styles.certificateCard}>
-      <div className={styles.certificateImage}>
-        <img src={image} alt="Certificate" />
+      <div className={styles.certificateImageWrapper}>
+        <img src={certificateFrame} alt="Certificate Frame" className={styles.certificateFrame} />
+        <img src={image} alt="Certificate" className={styles.certificateImage} />
       </div>
       <div className={styles.certificateDetails}>
         <h2 className={styles.certificateTitle}>{title}</h2>
