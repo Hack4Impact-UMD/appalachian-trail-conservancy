@@ -55,14 +55,28 @@
   gap: 20px;
 }
 
-/* Move filters under the search bar when screen width is below 1000px */
+/* show buttons when screen width is above 1201px */
+@media screen and (min-width: 1201px) {
+  .buttonContainer {
+    display: flex; 
+  }
+  .dropdownContainer {
+    display: none; 
+  }
+}
+
+/* show dropdown when screen width is below 1200px */
 @media screen and (max-width: 1200px) {
   .searchBarContainer {
     flex-direction: column;
     align-items: flex-start;
   }
   .buttonContainer {
-    margin-top: 1rem;
+    display: none;  
+  }
+  .dropdownContainer {
+    display: block; 
+    margin-top: 2%;
   }
 }
 

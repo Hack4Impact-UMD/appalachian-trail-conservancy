@@ -1,10 +1,18 @@
 import { useState, useEffect } from "react";
 import { IoIosSearch } from "react-icons/io";
-import { Button, InputAdornment, OutlinedInput } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  InputAdornment,
+  MenuItem,
+  OutlinedInput,
+  Select,
+} from "@mui/material";
 import {
   forestGreenButtonPadding,
   whiteButtonGrayBorder,
   grayBorderSearchBar,
+  whiteSelectGrayBorder,
 } from "../../muiTheme";
 import { getAllTrainings, getVolunteer } from "../../backend/FirestoreCalls";
 import { TrainingID } from "../../types/TrainingType";
@@ -132,7 +140,8 @@ function TrainingLibrary() {
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        style={{ left: navigationBarOpen ? "250px" : "0" }}
+      >
         <div className={styles.outerContainer}>
           <div className={styles.content}>
             <div className={styles.header}>
@@ -152,6 +161,24 @@ function TrainingLibrary() {
                 }
               />
 
+              {/* dropdown container */}
+              <div className={styles.dropdownContainer}>
+                <FormControl>
+                  <Select
+                    className={styles.dropdownMenu}
+                    sx={whiteSelectGrayBorder}
+                    value={filterType}
+                    onChange={(e) => setFilterType(e.target.value)}
+                    label="Filter"
+                  >
+                    <MenuItem value="all">ALL</MenuItem>
+                    <MenuItem value="inProgress">IN PROGRESS</MenuItem>
+                    <MenuItem value="completed">COMPLETED</MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
+
+              {/* button container */}
               <div className={styles.buttonContainer}>
                 <Button
                   sx={
@@ -160,7 +187,8 @@ function TrainingLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("all")}>
+                  onClick={() => setFilterType("all")}
+                >
                   All
                 </Button>
                 <Button
@@ -170,7 +198,8 @@ function TrainingLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("inProgress")}>
+                  onClick={() => setFilterType("inProgress")}
+                >
                   In Progress
                 </Button>
                 <Button
@@ -180,7 +209,8 @@ function TrainingLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("completed")}>
+                  onClick={() => setFilterType("completed")}
+                >
                   Completed
                 </Button>
               </div>
