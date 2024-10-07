@@ -56,7 +56,7 @@ const PathwayLandingPage: React.FC = () => {
           <div key={j}>
             <PathwayTile
               tileNum={j}
-              trainingID={j >= trainings.length ? trainings[j] : undefined}
+              trainingID={j < trainings.length ? trainings[j] : undefined}
               space={divWidth}
               count={trainings.length}
             />
@@ -71,7 +71,7 @@ const PathwayLandingPage: React.FC = () => {
           <div key={j}>
             <PathwayTile
               tileNum={j}
-              trainingID={j >= trainings.length ? trainings[j] : undefined}
+              trainingID={j < trainings.length ? trainings[j] : undefined}
               space={divWidth}
               count={trainings.length}
             />

@@ -23,36 +23,36 @@ interface PathwayTileProps {
 
 function getImage(imagesPerRow: number, num: number, count: number) {
   // Empty
-  if (num >= count) 
+  if (num > count) 
     return emptyIcon;
   // Straight down
   if (imagesPerRow == 1)
-    return num + 1 == count ? downEndIcon : verticalIcon;
+    return num == count ? downEndIcon : verticalIcon;
   // Not reversed
   if (Math.floor(num / imagesPerRow) % 2 == 0) {
     if ((num + 1) % imagesPerRow == 0) {
-      return num + 1 == count ? leftEndIcon : rightDownIcon;
+      return num == count ? leftEndIcon : rightDownIcon;
     }
     else if (num % imagesPerRow == 0){
       if (num == 0) {
-        return num + 1 == count ? leftEndIcon : horizontalIcon;
+        return horizontalIcon;
       }
       else {
-        return num + 1 == count ? downEndIcon : downRightIcon;
+        return num == count ? downEndIcon : downRightIcon;
       }
     }
-    return num + 1 == count ? leftEndIcon : horizontalIcon;
+    return num == count ? leftEndIcon : horizontalIcon;
   }
   // Reversed
   else {
     if ((num + 1) % imagesPerRow == 0) {
       return num + 1 == count ? rightEndIcon : leftDownIcon;
     }
-    if (num % imagesPerRow == 0) {
-      return num + 1 == count ? downEndIcon : downLeftIcon;
+    else if (num % imagesPerRow == 0) {
+      return num == count ? downEndIcon : downLeftIcon;
     }
 
-    return num + 1 == count ? rightEndIcon : horizontalIcon;
+    return num  == count ? rightEndIcon : horizontalIcon;
   }
 }
 
@@ -92,7 +92,7 @@ const PathwayTile: React.FC<PathwayTileProps> = ({
             fontWeight: "bold",
           }}
         >
-          {image != emptyIcon ? tileNum + 1: ""}
+          {trainingID !=  null ? tileNum + 1: ""}
         </div>
       </div>
       {trainingID ? (
