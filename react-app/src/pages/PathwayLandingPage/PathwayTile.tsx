@@ -21,9 +21,38 @@ interface PathwayTileProps {
   count: number;
 }
 
-function getImage(x, y, row) {
-  if (row == 1) {
-  } else {
+function getImage(imagesPerRow: number, num: number, count: number) {
+  // Empty
+  if (num >= count) 
+    return emptyIcon;
+  // Straight down
+  if (imagesPerRow == 1)
+    return num + 1 == count ? downEndIcon : verticalIcon;
+  // Not reversed
+  if (Math.floor(num / imagesPerRow) % 2 == 0) {
+    if ((num + 1) % imagesPerRow == 0) {
+      return num + 1 == count ? leftEndIcon : rightDownIcon;
+    }
+    else if (num % imagesPerRow == 0){
+      if (num == 0) {
+        return num + 1 == count ? leftEndIcon : horizontalIcon;
+      }
+      else {
+        return num + 1 == count ? downEndIcon : downRightIcon;
+      }
+    }
+    return num + 1 == count ? leftEndIcon : horizontalIcon;
+  }
+  // Reversed
+  else {
+    if ((num + 1) % imagesPerRow == 0) {
+      return num + 1 == count ? rightEndIcon : leftDownIcon;
+    }
+    if (num % imagesPerRow == 0) {
+      return num + 1 == count ? downEndIcon : downLeftIcon;
+    }
+
+    return num + 1 == count ? rightEndIcon : horizontalIcon;
   }
 }
 
@@ -34,14 +63,11 @@ const PathwayTile: React.FC<PathwayTileProps> = ({
   count,
 }) => {
   const [openTrainingPopup, setOpenTrainingPopup] = useState<boolean>(false);
-  const imgWidth = 429;
+  const imgWidth = 300;
 
-  const imagesPerRow = space / imgWidth;
-  const y = tileNum / imagesPerRow;
-  const x =
-    y % 2 == 0
-      ? tileNum % imagesPerRow
-      : imagesPerRow - (tileNum % imagesPerRow) - 1;
+  const imagesPerRow = Math.floor(space / imgWidth);
+  const image = getImage(imagesPerRow, tileNum, count);
+  console.log(tileNum +"num")
 
   return (
     <>
@@ -54,7 +80,7 @@ const PathwayTile: React.FC<PathwayTileProps> = ({
           setOpenTrainingPopup(true);
         }}
       >
-        <img src={horizontalIcon} style={{ width: "100%" }} />
+        <img src={image} style={{ width: "300px" , height: "300px"}} />
         <div
           style={{
             position: "absolute",
@@ -66,7 +92,7 @@ const PathwayTile: React.FC<PathwayTileProps> = ({
             fontWeight: "bold",
           }}
         >
-          {tileNum}
+          {image != emptyIcon ? tileNum + 1: ""}
         </div>
       </div>
       {trainingID ? (
