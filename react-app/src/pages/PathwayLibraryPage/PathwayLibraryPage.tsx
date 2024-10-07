@@ -41,6 +41,20 @@ function PathwayLibrary() {
   >([]);
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
 
+  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
+
+  // Update screen width on resize
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const filterPathways = (
     pathways?: {
       genericPathway: PathwayID;
@@ -137,7 +151,10 @@ function PathwayLibrary() {
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}
+        style={{
+          // Only apply left shift when screen width is greater than 1200px
+          left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
+        }}
       >
         <div className={styles.outerContainer}>
           <div className={styles.content}>

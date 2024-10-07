@@ -56,6 +56,33 @@
   gap: 20px;
 }
 
+.cardsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  row-gap: 1rem;
+  column-gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.card {
+  margin-bottom: 1%;
+}
+
+.emptySearchMessage {
+  width: 100%;
+  font-weight: bold;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+
+@media screen and (min-width: 1500px) {
+  .content {
+    width: 1200px;
+  }
+}
+
 /* show buttons when screen width is above 1201px */
 @media screen and (min-width: 1201px) {
   .buttonContainer {
@@ -79,32 +106,6 @@
   .dropdownContainer {
     display: block; 
     margin-top: 2%;
-  }
-}
-
-.cardsContainer {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  row-gap: 1rem;
-  column-gap: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-.card {
-  margin-bottom: 1%;
-}
-
-.emptySearchMessage {
-  width: 100%;
-  font-weight: bold;
-  text-align: center;
-  font-size: 1.1rem;
-}
-
-@media screen and (min-width: 1500px) {
-  .content {
-    width: 1200px;
   }
 }
 
