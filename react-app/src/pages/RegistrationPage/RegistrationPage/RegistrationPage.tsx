@@ -4,6 +4,8 @@ import {
   Button,
   Tooltip,
   TextField,
+  OutlinedInput,
+  FormHelperText,
 } from "@mui/material";
 
 import { forestGreenButton, grayBorderTextField } from "../../../muiTheme.ts";
@@ -82,7 +84,7 @@ function RegistrationPage() {
           <div className={styles.alignLeft}>
             <h3 className={styles.label}>First Name</h3>
           </div>
-          <TextField
+          <OutlinedInput
             value={firstName}
             sx={grayBorderTextField}
             onChange={(event) => {
@@ -94,7 +96,7 @@ function RegistrationPage() {
           <div className={styles.alignLeft}>
             <h3 className={styles.label}>Last Name</h3>
           </div>
-          <TextField
+          <OutlinedInput
             value={lastName}
             sx={grayBorderTextField}
             onChange={(event) => {
@@ -124,8 +126,7 @@ function RegistrationPage() {
               </span>
             </Tooltip>
           </div>
-          <TextField
-            variant="outlined"
+          <OutlinedInput
             sx={{
               width: 350,
               fontSize: '1.1rem',
@@ -141,15 +142,15 @@ function RegistrationPage() {
               setEmail(e.target.value);
             }}
             error={invalidEmail} 
-            helperText={invalidEmail ? "Invalid email" : ""}
-            FormHelperTextProps={{ style: { marginTop: '-0.25rem' }}}
           />
-
+          {invalidEmail && (
+          <FormHelperText error>Invalid email</FormHelperText>
+          )}
           {/* join code field */}
           <div className={styles.alignLeft}>
             <h3 className={styles.label}>Join Code</h3>
           </div>
-            <TextField
+            <OutlinedInput
                sx={{
                 width: 350,
                 fontSize: '1.1rem',
@@ -164,8 +165,6 @@ function RegistrationPage() {
                 setJoinCode(event.target.value);
               }}
               error={invalidCode} 
-              helperText={invalidCode ? "Invalid code" : ""}
-              FormHelperTextProps={{ style: { marginTop: '-0.25rem' }}}
             />
           </FormControl>
 
