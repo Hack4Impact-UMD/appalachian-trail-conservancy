@@ -19,6 +19,9 @@ import QuizPage from "./pages/QuizPage/QuizPage.tsx";
 import QuizResult from "./pages/QuizResultPage/QuizResultPage.tsx";
 import QuizLandingPage from "./pages/QuizLandingPage/QuizLandingPage.tsx";
 import PathwayLibrary from "./pages/PathwayLibraryPage/PathwayLibraryPage.tsx";
+import PathwayQuizLandingPage from "./pages/PathwayQuizLandingPage/PathwayQuizLandingPage.tsx";
+import PathwayQuizPage from "./pages/PathwayQuizPage/PathwayQuizPage.tsx";
+import { updateSamplePathway } from "./backendTesting/test.ts";
 
 function App() {
   return (
@@ -95,11 +98,27 @@ function App() {
                 </RequireAuth>
               }
             />
-             <Route
+            <Route
               path="/pathways/:id"
               element={
                 <RequireAuth>
                   <PathwayLandingPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/pathways/quizlanding"
+              element={
+                <RequireAuth>
+                  <PathwayQuizLandingPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/pathways/quiz"
+              element={
+                <RequireAuth>
+                  <PathwayQuizPage />
                 </RequireAuth>
               }
             />

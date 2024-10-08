@@ -3,6 +3,7 @@ import {
   addPathway,
   getAllTrainings,
   getAllPathways,
+  updatePathway,
   addVolunteerTraining,
   addVolunteerPathway,
 } from "../backend/FirestoreCalls";
@@ -218,5 +219,57 @@ export const addSampleVolunteerPathway = () => {
     })
     .catch((error) => {
       console.error("Error adding volunteer pathway:", error);
+    });
+};
+
+export const updateSamplePathway = () => {
+  updatePathway(
+    {
+      name: "Organizational Leadership Best Practices",
+      description:
+        "This self-paced online training includes a guide for planning and running effective meetings. From planning and preparation, tools for effectively conducting the meetings, and providing closure and follow-up, this course is a helpful tool for A.T.-maintaining clubs and Communities. This training is distributed as a resource booklet.",
+      shortBlurb:
+        "Intended for A.T. Club leaders, this webinar covers best practices of organizational leadership to benefit their organization. Self-paced online training in five chapters, total running time 1 hour 5 minutes.",
+      coverImage:
+        "https://media.newyorker.com/photos/5c0195240591e72cf6b59d12/1:1/w_1465,h_1465,c_limit/Duke-Spongebob_01.jpg",
+      trainingIDs: [
+        "lmLRWvZqwPdtarb6UDXX",
+        "wJ3Nh6Jjqz3EA0qQ8aNy",
+        "hv8UZJU8VIy8HB9NsajS",
+      ],
+      quiz: {
+        questions: [
+          {
+            question: "What is the best leadership practice?",
+            choices: [
+              "Kicking people",
+              "Listening to others",
+              "Having patience",
+            ],
+            answer: "Having patience",
+          },
+          {
+            question: "How can an effective meeting be organized?",
+            choices: [
+              "Asking someone else to plan it for you",
+              "Using Notion to have a team plan it for you",
+              "Hoping everything works out",
+            ],
+            answer: "Hoping everything works out",
+          },
+        ],
+        numQuestions: 2,
+        passingScore: 2,
+      },
+      badgeImage:
+        "https://github.com/Hack4Impact-UMD/y-knot/assets/67646012/fd89b897-4d20-4604-93a4-c28370cbdc2e",
+    },
+    "R8inCysiACE7bk1zy3y8"
+  )
+    .then(() => {
+      console.log("Pathway updated successfully.");
+    })
+    .catch((error) => {
+      console.error("Error updating pathway:", error);
     });
 };
