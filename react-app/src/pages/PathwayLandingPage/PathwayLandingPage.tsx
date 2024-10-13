@@ -8,12 +8,14 @@ import { VolunteerPathway } from "../../types/UserType";
 import { PathwayID } from "../../types/PathwayType";
 import { useAuth } from "../../auth/AuthProvider";
 import Loading from "../../components/LoadingScreen/Loading";
-import { getTraining } from "../../backend/FirestoreCalls";
+import { getPathway, getTraining } from "../../backend/FirestoreCalls";
 import { TrainingID } from "../../types/TrainingType";
+import { useParams } from "react-router-dom";
 import { WidthFull } from "@mui/icons-material";
 
 const PathwayLandingPage: React.FC = () => {
   const auth = useAuth();
+  const pathwayId = useParams().id;
   const navigate = useNavigate();
   const location = useLocation();
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
@@ -34,12 +36,6 @@ const PathwayLandingPage: React.FC = () => {
     },
     badgeImage: "",
   });
-
-  const fetchTrainings = async () => {
-    const trainingPromises = pathway.trainingIDs.map(getTraining);
-    const fetchedTrainings = await Promise.all(trainingPromises);
-    setTrainings(fetchedTrainings);
-  };
 
   const div = useRef<HTMLDivElement>(null);
 
@@ -80,20 +76,40 @@ const PathwayLandingPage: React.FC = () => {
       }
     }
     count += imagesPerRow;
-    console.log();
+    //console.log();
   }
 
   useEffect(() => {
-    // get data from nav state
-    // not retrieving volunteer pathway information yet
-    // do the bookmark case - get the pathway id from the url in the browser
-    if (location.state.pathway) {
-      setPathway(location.state.pathway);
-      fetchTrainings(); // set trainings to the list of trainingIDs
+    // get pathway if not coming from in app
+    if (pathwayId !== undefined && !location.state?.pathway) {
+      if (pathwayId !== undefined && !auth.loading && auth.id) {
+        getPathway(pathwayId)
+          .then((pathwayData) => {
+            setPathway(pathwayData);
+          })
+          .catch(() => {
+            console.log("Failed to get pathway");
+          });
+      }
     } else {
-      navigate("/pathways");
+      // set pathway from location state
+      if (location.state.pathway) {
+        setPathway(location.state.pathway);
+      }
     }
-  }, [pathway.trainingIDs]);
+  }, [auth.loading, auth.id]);
+
+  useEffect(() => {
+    const fetchTrainings = async () => {
+      const trainingPromises = pathway.trainingIDs.map(getTraining);
+      const fetchedTrainings = await Promise.all(trainingPromises);
+      setTrainings(fetchedTrainings);
+    };
+    if (pathway.trainingIDs.length > 0) {
+      fetchTrainings();
+      console.log("fetched trainings");
+    }
+  }, [pathway]);
 
   //console.log("Width " + divWidth + "\nlength " + trainings.length);
   useEffect(() => {
@@ -120,7 +136,7 @@ const PathwayLandingPage: React.FC = () => {
             <TitleInfo title={pathway.name} description={pathway.shortBlurb} />
 
             {/* Pathway Tiles Section */}
-            <div className={styles.pathwayTiles} >
+            <div className={styles.pathwayTiles}>
               {/* Render the Pathway tiles */}
               {/* {trainings.map((trainingData, index) => (
                 <PathwayTile

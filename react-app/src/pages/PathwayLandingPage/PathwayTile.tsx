@@ -23,21 +23,17 @@ interface PathwayTileProps {
 
 function getImage(imagesPerRow: number, num: number, count: number) {
   // Empty
-  if (num > count) 
-    return emptyIcon;
+  if (num > count) return emptyIcon;
   // Straight down
-  if (imagesPerRow == 1)
-    return num == count ? downEndIcon : verticalIcon;
+  if (imagesPerRow == 1) return num == count ? downEndIcon : verticalIcon;
   // Not reversed
   if (Math.floor(num / imagesPerRow) % 2 == 0) {
     if ((num + 1) % imagesPerRow == 0) {
       return num == count ? leftEndIcon : rightDownIcon;
-    }
-    else if (num % imagesPerRow == 0){
+    } else if (num % imagesPerRow == 0) {
       if (num == 0) {
         return horizontalIcon;
-      }
-      else {
+      } else {
         return num == count ? downEndIcon : downRightIcon;
       }
     }
@@ -47,12 +43,11 @@ function getImage(imagesPerRow: number, num: number, count: number) {
   else {
     if ((num + 1) % imagesPerRow == 0) {
       return num + 1 == count ? rightEndIcon : leftDownIcon;
-    }
-    else if (num % imagesPerRow == 0) {
+    } else if (num % imagesPerRow == 0) {
       return num == count ? downEndIcon : downLeftIcon;
     }
 
-    return num  == count ? rightEndIcon : horizontalIcon;
+    return num == count ? rightEndIcon : horizontalIcon;
   }
 }
 
@@ -67,7 +62,7 @@ const PathwayTile: React.FC<PathwayTileProps> = ({
 
   const imagesPerRow = Math.floor(space / imgWidth);
   const image = getImage(imagesPerRow, tileNum, count);
-  console.log(tileNum +"num")
+  //console.log(tileNum +"num")
 
   return (
     <>
@@ -80,7 +75,7 @@ const PathwayTile: React.FC<PathwayTileProps> = ({
           setOpenTrainingPopup(true);
         }}
       >
-        <img src={image} style={{ width: "300px" , height: "300px"}} />
+        <img src={image} style={{ width: "300px", height: "300px" }} />
         <div
           style={{
             position: "absolute",
@@ -92,7 +87,7 @@ const PathwayTile: React.FC<PathwayTileProps> = ({
             fontWeight: "bold",
           }}
         >
-          {trainingID !=  null ? tileNum + 1: ""}
+          {trainingID != null ? tileNum + 1 : ""}
         </div>
       </div>
       {trainingID ? (
