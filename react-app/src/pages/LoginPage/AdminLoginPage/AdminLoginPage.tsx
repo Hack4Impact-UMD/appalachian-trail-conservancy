@@ -24,7 +24,7 @@ function AdminLoginPage() {
   const { user } = useAuth();
   // If user is logged in, navigate to Dashboard
   if (user) {
-    return <Navigate to="/" />;
+    return <Navigate to="/admin" />;
   }
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
