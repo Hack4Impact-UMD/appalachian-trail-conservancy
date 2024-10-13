@@ -107,7 +107,6 @@ const PathwayLandingPage: React.FC = () => {
     };
     if (pathway.trainingIDs.length > 0) {
       fetchTrainings();
-      console.log("fetched trainings");
     }
   }, [pathway]);
 
