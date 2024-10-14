@@ -15,6 +15,7 @@ import TrainingCard from "../../components/TrainingCard/TrainingCard";
 import PathwayCard from "../../components/PathwayCard/PathwayCard";
 import styles from "./DashboardPage.module.css";
 import Certificate from "../../components/CertificateCard/CertificateCard";
+import Badge from "../../components/BadgeCard/BadgeCard";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import Loading from "../../components/LoadingScreen/Loading";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
@@ -307,7 +308,7 @@ function Dashboard() {
                     <div className={styles.cardsContainer}>
                       {pathwaysCompleted.slice(0, 4).map((pathway, index) => (
                         <div className={styles.card} key={index}>
-                          <Certificate
+                          <Badge
                             image={pathway.genericPathway.badgeImage}
                             title={pathway.genericPathway.name}
                             date={pathway.volunteerPathway!.dateCompleted}

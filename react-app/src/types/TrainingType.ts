@@ -11,7 +11,10 @@ export interface Training {
   quiz: Quiz;
   associatedPathways: string[]; // pathway IDs
   certificationImage: string; // URL
+  status: Status;
 }
+
+export type Status = "DRAFT" | "PUBLISHED" | "ARCHIVED";
 
 export interface TrainingResource {
   type: Resource;
