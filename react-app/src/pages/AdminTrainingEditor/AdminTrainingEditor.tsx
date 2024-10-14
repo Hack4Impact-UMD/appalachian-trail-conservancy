@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "./AdminTrainingEditor.module.css"; // Assuming CSS file is here
+import styles from "./AdminTrainingEditor.module.css";
 import {
   TextField,
   Button,
@@ -54,7 +54,7 @@ const AdminTrainingEditor: React.FC = () => {
     }
 
     // Regex for YouTube embedded link
-    const youtubeRegex = /^https:\/\/www\.youtube\.com\/embed\/[\w-]+$/;
+    const youtubeRegex = /^https:\/\/www\.youtube\.com\/embed\/[\w-]+(\?.*)?$/;
     if (resourceType === "video" && !youtubeRegex.test(resourceLink)) {
       newErrors.resourceLink = "Please provide a valid embedded YouTube link.";
     } else {
@@ -63,20 +63,22 @@ const AdminTrainingEditor: React.FC = () => {
 
     setErrors(newErrors);
 
-    // Return true if no errors
     return Object.values(newErrors).every((error) => error === "");
   };
 
   const handleNextClick = () => {
     if (validateFields()) {
-      // Proceed to the next step
       console.log("All validations passed");
     }
   };
-
   return (
     <div className={styles.container}>
-      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <div className={styles.navbar}>
+        <NavigationBar
+          open={navigationBarOpen}
+          setOpen={setNavigationBarOpen}
+        />
+      </div>
       <div className={styles.editor}>
         <h1>Training Editor</h1>
         <form noValidate>
@@ -135,16 +137,24 @@ const AdminTrainingEditor: React.FC = () => {
             </Select>
             <FormHelperText>Select the type of resource</FormHelperText>
           </FormControl>
-          <Button variant="contained" color="primary" onClick={handleNextClick}>
-            Next
-          </Button>
-          <Button
-            variant="outlined"
-            color="secondary"
-            className={styles.saveButton}
-          >
-            Save as Draft
-          </Button>
+
+          {/* Button group */}
+          <div className={styles.buttonGroup}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleNextClick}
+            >
+              Next
+            </Button>
+            <Button
+              variant="outlined"
+              color="secondary"
+              className={styles.saveButton}
+            >
+              Save as Draft
+            </Button>
+          </div>
         </form>
       </div>
     </div>
