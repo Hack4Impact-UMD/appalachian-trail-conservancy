@@ -55,6 +55,7 @@ function PathwayLandingPage() {
       passingScore: 0,
     },
     badgeImage: "",
+    status: "DRAFT",
   });
 
   const [volunteerPathway, setVolunteerPathway] = useState<VolunteerPathway>({
