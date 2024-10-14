@@ -21,8 +21,11 @@ import QuizLandingPage from "./pages/QuizLandingPage/QuizLandingPage.tsx";
 import PathwayLibrary from "./pages/PathwayLibraryPage/PathwayLibraryPage.tsx";
 import RegistrationPage from "./pages/RegistrationPage/RegistrationPage/RegistrationPage.tsx";
 import RegistrationConfirmationPage from "./pages/RegistrationPage/RegistrationConfirmationPage/RegistrationConfirmationPage.tsx";
+import { useAuth } from "./auth/AuthProvider.tsx";
 
 function App() {
+  const auth = useAuth();
+
   return (
     <ThemeProvider theme={theme}>
       <AuthProvider>
@@ -33,7 +36,10 @@ function App() {
             <Route path="/login/admin" element={<AdminLoginPage />} />
             <Route path="/logout" element={<LogoutPage />} />
             <Route path="/registration" element={<RegistrationPage />} />
-            <Route path="/registration-confirmation" element={<RegistrationConfirmationPage />} />
+            <Route
+              path="/registration-confirmation"
+              element={<RegistrationConfirmationPage />}
+            />
 
             <Route
               path="/"
@@ -99,7 +105,7 @@ function App() {
                 </RequireAuth>
               }
             />
-             <Route
+            <Route
               path="/pathways/:id"
               element={
                 <RequireAuth>
@@ -128,7 +134,13 @@ function App() {
               path="/testfunctions"
               element={
                 <RequireAuth>
-                  <button onClick={() => {}}>TEST</button>
+                  <button
+                    onClick={() => {
+                      //insert test function here
+                    }}
+                  >
+                    TEST
+                  </button>
                 </RequireAuth>
               }
             />

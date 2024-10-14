@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./TrainingCard.module.css";
-import TrainingPopup from "../TrainingPopup/TrainingPopup";
+import PathwayTrainingPopup from "../PathwayTrainingPopup/PathwayTrainingPopup";
 import { TrainingID } from "../../types/TrainingType";
 import { VolunteerTraining } from "../../types/UserType";
 
@@ -23,8 +23,7 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
       // Training not started
       return <div className={styles.marker}></div>;
     } else if (
-      volunteerTraining.numCompletedResources ===
-      volunteerTraining.numTotalResources
+      volunteerTraining.progress == "COMPLETED"
     ) {
       // Training completed
       return (
@@ -71,11 +70,12 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
           <div className={styles.progressBar}>{renderMarker()}</div>
         </div>
       </div>
-      <TrainingPopup
+      <PathwayTrainingPopup
         open={openTrainingPopup}
         onClose={setOpenTrainingPopup}
-        training={training}
-        volunteerTraining={volunteerTraining}
+        record={training}
+        volunteerRecord={volunteerTraining}
+        mode={"training"}
       />
     </>
   );

@@ -1,23 +1,26 @@
-import styles from "./TrainingPopup.module.css";
+import styles from "./PathwayTrainingPopup.module.css";
 import { Button } from "@mui/material";
 import { IoCloseOutline } from "react-icons/io5";
 import { whiteButtonGrayBorder } from "../../muiTheme";
 import { useNavigate } from "react-router-dom";
 import { TrainingID } from "../../types/TrainingType";
-import { VolunteerTraining } from "../../types/UserType";
+import { PathwayID } from "../../types/PathwayType";
+import { VolunteerTraining, VolunteerPathway } from "../../types/UserType";
 
 interface modalPropsType {
   open: boolean;
   onClose: any;
-  training: TrainingID;
-  volunteerTraining?: VolunteerTraining;
+  record: TrainingID | PathwayID;
+  volunteerRecord?: VolunteerTraining | VolunteerPathway;
+  mode: "training" | "pathway";
 }
 
-const TrainingPopup = ({
+const PathwayTrainingPopup = ({
   open,
   onClose,
-  training,
-  volunteerTraining,
+  record,
+  volunteerRecord,
+  mode,
 }: modalPropsType): React.ReactElement => {
   const navigate = useNavigate();
   return (
@@ -33,19 +36,24 @@ const TrainingPopup = ({
           <div className={styles.centered}>
             <div className={styles.modal}>
               <div className={styles.left}>
-                <p className={styles.title}>{training.name}</p>
-                <p className={styles.textContainer}>{training.shortBlurb}</p>
+                <p className={styles.title}>{record.name}</p>
+                <p className={styles.textContainer}>{record.shortBlurb}</p>
                 <div className={styles.learnMoreButton}>
                   <Button
                     variant="contained"
                     sx={{ ...whiteButtonGrayBorder, width: "150px" }}
                     onClick={() =>
-                      navigate(`/trainings/:${training.id}`, {
-                        state: {
-                          training: training,
-                          volunteerTraining: volunteerTraining,
-                        },
-                      })
+                      navigate(
+                        mode === "training"
+                          ? `/trainings/${record.id}`
+                          : `/pathways/${record.id}`,
+                        {
+                          state: {
+                            training: record,
+                            volunteerTraining: volunteerRecord,
+                          },
+                        }
+                      )
                     }
                   >
                     Learn More
@@ -56,7 +64,7 @@ const TrainingPopup = ({
                 <div className={styles.closeButton}>
                   <IoCloseOutline onClick={() => onClose()} />
                 </div>
-                <img src={training.coverImage} />
+                <img src={record.coverImage} />
               </div>
             </div>
           </div>
@@ -68,8 +76,8 @@ const TrainingPopup = ({
   );
 };
 
-TrainingPopup.defaultProps = {
+PathwayTrainingPopup.defaultProps = {
   width: 400,
 };
 
-export default TrainingPopup;
+export default PathwayTrainingPopup;
