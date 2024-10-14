@@ -38,10 +38,10 @@ const PathwayLandingPage: React.FC = () => {
   });
 
   const div = useRef<HTMLDivElement>(null);
-
   const imgWidth = 300;
   const imagesPerRow = Math.floor(divWidth / imgWidth);
-  const height = Math.ceil(trainings.length / imagesPerRow);
+  // To prevent trainings.length from being used uninitialized
+  const height = trainings.length == 0 ? 0 : Math.ceil((trainings.length + 1) / imagesPerRow);
   let elements = [];
   let count = 0;
 
@@ -113,10 +113,10 @@ const PathwayLandingPage: React.FC = () => {
   //console.log("Width " + divWidth + "\nlength " + trainings.length);
   useEffect(() => {
     // when the component gets mounted
-    if (div.current) setDivWidth(div.current.offsetWidth);
+    if (div.current) setDivWidth(div.current.offsetWidth );
     // to handle page resize
     const getwidth = () => {
-      if (div.current) setDivWidth(div.current.offsetWidth);
+      if (div.current) setDivWidth(div.current.offsetWidth );
     };
     window.addEventListener("resize", getwidth);
     // remove the event listener before the component gets unmounted

@@ -21,6 +21,9 @@ interface PathwayTileProps {
   count: number;
 }
 
+// im
+// num: specific index of the training in pathway
+// count: total number of trainings in pathway
 function getImage(imagesPerRow: number, num: number, count: number) {
   // Empty
   if (num > count) return emptyIcon;
@@ -28,8 +31,10 @@ function getImage(imagesPerRow: number, num: number, count: number) {
   if (imagesPerRow == 1) return num == count ? downEndIcon : verticalIcon;
   // Not reversed
   if (Math.floor(num / imagesPerRow) % 2 == 0) {
+    // Right-most card
     if ((num + 1) % imagesPerRow == 0) {
       return num == count ? leftEndIcon : rightDownIcon;
+      // Left-most icon
     } else if (num % imagesPerRow == 0) {
       if (num == 0) {
         return horizontalIcon;
