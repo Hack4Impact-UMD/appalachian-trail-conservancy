@@ -27,13 +27,6 @@
   padding-bottom: 3%;
 }
 
-/* For screen widths below 650px, adjust the content width */
-@media screen and (max-width: 1200px) {
-  .content {
-    width: 425px;
-  }
-}
-
 /* have space between header and view all link  */
 .header {
   display: flex;
@@ -56,6 +49,7 @@
   margin-bottom: 2rem;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .buttonContainer {
@@ -63,14 +57,29 @@
   gap: 20px;
 }
 
-/* Move filters under the search bar when screen width is below 1000px */
+/* show buttons when screen width is above 1201px */
+@media screen and (min-width: 1201px) {
+  .buttonContainer {
+    display: flex; 
+  }
+  .dropdownContainer {
+    display: none; 
+  }
+}
+
+/* show dropdown when screen width is below 1200px */
 @media screen and (max-width: 1200px) {
   .searchBarContainer {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+    width: 180%;
   }
   .buttonContainer {
-    margin-top: 1rem;
+    display: none;  
+  }
+  .dropdownContainer {
+    display: block; 
+    margin-top: 2%;
   }
 }
 
@@ -102,4 +111,22 @@
   justify-content: space-between;
   row-gap: 1rem;
   column-gap: 1rem;
+}
+
+@media screen and (min-width: 1800px) {
+  .content {
+    width: 1400px;
+  }
+  .searchBarContainer {
+    width: 1400px;
+  }
+}
+
+@media screen and (max-width: 950px) {
+  .content {
+    width: 425px;
+  }
+  .cardsContainer {
+    justify-content: space-around;
+  }
 }

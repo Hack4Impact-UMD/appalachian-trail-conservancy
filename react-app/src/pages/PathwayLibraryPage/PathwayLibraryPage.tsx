@@ -1,10 +1,19 @@
 import { useState, useEffect } from "react";
 import { IoIosSearch } from "react-icons/io";
-import { Button, InputAdornment, OutlinedInput } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  InputAdornment,
+  InputLabel,
+  MenuItem,
+  OutlinedInput,
+  Select,
+} from "@mui/material";
 import {
   forestGreenButtonPadding,
   whiteButtonGrayBorder,
   grayBorderSearchBar,
+  whiteSelectGrayBorder,
 } from "../../muiTheme";
 import { getAllPathways, getVolunteer } from "../../backend/FirestoreCalls";
 import { PathwayID } from "../../types/PathwayType";
@@ -31,6 +40,20 @@ function PathwayLibrary() {
     { genericPathway: PathwayID; volunteerPathway?: VolunteerPathway }[]
   >([]);
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+
+  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
+
+  // Update screen width on resize
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const filterPathways = (
     pathways?: {
@@ -128,7 +151,11 @@ function PathwayLibrary() {
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        style={{
+          // Only apply left shift when screen width is greater than 1200px
+          left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
+        }}
+      >
         <div className={styles.outerContainer}>
           <div className={styles.content}>
             <div className={styles.header}>
@@ -147,6 +174,25 @@ function PathwayLibrary() {
                   </InputAdornment>
                 }
               />
+
+              {/* dropdown container */}
+              <div className={styles.dropdownContainer}>
+                <FormControl>
+                  <Select
+                   className={styles.dropdownMenu}
+                   sx={whiteSelectGrayBorder}
+                    value={filterType}
+                    onChange={(e) => setFilterType(e.target.value)}
+                    label="Filter"
+                  >
+                    <MenuItem value="all">ALL</MenuItem>
+                    <MenuItem value="inProgress">IN PROGRESS</MenuItem>
+                    <MenuItem value="completed">COMPLETED</MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
+
+              {/* button container */}
               <div className={styles.buttonContainer}>
                 <Button
                   sx={
@@ -155,7 +201,8 @@ function PathwayLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("all")}>
+                  onClick={() => setFilterType("all")}
+                >
                   All
                 </Button>
                 <Button
@@ -165,7 +212,8 @@ function PathwayLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("inProgress")}>
+                  onClick={() => setFilterType("inProgress")}
+                >
                   In Progress
                 </Button>
                 <Button
@@ -175,11 +223,13 @@ function PathwayLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("completed")}>
+                  onClick={() => setFilterType("completed")}
+                >
                   Completed
                 </Button>
               </div>
             </div>
+
             {loading ? (
               <Loading />
             ) : (

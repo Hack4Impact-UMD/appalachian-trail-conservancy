@@ -91,3 +91,10 @@
   font-size: 1rem;
   margin-top: 4%;
 }
+
+/* adjust footer height when screen width is below 900px */
+@media screen and (max-width: 900px) {
+  .footerContainer{
+    height: 200px;
+  }
+}
