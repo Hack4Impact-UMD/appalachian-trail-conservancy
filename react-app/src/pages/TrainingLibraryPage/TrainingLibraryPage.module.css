@@ -48,6 +48,7 @@
   margin-bottom: 2rem;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .buttonContainer {
@@ -75,11 +76,55 @@
   font-size: 1.1rem;
 }
 
+
 @media screen and (min-width: 1500px) {
   .content {
     width: 1200px;
   }
 }
-/* 
-@media screen and (max-width: 600px) {
-} */
+
+/* show buttons when screen width is above 1201px */
+@media screen and (min-width: 1201px) {
+  .buttonContainer {
+    display: flex; 
+  }
+  .dropdownContainer {
+    display: none; 
+  }
+}
+
+/* show dropdown when screen width is below 1200px */
+@media screen and (max-width: 1200px) {
+  .searchBarContainer {
+    flex-direction: column;
+    align-items: stretch;
+    width: 180%;
+  }
+  .buttonContainer {
+    display: none;  
+  }
+  .dropdownContainer {
+    display: block; 
+    margin-top: 2%;
+  }
+}
+
+@media screen and (max-width: 950px) {
+  .content {
+    width: 600px;
+  }
+
+  .cardsContainer {
+    justify-content: space-between;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .content {
+    width: 300px;
+  }
+
+  .cardsContainer {
+    justify-content: space-around;
+  }
+}
