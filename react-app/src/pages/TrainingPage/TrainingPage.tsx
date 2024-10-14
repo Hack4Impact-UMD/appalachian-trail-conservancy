@@ -43,6 +43,7 @@ function TrainingPage() {
     },
     associatedPathways: [],
     certificationImage: "",
+    status: "DRAFT",
   });
 
   useEffect(() => {

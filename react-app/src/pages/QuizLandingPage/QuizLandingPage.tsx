@@ -40,6 +40,7 @@ function QuizLandingPage() {
     },
     associatedPathways: [],
     certificationImage: "",
+    status: "DRAFT",
   });
 
   useEffect(() => {
@@ -70,8 +71,7 @@ function QuizLandingPage() {
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}
-      >
+        style={{ left: navigationBarOpen ? "250px" : "0" }}>
         <div className={styles.outerContainer}>
           {loading ? (
             <Loading />
@@ -156,8 +156,7 @@ function QuizLandingPage() {
                       fromApp: true,
                     },
                   })
-                }
-              >
+                }>
                 BACK
               </Button>
               <Button
@@ -171,8 +170,7 @@ function QuizLandingPage() {
                       fromApp: true,
                     },
                   })
-                }
-              >
+                }>
                 START QUIZ
               </Button>
             </div>

@@ -44,6 +44,7 @@ function TrainingLandingPage() {
     },
     associatedPathways: [],
     certificationImage: "",
+    status: "DRAFT",
   });
 
   const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
