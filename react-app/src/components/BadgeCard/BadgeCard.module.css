@@ -35,7 +35,6 @@
   pointer-events: none; /* So the frame does not block interactions */
 }
 
-
 .badgeDetails {
   padding: 10px;
   display: flex;
@@ -46,12 +45,12 @@
 .badgeTitle {
   font-weight: bold;
   margin: 0 0 5px 0;
-  font-size: 1.1em;
+  font-size: 1.1rem;
   color: var(--forest-green);
 }
 
 .badgeDate {
   margin: 0;
   color: var(--blue-gray);
-  font-size: 0.8em;
+  font-size: 0.8rem;
 }

@@ -16,8 +16,16 @@ const Certificate: React.FC<CertificateProps> = ({ image, title, date }) => {
   return (
     <div className={styles.certificateCard}>
       <div className={styles.certificateImageWrapper}>
-        <img src={certificateFrame} alt="Certificate Frame" className={styles.certificateFrame} />
-        <img src={image} alt="Certificate" className={styles.certificateImage} />
+        <img
+          src={certificateFrame}
+          alt="Certificate Frame"
+          className={styles.certificateFrame}
+        />
+        <img
+          src={image}
+          alt="Certificate"
+          className={styles.certificateImage}
+        />
       </div>
       <div className={styles.certificateDetails}>
         <h2 className={styles.certificateTitle}>{title}</h2>
