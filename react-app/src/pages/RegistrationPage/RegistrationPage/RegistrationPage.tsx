@@ -41,7 +41,7 @@ function RegistrationPage() {
 
   // Check if email is valid
   const validateEmail = (email: string) => {
-    const pattern = /^\S+@\S+$/;
+    const pattern = /^[^@]+@[^@]+\.[^@]+$/;
     return pattern.test(email);
   };
 
@@ -54,7 +54,9 @@ function RegistrationPage() {
       setInvalidEmail(true);
     } else {
       setShowLoading(false);
-      navigate("/registration-confirmation"); /* proceed to confirmation */
+      navigate("/registration-confirmation", {
+        state: { fromApp: true },
+      }); /* proceed to confirmation */
     }
     setShowLoading(false);
   };
@@ -116,7 +118,8 @@ function RegistrationPage() {
                       boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)",
                     },
                   },
-                }}>
+                }}
+              >
                 <span className={styles.icon}>
                   <IoIosInformationCircleOutline />
                 </span>
@@ -175,7 +178,8 @@ function RegistrationPage() {
               sx={{ ...styledRectButton, ...forestGreenButton }}
               variant="contained"
               onClick={(e) => handleConfirm(e)}
-              disabled={!isFormValid}>
+              disabled={!isFormValid}
+            >
               {showLoading ? <Loading></Loading> : "Confirm"}
             </Button>
           </div>
