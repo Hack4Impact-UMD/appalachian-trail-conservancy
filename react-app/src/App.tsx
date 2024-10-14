@@ -22,140 +22,144 @@ import PathwayLibrary from "./pages/PathwayLibraryPage/PathwayLibraryPage.tsx";
 import { useAuth } from "./auth/AuthProvider.tsx";
 
 import { updateVolunteerTraining } from "./backend/FirestoreCalls.ts";
+import AdminTrainingEditor from "./pages/AdminTrainingEditor/AdminTrainingEditor.tsx";
 
 function App() {
   const auth = useAuth();
 
   return (
-    <ThemeProvider theme={theme}>
-      <AuthProvider>
-        <HashRouter>
-          <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/login/volunteer" element={<VolunteerLoginPage />} />
-            <Route path="/login/admin" element={<AdminLoginPage />} />
-            <Route path="/logout" element={<LogoutPage />} />
+    <>
+      <AdminTrainingEditor />
+    </>
+    // <ThemeProvider theme={theme}>
+    //   <AuthProvider>
+    //     <HashRouter>
+    //       <Routes>
+    //         <Route path="/login" element={<LoginPage />} />
+    //         <Route path="/login/volunteer" element={<VolunteerLoginPage />} />
+    //         <Route path="/login/admin" element={<AdminLoginPage />} />
+    //         <Route path="/logout" element={<LogoutPage />} />
 
-            <Route
-              path="/"
-              element={
-                <RequireAuth>
-                  <Dashboard />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/trainings"
-              element={
-                <RequireAuth>
-                  <TrainingLibrary />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/trainings/:id"
-              element={
-                <RequireAuth>
-                  <TrainingLandingPage />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/trainings/resources"
-              element={
-                <RequireAuth>
-                  <TrainingPage />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/trainings/quizlanding"
-              element={
-                <RequireAuth>
-                  <QuizLandingPage />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/trainings/quiz"
-              element={
-                <RequireAuth>
-                  <QuizPage />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/trainings/quizresult"
-              element={
-                <RequireAuth>
-                  <QuizResult />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/pathways"
-              element={
-                <RequireAuth>
-                  <PathwayLibrary />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/pathways/:id"
-              element={
-                <RequireAuth>
-                  <PathwayLandingPage />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/achievements"
-              element={
-                <RequireAuth>
-                  <AchievementsPage />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/*"
-              element={
-                <RequireAuth>
-                  <NotFoundPage />
-                </RequireAuth>
-              }
-            />
+    //         <Route
+    //           path="/"
+    //           element={
+    //             <RequireAuth>
+    //               <Dashboard />
+    //             </RequireAuth>
+    //           }
+    //         />
+    //         <Route
+    //           path="/trainings"
+    //           element={
+    //             <RequireAuth>
+    //               <TrainingLibrary />
+    //             </RequireAuth>
+    //           }
+    //         />
+    //         <Route
+    //           path="/trainings/:id"
+    //           element={
+    //             <RequireAuth>
+    //               <TrainingLandingPage />
+    //             </RequireAuth>
+    //           }
+    //         />
+    //         <Route
+    //           path="/trainings/resources"
+    //           element={
+    //             <RequireAuth>
+    //               <TrainingPage />
+    //             </RequireAuth>
+    //           }
+    //         />
+    //         <Route
+    //           path="/trainings/quizlanding"
+    //           element={
+    //             <RequireAuth>
+    //               <QuizLandingPage />
+    //             </RequireAuth>
+    //           }
+    //         />
+    //         <Route
+    //           path="/trainings/quiz"
+    //           element={
+    //             <RequireAuth>
+    //               <QuizPage />
+    //             </RequireAuth>
+    //           }
+    //         />
+    //         <Route
+    //           path="/trainings/quizresult"
+    //           element={
+    //             <RequireAuth>
+    //               <QuizResult />
+    //             </RequireAuth>
+    //           }
+    //         />
+    //         <Route
+    //           path="/pathways"
+    //           element={
+    //             <RequireAuth>
+    //               <PathwayLibrary />
+    //             </RequireAuth>
+    //           }
+    //         />
+    //         <Route
+    //           path="/pathways/:id"
+    //           element={
+    //             <RequireAuth>
+    //               <PathwayLandingPage />
+    //             </RequireAuth>
+    //           }
+    //         />
+    //         <Route
+    //           path="/achievements"
+    //           element={
+    //             <RequireAuth>
+    //               <AchievementsPage />
+    //             </RequireAuth>
+    //           }
+    //         />
+    //         <Route
+    //           path="/*"
+    //           element={
+    //             <RequireAuth>
+    //               <NotFoundPage />
+    //             </RequireAuth>
+    //           }
+    //         />
 
-            <Route
-              path="/testfunctions"
-              element={
-                <RequireAuth>
-                  <button
-                    onClick={() => {
-                      updateVolunteerTraining("ZpfkIPPdBuaeA6iFyhaR", {
-                        trainingID: "kjhasdkjfhajkfhak",
-                        progress: "INPROGRESS",
-                        dateCompleted: "09-30-2024",
-                        numCompletedResources: 90,
-                        numTotalResources: 1,
-                        quizScoreRecieved: 2,
-                      })
-                        .then(() => {
-                          console.log("success");
-                        })
-                        .catch((error) => {
-                          console.log(error);
-                        });
-                    }}
-                  >
-                    TEST
-                  </button>
-                </RequireAuth>
-              }
-            />
-          </Routes>
-        </HashRouter>
-      </AuthProvider>
-    </ThemeProvider>
+    //         <Route
+    //           path="/testfunctions"
+    //           element={
+    //             <RequireAuth>
+    //               <button
+    //                 onClick={() => {
+    //                   updateVolunteerTraining("ZpfkIPPdBuaeA6iFyhaR", {
+    //                     trainingID: "kjhasdkjfhajkfhak",
+    //                     progress: "INPROGRESS",
+    //                     dateCompleted: "09-30-2024",
+    //                     numCompletedResources: 90,
+    //                     numTotalResources: 1,
+    //                     quizScoreRecieved: 2,
+    //                   })
+    //                     .then(() => {
+    //                       console.log("success");
+    //                     })
+    //                     .catch((error) => {
+    //                       console.log(error);
+    //                     });
+    //                 }}
+    //               >
+    //                 TEST
+    //               </button>
+    //             </RequireAuth>
+    //           }
+    //         />
+    //       </Routes>
+    //     </HashRouter>
+    //   </AuthProvider>
+    // </ThemeProvider>
   );
 }
 

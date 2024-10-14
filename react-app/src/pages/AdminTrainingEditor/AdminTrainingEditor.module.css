@@ -1,0 +1,17 @@
+.container {
+    display: flex;
+}
+
+.editor {
+    padding: 2rem;
+    flex: 1;
+    background-color: #fff;
+}
+
+.uploadSection {
+    margin-top: 1rem;
+}
+
+.saveButton {
+    margin-left: 1rem;
+}
