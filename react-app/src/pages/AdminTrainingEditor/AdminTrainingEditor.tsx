@@ -8,8 +8,11 @@ import {
   InputLabel,
   FormControl,
   FormHelperText,
+  Typography,
 } from "@mui/material";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import Footer from "../../components/Footer/Footer";
+import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 
 const AdminTrainingEditor: React.FC = () => {
   const [trainingName, setTrainingName] = useState("");
@@ -27,9 +30,9 @@ const AdminTrainingEditor: React.FC = () => {
   });
 
   const characterLimits = {
-    trainingName: 50, // Adjustable
-    blurb: 150, // Adjustable
-    description: 500, // Adjustable
+    trainingName: 50,
+    blurb: 150,
+    description: 500,
   };
 
   const validateFields = () => {
@@ -53,7 +56,6 @@ const AdminTrainingEditor: React.FC = () => {
       newErrors.description = "";
     }
 
-    // Regex for YouTube embedded link
     const youtubeRegex = /^https:\/\/www\.youtube\.com\/embed\/[\w-]+(\?.*)?$/;
     if (resourceType === "video" && !youtubeRegex.test(resourceLink)) {
       newErrors.resourceLink = "Please provide a valid embedded YouTube link.";
@@ -71,93 +73,156 @@ const AdminTrainingEditor: React.FC = () => {
       console.log("All validations passed");
     }
   };
-  return (
-    <div className={styles.container}>
-      <div className={styles.navbar}>
-        <NavigationBar
-          open={navigationBarOpen}
-          setOpen={setNavigationBarOpen}
-        />
-      </div>
-      <div className={styles.editor}>
-        <h1>Training Editor</h1>
-        <form noValidate>
-          <TextField
-            label="Training Name"
-            value={trainingName}
-            onChange={(e) => setTrainingName(e.target.value)}
-            error={Boolean(errors.trainingName)}
-            helperText={errors.trainingName}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Blurb"
-            value={blurb}
-            onChange={(e) => setBlurb(e.target.value)}
-            error={Boolean(errors.blurb)}
-            helperText={errors.blurb}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            error={Boolean(errors.description)}
-            helperText={errors.description}
-            fullWidth
-            multiline
-            rows={4}
-            margin="normal"
-          />
-          <div className={styles.uploadSection}>
-            <Button variant="contained" component="label">
-              Upload Image
-              <input type="file" hidden />
-            </Button>
-          </div>
-          <TextField
-            label="Resource Link (PDF or Video)"
-            value={resourceLink}
-            onChange={(e) => setResourceLink(e.target.value)}
-            error={Boolean(errors.resourceLink)}
-            helperText={errors.resourceLink}
-            fullWidth
-            margin="normal"
-          />
-          <FormControl fullWidth margin="normal">
-            <InputLabel>Resource Type</InputLabel>
-            <Select
-              value={resourceType}
-              onChange={(e) => setResourceType(e.target.value)}
-            >
-              <MenuItem value="pdf">PDF</MenuItem>
-              <MenuItem value="video">Video</MenuItem>
-            </Select>
-            <FormHelperText>Select the type of resource</FormHelperText>
-          </FormControl>
 
-          {/* Button group */}
-          <div className={styles.buttonGroup}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleNextClick}
-            >
-              Next
-            </Button>
-            <Button
-              variant="outlined"
-              color="secondary"
-              className={styles.saveButton}
-            >
-              Save as Draft
-            </Button>
+  return (
+    <>
+      <div className={styles.container}>
+        <div className={styles.navbar}>
+          <NavigationBar
+            open={navigationBarOpen}
+            setOpen={setNavigationBarOpen}
+          />
+        </div>
+        <div className={styles.editor}>
+          <div className={styles.editorContent}>
+            <div className={styles.editorHeader}>
+              <h1 className={styles.headerText}>Training Editor</h1>
+              <ProfileIcon />
+            </div>
+
+            <form noValidate>
+              <Button
+                variant="outlined"
+                color="secondary"
+                className={styles.saveButton}
+              >
+                Save as Draft
+              </Button>
+              <Typography
+                variant="body2"
+                style={{
+                  color: "black",
+                  fontWeight: "bold",
+                  marginBottom: "4px",
+                }}
+              >
+                TRAINING NAME
+              </Typography>
+              <TextField
+                value={trainingName}
+                onChange={(e) => setTrainingName(e.target.value)}
+                error={Boolean(errors.trainingName)}
+                helperText={errors.trainingName}
+                fullWidth
+                margin="normal"
+              />
+
+              <Typography
+                variant="body2"
+                style={{
+                  color: "black",
+                  fontWeight: "bold",
+                  marginBottom: "4px",
+                }}
+              >
+                BLURB
+              </Typography>
+              <TextField
+                value={blurb}
+                onChange={(e) => setBlurb(e.target.value)}
+                error={Boolean(errors.blurb)}
+                helperText={errors.blurb}
+                fullWidth
+                margin="normal"
+              />
+
+              <Typography
+                variant="body2"
+                style={{
+                  color: "black",
+                  fontWeight: "bold",
+                  marginBottom: "4px",
+                }}
+              >
+                DESCRIPTION
+              </Typography>
+
+              <TextField
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                error={Boolean(errors.description)}
+                helperText={errors.description}
+                fullWidth
+                multiline
+                rows={4}
+                margin="normal"
+              />
+              {/* Upload Section */}
+              <div className={styles.uploadSection}>
+                <Button
+                  variant="contained"
+                  component="label"
+                  sx={{ backgroundColor: "#007bff", color: "white" }} // Change colors here
+                >
+                  Upload Image
+                  <input type="file" hidden />
+                </Button>
+              </div>
+
+              {/* Flex row for Resource Link and Resource Type */}
+              <Typography
+                variant="body2"
+                style={{
+                  color: "black",
+                  fontWeight: "bold",
+                  marginBottom: "2px",
+                }}
+              >
+                RESOURCE LINK (PDF or Video)
+              </Typography>
+              <div className={styles.flexRow}>
+                <TextField
+                  value={resourceLink}
+                  onChange={(e) => setResourceLink(e.target.value)}
+                  error={Boolean(errors.resourceLink)}
+                  helperText={errors.resourceLink}
+                  fullWidth
+                  margin="normal"
+                  className={styles.resourceLinkField}
+                  style={{ marginTop: "0px" }}
+                />
+                <FormControl
+                  margin="normal"
+                  className={styles.resourceTypeField}
+                >
+                  <InputLabel>Resource Type</InputLabel>
+                  <Select
+                    value={resourceType}
+                    onChange={(e) => setResourceType(e.target.value)}
+                  >
+                    <MenuItem value="pdf">PDF</MenuItem>
+                    <MenuItem value="video">Video</MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
+
+              {/* Button group */}
+              <div className={styles.buttonGroup}>
+                <Button
+                  variant="contained"
+                  sx={{ backgroundColor: "#49A772", color: "white" }} // Change background color and text color
+                  onClick={handleNextClick}
+                >
+                  Next
+                </Button>
+              </div>
+            </form>
           </div>
-        </form>
+          <Footer />{" "}
+        </div>
       </div>
-    </div>
+      {/* Make sure the footer is styled to be full width in its own CSS */}
+    </>
   );
 };
 

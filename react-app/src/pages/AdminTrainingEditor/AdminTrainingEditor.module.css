@@ -1,28 +1,60 @@
+html, body {
+    height: 100%;
+    margin: 0;
+  
+}
+
 .container {
     display: flex;
     height: 100vh;
+    
 }
 
 .navbar {
-    width: 250px; 
-    background-color: #f0f0f0; 
+    width: 250px;
+    background-color: #2E3B4E;
+}
+
+.editorHeader {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
 }
 
 .editor {
-    padding: 2rem;
-    flex-grow: 1; 
-    background-color: #fff;
-    margin-left: 4rem;
+    flex-grow: 1;
+    background-color: #FAFAFA;
     overflow-y: auto; 
+}
+.editorContent {
+    flex-grow: 1;
+    background-color: #FAFAFA;
+    overflow-y: auto;
+    margin-left: 2rem;
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+    margin-right: 2rem;
 }
 
 .uploadSection {
     margin-top: 1rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
 
-.saveButton {
-    margin-left: 1rem;
+.uploadSection button {
+    background-color: #49A772;
+    color: white;
+    padding: 0.5rem 1rem;
+    text-transform: none;
 }
+
+
+
 .buttonGroup {
     display: flex;
     flex-direction: column;
@@ -32,7 +64,42 @@
 }
 
 .buttonGroup button {
-    width: 100%; 
-    max-width: 200px; 
+    width: 150px; 
+}
+
+.flexRow {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.flexRow .resourceLinkField {
+    flex-grow: 2;
+    min-width: 250px;
+    margin-bottom: 8px !important; 
+}
+
+.flexRow .resourceTypeField {
+    flex-grow: 1;
+    min-width: 150px;
+    margin-top: 0rem !important; 
+}
+
+
+
+.saveButton {
+    margin-left: 1rem;
+    width: 180px; 
+    background-color: transparent !important; 
+    color: black !important; 
+    border: 2px solid black !important; 
+    border-radius: 10px !important; 
+}
+
+
+
+.headerText {
+    color: #2E3B4E; 
+    font-size: 2rem;
 }
 
