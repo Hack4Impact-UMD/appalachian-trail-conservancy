@@ -61,6 +61,12 @@
 .buttonContainer {
   display: flex;
   gap: 10%;
+  margin-bottom: 2%;
+}
+
+.buttonSelect {
+  display: flex;
+  gap: 3%;
 }
 
 .subHeader {
