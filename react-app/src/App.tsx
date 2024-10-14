@@ -19,9 +19,9 @@ import QuizPage from "./pages/QuizPage/QuizPage.tsx";
 import QuizResult from "./pages/QuizResultPage/QuizResultPage.tsx";
 import QuizLandingPage from "./pages/QuizLandingPage/QuizLandingPage.tsx";
 import PathwayLibrary from "./pages/PathwayLibraryPage/PathwayLibraryPage.tsx";
+import RegistrationPage from "./pages/RegistrationPage/RegistrationPage/RegistrationPage.tsx";
+import RegistrationConfirmationPage from "./pages/RegistrationPage/RegistrationConfirmationPage/RegistrationConfirmationPage.tsx";
 import { useAuth } from "./auth/AuthProvider.tsx";
-
-import { updateVolunteerTraining } from "./backend/FirestoreCalls.ts";
 
 function App() {
   const auth = useAuth();
@@ -35,6 +35,11 @@ function App() {
             <Route path="/login/volunteer" element={<VolunteerLoginPage />} />
             <Route path="/login/admin" element={<AdminLoginPage />} />
             <Route path="/logout" element={<LogoutPage />} />
+            <Route path="/registration" element={<RegistrationPage />} />
+            <Route
+              path="/registration-confirmation"
+              element={<RegistrationConfirmationPage />}
+            />
 
             <Route
               path="/"
@@ -131,20 +136,7 @@ function App() {
                 <RequireAuth>
                   <button
                     onClick={() => {
-                      updateVolunteerTraining("ZpfkIPPdBuaeA6iFyhaR", {
-                        trainingID: "kjhasdkjfhajkfhak",
-                        progress: "INPROGRESS",
-                        dateCompleted: "09-30-2024",
-                        numCompletedResources: 90,
-                        numTotalResources: 1,
-                        quizScoreRecieved: 2,
-                      })
-                        .then(() => {
-                          console.log("success");
-                        })
-                        .catch((error) => {
-                          console.log(error);
-                        });
+                      //insert test function here
                     }}
                   >
                     TEST

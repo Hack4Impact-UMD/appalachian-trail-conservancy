@@ -25,7 +25,7 @@ function VolunteerLoginPage() {
   const handleSendLink = async (event: any) => {
     event.preventDefault();
 
-    const pattern: RegExp = /^\S+@\S+$/;
+    const pattern: RegExp = /^[^@]+@[^@]+\.[^@]+$/;
 
     if (!pattern.test(email)) {
       setFailureMessage("*Not a valid email");
