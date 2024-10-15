@@ -3,7 +3,7 @@ import { IoIosSearch } from "react-icons/io";
 import { Button, InputAdornment, OutlinedInput } from "@mui/material";
 import {
   forestGreenButtonPadding,
-  forestGreenButton,
+  forestGreenButtonLarge,
   whiteButtonGrayBorder,
   grayBorderSearchBar,
 } from "../../muiTheme";
@@ -133,7 +133,7 @@ function AdminTrainingLibrary() {
               </div>
             </div>
             <div>
-              <Button sx={forestGreenButton} variant="contained">
+              <Button sx={forestGreenButtonLarge} variant="contained">
                 CREATE NEW TRAINING
               </Button>
             </div>

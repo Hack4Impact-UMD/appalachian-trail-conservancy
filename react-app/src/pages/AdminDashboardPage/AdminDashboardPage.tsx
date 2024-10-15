@@ -11,6 +11,7 @@ import { PathwayID } from "../../types/PathwayType";
 import { Button } from "@mui/material";
 import {
   forestGreenButtonPadding,
+  forestGreenButtonLarge,
   whiteButtonGrayBorder,
 } from "../../muiTheme";
 
@@ -71,10 +72,10 @@ function AdminDashboardPage() {
               </div>
             </div>
             <div className={styles.buttonContainer}>
-              <Button sx={forestGreenButtonPadding} variant="contained">
+              <Button sx={forestGreenButtonLarge} variant="contained">
                 CREATE NEW TRAINING
               </Button>
-              <Button sx={forestGreenButtonPadding} variant="contained">
+              <Button sx={forestGreenButtonLarge} variant="contained">
                 CREATE NEW PATHWAY
               </Button>
             </div>
