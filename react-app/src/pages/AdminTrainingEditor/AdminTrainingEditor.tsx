@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import styles from "./AdminTrainingEditor.module.css";
+import InfoIcon from "@mui/icons-material/Info";
+
 import {
   TextField,
   Button,
@@ -9,6 +11,7 @@ import {
   FormControl,
   FormHelperText,
   Typography,
+  Tooltip,
 } from "@mui/material";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import Footer from "../../components/Footer/Footer";
@@ -87,7 +90,10 @@ const AdminTrainingEditor: React.FC = () => {
           <div className={styles.editorContent}>
             <div className={styles.editorHeader}>
               <h1 className={styles.headerText}>Training Editor</h1>
-              <ProfileIcon />
+              <div className={styles.editorProfileHeader}>
+                <h5 className={styles.adminText}> Admin </h5>
+                <ProfileIcon />
+              </div>
             </div>
 
             <form noValidate>
@@ -104,6 +110,7 @@ const AdminTrainingEditor: React.FC = () => {
                   color: "black",
                   fontWeight: "bold",
                   marginBottom: "4px",
+                  marginTop: "2rem",
                 }}
               >
                 TRAINING NAME
@@ -162,24 +169,45 @@ const AdminTrainingEditor: React.FC = () => {
                 <Button
                   variant="contained"
                   component="label"
-                  sx={{ backgroundColor: "#007bff", color: "white" }} // Change colors here
+                  sx={{ backgroundColor: "#49A772", color: "white" }} // Change colors here
                 >
                   Upload Image
                   <input type="file" hidden />
                 </Button>
               </div>
 
-              {/* Flex row for Resource Link and Resource Type */}
-              <Typography
-                variant="body2"
+              {/* Resource Link and Tooltip */}
+              <div
                 style={{
-                  color: "black",
-                  fontWeight: "bold",
-                  marginBottom: "2px",
+                  display: "flex",
+                  alignItems: "center",
+                  marginTop: "2rem",
                 }}
               >
-                RESOURCE LINK (PDF or Video)
-              </Typography>
+                <Typography
+                  variant="body2"
+                  style={{
+                    color: "black",
+                    fontWeight: "bold",
+                    marginBottom: "0.5rem",
+                    marginTop: "2rem",
+                  }}
+                >
+                  RESOURCE LINK
+                </Typography>
+                <Tooltip title="Should be link to PDF or Video" placement="top">
+                  <InfoIcon
+                    fontSize="small"
+                    style={{
+                      marginLeft: "8px",
+                      color: "#6E6E6E",
+                      cursor: "pointer",
+                      marginTop: "1.5rem",
+                    }}
+                  />
+                </Tooltip>
+              </div>
+
               <div className={styles.flexRow}>
                 <TextField
                   value={resourceLink}
@@ -191,6 +219,7 @@ const AdminTrainingEditor: React.FC = () => {
                   className={styles.resourceLinkField}
                   style={{ marginTop: "0px" }}
                 />
+
                 <FormControl
                   margin="normal"
                   className={styles.resourceTypeField}
@@ -210,10 +239,14 @@ const AdminTrainingEditor: React.FC = () => {
               <div className={styles.buttonGroup}>
                 <Button
                   variant="contained"
-                  sx={{ backgroundColor: "#49A772", color: "white" }} // Change background color and text color
+                  sx={{
+                    backgroundColor: "#49A772",
+                    color: "white",
+                    fontSize: "12px", // make the text smaller (adjust size as needed)
+                  }} // Change background color and text color
                   onClick={handleNextClick}
                 >
-                  Next
+                  Next: Create Quiz
                 </Button>
               </div>
             </form>
