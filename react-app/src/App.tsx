@@ -24,6 +24,7 @@ import { useAuth } from "./auth/AuthProvider.tsx";
 import { updateVolunteerTraining } from "./backend/FirestoreCalls.ts";
 import AdminDashboard from "./pages/AdminDashboardPage/AdminDashboardPage.tsx";
 import AdminTrainingLibrary from "./pages/AdminTrainingLibraryPage/AdminTrainingLibraryPage.tsx";
+import AdminPathwayLibrary from "./pages/AdminPathwayLibraryPage/AdminPathwayLibraryPage.tsx";
 
 function App() {
   const auth = useAuth();
@@ -57,10 +58,19 @@ function App() {
             />
 
             <Route
-              path="/adminlibrary"
+              path="/admin/trainings"
               element={
                 <RequireAuth>
                   <AdminTrainingLibrary />
+                </RequireAuth>
+              }
+            />
+
+            <Route
+              path="/admin/pathways"
+              element={
+                <RequireAuth>
+                  <AdminPathwayLibrary />
                 </RequireAuth>
               }
             />

@@ -4,6 +4,10 @@ import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import styles from "./AdminDashboardPage.module.css";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Footer from "../../components/Footer/Footer";
+import AdminTrainingCard from "../../components/AdminTrainingCard/AdminTrainingCard";
+import AdminPathwayCard from "../../components/AdminPathwayCard/AdminPathwayCard";
+import { TrainingID } from "../../types/TrainingType";
+import { PathwayID } from "../../types/PathwayType";
 import { Button } from "@mui/material";
 import {
   forestGreenButtonPadding,
@@ -14,6 +18,39 @@ function AdminDashboardPage() {
   const auth = useAuth();
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
   const [trainingsSelected, setTrainingsSelected] = useState<boolean>(true);
+  const [training] = useState<TrainingID>({
+    name: "Introduction to Cooperation",
+    id: "123",
+    shortBlurb: "",
+    description: "",
+    coverImage:
+      "https://i0.wp.com/www.oxfordstudent.com/wp-content/uploads/2018/11/Spongebob-2.png?fit=770%2C433&ssl=1",
+    resources: [],
+    quiz: {
+      questions: [],
+      numQuestions: 0,
+      passingScore: 0,
+    },
+    associatedPathways: [],
+    certificationImage: "",
+    status: "DRAFT",
+  });
+
+  const [pathway] = useState<PathwayID>({
+    name: "Divalicious Pathway",
+    id: "",
+    shortBlurb: "",
+    description: "",
+    coverImage: "",
+    trainingIDs: [],
+    quiz: {
+      questions: [],
+      numQuestions: 0,
+      passingScore: 0,
+    },
+    badgeImage: "",
+    status: "DRAFT",
+  });
 
   return (
     <>
@@ -71,21 +108,40 @@ function AdminDashboardPage() {
             {trainingsSelected ? (
               <>
                 <div className={styles.cardsContainer}>
-                  <img
-                    src={
-                      "https://static.wikia.nocookie.net/cartoons/images/e/ed/Profile_-_SpongeBob_SquarePants.png/revision/latest?cb=20240420115914"
-                    }
-                    alt="Image"
-                  />
+                  <AdminTrainingCard training={training} />
+                  <AdminTrainingCard training={training} />
+                  <AdminTrainingCard training={training} />
+                  <AdminTrainingCard training={training} />
                 </div>
               </>
             ) : (
-              <></>
+              <>
+                <div className={styles.cardsContainer}>
+                  <AdminPathwayCard pathway={pathway} />
+                  <AdminPathwayCard pathway={pathway} />
+                  <AdminPathwayCard pathway={pathway} />
+                </div>
+              </>
             )}
 
             <div className={styles.subHeader}>
               <h2>Recent Published</h2>
             </div>
+            {trainingsSelected ? (
+              <>
+                <div className={styles.cardsContainer}>
+                  <AdminTrainingCard training={training} />
+                  <AdminTrainingCard training={training} />
+                  <AdminTrainingCard training={training} />
+                </div>
+              </>
+            ) : (
+              <>
+                <div className={styles.cardsContainer}>
+                  <AdminPathwayCard pathway={pathway} />
+                </div>
+              </>
+            )}
           </div>
         </div>
         <Footer />

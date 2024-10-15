@@ -7,104 +7,84 @@ import {
   whiteButtonGrayBorder,
   grayBorderSearchBar,
 } from "../../muiTheme";
-import { getAllTrainings, getVolunteer } from "../../backend/FirestoreCalls";
 import { TrainingID } from "../../types/TrainingType";
-import { VolunteerTraining } from "../../types/UserType";
+import { PathwayID } from "../../types/PathwayType.ts";
 import { useAuth } from "../../auth/AuthProvider.tsx";
-import styles from "./AdminTrainingLibraryPage.module.css";
+import styles from "./AdminPathwayLibraryPage.module.css";
 import Loading from "../../components/LoadingScreen/Loading.tsx";
 import debounce from "lodash.debounce";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import Footer from "../../components/Footer/Footer";
-import AdminTrainingCard from "../../components/AdminTrainingCard/AdminTrainingCard.tsx";
+import AdminPathwayCard from "../../components/AdminPathwayCard/AdminPathwayCard.tsx";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 
-function AdminTrainingLibrary() {
+function AdminPathwayLibrary() {
   const auth = useAuth();
 
   const [loading, setLoading] = useState<boolean>(true);
   const [filterType, setFilterType] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredTrainings, setFilteredTrainings] = useState<TrainingID[]>([]);
+  const [filteredPathways, setFilteredPathways] = useState<PathwayID[]>([]);
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
-  const [training1] = useState<TrainingID>({
-    name: "Introduction to Cooperation",
-    id: "123",
+
+  const [pathway1] = useState<PathwayID>({
+    name: "Divalicious Pathway",
+    id: "",
     shortBlurb: "",
     description: "",
-    coverImage:
-      "https://i0.wp.com/www.oxfordstudent.com/wp-content/uploads/2018/11/Spongebob-2.png?fit=770%2C433&ssl=1",
-    resources: [],
+    coverImage: "",
+    trainingIDs: [],
     quiz: {
       questions: [],
       numQuestions: 0,
       passingScore: 0,
     },
-    associatedPathways: [],
-    certificationImage: "",
-    status: "DRAFT",
-  });
-  const [training2] = useState<TrainingID>({
-    name: "How to be a Diva",
-    id: "123",
-    shortBlurb: "",
-    description: "",
-    coverImage:
-      "https://i0.wp.com/www.oxfordstudent.com/wp-content/uploads/2018/11/Spongebob-2.png?fit=770%2C433&ssl=1",
-    resources: [],
-    quiz: {
-      questions: [],
-      numQuestions: 0,
-      passingScore: 0,
-    },
-    associatedPathways: [],
-    certificationImage: "",
-    status: "DRAFT",
-  });
-  const [training3] = useState<TrainingID>({
-    name: "How to be a Crackhead",
-    id: "123",
-    shortBlurb: "",
-    description: "",
-    coverImage:
-      "https://i0.wp.com/www.oxfordstudent.com/wp-content/uploads/2018/11/Spongebob-2.png?fit=770%2C433&ssl=1",
-    resources: [],
-    quiz: {
-      questions: [],
-      numQuestions: 0,
-      passingScore: 0,
-    },
-    associatedPathways: [],
-    certificationImage: "",
+    badgeImage: "",
     status: "DRAFT",
   });
 
-  const trainings = [training1, training2, training3];
+  const [pathway2] = useState<PathwayID>({
+    name: "Pop Culture Whiz",
+    id: "",
+    shortBlurb: "",
+    description: "",
+    coverImage: "",
+    trainingIDs: [],
+    quiz: {
+      questions: [],
+      numQuestions: 0,
+      passingScore: 0,
+    },
+    badgeImage: "",
+    status: "PUBLISHED",
+  });
 
-  const filterTrainings = () => {
-    let filtered = trainings;
+  const pathways = [pathway1, pathway2];
+
+  const filterPathways = () => {
+    let filtered = pathways;
 
     // search bar filter
     if (searchQuery) {
-      filtered = filtered.filter((training) =>
-        training.name.toLowerCase().includes(searchQuery.toLowerCase())
+      filtered = filtered.filter((pathway) =>
+        pathway.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
     // in progress / completed filters
     if (filterType === "published") {
-      filtered = filtered.filter((training) => training.status == "PUBLISHED");
+      filtered = filtered.filter((pathway) => pathway.status == "PUBLISHED");
     } else if (filterType === "drafts") {
-      filtered = filtered.filter((training) => training.status == "DRAFT");
+      filtered = filtered.filter((pathway) => pathway.status == "DRAFT");
     } else if (filterType === "archives") {
-      filtered = filtered.filter((training) => training.status == "ARCHIVED");
+      filtered = filtered.filter((pathway) => pathway.status == "ARCHIVED");
     }
 
-    setFilteredTrainings(filtered);
+    setFilteredPathways(filtered);
   };
 
   useEffect(() => {
-    filterTrainings();
+    filterPathways();
     setLoading(false);
   }, [searchQuery, filterType]);
 
@@ -134,7 +114,7 @@ function AdminTrainingLibrary() {
             </div>
             <div>
               <Button sx={forestGreenButton} variant="contained">
-                CREATE NEW TRAINING
+                CREATE NEW PATHWAY
               </Button>
             </div>
             <div className={styles.searchBarContainer}>
@@ -189,15 +169,15 @@ function AdminTrainingLibrary() {
               <Loading />
             ) : (
               <>
-                {filteredTrainings.length === 0 ? (
+                {filteredPathways.length === 0 ? (
                   <div className={styles.emptySearchMessage}>
                     No Trainings Matching “{searchQuery}”
                   </div>
                 ) : (
                   <div className={styles.cardsContainer}>
-                    {filteredTrainings.map((training, index) => (
+                    {filteredPathways.map((pathway, index) => (
                       <div className={styles.card} key={index}>
-                        <AdminTrainingCard training={training} />
+                        <AdminPathwayCard pathway={pathway} />
                       </div>
                     ))}
                   </div>
@@ -212,4 +192,4 @@ function AdminTrainingLibrary() {
   );
 }
 
-export default AdminTrainingLibrary;
+export default AdminPathwayLibrary;
