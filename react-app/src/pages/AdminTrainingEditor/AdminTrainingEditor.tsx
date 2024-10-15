@@ -16,6 +16,7 @@ import {
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
+import { LuUpload } from "react-icons/lu";
 
 const AdminTrainingEditor: React.FC = () => {
   const [trainingName, setTrainingName] = useState("");
@@ -164,14 +165,38 @@ const AdminTrainingEditor: React.FC = () => {
                 rows={4}
                 margin="normal"
               />
-              {/* Upload Section */}
-              <div className={styles.uploadSection}>
+              {/* Upload Section with Typography and LuUpload Icon */}
+              <div
+                className={styles.uploadSection}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "flex-start",
+                }}
+              >
+                <Typography
+                  variant="body2"
+                  style={{
+                    color: "black",
+                    fontWeight: "bold",
+                    marginBottom: "8px",
+                  }}
+                >
+                  UPLOAD IMAGE
+                </Typography>
                 <Button
                   variant="contained"
                   component="label"
-                  sx={{ backgroundColor: "#49A772", color: "white" }} // Change colors here
+                  sx={{
+                    backgroundColor: "#D9D9D9",
+                    color: "black",
+                    "&:hover": {
+                      backgroundColor: "#D9D9D9",
+                    },
+                  }}
                 >
-                  Upload Image
+                  {/* Increase size of LuUpload icon */}
+                  <LuUpload style={{ fontSize: "50px" }} />
                   <input type="file" hidden />
                 </Button>
               </div>
@@ -228,6 +253,16 @@ const AdminTrainingEditor: React.FC = () => {
                   <Select
                     value={resourceType}
                     onChange={(e) => setResourceType(e.target.value)}
+                    MenuProps={{
+                      PaperProps: {
+                        sx: {
+                          "& .MuiMenuItem-root:hover": {
+                            backgroundColor: "#0A7650",
+                            color: "white",
+                          },
+                        },
+                      },
+                    }}
                   >
                     <MenuItem value="pdf">PDF</MenuItem>
                     <MenuItem value="video">Video</MenuItem>
@@ -242,8 +277,8 @@ const AdminTrainingEditor: React.FC = () => {
                   sx={{
                     backgroundColor: "#49A772",
                     color: "white",
-                    fontSize: "12px", // make the text smaller (adjust size as needed)
-                  }} // Change background color and text color
+                    fontSize: "12px",
+                  }}
                   onClick={handleNextClick}
                 >
                   Next: Create Quiz
@@ -254,7 +289,6 @@ const AdminTrainingEditor: React.FC = () => {
           <Footer />{" "}
         </div>
       </div>
-      {/* Make sure the footer is styled to be full width in its own CSS */}
     </>
   );
 };
