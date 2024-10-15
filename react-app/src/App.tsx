@@ -22,6 +22,7 @@ import PathwayLibrary from "./pages/PathwayLibraryPage/PathwayLibraryPage.tsx";
 import { useAuth } from "./auth/AuthProvider.tsx";
 import { updateVolunteerTraining } from "./backend/FirestoreCalls.ts";
 import AdminTrainingEditor from "./pages/AdminTrainingEditor/AdminTrainingEditor.tsx";
+import AdminPathwayEditor from "./pages/AdminPathwayEditor/AdminPathwayEditor.tsx";
 
 function App() {
   const auth = useAuth();
