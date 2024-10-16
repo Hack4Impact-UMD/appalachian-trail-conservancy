@@ -47,6 +47,7 @@ const QuizResultPage = () => {
     },
     associatedPathways: [],
     certificationImage: "",
+    status: "DRAFT",
   });
   const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
     {
@@ -80,8 +81,7 @@ const QuizResultPage = () => {
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}
-      >
+        style={{ left: navigationBarOpen ? "250px" : "0" }}>
         <div className={styles.outerContainer}>
           <div className={styles.bodyContainer}>
             {/* HEADER */}
@@ -153,8 +153,7 @@ const QuizResultPage = () => {
               <Button
                 sx={forestGreenButton}
                 variant="contained"
-                onClick={() => navigate("/trainings")}
-              >
+                onClick={() => navigate("/trainings")}>
                 Exit training
               </Button>
             ) : (
@@ -162,8 +161,7 @@ const QuizResultPage = () => {
                 <Button
                   sx={{ ...whiteButtonGrayBorder }}
                   variant="contained"
-                  onClick={() => navigate("/trainings")}
-                >
+                  onClick={() => navigate("/trainings")}>
                   Exit training
                 </Button>
                 <Button
@@ -177,8 +175,7 @@ const QuizResultPage = () => {
                         fromApp: true,
                       },
                     })
-                  }
-                >
+                  }>
                   Restart training
                 </Button>
                 <Button
@@ -192,8 +189,7 @@ const QuizResultPage = () => {
                         fromApp: true,
                       },
                     })
-                  }
-                >
+                  }>
                   Retake quiz
                 </Button>
               </>

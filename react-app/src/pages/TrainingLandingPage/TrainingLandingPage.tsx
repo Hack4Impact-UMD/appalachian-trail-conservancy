@@ -7,6 +7,7 @@ import {
   getVolunteer,
   getTraining,
   getPathway,
+  addVolunteerTraining,
 } from "../../backend/FirestoreCalls";
 import { Button } from "@mui/material";
 import { useAuth } from "../../auth/AuthProvider";
@@ -43,6 +44,7 @@ function TrainingLandingPage() {
     },
     associatedPathways: [],
     certificationImage: "",
+    status: "DRAFT",
   });
 
   const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
@@ -138,7 +140,8 @@ function TrainingLandingPage() {
                 (index + 1 <= volunteerTraining.numCompletedResources
                   ? styles.opacityContainer
                   : "")
-              }`}>
+              }`}
+            >
               <p className={styles.trainingNumber}>{index + 1}</p>
               <p className={styles.trainingTitle}>{resource.title}</p>
               <p className={styles.trainingType}>{resource.type}</p>
@@ -156,7 +159,8 @@ function TrainingLandingPage() {
                 (volunteerTraining.trainingID !== "" &&
                   volunteerTraining.progress === "INPROGRESS" && (
                     <div
-                      className={`${styles.marker} ${styles.progressMarker}`}>
+                      className={`${styles.marker} ${styles.progressMarker}`}
+                    >
                       IN PROGRESS
                     </div>
                   ))}
@@ -203,30 +207,53 @@ function TrainingLandingPage() {
   };
 
   const renderButton = () => {
-    if (
-      volunteerTraining.trainingID === "" ||
-      (volunteerTraining && volunteerTraining.numCompletedResources === 0)
-    ) {
+    if (volunteerTraining.trainingID === "") {
       return (
         <Button
           sx={{ ...forestGreenButton }}
           variant="contained"
-          onClick={() =>
-            navigate(`/trainings/resources`, {
-              state: {
-                training: training,
-                volunteerTraining: volunteerTraining,
-                fromApp: true,
-              },
-            })
-          }>
+          onClick={() => {
+            // Call addVolunteerTraining and wait for the result
+            addVolunteerTraining(auth.id.toString(), training)
+              .then(() => {
+                // Retrieve the volunteer data after adding the training
+                return getVolunteer(auth.id.toString());
+              })
+              .then((volunteerData) => {
+                // Extract the relevant volunteerTraining information
+                const updatedVolunteerTraining =
+                  volunteerData.trainingInformation.find(
+                    (trainingInfo) => trainingInfo.trainingID === training.id
+                  );
+
+                // If updatedVolunteerTraining is found, use it to set volunteerTraining
+                if (updatedVolunteerTraining) {
+                  setVolunteerTraining(updatedVolunteerTraining);
+                  // Navigate to the training resources page after successful addition
+                  navigate(`/trainings/resources`, {
+                    state: {
+                      training: training,
+                      volunteerTraining: updatedVolunteerTraining,
+                      volunteerId: auth.id.toString(),
+                      fromApp: true,
+                    },
+                  });
+                } else {
+                  throw new Error("Couldn't find updatedVolunteerTraining");
+                }
+              })
+              .catch((error) => {
+                console.error(
+                  "Error adding volunteer training or retrieving volunteer data:",
+                  error
+                );
+              });
+          }}
+        >
           Start
         </Button>
       );
-    } else if (
-      volunteerTraining.numCompletedResources ==
-      volunteerTraining.numTotalResources
-    ) {
+    } else if (volunteerTraining.progress == "COMPLETED") {
       return (
         <Button
           sx={{ ...forestGreenButton }}
@@ -236,10 +263,12 @@ function TrainingLandingPage() {
               state: {
                 training: training,
                 volunteerTraining: volunteerTraining,
+                volunteerId: auth.id.toString(),
                 fromApp: true,
               },
             })
-          }>
+          }
+        >
           Restart
         </Button>
       );
@@ -253,10 +282,12 @@ function TrainingLandingPage() {
               state: {
                 training: training,
                 volunteerTraining: volunteerTraining,
+                volunteerId: auth.id.toString(),
                 fromApp: true,
               },
             })
-          }>
+          }
+        >
           Resume
         </Button>
       );
@@ -269,7 +300,8 @@ function TrainingLandingPage() {
 
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        style={{ left: navigationBarOpen ? "250px" : "0" }}
+      >
         {loading ? (
           <Loading />
         ) : (
@@ -300,7 +332,8 @@ function TrainingLandingPage() {
                       (volunteerTraining.progress === "COMPLETED"
                         ? styles.opacityContainer
                         : "")
-                    }`}>
+                    }`}
+                  >
                     <p className={styles.trainingNumber}>
                       {volunteerTraining.numTotalResources + 1}
                     </p>
@@ -334,7 +367,8 @@ function TrainingLandingPage() {
                         onClick={() => {
                           navigate(`/pathways/${pathway.id}`);
                         }}
-                        key={idx}>
+                        key={idx}
+                      >
                         {pathway.name}
                       </div>
                     ))}
@@ -350,12 +384,14 @@ function TrainingLandingPage() {
         {/* footer */}
         <div
           className={styles.footer}
-          style={{ width: navigationBarOpen ? "calc(100% - 250px)" : "100%" }}>
+          style={{ width: navigationBarOpen ? "calc(100% - 250px)" : "100%" }}
+        >
           <div className={styles.footerButtons}>
             <Button
               sx={{ ...whiteButtonGrayBorder }}
               variant="contained"
-              onClick={() => navigate(-1)}>
+              onClick={() => navigate(-1)}
+            >
               Back
             </Button>
             {renderButton()}

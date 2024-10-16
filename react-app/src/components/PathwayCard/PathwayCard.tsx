@@ -1,9 +1,11 @@
+import { useState } from "react";
 import styles from "./PathwayCard.module.css";
 import LinearProgressWithLabel from "../LinearProgressWithLabel/LinearProgressWithLabel";
 import pathwayCard from "../../assets/pathwayCard.svg";
 import { useNavigate } from "react-router-dom";
 import { PathwayID } from "../../types/PathwayType";
 import { VolunteerPathway } from "../../types/UserType";
+import PathwayTrainingPopup from "../PathwayTrainingPopup/PathwayTrainingPopup";
 
 interface PathwayCardProps {
   pathway: PathwayID;
@@ -14,6 +16,8 @@ const PathwayCard: React.FC<PathwayCardProps> = ({
   pathway,
   volunteerPathway,
 }) => {
+  const [openTrainingPopup, setOpenTrainingPopup] = useState<boolean>(false);
+
   const navigate = useNavigate();
 
   const renderMarker = () => {
@@ -49,13 +53,18 @@ const PathwayCard: React.FC<PathwayCardProps> = ({
     <div
       className={styles.pathwayCard}
       onClick={() => {
-        navigate(`/pathways/${pathway.id}`, {
-          state: {
-            pathway: pathway,
-            volunteerPathway: volunteerPathway,
-          },
-        });
-      }}>
+        if (volunteerPathway == undefined) {
+          setOpenTrainingPopup(true);
+        } else {
+          navigate(`/pathways/${pathway.id}`, {
+            state: {
+              pathway: pathway,
+              volunteerPathway: volunteerPathway,
+            },
+          });
+        }
+      }}
+    >
       <div className={styles.pathwayImage}>
         <img src={pathwayCard} alt="Pathway" />
       </div>
@@ -66,6 +75,13 @@ const PathwayCard: React.FC<PathwayCardProps> = ({
         </div>
         <div className={styles.progressBar}>{renderMarker()}</div>
       </div>
+      <PathwayTrainingPopup
+        open={openTrainingPopup}
+        onClose={setOpenTrainingPopup}
+        record={pathway}
+        volunteerRecord={volunteerPathway}
+        mode={"pathway"}
+      />
     </div>
   );
 };

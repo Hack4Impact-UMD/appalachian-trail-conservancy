@@ -10,7 +10,10 @@ export interface Pathway {
   trainingIDs: string[];
   quiz: Quiz;
   badgeImage: string; // URL
+  status: Status;
 }
+
+export type Status = "DRAFT" | "PUBLISHED" | "ARCHIVED";
 
 export interface Quiz {
   questions: Question[];
