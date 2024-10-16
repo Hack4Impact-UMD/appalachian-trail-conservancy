@@ -23,6 +23,8 @@ import { useAuth } from "./auth/AuthProvider.tsx";
 import { updateVolunteerTraining } from "./backend/FirestoreCalls.ts";
 import AdminTrainingEditor from "./pages/AdminTrainingEditor/AdminTrainingEditor.tsx";
 import AdminPathwayEditor from "./pages/AdminPathwayEditor/AdminPathwayEditor.tsx";
+import RegistrationConfirmationPage from "./pages/RegistrationPage/RegistrationConfirmationPage/RegistrationConfirmationPage.tsx";
+import RegistrationPage from "./pages/RegistrationPage/RegistrationPage/RegistrationPage.tsx";
 
 function App() {
   const auth = useAuth();
