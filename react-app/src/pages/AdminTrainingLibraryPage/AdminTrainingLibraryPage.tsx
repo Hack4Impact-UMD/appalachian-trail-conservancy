@@ -92,7 +92,9 @@ function AdminTrainingLibrary() {
     }
 
     // in progress / completed filters
-    if (filterType === "published") {
+    if (filterType === "all") {
+      filtered = filtered;
+    } else if (filterType === "published") {
       filtered = filtered.filter((training) => training.status == "PUBLISHED");
     } else if (filterType === "drafts") {
       filtered = filtered.filter((training) => training.status == "DRAFT");
@@ -150,6 +152,17 @@ function AdminTrainingLibrary() {
               />
             </div>
             <div className={styles.buttonContainer}>
+            <Button
+                sx={
+                  filterType === "all"
+                    ? forestGreenButtonPadding
+                    : whiteButtonGrayBorder
+                }
+                variant="contained"
+                onClick={() => setFilterType("all")}
+              >
+                ALL
+              </Button>
               <Button
                 sx={
                   filterType === "published"

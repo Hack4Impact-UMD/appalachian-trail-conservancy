@@ -72,7 +72,9 @@ function AdminPathwayLibrary() {
     }
 
     // in progress / completed filters
-    if (filterType === "published") {
+    if (filterType === "all") {
+      filtered = filtered;
+    } else if (filterType === "published") {
       filtered = filtered.filter((pathway) => pathway.status == "PUBLISHED");
     } else if (filterType === "drafts") {
       filtered = filtered.filter((pathway) => pathway.status == "DRAFT");
@@ -130,6 +132,17 @@ function AdminPathwayLibrary() {
               />
             </div>
             <div className={styles.buttonContainer}>
+              <Button
+                sx={
+                  filterType === "all"
+                    ? forestGreenButtonPadding
+                    : whiteButtonGrayBorder
+                }
+                variant="contained"
+                onClick={() => setFilterType("all")}
+              >
+                ALL
+              </Button>
               <Button
                 sx={
                   filterType === "published"
