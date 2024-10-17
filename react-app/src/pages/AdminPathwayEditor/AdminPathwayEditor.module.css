@@ -3,10 +3,6 @@ html, body {
     margin: 0;
  
 }
-
-
-
-
 .container {
     display: flex;
     height: 100vh;
@@ -76,12 +72,17 @@ html, body {
   .searchBarNumber{
     margin-right: 3%;
     font-weight: bold;
+    margin-top: 0px;
+    margin-bottom: 0px;
   }
 
 
   .searchBarX{
     margin-left: 3%;
     align-items: center;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-top: 2px;
   }
 
 
@@ -100,6 +101,7 @@ html, body {
     justify-content: space-between;
     width: 100%;
     align-items: center;
+    vertical-align: middle;
   }
  
 

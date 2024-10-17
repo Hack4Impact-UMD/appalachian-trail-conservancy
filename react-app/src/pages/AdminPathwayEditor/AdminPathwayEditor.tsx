@@ -14,6 +14,7 @@ import {
   Tooltip,
   InputAdornment,
   OutlinedInput,
+  Autocomplete,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
@@ -48,6 +49,8 @@ const AdminPathwayEditor: React.FC = () => {
   const [invalidBlurb, setInvalidBlurb] = useState<boolean>(false);
   const [invalidDescription, setInvalidDescription] = useState<boolean>(false);
 
+  const options = ["blah", "blah blah"];
+
   const characterLimits = {
     trainingName: 2,
     blurb: 5,
@@ -78,7 +81,7 @@ const AdminPathwayEditor: React.FC = () => {
       setInvalidDescription(true);
     } else {
       newErrors.description = "";
-      setInvalidBlurb(false);
+      setInvalidDescription(false);
     }
 
     const youtubeRegex = /^https:\/\/www\.youtube\.com\/embed\/[\w-]+(\?.*)?$/;
@@ -299,11 +302,43 @@ const AdminPathwayEditor: React.FC = () => {
                   <div className={styles.searchBarsBox}>
                     <div className={styles.searchBarContainer}>
                       <p className={styles.searchBarNumber}>1</p>
-                      <OutlinedInput
-                        sx={{ ...grayBorderSearchBar, width: "599%" }}
-                        placeholder="SEARCH"
-                        onChange={debouncedOnChange}
+                      <Autocomplete
+                        disablePortal
+                        options={options}
+                        sx={{
+                          ...grayBorderSearchBar,
+                          width: "1000%",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            variant="outlined"
+                            label="SEARCH"
+                            InputLabelProps={{
+                              shrink: false,
+                            }}
+                            sx={{
+                              "& .MuiInputLabel-root": {
+                                color: "var(--blue-gray)",
+                                opacity: "50%",
+                                paddingBottom: "18%",
+                                "&.Mui-focused": {
+                                  visibility: "hidden",
+                                },
+                              },
+                              "& .MuiOutlinedInput-root": {
+                                padding: "8px",
+                                display: "flex",
+                                alignItems: "center",
+                              },
+                            }}
+                            className="custom-text-field"
+                          />
+                        )}
                       />
+
                       <div
                         className={styles.searchBarX}
                         style={{ visibility: "hidden" }}
@@ -313,10 +348,41 @@ const AdminPathwayEditor: React.FC = () => {
                     </div>
                     <div className={styles.searchBarContainer}>
                       <p className={styles.searchBarNumber}>2</p>
-                      <OutlinedInput
-                        sx={{ ...grayBorderSearchBar, width: "599%" }}
-                        placeholder="SEARCH"
-                        onChange={debouncedOnChange}
+                      <Autocomplete
+                        disablePortal
+                        options={options}
+                        sx={{
+                          ...grayBorderSearchBar,
+                          width: "600%",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            variant="outlined"
+                            label="SEARCH"
+                            InputLabelProps={{
+                              shrink: false,
+                            }}
+                            sx={{
+                              "& .MuiInputLabel-root": {
+                                color: "var(--blue-gray)",
+                                opacity: "50%",
+                                paddingBottom: "18%",
+                                "&.Mui-focused": {
+                                  visibility: "hidden",
+                                },
+                              },
+                              "& .MuiOutlinedInput-root": {
+                                padding: "8px",
+                                display: "flex",
+                                alignItems: "center",
+                              },
+                            }}
+                            className="custom-text-field"
+                          />
+                        )}
                       />
                       <div className={styles.searchBarX}>
                         <CloseIcon></CloseIcon>
@@ -324,10 +390,41 @@ const AdminPathwayEditor: React.FC = () => {
                     </div>
                     <div className={styles.searchBarContainer}>
                       <p className={styles.searchBarNumber}>3</p>
-                      <OutlinedInput
-                        sx={{ ...grayBorderSearchBar, width: "599%" }}
-                        placeholder="SEARCH"
-                        onChange={debouncedOnChange}
+                      <Autocomplete
+                        disablePortal
+                        options={options}
+                        sx={{
+                          ...grayBorderSearchBar,
+                          width: "600%",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            variant="outlined"
+                            label="SEARCH"
+                            InputLabelProps={{
+                              shrink: false,
+                            }}
+                            sx={{
+                              "& .MuiInputLabel-root": {
+                                color: "var(--blue-gray)",
+                                opacity: "50%",
+                                paddingBottom: "18%",
+                                "&.Mui-focused": {
+                                  visibility: "hidden",
+                                },
+                              },
+                              "& .MuiOutlinedInput-root": {
+                                padding: "8px",
+                                display: "flex",
+                                alignItems: "center",
+                              },
+                            }}
+                            className="custom-text-field"
+                          />
+                        )}
                       />
                       <div className={styles.searchBarX}>
                         <CloseIcon></CloseIcon>
@@ -350,14 +447,15 @@ const AdminPathwayEditor: React.FC = () => {
                 </div>
               </div>
               {/* Button group */}
-              <div className={styles.addTrainingContainer}>
+              <div className={styles.addTrainingContainer}> 
                 <Button
                   variant="contained"
                   sx={{
                     ...styledRectButton,
                     ...forestGreenButton,
-                    width: "18%",
                     marginTop: "2%",
+                    marginLeft: "3%",
+                    width: "40px%",
                   }}
                   onClick={handleNextClick}
                 >
