@@ -1,0 +1,155 @@
+.split {
+    height: 100%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    overflow-x: hidden;
+    transition: left 0.3s ease; /* Add transition for smooth animation */
+  }
+ 
+  .right {
+    right: 0;
+    left: 250px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+ 
+  html, body {
+    height: 100%;
+    margin: 0;
+}
+
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+
+.editorHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+
+.editorProfileHeader {
+    display: flex;
+    align-items: center;
+}
+
+
+.adminText {
+    margin-right: 1rem;
+}
+
+
+.editor {
+    flex-grow: 1;
+    background-color: #FAFAFA;
+    overflow-y: auto;
+}
+
+
+.nameHeading {
+    color: var(--blue-gray);
+    font-size: 3rem;
+    margin: 0;
+    max-width: 90%;
+}
+
+
+.editorContent {
+    flex-grow: 1;
+    background-color: #FAFAFA;
+    overflow-y: auto;
+    margin: 2rem;
+    padding: 0 3.5%;
+}
+
+
+.textFieldLabel {
+    color: black;
+    font-weight: bold;
+    margin-bottom: 4px;
+    margin-top: 2rem;
+}
+
+
+.addQuestionContainer {
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+
+.addAnswerBox {
+    display: flex;
+    width: 100%;
+    align-items: center;
+}
+
+
+.answerOption {
+    display: flex;
+    align-items: center;
+    margin-left: 17px;
+}
+
+
+.questionTitleBox {
+    display: flex;
+    width: 70%;
+    justify-content: space-between;
+    margin-top: 3rem;
+}
+
+
+.questionNumber {
+    margin-right: 15px;
+    font-weight: bold;
+}
+
+
+.radioLabel {
+    display: flex;
+    align-items: center;
+}
+
+
+.radioButton {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--forest-green);
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+
+.answerBox {
+    font-size: 1.1rem;
+    border-radius: 10px;
+    margin: 4px 10px;
+    width: 400px;
+    height: 30px;
+    border: 1.8px solid var(--blue-gray);
+}
+
+
+.answerBox fieldset {
+    border: none;
+}
+
+
+.buttonsContainer {
+    display: flex;
+    margin-top: 2rem;
+}
+
+
+.closeIcon {
+    padding-top: 12px;
+    padding-left: 10px;
+}
