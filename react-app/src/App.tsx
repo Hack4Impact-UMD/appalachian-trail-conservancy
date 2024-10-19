@@ -39,13 +39,16 @@ function App() {
             <Route path="/login/admin" element={<AdminLoginPage />} />
             <Route path="/logout" element={<LogoutPage />} />
             <Route path="/registration" element={<RegistrationPage />} />
-            <Route path="/registration-confirmation" element={<RegistrationConfirmationPage />} />
+            <Route
+              path="/registration-confirmation"
+              element={<RegistrationConfirmationPage />}
+            />
 
             <Route
               path="/"
               element={
                 <RequireAuth>
-                  <Dashboard />
+                  <AdminTrainingEditor />
                 </RequireAuth>
               }
             />

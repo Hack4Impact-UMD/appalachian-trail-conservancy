@@ -118,6 +118,17 @@ const AdminTrainingEditor: React.FC = () => {
               </Typography>
               <TextField
                 value={trainingName}
+                sx={{
+                  width: "80%",
+                  fontSize: "1.1rem",
+                  borderRadius: "10px",
+                  marginTop: "0.3rem",
+                  height: "3.2rem",
+                  border: "2px solid var(--blue-gray)",
+                  "& fieldset": {
+                    border: "none",
+                  },
+                }}
                 onChange={(e) => setTrainingName(e.target.value)}
                 error={Boolean(errors.trainingName)}
                 helperText={errors.trainingName}
@@ -137,6 +148,18 @@ const AdminTrainingEditor: React.FC = () => {
               </Typography>
               <TextField
                 value={blurb}
+                sx={{
+                  width: "80%",
+                  fontSize: "1.1rem",
+                  height: "auto",
+                  minHeight: 100,
+                  marginTop: "0.3rem",
+                  borderRadius: "10px",
+                  border: "2px solid var(--blue-gray)",
+                  "& fieldset": {
+                    border: "none",
+                  },
+                }}
                 onChange={(e) => setBlurb(e.target.value)}
                 error={Boolean(errors.blurb)}
                 helperText={errors.blurb}
@@ -157,6 +180,17 @@ const AdminTrainingEditor: React.FC = () => {
 
               <TextField
                 value={description}
+                sx={{
+                  width: "80%",
+                  fontSize: "1.1rem",
+                  minHeight: 100,
+                  borderRadius: "10px",
+                  marginTop: "0.3rem",
+                  border: "2px solid var(--blue-gray)",
+                  "& fieldset": {
+                    border: "none",
+                  },
+                }}
                 onChange={(e) => setDescription(e.target.value)}
                 error={Boolean(errors.description)}
                 helperText={errors.description}
@@ -236,6 +270,24 @@ const AdminTrainingEditor: React.FC = () => {
               <div className={styles.flexRow}>
                 <TextField
                   value={resourceLink}
+                  sx={{
+                    width: "50vw",
+                    height: "3.5rem",
+                    fontSize: "1.1rem",
+
+                    borderRadius: "10px",
+
+                    marginRight: "1rem",
+                    border: "2px solid var(--blue-gray)",
+                    "& fieldset": {
+                      border: "none",
+                    },
+                    "& .MuiInputBase-root": {
+                      padding: "0.5rem 1rem",
+                      display: "flex",
+                      alignItems: "center",
+                    },
+                  }}
                   onChange={(e) => setResourceLink(e.target.value)}
                   error={Boolean(errors.resourceLink)}
                   helperText={errors.resourceLink}
@@ -249,9 +301,31 @@ const AdminTrainingEditor: React.FC = () => {
                   margin="normal"
                   className={styles.resourceTypeField}
                 >
-                  <InputLabel>Resource Type</InputLabel>
+                  <Typography
+                    variant="body2"
+                    style={{
+                      color: "black",
+                      fontWeight: "bold",
+                      marginBottom: "0.5rem",
+                      marginTop: "-2.5rem",
+                    }}
+                  >
+                    RESOURCE TYPE
+                  </Typography>
                   <Select
                     value={resourceType}
+                    displayEmpty
+                    sx={{
+                      height: "3.5rem",
+                      fontSize: "1.1rem",
+                      borderRadius: "10px",
+                      padding: "0.5rem 1rem",
+                      "& .MuiSelect-select": {
+                        display: "flex",
+                        alignItems: "center",
+                        color: resourceType === "" ? "gray" : "black",
+                      },
+                    }}
                     onChange={(e) => setResourceType(e.target.value)}
                     MenuProps={{
                       PaperProps: {
@@ -278,6 +352,7 @@ const AdminTrainingEditor: React.FC = () => {
                     backgroundColor: "#49A772",
                     color: "white",
                     fontSize: "12px",
+                    marginTop: "1rem",
                   }}
                   onClick={handleNextClick}
                 >
