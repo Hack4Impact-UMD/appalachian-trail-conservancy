@@ -4,7 +4,7 @@
     z-index: 1;
     top: 0;
     overflow-x: hidden;
-    transition: left 0.3s ease; /* Add transition for smooth animation */
+    transition: left 0.3s ease; 
   }
  
   .right {
@@ -143,13 +143,13 @@
 }
 
 .numberInput {
-    width: 50px; 
+    width: 50px;
     height: 35px; 
   }
 
 .buttonsContainer {
     display: flex;
-    align-items: center;
+    align-items: center; 
     margin-top: 2rem;    
     justify-content: flex-start; 
   }
@@ -157,7 +157,7 @@
   .button {
     margin-left: 10px; 
     width: 80px;       
-    height: 40px;      
+    height: 40px;     
   }
   
 

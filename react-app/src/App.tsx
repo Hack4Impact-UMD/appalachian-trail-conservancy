@@ -22,6 +22,8 @@ import PathwayLibrary from "./pages/PathwayLibraryPage/PathwayLibraryPage.tsx";
 import RegistrationPage from "./pages/RegistrationPage/RegistrationPage/RegistrationPage.tsx";
 import RegistrationConfirmationPage from "./pages/RegistrationPage/RegistrationConfirmationPage/RegistrationConfirmationPage.tsx";
 import { useAuth } from "./auth/AuthProvider.tsx";
+import PathwayQuizEditorPage from "./pages/AdminPathwayEditorPage/PathwayQuizEditorPage.tsx";
+import TrainingQuizEditorPage from "./pages/AdminTrainingEditorPage/TrainingQuizEditorPage.tsx";
 
 function App() {
   const auth = useAuth();

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"; // Added useEffect
-import styles from "./PathwayQuizEditorPage.module.css";
+import styles from "./TrainingQuizEditorPage.module.css";
 import { Button, Typography, OutlinedInput, styled } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
@@ -14,7 +14,7 @@ import {
 import { Unstable_NumberInput as NumberInput } from "@mui/base/Unstable_NumberInput";
 import { styledRectButton } from "../LoginPage/LoginPage";
 
-function PathwayQuizEditorPage() {
+function TrainingQuizEditorPage() {
   const [navigationBarOpen, setNavigationBarOpen] = useState(true);
 
   const [questions, setQuestions] = useState([
@@ -123,7 +123,7 @@ function PathwayQuizEditorPage() {
           <div className={styles.editor}>
             <div className={styles.editorContent}>
               <div className={styles.editorHeader}>
-                <h1 className={styles.nameHeading}>Pathways Editor</h1>
+                <h1 className={styles.nameHeading}>Trainings Editor</h1>
                 <div className={styles.editorProfileHeader}>
                   <h5 className={styles.adminText}> Admin </h5>
                   <ProfileIcon />
@@ -298,4 +298,4 @@ function PathwayQuizEditorPage() {
   );
 }
 
-export default PathwayQuizEditorPage;
+export default TrainingQuizEditorPage;
