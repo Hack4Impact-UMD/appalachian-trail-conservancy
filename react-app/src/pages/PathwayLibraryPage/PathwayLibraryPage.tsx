@@ -189,6 +189,7 @@ function PathwayLibrary() {
 
             <div className={styles.searchBarContainer}>
               <OutlinedInput
+                className={styles.searchBar}
                 sx={grayBorderSearchBar}
                 placeholder="Search..."
                 onChange={debouncedOnChange}

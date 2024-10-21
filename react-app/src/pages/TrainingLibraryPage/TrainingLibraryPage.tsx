@@ -194,6 +194,7 @@ function TrainingLibrary() {
 
             <div className={styles.searchBarContainer}>
               <OutlinedInput
+                className={styles.searchBar}
                 sx={grayBorderSearchBar}
                 placeholder="Search..."
                 onChange={debouncedOnChange}
@@ -206,7 +207,7 @@ function TrainingLibrary() {
 
               {/* dropdown container */}
               <div className={styles.dropdownContainer}>
-                <FormControl>
+                <FormControl sx={{width: 300}}>
                   <Select
                     className={styles.dropdownMenu}
                     sx={whiteSelectGrayBorder}
