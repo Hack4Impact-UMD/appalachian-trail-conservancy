@@ -240,6 +240,7 @@ function AchievementsPage() {
                     <Badge
                       title={pathway.genericPathway.name}
                       date={pathway.volunteerPathway.dateCompleted}
+                      image={pathway.genericPathway.badgeImage}
                     />
                   ))}
                 </>

@@ -22,9 +22,7 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
     if (volunteerTraining == undefined) {
       // Training not started
       return <div className={styles.marker}></div>;
-    } else if (
-      volunteerTraining.progress == "COMPLETED"
-    ) {
+    } else if (volunteerTraining.progress == "COMPLETED") {
       // Training completed
       return (
         <div className={`${styles.marker} ${styles.completedMarker}`}>

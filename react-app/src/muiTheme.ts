@@ -56,6 +56,13 @@ export const forestGreenButtonPadding = {
   paddingRight: "20px",
 };
 
+// forest green button with padding, custom size, and font size
+export const forestGreenButtonLarge = {
+  ...forestGreenButtonPadding,
+  padding: '27px 27px',  
+  fontSize: '20px',
+};
+
 // white with dark green borders (no hover change)
 export const whiteButtonGreenBorder = {
   ...baseStyles,
