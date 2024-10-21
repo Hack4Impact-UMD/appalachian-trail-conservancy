@@ -149,6 +149,32 @@ function TrainingLibrary() {
 
   const debouncedOnChange = debounce(updateQuery, 200);
 
+  const renderEmptyMessage = () => {
+    if (searchQuery != "") {
+      return (
+        <div className={styles.emptySearchMessage}>
+          No Trainings Matching “{searchQuery}”
+        </div>
+      );
+    } else {
+      if (filterType == "all") {
+        return <div className={styles.emptySearchMessage}>No Trainings</div>;
+      } else if (filterType == "inProgress") {
+        return (
+          <div className={styles.emptySearchMessage}>
+            No Trainings In Progress
+          </div>
+        );
+      } else if (filterType == "completed") {
+        return (
+          <div className={styles.emptySearchMessage}>
+            No Trainings Completed
+          </div>
+        );
+      }
+    }
+  };
+
   return (
     <>
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
@@ -238,9 +264,7 @@ function TrainingLibrary() {
             ) : (
               <>
                 {filteredTrainings.length === 0 ? (
-                  <div className={styles.emptySearchMessage}>
-                    No Trainings Matching “{searchQuery}”
-                  </div>
+                  renderEmptyMessage()
                 ) : (
                   <div className={styles.cardsContainer}>
                     {filteredTrainings.map((training, index) => (

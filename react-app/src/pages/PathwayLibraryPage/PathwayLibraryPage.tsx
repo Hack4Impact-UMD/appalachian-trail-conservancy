@@ -146,6 +146,30 @@ function PathwayLibrary() {
 
   const debouncedOnChange = debounce(updateQuery, 500);
 
+  const renderEmptyMessage = () => {
+    if (searchQuery != "") {
+      return (
+        <div className={styles.emptySearchMessage}>
+          No Pathways Matching “{searchQuery}”
+        </div>
+      );
+    } else {
+      if (filterType == "all") {
+        return <div className={styles.emptySearchMessage}>No Pathways</div>;
+      } else if (filterType == "inProgress") {
+        return (
+          <div className={styles.emptySearchMessage}>
+            No Pathways In Progress
+          </div>
+        );
+      } else if (filterType == "completed") {
+        return (
+          <div className={styles.emptySearchMessage}>No Pathways Completed</div>
+        );
+      }
+    }
+  };
+
   return (
     <>
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
@@ -179,8 +203,8 @@ function PathwayLibrary() {
               <div className={styles.dropdownContainer}>
                 <FormControl>
                   <Select
-                   className={styles.dropdownMenu}
-                   sx={whiteSelectGrayBorder}
+                    className={styles.dropdownMenu}
+                    sx={whiteSelectGrayBorder}
                     value={filterType}
                     onChange={(e) => setFilterType(e.target.value)}
                     label="Filter"
@@ -235,9 +259,7 @@ function PathwayLibrary() {
             ) : (
               <>
                 {filteredPathways.length === 0 ? (
-                  <div className={styles.emptySearchMessage}>
-                    No Trainings Matching “{searchQuery}”
-                  </div>
+                  renderEmptyMessage()
                 ) : (
                   <div className={styles.cardsContainer}>
                     {filteredPathways.map((pathway, index) => (
