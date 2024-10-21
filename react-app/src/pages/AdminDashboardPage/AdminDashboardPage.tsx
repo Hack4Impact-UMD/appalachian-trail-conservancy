@@ -38,7 +38,7 @@ function AdminDashboardPage() {
   });
 
   const [pathway] = useState<PathwayID>({
-    name: "Divalicious Pathway",
+    name: "Test Pathway",
     id: "",
     shortBlurb: "",
     description: "",

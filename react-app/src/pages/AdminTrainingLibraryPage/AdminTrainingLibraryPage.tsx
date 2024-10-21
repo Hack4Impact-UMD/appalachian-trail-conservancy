@@ -45,7 +45,7 @@ function AdminTrainingLibrary() {
     status: "DRAFT",
   });
   const [training2] = useState<TrainingID>({
-    name: "How to be a Diva",
+    name: "Training in the Mountains",
     id: "123",
     shortBlurb: "",
     description: "",
@@ -62,7 +62,7 @@ function AdminTrainingLibrary() {
     status: "DRAFT",
   });
   const [training3] = useState<TrainingID>({
-    name: "How to be a Crackhead",
+    name: "How to be an Expert Hiker",
     id: "123",
     shortBlurb: "",
     description: "",

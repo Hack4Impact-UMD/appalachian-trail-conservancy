@@ -28,7 +28,7 @@ function AdminPathwayLibrary() {
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
 
   const [pathway1] = useState<PathwayID>({
-    name: "Divalicious Pathway",
+    name: "Test Pathway",
     id: "",
     shortBlurb: "",
     description: "",
@@ -44,7 +44,7 @@ function AdminPathwayLibrary() {
   });
 
   const [pathway2] = useState<PathwayID>({
-    name: "Pop Culture Whiz",
+    name: "Hiking Whiz",
     id: "",
     shortBlurb: "",
     description: "",
@@ -106,7 +106,7 @@ function AdminPathwayLibrary() {
         <div className={styles.outerContainer}>
           <div className={styles.content}>
             <div className={styles.header}>
-              <h1 className={styles.nameHeading}> Trainings Library </h1>
+              <h1 className={styles.nameHeading}> Pathways Library </h1>
               <div className={styles.adminIcon}>
                 <h6> ADMIN </h6>
                 <div className={styles.profileIcon}>
@@ -184,7 +184,7 @@ function AdminPathwayLibrary() {
               <>
                 {filteredPathways.length === 0 ? (
                   <div className={styles.emptySearchMessage}>
-                    No Trainings Matching “{searchQuery}”
+                    No Pathways Matching “{searchQuery}”
                   </div>
                 ) : (
                   <div className={styles.cardsContainer}>
