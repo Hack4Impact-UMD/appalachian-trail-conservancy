@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import achievementInactive from "../../assets/achievementsGray.svg";
 import achievementsActive from "../../assets/achievementsWhite.svg";
@@ -26,6 +26,22 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
   const handleLogOut = (): void => {
     setOpenLogoutPopup(true);
   };
+
+  // Automatically close NavBar when window width is below 600px
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 625 && open) {
+        setOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup event listener on unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [open, setOpen]);
 
   return (
     <div
@@ -172,12 +188,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
         </>
       ) : (
         <div>
-          <img
-            src={hamburger}
-            className={styles.hamburger}
-            width={30}
-            onClick={() => setOpen(true)}
-          />
+          
         </div>
       )}
     </div>

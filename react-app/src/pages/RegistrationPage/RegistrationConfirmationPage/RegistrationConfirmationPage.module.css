@@ -1,0 +1,76 @@
+/* form container */
+.bottom {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+/* center right login form */
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+/* for each component in centered container */
+.contentContainer {
+  margin: 0.5rem;
+}
+
+/* header */
+.heading {
+  font-size: 2.5rem;
+  color: var(--blue-gray);
+  padding-top: 0;
+  margin: 0;
+}
+
+/* switch to volunteer login */
+.switch {
+  font-size: 0.85rem;
+  font-weight: bold;
+  text-decoration: underline;
+  text-underline-position: under;
+  color: var(--forest-green);
+  background-color: white;
+  border: none;
+  cursor: pointer;
+}
+
+/* checkmark sizing */
+.checkmark {
+  width: 200px;
+  height: auto;
+}
+
+/* check email text */
+.emailConfirmationText {
+  font-size: 1.1rem;
+  color: --var(--blue-gray);
+  font-weight: bold;
+  margin-top: 1.12rem;
+  margin-bottom: 0.3rem;
+}
+
+/* mobile */
+@media screen and (max-width: 850px) {
+  .left {
+    width: 0%;
+  }
+  .right {
+    width: 100%;
+    min-width: 0%;
+  }
+}
+
+@media screen and (max-height: 750px) {
+  .split {
+    flex-direction: row;
+    height: 100%;
+  }
+}

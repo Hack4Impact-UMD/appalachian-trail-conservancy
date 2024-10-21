@@ -1,10 +1,18 @@
 import { useState, useEffect } from "react";
 import { IoIosSearch } from "react-icons/io";
-import { Button, InputAdornment, OutlinedInput } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  InputAdornment,
+  MenuItem,
+  OutlinedInput,
+  Select,
+} from "@mui/material";
 import {
   forestGreenButtonPadding,
   whiteButtonGrayBorder,
   grayBorderSearchBar,
+  whiteSelectGrayBorder,
 } from "../../muiTheme";
 import { getAllTrainings, getVolunteer } from "../../backend/FirestoreCalls";
 import { TrainingID } from "../../types/TrainingType";
@@ -14,6 +22,8 @@ import styles from "./TrainingLibraryPage.module.css";
 import Loading from "../../components/LoadingScreen/Loading.tsx";
 import debounce from "lodash.debounce";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import hamburger from "../../assets/hamburger.svg";
+
 import Footer from "../../components/Footer/Footer";
 import TrainingCard from "../../components/TrainingCard/TrainingCard";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
@@ -30,7 +40,21 @@ function TrainingLibrary() {
   const [filteredTrainings, setFilteredTrainings] = useState<
     { genericTraining: TrainingID; volunteerTraining?: VolunteerTraining }[]
   >([]);
-  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+  const [open, setOpen] = useState(true);
+
+  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
+
+  // Update screen width on resize
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const filterTrainings = (
     trainings?: {
@@ -129,12 +153,28 @@ function TrainingLibrary() {
 
   return (
     <>
-      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <NavigationBar open={open} setOpen={setOpen} />
+      
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        style={{
+          // Only apply left shift when screen width is greater than 1200px
+          left: open && screenWidth > 1200 ? "250px" : "0",
+        }}
+      >
+        {!open && (
+            <img
+              src={hamburger}
+              alt="Hamburger Menu"
+              className={styles.hamburger} // Add styles to position it
+              width={30}
+              onClick={() => setOpen(true)} // Set sidebar open when clicked
+            />
+          )
+        }
         <div className={styles.outerContainer}>
           <div className={styles.content}>
+
             <div className={styles.header}>
               <h1 className={styles.nameHeading}> Trainings </h1>
               <ProfileIcon />
@@ -152,6 +192,24 @@ function TrainingLibrary() {
                 }
               />
 
+              {/* dropdown container */}
+              <div className={styles.dropdownContainer}>
+                <FormControl>
+                  <Select
+                    className={styles.dropdownMenu}
+                    sx={whiteSelectGrayBorder}
+                    value={filterType}
+                    onChange={(e) => setFilterType(e.target.value)}
+                    label="Filter"
+                  >
+                    <MenuItem value="all">ALL</MenuItem>
+                    <MenuItem value="inProgress">IN PROGRESS</MenuItem>
+                    <MenuItem value="completed">COMPLETED</MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
+
+              {/* button container */}
               <div className={styles.buttonContainer}>
                 <Button
                   sx={
@@ -160,7 +218,8 @@ function TrainingLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("all")}>
+                  onClick={() => setFilterType("all")}
+                >
                   All
                 </Button>
                 <Button
@@ -170,7 +229,8 @@ function TrainingLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("inProgress")}>
+                  onClick={() => setFilterType("inProgress")}
+                >
                   In Progress
                 </Button>
                 <Button
@@ -180,7 +240,8 @@ function TrainingLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("completed")}>
+                  onClick={() => setFilterType("completed")}
+                >
                   Completed
                 </Button>
               </div>
