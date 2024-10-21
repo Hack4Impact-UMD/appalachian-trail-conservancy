@@ -104,7 +104,7 @@
     display: none;  
   }
   .dropdownContainer {
-    display: block; 
+    display: block;
     margin-top: 2%;
   }
 }
@@ -120,6 +120,10 @@
 }
 
 @media screen and (max-width: 650px) {
+  .dropdownMenu {
+    width: 300px;  
+  }
+
   .content {
     width: 300px;
   }

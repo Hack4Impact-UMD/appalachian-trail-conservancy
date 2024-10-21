@@ -123,6 +123,9 @@
 }
 
 @media screen and (max-width: 950px) {
+  .dropdownMenu {
+    width: 425px;
+  }
   .content {
     width: 425px;
   }
