@@ -152,7 +152,7 @@ function AdminTrainingLibrary() {
               />
             </div>
             <div className={styles.buttonContainer}>
-            <Button
+              <Button
                 sx={
                   filterType === "all"
                     ? forestGreenButtonPadding
