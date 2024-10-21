@@ -23,6 +23,8 @@ import styles from "./PathwayLibraryPage.module.css";
 import Loading from "../../components/LoadingScreen/Loading.tsx";
 import debounce from "lodash.debounce";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import hamburger from "../../assets/hamburger.svg";
+
 import Footer from "../../components/Footer/Footer";
 import PathwayCard from "../../components/PathwayCard/PathwayCard";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
@@ -39,7 +41,7 @@ function PathwayLibrary() {
   const [filteredPathways, setFilteredPathways] = useState<
     { genericPathway: PathwayID; volunteerPathway?: VolunteerPathway }[]
   >([]);
-  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+  const [open, setOpen] = useState(true); // nav bar
 
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
 
@@ -148,14 +150,24 @@ function PathwayLibrary() {
 
   return (
     <>
-      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <NavigationBar open={open} setOpen={setOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
         style={{
           // Only apply left shift when screen width is greater than 1200px
-          left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
+          left: open && screenWidth > 1200 ? "250px" : "0",
         }}
       >
+        {!open && (
+            <img
+              src={hamburger}
+              alt="Hamburger Menu"
+              className={styles.hamburger} // Add styles to position it
+              width={30}
+              onClick={() => setOpen(true)} // Set sidebar open when clicked
+            />
+          )
+        }
         <div className={styles.outerContainer}>
           <div className={styles.content}>
             <div className={styles.header}>
