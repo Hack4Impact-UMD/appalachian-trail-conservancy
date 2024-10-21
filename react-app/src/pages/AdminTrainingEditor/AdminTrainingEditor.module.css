@@ -1,97 +1,88 @@
-html, body {
-    height: 100%;
-    margin: 0;
-  
+html,
+body {
+  height: 100%;
+  margin: 0;
 }
 
 .container {
-    display: flex;
-    height: 100vh;
-    
+  display: flex;
+  height: 100vh;
 }
 
 .navbar {
-    width: 250px;
-    background-color: #2E3B4E;
+  width: 250px;
+  background-color: #2e3b4e;
 }
 
 .editorHeader {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
 }
 
-.editorProfileHeader{
-    display: flex;
+.editorProfileHeader {
+  display: flex;
 }
 
-.adminText{
-    margin-right: 1rem;
+.adminText {
+  margin-right: 1rem;
 }
 
 .editor {
-    flex-grow: 1;
-    background-color: #FAFAFA;
-    overflow-y: auto; 
+  flex-grow: 1;
+  background-color: #fafafa;
+  overflow-y: auto;
 }
 
 .editorContent {
-    flex-grow: 1;
-    background-color: #FAFAFA;
-    overflow-y: auto;
-    margin-left: 2rem;
-    margin-bottom: 2rem;
-    margin-top: 2rem;
-    margin-right: 2rem;
+  flex-grow: 1;
+  background-color: #fafafa;
+  overflow-y: auto;
+  margin-left: 2rem;
+  margin-bottom: 2rem;
+  margin-top: 2rem;
+  margin-right: 2rem;
 }
 
 .uploadSection {
-    margin-top: 1rem;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .uploadSection button {
-    background-color: #49A772;
-    color: white;
-    padding: 0.5rem 1rem;
-    text-transform: none;
+  background-color: #49a772;
+  color: white;
+  padding: 0.5rem 1rem;
+  text-transform: none;
 }
 
-
-
 .buttonGroup {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin-top: 1rem;
-    width: 150px; 
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+  width: 150px;
 }
 
 .buttonGroup button {
-    width: 150px; 
+  width: 150px;
 }
-
-
 
 .saveButton {
-    margin-left: 1rem;
-    width: 180px; 
-    background-color: transparent !important; 
-    color: black !important; 
-    border: 2px solid black !important; 
-    border-radius: 10px !important; 
+  margin-left: 1rem;
+  width: 180px;
+  background-color: transparent !important;
+  color: black !important;
+  border: 2px solid black !important;
+  border-radius: 10px !important;
 }
-
-
 
 .headerText {
-    color: #2E3B4E; 
-    font-size: 2rem;
+  color: #2e3b4e;
+  font-size: 2rem;
 }
-

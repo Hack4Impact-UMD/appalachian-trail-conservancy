@@ -447,7 +447,7 @@ const AdminPathwayEditor: React.FC = () => {
                 </div>
               </div>
               {/* Button group */}
-              <div className={styles.addTrainingContainer}> 
+              <div className={styles.addTrainingContainer}>
                 <Button
                   variant="contained"
                   sx={{
