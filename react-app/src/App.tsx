@@ -44,7 +44,6 @@ function App() {
               path="/registration-confirmation"
               element={<RegistrationConfirmationPage />}
             />
-
             <Route
               path="/"
               element={
