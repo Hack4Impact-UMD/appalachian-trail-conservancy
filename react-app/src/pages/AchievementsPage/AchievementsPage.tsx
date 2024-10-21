@@ -22,9 +22,11 @@ import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Certificate from "../../components/CertificateCard/CertificateCard";
 import { useAuth } from "../../auth/AuthProvider";
 import Badge from "../../components/BadgeCard/BadgeCard";
+import { useNavigate } from "react-router-dom";
 
 function AchievementsPage() {
   const auth = useAuth();
+  const navigate = useNavigate();
   const [badgesSelected, setBadgesSelected] = useState<boolean>(true);
   const [sortMode, setSortMode] = useState<string>("newest");
 
@@ -63,7 +65,6 @@ function AchievementsPage() {
         });
       }
     });
-
     getAllPathways().then((genericPathways) => {
       if (!auth.loading && auth.id) {
         getVolunteer(auth.id.toString()).then((volunteer) => {
@@ -90,7 +91,7 @@ function AchievementsPage() {
         });
       }
     });
-  });
+  }, [auth.loading, auth.id]);
 
   const sortCards = () => {
     let sortedCopy;
@@ -131,7 +132,6 @@ function AchievementsPage() {
           sortedCopy.sort((a, b) =>
             a.genericTraining.name.localeCompare(b.genericTraining.name)
           );
-
           break;
         case "reverseAlphabetically":
           sortedCopy.sort((a, b) =>
@@ -233,29 +233,75 @@ function AchievementsPage() {
                 </Select>
               </div>
             </div>
-            <div className={styles.cardsContainer}>
-              {badgesSelected ? (
-                <>
+
+            {badgesSelected ? (
+              <>
+                {correlatedPathways.length == 0 ? (
+                  <>
+                    <div className={styles.noCards}>
+                      <h1>No Badges Earned!</h1>
+                      <div className={styles.leftButtonContainer}>
+                        <Button
+                          onClick={() => {
+                            navigate("/pathways");
+                          }}
+                          sx={forestGreenButtonPadding}
+                          variant="contained"
+                        >
+                          Go to Pathways Library
+                        </Button>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <></>
+                )}
+                <div className={styles.cardsContainer}>
                   {correlatedPathways.map((pathway, index) => (
                     <Badge
                       title={pathway.genericPathway.name}
                       date={pathway.volunteerPathway.dateCompleted}
                       image={pathway.genericPathway.badgeImage}
+                      key={index}
                     />
                   ))}
-                </>
-              ) : (
-                <>
-                  {correlatedTrainings.map((training, index) => (
-                    <Certificate
-                      title={training.genericTraining.name}
-                      image={training.genericTraining.coverImage}
-                      date={training.volunteerTraining.dateCompleted}
-                    />
-                  ))}
-                </>
-              )}
-            </div>
+                </div>
+              </>
+            ) : (
+              <>
+                {correlatedTrainings.length == 0 ? (
+                  <>
+                    <div className={styles.noCards}>
+                      <h1>No Certifications Earned!</h1>
+                      <div className={styles.leftButtonContainer}>
+                        <Button
+                          onClick={() => {
+                            navigate("/trainings");
+                          }}
+                          sx={forestGreenButtonPadding}
+                          variant="contained"
+                        >
+                          Go to Trainings Library
+                        </Button>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className={styles.cardsContainer}>
+                      {correlatedTrainings.map((training, index) => (
+                        <Certificate
+                          title={training.genericTraining.name}
+                          image={training.genericTraining.coverImage}
+                          date={training.volunteerTraining.dateCompleted}
+                          key={index}
+                        />
+                      ))}
+                    </div>
+                  </>
+                )}
+              </>
+            )}
           </div>
         </div>
         <Footer />

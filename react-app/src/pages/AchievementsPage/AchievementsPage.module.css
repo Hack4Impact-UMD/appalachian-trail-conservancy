@@ -62,3 +62,10 @@
   column-gap: 1em;
   margin-bottom: 1rem;
 }
+
+.noCards {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin: 10% 15% 15% 15%;
+}
