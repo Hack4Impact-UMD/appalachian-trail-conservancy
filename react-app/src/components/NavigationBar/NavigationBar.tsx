@@ -188,12 +188,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
         </>
       ) : (
         <div>
-          <img
-            src={hamburger}
-            className={styles.hamburger}
-            width={30}
-            onClick={() => setOpen(true)}
-          />
+          
         </div>
       )}
     </div>
