@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"; // Added useEffect
+import React, { useState, useEffect } from "react";
 import styles from "./PathwayQuizEditorPage.module.css";
 import { Button, Typography, OutlinedInput, styled } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
@@ -11,8 +11,12 @@ import {
   grayBorderTextField,
   whiteButtonGrayBorder,
 } from "../../muiTheme";
-import { Unstable_NumberInput as NumberInput } from "@mui/base/Unstable_NumberInput";
+import {
+  Unstable_NumberInput as NumberInput,
+  numberInputClasses,
+} from "@mui/base/Unstable_NumberInput";
 import { styledRectButton } from "../LoginPage/LoginPage";
+import { blue, grey } from "@mui/material/colors";
 
 function PathwayQuizEditorPage() {
   const [navigationBarOpen, setNavigationBarOpen] = useState(true);
@@ -148,24 +152,38 @@ function PathwayQuizEditorPage() {
                     style={{
                       color: "black",
                       fontWeight: "bold",
-                      marginTop: "2rem",
+                      marginRight: "0.5rem",
+                      lineHeight: "1.5",
                     }}
                   >
                     POINTS TO PASS:
                   </Typography>
 
                   <NumberInput
+                    slots={{
+                      root: StyledInputRoot,
+                      input: StyledInputElement,
+                      incrementButton: StyledButton,
+                      decrementButton: StyledButton,
+                    }}
                     aria-label="Points to pass"
                     min={0}
                     max={maxPoints}
                     value={pointsToPass}
                     onChange={handlePointsToPassChange}
                   />
+
                   <Typography
                     variant="body2"
-                    style={{ marginLeft: "1rem", color: "gray" }}
+                    style={{
+                      marginLeft: "1rem",
+                      color: "black",
+                      marginTop: "0",
+                      lineHeight: "1.5",
+                      fontWeight: "bold",
+                    }}
                   >
-                    / {maxPoints} {/* Displays the total number of questions */}
+                    / {maxPoints}
                   </Typography>
                 </div>
 
@@ -299,3 +317,100 @@ function PathwayQuizEditorPage() {
 }
 
 export default PathwayQuizEditorPage;
+const StyledInputRoot = styled("div")(({ theme }) => ({
+  fontFamily: "'IBM Plex Sans', sans-serif",
+  fontWeight: 400,
+  borderRadius: "4px",
+  color: theme.palette.mode === "dark" ? grey[300] : grey[900],
+  background: theme.palette.mode === "dark" ? grey[900] : "#fff",
+  border: `1px solid black`,
+
+  boxShadow: `0px 2px 2px ${
+    theme.palette.mode === "dark" ? grey[900] : grey[50]
+  }`,
+  display: "grid",
+  gridTemplateColumns: "1fr 15px",
+  gridTemplateRows: "1fr 1fr",
+  overflow: "hidden",
+  columnGap: "2px",
+  padding: "2px",
+  width: "3rem",
+  height: "1.6rem",
+  marginTop: "0",
+  marginLeft: "1rem",
+  alignItems: "center",
+  boxSizing: "border-box",
+
+  "&:focus-visible": {
+    outline: 0,
+  },
+}));
+const StyledInputElement = styled("input")(({ theme }) => ({
+  fontSize: "0.9rem",
+  fontFamily: "inherit",
+  fontWeight: "bold",
+  lineHeight: 1.5,
+  gridColumn: "1/2",
+  gridRow: "1/3",
+  color: theme.palette.mode === "dark" ? grey[300] : grey[900],
+  background: "inherit",
+  border: "none",
+  borderRadius: "inherit",
+  padding: "2px 2px",
+  outline: 0,
+  width: "100%",
+  height: "100%",
+  textAlign: "center",
+  boxSizing: "border-box",
+}));
+
+const StyledButton = styled("button")(({ theme }) => ({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  padding: 0,
+  width: "10px",
+  height: "10px",
+  fontFamily: "system-ui, sans-serif",
+  fontSize: "0.675rem",
+  lineHeight: 1,
+  background: grey[200],
+  border: 0,
+  color: grey[900],
+  transition: "all 120ms cubic-bezier(0.4, 0, 0.2, 1)",
+  boxSizing: "border-box",
+
+  "&:hover": {
+    background: grey[300],
+    cursor: "pointer",
+  },
+
+  [`&.${numberInputClasses.incrementButton}`]: {
+    gridColumn: "2",
+    gridRow: "1",
+    borderTopLeftRadius: "4px",
+    borderTopRightRadius: "4px",
+    border: "1px solid",
+    borderBottom: 0,
+    borderColor: grey[300],
+    background: grey[200],
+    color: grey[900],
+    "&::before": {
+      content: '"▲"',
+    },
+  },
+
+  [`&.${numberInputClasses.decrementButton}`]: {
+    gridColumn: "2",
+    gridRow: "2",
+    borderBottomLeftRadius: "4px",
+    borderBottomRightRadius: "4px",
+    border: "1px solid",
+    borderColor: grey[300],
+    background: grey[200],
+    color: grey[900],
+    "&::before": {
+      content: '"▼"',
+    },
+  },
+}));

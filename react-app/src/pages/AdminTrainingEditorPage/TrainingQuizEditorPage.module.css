@@ -4,7 +4,7 @@
     z-index: 1;
     top: 0;
     overflow-x: hidden;
-    transition: left 0.3s ease; 
+    transition: left 0.3s ease; /* Add transition for smooth animation */
   }
  
   .right {
@@ -67,14 +67,6 @@
     overflow-y: auto;
     margin: 2rem;
     padding: 0 3.5%;
-}
-
-
-.textFieldLabel {
-    color: black;
-    font-weight: bold;
-    margin-bottom: 4px;
-    margin-top: 2rem;
 }
 
 
@@ -142,24 +134,16 @@
     border: none;
 }
 
-.numberInput {
-    width: 50px;
-    height: 35px; 
-  }
+
 
 .buttonsContainer {
     display: flex;
-    align-items: center; 
+    align-items: center;
     margin-top: 2rem;    
     justify-content: flex-start; 
   }
   
-  .button {
-    margin-left: 10px; 
-    width: 80px;       
-    height: 40px;     
-  }
-  
+
 
 .closeIcon {
     padding-top: 12px;

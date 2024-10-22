@@ -70,14 +70,6 @@
 }
 
 
-.textFieldLabel {
-    color: black;
-    font-weight: bold;
-    margin-bottom: 4px;
-    margin-top: 2rem;
-}
-
-
 .addQuestionContainer {
     margin-top: 1rem;
     display: flex;
@@ -142,10 +134,7 @@
     border: none;
 }
 
-.numberInput {
-    width: 50px; 
-    height: 35px; 
-  }
+
 
 .buttonsContainer {
     display: flex;
@@ -154,12 +143,7 @@
     justify-content: flex-start; 
   }
   
-  .button {
-    margin-left: 10px; 
-    width: 80px;       
-    height: 40px;      
-  }
-  
+
 
 .closeIcon {
     padding-top: 12px;
