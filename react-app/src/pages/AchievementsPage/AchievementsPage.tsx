@@ -61,7 +61,13 @@ function AchievementsPage() {
               }
             }
           }
-          setCorrelatedTrainings(allCorrelatedTrainings);
+          let sortedCopy = allCorrelatedTrainings.slice();
+          sortedCopy.sort((a, b) => {
+            const dateA = DateTime.fromISO(a.volunteerTraining.dateCompleted);
+            const dateB = DateTime.fromISO(b.volunteerTraining.dateCompleted);
+            return dateB.toMillis() - dateA.toMillis();
+          });
+          setCorrelatedTrainings(sortedCopy);
         });
       }
     });
