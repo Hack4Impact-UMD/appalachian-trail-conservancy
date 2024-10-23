@@ -21,6 +21,8 @@ import QuizPage from "./pages/QuizPage/QuizPage.tsx";
 import QuizResult from "./pages/QuizResultPage/QuizResultPage.tsx";
 import QuizLandingPage from "./pages/QuizLandingPage/QuizLandingPage.tsx";
 import PathwayLibrary from "./pages/PathwayLibraryPage/PathwayLibraryPage.tsx";
+import AdminTrainingEditor from "./pages/AdminTrainingEditor/AdminTrainingEditor.tsx";
+import AdminPathwayEditor from "./pages/AdminPathwayEditor/AdminPathwayEditor.tsx";
 import RegistrationPage from "./pages/RegistrationPage/RegistrationPage/RegistrationPage.tsx";
 import RegistrationConfirmationPage from "./pages/RegistrationPage/RegistrationConfirmationPage/RegistrationConfirmationPage.tsx";
 import AdminDashboard from "./pages/AdminDashboardPage/AdminDashboardPage.tsx";
@@ -42,7 +44,6 @@ function App() {
               path="/registration-confirmation"
               element={<RegistrationConfirmationPage />}
             />
-
             <Route
               path="/"
               element={
@@ -51,7 +52,6 @@ function App() {
                 </RequireVolunteerAuth>
               }
             />
-
             <Route
               path="/admin"
               element={
@@ -60,7 +60,6 @@ function App() {
                 </RequireAdminAuth>
               }
             />
-
             <Route
               path="/admin/trainings"
               element={
@@ -69,7 +68,14 @@ function App() {
                 </RequireAdminAuth>
               }
             />
-
+            <Route
+              path="/admin/trainings/editor"
+              element={
+                <RequireAdminAuth>
+                  <AdminTrainingEditor />
+                </RequireAdminAuth>
+              }
+            />
             <Route
               path="/admin/pathways"
               element={
@@ -78,7 +84,14 @@ function App() {
                 </RequireAdminAuth>
               }
             />
-
+            <Route
+              path="/admin/pathways/editor"
+              element={
+                <RequireAdminAuth>
+                  <AdminPathwayEditor />
+                </RequireAdminAuth>
+              }
+            />
             <Route
               path="/trainings"
               element={
@@ -159,7 +172,6 @@ function App() {
                 </RequireAuth>
               }
             />
-
             <Route
               path="/testfunctions"
               element={
@@ -167,7 +179,8 @@ function App() {
                   <button
                     onClick={() => {
                       //insert test function here
-                    }}>
+                    }}
+                  >
                     TEST
                   </button>
                 </RequireAuth>
