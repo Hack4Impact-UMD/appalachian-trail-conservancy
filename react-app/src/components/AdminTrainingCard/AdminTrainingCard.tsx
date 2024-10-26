@@ -13,9 +13,14 @@ const AdminTrainingCard: React.FC<AdminTrainingCardProps> = ({ training }) => {
           <img src={training.coverImage} alt="Training" />
         </div>
         <div className={styles.trainingContent}>
-          <div className={styles.trainingTitle}>
-            {training.name.substring(0, 20)}
-            {training.name.length >= 21 ? "..." : ""}
+          <div className={styles.trainingTitleWrapper}>
+            <div className={styles.trainingTitle}>
+              {training.name.substring(0, 20)}
+              {training.name.length >= 21 ? "..." : ""}
+            </div>
+            {training.name.length > 30 && (
+              <span className={styles.tooltip}>{training.name}</span>
+            )}
           </div>
           <div className={styles.outsideMarker}>
             <div className={`${styles.marker}`}>EDIT</div>
