@@ -14,7 +14,11 @@ import {
   grayBorderSearchBar,
   whiteSelectGrayBorder,
 } from "../../muiTheme";
-import { getAllTrainings, getVolunteer } from "../../backend/FirestoreCalls";
+import {
+  getAllPublishedTrainings,
+  getAllTrainings,
+  getVolunteer,
+} from "../../backend/FirestoreCalls";
 import { TrainingID } from "../../types/TrainingType";
 import { VolunteerTraining } from "../../types/UserType";
 import { useAuth } from "../../auth/AuthProvider.tsx";
@@ -97,7 +101,7 @@ function TrainingLibrary() {
 
   useEffect(() => {
     // get all trainings from firebase
-    getAllTrainings()
+    getAllPublishedTrainings()
       .then((genericTrainings) => {
         // only use auth if it is finished loading
         if (!auth.loading && auth.id) {
@@ -154,7 +158,7 @@ function TrainingLibrary() {
   return (
     <>
       <NavigationBar open={open} setOpen={setOpen} />
-      
+
       <div
         className={`${styles.split} ${styles.right}`}
         style={{
@@ -163,18 +167,16 @@ function TrainingLibrary() {
         }}
       >
         {!open && (
-            <img
-              src={hamburger}
-              alt="Hamburger Menu"
-              className={styles.hamburger} // Add styles to position it
-              width={30}
-              onClick={() => setOpen(true)} // Set sidebar open when clicked
-            />
-          )
-        }
+          <img
+            src={hamburger}
+            alt="Hamburger Menu"
+            className={styles.hamburger} // Add styles to position it
+            width={30}
+            onClick={() => setOpen(true)} // Set sidebar open when clicked
+          />
+        )}
         <div className={styles.outerContainer}>
           <div className={styles.content}>
-
             <div className={styles.header}>
               <h1 className={styles.nameHeading}> Trainings </h1>
               <ProfileIcon />
