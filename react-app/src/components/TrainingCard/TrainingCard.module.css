@@ -62,3 +62,32 @@
   background-color: var(--blue-gray);
   color: white;
 }
+.trainingTitleWrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip {
+  visibility: hidden;
+  background-color: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  text-align: center;
+  padding: 5px;
+  border-radius: 4px;
+  position: absolute;
+  z-index: 1;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: normal; 
+  max-width: 200px; 
+  opacity: 0;
+  transition: opacity 0.3s;
+  margin-bottom: 8px;
+}
+
+
+.trainingTitleWrapper:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
