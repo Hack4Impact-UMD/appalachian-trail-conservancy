@@ -13,6 +13,7 @@ import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import CompletedIcon from "../../assets/completedCheck.svg";
 import Loading from "../../components/LoadingScreen/Loading";
+import hamburger from "../../assets/hamburger.svg";
 
 const styledProgressShape = {
   height: 24,
@@ -251,15 +252,26 @@ function PathwayLandingPage() {
   };
 
   return (
-    <>
-      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
-
-      <div
-        className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
-        {loading ? (
-          <Loading />
-        ) : (
+      <>
+        <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+    
+        <div
+          className={`${styles.split} ${styles.right}`}
+          style={{ left: navigationBarOpen ? "250px" : "0" }}
+        >
+          {loading ? (
+            <Loading />
+          ) : (
+            <>
+              {!navigationBarOpen && (
+                <img
+                  src={hamburger}
+                  alt="Hamburger Menu"
+                  className={styles.hamburger} // Add styles to position it
+                  width={30}
+                  onClick={() => setNavigationBarOpen(true)} // Set sidebar open when clicked
+                />
+              )}
           <div className={styles.outerContainer}>
             <div className={styles.bodyContainer}>
               {/* HEADER */}
@@ -332,15 +344,16 @@ function PathwayLandingPage() {
                           className={styles.completedIcon}
                           src={CompletedIcon}
                           alt="Completed"
-                        />
-                      )}
+                          />
+                        )}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          </>
         )}
-
+        
         {/* footer */}
         <div
           className={styles.footer}

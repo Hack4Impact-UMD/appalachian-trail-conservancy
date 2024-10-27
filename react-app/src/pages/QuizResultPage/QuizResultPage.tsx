@@ -9,6 +9,7 @@ import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import atclogo from "../../assets/atc-primary-logo.png";
 import { Training } from "../../types/TrainingType";
 import { VolunteerTraining } from "../../types/UserType";
+import hamburger from "../../assets/hamburger.svg";
 
 const styledProgressShape = {
   height: 24,
@@ -82,6 +83,17 @@ const QuizResultPage = () => {
       <div
         className={`${styles.split} ${styles.right}`}
         style={{ left: navigationBarOpen ? "250px" : "0" }}>
+
+           {!navigationBarOpen && (
+          <img
+            src={hamburger}
+            alt="Hamburger Menu"
+            className={styles.hamburger} // Add styles to position it
+            width={30}
+            onClick={() => setNavigationBarOpen(true)} // Set sidebar open when clicked
+          />
+        )}
+
         <div className={styles.outerContainer}>
           <div className={styles.bodyContainer}>
             {/* HEADER */}

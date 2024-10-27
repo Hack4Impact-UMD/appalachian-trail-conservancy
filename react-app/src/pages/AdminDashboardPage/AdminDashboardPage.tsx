@@ -14,6 +14,8 @@ import {
   forestGreenButtonLarge,
   whiteButtonGrayBorder,
 } from "../../muiTheme";
+import hamburger from "../../assets/hamburger.svg";
+
 
 function AdminDashboardPage() {
   const auth = useAuth();
@@ -60,6 +62,15 @@ function AdminDashboardPage() {
         className={`${styles.split} ${styles.right}`}
         style={{ left: navigationBarOpen ? "250px" : "0" }}
       >
+         {!navigationBarOpen && (
+          <img
+            src={hamburger}
+            alt="Hamburger Menu"
+            className={styles.hamburger} // Add styles to position it
+            width={30}
+            onClick={() => setNavigationBarOpen(true)} // Set sidebar open when clicked
+          />
+        )}
         <div className={styles.outerContainer}>
           <div className={styles.content}>
             <div className={styles.header}>

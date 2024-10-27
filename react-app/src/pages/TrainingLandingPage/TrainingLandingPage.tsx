@@ -16,6 +16,8 @@ import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import CompletedIcon from "../../assets/completedCheck.svg";
 import Loading from "../../components/LoadingScreen/Loading";
+import hamburger from "../../assets/hamburger.svg";
+
 
 function TrainingLandingPage() {
   const auth = useAuth();
@@ -297,7 +299,7 @@ function TrainingLandingPage() {
   return (
     <>
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
-
+  
       <div
         className={`${styles.split} ${styles.right}`}
         style={{ left: navigationBarOpen ? "250px" : "0" }}
@@ -305,82 +307,93 @@ function TrainingLandingPage() {
         {loading ? (
           <Loading />
         ) : (
-          <div className={styles.outerContainer}>
-            <div className={styles.bodyContainer}>
-              {/* HEADER */}
-              <div className={styles.header}>
-                <h1 className={styles.nameHeading}>{training.name}</h1>
-                <ProfileIcon />
-              </div>
-
-              <div className={styles.progressContainer}>{renderMarker()}</div>
-
-              {/* ABOUT */}
-              <div className={styles.container}>
-                <h2>About</h2>
-                <p>{training.description}</p>
-              </div>
-
-              {/* OVERVIEW */}
-              <div className={styles.container}>
-                <h2>Overview</h2>
-                {renderTrainingResources()}
-                <div className={styles.trainingRowFinal}>
-                  <div
-                    className={`${styles.trainingInfo} ${
-                      volunteerTraining.trainingID !== "" &&
-                      (volunteerTraining.progress === "COMPLETED"
-                        ? styles.opacityContainer
-                        : "")
-                    }`}
-                  >
-                    <p className={styles.trainingNumber}>
-                      {volunteerTraining.numTotalResources + 1}
-                    </p>
-                    <p className={styles.trainingTitle}>Quiz</p>
-                  </div>
-                  <div>
-                    {/* Conditionally render an image if quiz is completed */}
-                    {volunteerTraining.trainingID !== "" &&
-                      volunteerTraining.progress === "COMPLETED" && (
-                        <img
-                          className={styles.completedIcon}
-                          src={CompletedIcon}
-                          alt="Completed"
-                        />
-                      )}
+          <>
+            {/* Hamburger Menu */}
+            {!navigationBarOpen && (
+              <img
+                src={hamburger}
+                alt="Hamburger Menu"
+                className={styles.hamburger} // Add styles to position it
+                width={30}
+                onClick={() => setNavigationBarOpen(true)} // Set sidebar open when clicked
+              />
+            )}
+  
+            <div className={styles.outerContainer}>
+              <div className={styles.bodyContainer}>
+                {/* HEADER */}
+                <div className={styles.header}>
+                  <h1 className={styles.nameHeading}>{training.name}</h1>
+                  <ProfileIcon />
+                </div>
+  
+                <div className={styles.progressContainer}>{renderMarker()}</div>
+  
+                {/* ABOUT */}
+                <div className={styles.container}>
+                  <h2>About</h2>
+                  <p>{training.description}</p>
+                </div>
+  
+                {/* OVERVIEW */}
+                <div className={styles.container}>
+                  <h2>Overview</h2>
+                  {renderTrainingResources()}
+                  <div className={styles.trainingRowFinal}>
+                    <div
+                      className={`${styles.trainingInfo} ${
+                        volunteerTraining.trainingID !== "" &&
+                        volunteerTraining.progress === "COMPLETED"
+                          ? styles.opacityContainer
+                          : ""
+                      }`}
+                    >
+                      <p className={styles.trainingNumber}>
+                        {volunteerTraining.numTotalResources + 1}
+                      </p>
+                      <p className={styles.trainingTitle}>Quiz</p>
+                    </div>
+                    <div>
+                      {/* Conditionally render an image if quiz is completed */}
+                      {volunteerTraining.trainingID !== "" &&
+                        volunteerTraining.progress === "COMPLETED" && (
+                          <img
+                            className={styles.completedIcon}
+                            src={CompletedIcon}
+                            alt="Completed"
+                          />
+                        )}
+                    </div>
                   </div>
                 </div>
+  
+                {/* RELATED PATHWAYS */}
+                {pathwayNames.length > 0 && (
+                  <>
+                    <div className={styles.container}>
+                      <h2>Related Pathways</h2>
+                    </div>
+  
+                    <div className={styles.relatedPathways}>
+                      {pathwayNames.map((pathway, idx) => (
+                        <div
+                          className={`${styles.marker} ${styles.pathwayMarker}`}
+                          onClick={() => {
+                            navigate(`/pathways/${pathway.id}`);
+                          }}
+                          key={idx}
+                        >
+                          {pathway.name}
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
               </div>
-
-              {/* RELATED PATHWAYS */}
-              {pathwayNames.length > 0 ? (
-                <>
-                  <div className={styles.container}>
-                    <h2>Related Pathways</h2>
-                  </div>
-
-                  <div className={styles.relatedPathways}>
-                    {pathwayNames.map((pathway, idx) => (
-                      <div
-                        className={`${styles.marker} ${styles.pathwayMarker}`}
-                        onClick={() => {
-                          navigate(`/pathways/${pathway.id}`);
-                        }}
-                        key={idx}
-                      >
-                        {pathway.name}
-                      </div>
-                    ))}
-                  </div>
-                </>
-              ) : (
-                <></>
-              )}
             </div>
-          </div>
+          </>
         )}
-
+  
         {/* footer */}
         <div
           className={styles.footer}
@@ -400,6 +413,7 @@ function TrainingLandingPage() {
       </div>
     </>
   );
-}
-
-export default TrainingLandingPage;
+  }
+  
+  export default TrainingLandingPage;
+  

@@ -4,14 +4,13 @@ import { Button } from "@mui/material";
 import { whiteButtonGrayBorder, forestGreenButton } from "../../muiTheme";
 import { TrainingID } from "../../types/TrainingType";
 import { VolunteerTraining } from "../../types/UserType";
-import {
-  updateVolunteerTraining
-} from "../../backend/FirestoreCalls";
+import { updateVolunteerTraining } from "../../backend/FirestoreCalls";
 import styles from "./TrainingPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import ResourceComponent from "../../components/ResourceComponent/ResourceComponent";
 import Loading from "../../components/LoadingScreen/Loading.tsx";
+import hamburger from "../../assets/hamburger.svg";
 
 function TrainingPage() {
   const navigate = useNavigate();
@@ -57,7 +56,7 @@ function TrainingPage() {
       setTraining(location.state.training);
       setVolunteerTraining(location.state.volunteerTraining);
       setLoading(false);
-      setVolunteerId(location.state.volunteerId)
+      setVolunteerId(location.state.volunteerId);
     } else {
       navigate("/trainings");
     }
@@ -76,16 +75,16 @@ function TrainingPage() {
         },
       });
     }
-    if (stepIndex == volunteerTraining.numCompletedResources){
+    if (stepIndex == volunteerTraining.numCompletedResources) {
       try {
         const updatedVolunteerTraining = {
           ...volunteerTraining,
           numCompletedResources: volunteerTraining.numCompletedResources + 1,
         };
-  
+
         // Update the state
         setVolunteerTraining(updatedVolunteerTraining);
-  
+
         // Call updateTraining to update the database
         await updateVolunteerTraining(volunteerId, updatedVolunteerTraining);
       } catch (error) {
@@ -115,7 +114,18 @@ function TrainingPage() {
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        style={{ left: navigationBarOpen ? "250px" : "0" }}
+      >
+        {!navigationBarOpen && (
+          <img
+            src={hamburger}
+            alt="Hamburger Menu"
+            className={styles.hamburger} // Add styles to position it
+            width={30}
+            onClick={() => setNavigationBarOpen(true)} // Set sidebar open when clicked
+          />
+        )}
+
         <div className={styles.outerContainer}>
           <div className={styles.bodyContainer}>
             {/* HEADER */}
@@ -135,18 +145,21 @@ function TrainingPage() {
         {/* footer */}
         <div
           className={styles.footer}
-          style={{ width: navigationBarOpen ? "calc(100% - 250px)" : "100%" }}>
+          style={{ width: navigationBarOpen ? "calc(100% - 250px)" : "100%" }}
+        >
           <div className={styles.footerButtons}>
             <Button
               sx={whiteButtonGrayBorder}
               onClick={() => handleBackButton()}
-              variant="contained">
+              variant="contained"
+            >
               Back
             </Button>
             <Button
               sx={forestGreenButton}
               onClick={() => handleContinueButton()}
-              variant="contained">
+              variant="contained"
+            >
               Continue
             </Button>
           </div>

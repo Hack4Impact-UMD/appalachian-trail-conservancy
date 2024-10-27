@@ -15,6 +15,19 @@
   flex-direction: column;
 }
 
+.hamburger {
+  color: var(--blue-gray);
+  font-size: 1.5rem;
+  margin: 1.5rem;
+  position: absolute;
+  top: 20px;
+  left: 10px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  z-index: 10; /* Ensure it's above other elements */
+}
+
 .outerContainer {
   display: flex;
   flex-direction: column;
@@ -76,4 +89,64 @@
 
 .footer {
   margin-top: auto;
+}
+
+/* mobile responsiveness */
+
+@media screen and (min-width: 1500px) {
+  .content {
+    width: 1200px;
+  }
+}
+
+/* show buttons when screen width is above 1201px */
+@media screen and (min-width: 1201px) {
+  .buttonContainer {
+    display: flex; 
+  }
+  .dropdownContainer {
+    display: none; 
+  }
+}
+
+/* show dropdown when screen width is below 1200px */
+@media screen and (max-width: 1200px) {
+  .searchBarContainer {
+    flex-direction: column;
+    align-items: stretch;
+    width: 180%;
+  }
+  .buttonContainer {
+    display: none;  
+  }
+  .dropdownContainer {
+    display: block; 
+    margin-top: 2%;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .content {
+    width: 600px;
+  }
+
+  .cardsContainer {
+    justify-content: space-between;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .content {
+    width: 300px;
+  }
+
+  .cardsContainer {
+    justify-content: space-around;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .header {
+    margin-top: 5rem;
+  }
 }

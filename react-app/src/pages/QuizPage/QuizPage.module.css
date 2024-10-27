@@ -15,6 +15,19 @@
   overflow-y: auto;
 }
 
+.hamburger {
+  color: var(--blue-gray);
+  font-size: 1.5rem;
+  margin: 1.5rem;
+  position: absolute;
+  top: 20px;
+  left: 10px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  z-index: 10; /* Ensure it's above other elements */
+}
+
 .outerContainer {
   display: flex;
   flex-direction: column;

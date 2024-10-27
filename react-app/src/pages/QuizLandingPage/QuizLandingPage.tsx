@@ -10,6 +10,7 @@ import styles from "./QuizLandingPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Loading from "../../components/LoadingScreen/Loading.tsx";
+import hamburger from "../../assets/hamburger.svg";
 
 function QuizLandingPage() {
   const navigate = useNavigate();
@@ -69,13 +70,25 @@ function QuizLandingPage() {
   return (
     <>
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
-      <div
-        className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
-        <div className={styles.outerContainer}>
+  
+ <div
+          className={`${styles.split} ${styles.right}`}
+          style={{ left: navigationBarOpen ? "250px" : "0" }}
+        >
           {loading ? (
             <Loading />
           ) : (
+            <>
+              {!navigationBarOpen && (
+                <img
+                  src={hamburger}
+                  alt="Hamburger Menu"
+                  className={styles.hamburger} // Add styles to position it
+                  width={30}
+                  onClick={() => setNavigationBarOpen(true)} // Set sidebar open when clicked
+                />
+              )}
+          <div className={styles.outerContainer}>
             <div className={styles.bodyContainer}>
               {/* header */}
               <div className={styles.header}>
@@ -132,11 +145,13 @@ function QuizLandingPage() {
                   <div className={styles.rightContent}>
                     Did Not Pass
                     <FaXmark className={styles.icon} />
-                  </div>
+                    </div>
                 </div>
               )}
             </div>
-          )}
+          </div>
+        </>
+      )}
           {/* footer */}
           <div
             className={styles.footer}
@@ -173,12 +188,11 @@ function QuizLandingPage() {
                 }>
                 START QUIZ
               </Button>
-            </div>
-          </div>
-        </div>
+              </div>
       </div>
-    </>
-  );
+    </div>
+  </>
+);
 }
 
 export default QuizLandingPage;

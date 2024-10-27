@@ -20,6 +20,7 @@ import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import Loading from "../../components/LoadingScreen/Loading";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Footer from "../../components/Footer/Footer";
+import hamburger from "../../assets/hamburger.svg";
 
 interface CorrelatedTraining {
   genericTraining: TrainingID;
@@ -35,6 +36,19 @@ function Dashboard() {
   const auth = useAuth();
   const [loading, setLoading] = useState<boolean>(true);
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
+
+  // Update screen width on resize
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   // for pathways and trainings, track All, In progress, and Completed
   const [trainingsInProgress, setTrainingsInProgress] = useState<
@@ -222,7 +236,20 @@ function Dashboard() {
 
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        style={{
+          // Only apply left shift when screen width is greater than 1200px
+          left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
+        }}
+      >
+        {!navigationBarOpen && (
+          <img
+            src={hamburger}
+            alt="Hamburger Menu"
+            className={styles.hamburger} // Add styles to position it
+            width={30}
+            onClick={() => setNavigationBarOpen(true)} // Set sidebar open when clicked
+          />
+        )}
         <div className={styles.outerContainer}>
           <div className={styles.content}>
             <div className={styles.header}>
@@ -243,7 +270,8 @@ function Dashboard() {
                       <Link to="/trainings">
                         <Button
                           sx={forestGreenButtonPadding}
-                          variant="contained">
+                          variant="contained"
+                        >
                           GO TO TRAINING LIBRARY
                         </Button>
                       </Link>
