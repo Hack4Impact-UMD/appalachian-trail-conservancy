@@ -17,6 +17,7 @@ import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import Footer from "../../components/Footer/Footer";
 import AdminPathwayCard from "../../components/AdminPathwayCard/AdminPathwayCard.tsx";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
+import { getAllPathways} from "../../backend/FirestoreCalls";
 
 function AdminPathwayLibrary() {
   const auth = useAuth();
@@ -27,43 +28,22 @@ function AdminPathwayLibrary() {
   const [filteredPathways, setFilteredPathways] = useState<PathwayID[]>([]);
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
 
-  const [pathway1] = useState<PathwayID>({
-    name: "Test Pathway",
-    id: "",
-    shortBlurb: "",
-    description: "",
-    coverImage: "",
-    trainingIDs: [],
-    quiz: {
-      questions: [],
-      numQuestions: 0,
-      passingScore: 0,
-    },
-    badgeImage: "",
-    status: "DRAFT",
-  });
+  useEffect(() => {
+    if (!auth.loading && auth.id) {
+      getAllPathways()
+        .then((genericPathways) => {
+          filterPathways(genericPathways);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching pathways:", error);
+        });
+    }
+  }, [auth.loading, auth.id]);
 
-  const [pathway2] = useState<PathwayID>({
-    name: "Hiking Whiz",
-    id: "",
-    shortBlurb: "",
-    description: "",
-    coverImage: "",
-    trainingIDs: [],
-    quiz: {
-      questions: [],
-      numQuestions: 0,
-      passingScore: 0,
-    },
-    badgeImage: "",
-    status: "PUBLISHED",
-  });
-
-  const pathways = [pathway1, pathway2];
-
-  const filterPathways = () => {
-    let filtered = pathways;
-
+  const filterPathways = (genericPathways: PathwayID[]) => {
+    let filtered = genericPathways;
+    
     // search bar filter
     if (searchQuery) {
       filtered = filtered.filter((pathway) =>
@@ -86,10 +66,12 @@ function AdminPathwayLibrary() {
   };
 
   useEffect(() => {
-    filterPathways();
-    setLoading(false);
-  }, [searchQuery, filterType]);
-
+    getAllPathways().then((genericPathways) => {
+      filterPathways(genericPathways);
+      setLoading(false);
+    });
+  }, [filterType, searchQuery]);
+  
   const updateQuery = (e: {
     target: { value: React.SetStateAction<string> };
   }) => setSearchQuery(e.target.value);
