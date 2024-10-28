@@ -17,7 +17,7 @@ import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import Footer from "../../components/Footer/Footer";
 import AdminPathwayCard from "../../components/AdminPathwayCard/AdminPathwayCard.tsx";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
-import { getAllPathways} from "../../backend/FirestoreCalls";
+import { getAllPathways } from "../../backend/FirestoreCalls";
 
 function AdminPathwayLibrary() {
   const auth = useAuth();
@@ -25,6 +25,7 @@ function AdminPathwayLibrary() {
   const [loading, setLoading] = useState<boolean>(true);
   const [filterType, setFilterType] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [correlatedPathways, setCorrelatedPathways] = useState<PathwayID[]>([]);
   const [filteredPathways, setFilteredPathways] = useState<PathwayID[]>([]);
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
 
@@ -32,6 +33,7 @@ function AdminPathwayLibrary() {
     if (!auth.loading && auth.id) {
       getAllPathways()
         .then((genericPathways) => {
+          setCorrelatedPathways(genericPathways);
           filterPathways(genericPathways);
           setLoading(false);
         })
@@ -43,7 +45,7 @@ function AdminPathwayLibrary() {
 
   const filterPathways = (genericPathways: PathwayID[]) => {
     let filtered = genericPathways;
-    
+
     // search bar filter
     if (searchQuery) {
       filtered = filtered.filter((pathway) =>
@@ -66,12 +68,9 @@ function AdminPathwayLibrary() {
   };
 
   useEffect(() => {
-    getAllPathways().then((genericPathways) => {
-      filterPathways(genericPathways);
-      setLoading(false);
-    });
+    filterPathways(correlatedPathways);
   }, [filterType, searchQuery]);
-  
+
   const updateQuery = (e: {
     target: { value: React.SetStateAction<string> };
   }) => setSearchQuery(e.target.value);

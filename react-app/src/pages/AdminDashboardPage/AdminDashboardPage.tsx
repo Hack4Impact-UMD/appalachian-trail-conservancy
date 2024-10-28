@@ -6,6 +6,7 @@ import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Footer from "../../components/Footer/Footer";
 import AdminTrainingCard from "../../components/AdminTrainingCard/AdminTrainingCard";
 import AdminPathwayCard from "../../components/AdminPathwayCard/AdminPathwayCard";
+import Loading from "../../components/LoadingScreen/Loading";
 import { TrainingID } from "../../types/TrainingType";
 import { PathwayID } from "../../types/PathwayType";
 import { Button } from "@mui/material";
@@ -14,18 +15,11 @@ import {
   forestGreenButtonLarge,
   whiteButtonGrayBorder,
 } from "../../muiTheme";
-import { Path } from "react-router-dom";
 import { getAllPathways, getAllTrainings } from "../../backend/FirestoreCalls";
-
-interface CorrelatedTraining {
-  genericTraining: TrainingID;
-}
-interface CorrelatedPathway {
-  genericPathway: PathwayID;
-}
 
 function AdminDashboardPage() {
   const auth = useAuth();
+  const [loading, setLoading] = useState<boolean>(true);
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
   const [trainingsSelected, setTrainingsSelected] = useState<boolean>(true);
   const [trainingDrafts, setTrainingDrafts] = useState<TrainingID[]>([]);
@@ -34,22 +28,6 @@ function AdminDashboardPage() {
   );
   const [pathwayDrafts, setPathwayDrafts] = useState<PathwayID[]>([]);
   const [pathwaysPublished, setPathwaysPublished] = useState<PathwayID[]>([]);
-
-  const [pathway] = useState<PathwayID>({
-    name: "Test Pathway",
-    id: "",
-    shortBlurb: "",
-    description: "",
-    coverImage: "",
-    trainingIDs: [],
-    quiz: {
-      questions: [],
-      numQuestions: 0,
-      passingScore: 0,
-    },
-    badgeImage: "",
-    status: "DRAFT",
-  });
 
   const correlateTrainings = (genericTrainings: TrainingID[]) => {
     let trainingsDrafts: TrainingID[] = [];
@@ -112,6 +90,8 @@ function AdminDashboardPage() {
         .catch((error) => {
           console.error("Error fetching pathways:", error);
         });
+
+      setLoading(false);
     }
   }, [auth.loading, auth.id]);
 
@@ -133,88 +113,98 @@ function AdminDashboardPage() {
                 </div>
               </div>
             </div>
-            <div className={styles.buttonContainer}>
-              <Button sx={forestGreenButtonLarge} variant="contained">
-                CREATE NEW TRAINING
-              </Button>
-              <Button sx={forestGreenButtonLarge} variant="contained">
-                CREATE NEW PATHWAY
-              </Button>
-            </div>
-            <div className={styles.buttonSelect}>
-              <Button
-                onClick={() => setTrainingsSelected(true)}
-                sx={
-                  trainingsSelected
-                    ? forestGreenButtonPadding
-                    : whiteButtonGrayBorder
-                }
-                variant="contained"
-              >
-                TRAINING
-              </Button>
-              <Button
-                onClick={() => setTrainingsSelected(false)}
-                sx={
-                  !trainingsSelected
-                    ? forestGreenButtonPadding
-                    : whiteButtonGrayBorder
-                }
-                variant="contained"
-              >
-                PATHWAYS
-              </Button>
-            </div>
-            <div className={styles.subHeader}>
-              <h2>Recent Drafts</h2>
-            </div>
-            {trainingsSelected ? (
-              <>
-                {trainingDrafts.length === 0 && (
-                  <div className={styles.subHeader}>lmao u flopped!</div>
-                )}
-                {trainingDrafts.length > 0 && (
-                  <div className={styles.cardsContainer}>
-                    {trainingDrafts.slice(0, 3).map((training, index) => (
-                      <AdminTrainingCard training={training} key={index} />
-                    ))}
-                  </div>
-                )}
-              </>
+            {loading ? (
+              <Loading />
             ) : (
               <>
-                {pathwayDrafts.length > 0 && (
-                  <div className={styles.cardsContainer}>
-                    {pathwayDrafts.slice(0, 2).map((pathway, index) => (
-                      <AdminPathwayCard pathway={pathway} key={index} />
-                    ))}
-                  </div>
+                <div className={styles.buttonContainer}>
+                  <Button sx={forestGreenButtonLarge} variant="contained">
+                    CREATE NEW TRAINING
+                  </Button>
+                  <Button sx={forestGreenButtonLarge} variant="contained">
+                    CREATE NEW PATHWAY
+                  </Button>
+                </div>
+                <div className={styles.buttonSelect}>
+                  <Button
+                    onClick={() => setTrainingsSelected(true)}
+                    sx={
+                      trainingsSelected
+                        ? forestGreenButtonPadding
+                        : whiteButtonGrayBorder
+                    }
+                    variant="contained"
+                  >
+                    TRAINING
+                  </Button>
+                  <Button
+                    onClick={() => setTrainingsSelected(false)}
+                    sx={
+                      !trainingsSelected
+                        ? forestGreenButtonPadding
+                        : whiteButtonGrayBorder
+                    }
+                    variant="contained"
+                  >
+                    PATHWAYS
+                  </Button>
+                </div>
+                <div className={styles.subHeader}>
+                  <h2>Recent Drafts</h2>
+                </div>
+                {trainingsSelected ? (
+                  <>
+                    {trainingDrafts.length === 0 && (
+                      <div className={styles.subHeader}>lmao u flopped!</div>
+                    )}
+                    {trainingDrafts.length > 0 && (
+                      <div className={styles.cardsContainer}>
+                        {trainingDrafts.slice(0, 3).map((training, index) => (
+                          <AdminTrainingCard training={training} key={index} />
+                        ))}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    {pathwayDrafts.length > 0 && (
+                      <div className={styles.cardsContainer}>
+                        {pathwayDrafts.slice(0, 2).map((pathway, index) => (
+                          <AdminPathwayCard pathway={pathway} key={index} />
+                        ))}
+                      </div>
+                    )}
+                  </>
                 )}
-              </>
-            )}
-
-            <div className={styles.subHeader}>
-              <h2>Recent Published</h2>
-            </div>
-            {trainingsSelected ? (
-              <>
-                {trainingsPublished.length > 0 && (
-                  <div className={styles.cardsContainer}>
-                    {trainingsPublished.slice(0, 3).map((training, index) => (
-                      <AdminTrainingCard training={training} key={index} />
-                    ))}
-                  </div>
-                )}
-              </>
-            ) : (
-              <>
-                {pathwaysPublished.length > 0 && (
-                  <div className={styles.cardsContainer}>
-                    {pathwaysPublished.slice(0, 2).map((pathway, index) => (
-                      <AdminPathwayCard pathway={pathway} key={index} />
-                    ))}
-                  </div>
-                )}
+                <div className={styles.subHeader}>
+                  <h2>Recent Published</h2>
+                </div>
+                {trainingsSelected ? (
+                  <>
+                    {trainingsPublished.length > 0 && (
+                      <div className={styles.cardsContainer}>
+                        {trainingsPublished
+                          .slice(0, 3)
+                          .map((training, index) => (
+                            <AdminTrainingCard
+                              training={training}
+                              key={index}
+                            />
+                          ))}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    {pathwaysPublished.length > 0 && (
+                      <div className={styles.cardsContainer}>
+                        {pathwaysPublished.slice(0, 2).map((pathway, index) => (
+                          <AdminPathwayCard pathway={pathway} key={index} />
+                        ))}
+                      </div>
+                    )}
+                  </>
+                )}{" "}
               </>
             )}
           </div>
