@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../../auth/AuthProvider";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import styles from "./AdminDashboardPage.module.css";
@@ -14,28 +14,26 @@ import {
   forestGreenButtonLarge,
   whiteButtonGrayBorder,
 } from "../../muiTheme";
+import { Path } from "react-router-dom";
+import { getAllPathways, getAllTrainings } from "../../backend/FirestoreCalls";
+
+interface CorrelatedTraining {
+  genericTraining: TrainingID;
+}
+interface CorrelatedPathway {
+  genericPathway: PathwayID;
+}
 
 function AdminDashboardPage() {
   const auth = useAuth();
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
   const [trainingsSelected, setTrainingsSelected] = useState<boolean>(true);
-  const [training] = useState<TrainingID>({
-    name: "Introduction to Cooperation",
-    id: "123",
-    shortBlurb: "",
-    description: "",
-    coverImage:
-      "https://i0.wp.com/www.oxfordstudent.com/wp-content/uploads/2018/11/Spongebob-2.png?fit=770%2C433&ssl=1",
-    resources: [],
-    quiz: {
-      questions: [],
-      numQuestions: 0,
-      passingScore: 0,
-    },
-    associatedPathways: [],
-    certificationImage: "",
-    status: "DRAFT",
-  });
+  const [trainingDrafts, setTrainingDrafts] = useState<TrainingID[]>([]);
+  const [trainingsPublished, setTrainingsPublished] = useState<TrainingID[]>(
+    []
+  );
+  const [pathwayDrafts, setPathwayDrafts] = useState<PathwayID[]>([]);
+  const [pathwaysPublished, setPathwaysPublished] = useState<PathwayID[]>([]);
 
   const [pathway] = useState<PathwayID>({
     name: "Test Pathway",
@@ -52,6 +50,70 @@ function AdminDashboardPage() {
     badgeImage: "",
     status: "DRAFT",
   });
+
+  const correlateTrainings = (genericTrainings: TrainingID[]) => {
+    let trainingsDrafts: TrainingID[] = [];
+    let trainingsPublished: TrainingID[] = [];
+
+    for (const genericTraining of genericTrainings) {
+      if (genericTraining.status == "DRAFT") {
+        trainingsDrafts.push(genericTraining);
+      } else if (genericTraining.status == "PUBLISHED") {
+        trainingsPublished.push(genericTraining);
+      }
+    }
+
+    setTrainingDrafts(trainingsDrafts);
+    setTrainingsPublished(trainingsPublished);
+  };
+
+  const correlatePathways = (genericPathways: PathwayID[]) => {
+    let pathwayDrafts: PathwayID[] = [];
+    let pathwaysPublished: PathwayID[] = [];
+
+    for (const genericPathway of genericPathways) {
+      if (genericPathway.status == "DRAFT") {
+        pathwayDrafts.push(genericPathway);
+      } else if (genericPathway.status == "PUBLISHED") {
+        pathwaysPublished.push(genericPathway);
+      }
+    }
+
+    setPathwayDrafts(pathwayDrafts);
+    setPathwaysPublished(pathwaysPublished);
+  };
+
+  // sort by reverse date completed. puts most recently completed first.
+  //  function sortTrainingsByDateCompleted(
+  //   trainings: TrainingID[]
+  // ): TrainingID[] {
+  //   return trainings.sort((a, b) => {
+  //     const dateA = new Date(a.dateCompleted);
+  //     const dateB = new Date(b.volunteerTraining!.dateCompleted);
+  //     return dateB.getTime() - dateA.getTime();
+  //   });
+  // }
+
+  useEffect(() => {
+    if (!auth.loading && auth.id) {
+      getAllTrainings()
+        .then((genericTrainings) => {
+          // function to sort
+          correlateTrainings(genericTrainings);
+        })
+        .catch((error) => {
+          console.error("Error fetching trainings:", error);
+        });
+
+      getAllPathways()
+        .then((genericPathways) => {
+          correlatePathways(genericPathways);
+        })
+        .catch((error) => {
+          console.error("Error fetching pathways:", error);
+        });
+    }
+  }, [auth.loading, auth.id]);
 
   return (
     <>
@@ -108,20 +170,26 @@ function AdminDashboardPage() {
             </div>
             {trainingsSelected ? (
               <>
-                <div className={styles.cardsContainer}>
-                  <AdminTrainingCard training={training} />
-                  <AdminTrainingCard training={training} />
-                  <AdminTrainingCard training={training} />
-                  <AdminTrainingCard training={training} />
-                </div>
+                {trainingDrafts.length === 0 && (
+                  <div className={styles.subHeader}>lmao u flopped!</div>
+                )}
+                {trainingDrafts.length > 0 && (
+                  <div className={styles.cardsContainer}>
+                    {trainingDrafts.slice(0, 3).map((training, index) => (
+                      <AdminTrainingCard training={training} key={index} />
+                    ))}
+                  </div>
+                )}
               </>
             ) : (
               <>
-                <div className={styles.cardsContainer}>
-                  <AdminPathwayCard pathway={pathway} />
-                  <AdminPathwayCard pathway={pathway} />
-                  <AdminPathwayCard pathway={pathway} />
-                </div>
+                {pathwayDrafts.length > 0 && (
+                  <div className={styles.cardsContainer}>
+                    {pathwayDrafts.slice(0, 2).map((pathway, index) => (
+                      <AdminPathwayCard pathway={pathway} key={index} />
+                    ))}
+                  </div>
+                )}
               </>
             )}
 
@@ -130,17 +198,23 @@ function AdminDashboardPage() {
             </div>
             {trainingsSelected ? (
               <>
-                <div className={styles.cardsContainer}>
-                  <AdminTrainingCard training={training} />
-                  <AdminTrainingCard training={training} />
-                  <AdminTrainingCard training={training} />
-                </div>
+                {trainingsPublished.length > 0 && (
+                  <div className={styles.cardsContainer}>
+                    {trainingsPublished.slice(0, 3).map((training, index) => (
+                      <AdminTrainingCard training={training} key={index} />
+                    ))}
+                  </div>
+                )}
               </>
             ) : (
               <>
-                <div className={styles.cardsContainer}>
-                  <AdminPathwayCard pathway={pathway} />
-                </div>
+                {pathwaysPublished.length > 0 && (
+                  <div className={styles.cardsContainer}>
+                    {pathwaysPublished.slice(0, 2).map((pathway, index) => (
+                      <AdminPathwayCard pathway={pathway} key={index} />
+                    ))}
+                  </div>
+                )}
               </>
             )}
           </div>
