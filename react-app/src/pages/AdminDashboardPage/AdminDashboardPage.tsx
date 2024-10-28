@@ -61,17 +61,6 @@ function AdminDashboardPage() {
     setPathwaysPublished(pathwaysPublished);
   };
 
-  // sort by reverse date completed. puts most recently completed first.
-  //  function sortTrainingsByDateCompleted(
-  //   trainings: TrainingID[]
-  // ): TrainingID[] {
-  //   return trainings.sort((a, b) => {
-  //     const dateA = new Date(a.dateCompleted);
-  //     const dateB = new Date(b.volunteerTraining!.dateCompleted);
-  //     return dateB.getTime() - dateA.getTime();
-  //   });
-  // }
-
   useEffect(() => {
     if (!auth.loading && auth.id) {
       getAllTrainings()
