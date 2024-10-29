@@ -126,7 +126,7 @@ function TrainingPage() {
           />
         )}
 
-        <div className={styles.outerContainer}>
+        <div className={`${styles.scrollContainer} ${styles.outerContainer}`}>
           <div className={styles.bodyContainer}>
             {/* HEADER */}
             <div className={styles.header}>

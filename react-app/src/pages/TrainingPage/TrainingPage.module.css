@@ -33,6 +33,12 @@
   align-items: center;
 }
 
+.scrollContainer {
+  height: calc(100vh - 100px); /* 100px is the height of the footer */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
 .bodyContainer {
   width: 875px;
   height: 90vh;
@@ -75,4 +81,56 @@
   display: flex;
   justify-content: flex-end;
   gap: 1%;
+}
+
+/* show buttons when screen width is above 1201px */
+@media screen and (min-width: 1201px) {
+  .buttonContainer {
+    display: flex; 
+  }
+  .dropdownContainer {
+    display: none; 
+  }
+}
+
+/* show dropdown when screen width is below 1200px */
+@media screen and (max-width: 1200px) {
+  .searchBarContainer {
+    flex-direction: column;
+    align-items: stretch;
+    width: 180%;
+  }
+  .buttonContainer {
+    display: none;  
+  }
+  .dropdownContainer {
+    display: block; 
+    margin-top: 2%;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .bodyContainer {
+    width: 600px;
+  }
+
+  .cardsContainer {
+    justify-content: space-between;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .bodyContainer {
+    width: 300px;
+  }
+
+  .cardsContainer {
+    justify-content: space-around;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .header {
+    margin-top: 5rem;
+  }
 }

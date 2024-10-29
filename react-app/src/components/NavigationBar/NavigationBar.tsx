@@ -6,7 +6,6 @@ import atcprimarylogo from "../../assets/atc-primary-logo.png";
 import collapseArrow from "../../assets/collapseArrow.svg";
 import dashboardInactive from "../../assets/dashboardGray.svg";
 import dashboardActive from "../../assets/dashboardWhite.svg";
-import hamburger from "../../assets/hamburger.svg";
 import logout from "../../assets/logout.svg";
 import pathwaysInactive from "../../assets/pathwaysGray.svg";
 import pathwaysActive from "../../assets/pathwaysWhite.svg";
