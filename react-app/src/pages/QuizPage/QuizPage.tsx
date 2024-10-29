@@ -46,7 +46,6 @@ function QuizPage() {
     },
     associatedPathways: [],
     certificationImage: "",
-    status: "DRAFT",
   });
 
   useEffect(() => {
@@ -98,7 +97,8 @@ function QuizPage() {
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        style={{ left: navigationBarOpen ? "250px" : "0" }}
+      >
         <div className={styles.outerContainer}>
           <div className={styles.bodyContainer}>
             {/* HEADER */}
@@ -136,12 +136,14 @@ function QuizPage() {
         {/* footer */}
         <div
           className={styles.footer}
-          style={{ width: navigationBarOpen ? "calc(100% - 250px)" : "100%" }}>
+          style={{ width: navigationBarOpen ? "calc(100% - 250px)" : "100%" }}
+        >
           <div className={styles.footerButtons}>
             <Button
               sx={{ ...forestGreenButton }}
               variant="contained"
-              onClick={handleSubmitQuiz}>
+              onClick={handleSubmitQuiz}
+            >
               Submit
             </Button>
           </div>
