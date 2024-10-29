@@ -22,7 +22,7 @@ function AdminTrainingLibrary() {
   const auth = useAuth();
 
   const [loading, setLoading] = useState<boolean>(true);
-  const [filterType, setFilterType] = useState("all");
+  const [filterType, setFilterType] = useState("drafts");
   const [searchQuery, setSearchQuery] = useState("");
   const [correlatedTrainings, setCorrelatedTrainings] = useState<TrainingID[]>(
     []
@@ -125,15 +125,16 @@ function AdminTrainingLibrary() {
             <div className={styles.buttonContainer}>
               <Button
                 sx={
-                  filterType === "all"
+                  filterType === "drafts"
                     ? forestGreenButtonPadding
                     : whiteButtonGrayBorder
                 }
                 variant="contained"
-                onClick={() => setFilterType("all")}
+                onClick={() => setFilterType("drafts")}
               >
-                ALL
+                DRAFTS
               </Button>
+
               <Button
                 sx={
                   filterType === "published"
@@ -145,17 +146,7 @@ function AdminTrainingLibrary() {
               >
                 PUBLISHED
               </Button>
-              <Button
-                sx={
-                  filterType === "drafts"
-                    ? forestGreenButtonPadding
-                    : whiteButtonGrayBorder
-                }
-                variant="contained"
-                onClick={() => setFilterType("drafts")}
-              >
-                DRAFTS
-              </Button>
+
               <Button
                 sx={
                   filterType === "archives"
@@ -166,6 +157,17 @@ function AdminTrainingLibrary() {
                 onClick={() => setFilterType("archives")}
               >
                 ARCHIVES
+              </Button>
+              <Button
+                sx={
+                  filterType === "all"
+                    ? forestGreenButtonPadding
+                    : whiteButtonGrayBorder
+                }
+                variant="contained"
+                onClick={() => setFilterType("all")}
+              >
+                ALL
               </Button>
             </div>
 
