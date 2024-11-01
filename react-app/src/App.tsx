@@ -38,8 +38,8 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/login/volunteer" element={<VolunteerLoginPage />} />
             <Route path="/login/admin" element={<AdminLoginPage />} />
-            <Route path="/logout" element={<LogoutPage />} />
-            <Route path="/registration" element={<RegistrationPage />} />
+            <Route path="/logout" element={<AdminTrainingEditor />} />
+            <Route path="/registration" element={<AdminPathwayEditor />} />
             <Route
               path="/registration-confirmation"
               element={<RegistrationConfirmationPage />}

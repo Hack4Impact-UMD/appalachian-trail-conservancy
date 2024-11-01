@@ -17,14 +17,17 @@ import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import { LuUpload } from "react-icons/lu";
+import { styledRectButton } from "../LoginPage/LoginPage";
+import { forestGreenButton, whiteButtonGrayBorder } from "../../muiTheme";
 
 const AdminTrainingEditor: React.FC = () => {
+  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+
   const [trainingName, setTrainingName] = useState("");
   const [blurb, setBlurb] = useState("");
   const [description, setDescription] = useState("");
   const [resourceLink, setResourceLink] = useState("");
   const [resourceType, setResourceType] = useState("");
-  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
 
   const [errors, setErrors] = useState({
     trainingName: "",
@@ -32,6 +35,7 @@ const AdminTrainingEditor: React.FC = () => {
     description: "",
     resourceLink: "",
   });
+  const [invalidBlurb, setInvalidBlurb] = useState<boolean>(false);
 
   const characterLimits = {
     trainingName: 50,
@@ -80,12 +84,18 @@ const AdminTrainingEditor: React.FC = () => {
 
   return (
     <>
+      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <div
+        className={`${styles.split} ${styles.right}`}
+        style={{ left: navigationBarOpen ? "250px" : "0" }}
+      ></div>
+
       <div className={styles.container}>
         <div className={styles.navbar}>
-          <NavigationBar
+          {/* <NavigationBar
             open={navigationBarOpen}
             setOpen={setNavigationBarOpen}
-          />
+          /> */}
         </div>
         <div className={styles.editor}>
           <div className={styles.editorContent}>
@@ -98,13 +108,7 @@ const AdminTrainingEditor: React.FC = () => {
             </div>
 
             <form noValidate>
-              <Button
-                variant="outlined"
-                color="secondary"
-                className={styles.saveButton}
-              >
-                Save as Draft
-              </Button>
+              <Button sx={whiteButtonGrayBorder}>Save as Draft</Button>
               <Typography
                 variant="body2"
                 style={{
@@ -155,7 +159,9 @@ const AdminTrainingEditor: React.FC = () => {
                   minHeight: 100,
                   marginTop: "0.3rem",
                   borderRadius: "10px",
-                  border: "2px solid var(--blue-gray)",
+                  border: invalidBlurb
+                    ? "2px solid #d32f2f"
+                    : "2px solid var(--blue-gray)",
                   "& fieldset": {
                     border: "none",
                   },
@@ -164,8 +170,15 @@ const AdminTrainingEditor: React.FC = () => {
                 error={Boolean(errors.blurb)}
                 helperText={errors.blurb}
                 fullWidth
+                multiline
+                rows={4}
                 margin="normal"
               />
+              {invalidBlurb && (
+                <FormHelperText error>
+                  Blurb cannot exceed {characterLimits.blurb} characters.
+                </FormHelperText>
+              )}
 
               <Typography
                 variant="body2"
@@ -216,7 +229,7 @@ const AdminTrainingEditor: React.FC = () => {
                     marginBottom: "8px",
                   }}
                 >
-                  UPLOAD IMAGE
+                  UPLOAD IMAGE (JPEG, PNG)
                 </Typography>
                 <Button
                   variant="contained"
@@ -345,14 +358,14 @@ const AdminTrainingEditor: React.FC = () => {
               </div>
 
               {/* Button group */}
-              <div className={styles.buttonGroup}>
+              <div className={styles.addTrainingContainer}>
                 <Button
                   variant="contained"
                   sx={{
-                    backgroundColor: "#49A772",
-                    color: "white",
-                    fontSize: "12px",
-                    marginTop: "1rem",
+                    ...styledRectButton,
+                    ...forestGreenButton,
+                    marginTop: "2%",
+                    width: "40px%",
                   }}
                   onClick={handleNextClick}
                 >
