@@ -27,7 +27,7 @@ import {
   whiteButtonGrayBorder,
   whiteButtonGreenBorder,
 } from "../../muiTheme";
-import { IoIosSearch } from "react-icons/io";
+import { IoIosInformationCircleOutline, IoIosSearch } from "react-icons/io";
 import { styledRectButton } from "../LoginPage/LoginPage";
 
 const AdminPathwayEditor: React.FC = () => {
@@ -245,6 +245,7 @@ const AdminPathwayEditor: React.FC = () => {
               )}
 
               {/* Upload Section with Typography and LuUpload Icon */}
+
               <div
                 className={styles.uploadSection}
                 style={{
@@ -253,16 +254,44 @@ const AdminPathwayEditor: React.FC = () => {
                   alignItems: "flex-start",
                 }}
               >
-                <Typography
-                  variant="body2"
+                <div
                   style={{
-                    color: "black",
-                    fontWeight: "bold",
+                    display: "flex",
+                    alignItems: "center",
                     marginBottom: "8px",
                   }}
                 >
-                  UPLOAD IMAGE (JPEG, PNG)
-                </Typography>
+                  <Typography
+                    variant="body2"
+                    style={{
+                      color: "black",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    UPLOAD IMAGE (JPEG, PNG)
+                  </Typography>
+                  <Tooltip
+                    title="Upload will be used as pathway cover and certificate image"
+                    placement="top"
+                    componentsProps={{
+                      tooltip: {
+                        sx: {
+                          bgcolor: "white",
+                          color: "black",
+                          borderRadius: "8px",
+                          boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)",
+                        },
+                      },
+                    }}
+                  >
+                    <span
+                      className={styles.icon}
+                      style={{ marginLeft: "8px" }} // Adjust spacing between Typography and Tooltip
+                    >
+                      <IoIosInformationCircleOutline />
+                    </span>
+                  </Tooltip>
+                </div>
                 <Button
                   variant="contained"
                   component="label"

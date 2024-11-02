@@ -71,6 +71,13 @@ body {
   padding: 0.5rem 1rem;
   text-transform: none;
 }
+.addTrainingContainer {
+  margin-top: 1.2rem;
+  margin-bottom: 1rem;
+  display: flex;
+  width: 100%;
+  align-items: left;
+}
 
 .buttonGroup {
   /* display: flex;

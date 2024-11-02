@@ -18,16 +18,20 @@ import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import { LuUpload } from "react-icons/lu";
 import { styledRectButton } from "../LoginPage/LoginPage";
-import { forestGreenButton, whiteButtonGrayBorder } from "../../muiTheme";
+import {
+  forestGreenButton,
+  selectOptionStyle,
+  whiteButtonGrayBorder,
+} from "../../muiTheme";
+import { IoIosInformationCircleOutline } from "react-icons/io";
 
 const AdminTrainingEditor: React.FC = () => {
-  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
-
   const [trainingName, setTrainingName] = useState("");
   const [blurb, setBlurb] = useState("");
   const [description, setDescription] = useState("");
   const [resourceLink, setResourceLink] = useState("");
   const [resourceType, setResourceType] = useState("");
+  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
 
   const [errors, setErrors] = useState({
     trainingName: "",
@@ -84,18 +88,12 @@ const AdminTrainingEditor: React.FC = () => {
 
   return (
     <>
-      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
-      <div
-        className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}
-      ></div>
-
       <div className={styles.container}>
         <div className={styles.navbar}>
-          {/* <NavigationBar
+          <NavigationBar
             open={navigationBarOpen}
             setOpen={setNavigationBarOpen}
-          /> */}
+          />
         </div>
         <div className={styles.editor}>
           <div className={styles.editorContent}>
@@ -114,7 +112,6 @@ const AdminTrainingEditor: React.FC = () => {
                 style={{
                   color: "black",
                   fontWeight: "bold",
-                  marginBottom: "4px",
                   marginTop: "2rem",
                 }}
               >
@@ -145,7 +142,7 @@ const AdminTrainingEditor: React.FC = () => {
                 style={{
                   color: "black",
                   fontWeight: "bold",
-                  marginBottom: "4px",
+                  marginTop: "1.2rem",
                 }}
               >
                 BLURB
@@ -155,7 +152,7 @@ const AdminTrainingEditor: React.FC = () => {
                 sx={{
                   width: "80%",
                   fontSize: "1.1rem",
-                  height: "auto",
+                  height: "2rem",
                   minHeight: 100,
                   marginTop: "0.3rem",
                   borderRadius: "10px",
@@ -212,7 +209,6 @@ const AdminTrainingEditor: React.FC = () => {
                 rows={4}
                 margin="normal"
               />
-              {/* Upload Section with Typography and LuUpload Icon */}
               <div
                 className={styles.uploadSection}
                 style={{
@@ -221,16 +217,45 @@ const AdminTrainingEditor: React.FC = () => {
                   alignItems: "flex-start",
                 }}
               >
-                <Typography
-                  variant="body2"
+                <div
                   style={{
-                    color: "black",
-                    fontWeight: "bold",
+                    display: "flex",
+                    alignItems: "center",
                     marginBottom: "8px",
                   }}
                 >
-                  UPLOAD IMAGE (JPEG, PNG)
-                </Typography>
+                  <Typography
+                    variant="body2"
+                    style={{
+                      color: "black",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    UPLOAD IMAGE (JPEG, PNG)
+                  </Typography>
+                  <Tooltip
+                    title="Upload will be used as training cover and certificate image"
+                    placement="top"
+                    componentsProps={{
+                      tooltip: {
+                        sx: {
+                          bgcolor: "white",
+                          color: "black",
+                          borderRadius: "8px",
+                          boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)",
+                        },
+                      },
+                    }}
+                  >
+                    <span
+                      className={styles.icon}
+                      style={{ marginLeft: "8px" }} // Adjust spacing between Typography and Tooltip
+                    >
+                      <IoIosInformationCircleOutline />
+                    </span>
+                  </Tooltip>
+                </div>
+
                 <Button
                   variant="contained"
                   component="label"
@@ -267,16 +292,27 @@ const AdminTrainingEditor: React.FC = () => {
                 >
                   RESOURCE LINK
                 </Typography>
-                <Tooltip title="Should be link to PDF or Video" placement="top">
-                  <InfoIcon
-                    fontSize="small"
-                    style={{
-                      marginLeft: "8px",
-                      color: "#6E6E6E",
-                      cursor: "pointer",
-                      marginTop: "1.5rem",
-                    }}
-                  />
+
+                <Tooltip
+                  title="Should be link to PDF or Video"
+                  placement="top"
+                  componentsProps={{
+                    tooltip: {
+                      sx: {
+                        bgcolor: "white",
+                        color: "black",
+                        borderRadius: "8px",
+                        boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)",
+                      },
+                    },
+                  }}
+                >
+                  <span
+                    className={styles.icon}
+                    style={{ marginTop: "1.75rem" }}
+                  >
+                    <IoIosInformationCircleOutline />
+                  </span>
                 </Tooltip>
               </div>
 
@@ -344,15 +380,19 @@ const AdminTrainingEditor: React.FC = () => {
                       PaperProps: {
                         sx: {
                           "& .MuiMenuItem-root:hover": {
-                            backgroundColor: "#0A7650",
+                            backgroundColor: "var(--ocean-green)",
                             color: "white",
                           },
                         },
                       },
                     }}
                   >
-                    <MenuItem value="pdf">PDF</MenuItem>
-                    <MenuItem value="video">Video</MenuItem>
+                    <MenuItem value="pdf" sx={selectOptionStyle}>
+                      PDF
+                    </MenuItem>
+                    <MenuItem value="video" sx={selectOptionStyle}>
+                      Video
+                    </MenuItem>
                   </Select>
                 </FormControl>
               </div>

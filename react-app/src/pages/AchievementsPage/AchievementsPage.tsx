@@ -194,15 +194,14 @@ function AchievementsPage() {
         }}
       >
         {!open && (
-            <img
-              src={hamburger}
-              alt="Hamburger Menu"
-              className={styles.hamburger} // Add styles to position it
-              width={30}
-              onClick={() => setOpen(true)} // Set sidebar open when clicked
-            />
-          )
-        }
+          <img
+            src={hamburger}
+            alt="Hamburger Menu"
+            className={styles.hamburger} // Add styles to position it
+            width={30}
+            onClick={() => setOpen(true)} // Set sidebar open when clicked
+          />
+        )}
         <div className={styles.outerContainer}>
           <div className={styles.content}>
             <div className={styles.header}>
@@ -241,7 +240,7 @@ function AchievementsPage() {
                   size="small"
                   sx={{
                     ...whiteSelectGrayBorder,
-                    width: '100%',
+                    width: "100%",
                   }}
                 >
                   <MenuItem value={"newest"} sx={selectOptionStyle}>
