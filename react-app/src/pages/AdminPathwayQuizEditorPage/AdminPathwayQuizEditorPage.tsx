@@ -39,9 +39,7 @@ function PathwayQuizEditorPage() {
       ],
     },
   ]);
-  const [selectedAnswers, setSelectedAnswers] = useState<(number | null)[]>([
-    null,
-  ]);
+  const [selectedAnswers, setSelectedAnswers] = useState<number[]>([-1]);
 
   const [pointsToPass, setPointsToPass] = useState(0);
   const [maxPoints, setMaxPoints] = useState(questions.length);
@@ -82,7 +80,7 @@ function PathwayQuizEditorPage() {
         ],
       },
     ]);
-    setSelectedAnswers([...selectedAnswers, null]);
+    setSelectedAnswers([...selectedAnswers, -1]);
   };
 
   const handleRemoveQuestion = (index: number) => {
@@ -113,7 +111,7 @@ function PathwayQuizEditorPage() {
   const handleRemoveAnswer = (questionIndex: number, answerIndex: number) => {
     const newSelectedAnswers = [...selectedAnswers];
     if (newSelectedAnswers[questionIndex] == answerIndex) {
-      newSelectedAnswers[questionIndex] = null;
+      newSelectedAnswers[questionIndex] = -1;
     }
     setSelectedAnswers(newSelectedAnswers);
 
@@ -140,8 +138,8 @@ function PathwayQuizEditorPage() {
     setSelectedAnswers(newSelectedAnswers);
   };
 
-  const handlePointsToPassChange = (event: any, value: number | null) => {
-    if (value !== null && value <= maxPoints) {
+  const handlePointsToPassChange = (event: any, value: number) => {
+    if (value !== -1 && value <= maxPoints) {
       setPointsToPass(value);
     }
   };
@@ -291,8 +289,7 @@ function PathwayQuizEditorPage() {
                       <div className={styles.selectedAnswerBox}>
                         <span className={styles.selectedAnswerText}>
                           ANSWER:{" "}
-                          {selectedAnswers[questionIndex] != null &&
-                          selectedAnswers[questionIndex] >= 0
+                          {selectedAnswers[questionIndex] >= 0
                             ? Number(selectedAnswers[questionIndex]) + 1
                             : "N/A"}
                         </span>
