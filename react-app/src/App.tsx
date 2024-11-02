@@ -25,8 +25,8 @@ import AdminTrainingEditor from "./pages/AdminTrainingEditor/AdminTrainingEditor
 import AdminPathwayEditor from "./pages/AdminPathwayEditor/AdminPathwayEditor.tsx";
 import RegistrationPage from "./pages/RegistrationPage/RegistrationPage/RegistrationPage.tsx";
 import RegistrationConfirmationPage from "./pages/RegistrationPage/RegistrationConfirmationPage/RegistrationConfirmationPage.tsx";
-import PathwayQuizEditorPage from "./pages/AdminPathwayEditorPage/PathwayQuizEditorPage.tsx";
-import TrainingQuizEditorPage from "./pages/AdminTrainingEditorPage/TrainingQuizEditorPage.tsx";
+import PathwayQuizEditorPage from "./pages/AdminPathwayQuizEditorPage/AdminPathwayQuizEditorPage.tsx";
+import TrainingQuizEditorPage from "./pages/AdminTrainingQuizEditorPage/AdminTrainingQuizEditorPage.tsx";
 import AdminDashboard from "./pages/AdminDashboardPage/AdminDashboardPage.tsx";
 import AdminTrainingLibrary from "./pages/AdminTrainingLibraryPage/AdminTrainingLibraryPage.tsx";
 import AdminPathwayLibrary from "./pages/AdminPathwayLibraryPage/AdminPathwayLibraryPage.tsx";
@@ -98,7 +98,7 @@ function App() {
               path="/admin/pathways/editor"
               element={
                 <RequireAdminAuth>
-                  <PathwayQuizEditorPage />
+                  <AdminPathwayEditor />
                 </RequireAdminAuth>
               }
             />

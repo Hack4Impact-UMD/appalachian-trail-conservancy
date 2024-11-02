@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import styles from "./TrainingQuizEditorPage.module.css";
+import styles from "./AdminTrainingQuizEditorPage.module.css";
 import {
   Button,
   OutlinedInput,

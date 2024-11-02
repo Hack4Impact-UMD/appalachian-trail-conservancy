@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import styles from "./PathwayQuizEditorPage.module.css";
+import styles from "./AdminPathwayQuizEditorPage.module.css";
 import {
   Button,
   OutlinedInput,
