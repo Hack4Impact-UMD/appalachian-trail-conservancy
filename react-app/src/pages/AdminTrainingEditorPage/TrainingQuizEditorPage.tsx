@@ -9,11 +9,6 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import { IoCloseOutline } from "react-icons/io5";
-import AddIcon from "@mui/icons-material/Add";
-import NavigationBar from "../../components/NavigationBar/NavigationBar";
-import Footer from "../../components/Footer/Footer";
-import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
-import Hamburger from "../../assets/hamburger.svg";
 import {
   forestGreenButton,
   grayBorderTextField,
@@ -25,6 +20,11 @@ import {
   styledRectButton,
 } from "../../muiTheme";
 import { Unstable_NumberInput as NumberInput } from "@mui/base/Unstable_NumberInput";
+import AddIcon from "@mui/icons-material/Add";
+import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import Footer from "../../components/Footer/Footer";
+import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
+import Hamburger from "../../assets/hamburger.svg";
 
 function TrainingQuizEditorPage() {
   const [navigationBarOpen, setNavigationBarOpen] = useState(true);
@@ -39,7 +39,7 @@ function TrainingQuizEditorPage() {
       ],
     },
   ]);
-  const [selectedAnswers, setSelectedAnswers] = useState<(string | null)[]>([
+  const [selectedAnswers, setSelectedAnswers] = useState<(number | null)[]>([
     null,
   ]);
 
@@ -111,6 +111,12 @@ function TrainingQuizEditorPage() {
   };
 
   const handleRemoveAnswer = (questionIndex: number, answerIndex: number) => {
+    const newSelectedAnswers = [...selectedAnswers];
+    if (newSelectedAnswers[questionIndex] == answerIndex) {
+      newSelectedAnswers[questionIndex] = null;
+    }
+    setSelectedAnswers(newSelectedAnswers);
+
     const newQuestions = [...questions];
     newQuestions[questionIndex].answers = newQuestions[
       questionIndex
@@ -118,11 +124,19 @@ function TrainingQuizEditorPage() {
     setQuestions(newQuestions);
   };
 
-  const handleCorrectAnswerChange = (questionIndex: number, event: any) => {
+  const handleCorrectAnswerChange = (
+    questionIndex: number,
+    answerIndex: number
+  ) => {
+    const newQuestions = [...questions];
+    newQuestions[questionIndex].answers.map((answer, idx) => ({
+      ...answer,
+      isCorrect: idx === answerIndex,
+    }));
+    setQuestions(newQuestions);
+
     const newSelectedAnswers = [...selectedAnswers];
-    newSelectedAnswers[questionIndex] = (
-      event.target as HTMLInputElement
-    ).value;
+    newSelectedAnswers[questionIndex] = answerIndex;
     setSelectedAnswers(newSelectedAnswers);
   };
 
@@ -131,6 +145,7 @@ function TrainingQuizEditorPage() {
       setPointsToPass(value);
     }
   };
+
   return (
     <>
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
@@ -222,8 +237,11 @@ function TrainingQuizEditorPage() {
                     <FormControl>
                       <RadioGroup
                         value={selectedAnswers[questionIndex]}
-                        onChange={(event: any) =>
-                          handleCorrectAnswerChange(questionIndex, event)
+                        onChange={(e) =>
+                          handleCorrectAnswerChange(
+                            questionIndex,
+                            Number(e.target.value)
+                          )
                         }>
                         {question.answers.map((answer, answerIndex) => (
                           <FormControlLabel
@@ -273,7 +291,8 @@ function TrainingQuizEditorPage() {
                       <div className={styles.selectedAnswerBox}>
                         <span className={styles.selectedAnswerText}>
                           ANSWER:{" "}
-                          {selectedAnswers[questionIndex]
+                          {selectedAnswers[questionIndex] != null &&
+                          selectedAnswers[questionIndex] >= 0
                             ? Number(selectedAnswers[questionIndex]) + 1
                             : "N/A"}
                         </span>
