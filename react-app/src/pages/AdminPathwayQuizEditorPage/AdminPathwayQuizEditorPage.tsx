@@ -292,7 +292,7 @@ function PathwayQuizEditorPage() {
                         <span className={styles.selectedAnswerText}>
                           ANSWER:{" "}
                           {selectedAnswers[questionIndex] !== null &&
-                          selectedAnswers[questionIndex] >= 0
+                          selectedAnswers[questionIndex]! >= 0
                             ? Number(selectedAnswers[questionIndex]!) + 1
                             : "N/A"}
                         </span>
