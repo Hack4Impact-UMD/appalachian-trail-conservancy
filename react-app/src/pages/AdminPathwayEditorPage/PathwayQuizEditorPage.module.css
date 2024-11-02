@@ -1,151 +1,165 @@
 .split {
-    height: 100%;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    overflow-x: hidden;
-    transition: left 0.3s ease; /* Add transition for smooth animation */
-  }
- 
-  .right {
-    right: 0;
-    left: 250px;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
- 
-  html, body {
-    height: 100%;
-    margin: 0;
+  height: 100%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  transition: left 0.3s ease; /* Add transition for smooth animation */
 }
 
+.right {
+  right: 0;
+  left: 250px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.hamburger {
+  color: var(--blue-gray);
+  font-size: 1.5rem;
+  margin: 1.5rem;
+  position: absolute;
+  top: 20px;
+  left: 10px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  z-index: 10; /* Ensure it's above other elements */
+}
 
 .container {
-    display: flex;
-    height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
+.content {
+  width: 875px;
+  padding-bottom: 3%;
+}
 
 .editorHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
-
-
-.editorProfileHeader {
-    display: flex;
-    align-items: center;
-}
-
-
-.adminText {
-    margin-right: 1rem;
-}
-
-
-.editor {
-    flex-grow: 1;
-    background-color: #FAFAFA;
-    overflow-y: auto;
-}
-
 
 .nameHeading {
-    color: var(--blue-gray);
-    font-size: 3rem;
-    margin: 0;
-    max-width: 90%;
+  color: var(--blue-gray);
+  font-size: 3rem;
+  margin: 0;
 }
 
-
-.editorContent {
-    flex-grow: 1;
-    background-color: #FAFAFA;
-    overflow-y: auto;
-    margin: 2rem;
-    padding: 0 3.5%;
+.quizEditorText {
+  color: var(--blue-gray);
+  font-weight: bold;
 }
 
-
-.addQuestionContainer {
-    margin-top: 1rem;
-    display: flex;
-    align-items: center;
+.pointsContainer {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+  color: var(--blue-gray);
 }
 
-
-.addAnswerBox {
-    display: flex;
-    width: 100%;
-    align-items: center;
+.leftMargin {
+  margin-left: 0.5rem;
 }
 
-
-.answerOption {
-    display: flex;
-    align-items: center;
-    margin-left: 17px;
+.questionHeading {
+  margin-top: 1.5rem;
 }
-
 
 .questionTitleBox {
-    display: flex;
-    width: 70%;
-    justify-content: space-between;
-    margin-top: 3rem;
+  display: flex;
+  width: 80%;
+  justify-content: space-between;
+  margin-top: 1rem;
+  align-items: center;
 }
-
 
 .questionNumber {
-    margin-right: 15px;
-    font-weight: bold;
+  margin-right: 2%;
+  font-weight: bold;
 }
 
-
-.radioLabel {
-    display: flex;
-    align-items: center;
+.answerOptions {
+  margin-left: 1.5rem;
 }
 
-
-.radioButton {
-    width: 20px;
-    height: 20px;
-    accent-color: var(--forest-green);
-    cursor: pointer;
-    margin-right: 8px;
+.answerOption {
+  display: flex;
+  align-items: center;
 }
-
 
 .answerBox {
-    font-size: 1.1rem;
-    border-radius: 10px;
-    margin: 4px 10px;
-    width: 400px;
-    height: 30px;
-    border: 1.8px solid var(--blue-gray);
+  font-size: 1.1rem;
+  border-radius: 10px;
+  margin: 4px 10px;
+  width: 400px;
+  height: 30px;
+  border: 1.8px solid var(--blue-gray);
 }
-
 
 .answerBox fieldset {
-    border: none;
+  border: none;
 }
 
+.closeIcon {
+  display: flex;
+  align-items: center;
+  font-size: 2rem;
+  color: var(--blue-gray);
+  cursor: pointer;
+}
 
+.closeIcon:hover {
+  color: red;
+}
+
+.addAnswerRow {
+  display: flex;
+  width: 75%;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.addAnswerButton {
+  color: var(--blue-gray);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.selectedAnswerText {
+  color: var(--forest-green);
+  font-weight: bold;
+  cursor: default;
+}
+
+.addQuestionContainer {
+  color: var(--blue-gray);
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  cursor: pointer;
+}
 
 .buttonsContainer {
-    display: flex;
-    align-items: center;
-    margin-top: 2rem;    
-    justify-content: flex-start; 
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+@media screen and (min-width: 1500px) {
+  .content {
+    width: 1200px;
+    padding-bottom: 3%;
   }
-  
-
-
-.closeIcon {
-    padding-top: 12px;
-    padding-left: 10px;
 }

@@ -106,7 +106,7 @@ function App() {
               path="/admin/pathways/editor/quiz"
               element={
                 <RequireAdminAuth>
-                  <AdminPathwayEditor />
+                  <PathwayQuizEditorPage />
                 </RequireAdminAuth>
               }
             />

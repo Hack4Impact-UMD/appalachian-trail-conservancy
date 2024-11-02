@@ -101,18 +101,12 @@ function AdminPathwayLibrary() {
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}
-      >
+        style={{ left: navigationBarOpen ? "250px" : "0" }}>
         <div className={styles.outerContainer}>
           <div className={styles.content}>
             <div className={styles.header}>
               <h1 className={styles.nameHeading}> Pathways Library </h1>
-              <div className={styles.adminIcon}>
-                <h6> ADMIN </h6>
-                <div className={styles.profileIcon}>
-                  <ProfileIcon />
-                </div>
-              </div>
+              <ProfileIcon />
             </div>
             <div>
               <Button sx={forestGreenButtonLarge} variant="contained">
@@ -139,8 +133,7 @@ function AdminPathwayLibrary() {
                     : whiteButtonGrayBorder
                 }
                 variant="contained"
-                onClick={() => setFilterType("all")}
-              >
+                onClick={() => setFilterType("all")}>
                 ALL
               </Button>
               <Button
@@ -150,8 +143,7 @@ function AdminPathwayLibrary() {
                     : whiteButtonGrayBorder
                 }
                 variant="contained"
-                onClick={() => setFilterType("published")}
-              >
+                onClick={() => setFilterType("published")}>
                 PUBLISHED
               </Button>
               <Button
@@ -161,8 +153,7 @@ function AdminPathwayLibrary() {
                     : whiteButtonGrayBorder
                 }
                 variant="contained"
-                onClick={() => setFilterType("drafts")}
-              >
+                onClick={() => setFilterType("drafts")}>
                 DRAFTS
               </Button>
               <Button
@@ -172,8 +163,7 @@ function AdminPathwayLibrary() {
                     : whiteButtonGrayBorder
                 }
                 variant="contained"
-                onClick={() => setFilterType("archives")}
-              >
+                onClick={() => setFilterType("archives")}>
                 ARCHIVES
               </Button>
             </div>

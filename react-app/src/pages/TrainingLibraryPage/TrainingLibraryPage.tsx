@@ -154,27 +154,24 @@ function TrainingLibrary() {
   return (
     <>
       <NavigationBar open={open} setOpen={setOpen} />
-      
+
       <div
         className={`${styles.split} ${styles.right}`}
         style={{
           // Only apply left shift when screen width is greater than 1200px
           left: open && screenWidth > 1200 ? "250px" : "0",
-        }}
-      >
+        }}>
         {!open && (
-            <img
-              src={hamburger}
-              alt="Hamburger Menu"
-              className={styles.hamburger} // Add styles to position it
-              width={30}
-              onClick={() => setOpen(true)} // Set sidebar open when clicked
-            />
-          )
-        }
+          <img
+            src={hamburger}
+            alt="Hamburger Menu"
+            className={styles.hamburger} // Add styles to position it
+            width={30}
+            onClick={() => setOpen(true)} // Set sidebar open when clicked
+          />
+        )}
         <div className={styles.outerContainer}>
           <div className={styles.content}>
-
             <div className={styles.header}>
               <h1 className={styles.nameHeading}> Trainings </h1>
               <ProfileIcon />
@@ -200,8 +197,7 @@ function TrainingLibrary() {
                     sx={whiteSelectGrayBorder}
                     value={filterType}
                     onChange={(e) => setFilterType(e.target.value)}
-                    label="Filter"
-                  >
+                    label="Filter">
                     <MenuItem value="all">ALL</MenuItem>
                     <MenuItem value="inProgress">IN PROGRESS</MenuItem>
                     <MenuItem value="completed">COMPLETED</MenuItem>
@@ -218,8 +214,7 @@ function TrainingLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("all")}
-                >
+                  onClick={() => setFilterType("all")}>
                   All
                 </Button>
                 <Button
@@ -229,8 +224,7 @@ function TrainingLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("inProgress")}
-                >
+                  onClick={() => setFilterType("inProgress")}>
                   In Progress
                 </Button>
                 <Button
@@ -240,8 +234,7 @@ function TrainingLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("completed")}
-                >
+                  onClick={() => setFilterType("completed")}>
                   Completed
                 </Button>
               </div>

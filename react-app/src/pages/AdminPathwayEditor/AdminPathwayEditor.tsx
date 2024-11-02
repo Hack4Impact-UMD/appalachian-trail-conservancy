@@ -25,10 +25,8 @@ import {
   forestGreenButton,
   grayBorderSearchBar,
   whiteButtonGrayBorder,
-  whiteButtonGreenBorder,
+  styledRectButton,
 } from "../../muiTheme";
-import { IoIosSearch } from "react-icons/io";
-import { styledRectButton } from "../LoginPage/LoginPage";
 
 const AdminPathwayEditor: React.FC = () => {
   const [trainingName, setTrainingName] = useState("");
@@ -135,8 +133,7 @@ const AdminPathwayEditor: React.FC = () => {
                   color: "black",
                   fontWeight: "bold",
                   marginTop: "2rem",
-                }}
-              >
+                }}>
                 TRAINING NAME
               </Typography>
               <TextField
@@ -172,8 +169,7 @@ const AdminPathwayEditor: React.FC = () => {
                   color: "black",
                   fontWeight: "bold",
                   marginTop: "2rem",
-                }}
-              >
+                }}>
                 BLURB
               </Typography>
               <TextField
@@ -211,8 +207,7 @@ const AdminPathwayEditor: React.FC = () => {
                   color: "black",
                   fontWeight: "bold",
                   marginTop: "2rem",
-                }}
-              >
+                }}>
                 DESCRIPTION
               </Typography>
               <TextField
@@ -251,16 +246,14 @@ const AdminPathwayEditor: React.FC = () => {
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "flex-start",
-                }}
-              >
+                }}>
                 <Typography
                   variant="body2"
                   style={{
                     color: "black",
                     fontWeight: "bold",
                     marginBottom: "8px",
-                  }}
-                >
+                  }}>
                   UPLOAD IMAGE (JPEG, PNG)
                 </Typography>
                 <Button
@@ -272,8 +265,7 @@ const AdminPathwayEditor: React.FC = () => {
                     "&:hover": {
                       backgroundColor: "#D9D9D9",
                     },
-                  }}
-                >
+                  }}>
                   {/* Increase size of LuUpload icon */}
                   <LuUpload style={{ fontSize: "50px" }} />
                   <input type="file" hidden />
@@ -285,8 +277,7 @@ const AdminPathwayEditor: React.FC = () => {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                }}
-              >
+                }}>
                 <div className={styles.trainingSelection}>
                   <Typography
                     variant="body2"
@@ -294,8 +285,7 @@ const AdminPathwayEditor: React.FC = () => {
                       color: "black",
                       fontWeight: "bold",
                       marginTop: "2rem",
-                    }}
-                  >
+                    }}>
                     TRAINING SELECT
                   </Typography>
 
@@ -341,8 +331,7 @@ const AdminPathwayEditor: React.FC = () => {
 
                       <div
                         className={styles.searchBarX}
-                        style={{ visibility: "hidden" }}
-                      >
+                        style={{ visibility: "hidden" }}>
                         <CloseIcon></CloseIcon>
                       </div>
                     </div>
@@ -433,13 +422,11 @@ const AdminPathwayEditor: React.FC = () => {
                     <div className={styles.addTrainingContainer}>
                       <p
                         className={styles.searchBarNumber}
-                        style={{ visibility: "hidden" }}
-                      >
+                        style={{ visibility: "hidden" }}>
                         4
                       </p>
                       <Button
-                        sx={{ ...whiteButtonGrayBorder, textAlign: "left" }}
-                      >
+                        sx={{ ...whiteButtonGrayBorder, textAlign: "left" }}>
                         Add Training
                       </Button>
                     </div>
@@ -457,8 +444,7 @@ const AdminPathwayEditor: React.FC = () => {
                     marginLeft: "3%",
                     width: "40px%",
                   }}
-                  onClick={handleNextClick}
-                >
+                  onClick={handleNextClick}>
                   Next: Create Quiz
                 </Button>
               </div>

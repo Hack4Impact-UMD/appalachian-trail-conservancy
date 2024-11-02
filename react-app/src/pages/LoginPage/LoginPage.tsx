@@ -1,16 +1,14 @@
 import { useAuth } from "../../auth/AuthProvider";
 import { Navigate, Link } from "react-router-dom";
 import { Button } from "@mui/material";
-import { forestGreenButton, whiteButtonGreenBorder } from "../../muiTheme";
+import {
+  forestGreenButton,
+  whiteButtonGreenBorder,
+  styledRectButton,
+} from "../../muiTheme";
 import styles from "./LoginPage.module.css";
 import primaryLogo from "../../assets/atc-primary-logo.png";
 import loginBanner from "../../assets/login-banner.jpeg";
-
-// Used in admin and volunteer login pages
-export const styledRectButton = {
-  width: 350,
-  marginTop: "5%",
-};
 
 function LoginPage() {
   const { user } = useAuth();
