@@ -91,18 +91,14 @@ const AdminTrainingEditor: React.FC = () => {
           <div className={styles.editorContent}>
             <div className={styles.editorHeader}>
               <h1 className={styles.headerText}>Training Editor</h1>
-              <div className={styles.editorProfileHeader}>
-                <h5 className={styles.adminText}> Admin </h5>
-                <ProfileIcon />
-              </div>
+              <ProfileIcon />
             </div>
 
             <form noValidate>
               <Button
                 variant="outlined"
                 color="secondary"
-                className={styles.saveButton}
-              >
+                className={styles.saveButton}>
                 Save as Draft
               </Button>
               <Typography
@@ -112,8 +108,7 @@ const AdminTrainingEditor: React.FC = () => {
                   fontWeight: "bold",
                   marginBottom: "4px",
                   marginTop: "2rem",
-                }}
-              >
+                }}>
                 TRAINING NAME
               </Typography>
               <TextField
@@ -142,8 +137,7 @@ const AdminTrainingEditor: React.FC = () => {
                   color: "black",
                   fontWeight: "bold",
                   marginBottom: "4px",
-                }}
-              >
+                }}>
                 BLURB
               </Typography>
               <TextField
@@ -173,8 +167,7 @@ const AdminTrainingEditor: React.FC = () => {
                   color: "black",
                   fontWeight: "bold",
                   marginBottom: "4px",
-                }}
-              >
+                }}>
                 DESCRIPTION
               </Typography>
 
@@ -206,16 +199,14 @@ const AdminTrainingEditor: React.FC = () => {
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "flex-start",
-                }}
-              >
+                }}>
                 <Typography
                   variant="body2"
                   style={{
                     color: "black",
                     fontWeight: "bold",
                     marginBottom: "8px",
-                  }}
-                >
+                  }}>
                   UPLOAD IMAGE
                 </Typography>
                 <Button
@@ -227,8 +218,7 @@ const AdminTrainingEditor: React.FC = () => {
                     "&:hover": {
                       backgroundColor: "#D9D9D9",
                     },
-                  }}
-                >
+                  }}>
                   {/* Increase size of LuUpload icon */}
                   <LuUpload style={{ fontSize: "50px" }} />
                   <input type="file" hidden />
@@ -241,8 +231,7 @@ const AdminTrainingEditor: React.FC = () => {
                   display: "flex",
                   alignItems: "center",
                   marginTop: "2rem",
-                }}
-              >
+                }}>
                 <Typography
                   variant="body2"
                   style={{
@@ -250,8 +239,7 @@ const AdminTrainingEditor: React.FC = () => {
                     fontWeight: "bold",
                     marginBottom: "0.5rem",
                     marginTop: "2rem",
-                  }}
-                >
+                  }}>
                   RESOURCE LINK
                 </Typography>
                 <Tooltip title="Should be link to PDF or Video" placement="top">
@@ -299,8 +287,7 @@ const AdminTrainingEditor: React.FC = () => {
 
                 <FormControl
                   margin="normal"
-                  className={styles.resourceTypeField}
-                >
+                  className={styles.resourceTypeField}>
                   <Typography
                     variant="body2"
                     style={{
@@ -308,8 +295,7 @@ const AdminTrainingEditor: React.FC = () => {
                       fontWeight: "bold",
                       marginBottom: "0.5rem",
                       marginTop: "-2.5rem",
-                    }}
-                  >
+                    }}>
                     RESOURCE TYPE
                   </Typography>
                   <Select
@@ -336,8 +322,7 @@ const AdminTrainingEditor: React.FC = () => {
                           },
                         },
                       },
-                    }}
-                  >
+                    }}>
                     <MenuItem value="pdf">PDF</MenuItem>
                     <MenuItem value="video">Video</MenuItem>
                   </Select>
@@ -354,8 +339,7 @@ const AdminTrainingEditor: React.FC = () => {
                     fontSize: "12px",
                     marginTop: "1rem",
                   }}
-                  onClick={handleNextClick}
-                >
+                  onClick={handleNextClick}>
                   Next: Create Quiz
                 </Button>
               </div>

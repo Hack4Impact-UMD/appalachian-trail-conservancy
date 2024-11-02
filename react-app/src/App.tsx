@@ -25,6 +25,8 @@ import AdminTrainingEditor from "./pages/AdminTrainingEditor/AdminTrainingEditor
 import AdminPathwayEditor from "./pages/AdminPathwayEditor/AdminPathwayEditor.tsx";
 import RegistrationPage from "./pages/RegistrationPage/RegistrationPage/RegistrationPage.tsx";
 import RegistrationConfirmationPage from "./pages/RegistrationPage/RegistrationConfirmationPage/RegistrationConfirmationPage.tsx";
+import PathwayQuizEditorPage from "./pages/AdminPathwayQuizEditorPage/AdminPathwayQuizEditorPage.tsx";
+import TrainingQuizEditorPage from "./pages/AdminTrainingQuizEditorPage/AdminTrainingQuizEditorPage.tsx";
 import AdminDashboard from "./pages/AdminDashboardPage/AdminDashboardPage.tsx";
 import AdminTrainingLibrary from "./pages/AdminTrainingLibraryPage/AdminTrainingLibraryPage.tsx";
 import AdminPathwayLibrary from "./pages/AdminPathwayLibraryPage/AdminPathwayLibraryPage.tsx";
@@ -77,6 +79,14 @@ function App() {
               }
             />
             <Route
+              path="/admin/trainings/editor/quiz"
+              element={
+                <RequireAdminAuth>
+                  <TrainingQuizEditorPage />
+                </RequireAdminAuth>
+              }
+            />
+            <Route
               path="/admin/pathways"
               element={
                 <RequireAdminAuth>
@@ -89,6 +99,14 @@ function App() {
               element={
                 <RequireAdminAuth>
                   <AdminPathwayEditor />
+                </RequireAdminAuth>
+              }
+            />
+            <Route
+              path="/admin/pathways/editor/quiz"
+              element={
+                <RequireAdminAuth>
+                  <PathwayQuizEditorPage />
                 </RequireAdminAuth>
               }
             />
@@ -179,8 +197,7 @@ function App() {
                   <button
                     onClick={() => {
                       //insert test function here
-                    }}
-                  >
+                    }}>
                     TEST
                   </button>
                 </RequireAuth>

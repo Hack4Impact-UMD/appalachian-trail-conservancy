@@ -7,8 +7,11 @@ import {
   FormHelperText,
 } from "@mui/material";
 
-import { forestGreenButton, grayBorderTextField } from "../../../muiTheme.ts";
-import { styledRectButton } from "../../LoginPage/LoginPage.tsx";
+import {
+  forestGreenButton,
+  grayBorderTextField,
+  styledRectButton,
+} from "../../../muiTheme.ts";
 import { Navigate } from "react-router";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../auth/AuthProvider.tsx";
@@ -118,8 +121,7 @@ function RegistrationPage() {
                       boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)",
                     },
                   },
-                }}
-              >
+                }}>
                 <span className={styles.icon}>
                   <IoIosInformationCircleOutline />
                 </span>
@@ -178,8 +180,7 @@ function RegistrationPage() {
               sx={{ ...styledRectButton, ...forestGreenButton }}
               variant="contained"
               onClick={(e) => handleConfirm(e)}
-              disabled={!isFormValid}
-            >
+              disabled={!isFormValid}>
               {showLoading ? <Loading></Loading> : "Confirm"}
             </Button>
           </div>
