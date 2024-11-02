@@ -291,9 +291,9 @@ function TrainingQuizEditorPage() {
                       <div className={styles.selectedAnswerBox}>
                         <span className={styles.selectedAnswerText}>
                           ANSWER:{" "}
-                          {selectedAnswers[questionIndex] != null &&
-                          selectedAnswers[questionIndex] >= 0
-                            ? Number(selectedAnswers[questionIndex]) + 1
+                          {selectedAnswers[questionIndex] !== null &&
+                          selectedAnswers[questionIndex]! >= 0
+                            ? Number(selectedAnswers[questionIndex]!) + 1
                             : "N/A"}
                         </span>
                       </div>
