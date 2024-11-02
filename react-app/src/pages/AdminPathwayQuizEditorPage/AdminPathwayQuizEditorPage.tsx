@@ -239,7 +239,7 @@ function PathwayQuizEditorPage() {
                   <div className={styles.answerOptions}>
                     <FormControl>
                       <RadioGroup
-                        value={selectedAnswers[questionIndex]}
+                        value={selectedAnswers[questionIndex] ?? -1}
                         onChange={(e) =>
                           handleCorrectAnswerChange(
                             questionIndex,
