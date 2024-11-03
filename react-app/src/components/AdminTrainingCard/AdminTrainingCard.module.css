@@ -20,16 +20,33 @@
   height: 100%;
   object-fit: cover;
 }
+
+.trainingContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background-color: var(--sky-blue);
+  padding: 20px;
+  position: relative;
+}
+
+.trainingTitleWrapper {
+  position: relative;
+  display: inline-block;
+}
+
 .trainingTitle {
   font-size: 1.2rem;
   font-weight: bold;
-  margin: 0 0 10px 5px;
+  margin: 0 0 5px 0;
   color: var(--blue-gray);
   height: 54px;
 }
 
 .outsideMarker {
-  margin: 0px 0 0px 5px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .marker {
@@ -39,39 +56,24 @@
   font-size: 0.9em;
   font-weight: bold;
   text-align: center;
-  margin: -10px 0 3px 0;
   background-color: var(--blue-gray);
   color: white;
 }
 
-.markerStatus {
-  display: inline-block;
-  padding: 9px 18px;
-  border-radius: 20px;
-  font-size: 0.9em;
-  font-weight: bold;
-  text-align: center;
-  margin: -10px 0 3px 0;
-  background-color: var(--blue-gray);
-  color: white;
-  margin-left: 5rem;
+.draftMarker {
+  border: 1.5px solid var(--blue-gray);
+  background-color: #d1e8db;
+  color: var(--blue-gray);
 }
 
-.trainingTitleWrapper {
-  position: relative;
-  display: inline-block;
+.publishedMarker {
+  border: 1.5px solid var(--blue-gray);
+  background-color: #a3d3b8;
+  color: var(--blue-gray);
 }
 
-.trainingContent {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  background-color: var(--sky-blue);
-  padding: 18px;
-  position: relative;
-}
-
-.trainingStatus span {
-  color: #007bff;
+.archiveMarker {
+  border: 1.5px solid var(--blue-gray);
+  background-color: #76bd95;
+  color: var(--blue-gray);
 }

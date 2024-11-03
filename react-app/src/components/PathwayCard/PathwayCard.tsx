@@ -5,6 +5,8 @@ import pathwayCard from "../../assets/pathwayCard.svg";
 import { useNavigate } from "react-router-dom";
 import { PathwayID } from "../../types/PathwayType";
 import { VolunteerPathway } from "../../types/UserType";
+import { Tooltip } from "@mui/material";
+import { grayTooltip } from "../../muiTheme";
 import PathwayTrainingPopup from "../PathwayTrainingPopup/PathwayTrainingPopup";
 
 interface PathwayCardProps {
@@ -63,19 +65,28 @@ const PathwayCard: React.FC<PathwayCardProps> = ({
             },
           });
         }
-      }}
-    >
+      }}>
       <div className={styles.pathwayImage}>
         <img src={pathwayCard} alt="Pathway" />
       </div>
       <div className={styles.pathwayContent}>
         <div className={styles.pathwayTitleWrapper}>
-          <div className={styles.pathwayTitle}>
-            {pathway.name.substring(0, 31)}
-            {pathway.name.length > 30 ? "..." : ""}
-          </div>
-          {pathway.name.length > 30 && (
-            <span className={styles.tooltip}>{pathway.name}</span>
+          {pathway.name.length > 35 ? (
+            <Tooltip
+              title={pathway.name}
+              arrow={false}
+              placement="top-start"
+              componentsProps={{
+                tooltip: {
+                  sx: { ...grayTooltip, maxWidth: "350px" },
+                },
+              }}>
+              <div className={styles.pathwayTitle}>
+                {pathway.name.substring(0, 36)}...
+              </div>
+            </Tooltip>
+          ) : (
+            <div className={styles.pathwayTitle}>{pathway.name}</div>
           )}
         </div>
 

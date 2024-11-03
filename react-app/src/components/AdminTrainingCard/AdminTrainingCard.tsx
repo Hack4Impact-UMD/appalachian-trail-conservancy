@@ -8,6 +8,29 @@ interface AdminTrainingCardProps {
 }
 
 const AdminTrainingCard: React.FC<AdminTrainingCardProps> = ({ training }) => {
+  const renderMarker = () => {
+    if (training.status === "DRAFT") {
+      // Training drafted
+      return (
+        <div className={`${styles.marker} ${styles.draftMarker}`}>DRAFT</div>
+      );
+    } else if (training.status === "PUBLISHED") {
+      // Training published
+      return (
+        <div className={`${styles.marker} ${styles.publishedMarker}`}>
+          PUBLISHED
+        </div>
+      );
+    } else if (training.status === "ARCHIVED") {
+      // Training archived
+      return (
+        <div className={`${styles.marker} ${styles.archiveMarker}`}>
+          ARCHIVE
+        </div>
+      );
+    }
+  };
+
   return (
     <>
       <div className={styles.trainingCard}>
@@ -16,7 +39,7 @@ const AdminTrainingCard: React.FC<AdminTrainingCardProps> = ({ training }) => {
         </div>
         <div className={styles.trainingContent}>
           <div className={styles.trainingTitleWrapper}>
-            {training.name.length > 30 ? (
+            {training.name.length > 35 ? (
               <Tooltip
                 title={training.name}
                 arrow={false}
@@ -27,7 +50,7 @@ const AdminTrainingCard: React.FC<AdminTrainingCardProps> = ({ training }) => {
                   },
                 }}>
                 <div className={styles.trainingTitle}>
-                  {training.name.substring(0, 31)}...
+                  {training.name.substring(0, 36)}...
                 </div>
               </Tooltip>
             ) : (
@@ -36,7 +59,7 @@ const AdminTrainingCard: React.FC<AdminTrainingCardProps> = ({ training }) => {
           </div>
           <div className={styles.outsideMarker}>
             <div className={`${styles.marker}`}>EDIT</div>
-            <div className={styles.markerStatus}>{training.status}</div>
+            <div>{renderMarker()}</div>
           </div>
         </div>
       </div>

@@ -55,7 +55,7 @@ function AdminTrainingLibrary() {
     },
     associatedPathways: [],
     certificationImage: "",
-    status: "DRAFT",
+    status: "PUBLISHED",
   });
   const [training3] = useState<TrainingID>({
     name: "How to be an Expert Hiker",
@@ -72,7 +72,7 @@ function AdminTrainingLibrary() {
     },
     associatedPathways: [],
     certificationImage: "",
-    status: "DRAFT",
+    status: "ARCHIVED",
   });
 
   const trainings = [training1, training2, training3];

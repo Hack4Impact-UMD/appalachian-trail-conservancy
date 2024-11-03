@@ -62,7 +62,7 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
         </div>
         <div className={styles.trainingContent}>
           <div className={styles.trainingTitleWrapper}>
-            {training.name.length > 30 ? (
+            {training.name.length > 35 ? (
               <Tooltip
                 title={training.name}
                 arrow={false}
@@ -73,14 +73,14 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
                   },
                 }}>
                 <div className={styles.trainingTitle}>
-                  {training.name.substring(0, 31)}...
+                  {training.name.substring(0, 36)}...
                 </div>
               </Tooltip>
             ) : (
               <div className={styles.trainingTitle}>{training.name}</div>
             )}
           </div>
-          <div className={styles.progressBar}>{renderMarker()}</div>
+          <div className={styles.markerContainer}>{renderMarker()}</div>
         </div>
       </div>
       <PathwayTrainingPopup
