@@ -133,7 +133,15 @@
   }
 }
 
-@media screen and (max-width: 650px) {
+@media screen and (max-width: 750px) {
+  .content {
+    width: 300px;
+  }
+
+  .cardsContainer {
+    justify-content: space-around;
+  }
+
   .searchBarContainer {
     flex-direction: column;
     align-items: stretch;
@@ -143,16 +151,6 @@
   .dropdownMenu {
     width: 300px;
     margin-top: 2%;
-  }
-}
-
-@media screen and (max-width: 750px) {
-  .content {
-    width: 300px;
-  }
-
-  .cardsContainer {
-    justify-content: space-around;
   }
 }
 
