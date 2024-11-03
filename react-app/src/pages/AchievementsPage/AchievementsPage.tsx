@@ -24,9 +24,13 @@ import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Certificate from "../../components/CertificateCard/CertificateCard";
 import { useAuth } from "../../auth/AuthProvider";
 import Badge from "../../components/BadgeCard/BadgeCard";
+import { useNavigate } from "react-router-dom";
+import Loading from "../../components/LoadingScreen/Loading";
 
 function AchievementsPage() {
   const auth = useAuth();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(true);
   const [badgesSelected, setBadgesSelected] = useState<boolean>(true);
   const [sortMode, setSortMode] = useState<string>("newest");
 
@@ -55,6 +59,7 @@ function AchievementsPage() {
   useEffect(() => {
     getAllTrainings().then((genericTrainings) => {
       if (!auth.loading && auth.id) {
+        setLoading(true);
         getVolunteer(auth.id.toString()).then((volunteer) => {
           const volunteerTrainings = volunteer.trainingInformation;
           let allCorrelatedTrainings: {
@@ -75,13 +80,20 @@ function AchievementsPage() {
               }
             }
           }
-          setCorrelatedTrainings(allCorrelatedTrainings);
+          let sortedCopy = allCorrelatedTrainings.slice();
+          sortedCopy.sort((a, b) => {
+            const dateA = DateTime.fromISO(a.volunteerTraining.dateCompleted);
+            const dateB = DateTime.fromISO(b.volunteerTraining.dateCompleted);
+            return dateB.toMillis() - dateA.toMillis();
+          });
+          setCorrelatedTrainings(sortedCopy);
+          setLoading(false);
         });
       }
     });
-
     getAllPathways().then((genericPathways) => {
       if (!auth.loading && auth.id) {
+        setLoading(true);
         getVolunteer(auth.id.toString()).then((volunteer) => {
           const volunteerPathways = volunteer.pathwayInformation;
           let allCorrelatedPathways: {
@@ -102,11 +114,18 @@ function AchievementsPage() {
               }
             }
           }
-          setCorrelatedPathways(allCorrelatedPathways);
+          let sortedCopy = allCorrelatedPathways.slice();
+          sortedCopy.sort((a, b) => {
+            const dateA = DateTime.fromISO(a.volunteerPathway.dateCompleted);
+            const dateB = DateTime.fromISO(b.volunteerPathway.dateCompleted);
+            return dateB.toMillis() - dateA.toMillis();
+          });
+          setCorrelatedPathways(sortedCopy);
+          setLoading(false);
         });
       }
     });
-  });
+  }, [auth.loading, auth.id]);
 
   const sortCards = () => {
     let sortedCopy;
@@ -147,7 +166,6 @@ function AchievementsPage() {
           sortedCopy.sort((a, b) =>
             a.genericTraining.name.localeCompare(b.genericTraining.name)
           );
-
           break;
         case "reverseAlphabetically":
           sortedCopy.sort((a, b) =>
@@ -194,15 +212,14 @@ function AchievementsPage() {
         }}
       >
         {!open && (
-            <img
-              src={hamburger}
-              alt="Hamburger Menu"
-              className={styles.hamburger} // Add styles to position it
-              width={30}
-              onClick={() => setOpen(true)} // Set sidebar open when clicked
-            />
-          )
-        }
+          <img
+            src={hamburger}
+            alt="Hamburger Menu"
+            className={styles.hamburger} // Add styles to position it
+            width={30}
+            onClick={() => setOpen(true)} // Set sidebar open when clicked
+          />
+        )}
         <div className={styles.outerContainer}>
           <div className={styles.content}>
             <div className={styles.header}>
@@ -212,7 +229,11 @@ function AchievementsPage() {
             <div className={styles.buttonContainer}>
               <div className={styles.leftButtonContainer}>
                 <Button
-                  onClick={() => setBadgesSelected(true)}
+                  onClick={() => {
+                    setBadgesSelected(true);
+                    setSortMode("newest");
+                    handleSortChange;
+                  }}
                   sx={
                     badgesSelected
                       ? forestGreenButtonPadding
@@ -223,7 +244,11 @@ function AchievementsPage() {
                   Pathway Badges
                 </Button>
                 <Button
-                  onClick={() => setBadgesSelected(false)}
+                  onClick={() => {
+                    setBadgesSelected(false);
+                    setSortMode("newest");
+                    handleSortChange;
+                  }}
                   sx={
                     !badgesSelected
                       ? forestGreenButtonPadding
@@ -241,7 +266,7 @@ function AchievementsPage() {
                   size="small"
                   sx={{
                     ...whiteSelectGrayBorder,
-                    width: '100%',
+                    width: "100%",
                   }}
                 >
                   <MenuItem value={"newest"} sx={selectOptionStyle}>
@@ -262,29 +287,80 @@ function AchievementsPage() {
                 </Select>
               </div>
             </div>
-            <div className={styles.cardsContainer}>
-              {badgesSelected ? (
-                <>
-                  {correlatedPathways.map((pathway, index) => (
-                    <Badge
-                      title={pathway.genericPathway.name}
-                      date={pathway.volunteerPathway.dateCompleted}
-                      image={pathway.genericPathway.badgeImage}
-                    />
-                  ))}
-                </>
-              ) : (
-                <>
-                  {correlatedTrainings.map((training, index) => (
-                    <Certificate
-                      title={training.genericTraining.name}
-                      image={training.genericTraining.coverImage}
-                      date={training.volunteerTraining.dateCompleted}
-                    />
-                  ))}
-                </>
-              )}
-            </div>
+            {loading ? (
+              <Loading />
+            ) : (
+              <>
+                {badgesSelected ? (
+                  <>
+                    {correlatedPathways.length == 0 ? (
+                      <>
+                        <div className={styles.noCards}>
+                          <h1>No Badges Earned!</h1>
+                          <div className={styles.leftButtonContainer}>
+                            <Button
+                              onClick={() => {
+                                navigate("/pathways");
+                              }}
+                              sx={forestGreenButtonPadding}
+                              variant="contained"
+                            >
+                              Go to Pathways Library
+                            </Button>
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      <></>
+                    )}
+                    <div className={styles.cardsContainer}>
+                      {correlatedPathways.map((pathway, index) => (
+                        <Badge
+                          title={pathway.genericPathway.name}
+                          date={pathway.volunteerPathway.dateCompleted}
+                          image={pathway.genericPathway.badgeImage}
+                          key={index}
+                        />
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {correlatedTrainings.length == 0 ? (
+                      <>
+                        <div className={styles.noCards}>
+                          <h1>No Certifications Earned!</h1>
+                          <div className={styles.leftButtonContainer}>
+                            <Button
+                              onClick={() => {
+                                navigate("/trainings");
+                              }}
+                              sx={forestGreenButtonPadding}
+                              variant="contained"
+                            >
+                              Go to Trainings Library
+                            </Button>
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className={styles.cardsContainer}>
+                          {correlatedTrainings.map((training, index) => (
+                            <Certificate
+                              title={training.genericTraining.name}
+                              image={training.genericTraining.coverImage}
+                              date={training.volunteerTraining.dateCompleted}
+                              key={index}
+                            />
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </>
+                )}
+              </>
+            )}
           </div>
         </div>
         <Footer />

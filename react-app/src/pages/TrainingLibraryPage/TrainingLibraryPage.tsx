@@ -44,6 +44,60 @@ function TrainingLibrary() {
 
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
 
+  useEffect(() => {
+    // get all trainings from firebase
+    getAllTrainings()
+      .then((genericTrainings) => {
+        // only use auth if it is finished loading
+        if (!auth.loading && auth.id) {
+          // get volunteer info from firebase. will contain volunteer progress on trainings
+          getVolunteer(auth.id.toString())
+            .then((volunteer) => {
+              const volunteerTrainings = volunteer.trainingInformation;
+              // match up the allGenericTrainings and volunteerTrainings, use setCorrelatedTrainings to set
+              let allCorrelatedTrainings: {
+                genericTraining: TrainingID;
+                volunteerTraining?: VolunteerTraining;
+              }[] = [];
+              for (const genericTraining of genericTrainings) {
+                // if genericTraining in volunteer.trainingInformation (has been started by volunteer), then we include that.
+                // otherwise, it's undefined
+                let startedByVolunteer = false;
+                for (const volunteerTraining of volunteerTrainings) {
+                  if (genericTraining.id == volunteerTraining.trainingID) {
+                    startedByVolunteer = true;
+                    allCorrelatedTrainings.push({
+                      genericTraining: genericTraining,
+                      volunteerTraining: volunteerTraining,
+                    });
+                  }
+                }
+                if (!startedByVolunteer) {
+                  allCorrelatedTrainings.push({
+                    genericTraining: genericTraining,
+                    volunteerTraining: undefined,
+                  });
+                }
+              }
+              setCorrelatedTrainings(allCorrelatedTrainings);
+              // also pass allCorrelatedTrainings into filterTrainings, in case it hasn't been set yet
+              filterTrainings(allCorrelatedTrainings);
+              setLoading(false);
+            })
+            .catch((error) => {
+              console.error("Error fetching volunteer:", error);
+            });
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching trainings:", error);
+      });
+  }, [auth.loading, auth.id]);
+
+  useEffect(() => {
+    filterTrainings(correlatedTrainings);
+  }, [searchQuery, filterType]);
+
   // Update screen width on resize
   useEffect(() => {
     const handleResize = () => {
@@ -95,61 +149,37 @@ function TrainingLibrary() {
     setFilteredTrainings(filtered);
   };
 
-  useEffect(() => {
-    // get all trainings from firebase
-    getAllTrainings()
-      .then((genericTrainings) => {
-        // only use auth if it is finished loading
-        if (!auth.loading && auth.id) {
-          // get volunteer info from firebase. will contain volunteer progress on trainings
-          getVolunteer(auth.id.toString())
-            .then((volunteer) => {
-              const volunteerTrainings = volunteer.trainingInformation;
-              // match up the allGenericTrainings and volunteerTrainings, use setCorrelatedTrainings to set
-              let allCorrelatedTrainings: {
-                genericTraining: TrainingID;
-                volunteerTraining?: VolunteerTraining;
-              }[] = [];
-              for (const genericTraining of genericTrainings) {
-                // if genericTraining in volunteer.trainingInformation (has been started by volunteer), then we include that.
-                // otherwise, it's undefined
-                let startedByVolunteer = false;
-                for (const volunteerTraining of volunteerTrainings) {
-                  if (genericTraining.id == volunteerTraining.trainingID) {
-                    startedByVolunteer = true;
-                    allCorrelatedTrainings.push({
-                      genericTraining: genericTraining,
-                      volunteerTraining: volunteerTraining,
-                    });
-                  }
-                }
-                if (!startedByVolunteer) {
-                  allCorrelatedTrainings.push({
-                    genericTraining: genericTraining,
-                    volunteerTraining: undefined,
-                  });
-                }
-              }
-              setCorrelatedTrainings(allCorrelatedTrainings);
-              // also pass allCorrelatedTrainings into filterTrainings, in case it hasn't been set yet
-              filterTrainings(allCorrelatedTrainings);
-              setLoading(false);
-            })
-            .catch((error) => {
-              console.error("Error fetching volunteer:", error);
-            });
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching trainings:", error);
-      });
-  }, [searchQuery, filterType, auth.loading, auth.id]);
-
   const updateQuery = (e: {
     target: { value: React.SetStateAction<string> };
   }) => setSearchQuery(e.target.value);
 
   const debouncedOnChange = debounce(updateQuery, 200);
+
+  const renderEmptyMessage = () => {
+    if (searchQuery != "") {
+      return (
+        <div className={styles.emptySearchMessage}>
+          No Trainings Matching “{searchQuery}”
+        </div>
+      );
+    } else {
+      if (filterType == "all") {
+        return <div className={styles.emptySearchMessage}>No Trainings</div>;
+      } else if (filterType == "inProgress") {
+        return (
+          <div className={styles.emptySearchMessage}>
+            No Trainings In Progress
+          </div>
+        );
+      } else if (filterType == "completed") {
+        return (
+          <div className={styles.emptySearchMessage}>
+            No Trainings Completed
+          </div>
+        );
+      }
+    }
+  };
 
   return (
     <>
@@ -179,6 +209,7 @@ function TrainingLibrary() {
 
             <div className={styles.searchBarContainer}>
               <OutlinedInput
+                className={styles.searchBar}
                 sx={grayBorderSearchBar}
                 placeholder="Search..."
                 onChange={debouncedOnChange}
@@ -191,7 +222,7 @@ function TrainingLibrary() {
 
               {/* dropdown container */}
               <div className={styles.dropdownContainer}>
-                <FormControl>
+                <FormControl sx={{ width: 300 }}>
                   <Select
                     className={styles.dropdownMenu}
                     sx={whiteSelectGrayBorder}
@@ -245,9 +276,7 @@ function TrainingLibrary() {
             ) : (
               <>
                 {filteredTrainings.length === 0 ? (
-                  <div className={styles.emptySearchMessage}>
-                    No Trainings Matching “{searchQuery}”
-                  </div>
+                  renderEmptyMessage()
                 ) : (
                   <div className={styles.cardsContainer}>
                     {filteredTrainings.map((training, index) => (
