@@ -89,7 +89,6 @@
   font-size: 1.1rem;
 }
 
-
 @media screen and (min-width: 1500px) {
   .content {
     width: 1200px;
@@ -99,26 +98,28 @@
 /* show buttons when screen width is above 1201px */
 @media screen and (min-width: 1201px) {
   .buttonContainer {
-    display: flex; 
+    display: flex;
   }
   .dropdownContainer {
-    display: none; 
+    display: none;
   }
 }
 
 /* show dropdown when screen width is below 1200px */
 @media screen and (max-width: 1200px) {
-  .searchBarContainer {
-    flex-direction: column;
-    align-items: stretch;
-    width: 180%;
+  .searchBar {
+    flex-grow: 1;
+    margin-right: 20px;
   }
   .buttonContainer {
-    display: none;  
+    display: none;
   }
   .dropdownContainer {
-    display: block; 
-    margin-top: 2%;
+    display: flex;
+    width: 170px;
+  }
+  .dropdownMenu {
+    width: 170px;
   }
 }
 
@@ -139,6 +140,17 @@
 
   .cardsContainer {
     justify-content: space-around;
+  }
+
+  .searchBarContainer {
+    flex-direction: column;
+    align-items: stretch;
+    width: 180%;
+  }
+
+  .dropdownMenu {
+    width: 300px;
+    margin-top: 2%;
   }
 }
 

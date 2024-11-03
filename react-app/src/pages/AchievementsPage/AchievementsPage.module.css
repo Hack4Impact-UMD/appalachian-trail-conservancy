@@ -76,6 +76,13 @@
   margin-bottom: 1rem;
 }
 
+.noCards {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin: 10% 15% 15% 15%;
+}
+
 @media screen and (min-width: 1500px) {
   .content {
     width: 1200px;
