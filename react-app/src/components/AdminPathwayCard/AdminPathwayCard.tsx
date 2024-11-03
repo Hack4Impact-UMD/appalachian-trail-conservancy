@@ -13,6 +13,29 @@ interface PathwayCardProps {
 const AdminPathwayCard: React.FC<PathwayCardProps> = ({ pathway }) => {
   const navigate = useNavigate();
 
+  const renderMarker = () => {
+    if (pathway.status === "DRAFT") {
+      // Pathway drafted
+      return (
+        <div className={`${styles.marker} ${styles.draftMarker}`}>DRAFT</div>
+      );
+    } else if (pathway.status === "PUBLISHED") {
+      // Pathway published
+      return (
+        <div className={`${styles.marker} ${styles.publishedMarker}`}>
+          PUBLISHED
+        </div>
+      );
+    } else if (pathway.status === "ARCHIVED") {
+      // Pathway archived
+      return (
+        <div className={`${styles.marker} ${styles.archiveMarker}`}>
+          ARCHIVE
+        </div>
+      );
+    }
+  };
+
   return (
     <div className={styles.pathwayCard}>
       <div className={styles.pathwayImage}>
@@ -20,7 +43,7 @@ const AdminPathwayCard: React.FC<PathwayCardProps> = ({ pathway }) => {
       </div>
       <div className={styles.pathwayContent}>
         <div className={styles.pathwayTitleWrapper}>
-          {pathway.name.length > 35 ? (
+          {pathway.name.length > 30 ? (
             <Tooltip
               title={pathway.name}
               arrow={false}
@@ -31,15 +54,16 @@ const AdminPathwayCard: React.FC<PathwayCardProps> = ({ pathway }) => {
                 },
               }}>
               <div className={styles.pathwayTitle}>
-                {pathway.name.substring(0, 36)}...
+                {pathway.name.substring(0, 31)}...
               </div>
             </Tooltip>
           ) : (
             <div className={styles.pathwayTitle}>{pathway.name}</div>
           )}
         </div>
-        <div className={styles.progressBar}>
-          {<div className={styles.marker}>EDIT</div>}
+        <div className={styles.outsideMarker}>
+          <div className={styles.marker}>EDIT</div>
+          <div>{renderMarker()}</div>
         </div>
       </div>
     </div>

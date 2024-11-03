@@ -71,7 +71,7 @@ const PathwayCard: React.FC<PathwayCardProps> = ({
       </div>
       <div className={styles.pathwayContent}>
         <div className={styles.pathwayTitleWrapper}>
-          {pathway.name.length > 35 ? (
+          {pathway.name.length > 30 ? (
             <Tooltip
               title={pathway.name}
               arrow={false}
@@ -82,7 +82,7 @@ const PathwayCard: React.FC<PathwayCardProps> = ({
                 },
               }}>
               <div className={styles.pathwayTitle}>
-                {pathway.name.substring(0, 36)}...
+                {pathway.name.substring(0, 31)}...
               </div>
             </Tooltip>
           ) : (
@@ -90,7 +90,7 @@ const PathwayCard: React.FC<PathwayCardProps> = ({
           )}
         </div>
 
-        <div className={styles.progressBar}>{renderMarker()}</div>
+        <div className={styles.markerContainer}>{renderMarker()}</div>
       </div>
       <PathwayTrainingPopup
         open={openTrainingPopup}

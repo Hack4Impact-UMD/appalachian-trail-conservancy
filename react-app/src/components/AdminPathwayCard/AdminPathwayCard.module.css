@@ -26,19 +26,26 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  background-color: rgb(193, 200, 235);
-  padding: 18px;
+  background-color: var(--blue-purple);
+  padding: 20px;
+}
+
+.pathwayTitleWrapper {
+  position: relative;
+  display: inline-block;
 }
 
 .pathwayTitle {
   font-size: 1.2em;
   font-weight: bold;
-  margin: 0 0 5px 5px;
+  margin: 0 0 5px 0;
   color: var(--blue-gray);
+  height: 30px;
 }
 
-.progressBar {
-  margin: 10px 0 10px 5px;
+.outsideMarker {
+  display: flex;
+  justify-content: space-between;
 }
 
 .marker {
@@ -48,13 +55,25 @@
   font-size: 0.9em;
   font-weight: bold;
   text-align: center;
-  margin: -8px 0 -5px 0;
   border: 1.5px solid var(--blue-gray);
   background-color: var(--blue-gray);
   color: white;
 }
 
-.pathwayTitleWrapper {
-  position: relative;
-  display: inline-block;
+.draftMarker {
+  border: 1.5px solid var(--blue-gray);
+  background-color: #d1e8db;
+  color: var(--blue-gray);
+}
+
+.publishedMarker {
+  border: 1.5px solid var(--blue-gray);
+  background-color: #a3d3b8;
+  color: var(--blue-gray);
+}
+
+.archiveMarker {
+  border: 1.5px solid var(--blue-gray);
+  background-color: #76bd95;
+  color: var(--blue-gray);
 }
