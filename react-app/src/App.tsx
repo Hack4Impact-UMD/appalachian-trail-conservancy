@@ -30,6 +30,7 @@ import TrainingQuizEditorPage from "./pages/AdminTrainingQuizEditorPage/AdminTra
 import AdminDashboard from "./pages/AdminDashboardPage/AdminDashboardPage.tsx";
 import AdminTrainingLibrary from "./pages/AdminTrainingLibraryPage/AdminTrainingLibraryPage.tsx";
 import AdminPathwayLibrary from "./pages/AdminPathwayLibraryPage/AdminPathwayLibraryPage.tsx";
+import AdminUserManagement from "./pages/AdminUserManagement/AdminUserManagement.tsx";
 
 function App() {
   return (
@@ -107,6 +108,14 @@ function App() {
               element={
                 <RequireAdminAuth>
                   <PathwayQuizEditorPage />
+                </RequireAdminAuth>
+              }
+            />
+            <Route
+              path="/admin/users"
+              element={
+                <RequireAdminAuth>
+                  <AdminUserManagement />
                 </RequireAdminAuth>
               }
             />
@@ -197,7 +206,8 @@ function App() {
                   <button
                     onClick={() => {
                       //insert test function here
-                    }}>
+                    }}
+                  >
                     TEST
                   </button>
                 </RequireAuth>
