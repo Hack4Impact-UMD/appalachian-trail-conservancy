@@ -39,7 +39,7 @@ const AdminPathwayCard: React.FC<PathwayCardProps> = ({ pathway }) => {
           )}
         </div>
         <div className={styles.progressBar}>
-          {<div className={`${styles.marker}`}>EDIT</div>}
+          {<div className={styles.marker}>EDIT</div>}
         </div>
       </div>
     </div>

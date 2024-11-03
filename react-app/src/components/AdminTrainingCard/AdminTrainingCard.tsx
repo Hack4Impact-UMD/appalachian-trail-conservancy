@@ -58,7 +58,7 @@ const AdminTrainingCard: React.FC<AdminTrainingCardProps> = ({ training }) => {
             )}
           </div>
           <div className={styles.outsideMarker}>
-            <div className={`${styles.marker}`}>EDIT</div>
+            <div className={styles.marker}>EDIT</div>
             <div>{renderMarker()}</div>
           </div>
         </div>

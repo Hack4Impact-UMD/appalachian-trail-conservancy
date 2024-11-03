@@ -13,6 +13,7 @@ import {
   whiteButtonGrayBorder,
   grayBorderSearchBar,
   whiteSelectGrayBorder,
+  selectOptionStyle,
 } from "../../muiTheme";
 import {
   getAllPublishedTrainings,
@@ -49,6 +50,7 @@ function TrainingLibrary() {
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
 
   useEffect(() => {
+    setLoading(true);
     // get all trainings from firebase
     getAllTrainings()
       .then((genericTrainings) => {
@@ -211,26 +213,14 @@ function TrainingLibrary() {
 
   const renderEmptyMessage = () => {
     if (searchQuery != "") {
-      return (
-        <div className={styles.emptySearchMessage}>
-          No Trainings Matching “{searchQuery}”
-        </div>
-      );
+      return `No Trainings Matching “${searchQuery}”`;
     } else {
       if (filterType == "all") {
-        return <div className={styles.emptySearchMessage}>No Trainings</div>;
+        return "No Trainings";
       } else if (filterType == "inProgress") {
-        return (
-          <div className={styles.emptySearchMessage}>
-            No Trainings In Progress
-          </div>
-        );
+        return "No Trainings In Progress";
       } else if (filterType == "completed") {
-        return (
-          <div className={styles.emptySearchMessage}>
-            No Trainings Completed
-          </div>
-        );
+        return "No Trainings Completed";
       }
     }
   };
@@ -283,9 +273,15 @@ function TrainingLibrary() {
                     value={filterType}
                     onChange={(e) => setFilterType(e.target.value)}
                     label="Filter">
-                    <MenuItem value="all">ALL</MenuItem>
-                    <MenuItem value="inProgress">IN PROGRESS</MenuItem>
-                    <MenuItem value="completed">COMPLETED</MenuItem>
+                    <MenuItem value="all" sx={selectOptionStyle}>
+                      ALL
+                    </MenuItem>
+                    <MenuItem value="inProgress" sx={selectOptionStyle}>
+                      IN PROGRESS
+                    </MenuItem>
+                    <MenuItem value="completed" sx={selectOptionStyle}>
+                      COMPLETED
+                    </MenuItem>
                   </Select>
                 </FormControl>
               </div>
@@ -330,7 +326,9 @@ function TrainingLibrary() {
             ) : (
               <>
                 {filteredTrainings.length === 0 ? (
-                  renderEmptyMessage()
+                  <div className={styles.emptySearchMessage}>
+                    {renderEmptyMessage()}
+                  </div>
                 ) : (
                   <div className={styles.cardsContainer}>
                     {filteredTrainings.map((training, index) => (
