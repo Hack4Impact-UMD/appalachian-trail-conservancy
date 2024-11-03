@@ -19,6 +19,7 @@ import AdminTrainingCard from "../../components/AdminTrainingCard/AdminTrainingC
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 
 function AdminTrainingLibrary() {
+  const auth = useAuth();
   const [loading, setLoading] = useState<boolean>(true);
   const [filterType, setFilterType] = useState("drafts");
   const [searchQuery, setSearchQuery] = useState("");
