@@ -17,6 +17,8 @@ import { PathwayID } from "../../types/PathwayType";
 import { DateTime } from "luxon";
 import styles from "./AchievementsPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import hamburger from "../../assets/hamburger.svg";
+
 import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Certificate from "../../components/CertificateCard/CertificateCard";
@@ -32,13 +34,27 @@ function AchievementsPage() {
   const [badgesSelected, setBadgesSelected] = useState<boolean>(true);
   const [sortMode, setSortMode] = useState<string>("newest");
 
-  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
   const [correlatedTrainings, setCorrelatedTrainings] = useState<
     { genericTraining: TrainingID; volunteerTraining: VolunteerTraining }[]
   >([]);
   const [correlatedPathways, setCorrelatedPathways] = useState<
     { genericPathway: PathwayID; volunteerPathway: VolunteerPathway }[]
   >([]);
+  const [open, setOpen] = useState(true);
+
+  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
+
+  // Update screen width on resize
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     getAllTrainings().then((genericTrainings) => {
@@ -187,11 +203,23 @@ function AchievementsPage() {
 
   return (
     <>
-      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <NavigationBar open={open} setOpen={setOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}
+        style={{
+          // Only apply left shift when screen width is greater than 1200px
+          left: open && screenWidth > 1200 ? "250px" : "0",
+        }}
       >
+        {!open && (
+          <img
+            src={hamburger}
+            alt="Hamburger Menu"
+            className={styles.hamburger} // Add styles to position it
+            width={30}
+            onClick={() => setOpen(true)} // Set sidebar open when clicked
+          />
+        )}
         <div className={styles.outerContainer}>
           <div className={styles.content}>
             <div className={styles.header}>
@@ -230,7 +258,7 @@ function AchievementsPage() {
                   size="small"
                   sx={{
                     ...whiteSelectGrayBorder,
-                    width: "154px",
+                    width: "100%",
                   }}
                 >
                   <MenuItem value={"newest"} sx={selectOptionStyle}>

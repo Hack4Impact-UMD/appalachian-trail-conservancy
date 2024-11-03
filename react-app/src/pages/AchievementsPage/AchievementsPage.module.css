@@ -43,6 +43,19 @@
   margin: 0;
 }
 
+.hamburger {
+  color: var(--blue-gray);
+  font-size: 1.5rem;
+  margin: 1.5rem;
+  position: absolute;
+  top: 20px;
+  left: 10px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  z-index: 10; /* Ensure it's above other elements */
+}
+
 .buttonContainer {
   display: flex;
   justify-content: space-between;
@@ -68,4 +81,68 @@
   align-items: center;
   flex-direction: column;
   margin: 10% 15% 15% 15%;
+}
+
+@media screen and (min-width: 1500px) {
+  .content {
+    width: 1200px;
+  }
+}
+
+/* show buttons when screen width is above 1201px */
+@media screen and (min-width: 1201px) {
+  .buttonContainer {
+    display: flex;
+  }
+  .dropdownContainer {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .content {
+    width: 600px;
+  }
+
+  .cardsContainer {
+    justify-content: space-between;
+  }
+
+  .buttonContainer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px; /* Add a gap between the buttons and the dropdown */
+  }
+
+  .rightButtonContainer {
+    align-items: stretch;
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .content {
+    width: 300px;
+  }
+
+  .cardsContainer {
+    justify-content: space-around;
+  }
+
+  .buttonContainer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px; /* Add a gap between the buttons and the dropdown */
+  }
+
+  .rightButtonContainer {
+    align-items: stretch;
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .header {
+    margin-top: 5rem;
+  }
 }

@@ -14,18 +14,24 @@ import TrainingPage from "./pages/TrainingPage/TrainingPage.tsx";
 import TrainingLandingPage from "./pages/TrainingLandingPage/TrainingLandingPage.tsx";
 import PathwayLandingPage from "./pages/PathwayLandingPage/PathwayLandingPage.tsx";
 import RequireAuth from "./auth/RequireAuth/RequireAuth.tsx";
+import RequireAdminAuth from "./auth/RequireAdminAuth/RequireAdminAuth.tsx";
+import RequireVolunteerAuth from "./auth/RequireVolunteerAuth/RequireVolunteerAuth.tsx";
 import LogoutPage from "./pages/LogoutPage/LogoutPage.tsx";
 import QuizPage from "./pages/QuizPage/QuizPage.tsx";
 import QuizResult from "./pages/QuizResultPage/QuizResultPage.tsx";
 import QuizLandingPage from "./pages/QuizLandingPage/QuizLandingPage.tsx";
 import PathwayLibrary from "./pages/PathwayLibraryPage/PathwayLibraryPage.tsx";
+import AdminTrainingEditor from "./pages/AdminTrainingEditor/AdminTrainingEditor.tsx";
+import AdminPathwayEditor from "./pages/AdminPathwayEditor/AdminPathwayEditor.tsx";
 import RegistrationPage from "./pages/RegistrationPage/RegistrationPage/RegistrationPage.tsx";
 import RegistrationConfirmationPage from "./pages/RegistrationPage/RegistrationConfirmationPage/RegistrationConfirmationPage.tsx";
-import { useAuth } from "./auth/AuthProvider.tsx";
+import PathwayQuizEditorPage from "./pages/AdminPathwayQuizEditorPage/AdminPathwayQuizEditorPage.tsx";
+import TrainingQuizEditorPage from "./pages/AdminTrainingQuizEditorPage/AdminTrainingQuizEditorPage.tsx";
+import AdminDashboard from "./pages/AdminDashboardPage/AdminDashboardPage.tsx";
+import AdminTrainingLibrary from "./pages/AdminTrainingLibraryPage/AdminTrainingLibraryPage.tsx";
+import AdminPathwayLibrary from "./pages/AdminPathwayLibraryPage/AdminPathwayLibraryPage.tsx";
 
 function App() {
-  const auth = useAuth();
-
   return (
     <ThemeProvider theme={theme}>
       <AuthProvider>
@@ -40,85 +46,140 @@ function App() {
               path="/registration-confirmation"
               element={<RegistrationConfirmationPage />}
             />
-
             <Route
               path="/"
               element={
-                <RequireAuth>
+                <RequireVolunteerAuth>
                   <Dashboard />
-                </RequireAuth>
+                </RequireVolunteerAuth>
+              }
+            />
+            <Route
+              path="/admin"
+              element={
+                <RequireAdminAuth>
+                  <AdminDashboard />
+                </RequireAdminAuth>
+              }
+            />
+            <Route
+              path="/admin/trainings"
+              element={
+                <RequireAdminAuth>
+                  <AdminTrainingLibrary />
+                </RequireAdminAuth>
+              }
+            />
+            <Route
+              path="/admin/trainings/editor"
+              element={
+                <RequireAdminAuth>
+                  <AdminTrainingEditor />
+                </RequireAdminAuth>
+              }
+            />
+            <Route
+              path="/admin/trainings/editor/quiz"
+              element={
+                <RequireAdminAuth>
+                  <TrainingQuizEditorPage />
+                </RequireAdminAuth>
+              }
+            />
+            <Route
+              path="/admin/pathways"
+              element={
+                <RequireAdminAuth>
+                  <AdminPathwayLibrary />
+                </RequireAdminAuth>
+              }
+            />
+            <Route
+              path="/admin/pathways/editor"
+              element={
+                <RequireAdminAuth>
+                  <AdminPathwayEditor />
+                </RequireAdminAuth>
+              }
+            />
+            <Route
+              path="/admin/pathways/editor/quiz"
+              element={
+                <RequireAdminAuth>
+                  <PathwayQuizEditorPage />
+                </RequireAdminAuth>
               }
             />
             <Route
               path="/trainings"
               element={
-                <RequireAuth>
+                <RequireVolunteerAuth>
                   <TrainingLibrary />
-                </RequireAuth>
+                </RequireVolunteerAuth>
               }
             />
             <Route
               path="/trainings/:id"
               element={
-                <RequireAuth>
+                <RequireVolunteerAuth>
                   <TrainingLandingPage />
-                </RequireAuth>
+                </RequireVolunteerAuth>
               }
             />
             <Route
               path="/trainings/resources"
               element={
-                <RequireAuth>
+                <RequireVolunteerAuth>
                   <TrainingPage />
-                </RequireAuth>
+                </RequireVolunteerAuth>
               }
             />
             <Route
               path="/trainings/quizlanding"
               element={
-                <RequireAuth>
+                <RequireVolunteerAuth>
                   <QuizLandingPage />
-                </RequireAuth>
+                </RequireVolunteerAuth>
               }
             />
             <Route
               path="/trainings/quiz"
               element={
-                <RequireAuth>
+                <RequireVolunteerAuth>
                   <QuizPage />
-                </RequireAuth>
+                </RequireVolunteerAuth>
               }
             />
             <Route
               path="/trainings/quizresult"
               element={
-                <RequireAuth>
+                <RequireVolunteerAuth>
                   <QuizResult />
-                </RequireAuth>
+                </RequireVolunteerAuth>
               }
             />
             <Route
               path="/pathways"
               element={
-                <RequireAuth>
+                <RequireVolunteerAuth>
                   <PathwayLibrary />
-                </RequireAuth>
+                </RequireVolunteerAuth>
               }
             />
             <Route
               path="/pathways/:id"
               element={
-                <RequireAuth>
+                <RequireVolunteerAuth>
                   <PathwayLandingPage />
-                </RequireAuth>
+                </RequireVolunteerAuth>
               }
             />
             <Route
               path="/achievements"
               element={
-                <RequireAuth>
+                <RequireVolunteerAuth>
                   <AchievementsPage />
-                </RequireAuth>
+                </RequireVolunteerAuth>
               }
             />
             <Route
@@ -129,7 +190,6 @@ function App() {
                 </RequireAuth>
               }
             />
-
             <Route
               path="/testfunctions"
               element={
@@ -137,8 +197,7 @@ function App() {
                   <button
                     onClick={() => {
                       //insert test function here
-                    }}
-                  >
+                    }}>
                     TEST
                   </button>
                 </RequireAuth>

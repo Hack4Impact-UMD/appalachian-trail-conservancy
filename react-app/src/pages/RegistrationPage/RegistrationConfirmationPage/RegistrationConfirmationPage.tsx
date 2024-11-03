@@ -1,7 +1,6 @@
 import { Button } from "@mui/material";
 import greenCheck from "../../../assets/greenCircleCheck.svg";
-import { forestGreenButton } from "../../../muiTheme.ts";
-import { styledRectButton } from "../../LoginPage/LoginPage.tsx";
+import { forestGreenButton, styledRectButton } from "../../../muiTheme.ts";
 import { Navigate, useLocation } from "react-router";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../../auth/AuthProvider.tsx";
@@ -40,8 +39,7 @@ function RegistrationConfirmationPage() {
           <Button
             type="submit"
             sx={{ ...styledRectButton, ...forestGreenButton }}
-            variant="contained"
-          >
+            variant="contained">
             Continue to login
           </Button>
         </Link>
@@ -51,8 +49,7 @@ function RegistrationConfirmationPage() {
       <div>
         <Link
           to="/registration/"
-          className={`${styles.switch} ${styles.contentContainer}`}
-        >
+          className={`${styles.switch} ${styles.contentContainer}`}>
           Go back
         </Link>
       </div>
