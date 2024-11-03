@@ -25,7 +25,7 @@
   font-weight: bold;
   margin: 0 0 10px 5px;
   color: var(--blue-gray);
-  height: 30px;
+  height: 54px;
 }
 
 .outsideMarker {
@@ -43,6 +43,7 @@
   background-color: var(--blue-gray);
   color: white;
 }
+
 .markerStatus {
   display: inline-block;
   padding: 9px 18px;
@@ -53,8 +54,7 @@
   margin: -10px 0 3px 0;
   background-color: var(--blue-gray);
   color: white;
-  margin-left: 5rem; 
-
+  margin-left: 5rem;
 }
 
 .trainingTitleWrapper {
@@ -62,29 +62,6 @@
   display: inline-block;
 }
 
-.tooltip {
-  visibility: hidden;
-  background-color: rgba(0, 0, 0, 0.75);
-  color: #fff;
-  text-align: center;
-  padding: 5px;
-  border-radius: 4px;
-  position: absolute;
-  z-index: 1;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  white-space: normal; 
-  max-width: 200px; 
-  opacity: 0;
-  transition: opacity 0.3s;
-  margin-bottom: 8px;
-}
-
-.trainingTitleWrapper:hover .tooltip {
-  visibility: visible;
-  opacity: 1;
-}
 .trainingContent {
   flex: 1;
   display: flex;
@@ -92,11 +69,9 @@
   justify-content: flex-end;
   background-color: var(--sky-blue);
   padding: 18px;
-  position: relative; 
+  position: relative;
 }
-
 
 .trainingStatus span {
-  color: #007bff; 
+  color: #007bff;
 }
-

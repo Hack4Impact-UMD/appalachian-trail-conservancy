@@ -1,5 +1,7 @@
 import styles from "./AdminTrainingCard.module.css";
 import { TrainingID } from "../../types/TrainingType";
+import { Tooltip } from "@mui/material";
+import { grayTooltip } from "../../muiTheme";
 
 interface AdminTrainingCardProps {
   training: TrainingID;
@@ -14,12 +16,22 @@ const AdminTrainingCard: React.FC<AdminTrainingCardProps> = ({ training }) => {
         </div>
         <div className={styles.trainingContent}>
           <div className={styles.trainingTitleWrapper}>
-            <div className={styles.trainingTitle}>
-              {training.name.substring(0, 20)}
-              {training.name.length > 20 ? "..." : ""}
-            </div>
-            {training.name.length > 20 && (
-              <span className={styles.tooltip}>{training.name}</span>
+            {training.name.length > 30 ? (
+              <Tooltip
+                title={training.name}
+                arrow={false}
+                placement="top-start"
+                componentsProps={{
+                  tooltip: {
+                    sx: { ...grayTooltip, maxWidth: "200px" },
+                  },
+                }}>
+                <div className={styles.trainingTitle}>
+                  {training.name.substring(0, 31)}...
+                </div>
+              </Tooltip>
+            ) : (
+              <div className={styles.trainingTitle}>{training.name}</div>
             )}
           </div>
           <div className={styles.outsideMarker}>

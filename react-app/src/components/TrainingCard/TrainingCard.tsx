@@ -4,6 +4,8 @@ import styles from "./TrainingCard.module.css";
 import PathwayTrainingPopup from "../PathwayTrainingPopup/PathwayTrainingPopup";
 import { TrainingID } from "../../types/TrainingType";
 import { VolunteerTraining } from "../../types/UserType";
+import { Tooltip } from "@mui/material";
+import { grayTooltip } from "../../muiTheme";
 
 interface TrainingCardProps {
   training: TrainingID;
@@ -54,19 +56,28 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
               },
             });
           }
-        }}
-      >
+        }}>
         <div className={styles.trainingImage}>
           <img src={training.coverImage} alt="Training" />
         </div>
         <div className={styles.trainingContent}>
           <div className={styles.trainingTitleWrapper}>
-            <div className={styles.trainingTitle}>
-              {training.name.substring(0, 31)}
-              {training.name.length > 30 ? "..." : ""}
-            </div>
-            {training.name.length > 30 && (
-              <span className={styles.tooltip}>{training.name}</span>
+            {training.name.length > 30 ? (
+              <Tooltip
+                title={training.name}
+                arrow={false}
+                placement="top-start"
+                componentsProps={{
+                  tooltip: {
+                    sx: { ...grayTooltip, maxWidth: "200px" },
+                  },
+                }}>
+                <div className={styles.trainingTitle}>
+                  {training.name.substring(0, 31)}...
+                </div>
+              </Tooltip>
+            ) : (
+              <div className={styles.trainingTitle}>{training.name}</div>
             )}
           </div>
           <div className={styles.progressBar}>{renderMarker()}</div>
