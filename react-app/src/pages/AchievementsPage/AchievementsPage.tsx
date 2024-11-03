@@ -229,7 +229,11 @@ function AchievementsPage() {
             <div className={styles.buttonContainer}>
               <div className={styles.leftButtonContainer}>
                 <Button
-                  onClick={() => setBadgesSelected(true)}
+                  onClick={() => {
+                    setBadgesSelected(true);
+                    setSortMode("newest");
+                    handleSortChange;
+                  }}
                   sx={
                     badgesSelected
                       ? forestGreenButtonPadding
@@ -240,7 +244,11 @@ function AchievementsPage() {
                   Pathway Badges
                 </Button>
                 <Button
-                  onClick={() => setBadgesSelected(false)}
+                  onClick={() => {
+                    setBadgesSelected(false);
+                    setSortMode("newest");
+                    handleSortChange;
+                  }}
                   sx={
                     !badgesSelected
                       ? forestGreenButtonPadding
