@@ -89,18 +89,12 @@ function AdminDashboardPage() {
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}
-      >
+        style={{ left: navigationBarOpen ? "250px" : "0" }}>
         <div className={styles.outerContainer}>
           <div className={styles.content}>
             <div className={styles.header}>
               <h1 className={styles.nameHeading}>Hello, {auth.firstName}!</h1>
-              <div className={styles.adminIcon}>
-                <h6> ADMIN </h6>
-                <div className={styles.profileIcon}>
-                  <ProfileIcon />
-                </div>
-              </div>
+              <ProfileIcon />
             </div>
             {loading ? (
               <Loading />
@@ -122,8 +116,7 @@ function AdminDashboardPage() {
                         ? forestGreenButtonPadding
                         : whiteButtonGrayBorder
                     }
-                    variant="contained"
-                  >
+                    variant="contained">
                     TRAINING
                   </Button>
                   <Button
@@ -133,8 +126,7 @@ function AdminDashboardPage() {
                         ? forestGreenButtonPadding
                         : whiteButtonGrayBorder
                     }
-                    variant="contained"
-                  >
+                    variant="contained">
                     PATHWAYS
                   </Button>
                 </div>

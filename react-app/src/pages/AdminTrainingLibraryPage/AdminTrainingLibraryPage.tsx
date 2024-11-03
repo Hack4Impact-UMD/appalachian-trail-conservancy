@@ -19,8 +19,6 @@ import AdminTrainingCard from "../../components/AdminTrainingCard/AdminTrainingC
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 
 function AdminTrainingLibrary() {
-  const auth = useAuth();
-
   const [loading, setLoading] = useState<boolean>(true);
   const [filterType, setFilterType] = useState("drafts");
   const [searchQuery, setSearchQuery] = useState("");
@@ -92,18 +90,12 @@ function AdminTrainingLibrary() {
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}
-      >
+        style={{ left: navigationBarOpen ? "250px" : "0" }}>
         <div className={styles.outerContainer}>
           <div className={styles.content}>
             <div className={styles.header}>
               <h1 className={styles.nameHeading}> Trainings Library </h1>
-              <div className={styles.adminIcon}>
-                <h6> ADMIN </h6>
-                <div className={styles.profileIcon}>
-                  <ProfileIcon />
-                </div>
-              </div>
+              <ProfileIcon />
             </div>
             <div>
               <Button sx={forestGreenButtonLarge} variant="contained">
@@ -130,8 +122,7 @@ function AdminTrainingLibrary() {
                     : whiteButtonGrayBorder
                 }
                 variant="contained"
-                onClick={() => setFilterType("drafts")}
-              >
+                onClick={() => setFilterType("drafts")}>
                 DRAFTS
               </Button>
 
@@ -142,8 +133,7 @@ function AdminTrainingLibrary() {
                     : whiteButtonGrayBorder
                 }
                 variant="contained"
-                onClick={() => setFilterType("published")}
-              >
+                onClick={() => setFilterType("published")}>
                 PUBLISHED
               </Button>
 
@@ -154,8 +144,7 @@ function AdminTrainingLibrary() {
                     : whiteButtonGrayBorder
                 }
                 variant="contained"
-                onClick={() => setFilterType("archives")}
-              >
+                onClick={() => setFilterType("archives")}>
                 ARCHIVES
               </Button>
               <Button
@@ -165,8 +154,7 @@ function AdminTrainingLibrary() {
                     : whiteButtonGrayBorder
                 }
                 variant="contained"
-                onClick={() => setFilterType("all")}
-              >
+                onClick={() => setFilterType("all")}>
                 ALL
               </Button>
             </div>

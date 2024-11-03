@@ -21,8 +21,12 @@ import QuizPage from "./pages/QuizPage/QuizPage.tsx";
 import QuizResult from "./pages/QuizResultPage/QuizResultPage.tsx";
 import QuizLandingPage from "./pages/QuizLandingPage/QuizLandingPage.tsx";
 import PathwayLibrary from "./pages/PathwayLibraryPage/PathwayLibraryPage.tsx";
+import AdminTrainingEditor from "./pages/AdminTrainingEditor/AdminTrainingEditor.tsx";
+import AdminPathwayEditor from "./pages/AdminPathwayEditor/AdminPathwayEditor.tsx";
 import RegistrationPage from "./pages/RegistrationPage/RegistrationPage/RegistrationPage.tsx";
 import RegistrationConfirmationPage from "./pages/RegistrationPage/RegistrationConfirmationPage/RegistrationConfirmationPage.tsx";
+import PathwayQuizEditorPage from "./pages/AdminPathwayQuizEditorPage/AdminPathwayQuizEditorPage.tsx";
+import TrainingQuizEditorPage from "./pages/AdminTrainingQuizEditorPage/AdminTrainingQuizEditorPage.tsx";
 import AdminDashboard from "./pages/AdminDashboardPage/AdminDashboardPage.tsx";
 import AdminTrainingLibrary from "./pages/AdminTrainingLibraryPage/AdminTrainingLibraryPage.tsx";
 import AdminPathwayLibrary from "./pages/AdminPathwayLibraryPage/AdminPathwayLibraryPage.tsx";
@@ -42,7 +46,6 @@ function App() {
               path="/registration-confirmation"
               element={<RegistrationConfirmationPage />}
             />
-
             <Route
               path="/"
               element={
@@ -51,7 +54,6 @@ function App() {
                 </RequireVolunteerAuth>
               }
             />
-
             <Route
               path="/admin"
               element={
@@ -60,7 +62,6 @@ function App() {
                 </RequireAdminAuth>
               }
             />
-
             <Route
               path="/admin/trainings"
               element={
@@ -69,7 +70,22 @@ function App() {
                 </RequireAdminAuth>
               }
             />
-
+            <Route
+              path="/admin/trainings/editor"
+              element={
+                <RequireAdminAuth>
+                  <AdminTrainingEditor />
+                </RequireAdminAuth>
+              }
+            />
+            <Route
+              path="/admin/trainings/editor/quiz"
+              element={
+                <RequireAdminAuth>
+                  <TrainingQuizEditorPage />
+                </RequireAdminAuth>
+              }
+            />
             <Route
               path="/admin/pathways"
               element={
@@ -78,7 +94,22 @@ function App() {
                 </RequireAdminAuth>
               }
             />
-
+            <Route
+              path="/admin/pathways/editor"
+              element={
+                <RequireAdminAuth>
+                  <AdminPathwayEditor />
+                </RequireAdminAuth>
+              }
+            />
+            <Route
+              path="/admin/pathways/editor/quiz"
+              element={
+                <RequireAdminAuth>
+                  <PathwayQuizEditorPage />
+                </RequireAdminAuth>
+              }
+            />
             <Route
               path="/trainings"
               element={
@@ -159,7 +190,6 @@ function App() {
                 </RequireAuth>
               }
             />
-
             <Route
               path="/testfunctions"
               element={
