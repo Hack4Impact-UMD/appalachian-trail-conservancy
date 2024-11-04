@@ -76,7 +76,6 @@ const PathwayLandingPage: React.FC = () => {
       }
     }
     count += imagesPerRow;
-    //console.log();
   }
 
   useEffect(() => {
@@ -153,8 +152,6 @@ const PathwayLandingPage: React.FC = () => {
               /> */}
               {elements}
               {/* for loop - even row do 1 2 3, odd row do 6 4 5, etc  */}
-              {divWidth}
-              {"\t" + trainings.length}
             </div>
           </div>
         </div>
