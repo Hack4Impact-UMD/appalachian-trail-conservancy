@@ -21,6 +21,7 @@ const PathwayLandingPage: React.FC = () => {
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
   const [divWidth, setDivWidth] = useState<number>(0);
   const [trainings, setTrainings] = useState<TrainingID[]>([]);
+  const [elements, setElements] = useState<any[]>([]);
 
   const [pathway, setPathway] = useState<PathwayID>({
     name: "",
@@ -38,89 +39,108 @@ const PathwayLandingPage: React.FC = () => {
   });
 
   const div = useRef<HTMLDivElement>(null);
-  const imgWidth = 300;
-  const imagesPerRow = Math.floor(divWidth / imgWidth);
-  // To prevent trainings.length from being used uninitialized
-  const height = trainings.length == 0 ? 0 : Math.ceil((trainings.length + 1) / imagesPerRow);
-  let elements = [];
-  let count = 0;
-
-  for (let i = 0; i < height; i++) {
-    if (i % 2 == 0) {
-      for (let j = count; j < count + imagesPerRow; j++) {
-        elements.push(
-          <div key={j}>
-            <PathwayTile
-              tileNum={j}
-              trainingID={j < trainings.length ? trainings[j] : undefined}
-              space={divWidth}
-              count={trainings.length}
-            />
-          </div>
-        );
-      }
-    }
-    // Reverse
-    else {
-      for (let j = count + imagesPerRow - 1; j >= count; j--) {
-        elements.push(
-          <div key={j}>
-            <PathwayTile
-              tileNum={j}
-              trainingID={j < trainings.length ? trainings[j] : undefined}
-              space={divWidth}
-              count={trainings.length}
-            />
-          </div>
-        );
-      }
-    }
-    count += imagesPerRow;
-  }
 
   useEffect(() => {
-    // get pathway if not coming from in app
-    if (pathwayId !== undefined && !location.state?.pathway) {
-      if (pathwayId !== undefined && !auth.loading && auth.id) {
-        getPathway(pathwayId)
-          .then((pathwayData) => {
-            setPathway(pathwayData);
-          })
-          .catch(() => {
-            console.log("Failed to get pathway");
-          });
+    const getPathwayInfo = async () => {
+      // get pathway if not coming from in app
+      if (pathwayId !== undefined && !location.state?.pathway) {
+        if (pathwayId !== undefined && !auth.loading && auth.id) {
+          getPathway(pathwayId)
+            .then(async (pathwayData) => {
+              setPathway(pathwayData);
+              console.log(pathwayData);
+              const trainingPromises = pathwayData.trainingIDs.map(getTraining);
+              const fetchedTrainings = await Promise.all(trainingPromises);
+              console.log(fetchedTrainings);
+              setTrainings(fetchedTrainings);
+              renderGrid(fetchedTrainings);
+            })
+            .catch(() => {
+              console.log("Failed to get pathway");
+            });
+        }
+      } else {
+        // set pathway from location state
+        if (location.state.pathway) {
+          setPathway(location.state.pathway);
+          const trainingPromises =
+            location.state.pathway.trainingIDs.map(getTraining);
+          const fetchedTrainings = await Promise.all(trainingPromises);
+          console.log(fetchedTrainings);
+          setTrainings(fetchedTrainings);
+          renderGrid(fetchedTrainings);
+        }
       }
-    } else {
-      // set pathway from location state
-      if (location.state.pathway) {
-        setPathway(location.state.pathway);
-      }
-    }
-  }, [auth.loading, auth.id]);
-
-  useEffect(() => {
-    const fetchTrainings = async () => {
-      const trainingPromises = pathway.trainingIDs.map(getTraining);
-      const fetchedTrainings = await Promise.all(trainingPromises);
-      setTrainings(fetchedTrainings);
     };
-    if (pathway.trainingIDs.length > 0) {
-      fetchTrainings();
-    }
-  }, [pathway]);
+    getPathwayInfo();
+  }, [auth.loading, auth.id]);
 
   //console.log("Width " + divWidth + "\nlength " + trainings.length);
   useEffect(() => {
     // when the component gets mounted
-    if (div.current) setDivWidth(div.current.offsetWidth );
+    if (div.current) setDivWidth(div.current.offsetWidth);
     // to handle page resize
     const getwidth = () => {
-      if (div.current) setDivWidth(div.current.offsetWidth );
+      if (div.current) setDivWidth(div.current.offsetWidth);
     };
     window.addEventListener("resize", getwidth);
     // remove the event listener before the component gets unmounted
     return () => window.removeEventListener("resize", getwidth);
-  }, []);
+  }, [navigationBarOpen]);
+
+  useEffect(() => {
+    renderGrid(trainings);
+    
+  }, [divWidth, navigationBarOpen, pathway]);
+
+  const renderGrid = (trainings: TrainingID[]) => {
+    console.log("ran");
+    const imgWidth = 300;
+    const imagesPerRow = Math.floor(divWidth / imgWidth);
+    // To prevent trainings.length from being used uninitialized
+    const height =
+      trainings.length == 0
+        ? 0
+        : Math.ceil((trainings.length + 1) / imagesPerRow);
+    let count = 0;
+
+    let newElts = [];
+
+    for (let i = 0; i < height; i++) {
+      if (i % 2 == 0) {
+        for (let j = count; j < count + imagesPerRow; j++) {
+          newElts.push(
+            <div key={j}>
+              <PathwayTile
+                tileNum={j}
+                trainingID={j < trainings.length ? trainings[j] : undefined}
+                space={divWidth}
+                count={trainings.length}
+              />
+            </div>
+          );
+        }
+      }
+      // Reverse
+      else {
+        for (let j = count + imagesPerRow - 1; j >= count; j--) {
+          newElts.push(
+            <div key={j}>
+              <PathwayTile
+                tileNum={j}
+                trainingID={j < trainings.length ? trainings[j] : undefined}
+                space={divWidth}
+                count={trainings.length}
+              />
+            </div>
+          );
+        }
+      }
+      count += imagesPerRow;
+    }
+    setElements(newElts);
+
+  };
 
   return (
     <>
