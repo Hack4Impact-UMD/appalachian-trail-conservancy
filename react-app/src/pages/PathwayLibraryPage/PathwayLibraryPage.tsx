@@ -4,7 +4,6 @@ import {
   Button,
   FormControl,
   InputAdornment,
-  InputLabel,
   MenuItem,
   OutlinedInput,
   Select,
@@ -14,8 +13,12 @@ import {
   whiteButtonGrayBorder,
   grayBorderSearchBar,
   whiteSelectGrayBorder,
+  selectOptionStyle,
 } from "../../muiTheme";
-import { getAllPathways, getVolunteer } from "../../backend/FirestoreCalls";
+import {
+  getAllPublishedPathways,
+  getVolunteer,
+} from "../../backend/FirestoreCalls";
 import { PathwayID } from "../../types/PathwayType";
 import { VolunteerPathway } from "../../types/UserType";
 import { useAuth } from "../../auth/AuthProvider.tsx";
@@ -24,7 +27,6 @@ import Loading from "../../components/LoadingScreen/Loading.tsx";
 import debounce from "lodash.debounce";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import hamburger from "../../assets/hamburger.svg";
-
 import Footer from "../../components/Footer/Footer";
 import PathwayCard from "../../components/PathwayCard/PathwayCard";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
@@ -94,8 +96,9 @@ function PathwayLibrary() {
   };
 
   useEffect(() => {
+    setLoading(true);
     // get all pathways from firebase
-    getAllPathways()
+    getAllPublishedPathways()
       .then((genericPathways) => {
         // only use auth if it is finished loading
         if (!auth.loading && auth.id) {
@@ -150,24 +153,14 @@ function PathwayLibrary() {
 
   const renderEmptyMessage = () => {
     if (searchQuery != "") {
-      return (
-        <div className={styles.emptySearchMessage}>
-          No Pathways Matching “{searchQuery}”
-        </div>
-      );
+      return `No Pathways Matching “${searchQuery}”`;
     } else {
       if (filterType == "all") {
-        return <div className={styles.emptySearchMessage}>No Pathways</div>;
+        return "No Pathways";
       } else if (filterType == "inProgress") {
-        return (
-          <div className={styles.emptySearchMessage}>
-            No Pathways In Progress
-          </div>
-        );
+        return "No Pathways In Progress";
       } else if (filterType == "completed") {
-        return (
-          <div className={styles.emptySearchMessage}>No Pathways Completed</div>
-        );
+        return "No Pathways Completed";
       }
     }
   };
@@ -180,18 +173,16 @@ function PathwayLibrary() {
         style={{
           // Only apply left shift when screen width is greater than 1200px
           left: open && screenWidth > 1200 ? "250px" : "0",
-        }}
-      >
+        }}>
         {!open && (
-            <img
-              src={hamburger}
-              alt="Hamburger Menu"
-              className={styles.hamburger} // Add styles to position it
-              width={30}
-              onClick={() => setOpen(true)} // Set sidebar open when clicked
-            />
-          )
-        }
+          <img
+            src={hamburger}
+            alt="Hamburger Menu"
+            className={styles.hamburger} // Add styles to position it
+            width={30}
+            onClick={() => setOpen(true)} // Set sidebar open when clicked
+          />
+        )}
         <div className={styles.outerContainer}>
           <div className={styles.content}>
             <div className={styles.header}>
@@ -220,11 +211,16 @@ function PathwayLibrary() {
                     sx={whiteSelectGrayBorder}
                     value={filterType}
                     onChange={(e) => setFilterType(e.target.value)}
-                    label="Filter"
-                  >
-                    <MenuItem value="all">ALL</MenuItem>
-                    <MenuItem value="inProgress">IN PROGRESS</MenuItem>
-                    <MenuItem value="completed">COMPLETED</MenuItem>
+                    label="Filter">
+                    <MenuItem value="all" sx={selectOptionStyle}>
+                      ALL
+                    </MenuItem>
+                    <MenuItem value="inProgress" sx={selectOptionStyle}>
+                      IN PROGRESS
+                    </MenuItem>
+                    <MenuItem value="completed" sx={selectOptionStyle}>
+                      COMPLETED
+                    </MenuItem>
                   </Select>
                 </FormControl>
               </div>
@@ -238,8 +234,7 @@ function PathwayLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("all")}
-                >
+                  onClick={() => setFilterType("all")}>
                   All
                 </Button>
                 <Button
@@ -249,8 +244,7 @@ function PathwayLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("inProgress")}
-                >
+                  onClick={() => setFilterType("inProgress")}>
                   In Progress
                 </Button>
                 <Button
@@ -260,8 +254,7 @@ function PathwayLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("completed")}
-                >
+                  onClick={() => setFilterType("completed")}>
                   Completed
                 </Button>
               </div>
@@ -272,7 +265,9 @@ function PathwayLibrary() {
             ) : (
               <>
                 {filteredPathways.length === 0 ? (
-                  renderEmptyMessage()
+                  <div className={styles.emptySearchMessage}>
+                    {renderEmptyMessage()}
+                  </div>
                 ) : (
                   <div className={styles.cardsContainer}>
                     {filteredPathways.map((pathway, index) => (

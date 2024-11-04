@@ -282,3 +282,21 @@ export const numberInputButton = styled("button")(() => ({
     },
   },
 }));
+
+// white background, gray text tooltip
+export const whiteTooltip = {
+  bgcolor: "white",
+  color: "var(--blue-gray)",
+  borderRadius: "8px",
+  boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)",
+  fontSize: "1rem",
+};
+
+// gray background, white text tooltip
+export const grayTooltip = {
+  bgcolor: "var(--blue-gray)",
+  color: "white",
+  borderRadius: "5px",
+  boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)",
+  fontSize: "1rem",
+};
