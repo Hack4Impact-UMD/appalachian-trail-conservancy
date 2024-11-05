@@ -37,7 +37,7 @@ function AdminUserManagement() {
     email: "sophietsai31@gmail.com",
     firstName: "Sophie",
     lastName: "Tsai",
-    type: "ADMIN"
+    type: "ADMIN",
   });
 
   const [user2] = useState<User>({
@@ -45,19 +45,19 @@ function AdminUserManagement() {
     email: "h4iatctest@gmail.com",
     firstName: "Akash",
     lastName: "Patil",
-    type: "VOLUNTEER"
+    type: "VOLUNTEER",
   });
 
   const users = [
     { id: user1.auth_id, ...user1 },
-    { id: user2.auth_id, ...user2 }
+    { id: user2.auth_id, ...user2 },
   ];
 
   const columns = [
     { field: "firstName", headerName: "First Name", width: 150 },
     { field: "lastName", headerName: "Last Name", width: 150 },
     { field: "email", headerName: "Email", width: 200 },
-    { field: "misc", headerName: "Miscellaneous", width: 200 }
+    { field: "misc", headerName: "Miscellaneous", width: 200 },
   ];
 
   const CustomToggleButtonGroup = styled(ToggleButtonGroup)({
@@ -95,9 +95,25 @@ function AdminUserManagement() {
       borderRight: "none", // Remove right border for the last button
     },
     "&:not(:first-of-type)": {
-      borderLeft: "2px solid black", // Add left border for buttons after the first
+      borderLeft: "1.5px solid black", // Add left border for buttons after the first
     },
   });
+
+  const whiteButtonGreenBorder = {
+    borderRadius: "15px",
+    boxShadow: "none",
+    height: 44,
+    paddingLeft: "20px",
+    paddingRight: "20px",
+    color: "var(--blue-gray)",
+    backgroundColor: "white",
+    border: "2px solid var(--blue-gray)",
+    "&:hover": {
+      color: "white",
+      backgroundColor: "var(--ocean-green)",
+      border: "2px solid var(--ocean-green)",
+    },
+  };
 
   const DataGridStyles = {
     border: 2,
@@ -111,12 +127,12 @@ function AdminUserManagement() {
       borderBottom: "2px solid black",
       display: "flex",
       "& .MuiDataGrid-columnHeader": {
-        display: 'flex',
-        alignItems: 'center', // Align items vertically
-        justifyContent: 'space-between',
-        padding: '0, 4px', // Adjust padding for uniformity
+        display: "flex",
+        alignItems: "center", // Align items vertically
+        justifyContent: "space-between",
+        padding: "0, 4px", // Adjust padding for uniformity
         minWidth: 150, // Set minimum width
-        position: 'relative', // Ensure relative positioning
+        position: "relative", // Ensure relative positioning
       },
       "& .MuiDataGrid-columnSeparator": {
         visibility: "visible",
@@ -125,7 +141,7 @@ function AdminUserManagement() {
     "& .MuiDataGrid-menuIcon": {
       visibility: "visible",
       opacity: 1,
-      padding: "0", 
+      padding: "0",
       pointerEvents: "auto",
       position: "relative", // Absolute positioning within the header
       right: "12px", // Fine-tuned right positioning
@@ -167,10 +183,14 @@ function AdminUserManagement() {
   };
 
   const filterUsers = () => {
-    let filtered = searchQuery ? users.filter((user) =>
-      user.firstName.toLowerCase().includes(searchQuery.toLowerCase())
-    ) : users; // Show all users if searchQuery is empty
-
+    let filtered = searchQuery
+      ? users.filter(
+          (user) =>
+            user.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            user.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            user.email.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      : users; // Show all users if searchQuery is empty
     setFilteredUsers(filtered);
   };
 
@@ -223,7 +243,7 @@ function AdminUserManagement() {
             {/* Conditional Content Rendering */}
             <div className={styles.contentSection}>
               {alignment === "user" && (
-                <div>
+                <>
                   <div className={styles.searchBarContainer}>
                     <OutlinedInput
                       sx={grayBorderSearchBar}
@@ -235,7 +255,9 @@ function AdminUserManagement() {
                         </InputAdornment>
                       }
                     />
+                    <Button sx={whiteButtonGreenBorder}>Export</Button>
                   </div>
+
                   <div className={styles.innerGrid}>
                     <DataGrid
                       rows={filteredUsers}
@@ -244,23 +266,22 @@ function AdminUserManagement() {
                       autoHeight
                       checkboxSelection
                       sx={DataGridStyles}
-                      onRowClick={(row) => {
-                      }}
+                      onRowClick={(row) => {}}
                     />
                   </div>
-                </div>
+                </>
               )}
               {alignment === "training" && (
-                <div>
+                <>
                   <h2>Training Information</h2>
                   <p>Details about training information go here.</p>
-                </div>
+                </>
               )}
               {alignment === "pathways" && (
-                <div>
+                <>
                   <h2>Pathways Information</h2>
                   <p>Details about pathways information go here.</p>
-                </div>
+                </>
               )}
             </div>
           </div>
