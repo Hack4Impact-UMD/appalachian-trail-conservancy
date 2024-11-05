@@ -44,7 +44,7 @@ function TrainingLibrary() {
   const [filteredTrainings, setFilteredTrainings] = useState<
     { genericTraining: TrainingID; volunteerTraining?: VolunteerTraining }[]
   >([]);
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(!(window.innerWidth < 1200));
 
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
 

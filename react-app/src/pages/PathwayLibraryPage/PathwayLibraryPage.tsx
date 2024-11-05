@@ -43,7 +43,7 @@ function PathwayLibrary() {
   const [filteredPathways, setFilteredPathways] = useState<
     { genericPathway: PathwayID; volunteerPathway?: VolunteerPathway }[]
   >([]);
-  const [open, setOpen] = useState(true); // nav bar
+  const [open, setOpen] = useState(!(window.innerWidth < 1200)); // nav bar
 
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
 
