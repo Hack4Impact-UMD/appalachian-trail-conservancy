@@ -16,7 +16,7 @@ import {
   grayBorderSearchBar,
 } from "../../muiTheme";
 import debounce from "lodash.debounce";
-import { borderColor, styled } from "@mui/system";
+import { borderColor, fontWeight, styled } from "@mui/system";
 
 function AdminUserManagement() {
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
@@ -79,14 +79,14 @@ function AdminUserManagement() {
     borderWidth: "0 2px", // Only right and left borders
     borderStyle: "solid",
     "&.Mui-selected": {
-      backgroundColor: "#a29fbf", // steel purple but idk how to make it use var(--steel-purple)
+      backgroundColor: "var(--steel-purple)", // steel purple but idk how to make it use var(--steel-purple)
       color: "white",
     },
     "&:not(.Mui-selected)": {
       backgroundColor: "white", // White for unselected button
     },
     "&:hover": {
-      backgroundColor: "#a29fbf", // again steel purple
+      backgroundColor: "var(--steel-purple)", // again steel purple
     },
     "&:first-of-type": {
       borderLeft: "none", // Remove left border for the first button
@@ -102,12 +102,13 @@ function AdminUserManagement() {
   const whiteButtonGreenBorder = {
     borderRadius: "15px",
     boxShadow: "none",
-    height: 44,
+    height: 50,
     paddingLeft: "20px",
     paddingRight: "20px",
-    color: "var(--blue-gray)",
+    color: "var(--ocean-green)",
     backgroundColor: "white",
-    border: "2px solid var(--blue-gray)",
+    border: "2px solid var(--ocean-green)",
+    fontWeight: "bold",
     "&:hover": {
       color: "white",
       backgroundColor: "var(--ocean-green)",
