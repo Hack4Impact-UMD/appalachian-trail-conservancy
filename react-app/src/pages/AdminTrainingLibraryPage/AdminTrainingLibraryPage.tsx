@@ -36,7 +36,9 @@ function AdminTrainingLibrary() {
     []
   );
   const [filteredTrainings, setFilteredTrainings] = useState<TrainingID[]>([]);
-  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+  const [navigationBarOpen, setNavigationBarOpen] = useState(
+    !(window.innerWidth < 1200)
+  );
 
   const filterTrainings = (genericTrainings?: TrainingID[]) => {
     let filtered = correlatedTrainings;
@@ -116,8 +118,7 @@ function AdminTrainingLibrary() {
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}
-      >
+        style={{ left: navigationBarOpen ? "250px" : "0" }}>
         <div className={styles.outerContainer}>
           <div className={styles.content}>
             <div className={styles.header}>
@@ -150,8 +151,7 @@ function AdminTrainingLibrary() {
                     sx={whiteSelectGrayBorder}
                     value={filterType}
                     onChange={(e) => setFilterType(e.target.value)}
-                    label="Filter"
-                  >
+                    label="Filter">
                     <MenuItem value="drafts" sx={selectOptionStyle}>
                       DRAFTS
                     </MenuItem>
@@ -177,8 +177,7 @@ function AdminTrainingLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("drafts")}
-                >
+                  onClick={() => setFilterType("drafts")}>
                   DRAFTS
                 </Button>
                 <Button
@@ -188,8 +187,7 @@ function AdminTrainingLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("published")}
-                >
+                  onClick={() => setFilterType("published")}>
                   PUBLISHED
                 </Button>
                 <Button
@@ -199,8 +197,7 @@ function AdminTrainingLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("archives")}
-                >
+                  onClick={() => setFilterType("archives")}>
                   ARCHIVES
                 </Button>
                 <Button
@@ -210,8 +207,7 @@ function AdminTrainingLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("all")}
-                >
+                  onClick={() => setFilterType("all")}>
                   ALL
                 </Button>
               </div>

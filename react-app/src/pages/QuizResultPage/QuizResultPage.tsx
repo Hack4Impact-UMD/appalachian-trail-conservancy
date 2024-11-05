@@ -34,7 +34,9 @@ const styledProgressFail = {
 const QuizResultPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+  const [navigationBarOpen, setNavigationBarOpen] = useState(
+    !(window.innerWidth < 1200)
+  );
   const [training, setTraining] = useState<Training>({
     name: "",
     shortBlurb: "",
@@ -83,8 +85,7 @@ const QuizResultPage = () => {
       <div
         className={`${styles.split} ${styles.right}`}
         style={{ left: navigationBarOpen ? "250px" : "0" }}>
-
-           {!navigationBarOpen && (
+        {!navigationBarOpen && (
           <img
             src={hamburger}
             alt="Hamburger Menu"

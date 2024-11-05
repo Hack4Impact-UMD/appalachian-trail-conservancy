@@ -22,7 +22,9 @@ import { getAllPathways, getAllTrainings } from "../../backend/FirestoreCalls";
 function AdminDashboardPage() {
   const auth = useAuth();
   const [loading, setLoading] = useState<boolean>(true);
-  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+  const [navigationBarOpen, setNavigationBarOpen] = useState(
+    !(window.innerWidth < 1200)
+  );
   const [trainingsSelected, setTrainingsSelected] = useState<boolean>(true);
   const [trainingDrafts, setTrainingDrafts] = useState<TrainingID[]>([]);
   const [trainingsPublished, setTrainingsPublished] = useState<TrainingID[]>(

@@ -35,7 +35,9 @@ interface CorrelatedPathway {
 function Dashboard() {
   const auth = useAuth();
   const [loading, setLoading] = useState<boolean>(true);
-  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+  const [navigationBarOpen, setNavigationBarOpen] = useState(
+    !(window.innerWidth < 1200)
+  );
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
 
   // Update screen width on resize
@@ -239,8 +241,7 @@ function Dashboard() {
         style={{
           // Only apply left shift when screen width is greater than 1200px
           left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-        }}
-      >
+        }}>
         {!navigationBarOpen && (
           <img
             src={hamburger}
@@ -270,8 +271,7 @@ function Dashboard() {
                       <Link to="/trainings">
                         <Button
                           sx={forestGreenButtonPadding}
-                          variant="contained"
-                        >
+                          variant="contained">
                           GO TO TRAINING LIBRARY
                         </Button>
                       </Link>

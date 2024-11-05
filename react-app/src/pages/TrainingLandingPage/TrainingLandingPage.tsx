@@ -18,14 +18,15 @@ import CompletedIcon from "../../assets/completedCheck.svg";
 import Loading from "../../components/LoadingScreen/Loading";
 import hamburger from "../../assets/hamburger.svg";
 
-
 function TrainingLandingPage() {
   const auth = useAuth();
   const navigate = useNavigate();
   const trainingId = useParams().id;
   const location = useLocation();
   const [loading, setLoading] = useState<boolean>(true);
-  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+  const [navigationBarOpen, setNavigationBarOpen] = useState(
+    !(window.innerWidth < 1200)
+  );
   const [pathwayNames, setPathwayNames] = useState<
     { name: string; id: string }[]
   >([]);
@@ -142,8 +143,7 @@ function TrainingLandingPage() {
                 (index + 1 <= volunteerTraining.numCompletedResources
                   ? styles.opacityContainer
                   : "")
-              }`}
-            >
+              }`}>
               <p className={styles.trainingNumber}>{index + 1}</p>
               <p className={styles.trainingTitle}>{resource.title}</p>
               <p className={styles.trainingType}>{resource.type}</p>
@@ -161,8 +161,7 @@ function TrainingLandingPage() {
                 (volunteerTraining.trainingID !== "" &&
                   volunteerTraining.progress === "INPROGRESS" && (
                     <div
-                      className={`${styles.marker} ${styles.progressMarker}`}
-                    >
+                      className={`${styles.marker} ${styles.progressMarker}`}>
                       IN PROGRESS
                     </div>
                   ))}
@@ -250,8 +249,7 @@ function TrainingLandingPage() {
                   error
                 );
               });
-          }}
-        >
+          }}>
           Start
         </Button>
       );
@@ -269,8 +267,7 @@ function TrainingLandingPage() {
                 fromApp: true,
               },
             })
-          }
-        >
+          }>
           Restart
         </Button>
       );
@@ -288,8 +285,7 @@ function TrainingLandingPage() {
                 fromApp: true,
               },
             })
-          }
-        >
+          }>
           Resume
         </Button>
       );
@@ -299,11 +295,10 @@ function TrainingLandingPage() {
   return (
     <>
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
-  
+
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}
-      >
+        style={{ left: navigationBarOpen ? "250px" : "0" }}>
         {loading ? (
           <Loading />
         ) : (
@@ -318,7 +313,7 @@ function TrainingLandingPage() {
                 onClick={() => setNavigationBarOpen(true)} // Set sidebar open when clicked
               />
             )}
-  
+
             <div className={styles.outerContainer}>
               <div className={styles.bodyContainer}>
                 {/* HEADER */}
@@ -326,15 +321,15 @@ function TrainingLandingPage() {
                   <h1 className={styles.nameHeading}>{training.name}</h1>
                   <ProfileIcon />
                 </div>
-  
+
                 <div className={styles.progressContainer}>{renderMarker()}</div>
-  
+
                 {/* ABOUT */}
                 <div className={styles.container}>
                   <h2>About</h2>
                   <p>{training.description}</p>
                 </div>
-  
+
                 {/* OVERVIEW */}
                 <div className={styles.container}>
                   <h2>Overview</h2>
@@ -346,8 +341,7 @@ function TrainingLandingPage() {
                         volunteerTraining.progress === "COMPLETED"
                           ? styles.opacityContainer
                           : ""
-                      }`}
-                    >
+                      }`}>
                       <p className={styles.trainingNumber}>
                         {volunteerTraining.numTotalResources + 1}
                       </p>
@@ -366,14 +360,14 @@ function TrainingLandingPage() {
                     </div>
                   </div>
                 </div>
-  
+
                 {/* RELATED PATHWAYS */}
                 {pathwayNames.length > 0 && (
                   <>
                     <div className={styles.container}>
                       <h2>Related Pathways</h2>
                     </div>
-  
+
                     <div className={styles.relatedPathways}>
                       {pathwayNames.map((pathway, idx) => (
                         <div
@@ -381,8 +375,7 @@ function TrainingLandingPage() {
                           onClick={() => {
                             navigate(`/pathways/${pathway.id}`);
                           }}
-                          key={idx}
-                        >
+                          key={idx}>
                           {pathway.name}
                         </div>
                       ))}
@@ -393,18 +386,16 @@ function TrainingLandingPage() {
             </div>
           </>
         )}
-  
+
         {/* footer */}
         <div
           className={styles.footer}
-          style={{ width: navigationBarOpen ? "calc(100% - 250px)" : "100%" }}
-        >
+          style={{ width: navigationBarOpen ? "calc(100% - 250px)" : "100%" }}>
           <div className={styles.footerButtons}>
             <Button
               sx={{ ...whiteButtonGrayBorder }}
               variant="contained"
-              onClick={() => navigate(-1)}
-            >
+              onClick={() => navigate(-1)}>
               Back
             </Button>
             {renderButton()}
@@ -413,7 +404,6 @@ function TrainingLandingPage() {
       </div>
     </>
   );
-  }
-  
-  export default TrainingLandingPage;
-  
+}
+
+export default TrainingLandingPage;
