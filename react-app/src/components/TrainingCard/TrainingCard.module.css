@@ -27,19 +27,19 @@
   flex-direction: column;
   justify-content: flex-end;
   background-color: var(--sky-blue);
-  padding: 18px;
+  padding: 20px;
 }
 
 .trainingTitle {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   font-weight: bold;
-  margin: 0 0 5px 5px;
+  margin: 0 0 5px 0;
   color: var(--blue-gray);
   height: 54px;
 }
 
-.progressBar {
-  margin: 10px 0 10px 5px;
+.markerContainer {
+  height: 30px;
 }
 
 .marker {
@@ -49,7 +49,6 @@
   font-size: 0.9em;
   font-weight: bold;
   text-align: center;
-  margin: -8px 0 -5px 0;
 }
 
 .notStartedMarker {
@@ -61,4 +60,9 @@
 .completedMarker {
   background-color: var(--blue-gray);
   color: white;
+}
+
+.trainingTitleWrapper {
+  position: relative;
+  display: inline-block;
 }

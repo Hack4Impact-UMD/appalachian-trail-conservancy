@@ -31,24 +31,10 @@
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   margin-top: 2rem;
   margin-bottom: 2rem;
-}
-
-.adminIcon {
-  color: var(--blue-gray);
-  font-size: 1.2rem;
-  font-weight: 700;
-  text-align: center;
-  display: flex;
-  flex-direction: row;
-  column-gap: 1rem;
-}
-
-.profileIcon {
-  margin-top: 10%;
 }
 
 .nameHeading {
@@ -61,13 +47,17 @@
   margin-top: 2rem;
   margin-bottom: 2rem;
   display: flex;
-  justify-content: space-between;
+  gap: 2%;
+  align-items: center;
+}
+
+.searchBar {
+  flex-grow: 1;
 }
 
 .buttonContainer {
   display: flex;
-  gap: 9%;
-  margin: -1% 0 3% 0;
+  gap: 5%;
 }
 
 .cardsContainer {
@@ -90,8 +80,69 @@
   font-size: 1.1rem;
 }
 
-@media screen and (min-width: 1500px) {
+/* show buttons when screen width is above 1501px */
+@media screen and (min-width: 1501px) {
   .content {
     width: 1200px;
+  }
+
+  .buttonContainer {
+    display: flex;
+  }
+
+  .dropdownContainer {
+    display: none;
+  }
+}
+
+/* show dropdown when screen width is below 1500px */
+@media screen and (max-width: 1500px) {
+  .searchBar {
+    flex-grow: 1;
+    margin-right: 20px;
+  }
+
+  .buttonContainer {
+    display: none;
+  }
+
+  .dropdownContainer {
+    display: flex;
+    width: 170px;
+  }
+
+  .dropdownMenu {
+    width: 170px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .content {
+    width: 600px;
+  }
+
+  .cardsContainer {
+    justify-content: space-between;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .content {
+    width: 300px;
+  }
+
+  .cardsContainer {
+    justify-content: space-around;
+  }
+
+  .searchBarContainer {
+    flex-direction: column;
+    align-items: stretch;
+    width: 180%;
+  }
+
+  .dropdownMenu {
+    width: 300px;
+    margin-top: 2%;
   }
 }

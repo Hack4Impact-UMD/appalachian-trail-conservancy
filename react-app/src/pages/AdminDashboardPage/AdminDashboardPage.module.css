@@ -56,20 +56,6 @@
   margin: 0;
 }
 
-.adminIcon {
-  color: var(--blue-gray);
-  font-size: 1.2rem;
-  font-weight: 700;
-  text-align: center;
-  display: flex;
-  flex-direction: row;
-  column-gap: 1rem;
-}
-
-.profileIcon {
-  margin-top: 10%;
-}
-
 .buttonContainer {
   display: flex;
   gap: 10%;

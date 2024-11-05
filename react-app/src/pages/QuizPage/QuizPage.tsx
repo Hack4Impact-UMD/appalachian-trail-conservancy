@@ -45,9 +45,9 @@ function QuizPage() {
       numQuestions: 0,
       passingScore: 0,
     },
+    status: "PUBLISHED",
     associatedPathways: [],
     certificationImage: "",
-    status: "DRAFT",
   });
 
   useEffect(() => {
