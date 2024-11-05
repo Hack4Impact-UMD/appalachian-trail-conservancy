@@ -16,7 +16,6 @@ import {
   whiteSelectGrayBorder,
   selectOptionStyle,
 } from "../../muiTheme";
-import { TrainingID } from "../../types/TrainingType";
 import { PathwayID } from "../../types/PathwayType.ts";
 import { useAuth } from "../../auth/AuthProvider.tsx";
 import styles from "./AdminPathwayLibraryPage.module.css";
