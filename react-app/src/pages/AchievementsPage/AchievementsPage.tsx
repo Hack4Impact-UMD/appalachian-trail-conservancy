@@ -33,15 +33,15 @@ function AchievementsPage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [badgesSelected, setBadgesSelected] = useState<boolean>(true);
   const [sortMode, setSortMode] = useState<string>("newest");
-
   const [correlatedTrainings, setCorrelatedTrainings] = useState<
     { genericTraining: TrainingID; volunteerTraining: VolunteerTraining }[]
   >([]);
   const [correlatedPathways, setCorrelatedPathways] = useState<
     { genericPathway: PathwayID; volunteerPathway: VolunteerPathway }[]
   >([]);
-  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
-
+  const [navigationBarOpen, setNavigationBarOpen] = useState(
+    !(window.innerWidth < 1200)
+  );
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
 
   // Update screen width on resize
@@ -233,6 +233,7 @@ function AchievementsPage() {
                     setSortMode("newest");
                     handleSortChange;
                   }}
+                  className={styles.toggleButton}
                   sx={
                     badgesSelected
                       ? forestGreenButtonPadding
@@ -247,6 +248,7 @@ function AchievementsPage() {
                     setSortMode("newest");
                     handleSortChange;
                   }}
+                  className={styles.toggleButton}
                   sx={
                     !badgesSelected
                       ? forestGreenButtonPadding

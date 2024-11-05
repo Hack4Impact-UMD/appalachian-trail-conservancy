@@ -170,7 +170,7 @@
 
   .searchBar {
     width: 425px !important;
-    margin-bottom: 4%;
+    margin-bottom: 10px;
   }
 
   .dropdownMenu {
