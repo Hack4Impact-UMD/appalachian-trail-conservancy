@@ -11,6 +11,7 @@ import {
   forestGreenButton,
   grayBorderTextField,
   styledRectButton,
+  whiteTooltip,
 } from "../../../muiTheme.ts";
 import { Navigate } from "react-router";
 import { Link, useNavigate } from "react-router-dom";
@@ -114,12 +115,7 @@ function RegistrationPage() {
                 placement="right"
                 componentsProps={{
                   tooltip: {
-                    sx: {
-                      bgcolor: "white",
-                      color: "black",
-                      borderRadius: "8px",
-                      boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)",
-                    },
+                    sx: whiteTooltip,
                   },
                 }}>
                 <span className={styles.icon}>

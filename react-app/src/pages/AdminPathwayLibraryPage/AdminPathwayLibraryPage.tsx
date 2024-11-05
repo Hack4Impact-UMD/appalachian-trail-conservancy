@@ -1,11 +1,20 @@
 import { useState, useEffect } from "react";
 import { IoIosSearch } from "react-icons/io";
-import { Button, InputAdornment, OutlinedInput } from "@mui/material";
+import {
+  Button,
+  InputAdornment,
+  OutlinedInput,
+  FormControl,
+  Select,
+  MenuItem,
+} from "@mui/material";
 import {
   forestGreenButtonPadding,
   forestGreenButtonLarge,
   whiteButtonGrayBorder,
   grayBorderSearchBar,
+  whiteSelectGrayBorder,
+  selectOptionStyle,
 } from "../../muiTheme";
 import { TrainingID } from "../../types/TrainingType";
 import { PathwayID } from "../../types/PathwayType.ts";
@@ -53,13 +62,11 @@ function AdminPathwayLibrary() {
       );
     }
 
-    // in progress / completed filters
-    if (filterType === "all") {
-      filtered = filtered;
+    // status filters
+    if (filterType === "drafts") {
+      filtered = filtered.filter((pathway) => pathway.status == "DRAFT");
     } else if (filterType === "published") {
       filtered = filtered.filter((pathway) => pathway.status == "PUBLISHED");
-    } else if (filterType === "drafts") {
-      filtered = filtered.filter((pathway) => pathway.status == "DRAFT");
     } else if (filterType === "archives") {
       filtered = filtered.filter((pathway) => pathway.status == "ARCHIVED");
     }
@@ -77,12 +84,29 @@ function AdminPathwayLibrary() {
 
   const debouncedOnChange = debounce(updateQuery, 200);
 
+  const renderEmptyMessage = () => {
+    if (searchQuery != "") {
+      return `No Pathways Matching “${searchQuery}”`;
+    } else {
+      if (filterType == "all") {
+        return "No Pathways";
+      } else if (filterType == "drafts") {
+        return "No Drafted Pathways";
+      } else if (filterType == "published") {
+        return "No Published Pathways";
+      } else if (filterType == "archives") {
+        return "No Archived Pathways";
+      }
+    }
+  };
+
   return (
     <>
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        style={{ left: navigationBarOpen ? "250px" : "0" }}
+      >
         <div className={styles.outerContainer}>
           <div className={styles.content}>
             <div className={styles.header}>
@@ -96,6 +120,7 @@ function AdminPathwayLibrary() {
             </div>
             <div className={styles.searchBarContainer}>
               <OutlinedInput
+                className={styles.searchBar}
                 sx={grayBorderSearchBar}
                 placeholder="Search..."
                 onChange={debouncedOnChange}
@@ -105,50 +130,80 @@ function AdminPathwayLibrary() {
                   </InputAdornment>
                 }
               />
-            </div>
-            <div className={styles.buttonContainer}>
-              <Button
-                sx={
-                  filterType === "drafts"
-                    ? forestGreenButtonPadding
-                    : whiteButtonGrayBorder
-                }
-                variant="contained"
-                onClick={() => setFilterType("drafts")}>
-                DRAFTS
-              </Button>
 
-              <Button
-                sx={
-                  filterType === "published"
-                    ? forestGreenButtonPadding
-                    : whiteButtonGrayBorder
-                }
-                variant="contained"
-                onClick={() => setFilterType("published")}>
-                PUBLISHED
-              </Button>
+              {/* dropdown container */}
+              <div className={styles.dropdownContainer}>
+                <FormControl sx={{ width: 300 }}>
+                  <Select
+                    className={styles.dropdownMenu}
+                    sx={whiteSelectGrayBorder}
+                    value={filterType}
+                    onChange={(e) => setFilterType(e.target.value)}
+                    label="Filter"
+                  >
+                    <MenuItem value="drafts" sx={selectOptionStyle}>
+                      DRAFTS
+                    </MenuItem>
+                    <MenuItem value="published" sx={selectOptionStyle}>
+                      PUBLISHED
+                    </MenuItem>
+                    <MenuItem value="archives" sx={selectOptionStyle}>
+                      ARCHIVES
+                    </MenuItem>
+                    <MenuItem value="all" sx={selectOptionStyle}>
+                      ALL
+                    </MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
 
-              <Button
-                sx={
-                  filterType === "archives"
-                    ? forestGreenButtonPadding
-                    : whiteButtonGrayBorder
-                }
-                variant="contained"
-                onClick={() => setFilterType("archives")}>
-                ARCHIVES
-              </Button>
-              <Button
-                sx={
-                  filterType === "all"
-                    ? forestGreenButtonPadding
-                    : whiteButtonGrayBorder
-                }
-                variant="contained"
-                onClick={() => setFilterType("all")}>
-                ALL
-              </Button>
+              {/* button container */}
+              <div className={styles.buttonContainer}>
+                <Button
+                  sx={
+                    filterType === "drafts"
+                      ? forestGreenButtonPadding
+                      : whiteButtonGrayBorder
+                  }
+                  variant="contained"
+                  onClick={() => setFilterType("drafts")}
+                >
+                  DRAFTS
+                </Button>
+                <Button
+                  sx={
+                    filterType === "published"
+                      ? forestGreenButtonPadding
+                      : whiteButtonGrayBorder
+                  }
+                  variant="contained"
+                  onClick={() => setFilterType("published")}
+                >
+                  PUBLISHED
+                </Button>
+                <Button
+                  sx={
+                    filterType === "archives"
+                      ? forestGreenButtonPadding
+                      : whiteButtonGrayBorder
+                  }
+                  variant="contained"
+                  onClick={() => setFilterType("archives")}
+                >
+                  ARCHIVES
+                </Button>
+                <Button
+                  sx={
+                    filterType === "all"
+                      ? forestGreenButtonPadding
+                      : whiteButtonGrayBorder
+                  }
+                  variant="contained"
+                  onClick={() => setFilterType("all")}
+                >
+                  ALL
+                </Button>
+              </div>
             </div>
 
             {loading ? (
@@ -157,7 +212,7 @@ function AdminPathwayLibrary() {
               <>
                 {filteredPathways.length === 0 ? (
                   <div className={styles.emptySearchMessage}>
-                    No Pathways Matching “{searchQuery}”
+                    {renderEmptyMessage()}
                   </div>
                 ) : (
                   <div className={styles.cardsContainer}>
