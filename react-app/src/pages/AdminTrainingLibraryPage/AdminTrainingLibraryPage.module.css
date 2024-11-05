@@ -16,6 +16,18 @@
   flex-direction: column;
 }
 
+.hamburger {
+  color: var(--blue-gray);
+  font-size: 1.5rem;
+  margin: 1.5rem;
+  position: absolute;
+  top: 20px;
+  left: 10px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
 .outerContainer {
   display: flex;
   flex-direction: column;
@@ -80,23 +92,8 @@
   font-size: 1.1rem;
 }
 
-/* show buttons when screen width is above 1501px */
-@media screen and (min-width: 1501px) {
-  .content {
-    width: 1200px;
-  }
-
-  .buttonContainer {
-    display: flex;
-  }
-
-  .dropdownContainer {
-    display: none;
-  }
-}
-
-/* show dropdown when screen width is below 1500px */
-@media screen and (max-width: 1500px) {
+/* show dropdown when screen width is below 1499px */
+@media screen and (max-width: 1499px) {
   .searchBar {
     flex-grow: 1;
     margin-right: 20px;
@@ -116,6 +113,35 @@
   }
 }
 
+/* show buttons when screen width is above 1501px */
+@media screen and (min-width: 1500px) {
+  .content {
+    width: 1200px;
+  }
+
+  .buttonContainer {
+    display: flex;
+  }
+
+  .dropdownContainer {
+    display: none;
+  }
+
+  .cardsContainer {
+    column-gap: 3.75rem;
+  }
+}
+
+@media screen and (min-width: 1800px) {
+  .content {
+    width: 1400px;
+  }
+
+  .cardsContainer {
+    column-gap: 6.25rem;
+  }
+}
+
 @media screen and (max-width: 1000px) {
   .content {
     width: 600px;
@@ -128,7 +154,7 @@
 
 @media screen and (max-width: 750px) {
   .content {
-    width: 300px;
+    width: 425px;
   }
 
   .cardsContainer {
@@ -137,12 +163,35 @@
 
   .searchBarContainer {
     flex-direction: column;
-    align-items: stretch;
-    width: 180%;
+    align-items: flex-start;
+  }
+
+  .searchBar {
+    width: 425px !important;
+    margin-bottom: 10px;
+  }
+
+  .dropdownMenu {
+    width: 425px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .header {
+    margin-top: 5rem;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .content {
+    width: 300px;
+  }
+
+  .searchBar {
+    width: 300px !important;
   }
 
   .dropdownMenu {
     width: 300px;
-    margin-top: 2%;
   }
 }
