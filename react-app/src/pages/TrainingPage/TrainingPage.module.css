@@ -38,7 +38,7 @@
   -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
 }
 
-.bodyContainer {
+.content {
   width: 875px;
   height: 90vh;
 }
@@ -79,57 +79,62 @@
   width: 875px;
   display: flex;
   justify-content: flex-end;
-  gap: 1%;
+  gap: 1rem;
 }
 
-/* show buttons when screen width is above 1201px */
-@media screen and (min-width: 1201px) {
-  .buttonContainer {
-    display: flex; 
+@media screen and (min-width: 1500px) {
+  .content {
+    width: 1200px;
   }
-  .dropdownContainer {
-    display: none; 
+
+  .footerButtons {
+    width: 1200px;
   }
 }
 
-/* show dropdown when screen width is below 1200px */
-@media screen and (max-width: 1200px) {
-  .searchBarContainer {
-    flex-direction: column;
-    align-items: stretch;
-    width: 180%;
+@media screen and (min-width: 1800px) {
+  .content {
+    width: 1400px;
   }
-  .buttonContainer {
-    display: none;  
-  }
-  .dropdownContainer {
-    display: block; 
-    margin-top: 2%;
+
+  .footerButtons {
+    width: 1400px;
   }
 }
 
 @media screen and (max-width: 1000px) {
-  .bodyContainer {
+  .content {
     width: 600px;
   }
 
-  .cardsContainer {
-    justify-content: space-between;
+  .footerButtons {
+    width: 600px;
   }
 }
 
 @media screen and (max-width: 750px) {
-  .bodyContainer {
-    width: 300px;
+  .content {
+    width: 425px;
+    margin-bottom: 120px;
   }
 
-  .cardsContainer {
-    justify-content: space-around;
+  .footerButtons {
+    width: 425px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .header {
+    margin-top: 5rem;
   }
 }
 
 @media screen and (max-width: 450px) {
-  .header {
-    margin-top: 5rem;
+  .content {
+    width: 300px;
+  }
+
+  .footerButtons {
+    width: 300px;
   }
 }

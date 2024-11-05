@@ -90,13 +90,13 @@ function QuizLandingPage() {
               />
             )}
             <div className={styles.outerContainer}>
-              <div className={styles.bodyContainer}>
+              <div className={styles.content}>
                 {/* header */}
                 <div className={styles.header}>
                   <h1 className={styles.nameHeading}>{training.name}</h1>
                   <ProfileIcon />
                 </div>
-                <div className={styles.subHeader}>
+                <div className={`${styles.subHeader} ${styles.questionInfo}`}>
                   <h2>Number of Questions: {training.quiz.numQuestions}</h2>
                   <h2>
                     Passing Score: {training.quiz.passingScore}/

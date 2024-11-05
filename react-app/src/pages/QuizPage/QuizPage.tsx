@@ -113,7 +113,7 @@ function QuizPage() {
         )}
 
         <div className={styles.outerContainer}>
-          <div className={styles.bodyContainer}>
+          <div className={styles.content}>
             {/* HEADER */}
             {loading ? (
               <Loading />
