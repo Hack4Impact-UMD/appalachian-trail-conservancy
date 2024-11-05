@@ -8,6 +8,7 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { Button, InputAdornment, OutlinedInput } from "@mui/material";
 import { User } from "../../types/UserType.ts";
 import { DataGrid } from "@mui/x-data-grid";
+import Footer from "../../components/Footer/Footer";
 import {
   forestGreenButtonPadding,
   forestGreenButtonLarge,
@@ -46,19 +47,22 @@ function AdminUserManagement() {
     type: "VOLUNTEER"
   });
 
-  const users = [user1, user2];
+  const users = [
+    { id: user1.auth_id, ...user1 },
+    { id: user2.auth_id, ...user2 }
+  ];
 
   const columns = [
-    { field: "auth_id", headerName: "Auth ID", width: 250 },
-    { field: "email", headerName: "Email", width: 200 },
     { field: "firstName", headerName: "First Name", width: 150 },
     { field: "lastName", headerName: "Last Name", width: 150 },
-    { field: "type", headerName: "User Type", width: 120 }
+    { field: "email", headerName: "Email", width: 200 },
+    { field: "misc", headerName: "Miscellaneous", width: 120 }
   ];
 
   const CustomToggleButtonGroup = styled(ToggleButtonGroup)({
+    width: "100%",
     borderRadius: "15px", // Rounded corners
-    border: "1px solid black",
+    border: "2px solid black",
     overflow: "hidden", // Ensures rounded corners display correctly
   });
 
@@ -71,12 +75,11 @@ function AdminUserManagement() {
     whiteSpace: "nowrap", // Prevent text from wrapping
     overflow: "hidden",
     borderColor: "black",
-    border: "1px solid",
-    borderRight: "2px solid black",
+    borderWidth: "0 2px", // Only right and left borders
+    borderStyle: "solid",
     "&.Mui-selected": {
       backgroundColor: "#a29fbf", // steel purple but idk how to make it use var(--steel-purple)
       color: "white",
-      borderColor: "black",
     },
     "&:not(.Mui-selected)": {
       backgroundColor: "white", // White for unselected button
@@ -85,38 +88,60 @@ function AdminUserManagement() {
       backgroundColor: "#a29fbf", // again steel purple
     },
     "&:first-of-type": {
-      borderRadius: "15px 0 0 15px", // Rounded left
+      borderLeft: "none", // Remove left border for the first button
     },
     "&:last-of-type": {
-      borderRadius: "0 15px 15px 0", // Rounded right
-      borderRight: "none",
+      borderRight: "none", // Remove right border for the last button
+    },
+    "&:not(:first-of-type)": {
+      borderLeft: "2px solid black", // Add left border for buttons after the first
     },
   });
 
   const DataGridStyles = {
-    border: 10,
-    borderColor: "rgba(189,189,189,0.75)",
+    border: 2,
+    borderColor: "rgba(38, 56, 67, 1)",
     borderRadius: 4,
-    "& .MuiDataGrid-row:nth-child(even)": {
-      backgroundColor: "rgba(224, 224, 224, 0.75)",
-      fontFamily: `"Source-Serif 4", serif`,
-    },
+    overflow: "hidden", // Ensures that rounded corners are respected
     "& .MuiDataGrid-columnHeaders": {
-      backgroundColor: "#2264E555",
-      borderRadius: 0,
-      fontFamily: `"Source-Serif 4", serif`,
+      backgroundColor: "rgba(10, 118, 80, 1)",
+      color: "white", // Set header font color to white
+      fontWeight: "bold", 
+      borderBottom: "2px solid black", // Border below header
+      "& .MuiDataGrid-columnSeparator": {
+        visibility: "visible", // Always display column separators for filtering
+      },
+    },
+    "& .MuiDataGrid-row": {
+      borderBottom: "2px solid black", // Black border between rows
+    },
+    "& .MuiDataGrid-row:nth-child(even)": {
+      backgroundColor: "rgba(217, 217, 217, 1)",
     },
     "& .MuiDataGrid-row:nth-child(odd)": {
-      backgroundColor: "#FFFFFF",
-      fontFamily: `"Source-Serif 4", serif`,
+      backgroundColor: "rgba(255, 255, 255, 1)",
     },
     "& .MuiDataGrid-footerContainer": {
       backgroundColor: "rgba(224, 224, 224, 0.75)",
     },
     "& .MuiDataGrid-row:hover": {
-      backgroundColor: "#2264E535",
+      backgroundColor: "#E0F5E0", // Light green shade on hover
       cursor: "pointer",
+      "& .MuiDataGrid-cell": {
+        textDecoration: "underline", // Underline text on hover
+      },
     },
+    "& .MuiCheckbox-root": {
+    "&.Mui-checked": {
+      color: "rgba(10, 118, 80, 1)", 
+    },
+  },
+  "& .MuiDataGrid-row.Mui-selected": {
+    "&:hover": {
+      backgroundColor: "#E0F5E0", // Keep hover color consistent
+      textDecoration: "underline", // Keep underline when hovered
+    },
+  },
   };
 
   const updateQuery = (e: {
@@ -175,16 +200,14 @@ function AdminUserManagement() {
                     <DataGrid
                       rows={users}
                       columns={columns}
-                      columnHeaderHeight={50}
                       rowHeight={40}
-                      disableRowSelectionOnClick
+                      autoHeight
+                      checkboxSelection
+                      sx={DataGridStyles}
                       onRowClick={(row) => {
                       }}
-                      sx={DataGridStyles}
                     />
                   </div>
-                  <h2>User Information</h2>
-                  <p>Details about user information go here.</p>
                 </div>
               )}
               {alignment === "training" && (
@@ -202,6 +225,7 @@ function AdminUserManagement() {
             </div>
           </div>
         </div>
+        <Footer />
       </div>
     </>
   );
