@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import styles from "./AdminUserManagement.module.css";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
@@ -22,6 +22,7 @@ function AdminUserManagement() {
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
   const [alignment, setAlignment] = useState<string | null>("user");
   const [searchQuery, setSearchQuery] = useState("");
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const handleAlignment = (
     event: React.MouseEvent<HTMLElement>,
     newAlignment: string | null
@@ -144,11 +145,29 @@ function AdminUserManagement() {
   },
   };
 
+  const filterUsers = () => {
+    let filtered = searchQuery ? users.filter((user) =>
+      user.firstName.toLowerCase().includes(searchQuery.toLowerCase())
+    ) : users; // Show all users if searchQuery is empty
+
+    setFilteredUsers(filtered);
+  };
+
   const updateQuery = (e: {
     target: { value: React.SetStateAction<string> };
-  }) => setSearchQuery(e.target.value);
+  }) => {
+    setSearchQuery(e.target.value);
+  };
 
   const debouncedOnChange = debounce(updateQuery, 200);
+
+  useEffect(() => {
+    filterUsers(); // Filter users whenever the searchQuery changes
+  }, [searchQuery]);
+
+  useEffect(() => {
+    setFilteredUsers(users); // Initialize filteredUsers with all users
+  }, []);
 
   return (
     <>
@@ -198,7 +217,7 @@ function AdminUserManagement() {
                   </div>
                   <div className={styles.innerGrid}>
                     <DataGrid
-                      rows={users}
+                      rows={filteredUsers}
                       columns={columns}
                       rowHeight={40}
                       autoHeight
