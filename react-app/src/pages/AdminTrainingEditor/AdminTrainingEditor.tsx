@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./AdminTrainingEditor.module.css";
 import InfoIcon from "@mui/icons-material/Info";
-
+import { useNavigate } from "react-router-dom";
 import {
   TextField,
   Button,
@@ -12,7 +12,17 @@ import {
   FormHelperText,
   Typography,
   Tooltip,
+  Snackbar,
+  Alert,
 } from "@mui/material";
+import {
+  addTraining, 
+  updateTraining,
+  saveTrainingDraft,
+  checkDuplicateTrainingName,
+  publishTraining,
+  getAllTrainings,
+} from "../../backend/FirestoreCalls";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
@@ -32,6 +42,7 @@ const AdminTrainingEditor: React.FC = () => {
   const [resourceLink, setResourceLink] = useState("");
   const [resourceType, setResourceType] = useState("");
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+  const navigate = useNavigate();
 
   const [errors, setErrors] = useState({
     trainingName: "",
@@ -41,6 +52,9 @@ const AdminTrainingEditor: React.FC = () => {
   });
   const [invalidBlurb, setInvalidBlurb] = useState<boolean>(false);
 
+  const [snackbar, setSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+
   const characterLimits = {
     trainingName: 50,
     blurb: 150,
@@ -49,21 +63,34 @@ const AdminTrainingEditor: React.FC = () => {
 
   const validateFields = () => {
     let newErrors = { ...errors };
+    let isValid = true;
 
-    if (trainingName.length > characterLimits.trainingName) {
+    if (!trainingName) {
+      newErrors.trainingName = "Training name is required.";
+      isValid = false;
+    } else if (trainingName.length > characterLimits.trainingName) {
       newErrors.trainingName = `Training name cannot exceed ${characterLimits.trainingName} characters.`;
+      isValid = false;
     } else {
       newErrors.trainingName = "";
     }
 
-    if (blurb.length > characterLimits.blurb) {
+    if (!blurb) {
+      newErrors.blurb = "Blurb is required.";
+      isValid = false;
+    } else if (blurb.length > characterLimits.blurb) {
       newErrors.blurb = `Blurb cannot exceed ${characterLimits.blurb} characters.`;
+      isValid = false;
     } else {
       newErrors.blurb = "";
     }
 
-    if (description.length > characterLimits.description) {
+    if (!description) {
+      newErrors.description = "Description is required.";
+      isValid = false;
+    } else if (description.length > characterLimits.description) {
       newErrors.description = `Description cannot exceed ${characterLimits.description} characters.`;
+      isValid = false;
     } else {
       newErrors.description = "";
     }
@@ -71,19 +98,76 @@ const AdminTrainingEditor: React.FC = () => {
     const youtubeRegex = /^https:\/\/www\.youtube\.com\/embed\/[\w-]+(\?.*)?$/;
     if (resourceType === "video" && !youtubeRegex.test(resourceLink)) {
       newErrors.resourceLink = "Please provide a valid embedded YouTube link.";
+      isValid = false;
     } else {
       newErrors.resourceLink = "";
     }
 
     setErrors(newErrors);
-
-    return Object.values(newErrors).every((error) => error === "");
+    return isValid;
   };
 
-  const handleNextClick = () => {
+  const handleNextClick = async () => {
     if (validateFields()) {
       console.log("All validations passed");
+      const trainingData: Training = {
+        name: trainingName,
+        shortBlurb: blurb,
+        description,
+        coverImage: "", // Placeholder, to be filled later
+        resources: [
+          { 
+            link: resourceLink,
+            type: resourceType,
+            title: trainingName
+          },
+        ],
+        associatedPathways: [], // Placeholder, to be filled later
+        quiz: null, // Placeholder, to be filled on quiz page
+        status: "DRAFT",
+      };
+      
+      addTraining(trainingData)
+        // Make it go to the quiz editor
+        .catch((error) => {
+          console.error("Error saving draft:", error);
+        });
+    } else {
+      setSnackbarMessage("Please complete all required fields before proceeding.");
+      setSnackbar(true);
     }
+  };
+
+  const handleSaveDraftClick = async () => {
+    const trainingData: Training = {
+      name: trainingName,
+      shortBlurb: blurb,
+      description,
+      coverImage: "", // Placeholder, to be filled later
+      resources: [
+        { 
+          link: resourceLink,
+          type: resourceType,
+          title: trainingName
+        },
+      ],
+      associatedPathways: [], // Placeholder, to be filled later
+      quiz: null, // Placeholder, to be filled on quiz page
+      status: "DRAFT",
+    };
+    
+    addTraining(trainingData)
+      .then(() => {
+        setSnackbarMessage("Training Saved As Draft");
+        setSnackbar(true);
+      })
+      .catch((error) => {
+        console.error("Error saving draft:", error);
+      });
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar(false);
   };
 
   return (
@@ -106,7 +190,9 @@ const AdminTrainingEditor: React.FC = () => {
             </div>
 
             <form noValidate>
-              <Button sx={whiteButtonGrayBorder}>Save as Draft</Button>
+              <Button sx={whiteButtonGrayBorder} onClick={handleSaveDraftClick}>
+                Save as Draft
+              </Button>
               <Typography
                 variant="body2"
                 style={{
@@ -131,6 +217,7 @@ const AdminTrainingEditor: React.FC = () => {
                   },
                 }}
                 onChange={(e) => setTrainingName(e.target.value)}
+                // handleSaveDraft
                 error={Boolean(errors.trainingName)}
                 helperText={errors.trainingName}
                 fullWidth
@@ -414,6 +501,12 @@ const AdminTrainingEditor: React.FC = () => {
               </div>
             </form>
           </div>
+          {/* Snackbar for Feedback */}
+          <Snackbar open={snackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+            <Alert onClose={handleCloseSnackbar} severity={snackbarMessage.includes("Draft") ? "success" : "error"}>
+              {snackbarMessage}
+            </Alert>
+          </Snackbar>
           <Footer />{" "}
         </div>
       </div>
