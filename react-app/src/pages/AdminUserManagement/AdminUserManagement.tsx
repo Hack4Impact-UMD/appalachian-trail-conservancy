@@ -57,7 +57,7 @@ function AdminUserManagement() {
     { field: "firstName", headerName: "First Name", width: 150 },
     { field: "lastName", headerName: "Last Name", width: 150 },
     { field: "email", headerName: "Email", width: 200 },
-    { field: "misc", headerName: "Miscellaneous", width: 120 }
+    { field: "misc", headerName: "Miscellaneous", width: 200 }
   ];
 
   const CustomToggleButtonGroup = styled(ToggleButtonGroup)({
@@ -103,18 +103,39 @@ function AdminUserManagement() {
     border: 2,
     borderColor: "rgba(38, 56, 67, 1)",
     borderRadius: 4,
-    overflow: "hidden", // Ensures that rounded corners are respected
+    overflow: "hidden",
     "& .MuiDataGrid-columnHeaders": {
       backgroundColor: "rgba(10, 118, 80, 1)",
-      color: "white", // Set header font color to white
-      fontWeight: "bold", 
-      borderBottom: "2px solid black", // Border below header
+      color: "white",
+      fontWeight: "bold",
+      borderBottom: "2px solid black",
+      display: "flex",
+      "& .MuiDataGrid-columnHeader": {
+        display: 'flex',
+        alignItems: 'center', // Align items vertically
+        justifyContent: 'space-between',
+        padding: '0, 4px', // Adjust padding for uniformity
+        minWidth: 150, // Set minimum width
+        position: 'relative', // Ensure relative positioning
+      },
       "& .MuiDataGrid-columnSeparator": {
-        visibility: "visible", // Always display column separators for filtering
+        visibility: "visible",
       },
     },
+    "& .MuiDataGrid-menuIcon": {
+      visibility: "visible",
+      opacity: 1,
+      padding: "0", 
+      pointerEvents: "auto",
+      position: "relative", // Absolute positioning within the header
+      right: "12px", // Fine-tuned right positioning
+      top: "50%", // Center it vertically
+      transform: "translateY(-50%)", // Adjust to center vertically
+      height: "24px", // Fixed height for icon
+      width: "24px", // Fixed width for icon
+    },
     "& .MuiDataGrid-row": {
-      borderBottom: "2px solid black", // Black border between rows
+      borderBottom: "2px solid black",
     },
     "& .MuiDataGrid-row:nth-child(even)": {
       backgroundColor: "rgba(217, 217, 217, 1)",
@@ -126,23 +147,23 @@ function AdminUserManagement() {
       backgroundColor: "rgba(224, 224, 224, 0.75)",
     },
     "& .MuiDataGrid-row:hover": {
-      backgroundColor: "#E0F5E0", // Light green shade on hover
+      backgroundColor: "#E0F5E0",
       cursor: "pointer",
       "& .MuiDataGrid-cell": {
-        textDecoration: "underline", // Underline text on hover
+        textDecoration: "underline",
       },
     },
     "& .MuiCheckbox-root": {
-    "&.Mui-checked": {
-      color: "rgba(10, 118, 80, 1)", 
+      "&.Mui-checked": {
+        color: "rgba(10, 118, 80, 1)",
+      },
     },
-  },
-  "& .MuiDataGrid-row.Mui-selected": {
-    "&:hover": {
-      backgroundColor: "#E0F5E0", // Keep hover color consistent
-      textDecoration: "underline", // Keep underline when hovered
+    "& .MuiDataGrid-row.Mui-selected": {
+      "&:hover": {
+        backgroundColor: "#E0F5E0",
+        textDecoration: "underline",
+      },
     },
-  },
   };
 
   const filterUsers = () => {
