@@ -80,9 +80,10 @@
   text-decoration: underline;
   text-underline-position: under;
   background-color: white;
+  color: var(--blue-gray);
   border: none;
   cursor: pointer;
-  margin: 30% 0% 0% 0%;
+  margin: 30% 0 0 0;
 }
 
 /* for logo */

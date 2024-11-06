@@ -6,7 +6,6 @@ import {
   OutlinedInput,
   FormHelperText,
 } from "@mui/material";
-
 import {
   forestGreenButton,
   grayBorderTextField,
@@ -16,6 +15,7 @@ import {
 import { Navigate } from "react-router";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../auth/AuthProvider.tsx";
+import { createVolunteerUser } from "../../../backend/AuthFunctions.ts";
 import styles from "./RegistrationPage.module.css";
 import Loading from "../../../components/LoadingScreen/Loading.tsx";
 import primaryLogo from "../../../assets/atc-primary-logo.png";
@@ -30,6 +30,7 @@ function RegistrationPage() {
   //Add Error Handling
   const [invalidEmail, setInvalidEmail] = useState<boolean>(false);
   const [invalidCode, setInvalidCode] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const [email, setEmail] = useState<string>("");
   const [firstName, setFirstName] = useState<string>("");
@@ -57,10 +58,15 @@ function RegistrationPage() {
     if (!validateEmail(email)) {
       setInvalidEmail(true);
     } else {
-      setShowLoading(false);
-      navigate("/registration-confirmation", {
-        state: { fromApp: true },
-      }); /* proceed to confirmation */
+      await createVolunteerUser(email, firstName, lastName, parseInt(joinCode))
+        .then(() => {
+          navigate("/registration-confirmation", {
+            state: { fromApp: true },
+          }); /* proceed to confirmation */
+        })
+        .catch((error) => {
+          setErrorMessage(error);
+        });
     }
     setShowLoading(false);
   };
@@ -181,6 +187,8 @@ function RegistrationPage() {
             </Button>
           </div>
         </form>
+
+        <div className={styles.error}>{errorMessage}</div>
 
         {/* switch to sign in */}
         <Link to="/login/" className={styles.switch}>

@@ -64,6 +64,13 @@
   align-items: center;
 }
 
+.error {
+  margin-top: 1rem;
+  padding: 0;
+  font-size: 0.8rem;
+  color: red;
+}
+
 /* switch to volunteer login */
 .switch {
   font-size: 0.85rem;
@@ -75,7 +82,7 @@
   border: none;
   cursor: pointer;
   padding-top: 1%;
-  padding-bottom: 5%;
+  padding-bottom: 3%;
 }
 
 .button {
