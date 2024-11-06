@@ -322,6 +322,25 @@ export function getAllTrainings(): Promise<TrainingID[]> {
   });
 }
 
+export function getAllPublishedTrainings(): Promise<TrainingID[]> {
+  const trainingsRef = collection(db, "Trainings");
+  const publishedTrainingsQuery = query(trainingsRef, where("status", "==", "PUBLISHED"));
+
+  return new Promise((resolve, reject) => {
+    getDocs(publishedTrainingsQuery)
+      .then((trainingSnapshot) => {
+        const allTrainings: TrainingID[] = trainingSnapshot.docs.map((doc) => {
+          const training: Training = doc.data() as Training;
+          return { ...training, id: doc.id };
+        });
+        resolve(allTrainings);
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+}
+
 export function getAllPathways(): Promise<PathwayID[]> {
   const pathwaysRef = collection(db, "Pathways");
   return new Promise((resolve, reject) => {
@@ -332,6 +351,24 @@ export function getAllPathways(): Promise<PathwayID[]> {
           const pathway: Pathway = doc.data() as Pathway;
           const newPathway: PathwayID = { ...pathway, id: doc.id };
           allPathways.push(newPathway);
+        });
+        resolve(allPathways);
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+}
+export function getAllPublishedPathways(): Promise<PathwayID[]> {
+  const pathwaysRef = collection(db, "Pathways");
+  const publishedPathwaysQuery = query(pathwaysRef, where("status", "==", "PUBLISHED"));
+
+  return new Promise((resolve, reject) => {
+    getDocs(publishedPathwaysQuery)
+      .then((pathwaySnapshot) => {
+        const allPathways: PathwayID[] = pathwaySnapshot.docs.map((doc) => {
+          const pathway: Pathway = doc.data() as Pathway;
+          return { ...pathway, id: doc.id };
         });
         resolve(allPathways);
       })

@@ -1,0 +1,12 @@
+.loadingContainer {
+  height: 99vh;
+  width: 99vw;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.errorMessage {
+  text-align: center;
+}

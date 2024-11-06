@@ -4,6 +4,8 @@ import styles from "./TrainingCard.module.css";
 import PathwayTrainingPopup from "../PathwayTrainingPopup/PathwayTrainingPopup";
 import { TrainingID } from "../../types/TrainingType";
 import { VolunteerTraining } from "../../types/UserType";
+import { Tooltip } from "@mui/material";
+import { grayTooltip } from "../../muiTheme";
 
 interface TrainingCardProps {
   training: TrainingID;
@@ -15,16 +17,13 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
   volunteerTraining,
 }) => {
   const [openTrainingPopup, setOpenTrainingPopup] = useState<boolean>(false);
-
   const navigate = useNavigate();
 
   const renderMarker = () => {
     if (volunteerTraining == undefined) {
       // Training not started
       return <div className={styles.marker}></div>;
-    } else if (
-      volunteerTraining.progress == "COMPLETED"
-    ) {
+    } else if (volunteerTraining.progress === "COMPLETED") {
       // Training completed
       return (
         <div className={`${styles.marker} ${styles.completedMarker}`}>
@@ -49,7 +48,7 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
           if (volunteerTraining == undefined) {
             setOpenTrainingPopup(true);
           } else {
-            // TODO: Navigate to training landing page and pass Training and VolunteerTraining as state
+            // Navigate to training landing page with training and volunteerTraining as state
             navigate(`/trainings/${training.id}`, {
               state: {
                 training: training,
@@ -57,17 +56,31 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
               },
             });
           }
-        }}
-      >
+        }}>
         <div className={styles.trainingImage}>
           <img src={training.coverImage} alt="Training" />
         </div>
         <div className={styles.trainingContent}>
-          <div className={styles.trainingTitle}>
-            {training.name.substring(0, 31)}
-            {training.name.length > 30 ? "..." : ""}
+          <div className={styles.trainingTitleWrapper}>
+            {training.name.length > 35 ? (
+              <Tooltip
+                title={training.name}
+                arrow={false}
+                placement="top-start"
+                componentsProps={{
+                  tooltip: {
+                    sx: { ...grayTooltip, maxWidth: "200px" },
+                  },
+                }}>
+                <div className={styles.trainingTitle}>
+                  {training.name.substring(0, 36)}...
+                </div>
+              </Tooltip>
+            ) : (
+              <div className={styles.trainingTitle}>{training.name}</div>
+            )}
           </div>
-          <div className={styles.progressBar}>{renderMarker()}</div>
+          <div className={styles.markerContainer}>{renderMarker()}</div>
         </div>
       </div>
       <PathwayTrainingPopup

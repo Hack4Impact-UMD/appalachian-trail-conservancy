@@ -14,13 +14,31 @@
   overflow: hidden;
 }
 
+.hamburger {
+  color: var(--blue-gray);
+  font-size: 1.5rem;
+  margin: 1.5rem;
+  position: absolute;
+  top: 20px;
+  left: 10px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
 .outerContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.bodyContainer {
+.scrollContainer {
+  height: calc(100vh - 100px); /* 100px is the height of the footer */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+.content {
   width: 875px;
   height: 90vh;
 }
@@ -61,5 +79,62 @@
   width: 875px;
   display: flex;
   justify-content: flex-end;
-  gap: 1%;
+  gap: 1rem;
+}
+
+@media screen and (min-width: 1500px) {
+  .content {
+    width: 1200px;
+  }
+
+  .footerButtons {
+    width: 1200px;
+  }
+}
+
+@media screen and (min-width: 1800px) {
+  .content {
+    width: 1400px;
+  }
+
+  .footerButtons {
+    width: 1400px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .content {
+    width: 600px;
+  }
+
+  .footerButtons {
+    width: 600px;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .content {
+    width: 425px;
+    margin-bottom: 120px;
+  }
+
+  .footerButtons {
+    width: 425px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .header {
+    margin-top: 5rem;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .content {
+    width: 300px;
+  }
+
+  .footerButtons {
+    width: 300px;
+  }
 }
