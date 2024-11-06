@@ -28,7 +28,6 @@ import Loading from "../../components/LoadingScreen/Loading.tsx";
 import debounce from "lodash.debounce";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import hamburger from "../../assets/hamburger.svg";
-
 import Footer from "../../components/Footer/Footer";
 import TrainingCard from "../../components/TrainingCard/TrainingCard";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
@@ -45,7 +44,7 @@ function TrainingLibrary() {
   const [filteredTrainings, setFilteredTrainings] = useState<
     { genericTraining: TrainingID; volunteerTraining?: VolunteerTraining }[]
   >([]);
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(!(window.innerWidth < 1200));
 
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
 

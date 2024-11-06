@@ -16,7 +16,7 @@ import {
   whiteSelectGrayBorder,
   selectOptionStyle,
 } from "../../muiTheme";
-import { getAllTrainings, getVolunteer } from "../../backend/FirestoreCalls";
+import { getAllTrainings } from "../../backend/FirestoreCalls";
 import { TrainingID } from "../../types/TrainingType";
 import { useAuth } from "../../auth/AuthProvider.tsx";
 import styles from "./AdminTrainingLibraryPage.module.css";
@@ -26,6 +26,7 @@ import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import Footer from "../../components/Footer/Footer";
 import AdminTrainingCard from "../../components/AdminTrainingCard/AdminTrainingCard.tsx";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
+import hamburger from "../../assets/hamburger.svg";
 
 function AdminTrainingLibrary() {
   const auth = useAuth();
@@ -36,7 +37,9 @@ function AdminTrainingLibrary() {
     []
   );
   const [filteredTrainings, setFilteredTrainings] = useState<TrainingID[]>([]);
-  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+  const [navigationBarOpen, setNavigationBarOpen] = useState(
+    !(window.innerWidth < 1200)
+  );
 
   const filterTrainings = (genericTrainings?: TrainingID[]) => {
     let filtered = correlatedTrainings;
@@ -70,6 +73,19 @@ function AdminTrainingLibrary() {
 
     setFilteredTrainings(filtered);
   };
+  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
+
+  // Update screen width on resize
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     if (!auth.loading && auth.id) {
@@ -116,8 +132,18 @@ function AdminTrainingLibrary() {
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}
-      >
+        style={{
+          left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
+        }}>
+        {!navigationBarOpen && (
+          <img
+            src={hamburger}
+            alt="Hamburger Menu"
+            className={styles.hamburger} // Add styles to position it
+            width={30}
+            onClick={() => setNavigationBarOpen(true)} // Set sidebar open when clicked
+          />
+        )}
         <div className={styles.outerContainer}>
           <div className={styles.content}>
             <div className={styles.header}>
@@ -150,8 +176,7 @@ function AdminTrainingLibrary() {
                     sx={whiteSelectGrayBorder}
                     value={filterType}
                     onChange={(e) => setFilterType(e.target.value)}
-                    label="Filter"
-                  >
+                    label="Filter">
                     <MenuItem value="drafts" sx={selectOptionStyle}>
                       DRAFTS
                     </MenuItem>
@@ -177,8 +202,7 @@ function AdminTrainingLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("drafts")}
-                >
+                  onClick={() => setFilterType("drafts")}>
                   DRAFTS
                 </Button>
                 <Button
@@ -188,8 +212,7 @@ function AdminTrainingLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("published")}
-                >
+                  onClick={() => setFilterType("published")}>
                   PUBLISHED
                 </Button>
                 <Button
@@ -199,8 +222,7 @@ function AdminTrainingLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("archives")}
-                >
+                  onClick={() => setFilterType("archives")}>
                   ARCHIVES
                 </Button>
                 <Button
@@ -210,8 +232,7 @@ function AdminTrainingLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("all")}
-                >
+                  onClick={() => setFilterType("all")}>
                   ALL
                 </Button>
               </div>

@@ -24,7 +24,9 @@ const AdminTrainingEditor: React.FC = () => {
   const [description, setDescription] = useState("");
   const [resourceLink, setResourceLink] = useState("");
   const [resourceType, setResourceType] = useState("");
-  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+  const [navigationBarOpen, setNavigationBarOpen] = useState(
+    !(window.innerWidth < 1200)
+  );
 
   const [errors, setErrors] = useState({
     trainingName: "",
