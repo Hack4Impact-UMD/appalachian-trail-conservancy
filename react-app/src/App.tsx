@@ -1,7 +1,8 @@
 import "./index.css";
+import React from "react";
 import { HashRouter, Route, Routes } from "react-router-dom";
 import { ThemeProvider } from "@mui/material";
-import { AuthProvider } from "./auth/AuthProvider.tsx";
+import { AuthProvider, useAuth } from "./auth/AuthProvider.tsx";
 import theme from "./muiTheme.ts";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import Dashboard from "./pages/DashboardPage/DashboardPage.tsx";
@@ -31,6 +32,24 @@ import AdminDashboard from "./pages/AdminDashboardPage/AdminDashboardPage.tsx";
 import AdminTrainingLibrary from "./pages/AdminTrainingLibraryPage/AdminTrainingLibraryPage.tsx";
 import AdminPathwayLibrary from "./pages/AdminPathwayLibraryPage/AdminPathwayLibraryPage.tsx";
 
+interface RoleBasedRouteProps {
+  adminComponent: JSX.Element;
+  volunteerComponent: JSX.Element;
+}
+
+const RoleBasedRoute: React.FC<RoleBasedRouteProps> = ({
+  adminComponent,
+  volunteerComponent,
+}) => {
+  const authContext = useAuth();
+
+  if (authContext.token?.claims?.role === "ADMIN") {
+    return <RequireAdminAuth>{adminComponent}</RequireAdminAuth>;
+  } else {
+    return <RequireVolunteerAuth>{volunteerComponent}</RequireVolunteerAuth>;
+  }
+};
+
 function App() {
   return (
     <ThemeProvider theme={theme}>
@@ -49,9 +68,10 @@ function App() {
             <Route
               path="/"
               element={
-                <RequireVolunteerAuth>
-                  <Dashboard />
-                </RequireVolunteerAuth>
+                <RoleBasedRoute
+                  adminComponent={<AdminDashboard />}
+                  volunteerComponent={<Dashboard />}
+                />
               }
             />
             <Route
@@ -197,8 +217,7 @@ function App() {
                   <button
                     onClick={() => {
                       //insert test function here
-                    }}
-                  >
+                    }}>
                     TEST
                   </button>
                 </RequireAuth>
