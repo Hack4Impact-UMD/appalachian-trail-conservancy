@@ -79,6 +79,11 @@
   gap: 3%;
 }
 
+.loadingContainer {
+  width: 100%;
+  margin-top: 1.5rem;
+}
+
 .subHeader {
   display: flex;
   flex-direction: row;
