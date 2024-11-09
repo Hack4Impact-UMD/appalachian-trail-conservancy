@@ -166,7 +166,7 @@ function AdminLoginPage() {
                 sx={{ ...styledRectButton, ...forestGreenButton }}
                 variant="contained"
                 onClick={(e) => handleSignIn(e)}>
-                {showLoading ? <Loading></Loading> : "Sign In"}
+                {showLoading ? <Loading color="white" /> : "Sign In"}
               </Button>
 
               {/* error message */}

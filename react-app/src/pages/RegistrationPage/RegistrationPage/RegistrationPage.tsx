@@ -64,8 +64,10 @@ function RegistrationPage() {
             state: { fromApp: true },
           }); /* proceed to confirmation */
         })
-        .catch((error) => {
-          setErrorMessage(error);
+        .catch(() => {
+          setErrorMessage(
+            "Error creating account. Account may already exist or join code may be incorrect."
+          );
         });
     }
     setShowLoading(false);
@@ -183,7 +185,7 @@ function RegistrationPage() {
               variant="contained"
               onClick={(e) => handleConfirm(e)}
               disabled={!isFormValid}>
-              {showLoading ? <Loading></Loading> : "Confirm"}
+              {showLoading ? <Loading color="white" /> : "Confirm"}
             </Button>
           </div>
         </form>
