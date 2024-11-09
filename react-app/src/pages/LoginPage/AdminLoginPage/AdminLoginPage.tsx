@@ -25,11 +25,6 @@ import ForgotPasswordModal from "../ForgotPasswordModal/ForgotPasswordModal";
 
 function AdminLoginPage() {
   const { user } = useAuth();
-  // If user is logged in, navigate to Dashboard
-  if (user) {
-    return <Navigate to="/admin" />;
-  }
-
   const [showPassword, setShowPassword] = useState<boolean>(false);
   //Add Forgot Password Popup
   const [openForgotModal, setOpenForgotModal] = useState<boolean>(false);
@@ -45,6 +40,11 @@ function AdminLoginPage() {
 
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+
+  // If user is logged in, navigate to Dashboard
+  if (user) {
+    return <Navigate to="/" />;
+  }
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 

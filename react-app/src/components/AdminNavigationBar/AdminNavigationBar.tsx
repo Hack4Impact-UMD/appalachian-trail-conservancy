@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import achievementInactive from "../../assets/achievementsGray.svg";
-import achievementsActive from "../../assets/achievementsWhite.svg";
+import userInactive from "../../assets/userGray.svg";
+import userActive from "../../assets/userWhite.svg";
 import atcprimarylogo from "../../assets/atc-primary-logo.png";
 import collapseArrow from "../../assets/collapseArrow.svg";
 import dashboardInactive from "../../assets/dashboardGray.svg";
@@ -11,15 +11,18 @@ import pathwaysInactive from "../../assets/pathwaysGray.svg";
 import pathwaysActive from "../../assets/pathwaysWhite.svg";
 import trainingsInactive from "../../assets/trainingsGray.svg";
 import trainingsActive from "../../assets/trainingsWhite.svg";
-import LogoutPopup from "./LogoutPopup/LogoutPopup";
-import styles from "./NavigationBar.module.css";
+import LogoutPopup from "../NavigationBar/LogoutPopup/LogoutPopup";
+import styles from "./AdminNavigationBar.module.css";
 
-interface NavigationBarProps {
+interface AdminNavigationBarProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
+const AdminNavigationBar: React.FC<AdminNavigationBarProps> = ({
+  open,
+  setOpen,
+}) => {
   const [openLogoutPopup, setOpenLogoutPopup] = useState<boolean>(false);
 
   const handleLogOut = (): void => {
@@ -148,7 +151,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
 
                 <div className={styles.tabContainer}>
                   <NavLink
-                    to="/achievements"
+                    to="/data"
                     className={({ isActive }) =>
                       isActive
                         ? `${styles.tab} ${styles.tabActive}`
@@ -158,16 +161,16 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
                     <div>
                       <img
                         className={styles.iconActive}
-                        src={achievementsActive}
-                        alt="achievements icon"
+                        src={userActive}
+                        alt="user icon"
                       />
                       <img
                         className={styles.iconInactive}
-                        src={achievementInactive}
-                        alt="achievements icon"
+                        src={userInactive}
+                        alt="user icon"
                       />
                     </div>
-                    Achievements
+                    Data Management
                   </NavLink>
                 </div>
               </div>
@@ -193,4 +196,4 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
   );
 };
 
-export default NavigationBar;
+export default AdminNavigationBar;
