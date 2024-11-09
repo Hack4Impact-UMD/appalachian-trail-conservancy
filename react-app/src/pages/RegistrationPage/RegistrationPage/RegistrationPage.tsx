@@ -29,7 +29,6 @@ function RegistrationPage() {
 
   //Add Error Handling
   const [invalidEmail, setInvalidEmail] = useState<boolean>(false);
-  const [invalidCode, setInvalidCode] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   const [email, setEmail] = useState<string>("");
@@ -163,9 +162,7 @@ function RegistrationPage() {
                 fontSize: "1.1rem",
                 height: 48,
                 borderRadius: "10px",
-                border: invalidCode
-                  ? "2px solid #d32f2f"
-                  : "2px solid var(--blue-gray)",
+                border: "2px solid var(--blue-gray)",
                 "& fieldset": {
                   border: "none",
                 },
@@ -173,7 +170,6 @@ function RegistrationPage() {
               onChange={(event) => {
                 setJoinCode(event.target.value);
               }}
-              error={invalidCode}
             />
           </FormControl>
 
