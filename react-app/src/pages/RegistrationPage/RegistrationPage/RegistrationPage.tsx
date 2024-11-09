@@ -2,7 +2,6 @@ import { useState } from "react";
 import {
   FormControl,
   Button,
-  Tooltip,
   OutlinedInput,
   FormHelperText,
 } from "@mui/material";
@@ -10,7 +9,6 @@ import {
   forestGreenButton,
   grayBorderTextField,
   styledRectButton,
-  whiteTooltip,
 } from "../../../muiTheme.ts";
 import { Navigate } from "react-router";
 import { Link, useNavigate } from "react-router-dom";
@@ -19,7 +17,6 @@ import { createVolunteerUser } from "../../../backend/AuthFunctions.ts";
 import styles from "./RegistrationPage.module.css";
 import Loading from "../../../components/LoadingScreen/Loading.tsx";
 import primaryLogo from "../../../assets/atc-primary-logo.png";
-import { IoIosInformationCircleOutline } from "react-icons/io";
 
 function RegistrationPage() {
   const { user } = useAuth();
@@ -116,19 +113,6 @@ function RegistrationPage() {
             {/* email field */}
             <div className={`${styles.alignLeft} ${styles.emailContainer}`}>
               <h3 className={styles.label}>Email</h3>
-              <Tooltip
-                title="Use your ATC volunteer email here."
-                arrow={false}
-                placement="right"
-                componentsProps={{
-                  tooltip: {
-                    sx: whiteTooltip,
-                  },
-                }}>
-                <span className={styles.icon}>
-                  <IoIosInformationCircleOutline />
-                </span>
-              </Tooltip>
             </div>
             <OutlinedInput
               sx={{
@@ -142,8 +126,12 @@ function RegistrationPage() {
                 "& fieldset": {
                   border: "none",
                 },
+                "& input::placeholder": {
+                  color: "black",
+                },
               }}
               value={email}
+              placeholder="Use your ATC Volunteer email"
               onChange={(e) => {
                 setEmail(e.target.value);
               }}
@@ -180,7 +168,8 @@ function RegistrationPage() {
               sx={{ ...styledRectButton, ...forestGreenButton }}
               variant="contained"
               onClick={(e) => handleConfirm(e)}
-              disabled={!isFormValid}>
+              disabled={!isFormValid}
+            >
               {showLoading ? <Loading color="white" /> : "Confirm"}
             </Button>
           </div>
