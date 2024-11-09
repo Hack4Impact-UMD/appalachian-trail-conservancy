@@ -1,28 +1,49 @@
 import { useEffect, useState } from "react";
-import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import styles from "./AdminUserManagement.module.css";
-import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
-import { IoIosSearch } from "react-icons/io";
-import ToggleButton from "@mui/material/ToggleButton";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { Button, InputAdornment, OutlinedInput } from "@mui/material";
 import { User } from "../../types/UserType.ts";
-import { DataGrid } from "@mui/x-data-grid";
-import Footer from "../../components/Footer/Footer";
 import {
-  forestGreenButtonPadding,
-  forestGreenButtonLarge,
-  whiteButtonGrayBorder,
+  DataGrid,
+  GridColumnMenuProps,
+  GridColumnMenuContainer,
+  GridFilterMenuItem,
+  SortGridMenuItems,
+} from "@mui/x-data-grid";
+import { IoIosSearch } from "react-icons/io";
+import { TbArrowsSort } from "react-icons/tb";
+import {
   grayBorderSearchBar,
+  CustomToggleButtonGroup,
+  PurpleToggleButton,
+  whiteButtonOceanGreenBorder,
+  DataGridStyles,
 } from "../../muiTheme";
 import debounce from "lodash.debounce";
-import { borderColor, fontWeight, styled } from "@mui/system";
+import hamburger from "../../assets/hamburger.svg";
+import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar";
+import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
+import Footer from "../../components/Footer/Footer";
 
 function AdminUserManagement() {
-  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
   const [alignment, setAlignment] = useState<string | null>("user");
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+  const [navigationBarOpen, setNavigationBarOpen] = useState(
+    !(window.innerWidth < 1200)
+  );
+  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
+
+  // Update screen width on resize
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   const handleAlignment = (
     event: React.MouseEvent<HTMLElement>,
     newAlignment: string | null
@@ -51,141 +72,23 @@ function AdminUserManagement() {
   const users = [
     { id: user1.auth_id, ...user1 },
     { id: user2.auth_id, ...user2 },
+    { id: 2, ...user2 },
+    { id: 3, ...user2 },
+    { id: 4, ...user2 },
+    { id: 5, ...user2 },
+    { id: 6, ...user2 },
+    { id: 7, ...user2 },
+    { id: 8, ...user2 },
+    { id: 9, ...user2 },
+    { id: 10, ...user2 },
+    { id: 11, ...user2 },
   ];
-
   const columns = [
     { field: "firstName", headerName: "First Name", width: 150 },
     { field: "lastName", headerName: "Last Name", width: 150 },
     { field: "email", headerName: "Email", width: 200 },
     { field: "misc", headerName: "Miscellaneous", width: 200 },
   ];
-
-  const CustomToggleButtonGroup = styled(ToggleButtonGroup)({
-    width: "100%",
-    borderRadius: "15px", // Rounded corners
-    border: "2px solid black",
-    overflow: "hidden", // Ensures rounded corners display correctly
-  });
-
-  const CustomToggleButton = styled(ToggleButton)({
-    flex: 1,
-    padding: "20px 40px",
-    color: "black",
-    fontWeight: "bold",
-    fontSize: "0.85rem",
-    whiteSpace: "nowrap", // Prevent text from wrapping
-    overflow: "hidden",
-    borderColor: "black",
-    borderWidth: "0 2px", // Only right and left borders
-    borderStyle: "solid",
-    "&.Mui-selected": {
-      backgroundColor: "var(--steel-purple)", // steel purple but idk how to make it use var(--steel-purple)
-      color: "white",
-    },
-    "&:not(.Mui-selected)": {
-      backgroundColor: "white", // White for unselected button
-    },
-    "&:hover": {
-      backgroundColor: "var(--steel-purple)", // again steel purple
-    },
-    "&:first-of-type": {
-      borderLeft: "none", // Remove left border for the first button
-    },
-    "&:last-of-type": {
-      borderRight: "none", // Remove right border for the last button
-    },
-    "&:not(:first-of-type)": {
-      borderLeft: "1.5px solid black", // Add left border for buttons after the first
-    },
-  });
-
-  const whiteButtonGreenBorder = {
-    borderRadius: "15px",
-    boxShadow: "none",
-    height: 50,
-    paddingLeft: "20px",
-    paddingRight: "20px",
-    color: "var(--ocean-green)",
-    backgroundColor: "white",
-    border: "2px solid var(--ocean-green)",
-    fontWeight: "bold",
-    "&:hover": {
-      color: "white",
-      backgroundColor: "var(--ocean-green)",
-      border: "2px solid var(--ocean-green)",
-    },
-  };
-
-  const DataGridStyles = {
-    border: 2,
-    borderColor: "rgba(38, 56, 67, 1)",
-    borderRadius: 4,
-    overflow: "hidden",
-    "& .MuiDataGrid-columnHeaders": {
-      backgroundColor: "rgba(10, 118, 80, 1)",
-      color: "white",
-      fontWeight: "bold",
-      borderBottom: "2px solid black",
-      display: "flex",
-      "& .MuiDataGrid-columnHeader": {
-        display: "flex",
-        alignItems: "center", // Align items vertically
-        justifyContent: "space-between",
-        padding: "0, 4px", // Adjust padding for uniformity
-        minWidth: 150, // Set minimum width
-        position: "relative", // Ensure relative positioning
-      },
-      "& .MuiDataGrid-columnSeparator": {
-        visibility: "visible",
-      },
-    },
-    "& .MuiDataGrid-menuIcon": {
-      visibility: "visible",
-      opacity: 1,
-      padding: "0",
-      pointerEvents: "auto",
-      position: "relative", // Absolute positioning within the header
-      right: "12px", // Fine-tuned right positioning
-      top: "50%", // Center it vertically
-      transform: "translateY(-50%)", // Adjust to center vertically
-      height: "24px", // Fixed height for icon
-      width: "24px", // Fixed width for icon
-      "&:hover": {
-        right: "100px", // Increase the right margin on hover to push it more to the right
-      },
-    },
-    "& .MuiDataGrid-row": {
-      borderBottom: "2px solid black",
-    },
-    "& .MuiDataGrid-row:nth-child(even)": {
-      backgroundColor: "rgba(217, 217, 217, 1)",
-    },
-    "& .MuiDataGrid-row:nth-child(odd)": {
-      backgroundColor: "rgba(255, 255, 255, 1)",
-    },
-    "& .MuiDataGrid-footerContainer": {
-      backgroundColor: "rgba(224, 224, 224, 0.75)",
-    },
-    "& .MuiDataGrid-row:hover": {
-      backgroundColor: "#E0F5E0",
-      cursor: "pointer",
-      "& .MuiDataGrid-cell": {
-        textDecoration: "underline",
-      },
-
-    },
-    "& .MuiCheckbox-root": {
-      "&.Mui-checked": {
-        color: "rgba(10, 118, 80, 1)",
-      },
-    },
-    "& .MuiDataGrid-row.Mui-selected": {
-      "&:hover": {
-        backgroundColor: "#E0F5E0",
-        textDecoration: "underline",
-      },
-    },
-  };
 
   const filterUsers = () => {
     let filtered = searchQuery
@@ -197,6 +100,20 @@ function AdminUserManagement() {
         )
       : users; // Show all users if searchQuery is empty
     setFilteredUsers(filtered);
+  };
+
+  const CustomColumnMenu = (props: GridColumnMenuProps) => {
+    const { hideMenu, currentColumn, open } = props;
+
+    return (
+      <GridColumnMenuContainer
+        hideMenu={hideMenu}
+        currentColumn={currentColumn}
+        open={open}>
+        <GridFilterMenuItem onClick={hideMenu} column={currentColumn!} />
+        <SortGridMenuItems onClick={hideMenu} column={currentColumn!} />
+      </GridColumnMenuContainer>
+    );
   };
 
   const updateQuery = (e: {
@@ -217,11 +134,25 @@ function AdminUserManagement() {
 
   return (
     <>
-      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <AdminNavigationBar
+        open={navigationBarOpen}
+        setOpen={setNavigationBarOpen}
+      />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}
-      >
+        style={{
+          // Only apply left shift when screen width is greater than 1200px
+          left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
+        }}>
+        {!navigationBarOpen && (
+          <img
+            src={hamburger}
+            alt="Hamburger Menu"
+            className={styles.hamburger} // Add styles to position it
+            width={30}
+            onClick={() => setNavigationBarOpen(true)} // Set sidebar open when clicked
+          />
+        )}
         <div className={styles.outerContainer}>
           <div className={styles.content}>
             <div className={styles.header}>
@@ -232,17 +163,16 @@ function AdminUserManagement() {
               <CustomToggleButtonGroup
                 value={alignment}
                 exclusive
-                onChange={handleAlignment}
-              >
-                <CustomToggleButton value="user">
+                onChange={handleAlignment}>
+                <PurpleToggleButton value="user">
                   USER INFORMATION
-                </CustomToggleButton>
-                <CustomToggleButton value="training">
+                </PurpleToggleButton>
+                <PurpleToggleButton value="training">
                   TRAINING INFORMATION
-                </CustomToggleButton>
-                <CustomToggleButton value="pathways">
+                </PurpleToggleButton>
+                <PurpleToggleButton value="pathways">
                   PATHWAYS INFORMATION
-                </CustomToggleButton>
+                </PurpleToggleButton>
               </CustomToggleButtonGroup>
             </div>
             {/* Conditional Content Rendering */}
@@ -260,7 +190,15 @@ function AdminUserManagement() {
                         </InputAdornment>
                       }
                     />
-                    <Button sx={whiteButtonGreenBorder}>Export</Button>
+                    <Button
+                      sx={{
+                        ...whiteButtonOceanGreenBorder,
+                        paddingLeft: "20px",
+                        paddingRight: "20px",
+                        fontWeight: "bold",
+                      }}>
+                      Export
+                    </Button>
                   </div>
 
                   <div className={styles.innerGrid}>
@@ -270,7 +208,12 @@ function AdminUserManagement() {
                       rowHeight={40}
                       autoHeight
                       checkboxSelection
+                      pageSize={10}
                       sx={DataGridStyles}
+                      components={{
+                        ColumnUnsortedIcon: TbArrowsSort,
+                        ColumnMenu: CustomColumnMenu,
+                      }}
                       onRowClick={(row) => {}}
                     />
                   </div>

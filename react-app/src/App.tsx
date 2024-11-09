@@ -76,7 +76,7 @@ function App() {
               }
             />
             <Route
-              path="/admin/management"
+              path="/management"
               element={
                 <RequireAdminAuth>
                   <AdminUserManagement />
@@ -204,8 +204,7 @@ function App() {
                   <button
                     onClick={() => {
                       //insert test function here
-                    }}
-                  >
+                    }}>
                     TEST
                   </button>
                 </RequireAuth>
