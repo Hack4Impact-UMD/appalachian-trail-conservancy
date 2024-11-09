@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../../auth/AuthProvider";
-import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar";
 import styles from "./AdminDashboardPage.module.css";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Footer from "../../components/Footer/Footer";
 import AdminTrainingCard from "../../components/AdminTrainingCard/AdminTrainingCard";
 import AdminPathwayCard from "../../components/AdminPathwayCard/AdminPathwayCard";
+import Loading from "../../components/LoadingScreen/Loading";
 import { TrainingID } from "../../types/TrainingType";
 import { PathwayID } from "../../types/PathwayType";
 import { Button } from "@mui/material";
@@ -14,57 +15,118 @@ import {
   forestGreenButtonLarge,
   whiteButtonGrayBorder,
 } from "../../muiTheme";
+import { getAllPathways, getAllTrainings } from "../../backend/FirestoreCalls";
+import hamburger from "../../assets/hamburger.svg";
 
 function AdminDashboardPage() {
   const auth = useAuth();
-  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [navigationBarOpen, setNavigationBarOpen] = useState(
+    !(window.innerWidth < 1200)
+  );
   const [trainingsSelected, setTrainingsSelected] = useState<boolean>(true);
-  const [training] = useState<TrainingID>({
-    name: "Introduction to Cooperation",
-    id: "123",
-    shortBlurb: "",
-    description: "",
-    coverImage:
-      "https://i0.wp.com/www.oxfordstudent.com/wp-content/uploads/2018/11/Spongebob-2.png?fit=770%2C433&ssl=1",
-    resources: [],
-    quiz: {
-      questions: [],
-      numQuestions: 0,
-      passingScore: 0,
-    },
-    associatedPathways: [],
-    certificationImage: "",
-    status: "DRAFT",
-  });
+  const [trainingDrafts, setTrainingDrafts] = useState<TrainingID[]>([]);
+  const [trainingsPublished, setTrainingsPublished] = useState<TrainingID[]>(
+    []
+  );
+  const [pathwayDrafts, setPathwayDrafts] = useState<PathwayID[]>([]);
+  const [pathwaysPublished, setPathwaysPublished] = useState<PathwayID[]>([]);
 
-  const [pathway] = useState<PathwayID>({
-    name: "Test Pathway",
-    id: "",
-    shortBlurb: "",
-    description: "",
-    coverImage: "",
-    trainingIDs: [],
-    quiz: {
-      questions: [],
-      numQuestions: 0,
-      passingScore: 0,
-    },
-    badgeImage: "",
-    status: "DRAFT",
-  });
+  const correlateTrainings = (genericTrainings: TrainingID[]) => {
+    let trainingsDrafts: TrainingID[] = [];
+    let trainingsPublished: TrainingID[] = [];
+
+    for (const genericTraining of genericTrainings) {
+      if (genericTraining.status == "DRAFT") {
+        trainingsDrafts.push(genericTraining);
+      } else if (genericTraining.status == "PUBLISHED") {
+        trainingsPublished.push(genericTraining);
+      }
+    }
+
+    setTrainingDrafts(trainingsDrafts);
+    setTrainingsPublished(trainingsPublished);
+  };
+
+  const correlatePathways = (genericPathways: PathwayID[]) => {
+    let pathwayDrafts: PathwayID[] = [];
+    let pathwaysPublished: PathwayID[] = [];
+
+    for (const genericPathway of genericPathways) {
+      if (genericPathway.status == "DRAFT") {
+        pathwayDrafts.push(genericPathway);
+      } else if (genericPathway.status == "PUBLISHED") {
+        pathwaysPublished.push(genericPathway);
+      }
+    }
+
+    setPathwayDrafts(pathwayDrafts);
+    setPathwaysPublished(pathwaysPublished);
+  };
+  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
+
+  // Update screen width on resize
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!auth.loading && auth.id) {
+      getAllTrainings()
+        .then((genericTrainings) => {
+          // function to sort
+          correlateTrainings(genericTrainings);
+        })
+        .catch((error) => {
+          console.error("Error fetching trainings:", error);
+        });
+
+      getAllPathways()
+        .then((genericPathways) => {
+          correlatePathways(genericPathways);
+        })
+        .catch((error) => {
+          console.error("Error fetching pathways:", error);
+        });
+
+      setLoading(false);
+    }
+  }, [auth.loading, auth.id]);
 
   return (
     <>
-      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <AdminNavigationBar
+        open={navigationBarOpen}
+        setOpen={setNavigationBarOpen}
+      />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        style={{
+          left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
+        }}>
+        {!navigationBarOpen && (
+          <img
+            src={hamburger}
+            alt="Hamburger Menu"
+            className={styles.hamburger} // Add styles to position it
+            width={30}
+            onClick={() => setNavigationBarOpen(true)} // Set sidebar open when clicked
+          />
+        )}
         <div className={styles.outerContainer}>
           <div className={styles.content}>
             <div className={styles.header}>
               <h1 className={styles.nameHeading}>Hello, {auth.firstName}!</h1>
               <ProfileIcon />
             </div>
+
             <div className={styles.buttonContainer}>
               <Button sx={forestGreenButtonLarge} variant="contained">
                 CREATE NEW TRAINING
@@ -95,44 +157,68 @@ function AdminDashboardPage() {
                 PATHWAYS
               </Button>
             </div>
-            <div className={styles.subHeader}>
-              <h2>Recent Drafts</h2>
-            </div>
-            {trainingsSelected ? (
-              <>
-                <div className={styles.cardsContainer}>
-                  <AdminTrainingCard training={training} />
-                  <AdminTrainingCard training={training} />
-                  <AdminTrainingCard training={training} />
-                  <AdminTrainingCard training={training} />
-                </div>
-              </>
+            {loading ? (
+              <div className={styles.loadingContainer}>
+                <Loading />
+              </div>
             ) : (
               <>
-                <div className={styles.cardsContainer}>
-                  <AdminPathwayCard pathway={pathway} />
-                  <AdminPathwayCard pathway={pathway} />
-                  <AdminPathwayCard pathway={pathway} />
+                <div className={styles.subHeader}>
+                  <h2>Recent Drafts</h2>
                 </div>
-              </>
-            )}
-
-            <div className={styles.subHeader}>
-              <h2>Recent Published</h2>
-            </div>
-            {trainingsSelected ? (
-              <>
-                <div className={styles.cardsContainer}>
-                  <AdminTrainingCard training={training} />
-                  <AdminTrainingCard training={training} />
-                  <AdminTrainingCard training={training} />
+                {trainingsSelected ? (
+                  <>
+                    {trainingDrafts.length === 0 && (
+                      <div className={styles.subHeader}>lmao u flopped!</div>
+                    )}
+                    {trainingDrafts.length > 0 && (
+                      <div className={styles.cardsContainer}>
+                        {trainingDrafts.slice(0, 3).map((training, index) => (
+                          <AdminTrainingCard training={training} key={index} />
+                        ))}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    {pathwayDrafts.length > 0 && (
+                      <div className={styles.cardsContainer}>
+                        {pathwayDrafts.slice(0, 2).map((pathway, index) => (
+                          <AdminPathwayCard pathway={pathway} key={index} />
+                        ))}
+                      </div>
+                    )}
+                  </>
+                )}
+                <div className={styles.subHeader}>
+                  <h2>Recent Published</h2>
                 </div>
-              </>
-            ) : (
-              <>
-                <div className={styles.cardsContainer}>
-                  <AdminPathwayCard pathway={pathway} />
-                </div>
+                {trainingsSelected ? (
+                  <>
+                    {trainingsPublished.length > 0 && (
+                      <div className={styles.cardsContainer}>
+                        {trainingsPublished
+                          .slice(0, 3)
+                          .map((training, index) => (
+                            <AdminTrainingCard
+                              training={training}
+                              key={index}
+                            />
+                          ))}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    {pathwaysPublished.length > 0 && (
+                      <div className={styles.cardsContainer}>
+                        {pathwaysPublished.slice(0, 2).map((pathway, index) => (
+                          <AdminPathwayCard pathway={pathway} key={index} />
+                        ))}
+                      </div>
+                    )}
+                  </>
+                )}
               </>
             )}
           </div>

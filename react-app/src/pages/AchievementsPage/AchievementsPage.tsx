@@ -33,15 +33,15 @@ function AchievementsPage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [badgesSelected, setBadgesSelected] = useState<boolean>(true);
   const [sortMode, setSortMode] = useState<string>("newest");
-
   const [correlatedTrainings, setCorrelatedTrainings] = useState<
     { genericTraining: TrainingID; volunteerTraining: VolunteerTraining }[]
   >([]);
   const [correlatedPathways, setCorrelatedPathways] = useState<
     { genericPathway: PathwayID; volunteerPathway: VolunteerPathway }[]
   >([]);
-  const [open, setOpen] = useState(true);
-
+  const [navigationBarOpen, setNavigationBarOpen] = useState(
+    !(window.innerWidth < 1200)
+  );
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
 
   // Update screen width on resize
@@ -203,21 +203,20 @@ function AchievementsPage() {
 
   return (
     <>
-      <NavigationBar open={open} setOpen={setOpen} />
+      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
         style={{
           // Only apply left shift when screen width is greater than 1200px
-          left: open && screenWidth > 1200 ? "250px" : "0",
-        }}
-      >
-        {!open && (
+          left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
+        }}>
+        {!navigationBarOpen && (
           <img
             src={hamburger}
             alt="Hamburger Menu"
             className={styles.hamburger} // Add styles to position it
             width={30}
-            onClick={() => setOpen(true)} // Set sidebar open when clicked
+            onClick={() => setNavigationBarOpen(true)} // Set sidebar open when clicked
           />
         )}
         <div className={styles.outerContainer}>
@@ -234,13 +233,13 @@ function AchievementsPage() {
                     setSortMode("newest");
                     handleSortChange;
                   }}
+                  className={styles.toggleButton}
                   sx={
                     badgesSelected
                       ? forestGreenButtonPadding
                       : whiteButtonGrayBorder
                   }
-                  variant="contained"
-                >
+                  variant="contained">
                   Pathway Badges
                 </Button>
                 <Button
@@ -249,13 +248,13 @@ function AchievementsPage() {
                     setSortMode("newest");
                     handleSortChange;
                   }}
+                  className={styles.toggleButton}
                   sx={
                     !badgesSelected
                       ? forestGreenButtonPadding
                       : whiteButtonGrayBorder
                   }
-                  variant="contained"
-                >
+                  variant="contained">
                   Training Certificates
                 </Button>
               </div>
@@ -267,8 +266,7 @@ function AchievementsPage() {
                   sx={{
                     ...whiteSelectGrayBorder,
                     width: "100%",
-                  }}
-                >
+                  }}>
                   <MenuItem value={"newest"} sx={selectOptionStyle}>
                     SORT: NEWEST
                   </MenuItem>
@@ -280,8 +278,7 @@ function AchievementsPage() {
                   </MenuItem>
                   <MenuItem
                     value={"reverseAlphabetically"}
-                    sx={selectOptionStyle}
-                  >
+                    sx={selectOptionStyle}>
                     SORT: Z-A
                   </MenuItem>
                 </Select>
@@ -303,8 +300,7 @@ function AchievementsPage() {
                                 navigate("/pathways");
                               }}
                               sx={forestGreenButtonPadding}
-                              variant="contained"
-                            >
+                              variant="contained">
                               Go to Pathways Library
                             </Button>
                           </div>
@@ -336,8 +332,7 @@ function AchievementsPage() {
                                 navigate("/trainings");
                               }}
                               sx={forestGreenButtonPadding}
-                              variant="contained"
-                            >
+                              variant="contained">
                               Go to Trainings Library
                             </Button>
                           </div>

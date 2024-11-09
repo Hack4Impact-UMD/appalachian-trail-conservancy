@@ -13,8 +13,13 @@ import {
   whiteButtonGrayBorder,
   grayBorderSearchBar,
   whiteSelectGrayBorder,
+  selectOptionStyle,
 } from "../../muiTheme";
-import { getAllTrainings, getVolunteer } from "../../backend/FirestoreCalls";
+import {
+  getAllPublishedTrainings,
+  getAllTrainings,
+  getVolunteer,
+} from "../../backend/FirestoreCalls";
 import { TrainingID } from "../../types/TrainingType";
 import { VolunteerTraining } from "../../types/UserType";
 import { useAuth } from "../../auth/AuthProvider.tsx";
@@ -23,7 +28,6 @@ import Loading from "../../components/LoadingScreen/Loading.tsx";
 import debounce from "lodash.debounce";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import hamburger from "../../assets/hamburger.svg";
-
 import Footer from "../../components/Footer/Footer";
 import TrainingCard from "../../components/TrainingCard/TrainingCard";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
@@ -40,11 +44,12 @@ function TrainingLibrary() {
   const [filteredTrainings, setFilteredTrainings] = useState<
     { genericTraining: TrainingID; volunteerTraining?: VolunteerTraining }[]
   >([]);
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(!(window.innerWidth < 1200));
 
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
 
   useEffect(() => {
+    setLoading(true);
     // get all trainings from firebase
     getAllTrainings()
       .then((genericTrainings) => {
@@ -149,6 +154,56 @@ function TrainingLibrary() {
     setFilteredTrainings(filtered);
   };
 
+  useEffect(() => {
+    // get all trainings from firebase
+    getAllPublishedTrainings()
+      .then((genericTrainings) => {
+        // only use auth if it is finished loading
+        if (!auth.loading && auth.id) {
+          // get volunteer info from firebase. will contain volunteer progress on trainings
+          getVolunteer(auth.id.toString())
+            .then((volunteer) => {
+              const volunteerTrainings = volunteer.trainingInformation;
+              // match up the allGenericTrainings and volunteerTrainings, use setCorrelatedTrainings to set
+              let allCorrelatedTrainings: {
+                genericTraining: TrainingID;
+                volunteerTraining?: VolunteerTraining;
+              }[] = [];
+              for (const genericTraining of genericTrainings) {
+                // if genericTraining in volunteer.trainingInformation (has been started by volunteer), then we include that.
+                // otherwise, it's undefined
+                let startedByVolunteer = false;
+                for (const volunteerTraining of volunteerTrainings) {
+                  if (genericTraining.id == volunteerTraining.trainingID) {
+                    startedByVolunteer = true;
+                    allCorrelatedTrainings.push({
+                      genericTraining: genericTraining,
+                      volunteerTraining: volunteerTraining,
+                    });
+                  }
+                }
+                if (!startedByVolunteer) {
+                  allCorrelatedTrainings.push({
+                    genericTraining: genericTraining,
+                    volunteerTraining: undefined,
+                  });
+                }
+              }
+              setCorrelatedTrainings(allCorrelatedTrainings);
+              // also pass allCorrelatedTrainings into filterTrainings, in case it hasn't been set yet
+              filterTrainings(allCorrelatedTrainings);
+              setLoading(false);
+            })
+            .catch((error) => {
+              console.error("Error fetching volunteer:", error);
+            });
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching trainings:", error);
+      });
+  }, [searchQuery, filterType, auth.loading, auth.id]);
+
   const updateQuery = (e: {
     target: { value: React.SetStateAction<string> };
   }) => setSearchQuery(e.target.value);
@@ -157,26 +212,14 @@ function TrainingLibrary() {
 
   const renderEmptyMessage = () => {
     if (searchQuery != "") {
-      return (
-        <div className={styles.emptySearchMessage}>
-          No Trainings Matching “{searchQuery}”
-        </div>
-      );
+      return `No Trainings Matching “${searchQuery}”`;
     } else {
       if (filterType == "all") {
-        return <div className={styles.emptySearchMessage}>No Trainings</div>;
+        return "No Trainings";
       } else if (filterType == "inProgress") {
-        return (
-          <div className={styles.emptySearchMessage}>
-            No Trainings In Progress
-          </div>
-        );
+        return "No Trainings In Progress";
       } else if (filterType == "completed") {
-        return (
-          <div className={styles.emptySearchMessage}>
-            No Trainings Completed
-          </div>
-        );
+        return "No Trainings Completed";
       }
     }
   };
@@ -229,9 +272,15 @@ function TrainingLibrary() {
                     value={filterType}
                     onChange={(e) => setFilterType(e.target.value)}
                     label="Filter">
-                    <MenuItem value="all">ALL</MenuItem>
-                    <MenuItem value="inProgress">IN PROGRESS</MenuItem>
-                    <MenuItem value="completed">COMPLETED</MenuItem>
+                    <MenuItem value="all" sx={selectOptionStyle}>
+                      ALL
+                    </MenuItem>
+                    <MenuItem value="inProgress" sx={selectOptionStyle}>
+                      IN PROGRESS
+                    </MenuItem>
+                    <MenuItem value="completed" sx={selectOptionStyle}>
+                      COMPLETED
+                    </MenuItem>
                   </Select>
                 </FormControl>
               </div>
@@ -272,11 +321,15 @@ function TrainingLibrary() {
             </div>
 
             {loading ? (
-              <Loading />
+              <div className={styles.centerTextLoading}>
+                <Loading />
+              </div>
             ) : (
               <>
                 {filteredTrainings.length === 0 ? (
-                  renderEmptyMessage()
+                  <div className={styles.centerTextLoading}>
+                    {renderEmptyMessage()}
+                  </div>
                 ) : (
                   <div className={styles.cardsContainer}>
                     {filteredTrainings.map((training, index) => (

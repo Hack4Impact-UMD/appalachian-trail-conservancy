@@ -15,15 +15,15 @@ import greenCheck from "../../../assets/greenCircleCheck.svg";
 
 function VolunteerLoginPage() {
   const { user } = useAuth();
-  // If user is logged in, navigate to Dashboard
-  if (user) {
-    return <Navigate to="/" />;
-  }
-
   const [failureMessage, setFailureMessage] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [viewConfirmation, setViewConfirmation] = useState<boolean>(false);
   const [displayText, setDisplayText] = useState<string>("");
+
+  // If user is logged in, navigate to Dashboard
+  if (user) {
+    return <Navigate to="/" />;
+  }
 
   const handleSendLink = async (event: any) => {
     event.preventDefault();

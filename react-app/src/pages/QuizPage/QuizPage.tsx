@@ -11,6 +11,7 @@ import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import QuizCard from "./QuizCard/QuizCard";
 import Loading from "../../components/LoadingScreen/Loading";
+import hamburger from "../../assets/hamburger.svg";
 
 function QuizPage() {
   const auth = useAuth();
@@ -19,7 +20,9 @@ function QuizPage() {
   const location = useLocation();
   const [loading, setLoading] = useState<boolean>(true);
   const [quizLoading, setQuizLoading] = useState<boolean>(false);
-  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+  const [navigationBarOpen, setNavigationBarOpen] = useState(
+    !(window.innerWidth < 1200)
+  );
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
   const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
     {
@@ -99,8 +102,18 @@ function QuizPage() {
       <div
         className={`${styles.split} ${styles.right}`}
         style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        {!navigationBarOpen && (
+          <img
+            src={hamburger}
+            alt="Hamburger Menu"
+            className={styles.hamburger} // Add styles to position it
+            width={30}
+            onClick={() => setNavigationBarOpen(true)} // Set sidebar open when clicked
+          />
+        )}
+
         <div className={styles.outerContainer}>
-          <div className={styles.bodyContainer}>
+          <div className={styles.content}>
             {/* HEADER */}
             {loading ? (
               <Loading />

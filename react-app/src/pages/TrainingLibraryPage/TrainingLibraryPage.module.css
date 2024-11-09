@@ -53,15 +53,18 @@
   width: 30px;
   height: 30px;
   cursor: pointer;
-  z-index: 10; /* Ensure it's above other elements */
 }
 
 .searchBarContainer {
   margin-top: 2rem;
   margin-bottom: 2rem;
   display: flex;
-  justify-content: space-between;
+  gap: 2%;
   align-items: center;
+}
+
+.searchBar {
+  flex-grow: 1;
 }
 
 .buttonContainer {
@@ -82,27 +85,11 @@
   margin-bottom: 1%;
 }
 
-.emptySearchMessage {
+.centerTextLoading {
   width: 100%;
   font-weight: bold;
   text-align: center;
   font-size: 1.1rem;
-}
-
-@media screen and (min-width: 1500px) {
-  .content {
-    width: 1200px;
-  }
-}
-
-/* show buttons when screen width is above 1201px */
-@media screen and (min-width: 1201px) {
-  .buttonContainer {
-    display: flex;
-  }
-  .dropdownContainer {
-    display: none;
-  }
 }
 
 /* show dropdown when screen width is below 1200px */
@@ -111,15 +98,49 @@
     flex-grow: 1;
     margin-right: 20px;
   }
+
   .buttonContainer {
     display: none;
   }
+
   .dropdownContainer {
     display: flex;
     width: 170px;
   }
+
   .dropdownMenu {
     width: 170px;
+  }
+}
+
+/* show buttons when screen width is above 1201px */
+@media screen and (min-width: 1201px) {
+  .buttonContainer {
+    display: flex;
+  }
+
+  .dropdownContainer {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 1500px) {
+  .content {
+    width: 1200px;
+  }
+
+  .cardsContainer {
+    column-gap: 2rem;
+  }
+}
+
+@media screen and (min-width: 1800px) {
+  .content {
+    width: 1400px;
+  }
+
+  .cardsContainer {
+    column-gap: 6.25rem;
   }
 }
 
@@ -135,7 +156,7 @@
 
 @media screen and (max-width: 750px) {
   .content {
-    width: 300px;
+    width: 425px;
   }
 
   .cardsContainer {
@@ -144,18 +165,35 @@
 
   .searchBarContainer {
     flex-direction: column;
-    align-items: stretch;
-    width: 180%;
+    align-items: flex-start;
+  }
+
+  .searchBar {
+    width: 425px !important;
+    margin-bottom: 10px;
   }
 
   .dropdownMenu {
-    width: 300px;
-    margin-top: 2%;
+    width: 425px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .header {
+    margin-top: 5rem;
   }
 }
 
 @media screen and (max-width: 450px) {
-  .header {
-    margin-top: 5rem;
+  .content {
+    width: 300px;
+  }
+
+  .searchBar {
+    width: 300px !important;
+  }
+
+  .dropdownMenu {
+    width: 300px;
   }
 }
