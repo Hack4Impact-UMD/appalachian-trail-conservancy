@@ -30,6 +30,7 @@ import TrainingQuizEditorPage from "./pages/AdminTrainingQuizEditorPage/AdminTra
 import AdminDashboard from "./pages/AdminDashboardPage/AdminDashboardPage.tsx";
 import AdminTrainingLibrary from "./pages/AdminTrainingLibraryPage/AdminTrainingLibraryPage.tsx";
 import AdminPathwayLibrary from "./pages/AdminPathwayLibraryPage/AdminPathwayLibraryPage.tsx";
+import AdminNewUserEmail from "./pages/AdminNewUserEmailPage/AdminNewUserEmailPage.tsx";
 
 function App() {
   return (
@@ -107,6 +108,14 @@ function App() {
               element={
                 <RequireAdminAuth>
                   <PathwayQuizEditorPage />
+                </RequireAdminAuth>
+              }
+            />
+            <Route
+              path="/admin/useremail"
+              element={
+                <RequireAdminAuth>
+                  <AdminNewUserEmail/>
                 </RequireAdminAuth>
               }
             />
