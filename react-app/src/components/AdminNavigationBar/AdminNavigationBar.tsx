@@ -98,7 +98,7 @@ const AdminNavigationBar: React.FC<AdminNavigationBarProps> = ({
 
                 <div className={styles.tabContainer}>
                   <NavLink
-                    to="/admin/trainings"
+                    to="/trainings"
                     className={({ isActive }) =>
                       isActive
                         ? `${styles.tab} ${styles.tabActive}`
@@ -122,7 +122,7 @@ const AdminNavigationBar: React.FC<AdminNavigationBarProps> = ({
 
                 <div className={styles.tabContainer}>
                   <NavLink
-                    to="/admin/pathways"
+                    to="/pathways"
                     className={({ isActive }) =>
                       isActive
                         ? `${styles.tab} ${styles.tabActive}`
@@ -146,7 +146,7 @@ const AdminNavigationBar: React.FC<AdminNavigationBarProps> = ({
 
                 <div className={styles.tabContainer}>
                   <NavLink
-                    to="/users"
+                    to="/data"
                     className={({ isActive }) =>
                       isActive
                         ? `${styles.tab} ${styles.tabActive}`
@@ -164,7 +164,7 @@ const AdminNavigationBar: React.FC<AdminNavigationBarProps> = ({
                         alt="user icon"
                       />
                     </div>
-                    User Management
+                    Data Management
                   </NavLink>
                 </div>
               </div>
