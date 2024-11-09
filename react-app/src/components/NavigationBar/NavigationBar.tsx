@@ -46,7 +46,8 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
     <div
       className={`${styles.navigationContainer} ${open ? "" : styles.closed} ${
         openLogoutPopup ? styles.popupOpen : ""
-      }`}>
+      }`}
+    >
       {open ? (
         <>
           <div className={styles.logoContainer}>
@@ -57,6 +58,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
               <div className={styles.arrowBox}>
                 <img
                   src={collapseArrow}
+                  className={styles.collapseArrow}
                   width={20}
                   onClick={() => setOpen(false)}
                 />
@@ -76,7 +78,8 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
                       isActive
                         ? `${styles.tab} ${styles.tabActive}`
                         : `${styles.tab} ${styles.tabInActive}`
-                    }>
+                    }
+                  >
                     <div>
                       <img
                         className={styles.iconActive}
@@ -100,7 +103,8 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
                       isActive
                         ? `${styles.tab} ${styles.tabActive}`
                         : `${styles.tab} ${styles.tabInActive}`
-                    }>
+                    }
+                  >
                     <div>
                       <img
                         className={styles.iconActive}
@@ -124,7 +128,8 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
                       isActive
                         ? `${styles.tab} ${styles.tabActive}`
                         : `${styles.tab} ${styles.tabInActive}`
-                    }>
+                    }
+                  >
                     <div>
                       <img
                         className={styles.iconActive}
@@ -148,7 +153,8 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
                       isActive
                         ? `${styles.tab} ${styles.tabActive}`
                         : `${styles.tab} ${styles.tabInActive}`
-                    }>
+                    }
+                  >
                     <div>
                       <img
                         className={styles.iconActive}
@@ -170,7 +176,8 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
                   onClick={() => {
                     handleLogOut();
                   }}
-                  className={styles.menuItem}>
+                  className={styles.menuItem}
+                >
                   <img src={logout} alt="Logout" />
                   Log Out
                 </button>

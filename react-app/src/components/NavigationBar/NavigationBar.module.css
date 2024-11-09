@@ -29,6 +29,10 @@
   margin: 7%;
 }
 
+.collapseArrow {
+  cursor: pointer;
+}
+
 .logoContainer {
   text-align: center;
 }
