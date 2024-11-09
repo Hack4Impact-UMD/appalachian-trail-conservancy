@@ -150,6 +150,9 @@ function AdminUserManagement() {
       transform: "translateY(-50%)", // Adjust to center vertically
       height: "24px", // Fixed height for icon
       width: "24px", // Fixed width for icon
+      "&:hover": {
+        right: "100px", // Increase the right margin on hover to push it more to the right
+      },
     },
     "& .MuiDataGrid-row": {
       borderBottom: "2px solid black",
@@ -169,6 +172,7 @@ function AdminUserManagement() {
       "& .MuiDataGrid-cell": {
         textDecoration: "underline",
       },
+
     },
     "& .MuiCheckbox-root": {
       "&.Mui-checked": {
