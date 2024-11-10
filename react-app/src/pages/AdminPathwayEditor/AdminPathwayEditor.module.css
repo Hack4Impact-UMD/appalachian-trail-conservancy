@@ -3,6 +3,23 @@ body {
   height: 100%;
   margin: 0;
 }
+
+.split {
+  height: 100%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  transition: left 0.3s ease; /* Add transition for smooth animation */
+}
+
+.right {
+  right: 0;
+  left: 250px;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
 .container {
   display: flex;
   height: 100vh;
@@ -11,6 +28,18 @@ body {
 .navbar {
   width: 250px;
   background-color: #2e3b4e;
+}
+
+.hamburger {
+  color: var(--blue-gray);
+  font-size: 1.5rem;
+  margin: 1.5rem;
+  position: absolute;
+  top: 20px;
+  left: 10px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
 }
 
 .editorHeader {
@@ -60,14 +89,16 @@ body {
 }
 
 .searchBarNumber {
-  margin-right: 3%;
+  width: .5%;
+  margin-left: -3.5%;
+  padding-right: 3%;
   font-weight: bold;
   margin-top: 0px;
   margin-bottom: 0px;
 }
 
 .searchBarX {
-  margin-left: 3%;
+  margin-left: 2.1%;
   align-items: center;
   margin-top: 0px;
   margin-bottom: 0px;
@@ -101,6 +132,12 @@ body {
   margin-right: 2rem;
   padding-left: 3.5%;
   padding-right: 3.5%;
+}
+
+.inputBoxHeader{
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
 }
 
 .textFieldLabel {
