@@ -53,7 +53,6 @@ const PathwayLandingPage: React.FC = () => {
               const fetchedTrainings = await Promise.all(trainingPromises);
               console.log(fetchedTrainings);
               setTrainings(fetchedTrainings);
-              renderGrid(fetchedTrainings);
             })
             .catch(() => {
               console.log("Failed to get pathway");
@@ -68,7 +67,6 @@ const PathwayLandingPage: React.FC = () => {
           const fetchedTrainings = await Promise.all(trainingPromises);
           console.log(fetchedTrainings);
           setTrainings(fetchedTrainings);
-          renderGrid(fetchedTrainings);
         }
       }
     };
@@ -89,9 +87,8 @@ const PathwayLandingPage: React.FC = () => {
   }, [navigationBarOpen]);
 
   useEffect(() => {
-    renderGrid(trainings);
-    
-  }, [divWidth, navigationBarOpen, pathway]);
+    if (trainings.length) renderGrid(trainings);
+  }, [divWidth, trainings]);
 
   const renderGrid = (trainings: TrainingID[]) => {
     console.log("ran");
@@ -103,7 +100,9 @@ const PathwayLandingPage: React.FC = () => {
         ? 0
         : Math.ceil((trainings.length + 1) / imagesPerRow);
     let count = 0;
-
+    console.log(divWidth);
+    console.log(height);
+    console.log();
     let newElts = [];
 
     for (let i = 0; i < height; i++) {
@@ -139,7 +138,6 @@ const PathwayLandingPage: React.FC = () => {
       count += imagesPerRow;
     }
     setElements(newElts);
-
   };
 
   return (

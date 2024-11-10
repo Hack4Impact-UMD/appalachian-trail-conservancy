@@ -47,7 +47,7 @@ function getImage(imagesPerRow: number, num: number, count: number) {
   // Reversed
   else {
     if ((num + 1) % imagesPerRow == 0) {
-      return num + 1 == count ? rightEndIcon : leftDownIcon;
+      return num == count ? rightEndIcon : leftDownIcon;
     } else if (num % imagesPerRow == 0) {
       return num == count ? downEndIcon : downLeftIcon;
     }
