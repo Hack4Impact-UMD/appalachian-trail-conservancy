@@ -66,46 +66,40 @@ const AdminTrainingEditor: React.FC = () => {
     description: 10,
   };
 
+  // make sure all fields are good before moving on
   const validateFields = () => {
-    let newErrors = { ...errors };
+    let newErrors = {
+      trainingName: "",
+      blurb: "",
+      description: "",
+      resourceLink: "",
+    };
     let isValid = true;
 
+    // Check for required fields
     if (!trainingName) {
       newErrors.trainingName = "Training name is required.";
       isValid = false;
-    } else if (trainingName.length > characterLimits.trainingName) {
-      newErrors.trainingName = `Training name cannot exceed ${characterLimits.trainingName} characters.`;
-      isValid = false;
-    } else {
-      newErrors.trainingName = "";
     }
 
     if (!blurb) {
       newErrors.blurb = "Blurb is required.";
       isValid = false;
-    } else if (blurb.length > characterLimits.blurb) {
-      newErrors.blurb = `Blurb cannot exceed ${characterLimits.blurb} characters.`;
-      isValid = false;
-    } else {
-      newErrors.blurb = "";
     }
 
     if (!description) {
       newErrors.description = "Description is required.";
       isValid = false;
-    } else if (description.length > characterLimits.description) {
-      newErrors.description = `Description cannot exceed ${characterLimits.description} characters.`;
-      isValid = false;
-    } else {
-      newErrors.description = "";
     }
 
+    // Validate Resource Link if type is video
     const youtubeRegex = /^https:\/\/www\.youtube\.com\/embed\/[\w-]+(\?.*)?$/;
     if (resourceType === "video" && !youtubeRegex.test(resourceLink)) {
       newErrors.resourceLink = "Please provide a valid embedded YouTube link.";
       isValid = false;
-    } else {
-      newErrors.resourceLink = "";
+    } else if (resourceType && !resourceLink) {
+      newErrors.resourceLink = "Resource link is required.";
+      isValid = false;
     }
 
     setErrors(newErrors);
@@ -115,16 +109,17 @@ const AdminTrainingEditor: React.FC = () => {
   const handleNextClick = async () => {
     if (validateFields()) {
       console.log("All validations passed");
+      // save training and proceed to quiz editor
       const trainingData: Training = {
         name: trainingName,
         shortBlurb: blurb,
-        description,
-        coverImage: "", // Placeholder, to be filled later
+        description: description,
+        coverImage: '', // Placeholder, to be filled later
         resources: [
           {
             link: resourceLink,
             type: resourceType,
-            title: trainingName,
+            title: "",
           },
         ],
         associatedPathways: [], // Placeholder, to be filled later
@@ -132,11 +127,12 @@ const AdminTrainingEditor: React.FC = () => {
         status: "DRAFT",
       };
 
-      addTraining(trainingData)
-        // Make it go to the quiz editor
-        .catch((error) => {
-          console.error("Error saving draft:", error);
-        });
+      try {
+        await addTraining(trainingData);
+        // navigate(`/quiz-creation/${trainingData.name}`); // Adjust the route to match quiz editor
+      } catch (error) {
+        console.error("Error saving draft:", error);
+      }
     } else {
       setSnackbarMessage(
         "Please complete all required fields before proceeding."
@@ -246,35 +242,31 @@ const AdminTrainingEditor: React.FC = () => {
 
                 <TextField
                   value={trainingName}
-                  sx={{
-                    width: "80%",
-                    fontSize: "1.1rem",
-                    borderRadius: "10px",
-                    marginTop: "0.3rem",
-                    height: "3.2rem",
-                    border: invalidName
-                      ? "2px solid #d32f2f"
-                      : "2px solid var(--blue-gray)",
-                    "& fieldset": {
-                      border: "none",
-                    },
-                  }}
                   onChange={(e) => {
                     const newValue = e.target.value;
                     if (newValue.length <= characterLimits.trainingName) {
                       setTrainingName(newValue);
                     }
                   }}
+                  error={Boolean(errors.trainingName)}
+                  helperText={errors.trainingName}
+                  sx={{
+                    width: "80%",
+                    fontSize: "1.1rem",
+                    borderRadius: "10px",
+                    marginTop: "0.3rem",
+                    height: "3.2rem",
+                    border: errors.trainingName
+                      ? "2px solid #d32f2f"
+                      : "2px solid var(--blue-gray)",
+                    "& fieldset": {
+                      border: "none",
+                    },
+                  }}
                   variant="outlined"
                   rows={1}
                   fullWidth
                 />
-                {invalidName && (
-                  <FormHelperText error>
-                    Training name cannot exceed {characterLimits.trainingName}{" "}
-                    characters.
-                  </FormHelperText>
-                )}
 
                 <div className={styles.inputBoxHeader}>
                   <Typography
@@ -304,6 +296,14 @@ const AdminTrainingEditor: React.FC = () => {
 
                 <TextField
                   value={blurb}
+                  onChange={(e) => {
+                    const newValue = e.target.value;
+                    if (newValue.length <= characterLimits.blurb) {
+                      setBlurb(newValue);
+                    }
+                  }}
+                  error={Boolean(errors.blurb)}
+                  helperText={errors.blurb}
                   sx={{
                     width: "80%",
                     fontSize: "1.1rem",
@@ -311,30 +311,18 @@ const AdminTrainingEditor: React.FC = () => {
                     minHeight: 100,
                     marginTop: "0.3rem",
                     borderRadius: "10px",
-                    border: invalidBlurb
+                    border: errors.blurb
                       ? "2px solid #d32f2f"
                       : "2px solid var(--blue-gray)",
                     "& fieldset": {
                       border: "none",
                     },
                   }}
-                  onChange={(e) => {
-                    const newValue = e.target.value;
-                    if (newValue.length <= characterLimits.blurb) {
-                      setBlurb(newValue);
-                    }
-                  }}
                   multiline
                   rows={3}
                   variant="outlined"
                   fullWidth
                 />
-
-                {invalidBlurb && (
-                  <FormHelperText error>
-                    Blurb cannot exceed {characterLimits.blurb} characters.
-                  </FormHelperText>
-                )}
 
                 <div className={styles.inputBoxHeader}>
                   <Typography
@@ -367,37 +355,32 @@ const AdminTrainingEditor: React.FC = () => {
 
                 <TextField
                   value={description}
-                  sx={{
-                    width: "80%",
-                    fontSize: "1.1rem",
-                    minHeight: 100,
-                    borderRadius: "10px",
-                    marginTop: "0.3rem",
-                    border: invalidDescription
-                      ? "2px solid #d32f2f"
-                      : "2px solid var(--blue-gray)",
-                    "& fieldset": {
-                      border: "none",
-                    },
-                  }}
                   onChange={(e) => {
                     const newValue = e.target.value;
                     if (newValue.length <= characterLimits.description) {
                       setDescription(newValue);
                     }
                   }}
+                  error={Boolean(errors.description)}
+                  helperText={errors.description}
+                  sx={{
+                    width: "80%",
+                    fontSize: "1.1rem",
+                    minHeight: 100,
+                    borderRadius: "10px",
+                    marginTop: "0.3rem",
+                    border: errors.description
+                      ? "2px solid #d32f2f"
+                      : "2px solid var(--blue-gray)",
+                    "& fieldset": {
+                      border: "none",
+                    },
+                  }}
                   multiline
                   rows={3}
                   variant="outlined"
                   fullWidth
                 />
-
-                {invalidDescription && (
-                  <FormHelperText error>
-                    Description cannot exceed {characterLimits.description}{" "}
-                    characters.
-                  </FormHelperText>
-                )}
 
                 <div
                   className={styles.uploadSection}
