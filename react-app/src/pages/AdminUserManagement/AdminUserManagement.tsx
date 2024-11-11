@@ -206,7 +206,7 @@ function AdminUserManagement() {
                       rows={filteredUsers}
                       columns={columns}
                       rowHeight={40}
-                      autoHeight
+                      // autoHeight={true}
                       checkboxSelection
                       pageSize={10}
                       sx={DataGridStyles}
@@ -214,6 +214,7 @@ function AdminUserManagement() {
                         ColumnUnsortedIcon: TbArrowsSort,
                         ColumnMenu: CustomColumnMenu,
                       }}
+                      // getRowHeight={() => "auto"}
                       onRowClick={(row) => {}}
                     />
                   </div>

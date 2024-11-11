@@ -67,6 +67,10 @@
   align-items: center;
 }
 
+.innerGrid {
+  height: 533px;
+}
+
 @media screen and (min-width: 1500px) {
   .content {
     width: 1200px;
