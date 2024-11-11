@@ -4,14 +4,37 @@ body {
   margin: 0;
 }
 
+.split {
+  height: 100%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  transition: left 0.3s ease; /* Add transition for smooth animation */
+}
+
+.right {
+  right: 0;
+  left: 250px;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.hamburger {
+  color: var(--blue-gray);
+  font-size: 1.5rem;
+  margin: 1.5rem;
+  position: absolute;
+  top: 20px;
+  left: 10px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
 .container {
   display: flex;
   height: 100vh;
-}
-
-.navbar {
-  width: 250px;
-  background-color: #2e3b4e;
 }
 
 .editorHeader {
@@ -26,7 +49,6 @@ body {
 .editorProfileHeader {
   display: flex;
   align-items: center;
-
 }
 
 .adminText {
@@ -40,13 +62,6 @@ body {
 }
 
 .editorContent {
-  /* flex-grow: 1;
-  background-color: #fafafa;
-  overflow-y: auto;
-  margin-left: 2rem;
-  margin-bottom: 2rem;
-  margin-top: 2rem;
-  margin-right: 2rem; */
   flex-grow: 1;
   background-color: #fafafa;
   overflow-y: auto;
@@ -58,8 +73,14 @@ body {
   padding-right: 3.5%;
 }
 
+.inputBoxHeader {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+}
+
 .uploadSection {
-  margin-top: 1rem;
+  margin-top: 2rem;
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -71,6 +92,7 @@ body {
   padding: 0.5rem 1rem;
   text-transform: none;
 }
+
 .addTrainingContainer {
   margin-top: 1.2rem;
   margin-bottom: 1rem;
@@ -80,11 +102,6 @@ body {
 }
 
 .buttonGroup {
-  /* display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-top: 1rem;
-  width: 150px; */
   margin-top: 1.2rem;
   margin-bottom: 1rem;
   display: flex;
@@ -105,6 +122,12 @@ body {
   border-radius: 10px !important;
 }
 
+.resourceHeadersBox {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+}
+
 .headerText {
   /* color: #2e3b4e;
   font-size: 2rem; */
@@ -114,6 +137,7 @@ body {
   max-width: 90%;
   white-space: normal;
 }
+
 .flexRow {
   display: flex;
   align-items: center;

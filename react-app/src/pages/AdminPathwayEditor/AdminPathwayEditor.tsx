@@ -25,7 +25,7 @@ import Paper from "@mui/material/Paper";
 import hamburger from "../../assets/hamburger.svg";
 
 const AdminPathwayEditor: React.FC = () => {
-  const [trainingName, setTrainingName] = useState("");
+  const [pathwayName, setPathwayName] = useState("");
   const [blurb, setBlurb] = useState("");
   const [description, setDescription] = useState("");
   const [resourceLink, setResourceLink] = useState("");
@@ -46,7 +46,7 @@ const AdminPathwayEditor: React.FC = () => {
   };
 
   const [errors, setErrors] = useState({
-    trainingName: "",
+    pathwayName: "",
     blurb: "",
     description: "",
     resourceLink: "",
@@ -57,7 +57,7 @@ const AdminPathwayEditor: React.FC = () => {
   const [invalidDescription, setInvalidDescription] = useState<boolean>(false);
 
   const characterLimits = {
-    trainingName: 2,
+    pathwayName: 2,
     blurb: 5,
     description: 10,
   };
@@ -65,11 +65,11 @@ const AdminPathwayEditor: React.FC = () => {
   const validateFields = () => {
     let newErrors = { ...errors };
 
-    if (trainingName.length > characterLimits.trainingName) {
+    if (pathwayName.length > characterLimits.pathwayName) {
       setInvalidName(true);
-      newErrors.trainingName = `Training name cannot exceed ${characterLimits.trainingName} characters.`;
+      newErrors.pathwayName = `Training name cannot exceed ${characterLimits.pathwayName} characters.`;
     } else {
-      newErrors.trainingName = "";
+      newErrors.pathwayName = "";
       setInvalidName(false);
     }
 
@@ -156,7 +156,7 @@ const AdminPathwayEditor: React.FC = () => {
                     marginTop: "2rem",
                   }}
                 >
-                  TRAINING NAME
+                  PATHWAY NAME
                 </Typography>
 
                 <Typography
@@ -169,7 +169,7 @@ const AdminPathwayEditor: React.FC = () => {
                   }}
                 >
                   {Math.max(
-                    characterLimits.trainingName - trainingName.length,
+                    characterLimits.pathwayName - pathwayName.length,
                     0
                   )}{" "}
                   Characters Remaining
@@ -177,7 +177,7 @@ const AdminPathwayEditor: React.FC = () => {
               </div>
 
               <TextField
-                value={trainingName}
+                value={pathwayName}
                 sx={{
                   width: "80%",
                   fontSize: "1.1rem",
@@ -191,14 +191,19 @@ const AdminPathwayEditor: React.FC = () => {
                     border: "none",
                   },
                 }}
-                onChange={(e) => setTrainingName(e.target.value)}
+                onChange={(e) => {
+                  const newValue = e.target.value;
+                  if (newValue.length <= characterLimits.pathwayName) {
+                    setPathwayName(newValue);
+                  }
+                }}
                 variant="outlined"
                 rows={1}
                 fullWidth
               />
               {invalidName && (
                 <FormHelperText error>
-                  Training name cannot exceed {characterLimits.trainingName}{" "}
+                  Training name cannot exceed {characterLimits.pathwayName}{" "}
                   characters.
                 </FormHelperText>
               )}
@@ -245,7 +250,12 @@ const AdminPathwayEditor: React.FC = () => {
                     border: "none",
                   },
                 }}
-                onChange={(e) => setBlurb(e.target.value)}
+                onChange={(e) => {
+                  const newValue = e.target.value;
+                  if (newValue.length <= characterLimits.blurb) {
+                    setBlurb(newValue);
+                  }
+                }}
                 multiline
                 rows={3}
                 variant="outlined"
@@ -302,7 +312,12 @@ const AdminPathwayEditor: React.FC = () => {
                     border: "none",
                   },
                 }}
-                onChange={(e) => setDescription(e.target.value)}
+                onChange={(e) => {
+                  const newValue = e.target.value;
+                  if (newValue.length <= characterLimits.description) {
+                    setDescription(newValue);
+                  }
+                }}
                 multiline
                 rows={3}
                 variant="outlined"
@@ -354,7 +369,7 @@ const AdminPathwayEditor: React.FC = () => {
                       },
                     }}
                   >
-                    <span className={styles.icon} style={{ marginLeft: "8px" }}>
+                    <span style={{ marginLeft: "8px" }}>
                       <IoIosInformationCircleOutline />
                     </span>
                   </Tooltip>

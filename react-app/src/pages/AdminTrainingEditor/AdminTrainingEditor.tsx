@@ -16,7 +16,7 @@ import {
   Alert,
 } from "@mui/material";
 import {
-  addTraining, 
+  addTraining,
   updateTraining,
   saveTrainingDraft,
   checkDuplicateTrainingName,
@@ -32,8 +32,10 @@ import {
   forestGreenButton,
   selectOptionStyle,
   whiteButtonGrayBorder,
+  whiteSelectGrayBorder,
 } from "../../muiTheme";
 import { IoIosInformationCircleOutline } from "react-icons/io";
+import hamburger from "../../assets/hamburger.svg";
 
 const AdminTrainingEditor: React.FC = () => {
   const [trainingName, setTrainingName] = useState("");
@@ -44,21 +46,24 @@ const AdminTrainingEditor: React.FC = () => {
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
   const navigate = useNavigate();
 
+  const [snackbar, setSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+
   const [errors, setErrors] = useState({
     trainingName: "",
     blurb: "",
     description: "",
     resourceLink: "",
   });
-  const [invalidBlurb, setInvalidBlurb] = useState<boolean>(false);
 
-  const [snackbar, setSnackbar] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [invalidName, setInvalidName] = useState<boolean>(false);
+  const [invalidBlurb, setInvalidBlurb] = useState<boolean>(false);
+  const [invalidDescription, setInvalidDescription] = useState<boolean>(false);
 
   const characterLimits = {
-    trainingName: 50,
-    blurb: 150,
-    description: 500,
+    trainingName: 2,
+    blurb: 5,
+    description: 10,
   };
 
   const validateFields = () => {
@@ -116,24 +121,26 @@ const AdminTrainingEditor: React.FC = () => {
         description,
         coverImage: "", // Placeholder, to be filled later
         resources: [
-          { 
+          {
             link: resourceLink,
             type: resourceType,
-            title: trainingName
+            title: trainingName,
           },
         ],
         associatedPathways: [], // Placeholder, to be filled later
         quiz: null, // Placeholder, to be filled on quiz page
         status: "DRAFT",
       };
-      
+
       addTraining(trainingData)
         // Make it go to the quiz editor
         .catch((error) => {
           console.error("Error saving draft:", error);
         });
     } else {
-      setSnackbarMessage("Please complete all required fields before proceeding.");
+      setSnackbarMessage(
+        "Please complete all required fields before proceeding."
+      );
       setSnackbar(true);
     }
   };
@@ -145,17 +152,17 @@ const AdminTrainingEditor: React.FC = () => {
       description,
       coverImage: "", // Placeholder, to be filled later
       resources: [
-        { 
+        {
           link: resourceLink,
           type: resourceType,
-          title: trainingName
+          title: trainingName,
         },
       ],
       associatedPathways: [], // Placeholder, to be filled later
       quiz: null, // Placeholder, to be filled on quiz page
       status: "DRAFT",
     };
-    
+
     addTraining(trainingData)
       .then(() => {
         setSnackbarMessage("Training Saved As Draft");
@@ -172,342 +179,418 @@ const AdminTrainingEditor: React.FC = () => {
 
   return (
     <>
-      <div className={styles.container}>
-        <div className={styles.navbar}>
-          <NavigationBar
-            open={navigationBarOpen}
-            setOpen={setNavigationBarOpen}
+      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+
+      <div
+        className={`${styles.split} ${styles.right}`}
+        style={{ left: navigationBarOpen ? "250px" : "0" }}
+      >
+        {/* Hamburger Menu */}
+        {!navigationBarOpen && (
+          <img
+            src={hamburger}
+            alt="Hamburger Menu"
+            className={styles.hamburger} // Add styles to position it
+            width={30}
+            onClick={() => setNavigationBarOpen(true)} // Set sidebar open when clicked
           />
-        </div>
-        <div className={styles.editor}>
-          <div className={styles.editorContent}>
-            <div className={styles.editorHeader}>
-              <h1 className={styles.headerText}>Training Editor</h1>
-              <div className={styles.editorProfileHeader}>
-                <h5 className={styles.adminText}> Admin </h5>
-                <ProfileIcon />
+        )}
+
+        <div className={styles.container}>
+          <div className={styles.editor}>
+            <div className={styles.editorContent}>
+              <div className={styles.editorHeader}>
+                <h1 className={styles.headerText}>Training Editor</h1>
+                <div className={styles.editorProfileHeader}>
+                  <h5 className={styles.adminText}> Admin </h5>
+                  <ProfileIcon />
+                </div>
               </div>
-            </div>
 
-            <form noValidate>
-              <Button sx={whiteButtonGrayBorder} onClick={handleSaveDraftClick}>
-                Save as Draft
-              </Button>
-              <Typography
-                variant="body2"
-                style={{
-                  color: "black",
-                  fontWeight: "bold",
-                  marginTop: "2rem",
-                }}
-              >
-                TRAINING NAME
-              </Typography>
-              <TextField
-                value={trainingName}
-                sx={{
-                  width: "80%",
-                  fontSize: "1.1rem",
-                  borderRadius: "10px",
-                  marginTop: "0.3rem",
-                  height: "3.2rem",
-                  border: "2px solid var(--blue-gray)",
-                  "& fieldset": {
-                    border: "none",
-                  },
-                }}
-                onChange={(e) => setTrainingName(e.target.value)}
-                // handleSaveDraft
-                error={Boolean(errors.trainingName)}
-                helperText={errors.trainingName}
-                fullWidth
-                margin="normal"
-              />
-
-              <Typography
-                variant="body2"
-                style={{
-                  color: "black",
-                  fontWeight: "bold",
-                  marginTop: "1.2rem",
-                }}
-              >
-                BLURB
-              </Typography>
-              <TextField
-                value={blurb}
-                sx={{
-                  width: "80%",
-                  fontSize: "1.1rem",
-                  height: "2rem",
-                  minHeight: 100,
-                  marginTop: "0.3rem",
-                  borderRadius: "10px",
-                  border: invalidBlurb
-                    ? "2px solid #d32f2f"
-                    : "2px solid var(--blue-gray)",
-                  "& fieldset": {
-                    border: "none",
-                  },
-                }}
-                onChange={(e) => setBlurb(e.target.value)}
-                error={Boolean(errors.blurb)}
-                helperText={errors.blurb}
-                fullWidth
-                multiline
-                rows={4}
-                margin="normal"
-              />
-              {invalidBlurb && (
-                <FormHelperText error>
-                  Blurb cannot exceed {characterLimits.blurb} characters.
-                </FormHelperText>
-              )}
-
-              <Typography
-                variant="body2"
-                style={{
-                  color: "black",
-                  fontWeight: "bold",
-                  marginBottom: "4px",
-                }}
-              >
-                DESCRIPTION
-              </Typography>
-
-              <TextField
-                value={description}
-                sx={{
-                  width: "80%",
-                  fontSize: "1.1rem",
-                  minHeight: 100,
-                  borderRadius: "10px",
-                  marginTop: "0.3rem",
-                  border: "2px solid var(--blue-gray)",
-                  "& fieldset": {
-                    border: "none",
-                  },
-                }}
-                onChange={(e) => setDescription(e.target.value)}
-                error={Boolean(errors.description)}
-                helperText={errors.description}
-                fullWidth
-                multiline
-                rows={4}
-                margin="normal"
-              />
-              <div
-                className={styles.uploadSection}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "flex-start",
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    marginBottom: "8px",
-                  }}
+              <form noValidate>
+                <Button
+                  sx={whiteButtonGrayBorder}
+                  onClick={handleSaveDraftClick}
                 >
+                  Save as Draft
+                </Button>
+
+                <div className={styles.inputBoxHeader}>
                   <Typography
                     variant="body2"
                     style={{
                       color: "black",
                       fontWeight: "bold",
+                      marginTop: "2rem",
                     }}
                   >
-                    UPLOAD IMAGE (JPEG, PNG)
+                    TRAINING NAME
                   </Typography>
-                  <Tooltip
-                    title="Upload will be used as training cover and certificate image"
-                    placement="top"
-                    componentsProps={{
-                      tooltip: {
-                        sx: {
-                          bgcolor: "white",
-                          color: "black",
-                          borderRadius: "8px",
-                          boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)",
-                        },
-                      },
+
+                  <Typography
+                    variant="body2"
+                    style={{
+                      color: "black",
+                      fontWeight: "500",
+                      marginTop: "2rem",
+                      fontSize: "0.8rem",
                     }}
                   >
-                    <span
-                      className={styles.icon}
-                      style={{ marginLeft: "8px" }} // Adjust spacing between Typography and Tooltip
-                    >
-                      <IoIosInformationCircleOutline />
-                    </span>
-                  </Tooltip>
+                    {Math.max(
+                      characterLimits.trainingName - trainingName.length,
+                      0
+                    )}{" "}
+                    Characters Remaining
+                  </Typography>
                 </div>
 
-                <Button
-                  variant="contained"
-                  component="label"
-                  sx={{
-                    backgroundColor: "#D9D9D9",
-                    color: "black",
-                    "&:hover": {
-                      backgroundColor: "#D9D9D9",
-                    },
-                  }}
-                >
-                  {/* Increase size of LuUpload icon */}
-                  <LuUpload style={{ fontSize: "50px" }} />
-                  <input type="file" hidden />
-                </Button>
-              </div>
-
-              {/* Resource Link and Tooltip */}
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginTop: "2rem",
-                }}
-              >
-                <Typography
-                  variant="body2"
-                  style={{
-                    color: "black",
-                    fontWeight: "bold",
-                    marginBottom: "0.5rem",
-                    marginTop: "2rem",
-                  }}
-                >
-                  RESOURCE LINK
-                </Typography>
-
-                <Tooltip
-                  title="Should be link to PDF or Video"
-                  placement="top"
-                  componentsProps={{
-                    tooltip: {
-                      sx: {
-                        bgcolor: "white",
-                        color: "black",
-                        borderRadius: "8px",
-                        boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)",
-                      },
-                    },
-                  }}
-                >
-                  <span
-                    className={styles.icon}
-                    style={{ marginTop: "1.75rem" }}
-                  >
-                    <IoIosInformationCircleOutline />
-                  </span>
-                </Tooltip>
-              </div>
-
-              <div className={styles.flexRow}>
                 <TextField
-                  value={resourceLink}
+                  value={trainingName}
                   sx={{
-                    width: "50vw",
-                    height: "3.5rem",
+                    width: "80%",
                     fontSize: "1.1rem",
-
                     borderRadius: "10px",
-
-                    marginRight: "1rem",
-                    border: "2px solid var(--blue-gray)",
+                    marginTop: "0.3rem",
+                    height: "3.2rem",
+                    border: invalidName
+                      ? "2px solid #d32f2f"
+                      : "2px solid var(--blue-gray)",
                     "& fieldset": {
                       border: "none",
                     },
-                    "& .MuiInputBase-root": {
-                      padding: "0.5rem 1rem",
-                      display: "flex",
-                      alignItems: "center",
-                    },
                   }}
-                  onChange={(e) => setResourceLink(e.target.value)}
-                  error={Boolean(errors.resourceLink)}
-                  helperText={errors.resourceLink}
+                  onChange={(e) => {
+                    const newValue = e.target.value;
+                    if (newValue.length <= characterLimits.trainingName) {
+                      setTrainingName(newValue);
+                    }
+                  }}
+                  variant="outlined"
+                  rows={1}
                   fullWidth
-                  margin="normal"
-                  className={styles.resourceLinkField}
-                  style={{ marginTop: "0px" }}
                 />
+                {invalidName && (
+                  <FormHelperText error>
+                    Training name cannot exceed {characterLimits.trainingName}{" "}
+                    characters.
+                  </FormHelperText>
+                )}
 
-                <FormControl
-                  margin="normal"
-                  className={styles.resourceTypeField}
-                >
+                <div className={styles.inputBoxHeader}>
                   <Typography
                     variant="body2"
                     style={{
                       color: "black",
                       fontWeight: "bold",
-                      marginBottom: "0.5rem",
-                      marginTop: "-2.5rem",
+                      marginTop: "2rem",
                     }}
                   >
-                    RESOURCE TYPE
+                    BLURB
                   </Typography>
-                  <Select
-                    value={resourceType}
-                    displayEmpty
-                    sx={{
-                      height: "3.5rem",
-                      fontSize: "1.1rem",
-                      borderRadius: "10px",
-                      padding: "0.5rem 1rem",
-                      "& .MuiSelect-select": {
-                        display: "flex",
-                        alignItems: "center",
-                        color: resourceType === "" ? "gray" : "black",
-                      },
+
+                  <Typography
+                    variant="body2"
+                    style={{
+                      color: "black",
+                      fontWeight: "500",
+                      marginTop: "2rem",
+                      fontSize: "0.8rem",
                     }}
-                    onChange={(e) => setResourceType(e.target.value)}
-                    MenuProps={{
-                      PaperProps: {
-                        sx: {
-                          "& .MuiMenuItem-root:hover": {
-                            backgroundColor: "var(--ocean-green)",
-                            color: "white",
+                  >
+                    {Math.max(characterLimits.blurb - blurb.length, 0)}{" "}
+                    Characters Remaining
+                  </Typography>
+                </div>
+
+                <TextField
+                  value={blurb}
+                  sx={{
+                    width: "80%",
+                    fontSize: "1.1rem",
+                    height: "auto",
+                    minHeight: 100,
+                    marginTop: "0.3rem",
+                    borderRadius: "10px",
+                    border: invalidBlurb
+                      ? "2px solid #d32f2f"
+                      : "2px solid var(--blue-gray)",
+                    "& fieldset": {
+                      border: "none",
+                    },
+                  }}
+                  onChange={(e) => {
+                    const newValue = e.target.value;
+                    if (newValue.length <= characterLimits.blurb) {
+                      setBlurb(newValue);
+                    }
+                  }}
+                  multiline
+                  rows={3}
+                  variant="outlined"
+                  fullWidth
+                />
+
+                {invalidBlurb && (
+                  <FormHelperText error>
+                    Blurb cannot exceed {characterLimits.blurb} characters.
+                  </FormHelperText>
+                )}
+
+                <div className={styles.inputBoxHeader}>
+                  <Typography
+                    variant="body2"
+                    style={{
+                      color: "black",
+                      fontWeight: "bold",
+                      marginTop: "2rem",
+                    }}
+                  >
+                    DESCRIPTION
+                  </Typography>
+
+                  <Typography
+                    variant="body2"
+                    style={{
+                      color: "black",
+                      fontWeight: "500",
+                      marginTop: "2rem",
+                      fontSize: "0.8rem",
+                    }}
+                  >
+                    {Math.max(
+                      characterLimits.description - description.length,
+                      0
+                    )}{" "}
+                    Characters Remaining
+                  </Typography>
+                </div>
+
+                <TextField
+                  value={description}
+                  sx={{
+                    width: "80%",
+                    fontSize: "1.1rem",
+                    minHeight: 100,
+                    borderRadius: "10px",
+                    marginTop: "0.3rem",
+                    border: invalidDescription
+                      ? "2px solid #d32f2f"
+                      : "2px solid var(--blue-gray)",
+                    "& fieldset": {
+                      border: "none",
+                    },
+                  }}
+                  onChange={(e) => {
+                    const newValue = e.target.value;
+                    if (newValue.length <= characterLimits.description) {
+                      setDescription(newValue);
+                    }
+                  }}
+                  multiline
+                  rows={3}
+                  variant="outlined"
+                  fullWidth
+                />
+
+                {invalidDescription && (
+                  <FormHelperText error>
+                    Description cannot exceed {characterLimits.description}{" "}
+                    characters.
+                  </FormHelperText>
+                )}
+
+                <div
+                  className={styles.uploadSection}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-start",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    <Typography
+                      variant="body2"
+                      style={{
+                        color: "black",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      UPLOAD IMAGE (JPEG, PNG)
+                    </Typography>
+                    <Tooltip
+                      title="Upload will be used as training cover and certificate image"
+                      placement="top"
+                      componentsProps={{
+                        tooltip: {
+                          sx: {
+                            bgcolor: "white",
+                            color: "black",
+                            borderRadius: "8px",
+                            boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)",
                           },
                         },
+                      }}
+                    >
+                      <span
+                        className={styles.icon}
+                        style={{ marginLeft: "8px" }}
+                      >
+                        <IoIosInformationCircleOutline />
+                      </span>
+                    </Tooltip>
+                  </div>
+
+                  <Button
+                    variant="contained"
+                    component="label"
+                    sx={{
+                      backgroundColor: "#D9D9D9",
+                      color: "black",
+                      "&:hover": {
+                        backgroundColor: "#D9D9D9",
                       },
                     }}
                   >
-                    <MenuItem value="pdf" sx={selectOptionStyle}>
-                      PDF
-                    </MenuItem>
-                    <MenuItem value="video" sx={selectOptionStyle}>
-                      Video
-                    </MenuItem>
-                  </Select>
-                </FormControl>
-              </div>
+                    <LuUpload style={{ fontSize: "50px" }} />
+                    <input type="file" hidden />
+                  </Button>
+                </div>
 
-              {/* Button group */}
-              <div className={styles.addTrainingContainer}>
-                <Button
-                  variant="contained"
-                  sx={{
-                    ...styledRectButton,
-                    ...forestGreenButton,
-                    marginTop: "2%",
-                    width: "40px%",
-                  }}
-                  onClick={handleNextClick}
+                {/* Resource Link and Tooltip */}
+                <div className={styles.resourceHeadersBox}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      marginTop: "2rem",
+                    }}
+                  >
+                    <Typography
+                      variant="body2"
+                      style={{
+                        color: "black",
+                        fontWeight: "bold",
+                        marginBottom: "0.5rem",
+                      }}
+                    >
+                      RESOURCE LINK
+                    </Typography>
+
+                    <Tooltip
+                      title="Should be link to PDF or Video"
+                      placement="top"
+                      componentsProps={{
+                        tooltip: {
+                          sx: {
+                            bgcolor: "white",
+                            color: "black",
+                            borderRadius: "8px",
+                            boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)",
+                          },
+                        },
+                      }}
+                    >
+                      <span
+                        style={{ marginLeft: "8px", marginBottom: "0.5rem" }}
+                      >
+                        <IoIosInformationCircleOutline />
+                      </span>
+                    </Tooltip>
+                  </div>
+                </div>
+                <div className={styles.flexRow}>
+                  <TextField
+                    value={resourceLink}
+                    sx={{
+                      width: "70%",
+                      fontSize: "1.1rem",
+                      borderRadius: "10px",
+                      marginTop: "0.3rem",
+                      height: "3.2rem",
+                      border: "2px solid var(--blue-gray)",
+                      "& fieldset": {
+                        border: "none",
+                      },
+                    }}
+                    onChange={(e) => setResourceLink(e.target.value)}
+                    error={Boolean(errors.resourceLink)}
+                    helperText={errors.resourceLink}
+                    fullWidth
+                    margin="normal"
+                    className={styles.resourceLinkField}
+                    style={{ marginTop: "0px" }}
+                  />
+
+                  <FormControl
+                    margin="normal"
+                    sx={{ marginTop: "0px" }}
+                    className={styles.resourceTypeField}
+                  >
+                    <Select
+                      className={styles.dropdownMenu}
+                      sx={{
+                        ...whiteSelectGrayBorder,
+                        fontSize: "1.1rem",
+                        borderRadius: "10px",
+                        height: "3.2rem",
+                        width: "180px",
+                      }}
+                      value={resourceType}
+                      onChange={(e) => setResourceType(e.target.value)}
+                      displayEmpty
+                      label="Resource Type"
+                    >
+                      <MenuItem value="" disabled sx={{ display: "none" }}>
+                        Resource Type
+                      </MenuItem>
+                      <MenuItem value="all">PDF</MenuItem>
+                      <MenuItem value="inProgress">Video</MenuItem>
+                    </Select>
+                  </FormControl>
+                </div>
+
+                {/* Button group */}
+                <div className={styles.addTrainingContainer}>
+                  <Button
+                    variant="contained"
+                    sx={{
+                      ...styledRectButton,
+                      ...forestGreenButton,
+                      marginTop: "2%",
+                      width: "40px%",
+                    }}
+                    onClick={handleNextClick}
+                  >
+                    Next: Create Quiz
+                  </Button>
+                </div>
+              </form>
+            </div>
+            {/* Snackbar for Feedback */}
+            {
+              <Snackbar
+                open={snackbar}
+                autoHideDuration={6000}
+                onClose={handleCloseSnackbar}
+              >
+                <Alert
+                  onClose={handleCloseSnackbar}
+                  severity={
+                    snackbarMessage.includes("Draft") ? "success" : "error"
+                  }
                 >
-                  Next: Create Quiz
-                </Button>
-              </div>
-            </form>
+                  {snackbarMessage}
+                </Alert>
+              </Snackbar>
+            }
+            <Footer />{" "}
           </div>
-          {/* Snackbar for Feedback */}
-          <Snackbar open={snackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
-            <Alert onClose={handleCloseSnackbar} severity={snackbarMessage.includes("Draft") ? "success" : "error"}>
-              {snackbarMessage}
-            </Alert>
-          </Snackbar>
-          <Footer />{" "}
         </div>
       </div>
     </>
