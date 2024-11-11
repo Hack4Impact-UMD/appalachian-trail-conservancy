@@ -143,3 +143,14 @@ body {
   align-items: center;
   gap: 1rem;
 }
+
+.snackbarContainer {
+  position: fixed;
+  bottom: 16px; /* Adjust as needed */
+  right: 16px;
+  z-index: 1300; /* Make sure it's above other elements */
+  margin-left: 250px; /* Ensure it aligns when navbar is open */
+  width: calc(100% - 250px); /* Take up only right side when navbar is open */
+  display: flex;
+  justify-content: flex-end; /* Align to the right */
+}

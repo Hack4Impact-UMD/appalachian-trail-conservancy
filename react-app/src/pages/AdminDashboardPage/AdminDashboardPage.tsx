@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../../auth/AuthProvider";
+import { useNavigate } from "react-router-dom";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import styles from "./AdminDashboardPage.module.css";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
@@ -14,44 +15,55 @@ import {
   forestGreenButtonLarge,
   whiteButtonGrayBorder,
 } from "../../muiTheme";
+import { getAllTrainings, getAllPathways } from "../../backend/FirestoreCalls";
 
 function AdminDashboardPage() {
   const auth = useAuth();
+  const navigate = useNavigate();
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
   const [trainingsSelected, setTrainingsSelected] = useState<boolean>(true);
-  const [training] = useState<TrainingID>({
-    name: "Introduction to Cooperation",
-    id: "123",
-    shortBlurb: "",
-    description: "",
-    coverImage:
-      "https://i0.wp.com/www.oxfordstudent.com/wp-content/uploads/2018/11/Spongebob-2.png?fit=770%2C433&ssl=1",
-    resources: [],
-    quiz: {
-      questions: [],
-      numQuestions: 0,
-      passingScore: 0,
-    },
-    associatedPathways: [],
-    certificationImage: "",
-    status: "DRAFT",
-  });
+  const [draftTrainings, setDraftTrainings] = useState<TrainingID[]>([]);
+  const [publishedTrainings, setPublishedTrainings] = useState<TrainingID[]>([]);
+  const [draftPathways, setDraftPathways] = useState<PathwayID[]>([]);
+  const [publishedPathways, setPublishedPathways] = useState<PathwayID[]>([]);
 
-  const [pathway] = useState<PathwayID>({
-    name: "Test Pathway",
-    id: "",
-    shortBlurb: "",
-    description: "",
-    coverImage: "",
-    trainingIDs: [],
-    quiz: {
-      questions: [],
-      numQuestions: 0,
-      passingScore: 0,
-    },
-    badgeImage: "",
-    status: "DRAFT",
-  });
+  // Fetch training data on component mount
+  useEffect(() => {
+    getAllTrainings()
+      .then((trainings) => {
+        // Filter trainings into drafts and published
+        setDraftTrainings(trainings.filter((training) => training.status === "DRAFT"));
+        setPublishedTrainings(trainings.filter((training) => training.status === "PUBLISHED"));
+      })
+      .catch((error) => {
+        console.error("Error fetching trainings:", error);
+      });
+  }, []);
+
+  // Fetch pathway data on component mount
+  useEffect(() => {
+    getAllPathways()
+      .then((pathways) => {
+        // Filter trainings into drafts and published
+        setDraftPathways(pathways.filter((pathway) => pathway.status === "DRAFT"));
+        setPublishedPathways(pathways.filter((pathway) => pathway.status === "PUBLISHED"));
+      })
+      .catch((error) => {
+        console.error("Error fetching pathways:", error);
+      });
+  }, []);
+
+  const handleCreateTraining = () => {
+    navigate("/admin/trainings/editor", { });
+  };
+
+  const handleEditTraining = (training: TrainingID) => {
+    navigate("/admin/trainings/editor", { state: { training } });
+  };
+
+  const handleEditPathway = (pathway: PathwayID) => {
+    navigate("/admin/pathways/editor", { state: { pathway } });
+  };
 
   return (
     <>
@@ -72,7 +84,7 @@ function AdminDashboardPage() {
               </div>
             </div>
             <div className={styles.buttonContainer}>
-              <Button sx={forestGreenButtonLarge} variant="contained">
+              <Button sx={forestGreenButtonLarge} variant="contained" onClick={() => handleCreateTraining()}>
                 CREATE NEW TRAINING
               </Button>
               <Button sx={forestGreenButtonLarge} variant="contained">
@@ -103,24 +115,25 @@ function AdminDashboardPage() {
                 PATHWAYS
               </Button>
             </div>
+
+            {/* Display Recent Drafts */}
             <div className={styles.subHeader}>
               <h2>Recent Drafts</h2>
             </div>
             {trainingsSelected ? (
               <>
                 <div className={styles.cardsContainer}>
-                  <AdminTrainingCard training={training} />
-                  <AdminTrainingCard training={training} />
-                  <AdminTrainingCard training={training} />
-                  <AdminTrainingCard training={training} />
+                  {draftTrainings.slice(0, 3).map((training) => (
+                    <AdminTrainingCard key={training.id} training={training} onEdit={() => handleEditTraining(training)} />
+                  ))}
                 </div>
               </>
             ) : (
               <>
                 <div className={styles.cardsContainer}>
-                  <AdminPathwayCard pathway={pathway} />
-                  <AdminPathwayCard pathway={pathway} />
-                  <AdminPathwayCard pathway={pathway} />
+                  {draftPathways.slice(0, 2).map((pathway) => (
+                    <AdminPathwayCard key={pathway.id} pathway={pathway} onEdit={() => handleEditPathway(pathway)} />
+                  ))}
                 </div>
               </>
             )}
@@ -131,15 +144,17 @@ function AdminDashboardPage() {
             {trainingsSelected ? (
               <>
                 <div className={styles.cardsContainer}>
-                  <AdminTrainingCard training={training} />
-                  <AdminTrainingCard training={training} />
-                  <AdminTrainingCard training={training} />
+                  {publishedTrainings.slice(0, 3).map((training) => (
+                    <AdminTrainingCard key={training.id} training={training} onEdit={() => handleEditTraining(training)} />
+                  ))}
                 </div>
               </>
             ) : (
               <>
                 <div className={styles.cardsContainer}>
-                  <AdminPathwayCard pathway={pathway} />
+                  {publishedPathways.slice(0, 2).map((pathway) => (
+                    <AdminPathwayCard key={pathway.id} pathway={pathway} onEdit={() => handleEditPathway(pathway)} />
+                  ))}
                 </div>
               </>
             )}

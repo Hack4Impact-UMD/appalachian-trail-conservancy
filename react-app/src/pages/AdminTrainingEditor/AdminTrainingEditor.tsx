@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./AdminTrainingEditor.module.css";
 import InfoIcon from "@mui/icons-material/Info";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   TextField,
   Button,
@@ -18,9 +18,6 @@ import {
 import {
   addTraining,
   updateTraining,
-  saveTrainingDraft,
-  checkDuplicateTrainingName,
-  publishTraining,
   getAllTrainings,
 } from "../../backend/FirestoreCalls";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
@@ -38,11 +35,19 @@ import { IoIosInformationCircleOutline } from "react-icons/io";
 import hamburger from "../../assets/hamburger.svg";
 
 const AdminTrainingEditor: React.FC = () => {
-  const [trainingName, setTrainingName] = useState("");
-  const [blurb, setBlurb] = useState("");
-  const [description, setDescription] = useState("");
-  const [resourceLink, setResourceLink] = useState("");
-  const [resourceType, setResourceType] = useState("");
+  const location = useLocation();
+  const trainingData = location.state?.training as TrainingID | undefined;
+
+  const [trainingId, setTrainingId] = useState<string | undefined>(trainingData?.id);
+  const [trainingName, setTrainingName] = useState(trainingData?.name || "");
+  const [blurb, setBlurb] = useState(trainingData?.shortBlurb || "");
+  const [description, setDescription] = useState(trainingData?.description || "");
+  const [resourceLink, setResourceLink] = useState(trainingData?.resources[0]?.link || "");
+  const [resourceType, setResourceType] = useState(trainingData?.resources[0]?.type || "");
+  const [status, setStatus] = useState(trainingData?.status || "DRAFT");
+
+  const [isEditMode, setIsEditMode] = useState<boolean>(status !== "DRAFT");
+
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
   const navigate = useNavigate();
 
@@ -61,9 +66,9 @@ const AdminTrainingEditor: React.FC = () => {
   const [invalidDescription, setInvalidDescription] = useState<boolean>(false);
 
   const characterLimits = {
-    trainingName: 2,
-    blurb: 5,
-    description: 10,
+    trainingName: 50,
+    blurb: 500,
+    description: 1000,
   };
 
   // make sure all fields are good before moving on
@@ -141,32 +146,28 @@ const AdminTrainingEditor: React.FC = () => {
     }
   };
 
-  const handleSaveDraftClick = async () => {
-    const trainingData: Training = {
-      name: trainingName,
-      shortBlurb: blurb,
-      description,
-      coverImage: "", // Placeholder, to be filled later
-      resources: [
-        {
-          link: resourceLink,
-          type: resourceType,
-          title: trainingName,
-        },
-      ],
-      associatedPathways: [], // Placeholder, to be filled later
-      quiz: null, // Placeholder, to be filled on quiz page
-      status: "DRAFT",
-    };
+  const handleSaveClick = async () => {
+    if (validateFields()) {
+      const updatedTraining = {
+        name: trainingName,
+        shortBlurb: blurb,
+        description: description,
+        resources: [{ link: resourceLink, type: resourceType, title: trainingName }],
+        status: isEditMode ? status : "DRAFT",
+      };
 
-    addTraining(trainingData)
-      .then(() => {
-        setSnackbarMessage("Training Saved As Draft");
-        setSnackbar(true);
-      })
-      .catch((error) => {
-        console.error("Error saving draft:", error);
-      });
+      if (trainingId) {
+        await updateTraining(updatedTraining, trainingId);
+        setSnackbarMessage("Training updated successfully.");
+      } else {
+        await addTraining(updatedTraining);
+        setSnackbarMessage("Draft saved successfully.");
+      }
+      setSnackbar(true);
+    } else {
+      setSnackbarMessage("Please complete all required fields.");
+      setSnackbar(true);
+    }
   };
 
   const handleCloseSnackbar = () => {
@@ -206,9 +207,10 @@ const AdminTrainingEditor: React.FC = () => {
               <form noValidate>
                 <Button
                   sx={whiteButtonGrayBorder}
-                  onClick={handleSaveDraftClick}
+                  variant="contained"
+                  onClick={handleSaveClick}
                 >
-                  Save as Draft
+                  {isEditMode ? "Save" : "Save as Draft"}
                 </Button>
 
                 <div className={styles.inputBoxHeader}>
@@ -555,23 +557,22 @@ const AdminTrainingEditor: React.FC = () => {
                 </div>
               </form>
             </div>
-            {/* Snackbar for Feedback */}
-            {
+            {/* Snackbar wrapper container */}
+            <div className={styles.snackbarContainer}>
               <Snackbar
                 open={snackbar}
                 autoHideDuration={6000}
                 onClose={handleCloseSnackbar}
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }} // Position within the right section
               >
                 <Alert
                   onClose={handleCloseSnackbar}
-                  severity={
-                    snackbarMessage.includes("Draft") ? "success" : "error"
-                  }
+                  severity={snackbarMessage.includes("successfully") ? "success" : "error"}
                 >
                   {snackbarMessage}
                 </Alert>
               </Snackbar>
-            }
+            </div>
             <Footer />{" "}
           </div>
         </div>
