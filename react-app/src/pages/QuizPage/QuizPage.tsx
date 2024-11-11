@@ -72,8 +72,31 @@ function QuizPage() {
     }
   }, []);
 
+  useEffect(() => {
+    const preventUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+    };
+
+    window.addEventListener("beforeunload", preventUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", preventUnload);
+    };
+  }, []);
+
   const handleSubmitQuiz = () => {
     setQuizLoading(true);
+
+    const numAnswers = selectedAnswers.filter(
+      (element) => element !== undefined
+    ).length;
+
+    if (selectedAnswers.length != numAnswers) {
+      alert("Please answer all of the questions.");
+      setQuizLoading(false);
+      return;
+    }
+
     validateQuiz(volunteerTraining.trainingID, volunteerId, selectedAnswers)
       .then((validateResults) => {
         const numAnswersCorrect = validateResults.data;
@@ -101,7 +124,8 @@ function QuizPage() {
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        style={{ left: navigationBarOpen ? "250px" : "0" }}
+      >
         {!navigationBarOpen && (
           <img
             src={hamburger}
@@ -149,12 +173,14 @@ function QuizPage() {
         {/* footer */}
         <div
           className={styles.footer}
-          style={{ width: navigationBarOpen ? "calc(100% - 250px)" : "100%" }}>
+          style={{ width: navigationBarOpen ? "calc(100% - 250px)" : "100%" }}
+        >
           <div className={styles.footerButtons}>
             <Button
               sx={{ ...forestGreenButton }}
               variant="contained"
-              onClick={handleSubmitQuiz}>
+              onClick={handleSubmitQuiz}
+            >
               Submit
             </Button>
           </div>
