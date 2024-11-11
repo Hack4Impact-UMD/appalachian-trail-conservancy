@@ -49,8 +49,7 @@ const AdminNavigationBar: React.FC<AdminNavigationBarProps> = ({
     <div
       className={`${styles.navigationContainer} ${open ? "" : styles.closed} ${
         openLogoutPopup ? styles.popupOpen : ""
-      }`}
-    >
+      }`}>
       {open ? (
         <>
           <div className={styles.logoContainer}>
@@ -81,8 +80,7 @@ const AdminNavigationBar: React.FC<AdminNavigationBarProps> = ({
                       isActive
                         ? `${styles.tab} ${styles.tabActive}`
                         : `${styles.tab} ${styles.tabInActive}`
-                    }
-                  >
+                    }>
                     <div>
                       <img
                         className={styles.iconActive}
@@ -106,8 +104,7 @@ const AdminNavigationBar: React.FC<AdminNavigationBarProps> = ({
                       isActive
                         ? `${styles.tab} ${styles.tabActive}`
                         : `${styles.tab} ${styles.tabInActive}`
-                    }
-                  >
+                    }>
                     <div>
                       <img
                         className={styles.iconActive}
@@ -131,8 +128,7 @@ const AdminNavigationBar: React.FC<AdminNavigationBarProps> = ({
                       isActive
                         ? `${styles.tab} ${styles.tabActive}`
                         : `${styles.tab} ${styles.tabInActive}`
-                    }
-                  >
+                    }>
                     <div>
                       <img
                         className={styles.iconActive}
@@ -151,13 +147,12 @@ const AdminNavigationBar: React.FC<AdminNavigationBarProps> = ({
 
                 <div className={styles.tabContainer}>
                   <NavLink
-                    to="/data"
+                    to="/management"
                     className={({ isActive }) =>
                       isActive
                         ? `${styles.tab} ${styles.tabActive}`
                         : `${styles.tab} ${styles.tabInActive}`
-                    }
-                  >
+                    }>
                     <div>
                       <img
                         className={styles.iconActive}
@@ -179,8 +174,7 @@ const AdminNavigationBar: React.FC<AdminNavigationBarProps> = ({
                   onClick={() => {
                     handleLogOut();
                   }}
-                  className={styles.menuItem}
-                >
+                  className={styles.menuItem}>
                   <img src={logout} alt="Logout" />
                   Log Out
                 </button>
