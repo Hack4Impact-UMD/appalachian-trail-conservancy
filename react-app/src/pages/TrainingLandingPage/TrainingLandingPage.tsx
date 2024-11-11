@@ -7,6 +7,7 @@ import {
   getVolunteer,
   getTraining,
   getPathway,
+  addVolunteerTraining,
 } from "../../backend/FirestoreCalls";
 import { Button } from "@mui/material";
 import { useAuth } from "../../auth/AuthProvider";
@@ -15,6 +16,7 @@ import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import CompletedIcon from "../../assets/completedCheck.svg";
 import Loading from "../../components/LoadingScreen/Loading";
+import hamburger from "../../assets/hamburger.svg";
 
 function TrainingLandingPage() {
   const auth = useAuth();
@@ -22,7 +24,9 @@ function TrainingLandingPage() {
   const trainingId = useParams().id;
   const location = useLocation();
   const [loading, setLoading] = useState<boolean>(true);
-  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+  const [navigationBarOpen, setNavigationBarOpen] = useState(
+    !(window.innerWidth < 1200)
+  );
   const [pathwayNames, setPathwayNames] = useState<
     { name: string; id: string }[]
   >([]);
@@ -43,6 +47,7 @@ function TrainingLandingPage() {
     },
     associatedPathways: [],
     certificationImage: "",
+    status: "DRAFT",
   });
 
   const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
@@ -203,30 +208,52 @@ function TrainingLandingPage() {
   };
 
   const renderButton = () => {
-    if (
-      volunteerTraining.trainingID === "" ||
-      (volunteerTraining && volunteerTraining.numCompletedResources === 0)
-    ) {
+    if (volunteerTraining.trainingID === "") {
       return (
         <Button
           sx={{ ...forestGreenButton }}
           variant="contained"
-          onClick={() =>
-            navigate(`/trainings/resources`, {
-              state: {
-                training: training,
-                volunteerTraining: volunteerTraining,
-                fromApp: true,
-              },
-            })
-          }>
+          onClick={() => {
+            // Call addVolunteerTraining and wait for the result
+            addVolunteerTraining(auth.id.toString(), training)
+              .then(() => {
+                // Retrieve the volunteer data after adding the training
+                return getVolunteer(auth.id.toString());
+              })
+              .then((volunteerData) => {
+                // Extract the relevant volunteerTraining information
+                const updatedVolunteerTraining =
+                  volunteerData.trainingInformation.find(
+                    (trainingInfo) => trainingInfo.trainingID === training.id
+                  );
+
+                // If updatedVolunteerTraining is found, use it to set volunteerTraining
+                if (updatedVolunteerTraining) {
+                  setVolunteerTraining(updatedVolunteerTraining);
+                  // Navigate to the training resources page after successful addition
+                  navigate(`/trainings/resources`, {
+                    state: {
+                      training: training,
+                      volunteerTraining: updatedVolunteerTraining,
+                      volunteerId: auth.id.toString(),
+                      fromApp: true,
+                    },
+                  });
+                } else {
+                  throw new Error("Couldn't find updatedVolunteerTraining");
+                }
+              })
+              .catch((error) => {
+                console.error(
+                  "Error adding volunteer training or retrieving volunteer data:",
+                  error
+                );
+              });
+          }}>
           Start
         </Button>
       );
-    } else if (
-      volunteerTraining.numCompletedResources ==
-      volunteerTraining.numTotalResources
-    ) {
+    } else if (volunteerTraining.progress == "COMPLETED") {
       return (
         <Button
           sx={{ ...forestGreenButton }}
@@ -236,6 +263,7 @@ function TrainingLandingPage() {
               state: {
                 training: training,
                 volunteerTraining: volunteerTraining,
+                volunteerId: auth.id.toString(),
                 fromApp: true,
               },
             })
@@ -253,6 +281,7 @@ function TrainingLandingPage() {
               state: {
                 training: training,
                 volunteerTraining: volunteerTraining,
+                volunteerId: auth.id.toString(),
                 fromApp: true,
               },
             })
@@ -273,78 +302,89 @@ function TrainingLandingPage() {
         {loading ? (
           <Loading />
         ) : (
-          <div className={styles.outerContainer}>
-            <div className={styles.bodyContainer}>
-              {/* HEADER */}
-              <div className={styles.header}>
-                <h1 className={styles.nameHeading}>{training.name}</h1>
-                <ProfileIcon />
-              </div>
+          <>
+            {/* Hamburger Menu */}
+            {!navigationBarOpen && (
+              <img
+                src={hamburger}
+                alt="Hamburger Menu"
+                className={styles.hamburger} // Add styles to position it
+                width={30}
+                onClick={() => setNavigationBarOpen(true)} // Set sidebar open when clicked
+              />
+            )}
 
-              <div className={styles.progressContainer}>{renderMarker()}</div>
+            <div className={styles.outerContainer}>
+              <div className={styles.content}>
+                {/* HEADER */}
+                <div className={styles.header}>
+                  <h1 className={styles.nameHeading}>{training.name}</h1>
+                  <ProfileIcon />
+                </div>
 
-              {/* ABOUT */}
-              <div className={styles.container}>
-                <h2>About</h2>
-                <p>{training.description}</p>
-              </div>
+                <div className={styles.progressContainer}>{renderMarker()}</div>
 
-              {/* OVERVIEW */}
-              <div className={styles.container}>
-                <h2>Overview</h2>
-                {renderTrainingResources()}
-                <div className={styles.trainingRowFinal}>
-                  <div
-                    className={`${styles.trainingInfo} ${
-                      volunteerTraining.trainingID !== "" &&
-                      (volunteerTraining.progress === "COMPLETED"
-                        ? styles.opacityContainer
-                        : "")
-                    }`}>
-                    <p className={styles.trainingNumber}>
-                      {volunteerTraining.numTotalResources + 1}
-                    </p>
-                    <p className={styles.trainingTitle}>Quiz</p>
-                  </div>
-                  <div>
-                    {/* Conditionally render an image if quiz is completed */}
-                    {volunteerTraining.trainingID !== "" &&
-                      volunteerTraining.progress === "COMPLETED" && (
-                        <img
-                          className={styles.completedIcon}
-                          src={CompletedIcon}
-                          alt="Completed"
-                        />
-                      )}
+                {/* ABOUT */}
+                <div className={styles.container}>
+                  <h2>About</h2>
+                  <p>{training.description}</p>
+                </div>
+
+                {/* OVERVIEW */}
+                <div className={styles.container}>
+                  <h2>Overview</h2>
+                  {renderTrainingResources()}
+                  <div className={styles.trainingRowFinal}>
+                    <div
+                      className={`${styles.trainingInfo} ${
+                        volunteerTraining.trainingID !== "" &&
+                        volunteerTraining.progress === "COMPLETED"
+                          ? styles.opacityContainer
+                          : ""
+                      }`}>
+                      <p className={styles.trainingNumber}>
+                        {volunteerTraining.numTotalResources + 1}
+                      </p>
+                      <p className={styles.trainingTitle}>Quiz</p>
+                    </div>
+                    <div>
+                      {/* Conditionally render an image if quiz is completed */}
+                      {volunteerTraining.trainingID !== "" &&
+                        volunteerTraining.progress === "COMPLETED" && (
+                          <img
+                            className={styles.completedIcon}
+                            src={CompletedIcon}
+                            alt="Completed"
+                          />
+                        )}
+                    </div>
                   </div>
                 </div>
+
+                {/* RELATED PATHWAYS */}
+                {pathwayNames.length > 0 && (
+                  <>
+                    <div className={styles.container}>
+                      <h2>Related Pathways</h2>
+                    </div>
+
+                    <div className={styles.relatedPathways}>
+                      {pathwayNames.map((pathway, idx) => (
+                        <div
+                          className={`${styles.marker} ${styles.pathwayMarker}`}
+                          onClick={() => {
+                            navigate(`/pathways/${pathway.id}`);
+                          }}
+                          key={idx}>
+                          {pathway.name}
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
               </div>
-
-              {/* RELATED PATHWAYS */}
-              {pathwayNames.length > 0 ? (
-                <>
-                  <div className={styles.container}>
-                    <h2>Related Pathways</h2>
-                  </div>
-
-                  <div className={styles.relatedPathways}>
-                    {pathwayNames.map((pathway, idx) => (
-                      <div
-                        className={`${styles.marker} ${styles.pathwayMarker}`}
-                        onClick={() => {
-                          navigate(`/pathways/${pathway.id}`);
-                        }}
-                        key={idx}>
-                        {pathway.name}
-                      </div>
-                    ))}
-                  </div>
-                </>
-              ) : (
-                <></>
-              )}
             </div>
-          </div>
+          </>
         )}
 
         {/* footer */}

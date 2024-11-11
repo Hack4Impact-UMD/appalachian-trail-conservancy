@@ -1,12 +1,25 @@
 import { useState, useEffect } from "react";
 import { IoIosSearch } from "react-icons/io";
-import { Button, InputAdornment, OutlinedInput } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  InputAdornment,
+  MenuItem,
+  OutlinedInput,
+  Select,
+} from "@mui/material";
 import {
   forestGreenButtonPadding,
   whiteButtonGrayBorder,
   grayBorderSearchBar,
+  whiteSelectGrayBorder,
+  selectOptionStyle,
 } from "../../muiTheme";
-import { getAllTrainings, getVolunteer } from "../../backend/FirestoreCalls";
+import {
+  getAllPublishedTrainings,
+  getAllTrainings,
+  getVolunteer,
+} from "../../backend/FirestoreCalls";
 import { TrainingID } from "../../types/TrainingType";
 import { VolunteerTraining } from "../../types/UserType";
 import { useAuth } from "../../auth/AuthProvider.tsx";
@@ -14,6 +27,7 @@ import styles from "./TrainingLibraryPage.module.css";
 import Loading from "../../components/LoadingScreen/Loading.tsx";
 import debounce from "lodash.debounce";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import hamburger from "../../assets/hamburger.svg";
 import Footer from "../../components/Footer/Footer";
 import TrainingCard from "../../components/TrainingCard/TrainingCard";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
@@ -30,7 +44,76 @@ function TrainingLibrary() {
   const [filteredTrainings, setFilteredTrainings] = useState<
     { genericTraining: TrainingID; volunteerTraining?: VolunteerTraining }[]
   >([]);
-  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+  const [open, setOpen] = useState(!(window.innerWidth < 1200));
+
+  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
+
+  useEffect(() => {
+    setLoading(true);
+    // get all trainings from firebase
+    getAllTrainings()
+      .then((genericTrainings) => {
+        // only use auth if it is finished loading
+        if (!auth.loading && auth.id) {
+          // get volunteer info from firebase. will contain volunteer progress on trainings
+          getVolunteer(auth.id.toString())
+            .then((volunteer) => {
+              const volunteerTrainings = volunteer.trainingInformation;
+              // match up the allGenericTrainings and volunteerTrainings, use setCorrelatedTrainings to set
+              let allCorrelatedTrainings: {
+                genericTraining: TrainingID;
+                volunteerTraining?: VolunteerTraining;
+              }[] = [];
+              for (const genericTraining of genericTrainings) {
+                // if genericTraining in volunteer.trainingInformation (has been started by volunteer), then we include that.
+                // otherwise, it's undefined
+                let startedByVolunteer = false;
+                for (const volunteerTraining of volunteerTrainings) {
+                  if (genericTraining.id == volunteerTraining.trainingID) {
+                    startedByVolunteer = true;
+                    allCorrelatedTrainings.push({
+                      genericTraining: genericTraining,
+                      volunteerTraining: volunteerTraining,
+                    });
+                  }
+                }
+                if (!startedByVolunteer) {
+                  allCorrelatedTrainings.push({
+                    genericTraining: genericTraining,
+                    volunteerTraining: undefined,
+                  });
+                }
+              }
+              setCorrelatedTrainings(allCorrelatedTrainings);
+              // also pass allCorrelatedTrainings into filterTrainings, in case it hasn't been set yet
+              filterTrainings(allCorrelatedTrainings);
+              setLoading(false);
+            })
+            .catch((error) => {
+              console.error("Error fetching volunteer:", error);
+            });
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching trainings:", error);
+      });
+  }, [auth.loading, auth.id]);
+
+  useEffect(() => {
+    filterTrainings(correlatedTrainings);
+  }, [searchQuery, filterType]);
+
+  // Update screen width on resize
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const filterTrainings = (
     trainings?: {
@@ -73,7 +156,7 @@ function TrainingLibrary() {
 
   useEffect(() => {
     // get all trainings from firebase
-    getAllTrainings()
+    getAllPublishedTrainings()
       .then((genericTrainings) => {
         // only use auth if it is finished loading
         if (!auth.loading && auth.id) {
@@ -127,12 +210,39 @@ function TrainingLibrary() {
 
   const debouncedOnChange = debounce(updateQuery, 200);
 
+  const renderEmptyMessage = () => {
+    if (searchQuery != "") {
+      return `No Trainings Matching “${searchQuery}”`;
+    } else {
+      if (filterType == "all") {
+        return "No Trainings";
+      } else if (filterType == "inProgress") {
+        return "No Trainings In Progress";
+      } else if (filterType == "completed") {
+        return "No Trainings Completed";
+      }
+    }
+  };
+
   return (
     <>
-      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <NavigationBar open={open} setOpen={setOpen} />
+
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        style={{
+          // Only apply left shift when screen width is greater than 1200px
+          left: open && screenWidth > 1200 ? "250px" : "0",
+        }}>
+        {!open && (
+          <img
+            src={hamburger}
+            alt="Hamburger Menu"
+            className={styles.hamburger} // Add styles to position it
+            width={30}
+            onClick={() => setOpen(true)} // Set sidebar open when clicked
+          />
+        )}
         <div className={styles.outerContainer}>
           <div className={styles.content}>
             <div className={styles.header}>
@@ -142,6 +252,7 @@ function TrainingLibrary() {
 
             <div className={styles.searchBarContainer}>
               <OutlinedInput
+                className={styles.searchBar}
                 sx={grayBorderSearchBar}
                 placeholder="Search..."
                 onChange={debouncedOnChange}
@@ -152,6 +263,29 @@ function TrainingLibrary() {
                 }
               />
 
+              {/* dropdown container */}
+              <div className={styles.dropdownContainer}>
+                <FormControl sx={{ width: 300 }}>
+                  <Select
+                    className={styles.dropdownMenu}
+                    sx={whiteSelectGrayBorder}
+                    value={filterType}
+                    onChange={(e) => setFilterType(e.target.value)}
+                    label="Filter">
+                    <MenuItem value="all" sx={selectOptionStyle}>
+                      ALL
+                    </MenuItem>
+                    <MenuItem value="inProgress" sx={selectOptionStyle}>
+                      IN PROGRESS
+                    </MenuItem>
+                    <MenuItem value="completed" sx={selectOptionStyle}>
+                      COMPLETED
+                    </MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
+
+              {/* button container */}
               <div className={styles.buttonContainer}>
                 <Button
                   sx={
@@ -187,12 +321,14 @@ function TrainingLibrary() {
             </div>
 
             {loading ? (
-              <Loading />
+              <div className={styles.centerTextLoading}>
+                <Loading />
+              </div>
             ) : (
               <>
                 {filteredTrainings.length === 0 ? (
-                  <div className={styles.emptySearchMessage}>
-                    No Trainings Matching “{searchQuery}”
+                  <div className={styles.centerTextLoading}>
+                    {renderEmptyMessage()}
                   </div>
                 ) : (
                   <div className={styles.cardsContainer}>

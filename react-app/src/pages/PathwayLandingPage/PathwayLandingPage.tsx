@@ -13,6 +13,7 @@ import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import CompletedIcon from "../../assets/completedCheck.svg";
 import Loading from "../../components/LoadingScreen/Loading";
+import hamburger from "../../assets/hamburger.svg";
 
 const styledProgressShape = {
   height: 24,
@@ -35,7 +36,9 @@ function PathwayLandingPage() {
   const pathwayId = useParams().id;
   const location = useLocation();
   const [loading, setLoading] = useState<boolean>(true);
-  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+  const [navigationBarOpen, setNavigationBarOpen] = useState(
+    !(window.innerWidth < 1200)
+  );
   const [trainingNames, setTrainingNames] = useState<
     { name: string; id: string }[]
   >([]);
@@ -55,6 +58,7 @@ function PathwayLandingPage() {
       passingScore: 0,
     },
     badgeImage: "",
+    status: "DRAFT",
   });
 
   const [volunteerPathway, setVolunteerPathway] = useState<VolunteerPathway>({
@@ -286,13 +290,23 @@ function PathwayLandingPage() {
         {loading ? (
           <Loading />
         ) : (
-          <div className={styles.outerContainer}>
-            <div className={styles.bodyContainer}>
-              {/* HEADER */}
-              <div className={styles.header}>
-                <h1 className={styles.nameHeading}>{pathway.name}</h1>
-                <ProfileIcon />
-              </div>
+          <>
+            {!navigationBarOpen && (
+              <img
+                src={hamburger}
+                alt="Hamburger Menu"
+                className={styles.hamburger} // Add styles to position it
+                width={30}
+                onClick={() => setNavigationBarOpen(true)} // Set sidebar open when clicked
+              />
+            )}
+            <div className={styles.outerContainer}>
+              <div className={styles.bodyContainer}>
+                {/* HEADER */}
+                <div className={styles.header}>
+                  <h1 className={styles.nameHeading}>{pathway.name}</h1>
+                  <ProfileIcon />
+                </div>
 
               <div className={styles.progressContainer}>
                 <div className={styles.progressBar}>
@@ -328,11 +342,11 @@ function PathwayLandingPage() {
                 <div>{renderMarker()}</div>
               </div>
 
-              {/* ABOUT */}
-              <div className={styles.container}>
-                <h2>About</h2>
-                <p>{pathway.description}</p>
-              </div>
+                {/* ABOUT */}
+                <div className={styles.container}>
+                  <h2>About</h2>
+                  <p>{pathway.description}</p>
+                </div>
 
               {/* OVERVIEW */}
               <div className={styles.container}>

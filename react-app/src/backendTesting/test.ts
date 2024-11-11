@@ -7,7 +7,7 @@ import {
   addVolunteerTraining,
   addVolunteerPathway,
 } from "../backend/FirestoreCalls";
-import { type Training, Resource } from "../types/TrainingType";
+import { type Training, Resource, Status } from "../types/TrainingType";
 import { type Pathway } from "../types/PathwayType";
 import { type User } from "../types/UserType";
 
@@ -61,6 +61,7 @@ export const addSampleTraining = ({
   },
   associatedPathways = [],
   certificationImage = "https://github.com/Hack4Impact-UMD/y-knot/assets/67646012/fd89b897-4d20-4604-93a4-c28370cbdc2e",
+  status = "DRAFT" as Status,
 }) => {
   const training: Training = {
     name,
@@ -71,6 +72,7 @@ export const addSampleTraining = ({
     quiz,
     associatedPathways,
     certificationImage,
+    status,
   };
   addTraining(training)
     .then(() => {
@@ -104,6 +106,7 @@ export const addSamplePathway = ({
     passingScore: 1,
   },
   badgeImage = "https://github.com/Hack4Impact-UMD/y-knot/assets/67646012/fd89b897-4d20-4604-93a4-c28370cbdc2e",
+  status = "DRAFT" as Status,
 }) => {
   const pathway: Pathway = {
     name,
@@ -113,6 +116,7 @@ export const addSamplePathway = ({
     trainingIDs,
     quiz,
     badgeImage,
+    status,
   };
   addPathway(pathway)
     .then(() => {
@@ -177,6 +181,7 @@ export const addSampleVolunteerTraining = () => {
     associatedPathways: [],
     certificationImage:
       "https://media.newyorker.com/photos/5c0195240591e72cf6b59d12/1:1/w_1465,h_1465,c_limit/Duke-Spongebob_01.jpg",
+    status: "DRAFT" as Status,
   })
     .then(() => {
       console.log("Volunteer training added successfully.");
@@ -213,6 +218,7 @@ export const addSampleVolunteerPathway = () => {
     },
     badgeImage:
       "https://media.newyorker.com/photos/5c0195240591e72cf6b59d12/1:1/w_1465,h_1465,c_limit/Duke-Spongebob_01.jpg",
+    status: "DRAFT" as Status,
   })
     .then(() => {
       console.log("Volunteer pathway added successfully.");

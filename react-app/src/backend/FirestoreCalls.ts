@@ -12,7 +12,13 @@ import {
 } from "firebase/firestore";
 import { httpsCallable } from "firebase/functions";
 import { db, functions } from "../config/firebase";
-import { Volunteer, VolunteerID, User, Admin } from "../types/UserType";
+import {
+  Volunteer,
+  VolunteerID,
+  VolunteerTraining,
+  User,
+  Admin,
+} from "../types/UserType";
 import { Training, TrainingID, Quiz } from "../types/TrainingType";
 import { Pathway, PathwayID } from "../types/PathwayType";
 
@@ -316,6 +322,25 @@ export function getAllTrainings(): Promise<TrainingID[]> {
   });
 }
 
+export function getAllPublishedTrainings(): Promise<TrainingID[]> {
+  const trainingsRef = collection(db, "Trainings");
+  const publishedTrainingsQuery = query(trainingsRef, where("status", "==", "PUBLISHED"));
+
+  return new Promise((resolve, reject) => {
+    getDocs(publishedTrainingsQuery)
+      .then((trainingSnapshot) => {
+        const allTrainings: TrainingID[] = trainingSnapshot.docs.map((doc) => {
+          const training: Training = doc.data() as Training;
+          return { ...training, id: doc.id };
+        });
+        resolve(allTrainings);
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+}
+
 export function getAllPathways(): Promise<PathwayID[]> {
   const pathwaysRef = collection(db, "Pathways");
   return new Promise((resolve, reject) => {
@@ -326,6 +351,24 @@ export function getAllPathways(): Promise<PathwayID[]> {
           const pathway: Pathway = doc.data() as Pathway;
           const newPathway: PathwayID = { ...pathway, id: doc.id };
           allPathways.push(newPathway);
+        });
+        resolve(allPathways);
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+}
+export function getAllPublishedPathways(): Promise<PathwayID[]> {
+  const pathwaysRef = collection(db, "Pathways");
+  const publishedPathwaysQuery = query(pathwaysRef, where("status", "==", "PUBLISHED"));
+
+  return new Promise((resolve, reject) => {
+    getDocs(publishedPathwaysQuery)
+      .then((pathwaySnapshot) => {
+        const allPathways: PathwayID[] = pathwaySnapshot.docs.map((doc) => {
+          const pathway: Pathway = doc.data() as Pathway;
+          return { ...pathway, id: doc.id };
         });
         resolve(allPathways);
       })
@@ -352,6 +395,71 @@ export function updateVolunteer(
       })
       .catch((e) => {
         reject(e);
+      });
+  });
+}
+
+export function updateVolunteerTraining(
+  volunteerId: string,
+  training: VolunteerTraining
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (training.trainingID === "" || !training.trainingID) {
+      reject(new Error("Invalid trainingId"));
+      return;
+    }
+
+    const volunteerRef = doc(db, "Users", volunteerId);
+    getDoc(volunteerRef)
+      .then((volunteerSnapshot) => {
+        if (volunteerSnapshot.exists()) {
+          const volunteer = volunteerSnapshot.data() as Volunteer;
+
+          // Determine if training already exists in volunteer
+          const existingTraining = volunteer.trainingInformation.find(
+            (trainingInfo) => trainingInfo.trainingID === training.trainingID
+          );
+
+          if (existingTraining) {
+            // Update the existing training record with new volunteerTraining data
+            const updatedTrainingInformation =
+              volunteer.trainingInformation.map((trainingInfo) => {
+                if (trainingInfo.trainingID === training.trainingID) {
+                  // Return updated training information
+                  return {
+                    ...trainingInfo,
+                    ...training, // Spread the new training data here
+                  };
+                }
+                return trainingInfo; // Return unchanged training info for other records
+              });
+
+            // Update the volunteer object with the new training information
+            const updatedVolunteer = {
+              ...volunteer,
+              trainingInformation: updatedTrainingInformation,
+            };
+
+            // Now, save the updated volunteer object back to Firestore
+            updateDoc(volunteerRef, updatedVolunteer)
+              .then(() => {
+                resolve();
+                console.log("Volunteer training updated successfully");
+              })
+              .catch((error) => {
+                reject("Error updating volunteer training:");
+                console.error("Error updating volunteer training:", error);
+              });
+          } else {
+            reject("Training not found in volunteer's training information.");
+          }
+        } else {
+          reject("Volunteer does not exist.");
+        }
+      })
+      .catch((error) => {
+        reject("Error fetching volunteer");
+        console.error("Error fetching volunteer:", error);
       });
   });
 }
@@ -387,7 +495,15 @@ export function addVolunteerTraining(
             // Add new training to volunteer's training information
             updateDoc(volunteerRef, {
               trainingInformation: volunteer.trainingInformation,
-            });
+            })
+              .then(() => {
+                // Resolve the promise after the document is successfully updated
+                resolve();
+              })
+              .catch((error) => {
+                // Reject if updating the document fails
+                reject(error);
+              });
           } else {
             reject(new Error("Training already exists in Volunteer"));
           }

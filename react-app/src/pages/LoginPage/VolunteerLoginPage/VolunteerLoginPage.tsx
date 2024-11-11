@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { OutlinedInput, Button } from "@mui/material";
-import { forestGreenButton, grayBorderTextField } from "../../../muiTheme";
-import { styledRectButton } from "../LoginPage";
+import {
+  forestGreenButton,
+  grayBorderTextField,
+  styledRectButton,
+} from "../../../muiTheme";
 import { Link, Navigate } from "react-router-dom";
 import { sendSignInLink } from "../../../backend/AuthFunctions";
 import { useAuth } from "../../../auth/AuthProvider";
@@ -12,20 +15,20 @@ import greenCheck from "../../../assets/greenCircleCheck.svg";
 
 function VolunteerLoginPage() {
   const { user } = useAuth();
-  // If user is logged in, navigate to Dashboard
-  if (user) {
-    return <Navigate to="/" />;
-  }
-
   const [failureMessage, setFailureMessage] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [viewConfirmation, setViewConfirmation] = useState<boolean>(false);
   const [displayText, setDisplayText] = useState<string>("");
 
+  // If user is logged in, navigate to Dashboard
+  if (user) {
+    return <Navigate to="/" />;
+  }
+
   const handleSendLink = async (event: any) => {
     event.preventDefault();
 
-    const pattern: RegExp = /^\S+@\S+$/;
+    const pattern: RegExp = /^[^@]+@[^@]+\.[^@]+$/;
 
     if (!pattern.test(email)) {
       setFailureMessage("*Not a valid email");
@@ -48,8 +51,7 @@ function VolunteerLoginPage() {
         className={styles.centered}
         onSubmit={(event) => {
           handleSendLink(event);
-        }}
-      >
+        }}>
         {/* email field */}
         <div className={styles.alignLeft}>
           <h3 className={styles.label}>Email</h3>
@@ -67,8 +69,7 @@ function VolunteerLoginPage() {
           type="submit"
           sx={{ ...styledRectButton, ...forestGreenButton }}
           variant="contained"
-          onClick={(e) => handleSendLink(e)}
-        >
+          onClick={(e) => handleSendLink(e)}>
           Send Link
         </Button>
 
@@ -76,8 +77,7 @@ function VolunteerLoginPage() {
         <p
           className={
             failureMessage ? styles.showFailureMessage : styles.errorContainer
-          }
-        >
+          }>
           {failureMessage}
         </p>
         {/* switch to admin link */}

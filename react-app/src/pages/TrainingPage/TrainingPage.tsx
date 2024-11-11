@@ -4,18 +4,23 @@ import { Button } from "@mui/material";
 import { whiteButtonGrayBorder, forestGreenButton } from "../../muiTheme";
 import { TrainingID } from "../../types/TrainingType";
 import { VolunteerTraining } from "../../types/UserType";
+import { updateVolunteerTraining } from "../../backend/FirestoreCalls";
 import styles from "./TrainingPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import ResourceComponent from "../../components/ResourceComponent/ResourceComponent";
 import Loading from "../../components/LoadingScreen/Loading.tsx";
+import hamburger from "../../assets/hamburger.svg";
 
 function TrainingPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const [stepIndex, setStepIndex] = useState(0);
   const [loading, setLoading] = useState<boolean>(true);
-  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+  const [navigationBarOpen, setNavigationBarOpen] = useState(
+    !(window.innerWidth < 1200)
+  );
+  const [volunteerId, setVolunteerId] = useState("");
   const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
     {
       trainingID: "",
@@ -39,6 +44,7 @@ function TrainingPage() {
     },
     associatedPathways: [],
     certificationImage: "",
+    status: "DRAFT",
   });
 
   useEffect(() => {
@@ -46,17 +52,19 @@ function TrainingPage() {
     if (
       location.state?.fromApp &&
       location.state.training &&
-      location.state.volunteerTraining
+      location.state.volunteerTraining &&
+      location.state.volunteerId
     ) {
       setTraining(location.state.training);
       setVolunteerTraining(location.state.volunteerTraining);
       setLoading(false);
+      setVolunteerId(location.state.volunteerId);
     } else {
       navigate("/trainings");
     }
   }, []);
 
-  const handleContinueButton = () => {
+  const handleContinueButton = async () => {
     if (stepIndex < training.resources.length - 1) {
       setStepIndex(stepIndex + 1);
     } else {
@@ -68,6 +76,22 @@ function TrainingPage() {
           from: location,
         },
       });
+    }
+    if (stepIndex == volunteerTraining.numCompletedResources) {
+      try {
+        const updatedVolunteerTraining = {
+          ...volunteerTraining,
+          numCompletedResources: volunteerTraining.numCompletedResources + 1,
+        };
+
+        // Update the state
+        setVolunteerTraining(updatedVolunteerTraining);
+
+        // Call updateTraining to update the database
+        await updateVolunteerTraining(volunteerId, updatedVolunteerTraining);
+      } catch (error) {
+        console.error("Error updating training:", error);
+      }
     }
   };
 
@@ -93,8 +117,18 @@ function TrainingPage() {
       <div
         className={`${styles.split} ${styles.right}`}
         style={{ left: navigationBarOpen ? "250px" : "0" }}>
-        <div className={styles.outerContainer}>
-          <div className={styles.bodyContainer}>
+        {!navigationBarOpen && (
+          <img
+            src={hamburger}
+            alt="Hamburger Menu"
+            className={styles.hamburger} // Add styles to position it
+            width={30}
+            onClick={() => setNavigationBarOpen(true)} // Set sidebar open when clicked
+          />
+        )}
+
+        <div className={`${styles.scrollContainer} ${styles.outerContainer}`}>
+          <div className={styles.content}>
             {/* HEADER */}
             <div className={styles.header}>
               <h1 className={styles.nameHeading}>{training.name}</h1>
