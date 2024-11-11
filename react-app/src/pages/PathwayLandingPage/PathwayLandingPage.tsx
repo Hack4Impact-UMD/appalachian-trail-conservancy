@@ -151,8 +151,7 @@ function PathwayLandingPage() {
               (index + 1 <= volunteerPathway.numTrainingsCompleted
                 ? styles.opacityContainer
                 : "")
-            }`}
-          >
+            }`}>
             {/* row for each training */}
             <p className={styles.trainingNumber}>{index + 1}</p>
             <p className={styles.trainingTitle}>{training.name}</p>
@@ -227,8 +226,7 @@ function PathwayLandingPage() {
                 from: location,
               },
             })
-          }
-        >
+          }>
           Start
         </Button>
       );
@@ -250,8 +248,7 @@ function PathwayLandingPage() {
                 from: location,
               },
             })
-          }
-        >
+          }>
           Restart
         </Button>
       );
@@ -271,8 +268,7 @@ function PathwayLandingPage() {
                 from: location,
               },
             })
-          }
-        >
+          }>
           Resume
         </Button>
       );
@@ -285,8 +281,7 @@ function PathwayLandingPage() {
 
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}
-      >
+        style={{ left: navigationBarOpen ? "250px" : "0" }}>
         {loading ? (
           <Loading />
         ) : (
@@ -308,39 +303,38 @@ function PathwayLandingPage() {
                   <ProfileIcon />
                 </div>
 
-              <div className={styles.progressContainer}>
-                <div className={styles.progressBar}>
-                  <LinearProgress
-                    variant="determinate"
-                    value={
-                      volunteerPathway.pathwayID !== ""
-                        ? ((volunteerPathway.numTrainingsCompleted +
-                            (volunteerPathway.quizScoreRecieved ? 1 : 0)) /
-                            (volunteerPathway.numTotalTrainings + 1)) *
-                          100
-                        : 0
-                    }
-                    sx={styledProgressPass}
-                  />
-                  <Box sx={{ minWidth: 35 }}>
-                    <Typography
-                      variant="body2"
-                      color="var(--blue-gray)"
-                      sx={{ fontSize: "15px" }}
-                    >
-                      {volunteerPathway.pathwayID !== ""
-                        ? Math.round(
-                            ((volunteerPathway.numTrainingsCompleted +
+                <div className={styles.progressContainer}>
+                  <div className={styles.progressBar}>
+                    <LinearProgress
+                      variant="determinate"
+                      value={
+                        volunteerPathway.pathwayID !== ""
+                          ? ((volunteerPathway.numTrainingsCompleted +
                               (volunteerPathway.quizScoreRecieved ? 1 : 0)) /
                               (volunteerPathway.numTotalTrainings + 1)) *
-                              100
-                          ) + "%"
-                        : "0%"}
-                    </Typography>
-                  </Box>
+                            100
+                          : 0
+                      }
+                      sx={styledProgressPass}
+                    />
+                    <Box sx={{ minWidth: 35 }}>
+                      <Typography
+                        variant="body2"
+                        color="var(--blue-gray)"
+                        sx={{ fontSize: "15px" }}>
+                        {volunteerPathway.pathwayID !== ""
+                          ? Math.round(
+                              ((volunteerPathway.numTrainingsCompleted +
+                                (volunteerPathway.quizScoreRecieved ? 1 : 0)) /
+                                (volunteerPathway.numTotalTrainings + 1)) *
+                                100
+                            ) + "%"
+                          : "0%"}
+                      </Typography>
+                    </Box>
+                  </div>
+                  <div>{renderMarker()}</div>
                 </div>
-                <div>{renderMarker()}</div>
-              </div>
 
                 {/* ABOUT */}
                 <div className={styles.container}>
@@ -348,52 +342,50 @@ function PathwayLandingPage() {
                   <p>{pathway.description}</p>
                 </div>
 
-              {/* OVERVIEW */}
-              <div className={styles.container}>
-                <h2>Overview</h2>
-                {renderTrainings()}
-                <div className={styles.trainingRowFinal}>
-                  <div
-                    className={`${styles.trainingInfo} ${
-                      volunteerPathway.pathwayID !== "" &&
-                      (volunteerPathway.progress === "COMPLETED"
-                        ? styles.opacityContainer
-                        : "")
-                    }`}
-                  >
-                    <p className={styles.trainingNumber}>
-                      {pathway.trainingIDs.length + 1}
-                    </p>
-                    <p className={styles.trainingTitle}>Quiz</p>
-                  </div>
-                  <div>
-                    {/* Conditionally render finished icon on quiz row if pathway is completed */}
-                    {volunteerPathway.pathwayID !== "" &&
-                      volunteerPathway.progress === "COMPLETED" && (
-                        <img
-                          className={styles.completedIcon}
-                          src={CompletedIcon}
-                          alt="Completed"
-                        />
-                      )}
+                {/* OVERVIEW */}
+                <div className={styles.container}>
+                  <h2>Overview</h2>
+                  {renderTrainings()}
+                  <div className={styles.trainingRowFinal}>
+                    <div
+                      className={`${styles.trainingInfo} ${
+                        volunteerPathway.pathwayID !== "" &&
+                        (volunteerPathway.progress === "COMPLETED"
+                          ? styles.opacityContainer
+                          : "")
+                      }`}>
+                      <p className={styles.trainingNumber}>
+                        {pathway.trainingIDs.length + 1}
+                      </p>
+                      <p className={styles.trainingTitle}>Quiz</p>
+                    </div>
+                    <div>
+                      {/* Conditionally render finished icon on quiz row if pathway is completed */}
+                      {volunteerPathway.pathwayID !== "" &&
+                        volunteerPathway.progress === "COMPLETED" && (
+                          <img
+                            className={styles.completedIcon}
+                            src={CompletedIcon}
+                            alt="Completed"
+                          />
+                        )}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          </>
         )}
 
         {/* footer */}
         <div
           className={styles.footer}
-          style={{ width: navigationBarOpen ? "calc(100% - 250px)" : "100%" }}
-        >
+          style={{ width: navigationBarOpen ? "calc(100% - 250px)" : "100%" }}>
           <div className={styles.footerButtons}>
             <Button
               sx={{ ...whiteButtonGrayBorder }}
               variant="contained"
-              onClick={() => navigate(-1)}
-            >
+              onClick={() => navigate(-1)}>
               Back
             </Button>
             {renderButton()}
