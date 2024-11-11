@@ -1,0 +1,144 @@
+/* split screen in two */
+.split {
+  height: 100%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  transition: left 0.3s ease; /* Add transition for smooth animation */
+}
+
+.right {
+  right: 0;
+  left: 250px;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.outerContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bodyContainer {
+  width: 875px;
+  margin-bottom: 10%;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.nameHeading {
+  color: var(--forest-green);
+  font-size: 3rem;
+  margin-top: 0;
+  margin-bottom: 0;
+  max-width: 90%;
+  white-space: normal;
+}
+
+.subHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--blue-gray);
+}
+
+.subHeader h2 {
+  font-size: 1.8rem;
+  margin: 1.5rem 0 1rem 0;
+}
+
+.instructions {
+  /* font-size: 1.8rem; */
+  margin: 0 0 1rem 0;
+}
+
+.noAttemptContainer {
+  background-color: var(--light-grey);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border-radius: 20px;
+  color: var(--blue-gray);
+  font-weight: bold;
+}
+
+.passedAttemptContainer {
+  background-color: var(--forest-green);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border-radius: 20px;
+  color: white;
+  font-weight: bold;
+}
+
+.failedAttemptContainer {
+  background-color: var(--sky-blue);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border-radius: 20px;
+  color: var(--blue-gray);
+  font-weight: bold;
+}
+
+.leftContent {
+  display: flex;
+  gap: 2%;
+  flex-direction: row;
+  align-items: center;
+  margin-right: auto;
+}
+
+.dateText {
+  width: 200px;
+}
+
+.rightContent {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.icon {
+  font-size: 1.8rem;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  margin-bottom: 0;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  box-shadow: 2px 0px 2px rgb(90, 90, 90);
+  background-color: white;
+  transition: 0.3s all ease;
+}
+
+.footerButtons {
+  width: 875px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1%;
+}
