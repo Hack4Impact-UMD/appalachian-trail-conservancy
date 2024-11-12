@@ -1,223 +1,121 @@
-import "./index.css";
-import { HashRouter, Route, Routes } from "react-router-dom";
-import { ThemeProvider } from "@mui/material";
-import { AuthProvider } from "./auth/AuthProvider.tsx";
-import theme from "./muiTheme.ts";
-import LoginPage from "./pages/LoginPage/LoginPage.tsx";
-import Dashboard from "./pages/DashboardPage/DashboardPage.tsx";
-import NotFoundPage from "./pages/NotFoundPage/NotFoundPage.tsx";
-import TrainingLibrary from "./pages/TrainingLibraryPage/TrainingLibraryPage.tsx";
-import VolunteerLoginPage from "./pages/LoginPage/VolunteerLoginPage/VolunteerLoginPage.tsx";
-import AdminLoginPage from "./pages/LoginPage/AdminLoginPage/AdminLoginPage.tsx";
-import AchievementsPage from "./pages/AchievementsPage/AchievementsPage.tsx";
-import TrainingPage from "./pages/TrainingPage/TrainingPage.tsx";
-import TrainingLandingPage from "./pages/TrainingLandingPage/TrainingLandingPage.tsx";
-import PathwayLandingPage from "./pages/PathwayLandingPage/PathwayLandingPage.tsx";
-import RequireAuth from "./auth/RequireAuth/RequireAuth.tsx";
-import RequireAdminAuth from "./auth/RequireAdminAuth/RequireAdminAuth.tsx";
-import RequireVolunteerAuth from "./auth/RequireVolunteerAuth/RequireVolunteerAuth.tsx";
-import LogoutPage from "./pages/LogoutPage/LogoutPage.tsx";
-import QuizPage from "./pages/QuizPage/QuizPage.tsx";
-import QuizResult from "./pages/QuizResultPage/QuizResultPage.tsx";
-import QuizLandingPage from "./pages/QuizLandingPage/QuizLandingPage.tsx";
-import PathwayLibrary from "./pages/PathwayLibraryPage/PathwayLibraryPage.tsx";
-import AdminTrainingEditor from "./pages/AdminTrainingEditor/AdminTrainingEditor.tsx";
-import AdminPathwayEditor from "./pages/AdminPathwayEditor/AdminPathwayEditor.tsx";
-import RegistrationPage from "./pages/RegistrationPage/RegistrationPage/RegistrationPage.tsx";
-import RegistrationConfirmationPage from "./pages/RegistrationPage/RegistrationConfirmationPage/RegistrationConfirmationPage.tsx";
-import PathwayQuizEditorPage from "./pages/AdminPathwayQuizEditorPage/AdminPathwayQuizEditorPage.tsx";
-import TrainingQuizEditorPage from "./pages/AdminTrainingQuizEditorPage/AdminTrainingQuizEditorPage.tsx";
-import AdminDashboard from "./pages/AdminDashboardPage/AdminDashboardPage.tsx";
-import AdminTrainingLibrary from "./pages/AdminTrainingLibraryPage/AdminTrainingLibraryPage.tsx";
-import AdminPathwayLibrary from "./pages/AdminPathwayLibraryPage/AdminPathwayLibraryPage.tsx";
-import AdminNewUserEmail from "./pages/AdminNewUserEmailPage/AdminNewUserEmailPage.tsx";
+import { useEffect, useState } from "react";
+import NavigationBar from "../../components/NavigationBar/NavigationBar.tsx";
+import styles from "./AdminNewUserEmailPage.module.css";
+import ProfileIcon from "../../components/ProfileIcon/ProfileIcon.tsx";
+import { IoIosSearch } from "react-icons/io";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import { Button, TextField, Typography } from "@mui/material";
+import { User } from "../../types/UserType.ts";
+import Footer from "../../components/Footer/Footer.tsx";
 
-function App() {
+function AdminNewUserEmail() {
+  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+  const [subject, setSubject] = useState("");
+  const [body, setBody] = useState("");
+
+  const [errors, setErrors] = useState({
+    subject: "",
+    body: "",
+  });
+
   return (
-    <ThemeProvider theme={theme}>
-      <AuthProvider>
-        <HashRouter>
-          <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/login/volunteer" element={<VolunteerLoginPage />} />
-            <Route path="/login/admin" element={<AdminLoginPage />} />
-            <Route path="/logout" element={<LogoutPage />} />
-            <Route path="/registration" element={<RegistrationPage />} />
-            <Route
-              path="/registration-confirmation"
-              element={<RegistrationConfirmationPage />}
+    <>
+      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <div
+        className={`${styles.split} ${styles.right}`}
+        style={{ left: navigationBarOpen ? "250px" : "0" }}
+      >
+        <div className={styles.outerContainer}>
+          <div className={styles.content}>
+            <div className={styles.header}>
+              <h1 className={styles.nameHeading}>Edit New User Email</h1>
+              <ProfileIcon />
+            </div>
+            <Typography
+              variant="body2"
+              style={{
+                color: "black",
+                fontWeight: "bold",
+                marginBottom: "4px",
+                marginTop: "2rem",
+              }}
+            >
+              SUBJECT
+            </Typography>
+            <TextField
+              value={subject}
+              sx={{
+                width: "80%",
+                fontSize: "1.1rem",
+                borderRadius: "10px",
+                marginTop: "0.3rem",
+                height: "3.2rem",
+                border: "2px solid var(--blue-gray)",
+                "& fieldset": {
+                  border: "none",
+                },
+              }}
+              onChange={(e) => setSubject(e.target.value)}
+              error={Boolean(errors.subject)}
+              helperText={errors.subject}
+              fullWidth
+              margin="normal"
             />
-            <Route
-              path="/"
-              element={
-                <RequireVolunteerAuth>
-                  <Dashboard />
-                </RequireVolunteerAuth>
-              }
+            <Typography
+              variant="body2"
+              style={{
+                color: "black",
+                fontWeight: "bold",
+                marginBottom: "4px",
+              }}
+            >
+              BODY
+            </Typography>
+
+            <TextField
+              value={body}
+              sx={{
+                width: "80%",
+                fontSize: "1.1rem",
+                minHeight: 100,
+                borderRadius: "10px",
+                marginTop: "0.3rem",
+                border: "2px solid var(--blue-gray)",
+                "& fieldset": {
+                  border: "none",
+                },
+              }}
+              onChange={(e) => setBody(e.target.value)}
+              error={Boolean(errors.body)}
+              helperText={errors.body}
+              fullWidth
+              multiline
+              rows={4}
+              margin="normal"
             />
-            <Route
-              path="/admin"
-              element={
-                <RequireAdminAuth>
-                  <AdminDashboard />
-                </RequireAdminAuth>
-              }
-            />
-            <Route
-              path="/admin/trainings"
-              element={
-                <RequireAdminAuth>
-                  <AdminTrainingLibrary />
-                </RequireAdminAuth>
-              }
-            />
-            <Route
-              path="/admin/trainings/editor"
-              element={
-                <RequireAdminAuth>
-                  <AdminTrainingEditor />
-                </RequireAdminAuth>
-              }
-            />
-            <Route
-              path="/admin/trainings/editor/quiz"
-              element={
-                <RequireAdminAuth>
-                  <TrainingQuizEditorPage />
-                </RequireAdminAuth>
-              }
-            />
-            <Route
-              path="/admin/pathways"
-              element={
-                <RequireAdminAuth>
-                  <AdminPathwayLibrary />
-                </RequireAdminAuth>
-              }
-            />
-            <Route
-              path="/admin/pathways/editor"
-              element={
-                <RequireAdminAuth>
-                  <AdminPathwayEditor />
-                </RequireAdminAuth>
-              }
-            />
-            <Route
-              path="/admin/pathways/editor/quiz"
-              element={
-                <RequireAdminAuth>
-                  <PathwayQuizEditorPage />
-                </RequireAdminAuth>
-              }
-            />
-            <Route
-              path="/admin/useremail"
-              element={
-                <RequireAdminAuth>
-                  <AdminNewUserEmail/>
-                </RequireAdminAuth>
-              }
-            />
-            <Route
-              path="/trainings"
-              element={
-                <RequireVolunteerAuth>
-                  <TrainingLibrary />
-                </RequireVolunteerAuth>
-              }
-            />
-            <Route
-              path="/trainings/:id"
-              element={
-                <RequireVolunteerAuth>
-                  <TrainingLandingPage />
-                </RequireVolunteerAuth>
-              }
-            />
-            <Route
-              path="/trainings/resources"
-              element={
-                <RequireVolunteerAuth>
-                  <TrainingPage />
-                </RequireVolunteerAuth>
-              }
-            />
-            <Route
-              path="/trainings/quizlanding"
-              element={
-                <RequireVolunteerAuth>
-                  <QuizLandingPage />
-                </RequireVolunteerAuth>
-              }
-            />
-            <Route
-              path="/trainings/quiz"
-              element={
-                <RequireVolunteerAuth>
-                  <QuizPage />
-                </RequireVolunteerAuth>
-              }
-            />
-            <Route
-              path="/trainings/quizresult"
-              element={
-                <RequireVolunteerAuth>
-                  <QuizResult />
-                </RequireVolunteerAuth>
-              }
-            />
-            <Route
-              path="/pathways"
-              element={
-                <RequireVolunteerAuth>
-                  <PathwayLibrary />
-                </RequireVolunteerAuth>
-              }
-            />
-            <Route
-              path="/pathways/:id"
-              element={
-                <RequireVolunteerAuth>
-                  <PathwayLandingPage />
-                </RequireVolunteerAuth>
-              }
-            />
-            <Route
-              path="/achievements"
-              element={
-                <RequireVolunteerAuth>
-                  <AchievementsPage />
-                </RequireVolunteerAuth>
-              }
-            />
-            <Route
-              path="/*"
-              element={
-                <RequireAuth>
-                  <NotFoundPage />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/testfunctions"
-              element={
-                <RequireAuth>
-                  <button
-                    onClick={() => {
-                      //insert test function here
-                    }}
-                  >
-                    TEST
-                  </button>
-                </RequireAuth>
-              }
-            />
-          </Routes>
-        </HashRouter>
-      </AuthProvider>
-    </ThemeProvider>
+            <div className={styles.buttonContainer}>
+              <Button
+                variant="outlined"
+                color="secondary"
+                className={styles.backButton}
+              >
+                BACK
+              </Button>
+              <Button
+                variant="outlined"
+                color="secondary"
+                className={styles.saveButton}
+              >
+                SAVE
+              </Button>
+            </div>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    </>
   );
 }
 
-export default App;
+export default AdminNewUserEmail;

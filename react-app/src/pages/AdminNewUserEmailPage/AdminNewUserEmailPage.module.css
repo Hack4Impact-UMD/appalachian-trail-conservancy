@@ -1,10 +1,11 @@
+
 .split {
     height: 100%;
     position: fixed;
     z-index: 1;
     top: 0;
     overflow-x: hidden;
-    transition: left 0.3s ease; /* Add transition for smooth animation */
+    transition: left 0.3s ease;
 }
   
 .right {
@@ -43,12 +44,19 @@
     font-size: 3rem;
     margin: 0;
 }
-  
-.saveButton {
-    margin-left: 1rem;
+
+.buttonContainer {
+    display: flex;
+    justify-content: flex-start;
+    gap: 1rem;
+    width: 80%; 
+    margin-top: 1.5rem;
+}
+
+.backButton, .saveButton {
     width: 100px;
     background-color: transparent !important;
     color: black !important;
     border: 2px solid black !important;
     border-radius: 10px !important;
-  }
+}
