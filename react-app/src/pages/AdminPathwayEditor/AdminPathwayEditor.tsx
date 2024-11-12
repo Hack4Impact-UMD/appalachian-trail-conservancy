@@ -20,7 +20,7 @@ import {
   whiteButtonGrayBorder,
 } from "../../muiTheme";
 import { IoIosInformationCircleOutline, IoIosSearch } from "react-icons/io";
-import { styledRectButton } from "../LoginPage/LoginPage";
+import { styledRectButton } from "../../muiTheme";
 import Paper from "@mui/material/Paper";
 import hamburger from "../../assets/hamburger.svg";
 
@@ -30,7 +30,9 @@ const AdminPathwayEditor: React.FC = () => {
   const [description, setDescription] = useState("");
   const [resourceLink, setResourceLink] = useState("");
   const [resourceType, setResourceType] = useState("");
-  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+  const [navigationBarOpen, setNavigationBarOpen] = useState(
+    !(window.innerWidth < 1200)
+  );
   const [searchBars, setSearchBars] = useState([1]); // Start with one search bar (the first one)
 
   const options = ["blah", "blah blah"];
@@ -137,10 +139,7 @@ const AdminPathwayEditor: React.FC = () => {
             {/* Heading */}
             <div className={styles.editorHeader}>
               <h1 className={styles.nameHeading}>Pathways Editor</h1>
-              <div className={styles.editorProfileHeader}>
-                <h5 className={styles.adminText}> Admin </h5>
-                <ProfileIcon />
-              </div>
+              <ProfileIcon />
             </div>
 
             {/* Input Boxes */}
@@ -499,7 +498,7 @@ const AdminPathwayEditor: React.FC = () => {
               </div>
             </form>
           </div>
-          <Footer />{" "}
+          <Footer />
         </div>
       </div>
     </>

@@ -15,6 +15,18 @@
   flex-direction: column;
 }
 
+.hamburger {
+  color: var(--blue-gray);
+  font-size: 1.5rem;
+  margin: 1.5rem;
+  position: absolute;
+  top: 20px;
+  left: 10px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
 .outerContainer {
   display: flex;
   flex-direction: column;
@@ -24,8 +36,6 @@
 .content {
   width: 875px;
   padding-bottom: 3%;
-  max-width: 1000px;
-  margin: 0 auto;
 }
 
 .header {
@@ -35,7 +45,7 @@
   justify-content: space-between;
   align-items: center;
   margin-top: 2rem;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 
 .nameHeading {
@@ -60,13 +70,18 @@
 
 .buttonContainer {
   display: flex;
-  gap: 10%;
-  margin-bottom: 2%;
+  gap: 5%;
+  margin-bottom: 2rem;
 }
 
 .buttonSelect {
   display: flex;
   gap: 3%;
+}
+
+.loadingContainer {
+  width: 100%;
+  margin-top: 1.5rem;
 }
 
 .subHeader {
@@ -99,6 +114,54 @@
   text-decoration: underline;
 }
 
-.footer {
-  margin-top: auto;
+@media screen and (min-width: 1500px) {
+  .content {
+    width: 1200px;
+  }
+
+  .cardsContainer {
+    column-gap: 2rem;
+  }
+}
+
+@media screen and (min-width: 1800px) {
+  .content {
+    width: 1400px;
+  }
+
+  .cardsContainer {
+    column-gap: 6.25rem;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .content {
+    width: 600px;
+  }
+
+  .cardsContainer {
+    justify-content: space-between;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .content {
+    width: 425px;
+  }
+
+  .cardsContainer {
+    justify-content: space-around;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .header {
+    margin-top: 5rem;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .content {
+    width: 300px;
+  }
 }

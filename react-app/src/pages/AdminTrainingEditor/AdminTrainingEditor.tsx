@@ -20,11 +20,12 @@ import {
   updateTraining,
   getAllTrainings,
 } from "../../backend/FirestoreCalls";
+import { TrainingID, Training } from "../../types/TrainingType";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import { LuUpload } from "react-icons/lu";
-import { styledRectButton } from "../LoginPage/LoginPage";
+import { styledRectButton } from "../../muiTheme";
 import {
   forestGreenButton,
   selectOptionStyle,
@@ -38,17 +39,27 @@ const AdminTrainingEditor: React.FC = () => {
   const location = useLocation();
   const trainingData = location.state?.training as TrainingID | undefined;
 
-  const [trainingId, setTrainingId] = useState<string | undefined>(trainingData?.id);
+  const [trainingId, setTrainingId] = useState<string | undefined>(
+    trainingData?.id
+  );
   const [trainingName, setTrainingName] = useState(trainingData?.name || "");
   const [blurb, setBlurb] = useState(trainingData?.shortBlurb || "");
-  const [description, setDescription] = useState(trainingData?.description || "");
-  const [resourceLink, setResourceLink] = useState(trainingData?.resources[0]?.link || "");
-  const [resourceType, setResourceType] = useState(trainingData?.resources[0]?.type || "");
+  const [description, setDescription] = useState(
+    trainingData?.description || ""
+  );
+  const [resourceLink, setResourceLink] = useState(
+    trainingData?.resources[0]?.link || ""
+  );
+  const [resourceType, setResourceType] = useState(
+    trainingData?.resources[0]?.type || "VIDEO"
+  );
+  const [navigationBarOpen, setNavigationBarOpen] = useState(
+    !(window.innerWidth < 1200)
+  );
   const [status, setStatus] = useState(trainingData?.status || "DRAFT");
 
   const [isEditMode, setIsEditMode] = useState<boolean>(status !== "DRAFT");
 
-  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
   const navigate = useNavigate();
 
   const [snackbar, setSnackbar] = useState(false);
@@ -99,7 +110,7 @@ const AdminTrainingEditor: React.FC = () => {
 
     // Validate Resource Link if type is video
     const youtubeRegex = /^https:\/\/www\.youtube\.com\/embed\/[\w-]+(\?.*)?$/;
-    if (resourceType === "video" && !youtubeRegex.test(resourceLink)) {
+    if (resourceType === "VIDEO" && !youtubeRegex.test(resourceLink)) {
       newErrors.resourceLink = "Please provide a valid embedded YouTube link.";
       isValid = false;
     } else if (resourceType && !resourceLink) {
@@ -119,7 +130,7 @@ const AdminTrainingEditor: React.FC = () => {
         name: trainingName,
         shortBlurb: blurb,
         description: description,
-        coverImage: '', // Placeholder, to be filled later
+        coverImage: "", // Placeholder, to be filled later
         resources: [
           {
             link: resourceLink,
@@ -152,7 +163,9 @@ const AdminTrainingEditor: React.FC = () => {
         name: trainingName,
         shortBlurb: blurb,
         description: description,
-        resources: [{ link: resourceLink, type: resourceType, title: trainingName }],
+        resources: [
+          { link: resourceLink, type: resourceType, title: trainingName },
+        ],
         status: isEditMode ? status : "DRAFT",
       };
 
@@ -198,10 +211,7 @@ const AdminTrainingEditor: React.FC = () => {
             <div className={styles.editorContent}>
               <div className={styles.editorHeader}>
                 <h1 className={styles.headerText}>Training Editor</h1>
-                <div className={styles.editorProfileHeader}>
-                  <h5 className={styles.adminText}> Admin </h5>
-                  <ProfileIcon />
-                </div>
+                <ProfileIcon />
               </div>
 
               <form noValidate>
@@ -527,7 +537,11 @@ const AdminTrainingEditor: React.FC = () => {
                         width: "180px",
                       }}
                       value={resourceType}
-                      onChange={(e) => setResourceType(e.target.value)}
+                      onChange={(e) =>
+                        setResourceType(
+                          e.target.value === "VIDEO" ? "VIDEO" : "PDF"
+                        )
+                      }
                       displayEmpty
                       label="Resource Type"
                     >
@@ -567,13 +581,17 @@ const AdminTrainingEditor: React.FC = () => {
               >
                 <Alert
                   onClose={handleCloseSnackbar}
-                  severity={snackbarMessage.includes("successfully") ? "success" : "error"}
+                  severity={
+                    snackbarMessage.includes("successfully")
+                      ? "success"
+                      : "error"
+                  }
                 >
                   {snackbarMessage}
                 </Alert>
               </Snackbar>
             </div>
-            <Footer />{" "}
+            <Footer />
           </div>
         </div>
       </div>

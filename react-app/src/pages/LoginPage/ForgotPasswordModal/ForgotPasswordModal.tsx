@@ -1,16 +1,15 @@
 import { useState } from "react";
 import { OutlinedInput, Button } from "@mui/material";
-import { forestGreenButton, grayBorderTextField } from "../../../muiTheme";
+import {
+  forestGreenButton,
+  grayBorderTextField,
+  styledRectButton,
+} from "../../../muiTheme";
 import { IoCloseOutline } from "react-icons/io5";
 import { sendResetEmail } from "../../../backend/AuthFunctions";
 import styles from "./ForgotPasswordModal.module.css";
 import Modal from "../../../components/ModalWrapper/Modal";
 import greenCheck from "../../../assets/greenCircleCheck.svg";
-
-const styledRectButton = {
-  width: 350,
-  marginTop: "5%",
-};
 
 interface ForgotPasswordModalProps {
   open: boolean;
@@ -85,8 +84,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
               <Button
                 sx={{ ...styledRectButton, ...forestGreenButton }}
                 variant="contained"
-                onClick={() => handleSendReset()}
-              >
+                onClick={() => handleSendReset()}>
                 Send Reset Email
               </Button>
             </form>

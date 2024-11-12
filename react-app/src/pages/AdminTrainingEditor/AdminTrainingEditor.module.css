@@ -46,15 +46,6 @@ body {
   margin-bottom: 2rem;
 }
 
-.editorProfileHeader {
-  display: flex;
-  align-items: center;
-}
-
-.adminText {
-  margin-right: 1rem;
-}
-
 .editor {
   flex-grow: 1;
   background-color: #fafafa;

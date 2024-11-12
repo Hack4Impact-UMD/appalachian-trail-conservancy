@@ -11,6 +11,7 @@ import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import QuizCard from "./QuizCard/QuizCard";
 import Loading from "../../components/LoadingScreen/Loading";
+import hamburger from "../../assets/hamburger.svg";
 
 function QuizPage() {
   const auth = useAuth();
@@ -19,7 +20,9 @@ function QuizPage() {
   const location = useLocation();
   const [loading, setLoading] = useState<boolean>(true);
   const [quizLoading, setQuizLoading] = useState<boolean>(false);
-  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+  const [navigationBarOpen, setNavigationBarOpen] = useState(
+    !(window.innerWidth < 1200)
+  );
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
   const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
     {
@@ -44,6 +47,7 @@ function QuizPage() {
       numQuestions: 0,
       passingScore: 0,
     },
+    status: "PUBLISHED",
     associatedPathways: [],
     certificationImage: "",
   });
@@ -97,10 +101,19 @@ function QuizPage() {
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}
-      >
+        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        {!navigationBarOpen && (
+          <img
+            src={hamburger}
+            alt="Hamburger Menu"
+            className={styles.hamburger} // Add styles to position it
+            width={30}
+            onClick={() => setNavigationBarOpen(true)} // Set sidebar open when clicked
+          />
+        )}
+
         <div className={styles.outerContainer}>
-          <div className={styles.bodyContainer}>
+          <div className={styles.content}>
             {/* HEADER */}
             {loading ? (
               <Loading />
@@ -136,14 +149,12 @@ function QuizPage() {
         {/* footer */}
         <div
           className={styles.footer}
-          style={{ width: navigationBarOpen ? "calc(100% - 250px)" : "100%" }}
-        >
+          style={{ width: navigationBarOpen ? "calc(100% - 250px)" : "100%" }}>
           <div className={styles.footerButtons}>
             <Button
               sx={{ ...forestGreenButton }}
               variant="contained"
-              onClick={handleSubmitQuiz}
-            >
+              onClick={handleSubmitQuiz}>
               Submit
             </Button>
           </div>

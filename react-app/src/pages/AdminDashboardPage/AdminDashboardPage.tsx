@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../auth/AuthProvider";
 import { useNavigate } from "react-router-dom";
-import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar";
 import styles from "./AdminDashboardPage.module.css";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Footer from "../../components/Footer/Footer";
 import AdminTrainingCard from "../../components/AdminTrainingCard/AdminTrainingCard";
 import AdminPathwayCard from "../../components/AdminPathwayCard/AdminPathwayCard";
+import Loading from "../../components/LoadingScreen/Loading";
 import { TrainingID } from "../../types/TrainingType";
 import { PathwayID } from "../../types/PathwayType";
 import { Button } from "@mui/material";
@@ -15,76 +16,126 @@ import {
   forestGreenButtonLarge,
   whiteButtonGrayBorder,
 } from "../../muiTheme";
-import { getAllTrainings, getAllPathways } from "../../backend/FirestoreCalls";
+import { getAllPathways, getAllTrainings } from "../../backend/FirestoreCalls";
+import hamburger from "../../assets/hamburger.svg";
 
 function AdminDashboardPage() {
   const auth = useAuth();
   const navigate = useNavigate();
-  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [navigationBarOpen, setNavigationBarOpen] = useState(
+    !(window.innerWidth < 1200)
+  );
   const [trainingsSelected, setTrainingsSelected] = useState<boolean>(true);
-  const [draftTrainings, setDraftTrainings] = useState<TrainingID[]>([]);
-  const [publishedTrainings, setPublishedTrainings] = useState<TrainingID[]>([]);
-  const [draftPathways, setDraftPathways] = useState<PathwayID[]>([]);
-  const [publishedPathways, setPublishedPathways] = useState<PathwayID[]>([]);
+  const [trainingDrafts, setTrainingDrafts] = useState<TrainingID[]>([]);
+  const [trainingsPublished, setTrainingsPublished] = useState<TrainingID[]>(
+    []
+  );
+  const [pathwayDrafts, setPathwayDrafts] = useState<PathwayID[]>([]);
+  const [pathwaysPublished, setPathwaysPublished] = useState<PathwayID[]>([]);
 
-  // Fetch training data on component mount
+  const correlateTrainings = (genericTrainings: TrainingID[]) => {
+    let trainingsDrafts: TrainingID[] = [];
+    let trainingsPublished: TrainingID[] = [];
+
+    for (const genericTraining of genericTrainings) {
+      if (genericTraining.status == "DRAFT") {
+        trainingsDrafts.push(genericTraining);
+      } else if (genericTraining.status == "PUBLISHED") {
+        trainingsPublished.push(genericTraining);
+      }
+    }
+
+    setTrainingDrafts(trainingsDrafts);
+    setTrainingsPublished(trainingsPublished);
+  };
+
+  const correlatePathways = (genericPathways: PathwayID[]) => {
+    let pathwayDrafts: PathwayID[] = [];
+    let pathwaysPublished: PathwayID[] = [];
+
+    for (const genericPathway of genericPathways) {
+      if (genericPathway.status == "DRAFT") {
+        pathwayDrafts.push(genericPathway);
+      } else if (genericPathway.status == "PUBLISHED") {
+        pathwaysPublished.push(genericPathway);
+      }
+    }
+
+    setPathwayDrafts(pathwayDrafts);
+    setPathwaysPublished(pathwaysPublished);
+  };
+  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
+
+  // Update screen width on resize
   useEffect(() => {
-    getAllTrainings()
-      .then((trainings) => {
-        // Filter trainings into drafts and published
-        setDraftTrainings(trainings.filter((training) => training.status === "DRAFT"));
-        setPublishedTrainings(trainings.filter((training) => training.status === "PUBLISHED"));
-      })
-      .catch((error) => {
-        console.error("Error fetching trainings:", error);
-      });
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
-  // Fetch pathway data on component mount
   useEffect(() => {
-    getAllPathways()
-      .then((pathways) => {
-        // Filter trainings into drafts and published
-        setDraftPathways(pathways.filter((pathway) => pathway.status === "DRAFT"));
-        setPublishedPathways(pathways.filter((pathway) => pathway.status === "PUBLISHED"));
-      })
-      .catch((error) => {
-        console.error("Error fetching pathways:", error);
-      });
-  }, []);
+    if (!auth.loading && auth.id) {
+      getAllTrainings()
+        .then((genericTrainings) => {
+          // function to sort
+          correlateTrainings(genericTrainings);
+        })
+        .catch((error) => {
+          console.error("Error fetching trainings:", error);
+        });
 
-  const handleCreateTraining = () => {
-    navigate("/admin/trainings/editor", { });
-  };
+      getAllPathways()
+        .then((genericPathways) => {
+          correlatePathways(genericPathways);
+        })
+        .catch((error) => {
+          console.error("Error fetching pathways:", error);
+        });
 
-  const handleEditTraining = (training: TrainingID) => {
-    navigate("/admin/trainings/editor", { state: { training } });
-  };
-
-  const handleEditPathway = (pathway: PathwayID) => {
-    navigate("/admin/pathways/editor", { state: { pathway } });
-  };
+      setLoading(false);
+    }
+  }, [auth.loading, auth.id]);
 
   return (
     <>
-      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <AdminNavigationBar
+        open={navigationBarOpen}
+        setOpen={setNavigationBarOpen}
+      />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}
+        style={{
+          left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
+        }}
       >
+        {!navigationBarOpen && (
+          <img
+            src={hamburger}
+            alt="Hamburger Menu"
+            className={styles.hamburger} // Add styles to position it
+            width={30}
+            onClick={() => setNavigationBarOpen(true)} // Set sidebar open when clicked
+          />
+        )}
         <div className={styles.outerContainer}>
           <div className={styles.content}>
             <div className={styles.header}>
               <h1 className={styles.nameHeading}>Hello, {auth.firstName}!</h1>
-              <div className={styles.adminIcon}>
-                <h6> ADMIN </h6>
-                <div className={styles.profileIcon}>
-                  <ProfileIcon />
-                </div>
-              </div>
+              <ProfileIcon />
             </div>
+
             <div className={styles.buttonContainer}>
-              <Button sx={forestGreenButtonLarge} variant="contained" onClick={() => handleCreateTraining()}>
+              <Button
+                sx={forestGreenButtonLarge}
+                variant="contained"
+                onClick={() => navigate("/admin/trainings/editor")}
+              >
                 CREATE NEW TRAINING
               </Button>
               <Button sx={forestGreenButtonLarge} variant="contained">
@@ -115,47 +166,68 @@ function AdminDashboardPage() {
                 PATHWAYS
               </Button>
             </div>
-
-            {/* Display Recent Drafts */}
-            <div className={styles.subHeader}>
-              <h2>Recent Drafts</h2>
-            </div>
-            {trainingsSelected ? (
-              <>
-                <div className={styles.cardsContainer}>
-                  {draftTrainings.slice(0, 3).map((training) => (
-                    <AdminTrainingCard key={training.id} training={training} onEdit={() => handleEditTraining(training)} />
-                  ))}
-                </div>
-              </>
+            {loading ? (
+              <div className={styles.loadingContainer}>
+                <Loading />
+              </div>
             ) : (
               <>
-                <div className={styles.cardsContainer}>
-                  {draftPathways.slice(0, 2).map((pathway) => (
-                    <AdminPathwayCard key={pathway.id} pathway={pathway} onEdit={() => handleEditPathway(pathway)} />
-                  ))}
+                <div className={styles.subHeader}>
+                  <h2>Recent Drafts</h2>
                 </div>
-              </>
-            )}
-
-            <div className={styles.subHeader}>
-              <h2>Recent Published</h2>
-            </div>
-            {trainingsSelected ? (
-              <>
-                <div className={styles.cardsContainer}>
-                  {publishedTrainings.slice(0, 3).map((training) => (
-                    <AdminTrainingCard key={training.id} training={training} onEdit={() => handleEditTraining(training)} />
-                  ))}
+                {trainingsSelected ? (
+                  <>
+                    {trainingDrafts.length === 0 && (
+                      <div className={styles.subHeader}>lmao u flopped!</div>
+                    )}
+                    {trainingDrafts.length > 0 && (
+                      <div className={styles.cardsContainer}>
+                        {trainingDrafts.slice(0, 3).map((training, index) => (
+                          <AdminTrainingCard training={training} key={index} />
+                        ))}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    {pathwayDrafts.length > 0 && (
+                      <div className={styles.cardsContainer}>
+                        {pathwayDrafts.slice(0, 2).map((pathway, index) => (
+                          <AdminPathwayCard pathway={pathway} key={index} />
+                        ))}
+                      </div>
+                    )}
+                  </>
+                )}
+                <div className={styles.subHeader}>
+                  <h2>Recent Published</h2>
                 </div>
-              </>
-            ) : (
-              <>
-                <div className={styles.cardsContainer}>
-                  {publishedPathways.slice(0, 2).map((pathway) => (
-                    <AdminPathwayCard key={pathway.id} pathway={pathway} onEdit={() => handleEditPathway(pathway)} />
-                  ))}
-                </div>
+                {trainingsSelected ? (
+                  <>
+                    {trainingsPublished.length > 0 && (
+                      <div className={styles.cardsContainer}>
+                        {trainingsPublished
+                          .slice(0, 3)
+                          .map((training, index) => (
+                            <AdminTrainingCard
+                              training={training}
+                              key={index}
+                            />
+                          ))}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    {pathwaysPublished.length > 0 && (
+                      <div className={styles.cardsContainer}>
+                        {pathwaysPublished.slice(0, 2).map((pathway, index) => (
+                          <AdminPathwayCard pathway={pathway} key={index} />
+                        ))}
+                      </div>
+                    )}
+                  </>
+                )}
               </>
             )}
           </div>

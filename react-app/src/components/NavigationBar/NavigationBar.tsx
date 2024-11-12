@@ -6,7 +6,6 @@ import atcprimarylogo from "../../assets/atc-primary-logo.png";
 import collapseArrow from "../../assets/collapseArrow.svg";
 import dashboardInactive from "../../assets/dashboardGray.svg";
 import dashboardActive from "../../assets/dashboardWhite.svg";
-import hamburger from "../../assets/hamburger.svg";
 import logout from "../../assets/logout.svg";
 import pathwaysInactive from "../../assets/pathwaysGray.svg";
 import pathwaysActive from "../../assets/pathwaysWhite.svg";
@@ -27,10 +26,10 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
     setOpenLogoutPopup(true);
   };
 
-  // Automatically close NavBar when window width is below 600px
+  // Automatically close NavBar when window width is below 1200px
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 625 && open) {
+      if (window.innerWidth < 1200 && open) {
         setOpen(false);
       }
     };
@@ -59,6 +58,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
               <div className={styles.arrowBox}>
                 <img
                   src={collapseArrow}
+                  className={styles.collapseArrow}
                   width={20}
                   onClick={() => setOpen(false)}
                 />
@@ -187,9 +187,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
           <LogoutPopup open={openLogoutPopup} onClose={setOpenLogoutPopup} />
         </>
       ) : (
-        <div>
-          
-        </div>
+        <div></div>
       )}
     </div>
   );

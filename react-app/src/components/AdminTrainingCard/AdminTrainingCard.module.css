@@ -6,7 +6,7 @@
   overflow: hidden;
   width: 275px;
   height: 275px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.3); /* Adding drop shadow */
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.3);
   cursor: pointer;
 }
 
@@ -27,19 +27,26 @@
   flex-direction: column;
   justify-content: flex-end;
   background-color: var(--sky-blue);
-  padding: 18px;
+  padding: 20px;
+  position: relative;
+}
+
+.trainingTitleWrapper {
+  position: relative;
+  display: inline-block;
 }
 
 .trainingTitle {
   font-size: 1.2rem;
   font-weight: bold;
-  margin: 0 0 10px 5px;
+  margin: 0 0 5px 0;
   color: var(--blue-gray);
-  height: 30px;
+  height: 54px;
 }
 
 .outsideMarker {
-  margin: 0px 0 0px 5px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .marker {
@@ -49,7 +56,24 @@
   font-size: 0.9em;
   font-weight: bold;
   text-align: center;
-  margin: -10px 0 3px 0;
   background-color: var(--blue-gray);
   color: white;
+}
+
+.draftMarker {
+  border: 1.5px solid var(--blue-gray);
+  background-color: var(--ocean-green-25);
+  color: var(--blue-gray);
+}
+
+.publishedMarker {
+  border: 1.5px solid var(--blue-gray);
+  background-color: var(--ocean-green-50);
+  color: var(--blue-gray);
+}
+
+.archiveMarker {
+  border: 1.5px solid var(--blue-gray);
+  background-color: var(--ocean-green-75);
+  color: var(--blue-gray);
 }
