@@ -122,66 +122,73 @@ const AdminTrainingEditor: React.FC = () => {
     return isValid;
   };
 
-  const handleNextClick = async () => {
-    if (validateFields()) {
-      console.log("All validations passed");
-      // save training and proceed to quiz editor
-      const trainingData: Training = {
-        name: trainingName,
-        shortBlurb: blurb,
-        description: description,
-        coverImage: "", // Placeholder, to be filled later
-        resources: [
-          {
-            link: resourceLink,
-            type: resourceType,
-            title: "",
-          },
-        ],
-        associatedPathways: [], // Placeholder, to be filled later
-        quiz: null, // Placeholder, to be filled on quiz page
-        status: "DRAFT",
-      };
-
-      try {
-        await addTraining(trainingData);
-        // navigate(`/quiz-creation/${trainingData.name}`); // Adjust the route to match quiz editor
-      } catch (error) {
-        console.error("Error saving draft:", error);
-      }
-    } else {
-      setSnackbarMessage(
-        "Please complete all required fields before proceeding."
-      );
+  const handleSaveClick = async () => {
+    // Validate fields only if in edit mode
+    if (isEditMode && !validateFields()) {
+      setSnackbarMessage("Please complete all required fields.");
       setSnackbar(true);
+      return;
     }
+    
+    const updatedTraining = {
+      name: trainingName,
+      shortBlurb: blurb,
+      description: description,
+      resources: [
+        { link: resourceLink, type: resourceType, title: trainingName },
+      ],
+      status: isEditMode ? status : "DRAFT",
+    };
+
+    if (trainingId) {
+      // Update existing training
+      await updateTraining(updatedTraining, trainingId);
+      setSnackbarMessage("Training updated successfully.");
+    } else {
+      // Save as new draft
+      await addTraining(updatedTraining);
+      setSnackbarMessage("Draft saved successfully.");
+    }
+    setSnackbar(true);
   };
 
-  const handleSaveClick = async () => {
+  const handleNextClick = async () => {
     if (validateFields()) {
       const updatedTraining = {
         name: trainingName,
         shortBlurb: blurb,
         description: description,
+        quiz: trainingData.quiz || {
+          numQuestions: 0,
+          passingScore: 0,
+          questions: [],
+        },
         resources: [
           { link: resourceLink, type: resourceType, title: trainingName },
         ],
         status: isEditMode ? status : "DRAFT",
       };
-
+  
       if (trainingId) {
         await updateTraining(updatedTraining, trainingId);
         setSnackbarMessage("Training updated successfully.");
+        setSnackbar(true);
+  
+        // Navigate to the quiz editor with the training as state
+        navigate("/trainings/editor/quiz", { state: { training: updatedTraining, id: trainingId } });
       } else {
-        await addTraining(updatedTraining);
+        const newTrainingId = await addTraining(updatedTraining);
         setSnackbarMessage("Draft saved successfully.");
+        setSnackbar(true);
+  
+        // Navigate to the quiz editor with the new training as state
+        navigate("/trainings/editor/quiz", { state: { training: updatedTraining, id: newTrainingId } });
       }
-      setSnackbar(true);
     } else {
       setSnackbarMessage("Please complete all required fields.");
       setSnackbar(true);
     }
-  };
+  };  
 
   const handleCloseSnackbar = () => {
     setSnackbar(false);
@@ -508,7 +515,9 @@ const AdminTrainingEditor: React.FC = () => {
                       borderRadius: "10px",
                       marginTop: "0.3rem",
                       height: "3.2rem",
-                      border: "2px solid var(--blue-gray)",
+                      border: errors.resourceLink 
+                        ? "2px solid #d32f2f" 
+                        : "2px solid var(--blue-gray)",
                       "& fieldset": {
                         border: "none",
                       },
@@ -544,12 +553,18 @@ const AdminTrainingEditor: React.FC = () => {
                       }
                       displayEmpty
                       label="Resource Type"
+                      renderValue={(selected) => {
+                        if (selected === "") {
+                          return <em>Resource Type</em>;
+                        }
+                        return selected === "VIDEO" ? "Video" : "PDF";
+                      }}
                     >
                       <MenuItem value="" disabled sx={{ display: "none" }}>
                         Resource Type
                       </MenuItem>
-                      <MenuItem value="all">PDF</MenuItem>
-                      <MenuItem value="inProgress">Video</MenuItem>
+                      <MenuItem value="PDF">PDF</MenuItem>
+                      <MenuItem value="VIDEO">Video</MenuItem>
                     </Select>
                   </FormControl>
                 </div>

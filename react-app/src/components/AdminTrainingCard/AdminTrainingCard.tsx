@@ -8,8 +8,11 @@ interface AdminTrainingCardProps {
   training: TrainingID;
 }
 
-const AdminTrainingCard: React.FC<AdminTrainingCardProps> = ({ training }) => {
+const AdminTrainingCard: React.FC<AdminTrainingCardProps> = ({ 
+  training 
+}) => {
   const navigate = useNavigate();
+
   const renderMarker = () => {
     if (training.status === "DRAFT") {
       // Training drafted
@@ -64,7 +67,7 @@ const AdminTrainingCard: React.FC<AdminTrainingCardProps> = ({ training }) => {
             <div
               className={styles.marker}
               onClick={() => {
-                navigate("/admin/trainings/editor", { state: { training } });
+                navigate("/trainings/editor", { state: { training } });
               }}
             >
               EDIT
