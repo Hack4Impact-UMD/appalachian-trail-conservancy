@@ -51,7 +51,7 @@ const AdminTrainingEditor: React.FC = () => {
     trainingData?.resources[0]?.link || ""
   );
   const [resourceType, setResourceType] = useState(
-    trainingData?.resources[0]?.type || "VIDEO"
+    trainingData?.resources[0]?.type || ""
   );
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
@@ -135,7 +135,7 @@ const AdminTrainingEditor: React.FC = () => {
       shortBlurb: blurb,
       description: description,
       resources: [
-        { link: resourceLink, type: resourceType, title: trainingName },
+        { link: resourceLink, type: resourceType },
       ],
       status: isEditMode ? status : "DRAFT",
     };
@@ -146,7 +146,8 @@ const AdminTrainingEditor: React.FC = () => {
       setSnackbarMessage("Training updated successfully.");
     } else {
       // Save as new draft
-      await addTraining(updatedTraining);
+      const newTrainingId = await addTraining(updatedTraining);
+      setTrainingId(newTrainingId);
       setSnackbarMessage("Draft saved successfully.");
     }
     setSnackbar(true);
@@ -164,7 +165,7 @@ const AdminTrainingEditor: React.FC = () => {
           questions: [],
         },
         resources: [
-          { link: resourceLink, type: resourceType, title: trainingName },
+          { link: resourceLink, type: resourceType },
         ],
         status: isEditMode ? status : "DRAFT",
       };

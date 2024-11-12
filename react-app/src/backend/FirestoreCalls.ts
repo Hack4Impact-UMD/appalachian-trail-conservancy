@@ -77,6 +77,8 @@ export function addTraining(training: Training): Promise<void> {
         .then(async (docRef) => {
           const trainingId = docRef.id;
 
+          resolve(trainingId)
+
           // get pathways associated with training
           const pathwayPromises = [];
           for (const pathwayId of training.associatedPathways) {
