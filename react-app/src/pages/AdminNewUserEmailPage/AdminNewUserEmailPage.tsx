@@ -122,11 +122,16 @@ function AdminNewUserEmail() {
                 width: "80%",
                 fontSize: "1.1rem",
                 minHeight: 250,
+                height: "auto",
                 borderRadius: "10px",
                 marginTop: "0.3rem",
                 border: "2px solid var(--blue-gray)",
                 "& fieldset": {
                   border: "none",
+                },
+                "& .MuiInputBase-root": {
+                  maxHeight: "250px",
+                  overflowY: "auto",
                 },
               }}
               onChange={(e) => setBody(e.target.value)}
@@ -134,19 +139,9 @@ function AdminNewUserEmail() {
               helperText={errors.body}
               fullWidth
               multiline
-              rows={4}
+              rows={9}
               margin="normal"
             />
-
-            {/* Editable div for applying HTML styles */}
-            <div
-              id="editableDiv"
-              contentEditable
-              suppressContentEditableWarning
-              className={styles.editableDiv}
-              onInput={handleBodyInput}
-              dangerouslySetInnerHTML={{ __html: body }}
-            ></div>
 
             <div className={styles.buttonContainer}>
               <Button

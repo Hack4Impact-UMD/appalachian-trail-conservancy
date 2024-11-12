@@ -51,7 +51,7 @@ function App() {
               path="/"
               element={
                 <RequireVolunteerAuth>
-                  <AdminNewUserEmail />
+                  <Dashboard />
                 </RequireVolunteerAuth>
               }
             />
