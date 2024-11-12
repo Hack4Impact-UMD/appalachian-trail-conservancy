@@ -1,12 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import NavigationBar from "../../components/NavigationBar/NavigationBar.tsx";
 import styles from "./AdminNewUserEmailPage.module.css";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon.tsx";
-import { IoIosSearch } from "react-icons/io";
-import ToggleButton from "@mui/material/ToggleButton";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { Button, TextField, Typography } from "@mui/material";
-import { User } from "../../types/UserType.ts";
 import Footer from "../../components/Footer/Footer.tsx";
 
 function AdminNewUserEmail() {
@@ -18,6 +14,28 @@ function AdminNewUserEmail() {
     subject: "",
     body: "",
   });
+
+  // Helper function to wrap the selected text with a specific HTML tag
+  const wrapSelectedText = (tag: string) => {
+    const selection = window.getSelection();
+    if (selection && selection.rangeCount > 0) {
+      const range = selection.getRangeAt(0);
+      const selectedText = range.toString();
+
+      if (selectedText) {
+        const wrapper = document.createElement(tag);
+        wrapper.innerText = selectedText;
+
+        range.deleteContents();
+        range.insertNode(wrapper);
+
+        setBody(document.getElementById("editableDiv")?.innerHTML || "");
+      }
+    }
+  };
+  const handleBodyInput = (event: any) => {
+    setBody(event.target.innerHTML);
+  };
 
   return (
     <>
@@ -62,23 +80,48 @@ function AdminNewUserEmail() {
               fullWidth
               margin="normal"
             />
-            <Typography
-              variant="body2"
-              style={{
-                color: "black",
-                fontWeight: "bold",
-                marginBottom: "4px",
-              }}
-            >
-              BODY
-            </Typography>
+
+            {/* Container for BODY typography and style buttons */}
+            <div className={styles.bodyContainer}>
+              <Typography
+                variant="body2"
+                style={{
+                  color: "black",
+                  fontWeight: "bold",
+                  marginBottom: "4px",
+                }}
+              >
+                BODY
+              </Typography>
+
+              <div className={styles.styleButtons}>
+                <button
+                  className={styles.styleButton}
+                  onClick={() => wrapSelectedText("b")}
+                >
+                  <b>B</b>
+                </button>
+                <button
+                  className={styles.styleButton}
+                  onClick={() => wrapSelectedText("i")}
+                >
+                  <i>I</i>
+                </button>
+                <button
+                  className={styles.styleButton}
+                  onClick={() => wrapSelectedText("u")}
+                >
+                  <u>U</u>
+                </button>
+              </div>
+            </div>
 
             <TextField
-              value={body}
+              value={body.replace(/<[^>]*>?/gm, "")}
               sx={{
                 width: "80%",
                 fontSize: "1.1rem",
-                minHeight: 100,
+                minHeight: 250,
                 borderRadius: "10px",
                 marginTop: "0.3rem",
                 border: "2px solid var(--blue-gray)",
@@ -94,6 +137,17 @@ function AdminNewUserEmail() {
               rows={4}
               margin="normal"
             />
+
+            {/* Editable div for applying HTML styles */}
+            <div
+              id="editableDiv"
+              contentEditable
+              suppressContentEditableWarning
+              className={styles.editableDiv}
+              onInput={handleBodyInput}
+              dangerouslySetInnerHTML={{ __html: body }}
+            ></div>
+
             <div className={styles.buttonContainer}>
               <Button
                 variant="outlined"
