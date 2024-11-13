@@ -32,6 +32,9 @@ import AdminDashboard from "./pages/AdminDashboardPage/AdminDashboardPage.tsx";
 import AdminTrainingLibrary from "./pages/AdminTrainingLibraryPage/AdminTrainingLibraryPage.tsx";
 import AdminPathwayLibrary from "./pages/AdminPathwayLibraryPage/AdminPathwayLibraryPage.tsx";
 
+import { addEmail, updateEmail } from "./backend/AdminFirestoreCall.ts";
+import { EmailType } from "./types/AssetsType.ts";
+
 interface RoleBasedRouteProps {
   adminComponent: JSX.Element;
   volunteerComponent: JSX.Element;
@@ -193,9 +196,32 @@ function App() {
               element={
                 <RequireAuth>
                   <button
-                    onClick={() => {
-                      //insert test function here
-                    }}>
+                    onClick={async () => {
+                      const email: EmailType = {
+                        type: "EMAIL",
+                        dateUpdated: "2024/11/11",
+                        subject: "ATC Registration",
+                        body: `
+                        <div>
+                          <div style="max-width: 600px; margin: auto">
+                            <br><br><br>
+                            <p style="font-size: 16px">
+                            Hello,<br>
+                            <br>
+                            Your account has been created.<br>
+                            <br>
+                            <span style="font-weight: 600; text-decoration: underline">Appalachian Trail Conservancy Training Portal</span><br>
+                            <br>
+                            Please look out for a reset password email which will allow you to reset your password for security purposes.
+                          <div>
+                        </div>
+                      `,
+                      };
+                      updateEmail(email).then(() => {
+                        console.log("success");
+                      });
+                    }}
+                  >
                     TEST
                   </button>
                 </RequireAuth>

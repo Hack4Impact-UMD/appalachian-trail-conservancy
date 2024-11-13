@@ -23,6 +23,18 @@ import { Training, TrainingID, Quiz } from "../types/TrainingType";
 import { Pathway, PathwayID } from "../types/PathwayType";
 import { AssetsType, EmailType } from "../types/AssetsType";
 
+export function addEmail(email: EmailType): Promise<void> {
+  return new Promise((resolve, reject) => {
+    addDoc(collection(db, "Assets"), email)
+      .then(() => {
+        resolve();
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+}
+
 export function updateEmail(email: EmailType): Promise<void> {
   return new Promise((resolve, reject) => {
     if (email.subject === "" || email.body === "") {

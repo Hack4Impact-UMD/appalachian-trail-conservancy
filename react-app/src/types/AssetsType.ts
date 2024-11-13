@@ -1,5 +1,5 @@
 export interface AssetsType {
-  type: "EMAIL" | "REGISTRATIONCODE";
+  type: AssetsDocumentType;
   dateUpdated: string; // YYYY-MM-DD
 }
 
@@ -11,3 +11,5 @@ export interface EmailType extends AssetsType {
 export interface RegistrationCodeType extends AssetsType {
   code: string;
 }
+
+export type AssetsDocumentType = "EMAIL" | "REGISTRATIONCODE";
