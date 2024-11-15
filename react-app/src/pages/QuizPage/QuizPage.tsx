@@ -92,9 +92,11 @@ function QuizPage() {
     ).length;
 
     if (selectedAnswers.length != numAnswers) {
-      alert("Please answer all of the questions.");
       setQuizLoading(false);
-      return;
+      const prompt = window.confirm("Not all questions are answered. Submit?");
+      if (!prompt) {
+        return; // don't proceed if user hits cancel
+      }
     }
 
     validateQuiz(volunteerTraining.trainingID, volunteerId, selectedAnswers)
