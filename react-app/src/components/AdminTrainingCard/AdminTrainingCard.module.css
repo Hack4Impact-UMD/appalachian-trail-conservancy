@@ -62,18 +62,18 @@
 
 .draftMarker {
   border: 1.5px solid var(--blue-gray);
-  background-color: #d1e8db;
+  background-color: var(--ocean-green-25);
   color: var(--blue-gray);
 }
 
 .publishedMarker {
   border: 1.5px solid var(--blue-gray);
-  background-color: #a3d3b8;
+  background-color: var(--ocean-green-50);
   color: var(--blue-gray);
 }
 
 .archiveMarker {
   border: 1.5px solid var(--blue-gray);
-  background-color: #76bd95;
+  background-color: var(--ocean-green-75);
   color: var(--blue-gray);
 }

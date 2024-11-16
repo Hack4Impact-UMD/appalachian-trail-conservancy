@@ -22,6 +22,8 @@ import QuizPage from "./pages/QuizPage/QuizPage.tsx";
 import QuizResult from "./pages/QuizResultPage/QuizResultPage.tsx";
 import QuizLandingPage from "./pages/QuizLandingPage/QuizLandingPage.tsx";
 import PathwayLibrary from "./pages/PathwayLibraryPage/PathwayLibraryPage.tsx";
+import PathwayQuizLandingPage from "./pages/PathwayQuizLandingPage/PathwayQuizLandingPage.tsx";
+import PathwayQuizPage from "./pages/PathwayQuizPage/PathwayQuizPage.tsx";
 import AdminTrainingEditor from "./pages/AdminTrainingEditor/AdminTrainingEditor.tsx";
 import AdminPathwayEditor from "./pages/AdminPathwayEditor/AdminPathwayEditor.tsx";
 import RegistrationPage from "./pages/RegistrationPage/RegistrationPage/RegistrationPage.tsx";
@@ -31,6 +33,7 @@ import TrainingQuizEditorPage from "./pages/AdminTrainingQuizEditorPage/AdminTra
 import AdminDashboard from "./pages/AdminDashboardPage/AdminDashboardPage.tsx";
 import AdminTrainingLibrary from "./pages/AdminTrainingLibraryPage/AdminTrainingLibraryPage.tsx";
 import AdminPathwayLibrary from "./pages/AdminPathwayLibraryPage/AdminPathwayLibraryPage.tsx";
+import AdminUserManagement from "./pages/AdminUserManagement/AdminUserManagement.tsx";
 
 interface RoleBasedRouteProps {
   adminComponent: JSX.Element;
@@ -72,6 +75,14 @@ function App() {
                   adminComponent={<AdminDashboard />}
                   volunteerComponent={<Dashboard />}
                 />
+              }
+            />
+            <Route
+              path="/management"
+              element={
+                <RequireAdminAuth>
+                  <AdminUserManagement />
+                </RequireAdminAuth>
               }
             />
             <Route
@@ -170,6 +181,22 @@ function App() {
                 <RequireAdminAuth>
                   <PathwayQuizEditorPage />
                 </RequireAdminAuth>
+              }
+            />
+            <Route
+              path="/pathways/quizlanding"
+              element={
+                <RequireAuth>
+                  <PathwayQuizLandingPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/pathways/quiz"
+              element={
+                <RequireAuth>
+                  <PathwayQuizPage />
+                </RequireAuth>
               }
             />
             <Route

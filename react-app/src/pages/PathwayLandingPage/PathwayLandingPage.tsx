@@ -218,7 +218,14 @@ function PathwayLandingPage() {
           variant="contained"
           onClick={() =>
             // TODO: Connect to training
-            navigate(`/pathways`)
+            navigate(`/pathways/quizlanding`, {
+              state: {
+                pathway: pathway,
+                volunteerPathway: volunteerPathway,
+                fromApp: true,
+                from: location,
+              },
+            })
           }>
           Start
         </Button>
@@ -233,7 +240,14 @@ function PathwayLandingPage() {
           variant="contained"
           onClick={() =>
             // TODO: Connect to training
-            navigate(`/pathways`)
+            navigate(`/pathways/quizlanding`, {
+              state: {
+                pathway: pathway,
+                volunteerPathway: volunteerPathway,
+                fromApp: true,
+                from: location,
+              },
+            })
           }>
           Restart
         </Button>
@@ -245,7 +259,15 @@ function PathwayLandingPage() {
           variant="contained"
           onClick={() =>
             // TODO: Connect to training
-            navigate(`/pathways`)
+            //navigate(`/pathways`)
+            navigate(`/pathways/quizlanding`, {
+              state: {
+                pathway: pathway,
+                volunteerPathway: volunteerPathway,
+                fromApp: true,
+                from: location,
+              },
+            })
           }>
           Resume
         </Button>
