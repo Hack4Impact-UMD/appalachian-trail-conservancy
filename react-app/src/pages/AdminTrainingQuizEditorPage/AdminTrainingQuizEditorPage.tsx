@@ -36,6 +36,7 @@ function TrainingQuizEditorPage() {
   const navigate = useNavigate();
   const [navigationBarOpen, setNavigationBarOpen] = useState(true);
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
+  const [isEditMode, setIsEditMode] = useState<boolean>(status !== "DRAFT");
 
   const [questions, setQuestions] = useState([
     {
@@ -180,7 +181,7 @@ function TrainingQuizEditorPage() {
     }
   };
 
-  const validateQuizFields = () => {
+  const validateFields = () => {
     if (questions.length === 0) {
       console.log("Validation failed: No questions provided.");
       return false; // No questions present
@@ -220,17 +221,27 @@ function TrainingQuizEditorPage() {
     return true; // All checks passed
   };  
 
-  const handleSaveQuiz = async () => {
-    const updatedQuiz = {
-      numQuestions,
-      passingScore,
-      questions,
+  const handleSaveClick = async () => {
+    // Validate fields only if in edit mode
+    if (isEditMode && !validateFields()) {
+      setSnackbarMessage("Please complete all required fields.");
+      setSnackbar(true);
+      return;
+    }
+
+    const quizData = {
+      numQuestions: questions.length,
+      passingScore: pointsToPass,
+      questions: questions.map(q => ({
+        question: q.questionText,
+        choices: q.answers.map(a => a.text),
+        answer: selectedAnswers[q.answers.findIndex(a => a.isCorrect)],
+      })),
     };
 
-    // Save quiz data along with training
     const updatedTraining = {
       ...training,
-      quiz: updatedQuiz
+      quiz: quizData,
     };
 
     // Update the training in the database (assuming you have a method for that)
@@ -239,7 +250,7 @@ function TrainingQuizEditorPage() {
 
   const handlePublishClick = async () => {
     // Validation: Ensure fields are filled
-    if (!validateQuizFields()) {
+    if (!validateFields()) {
       setSnackbarMessage("Please complete all fields and include at least one question.");
       setSnackbar(true);
       return;
@@ -261,7 +272,7 @@ function TrainingQuizEditorPage() {
         questions: questions.map(q => ({
           question: q.questionText,
           choices: q.answers.map(a => a.text),
-          answer: q.answers.findIndex(a => a.isCorrect),
+          answer: selectedAnswers[q.answers.findIndex(a => a.isCorrect)],
         })),
       };
 
@@ -313,7 +324,13 @@ function TrainingQuizEditorPage() {
             </div>
 
             <form noValidate onSubmit={(e) => e.preventDefault()}>
-              <Button sx={whiteButtonGrayBorder}>Save as Draft</Button>
+              <Button 
+                sx={whiteButtonGrayBorder}
+                variant="contained"
+                onClick={handleSaveClick}
+              >
+                {isEditMode ? "Save" : "Save as Draft"}
+              </Button>
 
               <h2 className={styles.quizEditorText}>CREATE QUIZ</h2>
 
@@ -459,6 +476,9 @@ function TrainingQuizEditorPage() {
                     ...styledRectButton,
                     ...whiteButtonGrayBorder,
                     width: "120px",
+                  }}
+                  onClick={() => {
+                    navigate("/trainings/editor", { state: { training } });
                   }}>
                   BACK
                 </Button>
@@ -471,7 +491,7 @@ function TrainingQuizEditorPage() {
                     marginLeft: "30px",
                   }}
                   onClick={handlePublishClick}>
-                  PUBLISH
+                  {isEditMode ? "ARCHIVE" : "PUBLISH"}
                 </Button>
               </div>
             </form>
