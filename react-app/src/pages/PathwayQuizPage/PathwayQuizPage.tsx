@@ -44,6 +44,7 @@ function PathwayQuizPage() {
       passingScore: 0,
     },
     badgeImage: "",
+    status: "PUBLISHED",
   });
 
   useEffect(() => {
@@ -64,8 +65,34 @@ function PathwayQuizPage() {
     }
   }, []);
 
+  useEffect(() => {
+    // prompt user before closing/refreshing page
+    const preventUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+    };
+
+    window.addEventListener("beforeunload", preventUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", preventUnload);
+    };
+  }, []);
+
   const handleSubmitQuiz = () => {
     setQuizLoading(true);
+
+    // check if any questions are unanswered
+    if (!selectedAnswers.some((answer) => answer == undefined)) {
+      setQuizLoading(false);
+      const prompt = window.confirm("Not all questions are answered. Submit?");
+      if (!prompt) {
+        return; // don't proceed if user hits cancel
+      } else {
+        setQuizLoading(true); // continue if user hits ok
+      }
+    }
+
+    // TODO: validate quiz
   };
 
   if (!location.state?.fromApp) {
@@ -77,8 +104,7 @@ function PathwayQuizPage() {
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}
-      >
+        style={{ left: navigationBarOpen ? "250px" : "0" }}>
         <div className={styles.outerContainer}>
           <div className={styles.bodyContainer}>
             {/* HEADER */}
@@ -116,14 +142,12 @@ function PathwayQuizPage() {
         {/* footer */}
         <div
           className={styles.footer}
-          style={{ width: navigationBarOpen ? "calc(100% - 250px)" : "100%" }}
-        >
+          style={{ width: navigationBarOpen ? "calc(100% - 250px)" : "100%" }}>
           <div className={styles.footerButtons}>
             <Button
               sx={{ ...forestGreenButton }}
               variant="contained"
-              onClick={() => {}}
-            >
+              onClick={handleSubmitQuiz}>
               Submit
             </Button>
           </div>

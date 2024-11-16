@@ -94,6 +94,8 @@ function QuizPage() {
       const prompt = window.confirm("Not all questions are answered. Submit?");
       if (!prompt) {
         return; // don't proceed if user hits cancel
+      } else {
+        setQuizLoading(true);
       }
     }
 
@@ -109,6 +111,7 @@ function QuizPage() {
             fromApp: true,
           },
         });
+        setQuizLoading(false);
       })
       .catch((error) => {
         console.error("Error validating quiz:", error);

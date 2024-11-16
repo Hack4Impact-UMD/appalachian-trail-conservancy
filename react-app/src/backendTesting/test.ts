@@ -269,6 +269,7 @@ export const updateSamplePathway = () => {
       },
       badgeImage:
         "https://github.com/Hack4Impact-UMD/y-knot/assets/67646012/fd89b897-4d20-4604-93a4-c28370cbdc2e",
+      status: "DRAFT" as Status,
     },
     "R8inCysiACE7bk1zy3y8"
   )
