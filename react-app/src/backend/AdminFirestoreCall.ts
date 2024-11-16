@@ -35,7 +35,7 @@ export function addEmail(email: EmailType): Promise<void> {
   });
 }
 
-export function updateEmail(email: EmailType): Promise<void> {
+export function updateRegistrationEmail(email: EmailType): Promise<void> {
   return new Promise((resolve, reject) => {
     if (email.subject === "" || email.body === "") {
       reject(new Error("Invalid subject or body"));
