@@ -406,21 +406,21 @@ function AdminVolunteerDetails() {
             </div>
 
             <div className={styles.volunteerInfo}>
-              <div>
+              <div className={styles.text}>
                 <b>Name: </b>
                 {volunteer.firstName} {volunteer.lastName}
               </div>
-              <div>
+              <div className={styles.text}>
                 <b>Email: </b>
                 {volunteer.email}
               </div>
               <br></br>
-              <div>
-                <b>Trainings Completed: </b>
+              <div className={styles.text}>
+                <b>Training(s) Completed: </b>
                 {trainingsCompleted}
               </div>
-              <div>
-                <b>Pathways Completed: </b>
+              <div className={styles.text}>
+                <b>Pathways(s) Completed: </b>
                 {pathwaysCompleted}
               </div>
             </div>
@@ -428,7 +428,7 @@ function AdminVolunteerDetails() {
             <div className={styles.queryContainer}>
               <div className={styles.searchBarContainer}>
                 <OutlinedInput
-                  sx={{ ...grayBorderSearchBar, width: "80%" }}
+                  sx={{ ...grayBorderSearchBar, width: "95%" }}
                   placeholder="Search..."
                   onChange={debouncedOnChange}
                   startAdornment={
@@ -463,7 +463,6 @@ function AdminVolunteerDetails() {
               </div>
             </div>
 
-            {/* Conditional Content Rendering */}
             <div className={styles.contentSection}>
               {alignment === "trainings" && (
                 <>
