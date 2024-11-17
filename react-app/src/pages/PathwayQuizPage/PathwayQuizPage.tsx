@@ -20,7 +20,9 @@ function PathwayQuizPage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [quizLoading, setQuizLoading] = useState<boolean>(false);
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
-  const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
+  const [selectedAnswers, setSelectedAnswers] = useState<
+    (string | undefined)[] // undefined allows to check for "empty" positions in sparse array
+  >([]);
   const [volunteerPathway, setVolunteerPathway] = useState<VolunteerPathway>({
     pathwayID: "",
     progress: "INPROGRESS",
@@ -59,7 +61,9 @@ function PathwayQuizPage() {
       if (location.state.pathway) {
         setPathway(location.state.pathway);
         setVolunteerPathway(location.state.volunteerPathway);
-        setSelectedAnswers(Array(location.state.pathway.quiz.questions.length));
+        setSelectedAnswers(
+          Array(location.state.pathway.quiz.questions.length).fill(undefined) // fill with undefined to allow for pre-submit warning
+        );
         setLoading(false);
       }
     }
@@ -82,15 +86,19 @@ function PathwayQuizPage() {
     setQuizLoading(true);
 
     // check if any questions are unanswered
-    if (!selectedAnswers.some((answer) => answer == undefined)) {
+    if (selectedAnswers.some((answer) => answer == undefined)) {
       setQuizLoading(false);
       const prompt = window.confirm("Not all questions are answered. Submit?");
       if (!prompt) {
         return; // don't proceed if user hits cancel
-      } else {
-        setQuizLoading(true); // continue if user hits ok
       }
+      setQuizLoading(true); // continue if user hits ok
     }
+
+    // replace any undefined values with empty string for quiz validation function
+    const cleanedSelectedAnswers = selectedAnswers.map((value) =>
+      value === undefined ? "" : value
+    );
 
     // TODO: validate quiz
   };
@@ -104,7 +112,8 @@ function PathwayQuizPage() {
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        style={{ left: navigationBarOpen ? "250px" : "0" }}
+      >
         <div className={styles.outerContainer}>
           <div className={styles.bodyContainer}>
             {/* HEADER */}
@@ -142,12 +151,14 @@ function PathwayQuizPage() {
         {/* footer */}
         <div
           className={styles.footer}
-          style={{ width: navigationBarOpen ? "calc(100% - 250px)" : "100%" }}>
+          style={{ width: navigationBarOpen ? "calc(100% - 250px)" : "100%" }}
+        >
           <div className={styles.footerButtons}>
             <Button
               sx={{ ...forestGreenButton }}
               variant="contained"
-              onClick={handleSubmitQuiz}>
+              onClick={handleSubmitQuiz}
+            >
               Submit
             </Button>
           </div>

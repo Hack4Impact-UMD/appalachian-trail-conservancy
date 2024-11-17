@@ -23,7 +23,9 @@ function QuizPage() {
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
   );
-  const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
+  const [selectedAnswers, setSelectedAnswers] = useState<
+    (string | undefined)[] // undefined allows to check for "empty" positions in sparse array
+  >([]);
   const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
     {
       trainingID: "",
@@ -65,7 +67,7 @@ function QuizPage() {
         setTraining(location.state.training);
         setVolunteerTraining(location.state.volunteerTraining);
         setSelectedAnswers(
-          Array(location.state.training.quiz.questions.length)
+          Array(location.state.training.quiz.questions.length).fill(undefined) // fill with undefined to allow for pre-submit warning
         );
         setLoading(false);
       }
@@ -89,17 +91,25 @@ function QuizPage() {
     setQuizLoading(true);
 
     // check if any questions are unanswered
-    if (!selectedAnswers.some((answer) => answer == undefined)) {
+    if (selectedAnswers.some((answer) => answer === undefined)) {
       setQuizLoading(false);
       const prompt = window.confirm("Not all questions are answered. Submit?");
       if (!prompt) {
         return; // don't proceed if user hits cancel
-      } else {
-        setQuizLoading(true);
       }
+      setQuizLoading(true);
     }
 
-    validateQuiz(volunteerTraining.trainingID, volunteerId, selectedAnswers)
+    // replace any undefined values with empty string for quiz validation function
+    const cleanedSelectedAnswers = selectedAnswers.map((value) =>
+      value === undefined ? "" : value
+    );
+
+    validateQuiz(
+      volunteerTraining.trainingID,
+      volunteerId,
+      cleanedSelectedAnswers
+    )
       .then((validateResults) => {
         const numAnswersCorrect = validateResults.data;
         navigate(`/trainings/quizresult`, {
@@ -127,7 +137,8 @@ function QuizPage() {
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        style={{ left: navigationBarOpen ? "250px" : "0" }}
+      >
         {!navigationBarOpen && (
           <img
             src={hamburger}
@@ -175,12 +186,14 @@ function QuizPage() {
         {/* footer */}
         <div
           className={styles.footer}
-          style={{ width: navigationBarOpen ? "calc(100% - 250px)" : "100%" }}>
+          style={{ width: navigationBarOpen ? "calc(100% - 250px)" : "100%" }}
+        >
           <div className={styles.footerButtons}>
             <Button
               sx={{ ...forestGreenButton }}
               variant="contained"
-              onClick={handleSubmitQuiz}>
+              onClick={handleSubmitQuiz}
+            >
               Submit
             </Button>
           </div>
