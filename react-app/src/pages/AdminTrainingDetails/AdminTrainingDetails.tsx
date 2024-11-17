@@ -226,7 +226,7 @@ function AdminTrainingDetails() {
   const columns = [
     { field: "volunteerName", headerName: "NAME", width: 200 },
     { field: "email", headerName: "EMAIL", width: 200 },
-    { field: "dateCompleted", headerName: "DATE COMPLETED", width: 200 },
+    { field: "dateCompleted", headerName: "DATE", width: 200 },
     { field: "timeCompleted", headerName: "TIME", width: 150 },
     { field: "quizScore", headerName: "SCORE", width: 150 },
     { field: "passFailStatus", headerName: "P/F", width: 100 },
@@ -243,9 +243,8 @@ function AdminTrainingDetails() {
       )
       .filter((training) => training.trainingID === trainingData.id)
       .map((training) => {
-        const quizScore = Math.round(training.quizScoreRecieved);
-        const passingScore = trainingData.quiz.numQuestions;
-        const quizScoreFormatted = `${quizScore} / ${passingScore}`;
+        const passingScore = trainingData.quiz.passingScore;
+        const quizScoreFormatted = `${training.quizScoreRecieved} / ${trainingData.quiz.numQuestions}`;
 
         return {
           id: `${volunteer.auth_id}-${training.trainingID}`,

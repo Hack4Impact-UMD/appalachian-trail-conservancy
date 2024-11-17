@@ -71,7 +71,7 @@ function AdminVolunteerDetails() {
         dateCompleted: "",
         numCompletedResources: 3,
         numTotalResources: 5,
-        quizScoreRecieved: 85,
+        quizScoreRecieved: 4,
       },
       {
         trainingID: "t002",
@@ -79,7 +79,7 @@ function AdminVolunteerDetails() {
         dateCompleted: "2024-01-15T10:30:00.000Z",
         numCompletedResources: 5,
         numTotalResources: 5,
-        quizScoreRecieved: 90,
+        quizScoreRecieved: 5,
       },
     ],
     pathwayInformation: [
@@ -90,7 +90,7 @@ function AdminVolunteerDetails() {
         trainingsCompleted: ["t001"],
         numTrainingsCompleted: 1,
         numTotalTrainings: 3,
-        quizScoreRecieved: 80,
+        quizScoreRecieved: 1,
       },
     ],
   };
@@ -118,8 +118,8 @@ function AdminVolunteerDetails() {
             answer: "John",
           },
         ],
-        numQuestions: 1,
-        passingScore: 50,
+        numQuestions: 5,
+        passingScore: 5,
       },
       associatedPathways: ["p001"],
       certificationImage: "https://via.placeholder.com/50",
@@ -146,8 +146,8 @@ function AdminVolunteerDetails() {
         questions: [
           { question: "What is 2+2?", choices: ["3", "4"], answer: "4" },
         ],
-        numQuestions: 1,
-        passingScore: 50,
+        numQuestions: 5,
+        passingScore: 3,
       },
       associatedPathways: ["p001"],
       certificationImage: "https://via.placeholder.com/50",
@@ -230,10 +230,6 @@ function AdminVolunteerDetails() {
     return totalPathways;
   };
 
-  const getPassFailStatus = (score: number, passingScore: number) => {
-    return score >= passingScore ? "Passed" : "Failed";
-  };
-
   const formatTrainingsCompleted = (numCompleted: number, numTotal: number) => {
     return `${numCompleted}/${numTotal}`;
   };
@@ -293,18 +289,16 @@ function AdminVolunteerDetails() {
       const trainingDetails =
         trainings[training.trainingID as keyof typeof trainings];
 
-      const passFail = getPassFailStatus(
-        training.quizScoreRecieved || 0,
-        trainingDetails.quiz.passingScore
-      );
+      const passingScore = trainingDetails.quiz.passingScore;
+        const quizScoreFormatted = `${training.quizScoreRecieved} / ${trainingDetails.quiz.numQuestions}`;
 
       return {
         id: training.trainingID,
         trainingName: trainingDetails.name,
         dateCompleted: formatDate(training.dateCompleted),
         timeCompleted: formatTime(training.dateCompleted),
-        quizScore: training.quizScoreRecieved || "Not Available",
-        passFailStatus: passFail,
+        quizScore: quizScoreFormatted || "Not Available",
+        passFailStatus: training.quizScoreRecieved >= passingScore ? "Passed" : "Failed",
         status: training.progress,
       };
     }

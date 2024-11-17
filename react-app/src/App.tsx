@@ -34,6 +34,8 @@ import AdminDashboard from "./pages/AdminDashboardPage/AdminDashboardPage.tsx";
 import AdminTrainingLibrary from "./pages/AdminTrainingLibraryPage/AdminTrainingLibraryPage.tsx";
 import AdminPathwayLibrary from "./pages/AdminPathwayLibraryPage/AdminPathwayLibraryPage.tsx";
 import AdminUserManagement from "./pages/AdminUserManagement/AdminUserManagement.tsx";
+import AdminVolunteerDetails from "./pages/AdminVolunteerDetails/AdminVolunteerDetails.tsx";
+import AdminTrainingDetails from "./pages/AdminTrainingDetails/AdminTrainingDetails.tsx";
 
 interface RoleBasedRouteProps {
   adminComponent: JSX.Element;
@@ -72,7 +74,7 @@ function App() {
               path="/"
               element={
                 <RoleBasedRoute
-                  adminComponent={<AdminDashboard />}
+                  adminComponent={<AdminTrainingDetails />}
                   volunteerComponent={<Dashboard />}
                 />
               }
@@ -89,7 +91,7 @@ function App() {
               path="/trainings"
               element={
                 <RoleBasedRoute
-                  adminComponent={<AdminTrainingLibrary />}
+                  adminComponent={<AdminVolunteerDetails />}
                   volunteerComponent={<TrainingLibrary />}
                 />
               }

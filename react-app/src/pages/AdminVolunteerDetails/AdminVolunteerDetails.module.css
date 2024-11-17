@@ -93,6 +93,7 @@
 
 .text {
   color: var(--blue-gray);
+  margin-top: 0.3rem;
 }
 
 .buttonContainer{
