@@ -186,17 +186,17 @@ function App() {
             <Route
               path="/pathways/quizlanding"
               element={
-                <RequireAuth>
+                <RequireVolunteerAuth>
                   <PathwayQuizLandingPage />
-                </RequireAuth>
+                </RequireVolunteerAuth>
               }
             />
             <Route
               path="/pathways/quiz"
               element={
-                <RequireAuth>
+                <RequireVolunteerAuth>
                   <PathwayQuizPage />
-                </RequireAuth>
+                </RequireVolunteerAuth>
               }
             />
             <Route

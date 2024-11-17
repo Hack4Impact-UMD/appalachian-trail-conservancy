@@ -20,7 +20,9 @@ function PathwayQuizPage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [quizLoading, setQuizLoading] = useState<boolean>(false);
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
-  const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
+  const [selectedAnswers, setSelectedAnswers] = useState<
+    (string | undefined)[] // undefined allows to check for "empty" positions in sparse array
+  >([]);
   const [volunteerPathway, setVolunteerPathway] = useState<VolunteerPathway>({
     pathwayID: "",
     progress: "INPROGRESS",
@@ -44,6 +46,7 @@ function PathwayQuizPage() {
       passingScore: 0,
     },
     badgeImage: "",
+    status: "PUBLISHED",
   });
 
   useEffect(() => {
@@ -58,14 +61,46 @@ function PathwayQuizPage() {
       if (location.state.pathway) {
         setPathway(location.state.pathway);
         setVolunteerPathway(location.state.volunteerPathway);
-        setSelectedAnswers(Array(location.state.pathway.quiz.questions.length));
+        setSelectedAnswers(
+          Array(location.state.pathway.quiz.questions.length).fill(undefined) // fill with undefined to allow for pre-submit warning
+        );
         setLoading(false);
       }
     }
   }, []);
 
+  useEffect(() => {
+    // prompt user before closing/refreshing page
+    const preventUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+    };
+
+    window.addEventListener("beforeunload", preventUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", preventUnload);
+    };
+  }, []);
+
   const handleSubmitQuiz = () => {
     setQuizLoading(true);
+
+    // check if any questions are unanswered
+    if (selectedAnswers.some((answer) => answer == undefined)) {
+      setQuizLoading(false);
+      const prompt = window.confirm("Not all questions are answered. Submit?");
+      if (!prompt) {
+        return; // don't proceed if user hits cancel
+      }
+      setQuizLoading(true); // continue if user hits ok
+    }
+
+    // replace any undefined values with empty string for quiz validation function
+    const cleanedSelectedAnswers = selectedAnswers.map((value) =>
+      value === undefined ? "" : value
+    );
+
+    // TODO: validate quiz
   };
 
   if (!location.state?.fromApp) {
@@ -122,7 +157,7 @@ function PathwayQuizPage() {
             <Button
               sx={{ ...forestGreenButton }}
               variant="contained"
-              onClick={() => {}}
+              onClick={handleSubmitQuiz}
             >
               Submit
             </Button>

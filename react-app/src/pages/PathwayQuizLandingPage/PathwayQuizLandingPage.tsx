@@ -35,6 +35,7 @@ function PathwayQuizLandingPage() {
       passingScore: 0,
     },
     badgeImage: "",
+    status: "PUBLISHED",
   });
 
   useEffect(() => {
@@ -64,8 +65,7 @@ function PathwayQuizLandingPage() {
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}
-      >
+        style={{ left: navigationBarOpen ? "250px" : "0" }}>
         <div className={styles.outerContainer}>
           <div className={styles.bodyContainer}>
             {/* header */}
@@ -129,8 +129,7 @@ function PathwayQuizLandingPage() {
               className={styles.footer}
               style={{
                 width: navigationBarOpen ? "calc(100% - 250px)" : "100%",
-              }}
-            >
+              }}>
               {/* buttons */}
               <div className={styles.footerButtons}>
                 <Button
@@ -144,8 +143,7 @@ function PathwayQuizLandingPage() {
                         fromApp: true,
                       },
                     })
-                  }
-                >
+                  }>
                   BACK
                 </Button>
                 <Button
@@ -159,8 +157,7 @@ function PathwayQuizLandingPage() {
                         fromApp: true,
                       },
                     })
-                  }
-                >
+                  }>
                   START QUIZ
                 </Button>
               </div>
