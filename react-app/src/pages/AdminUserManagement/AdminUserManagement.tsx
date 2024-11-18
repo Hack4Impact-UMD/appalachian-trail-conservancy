@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "./AdminUserManagement.module.css";
+import { getVolunteers } from "../../backend/FirestoreCalls";
 import { Button, InputAdornment, OutlinedInput } from "@mui/material";
 import { User } from "../../types/UserType.ts";
 import {
@@ -28,6 +29,7 @@ function AdminUserManagement() {
   const [alignment, setAlignment] = useState<string | null>("user");
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+  const [usersData, setUsersData] = useState<User[]>([]);
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
   );
@@ -53,36 +55,17 @@ function AdminUserManagement() {
     }
   };
 
-  const [user1] = useState<User>({
-    auth_id: "U6ICu0t0MxOuUCygwXY7aLeJCCv2",
-    email: "sophietsai31@gmail.com",
-    firstName: "Sophie",
-    lastName: "Tsai",
-    type: "ADMIN",
-  });
+  useEffect(() => {
+    getVolunteers()
+      .then((users) => {
+        setUsersData(users);
+        setFilteredUsers(users); // Initialize filteredUsers with all users from Firestore
+      })
+      .catch((error) => {
+        console.error("Error fetching users:", error);
+      });
+  }, []);
 
-  const [user2] = useState<User>({
-    auth_id: "wZO7L1uS1dc9YIrq7FU6YXzZk1J3",
-    email: "h4iatctest@gmail.com",
-    firstName: "Akash",
-    lastName: "Patil",
-    type: "VOLUNTEER",
-  });
-
-  const users = [
-    { id: user1.auth_id, ...user1 },
-    { id: user2.auth_id, ...user2 },
-    { id: 2, ...user2 },
-    { id: 3, ...user2 },
-    { id: 4, ...user2 },
-    { id: 5, ...user2 },
-    { id: 6, ...user2 },
-    { id: 7, ...user2 },
-    { id: 8, ...user2 },
-    { id: 9, ...user2 },
-    { id: 10, ...user2 },
-    { id: 11, ...user2 },
-  ];
   const columns = [
     { field: "firstName", headerName: "First Name", width: 150 },
     { field: "lastName", headerName: "Last Name", width: 150 },
@@ -92,13 +75,13 @@ function AdminUserManagement() {
 
   const filterUsers = () => {
     let filtered = searchQuery
-      ? users.filter(
+      ? usersData.filter(
           (user) =>
             user.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
             user.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
             user.email.toLowerCase().includes(searchQuery.toLowerCase())
         )
-      : users; // Show all users if searchQuery is empty
+      : usersData; // Show all users if searchQuery is empty
     setFilteredUsers(filtered);
   };
 
@@ -129,7 +112,7 @@ function AdminUserManagement() {
   }, [searchQuery]);
 
   useEffect(() => {
-    setFilteredUsers(users); // Initialize filteredUsers with all users
+    setFilteredUsers(usersData); // Initialize filteredUsers with all users
   }, []);
 
   return (
@@ -214,6 +197,7 @@ function AdminUserManagement() {
                         ColumnMenu: CustomColumnMenu,
                       }}
                       onRowClick={(row) => {}}
+                      getRowId={(row) => row.auth_id} // Use auth_id as the unique ID for each row
                     />
                   </div>
                 </>
