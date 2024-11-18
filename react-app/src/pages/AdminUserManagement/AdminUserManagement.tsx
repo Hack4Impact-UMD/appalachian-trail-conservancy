@@ -133,12 +133,39 @@ function AdminUserManagement() {
     );
   };
 
-  const updateQuery = (e: {
-    target: { value: React.SetStateAction<string> };
-  }) => {
-    setSearchQuery(e.target.value);
+  const filterTrainings = () => {
+    const filtered = searchQuery
+      ? trainingsData.filter((training) =>
+          training.name.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      : trainingsData; // Show all trainings if searchQuery is empty
+    setFilteredTrainings(filtered);
   };
 
+  const filterPathways = () => {
+    const filtered = searchQuery
+      ? pathwaysData.filter((pathway) =>
+          pathway.name.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      : pathwaysData; // Show all pathways if searchQuery is empty
+    setFilteredPathways(filtered);
+  };
+
+  // Apply the appropriate filter based on the active tab and search query
+  useEffect(() => {
+    if (alignment === "user") {
+      filterUsers();
+    } else if (alignment === "training") {
+      filterTrainings();
+    } else if (alignment === "pathways") {
+      filterPathways();
+    }
+  }, [searchQuery, alignment]); // Runs whenever searchQuery or alignment changes
+
+  // Debounce the search query to prevent excessive filtering
+  const updateQuery = (e: { target: { value: string } }) => {
+    setSearchQuery(e.target.value);
+  };
   const debouncedOnChange = debounce(updateQuery, 200);
 
   useEffect(() => {
