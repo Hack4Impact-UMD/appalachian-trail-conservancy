@@ -1,8 +1,14 @@
 import { useEffect, useState } from "react";
 import styles from "./AdminUserManagement.module.css";
-import { getVolunteers } from "../../backend/FirestoreCalls";
+import { 
+  getVolunteers,
+  getAllTrainings,
+  getAllPathways
+ } from "../../backend/FirestoreCalls";
 import { Button, InputAdornment, OutlinedInput } from "@mui/material";
 import { User } from "../../types/UserType.ts";
+import { TrainingID } from "../../types/TrainingType.ts";
+import { PathwayID } from "../../types/PathwayType.ts";
 import {
   DataGrid,
   GridColumnMenuProps,
@@ -30,6 +36,10 @@ function AdminUserManagement() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [usersData, setUsersData] = useState<User[]>([]);
+  const [filteredTrainings, setFilteredTrainings] = useState<TrainingID[]>([]);
+  const [trainingsData, setTrainingsData] = useState<TrainingID[]>([]);
+  const [filteredPathways, setFilteredPathways] = useState<PathwayID[]>([]);
+  const [pathwaysData, setPathwaysData] = useState<PathwayID[]>([]);
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
   );
@@ -64,13 +74,37 @@ function AdminUserManagement() {
       .catch((error) => {
         console.error("Error fetching users:", error);
       });
+      getAllTrainings()
+      .then((trainings) => {
+        setTrainingsData(trainings);
+        setFilteredTrainings(trainings); 
+      })
+      .catch((error) => {
+        console.error("Error fetching users:", error);
+      });
+      getAllPathways()
+      .then((pathways) => {
+        setPathwaysData(pathways);
+        setFilteredPathways(pathways); 
+      })
+      .catch((error) => {
+        console.error("Error fetching users:", error);
+      });
   }, []);
 
-  const columns = [
+  const usersColumns = [
     { field: "firstName", headerName: "First Name", width: 150 },
     { field: "lastName", headerName: "Last Name", width: 150 },
     { field: "email", headerName: "Email", width: 200 },
     { field: "misc", headerName: "Miscellaneous", width: 200 },
+  ];
+
+  const pathwaysColumns = [
+    { field: "name", headerName: "Pathway Name", width: 350 },
+  ];
+
+  const trainingsColumns = [
+    { field: "name", headerName: "Training Name", width: 350 },
   ];
 
   const filterUsers = () => {
@@ -187,7 +221,7 @@ function AdminUserManagement() {
                   <div className={styles.innerGrid}>
                     <DataGrid
                       rows={filteredUsers}
-                      columns={columns}
+                      columns={usersColumns}
                       rowHeight={40}
                       checkboxSelection
                       pageSize={10}
@@ -204,14 +238,84 @@ function AdminUserManagement() {
               )}
               {alignment === "training" && (
                 <>
-                  <h2>Training Information</h2>
-                  <p>Details about training information go here.</p>
+                  <div className={styles.searchBarContainer}>
+                    <OutlinedInput
+                      sx={grayBorderSearchBar}
+                      placeholder="Search..."
+                      onChange={debouncedOnChange}
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <IoIosSearch />
+                        </InputAdornment>
+                      }
+                    />
+                    <Button
+                      sx={{
+                        ...whiteButtonOceanGreenBorder,
+                        paddingLeft: "20px",
+                        paddingRight: "20px",
+                        fontWeight: "bold",
+                      }}>
+                      Export
+                    </Button>
+                  </div>
+
+                  <div className={styles.innerGrid}>
+                    <DataGrid
+                      rows={filteredTrainings}
+                      columns={trainingsColumns}
+                      rowHeight={40}
+                      checkboxSelection
+                      pageSize={10}
+                      sx={DataGridStyles}
+                      components={{
+                        ColumnUnsortedIcon: TbArrowsSort,
+                        ColumnMenu: CustomColumnMenu,
+                      }}
+                      onRowClick={(row) => {}}
+                    />
+                  </div>
                 </>
               )}
               {alignment === "pathways" && (
                 <>
-                  <h2>Pathways Information</h2>
-                  <p>Details about pathways information go here.</p>
+                  <div className={styles.searchBarContainer}>
+                    <OutlinedInput
+                      sx={grayBorderSearchBar}
+                      placeholder="Search..."
+                      onChange={debouncedOnChange}
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <IoIosSearch />
+                        </InputAdornment>
+                      }
+                    />
+                    <Button
+                      sx={{
+                        ...whiteButtonOceanGreenBorder,
+                        paddingLeft: "20px",
+                        paddingRight: "20px",
+                        fontWeight: "bold",
+                      }}>
+                      Export
+                    </Button>
+                  </div>
+
+                  <div className={styles.innerGrid}>
+                    <DataGrid
+                      rows={filteredPathways}
+                      columns={pathwaysColumns}
+                      rowHeight={40}
+                      checkboxSelection
+                      pageSize={10}
+                      sx={DataGridStyles}
+                      components={{
+                        ColumnUnsortedIcon: TbArrowsSort,
+                        ColumnMenu: CustomColumnMenu,
+                      }}
+                      onRowClick={(row) => {}}
+                    />
+                  </div>
                 </>
               )}
             </div>
