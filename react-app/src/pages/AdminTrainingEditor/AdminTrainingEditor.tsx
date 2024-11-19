@@ -20,7 +20,7 @@ import {
   updateTraining,
   getAllTrainings,
 } from "../../backend/FirestoreCalls";
-import { TrainingID, Training } from "../../types/TrainingType";
+import { TrainingID, Training, TrainingResource, Resource, Quiz, Question, Status } from "../../types/TrainingType";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
@@ -53,6 +53,7 @@ const AdminTrainingEditor: React.FC = () => {
   const [resourceType, setResourceType] = useState(
     trainingData?.resources[0]?.type || ""
   );
+
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
   );
@@ -70,6 +71,7 @@ const AdminTrainingEditor: React.FC = () => {
     blurb: "",
     description: "",
     resourceLink: "",
+    resourceType: "",
   });
 
   const [invalidName, setInvalidName] = useState<boolean>(false);
@@ -89,6 +91,7 @@ const AdminTrainingEditor: React.FC = () => {
       blurb: "",
       description: "",
       resourceLink: "",
+      resourceType: "",
     };
     let isValid = true;
 
@@ -105,6 +108,11 @@ const AdminTrainingEditor: React.FC = () => {
 
     if (!description) {
       newErrors.description = "Description is required.";
+      isValid = false;
+    }
+
+    if (!resourceType) {
+      newErrors.resourceType = "Resource Type is required.";
       isValid = false;
     }
 
@@ -129,16 +137,25 @@ const AdminTrainingEditor: React.FC = () => {
       setSnackbar(true);
       return;
     }
+
+    let blankErrors = {
+      trainingName: "",
+      blurb: "",
+      description: "",
+      resourceLink: "",
+      resourceType: "",
+    };
+    setErrors(blankErrors);
     
     const updatedTraining = {
       name: trainingName,
       shortBlurb: blurb,
       description: description,
       resources: [
-        { link: resourceLink, type: resourceType },
+        { link: resourceLink, type: resourceType } as TrainingResource,
       ],
       status: isEditMode ? status : "DRAFT",
-    };
+    } as Training;
 
     if (trainingId) {
       // Update existing training
@@ -146,7 +163,7 @@ const AdminTrainingEditor: React.FC = () => {
       setSnackbarMessage("Training updated successfully.");
     } else {
       // Save as new draft
-      const newTrainingId = await addTraining(updatedTraining);
+      const newTrainingId = await addTraining(updatedTraining) as string | undefined;
       setTrainingId(newTrainingId);
       setSnackbarMessage("Draft saved successfully.");
     }
@@ -156,34 +173,32 @@ const AdminTrainingEditor: React.FC = () => {
   const handleNextClick = async () => {
     if (validateFields()) {
       const updatedTraining = {
+        ...trainingData,
         name: trainingName,
         shortBlurb: blurb,
         description: description,
-        quiz: trainingData.quiz || {
-          numQuestions: 0,
-          passingScore: 0,
-          questions: [],
-        },
         resources: [
-          { link: resourceLink, type: resourceType },
-        ],
-        status: isEditMode ? status : "DRAFT",
-      };
+          { link: resourceLink, type: resourceType as Resource } as TrainingResource,
+        ] as TrainingResource[],
+        status: isEditMode ? status : "DRAFT" as Status,
+      } as TrainingID;
   
       if (trainingId) {
         await updateTraining(updatedTraining, trainingId);
+        updatedTraining.id = trainingId;
         setSnackbarMessage("Training updated successfully.");
         setSnackbar(true);
   
         // Navigate to the quiz editor with the training as state
-        navigate("/trainings/editor/quiz", { state: { training: updatedTraining, id: trainingId } });
+        navigate("/trainings/editor/quiz", { state: { training: updatedTraining } });
       } else {
         const newTrainingId = await addTraining(updatedTraining);
+        updatedTraining.id = newTrainingId;
         setSnackbarMessage("Draft saved successfully.");
         setSnackbar(true);
   
         // Navigate to the quiz editor with the new training as state
-        navigate("/trainings/editor/quiz", { state: { training: updatedTraining, id: newTrainingId } });
+        navigate("/trainings/editor/quiz", { state: { training: updatedTraining } });
       }
     } else {
       setSnackbarMessage("Please complete all required fields.");
@@ -511,7 +526,7 @@ const AdminTrainingEditor: React.FC = () => {
                   <TextField
                     value={resourceLink}
                     sx={{
-                      width: "70%",
+                      width: "65.5%",
                       fontSize: "1.1rem",
                       borderRadius: "10px",
                       marginTop: "0.3rem",
@@ -534,8 +549,9 @@ const AdminTrainingEditor: React.FC = () => {
 
                   <FormControl
                     margin="normal"
-                    sx={{ marginTop: "0px" }}
+                    sx={{ marginTop: "0px", width: "180px" }}
                     className={styles.resourceTypeField}
+                    error={Boolean(errors.resourceType)}
                   >
                     <Select
                       className={styles.dropdownMenu}
@@ -544,7 +560,6 @@ const AdminTrainingEditor: React.FC = () => {
                         fontSize: "1.1rem",
                         borderRadius: "10px",
                         height: "3.2rem",
-                        width: "180px",
                       }}
                       value={resourceType}
                       onChange={(e) =>
@@ -582,7 +597,7 @@ const AdminTrainingEditor: React.FC = () => {
                     }}
                     onClick={handleNextClick}
                   >
-                    Next: Create Quiz
+                    {isEditMode ? "Next: Edit Quiz" : "Next: Create Quiz"}
                   </Button>
                 </div>
               </form>
