@@ -219,12 +219,7 @@ function App() {
               path="/testfunctions"
               element={
                 <RequireAuth>
-                  <button
-                    onClick={() => {
-                      //insert test function here
-                    }}>
-                    TEST
-                  </button>
+                  <button onClick={async () => {}}>TEST</button>
                 </RequireAuth>
               }
             />
