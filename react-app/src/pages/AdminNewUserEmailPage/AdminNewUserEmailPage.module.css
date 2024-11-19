@@ -93,9 +93,28 @@
     align-items: center;  
     justify-content: space-between;  
     width: 80%;  
-    margin-top: 2rem;  
+    margin-top: 1rem; 
+    
+}
+.bodyLabel {
+    font-weight: bold !important;
+    color: black;
 }
 
+.toolbarButtons {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+}
+#quillEditor {
+    height: 250px;
+    width: 80%;
+    border: 1px solid var(--blue-gray);
+    border-radius: 10px;
+    margin-bottom: 200rem; /* Adjust this value for desired spacing */
+    background-color: #fff;
+}
 
 @media (max-width: 768px) {
     .content {
@@ -162,4 +181,10 @@
         height: 25px;
         font-size: 0.9rem;
     }
+}
+
+/* Remove border from Quill toolbar */
+.ql-bold{
+    border: none;
+    background: none;
 }

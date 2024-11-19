@@ -1,41 +1,40 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import NavigationBar from "../../components/NavigationBar/NavigationBar.tsx";
 import styles from "./AdminNewUserEmailPage.module.css";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon.tsx";
 import { Button, TextField, Typography } from "@mui/material";
 import Footer from "../../components/Footer/Footer.tsx";
+import Quill from "quill";
+import "quill/dist/quill.snow.css";
 
 function AdminNewUserEmail() {
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
+  const [errors, setErrors] = useState({ subject: "", body: "" });
 
-  const [errors, setErrors] = useState({
-    subject: "",
-    body: "",
-  });
+  const editorContainerRef = useRef<HTMLDivElement>(null); // DOM reference for editor container
+  const quillRef = useRef<Quill | null>(null); // Quill instance reference
 
-  // Helper function to wrap the selected text with a specific HTML tag
-  const wrapSelectedText = (tag: string) => {
-    const selection = window.getSelection();
-    if (selection && selection.rangeCount > 0) {
-      const range = selection.getRangeAt(0);
-      const selectedText = range.toString();
+  const toolbarContainer = useRef<HTMLDivElement>(null);
 
-      if (selectedText) {
-        const wrapper = document.createElement(tag);
-        wrapper.innerText = selectedText;
+  useEffect(() => {
+    if (editorContainerRef.current && !quillRef.current) {
+      console.log("Initializing Quill editor");
+      quillRef.current = new Quill(editorContainerRef.current, {
+        modules: {
+          toolbar: "#toolbar",
+        },
+      });
 
-        range.deleteContents();
-        range.insertNode(wrapper);
-
-        setBody(document.getElementById("editableDiv")?.innerHTML || "");
-      }
+      // Handle Quill text changes
+      quillRef.current.on("text-change", () => {
+        const editorContent = quillRef.current!.root.innerHTML;
+        console.log("Editor content changed:", editorContent);
+        setBody(editorContent); // Store as HTML
+      });
     }
-  };
-  const handleBodyInput = (event: any) => {
-    setBody(event.target.innerHTML);
-  };
+  }, []); // Empty dependency array ensures this runs only once
 
   return (
     <>
@@ -69,7 +68,7 @@ function AdminNewUserEmail() {
                 borderRadius: "10px",
                 marginTop: "0.3rem",
                 height: "3.2rem",
-                border: "2px solid var(--blue-gray)",
+                border: "1px solid var(--blue-gray)",
                 "& fieldset": {
                   border: "none",
                 },
@@ -81,73 +80,65 @@ function AdminNewUserEmail() {
               margin="normal"
             />
 
-            {/* Container for BODY typography and style buttons */}
             <div className={styles.bodyContainer}>
-              <Typography
-                variant="body2"
-                style={{
-                  color: "black",
-                  fontWeight: "bold",
-                  marginBottom: "4px",
-                }}
-              >
+              <Typography variant="body2" className={styles.bodyLabel}>
                 BODY
               </Typography>
 
-              <div className={styles.styleButtons}>
+              <div className={styles.toolbarButtons} id="toolbar">
                 <button
-                  className={styles.styleButton}
-                  onClick={() => wrapSelectedText("b")}
+                  className="ql-bold"
+                  style={{
+                    background: "none",
+                    fontSize: "1.5em",
+                    width: "2rem",
+                  }}
                 >
-                  <b>B</b>
+                  B
                 </button>
                 <button
-                  className={styles.styleButton}
-                  onClick={() => wrapSelectedText("i")}
+                  className="ql-italic"
+                  style={{
+                    background: "none",
+                    fontSize: "1.5em",
+                    width: "2rem",
+                  }}
                 >
-                  <i>I</i>
+                  I
                 </button>
                 <button
-                  className={styles.styleButton}
-                  onClick={() => wrapSelectedText("u")}
+                  className="ql-underline"
+                  style={{
+                    background: "none",
+                    fontSize: "1.5em",
+                    width: "2rem",
+                  }}
                 >
-                  <u>U</u>
+                  U
                 </button>
               </div>
             </div>
 
-            <TextField
-              value={body.replace(/<[^>]*>?/gm, "")}
-              sx={{
+            {/* Quill Editor Container */}
+            <div
+              ref={editorContainerRef}
+              id="quillEditor"
+              style={{
+                height: "250px",
                 width: "80%",
-                fontSize: "1.1rem",
-                minHeight: 250,
-                height: "auto",
+                border: "1px solid var(--blue-gray)",
                 borderRadius: "10px",
-                marginTop: "0.3rem",
-                border: "2px solid var(--blue-gray)",
-                "& fieldset": {
-                  border: "none",
-                },
-                "& .MuiInputBase-root": {
-                  maxHeight: "250px",
-                  overflowY: "auto",
-                },
+                marginBottom: "1rem",
+                backgroundColor: "#fff",
               }}
-              onChange={(e) => setBody(e.target.value)}
-              error={Boolean(errors.body)}
-              helperText={errors.body}
-              fullWidth
-              multiline
-              rows={9}
-              margin="normal"
-            />
+            ></div>
 
             <div className={styles.buttonContainer}>
               <Button
                 variant="outlined"
                 color="secondary"
                 className={styles.saveButton}
+                onClick={() => console.log("Body as HTML:", body)}
               >
                 SAVE
               </Button>
