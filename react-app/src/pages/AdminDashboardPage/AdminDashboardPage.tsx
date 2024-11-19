@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../auth/AuthProvider";
-import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar";
 import styles from "./AdminDashboardPage.module.css";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Footer from "../../components/Footer/Footer";
@@ -102,7 +102,10 @@ function AdminDashboardPage() {
 
   return (
     <>
-      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <AdminNavigationBar
+        open={navigationBarOpen}
+        setOpen={setNavigationBarOpen}
+      />
       <div
         className={`${styles.split} ${styles.right}`}
         style={{
@@ -123,40 +126,43 @@ function AdminDashboardPage() {
               <h1 className={styles.nameHeading}>Hello, {auth.firstName}!</h1>
               <ProfileIcon />
             </div>
+
+            <div className={styles.buttonContainer}>
+              <Button sx={forestGreenButtonLarge} variant="contained">
+                CREATE NEW TRAINING
+              </Button>
+              <Button sx={forestGreenButtonLarge} variant="contained">
+                CREATE NEW PATHWAY
+              </Button>
+            </div>
+            <div className={styles.buttonSelect}>
+              <Button
+                onClick={() => setTrainingsSelected(true)}
+                sx={
+                  trainingsSelected
+                    ? forestGreenButtonPadding
+                    : whiteButtonGrayBorder
+                }
+                variant="contained">
+                TRAINING
+              </Button>
+              <Button
+                onClick={() => setTrainingsSelected(false)}
+                sx={
+                  !trainingsSelected
+                    ? forestGreenButtonPadding
+                    : whiteButtonGrayBorder
+                }
+                variant="contained">
+                PATHWAYS
+              </Button>
+            </div>
             {loading ? (
-              <Loading />
+              <div className={styles.loadingContainer}>
+                <Loading />
+              </div>
             ) : (
               <>
-                <div className={styles.buttonContainer}>
-                  <Button sx={forestGreenButtonLarge} variant="contained">
-                    CREATE NEW TRAINING
-                  </Button>
-                  <Button sx={forestGreenButtonLarge} variant="contained">
-                    CREATE NEW PATHWAY
-                  </Button>
-                </div>
-                <div className={styles.buttonSelect}>
-                  <Button
-                    onClick={() => setTrainingsSelected(true)}
-                    sx={
-                      trainingsSelected
-                        ? forestGreenButtonPadding
-                        : whiteButtonGrayBorder
-                    }
-                    variant="contained">
-                    TRAINING
-                  </Button>
-                  <Button
-                    onClick={() => setTrainingsSelected(false)}
-                    sx={
-                      !trainingsSelected
-                        ? forestGreenButtonPadding
-                        : whiteButtonGrayBorder
-                    }
-                    variant="contained">
-                    PATHWAYS
-                  </Button>
-                </div>
                 <div className={styles.subHeader}>
                   <h2>Recent Drafts</h2>
                 </div>
@@ -212,7 +218,7 @@ function AdminDashboardPage() {
                       </div>
                     )}
                   </>
-                )}{" "}
+                )}
               </>
             )}
           </div>

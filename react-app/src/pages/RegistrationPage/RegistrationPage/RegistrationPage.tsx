@@ -2,24 +2,21 @@ import { useState } from "react";
 import {
   FormControl,
   Button,
-  Tooltip,
   OutlinedInput,
   FormHelperText,
 } from "@mui/material";
-
 import {
   forestGreenButton,
   grayBorderTextField,
   styledRectButton,
-  whiteTooltip,
 } from "../../../muiTheme.ts";
 import { Navigate } from "react-router";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../auth/AuthProvider.tsx";
+import { createVolunteerUser } from "../../../backend/AuthFunctions.ts";
 import styles from "./RegistrationPage.module.css";
 import Loading from "../../../components/LoadingScreen/Loading.tsx";
 import primaryLogo from "../../../assets/atc-primary-logo.png";
-import { IoIosInformationCircleOutline } from "react-icons/io";
 
 function RegistrationPage() {
   const { user } = useAuth();
@@ -29,7 +26,7 @@ function RegistrationPage() {
 
   //Add Error Handling
   const [invalidEmail, setInvalidEmail] = useState<boolean>(false);
-  const [invalidCode, setInvalidCode] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const [email, setEmail] = useState<string>("");
   const [firstName, setFirstName] = useState<string>("");
@@ -57,10 +54,17 @@ function RegistrationPage() {
     if (!validateEmail(email)) {
       setInvalidEmail(true);
     } else {
-      setShowLoading(false);
-      navigate("/registration-confirmation", {
-        state: { fromApp: true },
-      }); /* proceed to confirmation */
+      await createVolunteerUser(email, firstName, lastName, joinCode)
+        .then(() => {
+          navigate("/registration-confirmation", {
+            state: { fromApp: true },
+          }); /* proceed to confirmation */
+        })
+        .catch(() => {
+          setErrorMessage(
+            "Error creating account. Account may already exist or join code may be incorrect."
+          );
+        });
     }
     setShowLoading(false);
   };
@@ -109,19 +113,6 @@ function RegistrationPage() {
             {/* email field */}
             <div className={`${styles.alignLeft} ${styles.emailContainer}`}>
               <h3 className={styles.label}>Email</h3>
-              <Tooltip
-                title="Use your ATC volunteer email here."
-                arrow={false}
-                placement="right"
-                componentsProps={{
-                  tooltip: {
-                    sx: whiteTooltip,
-                  },
-                }}>
-                <span className={styles.icon}>
-                  <IoIosInformationCircleOutline />
-                </span>
-              </Tooltip>
             </div>
             <OutlinedInput
               sx={{
@@ -135,8 +126,12 @@ function RegistrationPage() {
                 "& fieldset": {
                   border: "none",
                 },
+                "& input::placeholder": {
+                  color: "black",
+                },
               }}
               value={email}
+              placeholder="Use your ATC Volunteer email"
               onChange={(e) => {
                 setEmail(e.target.value);
               }}
@@ -155,9 +150,7 @@ function RegistrationPage() {
                 fontSize: "1.1rem",
                 height: 48,
                 borderRadius: "10px",
-                border: invalidCode
-                  ? "2px solid #d32f2f"
-                  : "2px solid var(--blue-gray)",
+                border: "2px solid var(--blue-gray)",
                 "& fieldset": {
                   border: "none",
                 },
@@ -165,7 +158,6 @@ function RegistrationPage() {
               onChange={(event) => {
                 setJoinCode(event.target.value);
               }}
-              error={invalidCode}
             />
           </FormControl>
 
@@ -176,11 +168,14 @@ function RegistrationPage() {
               sx={{ ...styledRectButton, ...forestGreenButton }}
               variant="contained"
               onClick={(e) => handleConfirm(e)}
-              disabled={!isFormValid}>
-              {showLoading ? <Loading></Loading> : "Confirm"}
+              disabled={!isFormValid}
+            >
+              {showLoading ? <Loading color="white" /> : "Confirm"}
             </Button>
           </div>
         </form>
+
+        <div className={styles.error}>{errorMessage}</div>
 
         {/* switch to sign in */}
         <Link to="/login/" className={styles.switch}>

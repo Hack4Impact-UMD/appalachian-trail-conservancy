@@ -324,7 +324,10 @@ export function getAllTrainings(): Promise<TrainingID[]> {
 
 export function getAllPublishedTrainings(): Promise<TrainingID[]> {
   const trainingsRef = collection(db, "Trainings");
-  const publishedTrainingsQuery = query(trainingsRef, where("status", "==", "PUBLISHED"));
+  const publishedTrainingsQuery = query(
+    trainingsRef,
+    where("status", "==", "PUBLISHED")
+  );
 
   return new Promise((resolve, reject) => {
     getDocs(publishedTrainingsQuery)
@@ -361,7 +364,10 @@ export function getAllPathways(): Promise<PathwayID[]> {
 }
 export function getAllPublishedPathways(): Promise<PathwayID[]> {
   const pathwaysRef = collection(db, "Pathways");
-  const publishedPathwaysQuery = query(pathwaysRef, where("status", "==", "PUBLISHED"));
+  const publishedPathwaysQuery = query(
+    pathwaysRef,
+    where("status", "==", "PUBLISHED")
+  );
 
   return new Promise((resolve, reject) => {
     getDocs(publishedPathwaysQuery)

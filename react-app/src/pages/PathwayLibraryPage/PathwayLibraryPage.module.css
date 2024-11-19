@@ -86,7 +86,7 @@
   margin-bottom: 1%; /* Add margin between items */
 }
 
-.emptySearchMessage {
+.centerTextLoading {
   width: 100%;
   font-weight: bold;
   text-align: center;

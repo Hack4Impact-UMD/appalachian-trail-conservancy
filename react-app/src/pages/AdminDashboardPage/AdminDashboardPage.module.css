@@ -45,7 +45,7 @@
   justify-content: space-between;
   align-items: center;
   margin-top: 2rem;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 
 .nameHeading {
@@ -70,13 +70,18 @@
 
 .buttonContainer {
   display: flex;
-  gap: 10%;
-  margin-bottom: 2%;
+  gap: 5%;
+  margin-bottom: 2rem;
 }
 
 .buttonSelect {
   display: flex;
   gap: 3%;
+}
+
+.loadingContainer {
+  width: 100%;
+  margin-top: 1.5rem;
 }
 
 .subHeader {

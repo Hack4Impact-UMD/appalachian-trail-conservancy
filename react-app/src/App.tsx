@@ -1,7 +1,8 @@
 import "./index.css";
+import React from "react";
 import { HashRouter, Route, Routes } from "react-router-dom";
 import { ThemeProvider } from "@mui/material";
-import { AuthProvider } from "./auth/AuthProvider.tsx";
+import { AuthProvider, useAuth } from "./auth/AuthProvider.tsx";
 import theme from "./muiTheme.ts";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import Dashboard from "./pages/DashboardPage/DashboardPage.tsx";
@@ -21,6 +22,8 @@ import QuizPage from "./pages/QuizPage/QuizPage.tsx";
 import QuizResult from "./pages/QuizResultPage/QuizResultPage.tsx";
 import QuizLandingPage from "./pages/QuizLandingPage/QuizLandingPage.tsx";
 import PathwayLibrary from "./pages/PathwayLibraryPage/PathwayLibraryPage.tsx";
+import PathwayQuizLandingPage from "./pages/PathwayQuizLandingPage/PathwayQuizLandingPage.tsx";
+import PathwayQuizPage from "./pages/PathwayQuizPage/PathwayQuizPage.tsx";
 import AdminTrainingEditor from "./pages/AdminTrainingEditor/AdminTrainingEditor.tsx";
 import AdminPathwayEditor from "./pages/AdminPathwayEditor/AdminPathwayEditor.tsx";
 import RegistrationPage from "./pages/RegistrationPage/RegistrationPage/RegistrationPage.tsx";
@@ -31,6 +34,25 @@ import AdminDashboard from "./pages/AdminDashboardPage/AdminDashboardPage.tsx";
 import AdminTrainingLibrary from "./pages/AdminTrainingLibraryPage/AdminTrainingLibraryPage.tsx";
 import AdminPathwayLibrary from "./pages/AdminPathwayLibraryPage/AdminPathwayLibraryPage.tsx";
 import AdminNewUserEmail from "./pages/AdminNewUserEmailPage/AdminNewUserEmailPage.tsx";
+import AdminUserManagement from "./pages/AdminUserManagement/AdminUserManagement.tsx";
+
+interface RoleBasedRouteProps {
+  adminComponent: JSX.Element;
+  volunteerComponent: JSX.Element;
+}
+
+const RoleBasedRoute: React.FC<RoleBasedRouteProps> = ({
+  adminComponent,
+  volunteerComponent,
+}) => {
+  const authContext = useAuth();
+
+  if (authContext.token?.claims?.role === "ADMIN") {
+    return <RequireAdminAuth>{adminComponent}</RequireAdminAuth>;
+  } else {
+    return <RequireVolunteerAuth>{volunteerComponent}</RequireVolunteerAuth>;
+  }
+};
 
 function App() {
   return (
@@ -50,64 +72,17 @@ function App() {
             <Route
               path="/"
               element={
-                <RequireVolunteerAuth>
-                  <Dashboard />
-                </RequireVolunteerAuth>
+                <RoleBasedRoute
+                  adminComponent={<AdminDashboard />}
+                  volunteerComponent={<Dashboard />}
+                />
               }
             />
             <Route
-              path="/admin"
+              path="/management"
               element={
                 <RequireAdminAuth>
-                  <AdminDashboard />
-                </RequireAdminAuth>
-              }
-            />
-            <Route
-              path="/admin/trainings"
-              element={
-                <RequireAdminAuth>
-                  <AdminTrainingLibrary />
-                </RequireAdminAuth>
-              }
-            />
-            <Route
-              path="/admin/trainings/editor"
-              element={
-                <RequireAdminAuth>
-                  <AdminTrainingEditor />
-                </RequireAdminAuth>
-              }
-            />
-            <Route
-              path="/admin/trainings/editor/quiz"
-              element={
-                <RequireAdminAuth>
-                  <TrainingQuizEditorPage />
-                </RequireAdminAuth>
-              }
-            />
-            <Route
-              path="/admin/pathways"
-              element={
-                <RequireAdminAuth>
-                  <AdminPathwayLibrary />
-                </RequireAdminAuth>
-              }
-            />
-            <Route
-              path="/admin/pathways/editor"
-              element={
-                <RequireAdminAuth>
-                  <AdminPathwayEditor />
-                </RequireAdminAuth>
-              }
-            />
-            <Route
-              path="/admin/pathways/editor/quiz"
-              element={
-                <RequireAdminAuth>
-                  <PathwayQuizEditorPage />
+                  <AdminUserManagement />
                 </RequireAdminAuth>
               }
             />
@@ -122,9 +97,10 @@ function App() {
             <Route
               path="/trainings"
               element={
-                <RequireVolunteerAuth>
-                  <TrainingLibrary />
-                </RequireVolunteerAuth>
+                <RoleBasedRoute
+                  adminComponent={<AdminTrainingLibrary />}
+                  volunteerComponent={<TrainingLibrary />}
+                />
               }
             />
             <Route
@@ -168,11 +144,28 @@ function App() {
               }
             />
             <Route
+              path="/trainings/editor"
+              element={
+                <RequireAdminAuth>
+                  <AdminTrainingEditor />
+                </RequireAdminAuth>
+              }
+            />
+            <Route
+              path="/trainings/editor/quiz"
+              element={
+                <RequireAdminAuth>
+                  <TrainingQuizEditorPage />
+                </RequireAdminAuth>
+              }
+            />
+            <Route
               path="/pathways"
               element={
-                <RequireVolunteerAuth>
-                  <PathwayLibrary />
-                </RequireVolunteerAuth>
+                <RoleBasedRoute
+                  adminComponent={<AdminPathwayLibrary />}
+                  volunteerComponent={<PathwayLibrary />}
+                />
               }
             />
             <Route
@@ -180,6 +173,38 @@ function App() {
               element={
                 <RequireVolunteerAuth>
                   <PathwayLandingPage />
+                </RequireVolunteerAuth>
+              }
+            />
+            <Route
+              path="/pathways/editor"
+              element={
+                <RequireAdminAuth>
+                  <AdminPathwayEditor />
+                </RequireAdminAuth>
+              }
+            />
+            <Route
+              path="/pathways/editor/quiz"
+              element={
+                <RequireAdminAuth>
+                  <PathwayQuizEditorPage />
+                </RequireAdminAuth>
+              }
+            />
+            <Route
+              path="/pathways/quizlanding"
+              element={
+                <RequireVolunteerAuth>
+                  <PathwayQuizLandingPage />
+                </RequireVolunteerAuth>
+              }
+            />
+            <Route
+              path="/pathways/quiz"
+              element={
+                <RequireVolunteerAuth>
+                  <PathwayQuizPage />
                 </RequireVolunteerAuth>
               }
             />
@@ -203,13 +228,7 @@ function App() {
               path="/testfunctions"
               element={
                 <RequireAuth>
-                  <button
-                    onClick={() => {
-                      //insert test function here
-                    }}
-                  >
-                    TEST
-                  </button>
+                  <button onClick={async () => {}}>TEST</button>
                 </RequireAuth>
               }
             />

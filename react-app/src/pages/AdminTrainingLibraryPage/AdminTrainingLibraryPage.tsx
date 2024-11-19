@@ -22,7 +22,7 @@ import { useAuth } from "../../auth/AuthProvider.tsx";
 import styles from "./AdminTrainingLibraryPage.module.css";
 import Loading from "../../components/LoadingScreen/Loading.tsx";
 import debounce from "lodash.debounce";
-import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar";
 import Footer from "../../components/Footer/Footer";
 import AdminTrainingCard from "../../components/AdminTrainingCard/AdminTrainingCard.tsx";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
@@ -129,7 +129,10 @@ function AdminTrainingLibrary() {
 
   return (
     <>
-      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <AdminNavigationBar
+        open={navigationBarOpen}
+        setOpen={setNavigationBarOpen}
+      />
       <div
         className={`${styles.split} ${styles.right}`}
         style={{
@@ -239,11 +242,13 @@ function AdminTrainingLibrary() {
             </div>
 
             {loading ? (
-              <Loading />
+              <div className={styles.centerTextLoading}>
+                <Loading />
+              </div>
             ) : (
               <>
                 {filteredTrainings.length === 0 ? (
-                  <div className={styles.emptySearchMessage}>
+                  <div className={styles.centerTextLoading}>
                     {renderEmptyMessage()}
                   </div>
                 ) : (

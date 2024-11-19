@@ -1,4 +1,3 @@
-/* split screen in two */
 .split {
   height: 100%;
   position: fixed;
@@ -46,7 +45,7 @@
   justify-content: space-between;
   align-items: center;
   margin-top: 2rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .nameHeading {
@@ -55,80 +54,26 @@
   margin: 0;
 }
 
+.buttonGroup {
+  display: flex;
+  flex-direction: row;
+}
+
 .searchBarContainer {
   margin-top: 2rem;
   margin-bottom: 2rem;
   display: flex;
-  gap: 2%;
+  justify-content: space-between;
   align-items: center;
 }
 
-.searchBar {
-  flex-grow: 1;
+.innerGrid {
+  height: 533px;
 }
 
-.buttonContainer {
-  display: flex;
-  gap: 5%;
-}
-
-.cardsContainer {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  row-gap: 1rem;
-  column-gap: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-.card {
-  margin-bottom: 1%;
-}
-
-.centerTextLoading {
-  width: 100%;
-  font-weight: bold;
-  text-align: center;
-  font-size: 1.1rem;
-}
-
-/* show dropdown when screen width is below 1499px */
-@media screen and (max-width: 1499px) {
-  .searchBar {
-    flex-grow: 1;
-    margin-right: 20px;
-  }
-
-  .buttonContainer {
-    display: none;
-  }
-
-  .dropdownContainer {
-    display: flex;
-    width: 170px;
-  }
-
-  .dropdownMenu {
-    width: 170px;
-  }
-}
-
-/* show buttons when screen width is above 1501px */
 @media screen and (min-width: 1500px) {
   .content {
     width: 1200px;
-  }
-
-  .buttonContainer {
-    display: flex;
-  }
-
-  .dropdownContainer {
-    display: none;
-  }
-
-  .cardsContainer {
-    column-gap: 3.75rem;
   }
 }
 
@@ -136,42 +81,16 @@
   .content {
     width: 1400px;
   }
-
-  .cardsContainer {
-    column-gap: 6.25rem;
-  }
 }
 
 @media screen and (max-width: 1000px) {
   .content {
     width: 600px;
   }
-
-  .cardsContainer {
-    justify-content: space-between;
-  }
 }
 
 @media screen and (max-width: 750px) {
   .content {
-    width: 425px;
-  }
-
-  .cardsContainer {
-    justify-content: space-around;
-  }
-
-  .searchBarContainer {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .searchBar {
-    width: 425px !important;
-    margin-bottom: 10px;
-  }
-
-  .dropdownMenu {
     width: 425px;
   }
 }
@@ -184,14 +103,6 @@
 
 @media screen and (max-width: 450px) {
   .content {
-    width: 300px;
-  }
-
-  .searchBar {
-    width: 300px !important;
-  }
-
-  .dropdownMenu {
     width: 300px;
   }
 }

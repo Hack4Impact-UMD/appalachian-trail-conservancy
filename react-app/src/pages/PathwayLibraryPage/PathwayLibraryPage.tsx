@@ -261,11 +261,13 @@ function PathwayLibrary() {
             </div>
 
             {loading ? (
-              <Loading />
+              <div className={styles.centerTextLoading}>
+                <Loading />
+              </div>
             ) : (
               <>
                 {filteredPathways.length === 0 ? (
-                  <div className={styles.emptySearchMessage}>
+                  <div className={styles.centerTextLoading}>
                     {renderEmptyMessage()}
                   </div>
                 ) : (

@@ -83,6 +83,7 @@
   text-decoration: underline;
   text-underline-position: under;
   background-color: white;
+  color: var(--blue-gray);
   border: none;
   cursor: pointer;
 }

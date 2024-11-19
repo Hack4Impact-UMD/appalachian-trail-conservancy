@@ -4,70 +4,65 @@ import { forestGreenButton } from "../../muiTheme";
 import { useLocation, Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthProvider";
 import { validateQuiz } from "../../backend/FirestoreCalls";
-import { Training } from "../../types/TrainingType";
-import { VolunteerTraining } from "../../types/UserType";
-import styles from "./QuizPage.module.css";
+import { Pathway } from "../../types/PathwayType";
+import { VolunteerPathway } from "../../types/UserType";
+import styles from "./PathwayQuizPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
-import QuizCard from "./QuizCard/QuizCard";
+import QuizCard from "../QuizPage/QuizCard/QuizCard";
 import Loading from "../../components/LoadingScreen/Loading";
-import hamburger from "../../assets/hamburger.svg";
 
-function QuizPage() {
+function PathwayQuizPage() {
   const auth = useAuth();
   const volunteerId = auth.id.toString();
   const navigate = useNavigate();
   const location = useLocation();
   const [loading, setLoading] = useState<boolean>(true);
   const [quizLoading, setQuizLoading] = useState<boolean>(false);
-  const [navigationBarOpen, setNavigationBarOpen] = useState(
-    !(window.innerWidth < 1200)
-  );
+  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
   const [selectedAnswers, setSelectedAnswers] = useState<
     (string | undefined)[] // undefined allows to check for "empty" positions in sparse array
   >([]);
-  const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
-    {
-      trainingID: "",
-      progress: "INPROGRESS",
-      dateCompleted: "0000-00-00",
-      numCompletedResources: 0,
-      numTotalResources: 0,
-    }
-  );
+  const [volunteerPathway, setVolunteerPathway] = useState<VolunteerPathway>({
+    pathwayID: "",
+    progress: "INPROGRESS",
+    dateCompleted: "0000-00-00",
+    trainingsCompleted: [],
+    numTrainingsCompleted: 0,
+    numTotalTrainings: 0,
+  });
 
   // This training should represent the current training corresponding to the current quiz
   // This data should be recieved from navigation state
-  const [training, setTraining] = useState<Training>({
+  const [pathway, setPathway] = useState<Pathway>({
     name: "",
     shortBlurb: "",
     description: "",
     coverImage: "",
-    resources: [],
+    trainingIDs: [],
     quiz: {
       questions: [],
       numQuestions: 0,
       passingScore: 0,
     },
+    badgeImage: "",
     status: "PUBLISHED",
-    associatedPathways: [],
-    certificationImage: "",
   });
 
   useEffect(() => {
     if (
       !location.state ||
-      !location.state.training ||
-      !location.state.volunteerTraining
+      !location.state.pathway ||
+      !location.state.volunteerPathway
     ) {
-      navigate("/trainings");
+      navigate("/pathways");
     } else {
       // Update state with data from location's state
-      if (location.state.training) {
-        setTraining(location.state.training);
-        setVolunteerTraining(location.state.volunteerTraining);
+      if (location.state.pathway) {
+        setPathway(location.state.pathway);
+        setVolunteerPathway(location.state.volunteerPathway);
         setSelectedAnswers(
-          Array(location.state.training.quiz.questions.length).fill(undefined) // fill with undefined to allow for pre-submit warning
+          Array(location.state.pathway.quiz.questions.length).fill(undefined) // fill with undefined to allow for pre-submit warning
         );
         setLoading(false);
       }
@@ -91,13 +86,13 @@ function QuizPage() {
     setQuizLoading(true);
 
     // check if any questions are unanswered
-    if (selectedAnswers.some((answer) => answer === undefined)) {
+    if (selectedAnswers.some((answer) => answer == undefined)) {
       setQuizLoading(false);
       const prompt = window.confirm("Not all questions are answered. Submit?");
       if (!prompt) {
         return; // don't proceed if user hits cancel
       }
-      setQuizLoading(true);
+      setQuizLoading(true); // continue if user hits ok
     }
 
     // replace any undefined values with empty string for quiz validation function
@@ -105,31 +100,11 @@ function QuizPage() {
       value === undefined ? "" : value
     );
 
-    validateQuiz(
-      volunteerTraining.trainingID,
-      volunteerId,
-      cleanedSelectedAnswers
-    )
-      .then((validateResults) => {
-        const numAnswersCorrect = validateResults.data;
-        navigate(`/trainings/quizresult`, {
-          state: {
-            training: training,
-            volunteerTraining: volunteerTraining,
-            selectedAnswers: selectedAnswers,
-            achievedScore: numAnswersCorrect,
-            fromApp: true,
-          },
-        });
-        setQuizLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error validating quiz:", error);
-      });
+    // TODO: validate quiz
   };
 
   if (!location.state?.fromApp) {
-    return <Navigate to="/trainings" />;
+    return <Navigate to="/pathways" />;
   }
 
   return (
@@ -139,25 +114,15 @@ function QuizPage() {
         className={`${styles.split} ${styles.right}`}
         style={{ left: navigationBarOpen ? "250px" : "0" }}
       >
-        {!navigationBarOpen && (
-          <img
-            src={hamburger}
-            alt="Hamburger Menu"
-            className={styles.hamburger} // Add styles to position it
-            width={30}
-            onClick={() => setNavigationBarOpen(true)} // Set sidebar open when clicked
-          />
-        )}
-
         <div className={styles.outerContainer}>
-          <div className={styles.content}>
+          <div className={styles.bodyContainer}>
             {/* HEADER */}
             {loading ? (
               <Loading />
             ) : (
               <>
                 <div className={styles.header}>
-                  <h1 className={styles.nameHeading}>{training.name} - Quiz</h1>
+                  <h1 className={styles.nameHeading}>{pathway.name} - Quiz</h1>
                   <ProfileIcon />
                 </div>
 
@@ -165,7 +130,7 @@ function QuizPage() {
                   <Loading />
                 ) : (
                   <div className={styles.questionContainer}>
-                    {training.quiz.questions.map((option, index) => (
+                    {pathway.quiz.questions.map((option, index) => (
                       <QuizCard
                         key={index}
                         currentQuestion={index + 1}
@@ -203,4 +168,4 @@ function QuizPage() {
   );
 }
 
-export default QuizPage;
+export default PathwayQuizPage;
