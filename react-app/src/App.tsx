@@ -36,6 +36,7 @@ import AdminPathwayLibrary from "./pages/AdminPathwayLibraryPage/AdminPathwayLib
 import AdminUserManagement from "./pages/AdminUserManagement/AdminUserManagement.tsx";
 import AdminVolunteerDetails from "./pages/AdminVolunteerDetails/AdminVolunteerDetails.tsx";
 import AdminTrainingDetails from "./pages/AdminTrainingDetails/AdminTrainingDetails.tsx";
+import { getTraining, getVolunteers } from "./backend/FirestoreCalls.ts";
 
 interface RoleBasedRouteProps {
   adminComponent: JSX.Element;
@@ -74,7 +75,7 @@ function App() {
               path="/"
               element={
                 <RoleBasedRoute
-                  adminComponent={<AdminTrainingDetails />}
+                  adminComponent={<AdminDashboard />}
                   volunteerComponent={<Dashboard />}
                 />
               }
@@ -88,10 +89,26 @@ function App() {
               }
             />
             <Route
+              path="/management/volunteer/:id"
+              element={
+                <RequireAdminAuth>
+                  <AdminVolunteerDetails />
+                </RequireAdminAuth>
+              }
+            />
+            <Route
+              path="/management/training/:id"
+              element={
+                <RequireAdminAuth>
+                  <AdminTrainingDetails />
+                </RequireAdminAuth>
+              }
+            />
+            <Route
               path="/trainings"
               element={
                 <RoleBasedRoute
-                  adminComponent={<AdminVolunteerDetails />}
+                  adminComponent={<AdminTrainingLibrary />}
                   volunteerComponent={<TrainingLibrary />}
                 />
               }
@@ -221,12 +238,7 @@ function App() {
               path="/testfunctions"
               element={
                 <RequireAuth>
-                  <button
-                    onClick={() => {
-                      //insert test function here
-                    }}>
-                    TEST
-                  </button>
+                  <button onClick={() => {}}>TEST</button>
                 </RequireAuth>
               }
             />

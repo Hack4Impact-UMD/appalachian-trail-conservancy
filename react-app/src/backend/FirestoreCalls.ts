@@ -22,6 +22,27 @@ import {
 import { Training, TrainingID, Quiz } from "../types/TrainingType";
 import { Pathway, PathwayID } from "../types/PathwayType";
 
+export function getVolunteers(): Promise<Volunteer[]> {
+  const collectionName = "Users";
+  const collectionRef = collection(db, collectionName);
+
+  return new Promise((resolve, reject) => {
+    getDocs(collectionRef)
+      .then((snapshot) => {
+        const allDocuments: Volunteer[] = snapshot.docs
+          .map((doc) => {
+            const document = doc.data();
+            return { ...document, auth_id: doc.id } as Volunteer;
+          })
+          .filter((user) => user.type === "VOLUNTEER"); // Filter for VOLUNTEER users only
+        resolve(allDocuments);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}
+
 export function getUserWithAuth(auth_id: string): Promise<Admin | VolunteerID> {
   return new Promise((resolve, reject) => {
     const userRef = query(
@@ -324,7 +345,10 @@ export function getAllTrainings(): Promise<TrainingID[]> {
 
 export function getAllPublishedTrainings(): Promise<TrainingID[]> {
   const trainingsRef = collection(db, "Trainings");
-  const publishedTrainingsQuery = query(trainingsRef, where("status", "==", "PUBLISHED"));
+  const publishedTrainingsQuery = query(
+    trainingsRef,
+    where("status", "==", "PUBLISHED")
+  );
 
   return new Promise((resolve, reject) => {
     getDocs(publishedTrainingsQuery)
@@ -361,7 +385,10 @@ export function getAllPathways(): Promise<PathwayID[]> {
 }
 export function getAllPublishedPathways(): Promise<PathwayID[]> {
   const pathwaysRef = collection(db, "Pathways");
-  const publishedPathwaysQuery = query(pathwaysRef, where("status", "==", "PUBLISHED"));
+  const publishedPathwaysQuery = query(
+    pathwaysRef,
+    where("status", "==", "PUBLISHED")
+  );
 
   return new Promise((resolve, reject) => {
     getDocs(publishedPathwaysQuery)

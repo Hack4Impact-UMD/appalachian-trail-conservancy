@@ -110,7 +110,8 @@ function AdminDashboardPage() {
         className={`${styles.split} ${styles.right}`}
         style={{
           left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-        }}>
+        }}
+      >
         {!navigationBarOpen && (
           <img
             src={hamburger}
@@ -143,7 +144,8 @@ function AdminDashboardPage() {
                     ? forestGreenButtonPadding
                     : whiteButtonGrayBorder
                 }
-                variant="contained">
+                variant="contained"
+              >
                 TRAINING
               </Button>
               <Button
@@ -153,7 +155,8 @@ function AdminDashboardPage() {
                     ? forestGreenButtonPadding
                     : whiteButtonGrayBorder
                 }
-                variant="contained">
+                variant="contained"
+              >
                 PATHWAYS
               </Button>
             </div>
@@ -169,7 +172,7 @@ function AdminDashboardPage() {
                 {trainingsSelected ? (
                   <>
                     {trainingDrafts.length === 0 && (
-                      <div className={styles.subHeader}>lmao u flopped!</div>
+                      <div className={styles.subHeader}>No Drafts</div>
                     )}
                     {trainingDrafts.length > 0 && (
                       <div className={styles.cardsContainer}>

@@ -8,6 +8,8 @@ import {
 } from "@mui/material";
 import {
   User,
+  Volunteer,
+  VolunteerID,
   VolunteerPathway,
   VolunteerTraining,
 } from "../../types/UserType.ts";
@@ -22,11 +24,8 @@ import { IoIosSearch } from "react-icons/io";
 import { TbArrowsSort } from "react-icons/tb";
 import {
   grayBorderSearchBar,
-  CustomToggleButtonGroup,
-  PurpleToggleButton,
   whiteButtonOceanGreenBorder,
   DataGridStyles,
-  forestGreenButton,
   whiteButtonGrayBorder,
   forestGreenButtonPadding,
 } from "../../muiTheme.ts";
@@ -36,19 +35,17 @@ import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigat
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon.tsx";
 import Footer from "../../components/Footer/Footer.tsx";
 import { DateTime } from "luxon";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import {
+  getPathway,
+  getTraining,
+  getVolunteer,
+} from "../../backend/FirestoreCalls.ts";
+import { TrainingID } from "../../types/TrainingType.ts";
+import { PathwayID } from "../../types/PathwayType.ts";
 
 function AdminVolunteerDetails() {
-  // Update screen width on resize
-  useEffect(() => {
-    const handleResize = () => {
-      setScreenWidth(window.innerWidth);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  const navigate = useNavigate();
   const handleAlignment = (
     event: React.MouseEvent<HTMLElement>,
     newAlignment: string | null
@@ -57,201 +54,61 @@ function AdminVolunteerDetails() {
       setAlignment(newAlignment);
     }
   };
-
-  const volunteer = {
-    auth_id: "v12345",
-    email: "blub@example.com",
-    firstName: "blub",
-    lastName: "blub",
-    type: "VOLUNTEER",
-    trainingInformation: [
-      {
-        trainingID: "t001",
-        progress: "INPROGRESS",
-        dateCompleted: "",
-        numCompletedResources: 3,
-        numTotalResources: 5,
-        quizScoreRecieved: 4,
-      },
-      {
-        trainingID: "t002",
-        progress: "COMPLETED",
-        dateCompleted: "2024-01-15T10:30:00.000Z",
-        numCompletedResources: 5,
-        numTotalResources: 5,
-        quizScoreRecieved: 5,
-      },
-    ],
-    pathwayInformation: [
-      {
-        pathwayID: "p001",
-        progress: "INPROGRESS",
-        dateCompleted: "",
-        trainingsCompleted: ["t001"],
-        numTrainingsCompleted: 1,
-        numTotalTrainings: 3,
-        quizScoreRecieved: 1,
-      },
-    ],
-  };
-
-  // Dummy Training and Pathway Data
-  const trainings = {
-    t001: {
-      name: "Training 1",
-      shortBlurb: "Introduction to the basics.",
-      description: "This training covers the basics of the volunteer program.",
-      coverImage: "https://via.placeholder.com/150",
-      resources: [
-        {
-          type: "VIDEO",
-          link: "https://example.com/video1",
-          title: "Intro Video",
-        },
-        { type: "PDF", link: "https://example.com/pdf1", title: "Intro PDF" },
-      ],
-      quiz: {
-        questions: [
-          {
-            question: "What is your name?",
-            choices: ["John", "Jane"],
-            answer: "John",
-          },
-        ],
-        numQuestions: 5,
-        passingScore: 5,
-      },
-      associatedPathways: ["p001"],
-      certificationImage: "https://via.placeholder.com/50",
-      status: "PUBLISHED",
-    },
-    t002: {
-      name: "Training 2",
-      shortBlurb: "Advanced Topics.",
-      description: "This training dives deeper into advanced topics.",
-      coverImage: "https://via.placeholder.com/150",
-      resources: [
-        {
-          type: "VIDEO",
-          link: "https://example.com/video2",
-          title: "Advanced Video",
-        },
-        {
-          type: "PDF",
-          link: "https://example.com/pdf2",
-          title: "Advanced PDF",
-        },
-      ],
-      quiz: {
-        questions: [
-          { question: "What is 2+2?", choices: ["3", "4"], answer: "4" },
-        ],
-        numQuestions: 5,
-        passingScore: 3,
-      },
-      associatedPathways: ["p001"],
-      certificationImage: "https://via.placeholder.com/50",
-      status: "PUBLISHED",
-    },
-  };
-
-  // Dummy Pathway Data
-  const pathways = {
-    p001: {
-      name: "Volunteer Pathway 1",
-      shortBlurb: "Pathway for beginners.",
-      description:
-        "This is a beginner pathway to help new volunteers get started.",
-      coverImage: "https://via.placeholder.com/150",
-      trainingIDs: ["t001", "t002"],
-      quiz: {
-        questions: [
-          {
-            question: "What is the first step?",
-            choices: ["Step 1", "Step 2"],
-            answer: "Step 1",
-          },
-        ],
-        numQuestions: 1,
-        passingScore: 50,
-      },
-      badgeImage: "https://via.placeholder.com/50",
-      status: "PUBLISHED",
-    },
-  };
-
-  const formatDate = (isoDate: string) => {
-    if (!isoDate) {
-      return "Not Available";
-    }
-    const date = DateTime.fromISO(isoDate);
-    return date.isValid
-      ? date.toLocaleString(DateTime.DATE_SHORT)
-      : "Not Available";
-  };
-
-  const formatTime = (isoDate: string) => {
-    if (!isoDate) {
-      return "Not Available";
-    }
-    const date = DateTime.fromISO(isoDate);
-    return date.isValid
-      ? date.toLocaleString(DateTime.TIME_SIMPLE)
-      : "Not Available";
-  };
-
-  const countTrainingsCompleted = (trainingInformation: any[]) => {
-    let totalTrainings = 0;
-
-    trainingInformation.forEach((training) => {
-      if (
-        training.progress === "INPROGRESS" ||
-        training.progress === "COMPLETED"
-      ) {
-        totalTrainings++;
-      }
-    });
-
-    return totalTrainings;
-  };
-
-  const countPathwaysCompleted = (pathwayInformation: any[]) => {
-    let totalPathways = 0;
-
-    pathwayInformation.forEach((pathway) => {
-      if (
-        pathway.progress === "INPROGRESS" ||
-        pathway.progress === "COMPLETED"
-      ) {
-        totalPathways++;
-      }
-    });
-
-    return totalPathways;
-  };
-
-  const formatTrainingsCompleted = (numCompleted: number, numTotal: number) => {
-    return `${numCompleted}/${numTotal}`;
-  };
-
+  const volunteerId = useParams().id;
+  const location = useLocation();
   const [alignment, setAlignment] = useState<string | null>("trainings");
   const [searchQuery, setSearchQuery] = useState("");
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
   );
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
-  const trainingsCompleted = countTrainingsCompleted(
-    volunteer.trainingInformation
-  );
-  const pathwaysCompleted = countPathwaysCompleted(
-    volunteer.pathwayInformation
-  );
-  const [filteredTrainings, setFilteredTrainings] = useState(
-    volunteer.trainingInformation
-  );
-  const [filteredPathways, setFilteredPathways] = useState(
-    volunteer.pathwayInformation
-  );
+  const [trainings, setTrainings] = useState<
+    { training: TrainingID; volunteerTraining: VolunteerTraining }[]
+  >([]);
+  const [filteredTrainings, setFilteredTrainings] = useState<
+    { training: TrainingID; volunteerTraining: VolunteerTraining }[]
+  >([]);
+
+  const [pathways, setPathways] = useState<
+    { pathway: PathwayID; volunteerPathway: VolunteerPathway }[]
+  >([]);
+  const [filteredPathways, setFilteredPathways] = useState<
+    { pathway: PathwayID; volunteerPathway: VolunteerPathway }[]
+  >([]);
+
+  const [numTrainingsCompleted, setNumTrainingsCompleted] = useState<number>(0);
+  const [numPathwaysCompleted, setNumPathwaysCompleted] = useState<number>(0);
+
+  const [volunteer, setVolunteer] = useState<VolunteerID>({
+    id: "",
+    trainingInformation: [],
+    pathwayInformation: [],
+    auth_id: "",
+    email: "",
+    firstName: "",
+    lastName: "",
+    type: "VOLUNTEER",
+  });
+
+  const formatDate = (isoDate: string) => {
+    if (!isoDate) {
+      return "N/A";
+    }
+    const date = DateTime.fromISO(isoDate);
+    return date.isValid ? date.toLocaleString(DateTime.DATE_SHORT) : "N/A";
+  };
+
+  const formatTime = (isoDate: string) => {
+    if (!isoDate) {
+      return "N/A";
+    }
+    const date = DateTime.fromISO(isoDate);
+    return date.isValid ? date.toLocaleString(DateTime.TIME_SIMPLE) : "N/A";
+  };
+
+  const formatTrainingsCompleted = (numCompleted: number, numTotal: number) => {
+    return `${numCompleted}/${numTotal}`;
+  };
 
   // DataGrid data
   const columns = [
@@ -263,46 +120,59 @@ function AdminVolunteerDetails() {
     { field: "status", headerName: "STATUS", width: 130 },
   ];
 
-  const filterTrainings = () => {
-    const filtered = searchQuery
-      ? volunteer.trainingInformation.filter((training) =>
-          trainings[training.trainingID as keyof typeof trainings].name
+  const filterTrainings = (
+    associatedTrainings: {
+      training: TrainingID;
+      volunteerTraining: VolunteerTraining;
+    }[]
+  ) => {
+    let filtered = searchQuery
+      ? associatedTrainings.filter((training) =>
+          training.training.name
             .toLowerCase()
             .includes(searchQuery.toLowerCase())
         )
-      : volunteer.trainingInformation;
+      : associatedTrainings;
 
     setFilteredTrainings(filtered);
   };
 
-  useEffect(() => {
-    filterTrainings();
-  }, [searchQuery]);
+  const filterPathways = (
+    associatedPathways: {
+      pathway: PathwayID;
+      volunteerPathway: VolunteerPathway;
+    }[]
+  ) => {
+    let filtered = searchQuery
+      ? associatedPathways.filter((pathway) =>
+          pathway.pathway.name.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      : associatedPathways;
 
-  const rows = filteredTrainings.map(
-    (training: {
-      trainingID: string;
-      quizScoreRecieved: any;
-      dateCompleted: any;
-      progress: any;
-    }) => {
-      const trainingDetails =
-        trainings[training.trainingID as keyof typeof trainings];
+    setFilteredPathways(filtered);
+  };
 
-      const passingScore = trainingDetails.quiz.passingScore;
-        const quizScoreFormatted = `${training.quizScoreRecieved} / ${trainingDetails.quiz.numQuestions}`;
+  const rows = filteredTrainings.map((currTraining) => {
+    const passingScore = currTraining.training.quiz.passingScore;
 
-      return {
-        id: training.trainingID,
-        trainingName: trainingDetails.name,
-        dateCompleted: formatDate(training.dateCompleted),
-        timeCompleted: formatTime(training.dateCompleted),
-        quizScore: quizScoreFormatted || "Not Available",
-        passFailStatus: training.quizScoreRecieved >= passingScore ? "Passed" : "Failed",
-        status: training.progress,
-      };
-    }
-  );
+    return {
+      id: currTraining.training.id,
+      trainingName: currTraining.training.name,
+      dateCompleted: formatDate(currTraining.volunteerTraining.dateCompleted),
+      timeCompleted: formatTime(currTraining.volunteerTraining.dateCompleted),
+      quizScore:
+        currTraining.volunteerTraining.quizScoreRecieved == undefined
+          ? "N/A"
+          : `${currTraining.volunteerTraining.quizScoreRecieved} / ${currTraining.training.quiz.numQuestions}`,
+      passFailStatus:
+        currTraining.volunteerTraining.quizScoreRecieved == undefined
+          ? "N/A"
+          : currTraining.volunteerTraining.quizScoreRecieved >= passingScore
+          ? "Passed"
+          : "Failed",
+      status: currTraining.volunteerTraining.progress,
+    };
+  });
 
   const pathwayColumns = [
     { field: "pathwayName", headerName: "NAME", width: 250 },
@@ -316,36 +186,22 @@ function AdminVolunteerDetails() {
     { field: "score", headerName: "SCORE", width: 130 },
   ];
 
-  const pathwayRows = filteredPathways.map((pathway) => {
-    const pathwayDetails = pathways[pathway.pathwayID as keyof typeof pathways];
-
+  const pathwayRows = filteredPathways.map((currPathway) => {
     return {
-      id: pathway.pathwayID,
-      pathwayName: pathwayDetails.name,
-      progress: pathway.progress,
-      dateCompleted: formatDate(pathway.dateCompleted), // Format the date using Luxon
+      id: currPathway.pathway.id,
+      pathwayName: currPathway.pathway.name,
+      progress: currPathway.volunteerPathway.progress,
+      dateCompleted: formatDate(currPathway.volunteerPathway.dateCompleted), // Format the date using Luxon
       trainingsCompleted: formatTrainingsCompleted(
-        pathway.numTrainingsCompleted,
-        pathway.numTotalTrainings
+        currPathway.volunteerPathway.numTrainingsCompleted,
+        currPathway.volunteerPathway.numTotalTrainings
       ),
       score:
-        pathway.quizScoreRecieved !== undefined
-          ? pathway.quizScoreRecieved
-          : "Not Available", // Handle score
+        currPathway.volunteerPathway.quizScoreRecieved !== undefined
+          ? currPathway.volunteerPathway.quizScoreRecieved
+          : "N/A", // Handle score
     };
   });
-
-  useEffect(() => {
-    const filtered = searchQuery
-      ? volunteer.pathwayInformation.filter((pathway) =>
-          pathways[pathway.pathwayID as keyof typeof pathways].name
-            .toLowerCase()
-            .includes(searchQuery.toLowerCase())
-        )
-      : volunteer.pathwayInformation;
-
-    setFilteredPathways(filtered);
-  }, [searchQuery]);
 
   const CustomColumnMenu = (props: GridColumnMenuProps) => {
     const { hideMenu, currentColumn, open } = props;
@@ -368,7 +224,114 @@ function AdminVolunteerDetails() {
     setSearchQuery(e.target.value);
   };
 
+  const getNumTrainingsCompleted = async (
+    volunteerTrainings: VolunteerTraining[]
+  ) => {
+    let completedTrainings = volunteerTrainings.filter(
+      (training) => training.progress == "COMPLETED"
+    );
+    setNumTrainingsCompleted(completedTrainings.length);
+  };
+
+  const getNumPathwaysCompleted = async (
+    volunteerPathways: VolunteerPathway[]
+  ) => {
+    let completedPathways = volunteerPathways.filter(
+      (pathway) => pathway.progress == "COMPLETED"
+    );
+    setNumPathwaysCompleted(completedPathways.length);
+  };
+
   const debouncedOnChange = debounce(updateQuery, 200);
+
+  // associate volunteer trainings with the generic training
+  const fetchTrainings = async (volunteerTrainings: VolunteerTraining[]) => {
+    try {
+      const trainingPromises = volunteerTrainings.map((training) =>
+        getTraining(training.trainingID)
+      );
+      console.log(volunteerTrainings);
+      console.log(trainingPromises);
+      const trainings = await Promise.all(trainingPromises); //fails here
+
+      let associatedTrainings: {
+        training: TrainingID;
+        volunteerTraining: VolunteerTraining;
+      }[] = [];
+
+      for (let i = 0; i < trainings.length; i++) {
+        associatedTrainings.push({
+          training: trainings[i],
+          volunteerTraining: volunteerTrainings[i],
+        });
+      }
+      console.log(associatedTrainings);
+      setTrainings(associatedTrainings);
+      filterTrainings(associatedTrainings);
+    } catch (error) {
+      console.log("Failed to get trainings");
+    }
+  };
+
+  const fetchPathways = async (volunteerPathways: VolunteerPathway[]) => {
+    try {
+      const pathwayPromises = volunteerPathways.map((pathway) =>
+        getPathway(pathway.pathwayID)
+      );
+      const pathways = await Promise.all(pathwayPromises);
+      let associatedPathways: {
+        pathway: PathwayID;
+        volunteerPathway: VolunteerPathway;
+      }[] = [];
+      for (let i = 0; i < pathways.length; i++) {
+        associatedPathways.push({
+          pathway: pathways[i],
+          volunteerPathway: volunteerPathways[i],
+        });
+      }
+      setPathways(associatedPathways);
+      filterPathways(associatedPathways);
+    } catch (error) {
+      console.log("Failed to get pathways");
+    }
+  };
+
+  useEffect(() => {
+    if (volunteerId !== undefined && !location.state?.volunteerID) {
+      getVolunteer(volunteerId)
+        .then(async (volunteerData) => {
+          setVolunteer({ ...volunteerData, id: volunteerId });
+          getNumTrainingsCompleted(volunteerData.trainingInformation);
+          getNumPathwaysCompleted(volunteerData.pathwayInformation);
+          fetchTrainings(volunteerData.trainingInformation);
+          fetchPathways(volunteerData.pathwayInformation);
+        })
+        .catch(() => {
+          console.log("Failed to get volunteer information");
+        });
+    } else {
+      if (location.state.volunteerID) {
+        setVolunteer(location.state.volunteerID);
+      }
+      // set loading
+    }
+  }, [volunteerId, location.state]);
+
+  useEffect(() => {
+    filterTrainings(trainings);
+    filterPathways(pathways);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <>
@@ -411,11 +374,11 @@ function AdminVolunteerDetails() {
               <br></br>
               <div className={styles.text}>
                 <b>Training(s) Completed: </b>
-                {trainingsCompleted}
+                {numTrainingsCompleted}
               </div>
               <div className={styles.text}>
                 <b>Pathways(s) Completed: </b>
-                {pathwaysCompleted}
+                {numPathwaysCompleted}
               </div>
             </div>
 
