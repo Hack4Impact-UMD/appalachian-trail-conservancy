@@ -250,9 +250,8 @@ function AdminVolunteerDetails() {
       const trainingPromises = volunteerTrainings.map((training) =>
         getTraining(training.trainingID)
       );
-      console.log(volunteerTrainings);
-      console.log(trainingPromises);
-      const trainings = await Promise.all(trainingPromises); //fails here
+
+      const trainings = await Promise.all(trainingPromises);
 
       let associatedTrainings: {
         training: TrainingID;
@@ -265,7 +264,7 @@ function AdminVolunteerDetails() {
           volunteerTraining: volunteerTrainings[i],
         });
       }
-      console.log(associatedTrainings);
+
       setTrainings(associatedTrainings);
       filterTrainings(associatedTrainings);
     } catch (error) {
