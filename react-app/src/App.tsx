@@ -33,7 +33,7 @@ import TrainingQuizEditorPage from "./pages/AdminTrainingQuizEditorPage/AdminTra
 import AdminDashboard from "./pages/AdminDashboardPage/AdminDashboardPage.tsx";
 import AdminTrainingLibrary from "./pages/AdminTrainingLibraryPage/AdminTrainingLibraryPage.tsx";
 import AdminPathwayLibrary from "./pages/AdminPathwayLibraryPage/AdminPathwayLibraryPage.tsx";
-import AdminNewUserEmail from "./pages/AdminNewUserEmailPage/AdminNewUserEmailPage.tsx";
+import AdminRegistrationManagementPage from "./pages/AdminRegistrationManagementPage/AdminRegistrationManagementPage.tsx";
 import AdminUserManagement from "./pages/AdminUserManagement/AdminUserManagement.tsx";
 
 interface RoleBasedRouteProps {
@@ -64,7 +64,7 @@ function App() {
             <Route path="/login/volunteer" element={<VolunteerLoginPage />} />
             <Route path="/login/admin" element={<AdminLoginPage />} />
             <Route path="/logout" element={<LogoutPage />} />
-            <Route path="/registration" element={<RegistrationPage />} />
+            <Route path="/register" element={<RegistrationPage />} />
             <Route
               path="/registration-confirmation"
               element={<RegistrationConfirmationPage />}
@@ -76,22 +76,6 @@ function App() {
                   adminComponent={<AdminDashboard />}
                   volunteerComponent={<Dashboard />}
                 />
-              }
-            />
-            <Route
-              path="/management"
-              element={
-                <RequireAdminAuth>
-                  <AdminUserManagement />
-                </RequireAdminAuth>
-              }
-            />
-            <Route
-              path="/admin/useremail"
-              element={
-                <RequireAdminAuth>
-                  <AdminNewUserEmail />
-                </RequireAdminAuth>
               }
             />
             <Route
@@ -214,6 +198,22 @@ function App() {
                 <RequireVolunteerAuth>
                   <AchievementsPage />
                 </RequireVolunteerAuth>
+              }
+            />
+            <Route
+              path="/data"
+              element={
+                <RequireAdminAuth>
+                  <AdminUserManagement />
+                </RequireAdminAuth>
+              }
+            />
+            <Route
+              path="/registration"
+              element={
+                <RequireAdminAuth>
+                  <AdminRegistrationManagementPage />
+                </RequireAdminAuth>
               }
             />
             <Route

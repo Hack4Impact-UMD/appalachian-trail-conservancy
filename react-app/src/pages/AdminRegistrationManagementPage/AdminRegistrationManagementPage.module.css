@@ -1,0 +1,212 @@
+.split {
+  height: 100%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  transition: left 0.3s ease;
+}
+
+.right {
+  right: 0;
+  left: 250px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.hamburger {
+  color: var(--blue-gray);
+  font-size: 1.5rem;
+  margin: 1.5rem;
+  position: absolute;
+  top: 20px;
+  left: 10px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.outerContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.content {
+  width: 875px;
+  padding-bottom: 3%;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.nameHeading {
+  color: var(--blue-gray);
+  font-size: 3rem;
+  margin: 0;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: flex-start;
+  gap: 1rem;
+  width: 80%;
+  margin-top: 1.5rem;
+}
+
+.backButton,
+.saveButton {
+  width: 100px;
+  background-color: transparent !important;
+  color: black !important;
+  border: 2px solid black !important;
+  border-radius: 10px !important;
+}
+
+.styleButtons {
+  display: flex;
+  gap: 0;
+}
+
+.styleButton {
+  width: 30px;
+  height: 30px;
+  font-size: 1.2rem;
+  background-color: white;
+  color: black;
+  border: 2px solid black;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.styleButton:hover {
+  background-color: #333;
+  color: white;
+}
+
+.MuiTextField-root {
+  position: relative;
+}
+
+.bodyContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 80%;
+  margin-top: 1rem;
+}
+
+.bodyLabel {
+  font-weight: bold !important;
+  color: black;
+}
+
+.toolbarButtons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+#quillEditor {
+  height: 250px;
+  width: 80%;
+  border: 1px solid var(--blue-gray);
+  border-radius: 10px;
+  margin-bottom: 200rem; /* Adjust this value for desired spacing */
+  background-color: #fff;
+}
+
+@media screen and (min-width: 1500px) {
+  .content {
+    width: 1200px;
+  }
+}
+
+@media screen and (min-width: 1800px) {
+  .content {
+    width: 1400px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .content {
+    width: 600px;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .content {
+    width: 425px;
+  }
+
+  .styleButtons {
+    top: 5rem;
+    right: 10%;
+  }
+
+  .buttonContainer {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .backButton,
+  .saveButton {
+    width: 80px;
+    font-size: 0.9rem;
+  }
+
+  .MuiTextField-root {
+    width: 100%;
+    font-size: 0.9rem;
+  }
+
+  .styleButton {
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .header {
+    margin-top: 5rem;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .content {
+    width: 300px;
+  }
+
+  .styleButtons {
+    top: 4.5rem;
+    right: 5%;
+  }
+
+  .buttonContainer {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .backButton,
+  .saveButton {
+    width: 100%;
+    font-size: 1rem;
+  }
+
+  .styleButton {
+    width: 25px;
+    height: 25px;
+    font-size: 0.9rem;
+  }
+}

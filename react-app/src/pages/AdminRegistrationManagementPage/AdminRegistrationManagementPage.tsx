@@ -1,14 +1,17 @@
 import { useState, useRef, useEffect } from "react";
-import NavigationBar from "../../components/NavigationBar/NavigationBar.tsx";
-import styles from "./AdminNewUserEmailPage.module.css";
+import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar.tsx";
+import styles from "./AdminRegistrationManagementPage.module.css";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon.tsx";
 import { Button, TextField, Typography } from "@mui/material";
 import Footer from "../../components/Footer/Footer.tsx";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
+import hamburger from "../../assets/hamburger.svg";
 
-function AdminNewUserEmail() {
-  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+function AdminRegistrationManagementPage() {
+  const [navigationBarOpen, setNavigationBarOpen] = useState(
+    !(window.innerWidth < 1200)
+  );
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
   const [errors, setErrors] = useState({ subject: "", body: "" });
@@ -17,6 +20,7 @@ function AdminNewUserEmail() {
   const quillRef = useRef<Quill | null>(null); // Quill instance reference
 
   const toolbarContainer = useRef<HTMLDivElement>(null);
+  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
 
   useEffect(() => {
     if (editorContainerRef.current && !quillRef.current) {
@@ -36,13 +40,38 @@ function AdminNewUserEmail() {
     }
   }, []); // Empty dependency array ensures this runs only once
 
+  // Update screen width on resize
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <>
-      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <AdminNavigationBar
+        open={navigationBarOpen}
+        setOpen={setNavigationBarOpen}
+      />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}
-      >
+        style={{
+          left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
+        }}>
+        {!navigationBarOpen && (
+          <img
+            src={hamburger}
+            alt="Hamburger Menu"
+            className={styles.hamburger} // Add styles to position it
+            width={30}
+            onClick={() => setNavigationBarOpen(true)} // Set sidebar open when clicked
+          />
+        )}
         <div className={styles.outerContainer}>
           <div className={styles.content}>
             <div className={styles.header}>
@@ -56,8 +85,7 @@ function AdminNewUserEmail() {
                 fontWeight: "bold",
                 marginBottom: "4px",
                 marginTop: "2rem",
-              }}
-            >
+              }}>
               SUBJECT
             </Typography>
             <TextField
@@ -92,8 +120,7 @@ function AdminNewUserEmail() {
                     background: "none",
                     fontSize: "1.5em",
                     width: "2rem",
-                  }}
-                >
+                  }}>
                   B
                 </button>
                 <button
@@ -102,8 +129,7 @@ function AdminNewUserEmail() {
                     background: "none",
                     fontSize: "1.5em",
                     width: "2rem",
-                  }}
-                >
+                  }}>
                   I
                 </button>
                 <button
@@ -112,8 +138,7 @@ function AdminNewUserEmail() {
                     background: "none",
                     fontSize: "1.5em",
                     width: "2rem",
-                  }}
-                >
+                  }}>
                   U
                 </button>
               </div>
@@ -130,23 +155,20 @@ function AdminNewUserEmail() {
                 borderRadius: "10px",
                 marginBottom: "1rem",
                 backgroundColor: "#fff",
-              }}
-            ></div>
+              }}></div>
 
             <div className={styles.buttonContainer}>
               <Button
                 variant="outlined"
                 color="secondary"
                 className={styles.saveButton}
-                onClick={() => console.log("Body as HTML:", body)}
-              >
+                onClick={() => console.log("Body as HTML:", body)}>
                 SAVE
               </Button>
               <Button
                 variant="outlined"
                 color="secondary"
-                className={styles.backButton}
-              >
+                className={styles.backButton}>
                 BACK
               </Button>
             </div>
@@ -158,4 +180,4 @@ function AdminNewUserEmail() {
   );
 }
 
-export default AdminNewUserEmail;
+export default AdminRegistrationManagementPage;
