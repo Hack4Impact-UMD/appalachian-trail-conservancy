@@ -44,15 +44,6 @@ function RegistrationConfirmationPage() {
           </Button>
         </Link>
       </div>
-
-      {/* go back */}
-      <div>
-        <Link
-          to="/registration/"
-          className={`${styles.switch} ${styles.contentContainer}`}>
-          Go back
-        </Link>
-      </div>
     </div>
   );
 }

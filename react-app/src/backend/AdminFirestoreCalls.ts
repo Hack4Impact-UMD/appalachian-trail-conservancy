@@ -1,29 +1,15 @@
 import {
   collection,
-  doc,
   addDoc,
   deleteDoc,
-  getDoc,
   getDocs,
-  updateDoc,
-  runTransaction,
   query,
   where,
 } from "firebase/firestore";
-import { httpsCallable } from "firebase/functions";
-import { db, functions } from "../config/firebase";
-import {
-  Volunteer,
-  VolunteerID,
-  VolunteerTraining,
-  User,
-  Admin,
-} from "../types/UserType";
-import { Training, TrainingID, Quiz } from "../types/TrainingType";
-import { Pathway, PathwayID } from "../types/PathwayType";
-import { AssetsType, EmailType } from "../types/AssetsType";
+import { db } from "../config/firebase";
+import { EmailType } from "../types/AssetsType";
 
-export function addEmail(email: EmailType): Promise<void> {
+export function addRegistrationEmail(email: EmailType): Promise<void> {
   return new Promise((resolve, reject) => {
     addDoc(collection(db, "Assets"), email)
       .then(() => {
