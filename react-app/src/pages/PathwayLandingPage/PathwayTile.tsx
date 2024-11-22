@@ -11,62 +11,86 @@ import rightDownIcon from "../../assets/PathwayTiles/RightDown.svg";
 import rightEndIcon from "../../assets/PathwayTiles/RightEnd.svg";
 import verticalIcon from "../../assets/PathwayTiles/Vertical.svg";
 import TrainingPopup from "../../components/TrainingPopup/TrainingPopup";
+import downLeftCompleted from "../../assets/PathwayTiles/DownLeftCompleted.svg";
+import downTrophy from "../../assets/PathwayTiles/DownTrophy.svg";
+import leftDownCompleted from "../../assets/PathwayTiles/LeftDownCompleted.svg"; 
+import rightDownCompleted from "../../assets/PathwayTiles/RightDownCompleted.svg";
+import verticalCompleted from "../../assets/PathwayTiles/VerticalCompleted.svg";
+import downRightCompleted from "../../assets/PathwayTiles/DownRightCompleted.svg";
+import horizontalCompleted from "../../assets/PathwayTiles/HorizontalCompleted.svg";
+import leftTrophy from "../../assets/PathwayTiles/LeftTrophy.svg";
+import rightTrophy from "../../assets/PathwayTiles/RightTrophy.svg";
 import { useState } from "react";
 import { TrainingID } from "../../types/TrainingType";
 
 interface PathwayTileProps {
-  tileNum: number;
-  trainingID?: TrainingID;
-  space: number;
-  count: number;
+  tileNum: number; // index of the tile
+  trainingID?: TrainingID; // training id of the specific training
+  width: number; // width of the div
+  numTrainings: number; // total number of trainings in this pathway
+  trainingsCompleted: number;
 }
 
-// im
-// num: specific index of the training in pathway
+// imagesPerRow: the total number of images per row, used to identify which direction
+// index: specific index of the training in pathway
 // count: total number of trainings in pathway
-function getImage(imagesPerRow: number, num: number, count: number) {
+// trainingsCompleted: the number of trainings in this pathway that have been finished
+function getImage(imagesPerRow: number, index: number, numTrainings: number, trainingsCompleted: number) {
   // Empty
-  if (num > count) return emptyIcon;
+  if (index > numTrainings) return emptyIcon;
   // Straight down
-  if (imagesPerRow == 1) return num == count ? downEndIcon : verticalIcon;
+  if (imagesPerRow == 1) {
+    // Check if they're finished
+    // if (index < trainingsCompleted) {
+    //   return index == numTrainings ? downTrophy : verticalCompleted;
+    // }
+    return index == numTrainings ? downEndIcon : verticalIcon;
+  }
   // Not reversed
-  if (Math.floor(num / imagesPerRow) % 2 == 0) {
+  if (Math.floor(index / imagesPerRow) % 2 == 0) {
     // Right-most card
-    if ((num + 1) % imagesPerRow == 0) {
-      return num == count ? leftEndIcon : rightDownIcon;
+    if ((index + 1) % imagesPerRow == 0) {
+      // if (index < trainingsCompleted) {
+      //  return index == numTrainings ? leftTrophy : rightDownCompleted;
+      // }
+      return index == numTrainings ? leftEndIcon : rightDownIcon;
       // Left-most icon
-    } else if (num % imagesPerRow == 0) {
-      if (num == 0) {
+    } else if (index % imagesPerRow == 0) {
+      if (index == 0) {
+        // return index < numCompleted : horizonalCompleted ? horizontalIcon; // insert check for finished the first one
         return horizontalIcon;
       } else {
-        return num == count ? downEndIcon : downRightIcon;
+        // if (index < trainingsCompleted) {
+        // }
+        return index == numTrainings ? downEndIcon : downRightIcon;
       }
     }
-    return num == count ? leftEndIcon : horizontalIcon;
+    return index == numTrainings ? leftEndIcon : horizontalIcon;
   }
   // Reversed
   else {
-    if ((num + 1) % imagesPerRow == 0) {
-      return num == count ? rightEndIcon : leftDownIcon;
-    } else if (num % imagesPerRow == 0) {
-      return num == count ? downEndIcon : downLeftIcon;
+    if ((index + 1) % imagesPerRow == 0) {
+      return index == numTrainings ? rightEndIcon : leftDownIcon;
+    } else if (index % imagesPerRow == 0) {
+      return index == numTrainings ? downEndIcon : downLeftIcon;
     }
 
-    return num == count ? rightEndIcon : horizontalIcon;
+    return index == numTrainings ? rightEndIcon : horizontalIcon;
   }
 }
 
 const PathwayTile: React.FC<PathwayTileProps> = ({
   tileNum,
   trainingID,
-  space,
-  count,
+  width,
+  numTrainings,
+  trainingsCompleted,
 }) => {
   const [openTrainingPopup, setOpenTrainingPopup] = useState<boolean>(false);
   const imgWidth = 300;
 
-  const imagesPerRow = Math.floor(space / imgWidth);
-  const image = getImage(imagesPerRow, tileNum, count);
+  const imagesPerRow = Math.floor(width / imgWidth);
+  const image = getImage(imagesPerRow, tileNum, numTrainings, 1);
   //console.log(tileNum +"num")
 
   return (

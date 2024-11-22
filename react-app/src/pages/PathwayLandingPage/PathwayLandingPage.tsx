@@ -8,7 +8,7 @@ import { VolunteerPathway } from "../../types/UserType";
 import { PathwayID } from "../../types/PathwayType";
 import { useAuth } from "../../auth/AuthProvider";
 import Loading from "../../components/LoadingScreen/Loading";
-import { getPathway, getTraining } from "../../backend/FirestoreCalls";
+import { getPathway, getTraining, getVolunteer } from "../../backend/FirestoreCalls";
 import { TrainingID } from "../../types/TrainingType";
 import { useParams } from "react-router-dom";
 import { WidthFull } from "@mui/icons-material";
@@ -21,6 +21,7 @@ const PathwayLandingPage: React.FC = () => {
   const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
   const [divWidth, setDivWidth] = useState<number>(0);
   const [trainings, setTrainings] = useState<TrainingID[]>([]);
+  const [numCompleted, setNumCompleted] = useState<number>(0);
   const [elements, setElements] = useState<any[]>([]);
 
   const [pathway, setPathway] = useState<PathwayID>({
@@ -47,11 +48,10 @@ const PathwayLandingPage: React.FC = () => {
         if (pathwayId !== undefined && !auth.loading && auth.id) {
           getPathway(pathwayId)
             .then(async (pathwayData) => {
+              console.log("ran first \n\n\n");
               setPathway(pathwayData);
-              console.log(pathwayData);
               const trainingPromises = pathwayData.trainingIDs.map(getTraining);
               const fetchedTrainings = await Promise.all(trainingPromises);
-              console.log(fetchedTrainings);
               setTrainings(fetchedTrainings);
             })
             .catch(() => {
@@ -61,16 +61,49 @@ const PathwayLandingPage: React.FC = () => {
       } else {
         // set pathway from location state
         if (location.state.pathway) {
+          console.log("ran second \n\n\n");
+          console.log(location.state.pathway);
           setPathway(location.state.pathway);
           const trainingPromises =
             location.state.pathway.trainingIDs.map(getTraining);
-          const fetchedTrainings = await Promise.all(trainingPromises);
-          console.log(fetchedTrainings);
+          const fetchedTrainings = await Promise.all(trainingPromises);  // I think it's breaking here
+          console.log(typeof(trainingPromises));
           setTrainings(fetchedTrainings);
         }
       }
     };
     getPathwayInfo();
+
+    // Filters based on the current pathway to get the number of trainings the user completed
+    // Commented out until the other stuff is working
+    // const getTrainingsCompleted = async () => {
+    //   if (!auth.loading && auth.id && pathwayId !== undefined) {
+    //     try {
+    //       const volunteer = await getVolunteer(auth.id.toString());
+    //       const pathwayList = volunteer.pathwayInformation;
+    
+    //       // console.log(pathwayList);
+    //       // console.log(pathwayId);
+    
+    //       const volunteerPathway = pathwayList.filter(
+    //         (thePathway) => pathwayId === thePathway.pathwayID
+    //       );
+    
+    //       if (volunteerPathway.length > 0) {
+    //         const numTrainings = volunteerPathway[0].numTrainingsCompleted;
+    //         console.log(numTrainings);
+    //         setNumCompleted(numTrainings);
+    //       } else {
+    //         console.warn("No matching pathway found.");
+    //       }
+    //     } catch (error) {
+    //       console.error("Error fetching volunteer data:", error);
+    //     }
+    //   }
+    // };
+
+    // getTrainingsCompleted();
+
   }, [auth.loading, auth.id]);
 
   //console.log("Width " + divWidth + "\nlength " + trainings.length);
@@ -91,7 +124,6 @@ const PathwayLandingPage: React.FC = () => {
   }, [divWidth, trainings]);
 
   const renderGrid = (trainings: TrainingID[]) => {
-    console.log("ran");
     const imgWidth = 300;
     const imagesPerRow = Math.floor(divWidth / imgWidth);
     // To prevent trainings.length from being used uninitialized
@@ -113,8 +145,9 @@ const PathwayLandingPage: React.FC = () => {
               <PathwayTile
                 tileNum={j}
                 trainingID={j < trainings.length ? trainings[j] : undefined}
-                space={divWidth}
-                count={trainings.length}
+                width={divWidth}
+                numTrainings={trainings.length}
+                trainingsCompleted={1} // Filler for now
               />
             </div>
           );
@@ -128,8 +161,9 @@ const PathwayLandingPage: React.FC = () => {
               <PathwayTile
                 tileNum={j}
                 trainingID={j < trainings.length ? trainings[j] : undefined}
-                space={divWidth}
-                count={trainings.length}
+                width={divWidth}
+                numTrainings={trainings.length}
+                trainingsCompleted={1} // Filler for now
               />
             </div>
           );
@@ -153,23 +187,7 @@ const PathwayLandingPage: React.FC = () => {
 
             {/* Pathway Tiles Section */}
             <div className={styles.pathwayTiles}>
-              {/* Render the Pathway tiles */}
-              {/* {trainings.map((trainingData, index) => (
-                <PathwayTile
-                  tileNum={index + 1}
-                  trainingID={trainingData}
-                  space={divWidth}
-                  count={trainings.length}
-                />
-              ))}{" "} */}
-              {/* for loop + 1 */}
-              {/* <PathwayTile
-                tileNum={1}
-                space={divWidth}
-                count={trainings.length}
-              /> */}
               {elements}
-              {/* for loop - even row do 1 2 3, odd row do 6 4 5, etc  */}
             </div>
           </div>
         </div>
