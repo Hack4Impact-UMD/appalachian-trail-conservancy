@@ -34,6 +34,7 @@ import AdminDashboard from "./pages/AdminDashboardPage/AdminDashboardPage.tsx";
 import AdminTrainingLibrary from "./pages/AdminTrainingLibraryPage/AdminTrainingLibraryPage.tsx";
 import AdminPathwayLibrary from "./pages/AdminPathwayLibraryPage/AdminPathwayLibraryPage.tsx";
 import AdminUserManagement from "./pages/AdminUserManagement/AdminUserManagement.tsx";
+import VolunteerProfilePage from "./pages/VolunteerProfilePage/VolunteerProfilePage.tsx";
 
 interface RoleBasedRouteProps {
   adminComponent: JSX.Element;
@@ -204,6 +205,14 @@ function App() {
               element={
                 <RequireVolunteerAuth>
                   <AchievementsPage />
+                </RequireVolunteerAuth>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <RequireVolunteerAuth>
+                  <VolunteerProfilePage />
                 </RequireVolunteerAuth>
               }
             />
