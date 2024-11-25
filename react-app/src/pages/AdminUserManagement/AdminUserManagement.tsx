@@ -58,14 +58,23 @@ function AdminUserManagement() {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-  const handleAlignment = (
-    event: React.MouseEvent<HTMLElement>,
-    newAlignment: string | null
-  ) => {
+  const handleAlignment = (newAlignment: string | null) => {
     if (newAlignment !== null) {
       setAlignment(newAlignment);
+      setSearchQuery(""); // Reset search query
+  
+      // Reset filtered data based on the selected table
+      if (newAlignment === "user") {
+        setFilteredUsers(usersData);
+      } else if (newAlignment === "training") {
+        setFilteredTrainings(trainingsData);
+      } else if (newAlignment === "pathways") {
+        setFilteredPathways(pathwaysData);
+      }
     }
   };
+  
+  
 
   useEffect(() => {
     getVolunteers()
@@ -155,6 +164,7 @@ function AdminUserManagement() {
 
   // Apply the appropriate filter based on the active tab and search query
   useEffect(() => {
+    setSearchQuery(""); // Clear the search query when the table is switched
     if (alignment === "user") {
       filterUsers();
     } else if (alignment === "training") {
@@ -162,13 +172,59 @@ function AdminUserManagement() {
     } else if (alignment === "pathways") {
       filterPathways();
     }
-  }, [searchQuery, alignment]); // Runs whenever searchQuery or alignment changes
+  }, [alignment]); // Trigger this effect whenever `alignment` changes
+  
 
   // Debounce the search query to prevent excessive filtering
   const updateQuery = (e: { target: { value: string } }) => {
     setSearchQuery(e.target.value);
   };
+
+  const handleSearchChange = (e: { target: { value: string } }) => {
+    const value = e.target.value;
+    setSearchQuery(value); // Update the state immediately for the input field
+    debouncedFilter(value); // Apply the filter logic with debounce
+  };
+  
+  // Debounced filter logic
+  const debouncedFilter = debounce((value: string) => {
+    if (alignment === "user") {
+      setFilteredUsers(
+        value
+          ? usersData.filter(
+              (user) =>
+                user.firstName.toLowerCase().includes(value.toLowerCase()) ||
+                user.lastName.toLowerCase().includes(value.toLowerCase()) ||
+                user.email.toLowerCase().includes(value.toLowerCase())
+            )
+          : usersData
+      );
+    } else if (alignment === "training") {
+      setFilteredTrainings(
+        value
+          ? trainingsData.filter((training) =>
+              training.name.toLowerCase().includes(value.toLowerCase())
+            )
+          : trainingsData
+      );
+    } else if (alignment === "pathways") {
+      setFilteredPathways(
+        value
+          ? pathwaysData.filter((pathway) =>
+              pathway.name.toLowerCase().includes(value.toLowerCase())
+            )
+          : pathwaysData
+      );
+    }
+  }, 200); // Debounce interval in milliseconds  
+
   const debouncedOnChange = debounce(updateQuery, 200);
+
+  useEffect(() => {
+    return () => {
+      debouncedFilter.cancel();
+    };
+  }, []);  
 
   useEffect(() => {
     filterUsers(); // Filter users whenever the searchQuery changes
@@ -177,6 +233,13 @@ function AdminUserManagement() {
   useEffect(() => {
     setFilteredUsers(usersData); // Initialize filteredUsers with all users
   }, []);
+
+  const [selectionModel, setSelectionModel] = useState([]);
+
+  useEffect(() => {
+    // Clear the selection whenever the table (alignment) changes
+    setSelectionModel([]);
+  }, [alignment]);
 
   return (
     <>
@@ -209,7 +272,7 @@ function AdminUserManagement() {
               <CustomToggleButtonGroup
                 value={alignment}
                 exclusive
-                onChange={handleAlignment}>
+                onChange={(event, newAlignment) => handleAlignment(newAlignment)}>
                 <PurpleToggleButton value="user">
                   USER INFORMATION
                 </PurpleToggleButton>
@@ -228,7 +291,8 @@ function AdminUserManagement() {
                     className={styles.dropdownMenu}
                     sx={whiteSelectGrayBorder}
                     value={alignment}
-                    onChange={handleAlignment}
+                    onChange={(e) => handleAlignment(e.target.value)} // Handle the dropdown value directly
+                    displayEmpty
                     label="Filter">
                     <MenuItem value="user" sx={selectOptionStyle}>
                       USER INFORMATION
@@ -251,7 +315,8 @@ function AdminUserManagement() {
                       className={styles.searchBar}
                       sx={grayBorderSearchBar}
                       placeholder="Search..."
-                      onChange={debouncedOnChange}
+                      value={searchQuery}
+                      onChange={handleSearchChange}
                       startAdornment={
                         <InputAdornment position="start">
                           <IoIosSearch />
@@ -283,6 +348,8 @@ function AdminUserManagement() {
                       }}
                       onRowClick={(row) => {}}
                       getRowId={(row) => row.auth_id} // Use auth_id as the unique ID for each row
+                      selectionModel={selectionModel} // Controlled selection model
+                      onSelectionModelChange={(newSelection) => setSelectionModel(newSelection)}
                     />
                   </div>
                 </>
@@ -294,7 +361,8 @@ function AdminUserManagement() {
                       className={styles.searchBar}
                       sx={grayBorderSearchBar}
                       placeholder="Search..."
-                      onChange={debouncedOnChange}
+                      value={searchQuery}
+                      onChange={handleSearchChange}
                       startAdornment={
                         <InputAdornment position="start">
                           <IoIosSearch />
@@ -326,6 +394,8 @@ function AdminUserManagement() {
                         ColumnMenu: CustomColumnMenu,
                       }}
                       onRowClick={(row) => {}}
+                      selectionModel={selectionModel} // Controlled selection model
+                      onSelectionModelChange={(newSelection) => setSelectionModel(newSelection)}
                     />
                   </div>
                 </>
@@ -337,7 +407,8 @@ function AdminUserManagement() {
                       className={styles.searchBar}
                       sx={grayBorderSearchBar}
                       placeholder="Search..."
-                      onChange={debouncedOnChange}
+                      value={searchQuery}
+                      onChange={handleSearchChange}
                       startAdornment={
                         <InputAdornment position="start">
                           <IoIosSearch />
@@ -368,6 +439,8 @@ function AdminUserManagement() {
                         ColumnMenu: CustomColumnMenu,
                       }}
                       onRowClick={(row) => {}}
+                      selectionModel={selectionModel} // Controlled selection model
+                      onSelectionModelChange={(newSelection) => setSelectionModel(newSelection)}
                     />
                   </div>
                 </>
