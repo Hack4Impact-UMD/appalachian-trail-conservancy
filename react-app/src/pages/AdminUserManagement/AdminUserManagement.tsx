@@ -5,7 +5,7 @@ import {
   getAllTrainings,
   getAllPathways
  } from "../../backend/FirestoreCalls";
-import { Button, InputAdornment, OutlinedInput } from "@mui/material";
+import { Button, InputAdornment, OutlinedInput, MenuItem, FormControl, Select, } from "@mui/material";
 import { User } from "../../types/UserType.ts";
 import { TrainingID } from "../../types/TrainingType.ts";
 import { PathwayID } from "../../types/PathwayType.ts";
@@ -24,6 +24,8 @@ import {
   PurpleToggleButton,
   whiteButtonOceanGreenBorder,
   DataGridStyles,
+  whiteSelectGrayBorder,
+  selectOptionStyle,
 } from "../../muiTheme";
 import debounce from "lodash.debounce";
 import hamburger from "../../assets/hamburger.svg";
@@ -219,12 +221,34 @@ function AdminUserManagement() {
                 </PurpleToggleButton>
               </CustomToggleButtonGroup>
             </div>
+            {/* dropdown container */}
+            <div className={styles.dropdownContainer}>
+                <FormControl sx={{ width: 300 }}>
+                  <Select
+                    className={styles.dropdownMenu}
+                    sx={whiteSelectGrayBorder}
+                    value={alignment}
+                    onChange={handleAlignment}
+                    label="Filter">
+                    <MenuItem value="user" sx={selectOptionStyle}>
+                      USER INFORMATION
+                    </MenuItem>
+                    <MenuItem value="training" sx={selectOptionStyle}>
+                      TRAINING INFORMATION
+                    </MenuItem>
+                    <MenuItem value="pathways" sx={selectOptionStyle}>
+                      PATHWAYS
+                    </MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
             {/* Conditional Content Rendering */}
             <div className={styles.contentSection}>
               {alignment === "user" && (
                 <>
                   <div className={styles.searchBarContainer}>
                     <OutlinedInput
+                      className={styles.searchBar}
                       sx={grayBorderSearchBar}
                       placeholder="Search..."
                       onChange={debouncedOnChange}
@@ -267,6 +291,7 @@ function AdminUserManagement() {
                 <>
                   <div className={styles.searchBarContainer}>
                     <OutlinedInput
+                      className={styles.searchBar}
                       sx={grayBorderSearchBar}
                       placeholder="Search..."
                       onChange={debouncedOnChange}
@@ -277,6 +302,7 @@ function AdminUserManagement() {
                       }
                     />
                     <Button
+                      className={styles.export}
                       sx={{
                         ...whiteButtonOceanGreenBorder,
                         paddingLeft: "20px",
@@ -308,6 +334,7 @@ function AdminUserManagement() {
                 <>
                   <div className={styles.searchBarContainer}>
                     <OutlinedInput
+                      className={styles.searchBar}
                       sx={grayBorderSearchBar}
                       placeholder="Search..."
                       onChange={debouncedOnChange}
