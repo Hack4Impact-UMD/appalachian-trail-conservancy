@@ -1,15 +1,11 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../auth/AuthProvider";
 import { Link } from "react-router-dom";
-import {
-  getVolunteer,
-  getAllTrainings,
-  getAllPathways,
-} from "../../backend/FirestoreCalls";
+import { getVolunteer } from "../../backend/FirestoreCalls";
 import { TrainingID } from "../../types/TrainingType";
 import { PathwayID } from "../../types/PathwayType";
 import { VolunteerPathway, VolunteerTraining } from "../../types/UserType";
-import { Button } from "@mui/material";
+import { OutlinedInput, Button } from "@mui/material";
 import { forestGreenButtonPadding } from "../../muiTheme";
 import TrainingCard from "../../components/TrainingCard/TrainingCard";
 import PathwayCard from "../../components/PathwayCard/PathwayCard";
@@ -21,6 +17,7 @@ import Loading from "../../components/LoadingScreen/Loading";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Footer from "../../components/Footer/Footer";
 import hamburger from "../../assets/hamburger.svg";
+import { grayBorderTextField, whiteButtonGrayBorder, whiteButtonOceanGreenBorder, whiteButtonGreenBorder, forestGreenButton } from "../../muiTheme"
 
 
 function VolunteerProfilePage() {
@@ -74,24 +71,36 @@ return (
                     First Name
                 </div>
                 <div>
-                    <input>
-                    </input>
+                  <OutlinedInput
+                  value={auth.firstName}
+                  sx={{ ...grayBorderTextField }}
+                  >
+                  </OutlinedInput>
                 </div>
                 <div>
                     Last Name
                 </div>
                 <div>
-                    <input>
-                    </input>
+                <OutlinedInput
+                  value={auth.lastName}
+                  sx={{ ...grayBorderTextField }}
+                  >
+                  </OutlinedInput>
                 </div>
                 <div>
-                    Registered Email
+                <div>
+                    Registered email
+                  </div>
                 </div>
                 <div>
-                    <input>
-                    </input>
+                <OutlinedInput
+                  sx={{ ...grayBorderTextField }}
+                  >
+                  </OutlinedInput>
                 </div>
-                <Button>
+                <Button
+                sx={forestGreenButton}
+                variant="contained">
                     Save
                 </Button>
             </div>
