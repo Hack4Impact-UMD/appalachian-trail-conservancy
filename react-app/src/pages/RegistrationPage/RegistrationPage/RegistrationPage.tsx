@@ -131,7 +131,7 @@ function RegistrationPage() {
                 },
               }}
               value={email}
-              placeholder="Use your ATC Volunteer email"
+              // placeholder="Use your ATC Volunteer email"
               onChange={(e) => {
                 setEmail(e.target.value);
               }}
@@ -140,6 +140,35 @@ function RegistrationPage() {
             {invalidEmail && (
               <FormHelperText error>Invalid email</FormHelperText>
             )}
+            {/* Confirm email box */}
+            <div>
+            <div className={`${styles.alignLeft} ${styles.emailContainer}`}>
+              <h3 className={styles.label}>Confirm Email</h3>
+            </div>
+            <OutlinedInput
+              sx={{
+                width: 350,
+                fontSize: "1.1rem",
+                height: 48,
+                borderRadius: "10px",
+                border: invalidEmail
+                  ? "2px solid #d32f2f"
+                  : "2px solid var(--blue-gray)",
+                "& fieldset": {
+                  border: "none",
+                },
+                "& input::placeholder": {
+                  color: "black",
+                },
+              }}
+              value={email}
+              // placeholder="Use your ATC Volunteer email"
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+              error={invalidEmail}
+            />
+            </div>
             {/* join code field */}
             <div className={styles.alignLeft}>
               <h3 className={styles.label}>Join Code</h3>
