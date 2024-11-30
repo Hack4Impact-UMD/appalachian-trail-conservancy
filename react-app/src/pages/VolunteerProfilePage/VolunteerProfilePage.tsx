@@ -66,48 +66,48 @@ return (
             <h1 className={styles.nameHeading}>Profile Page</h1>
           </div>
           <div className={styles.profileContainer}>
-            <div>
-                <div>
+            <div className={styles.leftContainer}>
+                <div className={styles.profileItem}>
                     First Name
                 </div>
-                <div>
+                <div className={styles.profileItem}>
                   <OutlinedInput
                   value={auth.firstName}
                   sx={{ ...grayBorderTextField }}
                   >
                   </OutlinedInput>
                 </div>
-                <div>
+                <div className={styles.profileItem}>
                     Last Name
                 </div>
-                <div>
+                <div className={styles.profileItem}>
                 <OutlinedInput
                   value={auth.lastName}
                   sx={{ ...grayBorderTextField }}
                   >
                   </OutlinedInput>
                 </div>
-                <div>
-                <div>
+                <div className={styles.profileItem}>
+                  
                     Registered email
-                  </div>
+                  
                 </div>
-                <div>
+                <div className={styles.profileItem}>
                 <OutlinedInput
                   sx={{ ...grayBorderTextField }}
                   >
                   </OutlinedInput>
                 </div>
+                <div className={styles.profileItem}>
                 <Button
                 sx={forestGreenButton}
                 variant="contained">
                     Save
                 </Button>
+                </div>
             </div>
             <div className={styles.profileIcon}>
-            <Link to="/profile">
-            <ProfileIcon />
-            </Link>
+            <ProfileIcon /> {/* Question about importing the icon and changing the css */}
             </div>
           </div>
         </div>

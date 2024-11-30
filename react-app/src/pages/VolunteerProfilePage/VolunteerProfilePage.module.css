@@ -56,13 +56,21 @@
 
   .profileContainer {
     display: flex;
-
+    justify-content: space-between;
   }
 
+  .leftContainer {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .profileItem {
+    margin: 3%;
+    font-size: 1rem;
+  }
 
   .profileIcon {
-    
-
+    font-size: 3rem;
   }
   
   .subHeader {

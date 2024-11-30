@@ -251,11 +251,13 @@ function Dashboard() {
             onClick={() => setNavigationBarOpen(true)} // Set sidebar open when clicked
           />
         )}
-        <div className={styles.outerContainer}>
+        <div className={styles.outerContainer}>3
           <div className={styles.content}>
             <div className={styles.header}>
               <h1 className={styles.nameHeading}>Hello, {auth.firstName}!</h1>
+              <Link to="/profile">
               <ProfileIcon />
+              </Link>
             </div>
             {loading ? (
               <Loading />
