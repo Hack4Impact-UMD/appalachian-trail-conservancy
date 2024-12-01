@@ -66,11 +66,16 @@
 
   .profileItem {
     margin: 3%;
-    font-size: 1rem;
+    font-size: 1.3rem;
   }
 
   .profileIcon {
     font-size: 3rem;
+  }
+
+  .emailBox {
+    display: flex;
+    
   }
   
   .subHeader {

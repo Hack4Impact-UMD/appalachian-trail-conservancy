@@ -19,51 +19,55 @@ import Loading from "../../components/LoadingScreen/Loading";
 import SettingsProfileIcon from "../../components/SettingsProfileIcon/SettingsProfileIcon";
 import Footer from "../../components/Footer/Footer";
 import hamburger from "../../assets/hamburger.svg";
-import { grayBorderTextField, whiteButtonGrayBorder, whiteButtonOceanGreenBorder, whiteButtonGreenBorder, forestGreenButton } from "../../muiTheme"
-
+import {
+  grayBorderTextField,
+  whiteButtonGrayBorder,
+  whiteButtonOceanGreenBorder,
+  whiteButtonGreenBorder,
+  forestGreenButton,
+} from "../../muiTheme";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 function VolunteerProfilePage() {
-    const auth = useAuth();
-    const [loading, setLoading] = useState<boolean>(true);
-    const [navigationBarOpen, setNavigationBarOpen] = useState(
-      !(window.innerWidth < 1200)
-    );
-    const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
-    const [volunteerCopy, setVolunteerCopy] = useState<Volunteer>();
-    const [firstName, setFirstName] = useState<String>(auth.firstName); 
-    const [lastName, setLastName] = useState<String>(auth.lastName);
-  
-    // Update screen width on resize
-    useEffect(() => {
-      const handleResize = () => {
-        setScreenWidth(window.innerWidth);
-      };
-  
-      window.addEventListener("resize", handleResize);
-      return () => {
-        window.removeEventListener("resize", handleResize);
-      };
-    }, []);
+  const auth = useAuth();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [navigationBarOpen, setNavigationBarOpen] = useState(
+    !(window.innerWidth < 1200)
+  );
+  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
+  const [volunteerCopy, setVolunteerCopy] = useState<Volunteer>();
+  const [firstName, setFirstName] = useState<String>(auth.firstName);
+  const [lastName, setLastName] = useState<String>(auth.lastName);
 
-    useEffect(() => {
-      const getTrainingsCompleted = async () => {
-        if (!auth.loading && auth.id) {
-          try {
-            const volunteer = await getVolunteer(auth.id.toString());
-            console.log(volunteer);
-            setVolunteerCopy(volunteer);
-            setLoading(false);
-          }
-          catch (error) {
+  // Update screen width on resize
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
 
-          }
-        }};
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
-        getTrainingsCompleted();
-    }, [auth.loading, auth.id]);
+  useEffect(() => {
+    const getTrainingsCompleted = async () => {
+      if (!auth.loading && auth.id) {
+        try {
+          const volunteer = await getVolunteer(auth.id.toString());
+          console.log(volunteer);
+          setVolunteerCopy(volunteer);
+          setLoading(false);
+        } catch (error) {}
+      }
+    };
 
-    function updateName() {
-      if (volunteerCopy != undefined)
+    getTrainingsCompleted();
+  }, [auth.loading, auth.id]);
+
+  function updateName() {
+    if (volunteerCopy != undefined)
       updateVolunteer(
         { ...volunteerCopy, firstName, lastName }, // Updated volunteer object
         volunteerCopy.auth_id // Use the unique ID for updating
@@ -74,99 +78,96 @@ function VolunteerProfilePage() {
         .catch((error) => {
           console.error("Error updating volunteer:", error);
         });
-    }
+  }
 
-return (
+  return (
     <>
-    <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
 
-    <div
-      className={`${styles.split} ${styles.right}`}
-      style={{
-        // Only apply left shift when screen width is greater than 1200px
-        left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-      }}>
-      {!navigationBarOpen && (
-        <img
-          src={hamburger}
-          alt="Hamburger Menu"
-          className={styles.hamburger} // Add styles to position it
-          width={30}
-          onClick={() => setNavigationBarOpen(true)} // Set sidebar open when clicked
-        />
-      )}
-      <div className={styles.outerContainer}>
-        <div className={styles.content}>
-          <div className={styles.header}>
-            <h1 className={styles.nameHeading}>Profile Page</h1>
-          </div>
-          <div className={styles.profileContainer}>
-            <div className={styles.leftContainer}>
+      <div
+        className={`${styles.split} ${styles.right}`}
+        style={{
+          // Only apply left shift when screen width is greater than 1200px
+          left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
+        }}
+      >
+        {!navigationBarOpen && (
+          <img
+            src={hamburger}
+            alt="Hamburger Menu"
+            className={styles.hamburger} // Add styles to position it
+            width={30}
+            onClick={() => setNavigationBarOpen(true)} // Set sidebar open when clicked
+          />
+        )}
+        <div className={styles.outerContainer}>
+          <div className={styles.content}>
+            <div className={styles.header}>
+              <h1 className={styles.nameHeading}>Profile Page</h1>
+            </div>
+            <div className={styles.profileContainer}>
+              <div className={styles.leftContainer}>
+                <div className={styles.profileItem}>First Name</div>
                 <div className={styles.profileItem}>
-                    First Name
+                  <OutlinedInput
+                    value={auth.firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    sx={{ ...grayBorderTextField }}
+                  ></OutlinedInput>
+                </div>
+                <div className={styles.profileItem}>Last Name</div>
+                <div className={styles.profileItem}>
+                  <OutlinedInput
+                    value={auth.lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    sx={{ ...grayBorderTextField }}
+                  ></OutlinedInput>
+                </div>
+                <div className={styles.emailBox}>
+                  <div className={styles.profileItem}>Registered email</div>
+                  <div>
+                    <Tooltip
+                      title="You cannot edit this email. You must create a new account if so."
+                      placement="right-start"
+                      componentsProps={{
+                        tooltip: {
+                          sx: {
+                            bgcolor: "white",
+                            color: "black",
+                          },
+                        },
+                      }}
+                    >
+                      <InfoOutlinedIcon />
+                    </Tooltip>
+                  </div>
                 </div>
                 <div className={styles.profileItem}>
                   <OutlinedInput
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  sx={{ ...grayBorderTextField }}
+                    sx={{ ...grayBorderTextField }}
+                  ></OutlinedInput>
+                </div>
+
+                <div className={styles.profileItem}>
+                  <Button
+                    sx={forestGreenButton}
+                    variant="contained"
+                    onClick={updateName}
                   >
-                  </OutlinedInput>
-                </div>
-                <div className={styles.profileItem}>
-                    Last Name
-                </div>
-                <div className={styles.profileItem}>
-                <OutlinedInput
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  sx={{ ...grayBorderTextField }}
-                  >
-                  </OutlinedInput>
-                </div>
-                <div className={styles.profileItem}>
-                  
-                    Registered email
-                  
-                </div>
-                <div className={styles.profileItem}>
-                <OutlinedInput
-                  sx={{ ...grayBorderTextField }}
-                  >
-                  </OutlinedInput>
-                </div>
-                <div className={styles.profileItem}>
-                <Button
-                sx={forestGreenButton}
-                variant="contained"
-                onClick={updateName}>
                     Save
-                </Button>
+                  </Button>
                 </div>
-                <div>
-                <Tooltip title="Should be link to PDF or Video" placement="top">
-                  <InfoIcon
-                    fontSize="small"
-                    style={{
-                      marginLeft: "8px",
-                      color: "#6E6E6E",
-                      cursor: "pointer",
-                      marginTop: "1.5rem",
-                    }}
-                  />
-                </Tooltip>
-                </div>
-            </div>
-            <div className={styles.profileIcon}>
-            <SettingsProfileIcon />
+              </div>
+              <div className={styles.profileIcon}>
+                <SettingsProfileIcon />
+              </div>
             </div>
           </div>
         </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
-  </>
-);
+    </>
+  );
 }
 
-export default VolunteerProfilePage
+export default VolunteerProfilePage;
