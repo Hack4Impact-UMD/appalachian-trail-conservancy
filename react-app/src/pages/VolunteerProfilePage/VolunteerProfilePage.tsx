@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../auth/AuthProvider";
 import { Link } from "react-router-dom";
-import { getVolunteer } from "../../backend/FirestoreCalls";
+import { getVolunteer, updateVolunteer } from "../../backend/FirestoreCalls";
 import { TrainingID } from "../../types/TrainingType";
 import { PathwayID } from "../../types/PathwayType";
 import { VolunteerPathway, VolunteerTraining } from "../../types/UserType";
 import { OutlinedInput, Button, Tooltip } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
 import { forestGreenButtonPadding } from "../../muiTheme";
+import { Volunteer } from "../../types/UserType";
 import TrainingCard from "../../components/TrainingCard/TrainingCard";
 import PathwayCard from "../../components/PathwayCard/PathwayCard";
 import styles from "./VolunteerProfilePage.module.css";
@@ -15,7 +16,7 @@ import Certificate from "../../components/CertificateCard/CertificateCard";
 import Badge from "../../components/BadgeCard/BadgeCard";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import Loading from "../../components/LoadingScreen/Loading";
-import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
+import SettingsProfileIcon from "../../components/SettingsProfileIcon/SettingsProfileIcon";
 import Footer from "../../components/Footer/Footer";
 import hamburger from "../../assets/hamburger.svg";
 import { grayBorderTextField, whiteButtonGrayBorder, whiteButtonOceanGreenBorder, whiteButtonGreenBorder, forestGreenButton } from "../../muiTheme"
@@ -28,6 +29,9 @@ function VolunteerProfilePage() {
       !(window.innerWidth < 1200)
     );
     const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
+    const [volunteerCopy, setVolunteerCopy] = useState<Volunteer>();
+    const [firstName, setFirstName] = useState<String>(auth.firstName); 
+    const [lastName, setLastName] = useState<String>(auth.lastName);
   
     // Update screen width on resize
     useEffect(() => {
@@ -41,6 +45,36 @@ function VolunteerProfilePage() {
       };
     }, []);
 
+    useEffect(() => {
+      const getTrainingsCompleted = async () => {
+        if (!auth.loading && auth.id) {
+          try {
+            const volunteer = await getVolunteer(auth.id.toString());
+            console.log(volunteer);
+            setVolunteerCopy(volunteer);
+            setLoading(false);
+          }
+          catch (error) {
+
+          }
+        }};
+
+        getTrainingsCompleted();
+    }, [auth.loading, auth.id]);
+
+    function updateName() {
+      if (volunteerCopy != undefined)
+      updateVolunteer(
+        { ...volunteerCopy, firstName, lastName }, // Updated volunteer object
+        volunteerCopy.auth_id // Use the unique ID for updating
+      )
+        .then(() => {
+          console.log("Volunteer updated successfully");
+        })
+        .catch((error) => {
+          console.error("Error updating volunteer:", error);
+        });
+    }
 
 return (
     <>
@@ -73,7 +107,8 @@ return (
                 </div>
                 <div className={styles.profileItem}>
                   <OutlinedInput
-                  value={auth.firstName}
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
                   sx={{ ...grayBorderTextField }}
                   >
                   </OutlinedInput>
@@ -83,7 +118,8 @@ return (
                 </div>
                 <div className={styles.profileItem}>
                 <OutlinedInput
-                  value={auth.lastName}
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
                   sx={{ ...grayBorderTextField }}
                   >
                   </OutlinedInput>
@@ -102,7 +138,8 @@ return (
                 <div className={styles.profileItem}>
                 <Button
                 sx={forestGreenButton}
-                variant="contained">
+                variant="contained"
+                onClick={updateName}>
                     Save
                 </Button>
                 </div>
@@ -121,7 +158,7 @@ return (
                 </div>
             </div>
             <div className={styles.profileIcon}>
-            <ProfileIcon />
+            <SettingsProfileIcon />
             </div>
           </div>
         </div>

@@ -1,0 +1,17 @@
+.profileContainer {
+  display: flex;
+  align-items: center;
+}
+
+.profileIcon {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-color: var(--forest-green);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 3rem;
+  font-weight: bold;
+}
