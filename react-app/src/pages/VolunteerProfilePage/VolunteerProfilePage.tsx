@@ -5,7 +5,8 @@ import { getVolunteer } from "../../backend/FirestoreCalls";
 import { TrainingID } from "../../types/TrainingType";
 import { PathwayID } from "../../types/PathwayType";
 import { VolunteerPathway, VolunteerTraining } from "../../types/UserType";
-import { OutlinedInput, Button } from "@mui/material";
+import { OutlinedInput, Button, Tooltip } from "@mui/material";
+import InfoIcon from "@mui/icons-material/Info";
 import { forestGreenButtonPadding } from "../../muiTheme";
 import TrainingCard from "../../components/TrainingCard/TrainingCard";
 import PathwayCard from "../../components/PathwayCard/PathwayCard";
@@ -105,9 +106,22 @@ return (
                     Save
                 </Button>
                 </div>
+                <div>
+                <Tooltip title="Should be link to PDF or Video" placement="top">
+                  <InfoIcon
+                    fontSize="small"
+                    style={{
+                      marginLeft: "8px",
+                      color: "#6E6E6E",
+                      cursor: "pointer",
+                      marginTop: "1.5rem",
+                    }}
+                  />
+                </Tooltip>
+                </div>
             </div>
             <div className={styles.profileIcon}>
-            <ProfileIcon /> {/* Question about importing the icon and changing the css */}
+            <ProfileIcon />
             </div>
           </div>
         </div>
