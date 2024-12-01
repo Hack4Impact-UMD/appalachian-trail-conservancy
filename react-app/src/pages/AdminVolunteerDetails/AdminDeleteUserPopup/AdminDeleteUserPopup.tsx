@@ -12,7 +12,10 @@ interface modalPropsType {
   onClose: any;
 }
 
-const LogoutPopup = ({ open, onClose }: modalPropsType): React.ReactElement => {
+const DeleteUserPopup = ({
+  open,
+  onClose,
+}: modalPropsType): React.ReactElement => {
   const navigate = useNavigate();
 
   function startLogOut() {
@@ -35,22 +38,26 @@ const LogoutPopup = ({ open, onClose }: modalPropsType): React.ReactElement => {
       }}
     >
       <div className={styles.content}>
-        <p className={styles.title}>ARE YOU SURE YOU WANT TO DELETE THIS VOLUNTEER?</p>
+        <p className={styles.title}>
+          ARE YOU SURE YOU WANT TO DELETE THIS VOLUNTEER?
+        </p>
         <p className={styles.text}>This action cannot be undone.</p>
         <div className={styles.buttons}>
           <div className={styles.leftButton}>
             <Button
               onClick={() => onClose()}
               variant="contained"
-              sx={{ ...whiteButtonGrayBorder, width: "100px", 
+              sx={{
+                ...whiteButtonGrayBorder,
+                width: "100px",
                 color: "white",
-                  backgroundColor: "gray",
+                backgroundColor: "gray",
+                border: "2px solid gray",
+                "&:hover": {
+                  color: "gray",
                   border: "2px solid gray",
-                  "&:hover": {
-                    color: "gray",
-                    border: "2px solid gray",
-                    backgroundColor: "white"
-                  }, 
+                  backgroundColor: "white",
+                },
               }}
             >
               Cancel
@@ -61,15 +68,17 @@ const LogoutPopup = ({ open, onClose }: modalPropsType): React.ReactElement => {
               <Button
                 onClick={() => startLogOut()}
                 variant="contained"
-                sx={{ ...forestGreenButton, width: "100px",    
+                sx={{
+                  ...forestGreenButton,
+                  width: "100px",
                   color: "white",
                   backgroundColor: "#BF3232",
                   border: "2px solid #BF3232",
                   "&:hover": {
                     color: "#BF3232",
                     border: "2px solid #BF3232",
-                    backgroundColor: "white"
-                  }, 
+                    backgroundColor: "white",
+                  },
                 }}
               >
                 Yes
@@ -85,4 +94,4 @@ const LogoutPopup = ({ open, onClose }: modalPropsType): React.ReactElement => {
   );
 };
 
-export default LogoutPopup;
+export default DeleteUserPopup;

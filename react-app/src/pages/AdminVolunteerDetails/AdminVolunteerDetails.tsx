@@ -335,7 +335,8 @@ function AdminVolunteerDetails() {
   }, []);
 
   //delete user popup
-  const [openDeleteUserPopup, setOpenDeleteUserPopup] = useState<boolean>(false);
+  const [openDeleteUserPopup, setOpenDeleteUserPopup] =
+    useState<boolean>(false);
 
   const handleDeleteUser = (): void => {
     setOpenDeleteUserPopup(true);
@@ -343,26 +344,32 @@ function AdminVolunteerDetails() {
 
   return (
     <>
-    <div className={openDeleteUserPopup ? styles.popupOpen : ""}>
-     <AdminNavigationBar
-  open={navigationBarOpen}
-  setOpen={setNavigationBarOpen}
-/>
-</div>
-<DeleteUserPopup open={openDeleteUserPopup} onClose={setOpenDeleteUserPopup} />
-<div
-  className={`${styles.split} ${styles.right} ${openDeleteUserPopup ? styles.popupOpen : ""}`}
-  style={{
-    // Only apply left shift when screen width is greater than 1200px
-    left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-  }}
->
-
+      <div className={openDeleteUserPopup ? styles.popupOpen : ""}>
+        <AdminNavigationBar
+          open={navigationBarOpen}
+          setOpen={setNavigationBarOpen}
+        />
+      </div>
+      <DeleteUserPopup
+        open={openDeleteUserPopup}
+        onClose={setOpenDeleteUserPopup}
+      />
+      <div
+        className={`${styles.split} ${styles.right} ${
+          openDeleteUserPopup ? styles.popupOpen : ""
+        }`}
+        style={{
+          // Only apply left shift when screen width is greater than 1200px
+          left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
+        }}
+      >
         {!navigationBarOpen && (
           <img
             src={hamburger}
             alt="Hamburger Menu"
-            className={`${styles.hamburger} ${openDeleteUserPopup ? styles.popupOpen : ""}`} // Add styles to position it
+            className={`${styles.hamburger} ${
+              openDeleteUserPopup ? styles.popupOpen : ""
+            }`} // Add styles to position it
             width={30}
             onClick={() => setNavigationBarOpen(true)} // Set sidebar open when clicked
           />
@@ -486,33 +493,33 @@ function AdminVolunteerDetails() {
                 BACK
               </Button>
               <div className={styles.buttonContainerInner}>
-              <Button
-                sx={{
-                  ...whiteButtonOceanGreenBorder,
-                  color: "var(--steel-purple)",
-                  border: "2px solid var(--steel-purple)",
-                  "&:hover": {
-                    color: "#BF3232",
-                    border: "2px solid #BF3232",
-                  },
-                  fontWeight: "bold",
-                  width: "100px",
-                }}
-                onClick={() => {
-                  handleDeleteUser();
-                }}
-              >
-                Delete
-              </Button>
-              <Button
-                sx={{
-                  ...whiteButtonOceanGreenBorder,
-                  fontWeight: "bold",
-                  width: "100px",
-                }}
-              >
-                Export
-              </Button>
+                <Button
+                  sx={{
+                    ...whiteButtonOceanGreenBorder,
+                    color: "var(--steel-purple)",
+                    border: "2px solid var(--steel-purple)",
+                    "&:hover": {
+                      color: "#BF3232",
+                      border: "2px solid #BF3232",
+                    },
+                    fontWeight: "bold",
+                    width: "100px",
+                  }}
+                  onClick={() => {
+                    handleDeleteUser();
+                  }}
+                >
+                  Delete
+                </Button>
+                <Button
+                  sx={{
+                    ...whiteButtonOceanGreenBorder,
+                    fontWeight: "bold",
+                    width: "100px",
+                  }}
+                >
+                  Export
+                </Button>
               </div>
             </div>
           </div>
