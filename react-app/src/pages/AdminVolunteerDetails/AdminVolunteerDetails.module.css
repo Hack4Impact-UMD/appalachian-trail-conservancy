@@ -15,6 +15,11 @@
   flex-direction: column;
 }
 
+.popupOpen {
+  position:absolute;
+  z-index: -1;
+}
+
 .hamburger {
   color: var(--blue-gray);
   font-size: 1.5rem;
@@ -100,6 +105,13 @@
   display: flex;
   justify-content: space-between;
   padding-top: 2%;
+}
+
+.buttonContainerInner {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  width: 20%;
 }
 
 @media screen and (min-width: 1500px) {

@@ -81,7 +81,7 @@ function App() {
               }
             />
             <Route
-              path="/management"
+              path="/AdminVolunteerDetails"
               element={
                 <RequireAdminAuth>
                   <AdminUserManagement />

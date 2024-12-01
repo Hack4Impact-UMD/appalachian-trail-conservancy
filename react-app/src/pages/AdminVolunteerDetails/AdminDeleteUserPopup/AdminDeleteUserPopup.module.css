@@ -1,0 +1,45 @@
+.closeButton {
+    display: flex;
+    position: absolute;
+    background: white;
+    top: 20px;
+    right: 20px;
+    border-radius: 50%;
+    color: var(--blue-gray);
+    text-align: center;
+    font-size: 2.25rem;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    max-width: 300px;
+    text-align: center;
+    color: black;
+  }
+
+  .text {
+    font-size: 1.1rem;
+    max-width: 300px;
+    text-align: center;
+    color: black;
+  }
+  
+  .buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10%;
+  }
+  
