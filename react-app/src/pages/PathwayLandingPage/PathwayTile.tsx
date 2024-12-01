@@ -11,15 +11,23 @@ import rightDownIcon from "../../assets/PathwayTiles/RightDown.svg";
 import rightEndIcon from "../../assets/PathwayTiles/RightEnd.svg";
 import verticalIcon from "../../assets/PathwayTiles/Vertical.svg";
 import TrainingPopup from "../../components/TrainingPopup/TrainingPopup";
-import downLeftCompleted from "../../assets/PathwayTiles/DownLeftCompleted.svg";
-import downTrophy from "../../assets/PathwayTiles/DownTrophy.svg";
-import leftDownCompleted from "../../assets/PathwayTiles/LeftDownCompleted.svg"; 
-import rightDownCompleted from "../../assets/PathwayTiles/RightDownCompleted.svg";
-import verticalCompleted from "../../assets/PathwayTiles/VerticalCompleted.svg";
-import downRightCompleted from "../../assets/PathwayTiles/DownRightCompleted.svg";
-import horizontalCompleted from "../../assets/PathwayTiles/HorizontalCompleted.svg";
-import leftTrophy from "../../assets/PathwayTiles/LeftTrophy.svg";
-import rightTrophy from "../../assets/PathwayTiles/RightTrophy.svg";
+
+import downLeftCompleted from "../../assets/PathwayTiles/CompletedTiles/DownLeftCompleted.svg"; 
+import downTrophy from "../../assets/PathwayTiles/CompletedTiles/DownTrophy.svg";
+import leftDownCompleted from "../../assets/PathwayTiles/CompletedTiles/LeftDownCompleted.svg"; 
+import rightDownCompleted from "../../assets/PathwayTiles/CompletedTiles/RightDownCompleted.svg";
+import verticalCompleted from "../../assets/PathwayTiles/CompletedTiles/VerticalCompleted.svg";
+import downRightCompleted from "../../assets/PathwayTiles/CompletedTiles/DownRightCompleted.svg";
+import leftCompleted from "../../assets/PathwayTiles/CompletedTiles/LeftCompleted.svg";
+import leftTrophy from "../../assets/PathwayTiles/CompletedTiles/LeftTrophy.svg";
+import rightTrophy from "../../assets/PathwayTiles/CompletedTiles/RightTrophy.svg";
+
+import downLeftInter from "../../assets/PathwayTiles/IntermediateTiles/DownLeftInter.svg";
+import downRightInter from "../../assets/PathwayTiles/IntermediateTiles/DownRightInter.svg";
+import leftInter from "../../assets/PathwayTiles/IntermediateTiles/LeftInter.svg";
+import leftDownInter from "../../assets/PathwayTiles/IntermediateTiles/LeftDownInter.svg";
+import rightDownInter from "../../assets/PathwayTiles/IntermediateTiles/RightDownInter.svg";
+import verticalInter from "../../assets/PathwayTiles/IntermediateTiles/VerticalInter.svg";
 import { useState } from "react";
 import { TrainingID } from "../../types/TrainingType";
 
@@ -36,46 +44,119 @@ interface PathwayTileProps {
 // count: total number of trainings in pathway
 // trainingsCompleted: the number of trainings in this pathway that have been finished
 function getImage(imagesPerRow: number, index: number, numTrainings: number, trainingsCompleted: number) {
+  console.log("card index " + index);
+  // console.log("num trainings " + numTrainings);
   // Empty
   if (index > numTrainings) return emptyIcon;
   // Straight down
-  if (imagesPerRow == 1) {
-    // Check if they're finished
-    // if (index < trainingsCompleted) {
-    //   return index == numTrainings ? downTrophy : verticalCompleted;
+  if (imagesPerRow === 1) {
+    // // Check if the current tile is finished
+    // if (index <= trainingsCompleted) {
+    //   // Check if all tiles have been finished
+    //   if (index + 1 == trainingsCompleted )
+
+    //   // Check if this is the msot recent tile to be finished
+    //   if (index )
     // }
-    return index == numTrainings ? downEndIcon : verticalIcon;
+
+    // Check that the index has been completed
+    if (index <= trainingsCompleted && trainingsCompleted != 0) {
+      // Check if it is the final  one
+      if (index === numTrainings)
+        return downTrophy;
+      // Check if it is the last one in the sequence
+      if (index + 1 === trainingsCompleted)
+        return verticalInter;
+      
+      // Otherwise it is done and the one behind it is to
+      return verticalCompleted;
+    }
+
+    return index === numTrainings ? downEndIcon : verticalIcon;
   }
   // Not reversed
-  if (Math.floor(index / imagesPerRow) % 2 == 0) {
+  if (Math.floor(index / imagesPerRow) % 2 === 0) {
     // Right-most card
-    if ((index + 1) % imagesPerRow == 0) {
-      // if (index < trainingsCompleted) {
-      //  return index == numTrainings ? leftTrophy : rightDownCompleted;
-      // }
-      return index == numTrainings ? leftEndIcon : rightDownIcon;
+    if ((index + 1) % imagesPerRow === 0) {
+      // Check if this has been completed yet
+      if (index <= trainingsCompleted && trainingsCompleted != 0) {
+        // Check if this is the last one completed
+        if (index === numTrainings)
+          return rightTrophy;
+        //
+        if (index + 1 === trainingsCompleted) 
+          return rightDownInter;
+
+        return rightDownCompleted;
+      }
+      return index === numTrainings ? leftEndIcon : rightDownIcon;
       // Left-most icon
-    } else if (index % imagesPerRow == 0) {
-      if (index == 0) {
-        // return index < numCompleted : horizonalCompleted ? horizontalIcon; // insert check for finished the first one
+    } else if (index % imagesPerRow === 0) {
+        //
+        if (index <= trainingsCompleted && trainingsCompleted != 0) {
+          //
+          if (index === numTrainings)
+            return leftTrophy;
+          //
+
+          if (index === 0)
+            return index + 1 === numTrainings ? leftInter : leftCompleted;
+
+          if (index + 1 === trainingsCompleted)
+            return leftDownInter;
+          
+          return leftDownCompleted;
+        }
+
+      if (index === 0) {
         return horizontalIcon;
       } else {
         // if (index < trainingsCompleted) {
         // }
-        return index == numTrainings ? downEndIcon : downRightIcon;
+        return index === numTrainings ? downEndIcon : downRightIcon;
       }
     }
+
+    // Middle icons
+    if (index + 1 <= trainingsCompleted && trainingsCompleted != 0) {
+      return leftCompleted;
+    }
+
     return index == numTrainings ? leftEndIcon : horizontalIcon;
   }
   // Reversed
   else {
+    // Left most icon
     if ((index + 1) % imagesPerRow == 0) {
-      return index == numTrainings ? rightEndIcon : leftDownIcon;
-    } else if (index % imagesPerRow == 0) {
-      return index == numTrainings ? downEndIcon : downLeftIcon;
+      if (index <= trainingsCompleted && trainingsCompleted != 0) {
+        if (index ===numTrainings)
+          return leftTrophy;
+        
+        if (index + 1 === trainingsCompleted)
+          return leftDownInter;
+
+        return leftDownCompleted;
+      }
+      return index === numTrainings ? rightEndIcon : leftDownIcon;
+    } else if (index % imagesPerRow === 0) {
+      if (index <= trainingsCompleted && trainingsCompleted != 0) {
+        if (index === numTrainings)
+          return leftTrophy;
+
+        if (index + 1 === trainingsCompleted)
+          return downLeftInter;
+
+        return downLeftCompleted;
+      }
+
+      return index === numTrainings ? downEndIcon : downLeftIcon;
     }
 
-    return index == numTrainings ? rightEndIcon : horizontalIcon;
+    if (index + 1 <= trainingsCompleted && trainingsCompleted != 0) {
+      return leftCompleted; // TODO: right completed goes here
+    }
+
+    return index === numTrainings ? rightEndIcon : horizontalIcon; 
   }
 }
 
@@ -90,7 +171,7 @@ const PathwayTile: React.FC<PathwayTileProps> = ({
   const imgWidth = 300;
 
   const imagesPerRow = Math.floor(width / imgWidth);
-  const image = getImage(imagesPerRow, tileNum, numTrainings, 1);
+  const image = getImage(imagesPerRow, tileNum, numTrainings, trainingsCompleted);
   //console.log(tileNum +"num")
 
   return (
@@ -116,7 +197,7 @@ const PathwayTile: React.FC<PathwayTileProps> = ({
             fontWeight: "bold",
           }}
         >
-          {trainingID != null ? tileNum + 1 : ""}
+          {trainingID != null && tileNum >= trainingsCompleted ? tileNum + 1 : ""}
         </div>
       </div>
       {trainingID ? (

@@ -76,33 +76,33 @@ const PathwayLandingPage: React.FC = () => {
 
     // Filters based on the current pathway to get the number of trainings the user completed
     // Commented out until the other stuff is working
-    // const getTrainingsCompleted = async () => {
-    //   if (!auth.loading && auth.id && pathwayId !== undefined) {
-    //     try {
-    //       const volunteer = await getVolunteer(auth.id.toString());
-    //       const pathwayList = volunteer.pathwayInformation;
+    const getTrainingsCompleted = async () => {
+      if (!auth.loading && auth.id && pathwayId !== undefined) {
+        try {
+          const volunteer = await getVolunteer(auth.id.toString());
+          const pathwayList = volunteer.pathwayInformation;
     
-    //       // console.log(pathwayList);
-    //       // console.log(pathwayId);
+          // console.log(pathwayList);
+          // console.log(pathwayId);
     
-    //       const volunteerPathway = pathwayList.filter(
-    //         (thePathway) => pathwayId === thePathway.pathwayID
-    //       );
+          const volunteerPathway = pathwayList.filter(
+            (thePathway) => pathwayId === thePathway.pathwayID
+          );
     
-    //       if (volunteerPathway.length > 0) {
-    //         const numTrainings = volunteerPathway[0].numTrainingsCompleted;
-    //         console.log(numTrainings);
-    //         setNumCompleted(numTrainings);
-    //       } else {
-    //         console.warn("No matching pathway found.");
-    //       }
-    //     } catch (error) {
-    //       console.error("Error fetching volunteer data:", error);
-    //     }
-    //   }
-    // };
+          if (volunteerPathway.length > 0) {
+            const numTrainings = volunteerPathway[0].numTrainingsCompleted;
+            console.log("completed " + numTrainings);
+            setNumCompleted(numTrainings);
+          } else {
+            setNumCompleted(0);
+          }
+        } catch (error) {
+          console.error("Error fetching volunteer data:", error);
+        }
+      }
+    };
 
-    // getTrainingsCompleted();
+    getTrainingsCompleted();
 
   }, [auth.loading, auth.id]);
 
@@ -147,7 +147,7 @@ const PathwayLandingPage: React.FC = () => {
                 trainingID={j < trainings.length ? trainings[j] : undefined}
                 width={divWidth}
                 numTrainings={trainings.length}
-                trainingsCompleted={1} // Filler for now
+                trainingsCompleted={numCompleted} // Filler for now
               />
             </div>
           );
@@ -163,7 +163,7 @@ const PathwayLandingPage: React.FC = () => {
                 trainingID={j < trainings.length ? trainings[j] : undefined}
                 width={divWidth}
                 numTrainings={trainings.length}
-                trainingsCompleted={1} // Filler for now
+                trainingsCompleted={numCompleted} // Filler for now
               />
             </div>
           );
