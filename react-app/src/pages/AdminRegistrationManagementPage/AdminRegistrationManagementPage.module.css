@@ -61,6 +61,13 @@
   width: 80%;
   margin-top: 1.5rem;
 }
+.outerContainer {
+  overflow: visible; 
+}
+
+#quillEditor {
+  overflow: visible; 
+}
 
 .backButton,
 .saveButton {
@@ -71,115 +78,50 @@
   border-radius: 10px !important;
 }
 
-.styleButtons {
-  display: flex;
-  gap: 0;
-}
-
-.styleButton {
-  width: 30px;
-  height: 30px;
-  font-size: 1.2rem;
-  background-color: white;
-  color: black;
-  border: 2px solid black;
-  border-radius: 5px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.styleButton:hover {
-  background-color: #333;
-  color: white;
-}
-
-.MuiTextField-root {
-  position: relative;
-}
-
 .bodyContainer {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 80%;
   margin-top: 1rem;
+  border-radius: 10px; 
+
 }
 
 .bodyLabel {
   font-weight: bold !important;
   color: black;
-}
+  border-radius: 10px;
 
-.toolbarButtons {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
 }
 
 #quillEditor {
-  height: 250px;
+  height: 300px;
   width: 80%;
   border: 1px solid var(--blue-gray);
   border-radius: 10px;
-  margin-bottom: 200rem; /* Adjust this value for desired spacing */
+  margin-bottom: 1rem;
   background-color: #fff;
+  position: relative; 
+  overflow: hidden; 
+  padding-top: 40px; 
+}
+.ql-toolbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10; 
+  width: 100%; 
+}
+.ql-container {
+  height: calc(100% - 40px);
+  margin-top: 40px;
 }
 
-@media screen and (min-width: 1500px) {
-  .content {
-    width: 1200px;
-  }
-}
-
-@media screen and (min-width: 1800px) {
-  .content {
-    width: 1400px;
-  }
-}
-
-@media screen and (max-width: 1000px) {
-  .content {
-    width: 600px;
-  }
-}
 
 @media screen and (max-width: 750px) {
   .content {
     width: 425px;
-  }
-
-  .styleButtons {
-    top: 5rem;
-    right: 10%;
-  }
-
-  .buttonContainer {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .backButton,
-  .saveButton {
-    width: 80px;
-    font-size: 0.9rem;
-  }
-
-  .MuiTextField-root {
-    width: 100%;
-    font-size: 0.9rem;
-  }
-
-  .styleButton {
-    width: 30px;
-    height: 30px;
-    font-size: 1rem;
-  }
-}
-
-@media screen and (max-width: 600px) {
-  .header {
-    margin-top: 5rem;
   }
 }
 
@@ -187,26 +129,11 @@
   .content {
     width: 300px;
   }
-
-  .styleButtons {
-    top: 4.5rem;
-    right: 5%;
-  }
-
-  .buttonContainer {
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .backButton,
-  .saveButton {
-    width: 100%;
-    font-size: 1rem;
-  }
-
-  .styleButton {
-    width: 25px;
-    height: 25px;
-    font-size: 0.9rem;
-  }
 }
+.buttonGroup {
+  gap: 0.5rem; 
+  margin-top: 2rem; 
+  width: 60%;
+  
+}
+
