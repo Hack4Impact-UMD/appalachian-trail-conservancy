@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   FormControl,
   Button,
@@ -17,6 +17,8 @@ import { createVolunteerUser } from "../../../backend/AuthFunctions.ts";
 import styles from "./RegistrationPage.module.css";
 import Loading from "../../../components/LoadingScreen/Loading.tsx";
 import primaryLogo from "../../../assets/atc-primary-logo.png";
+import { trim } from "lodash";
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
 function RegistrationPage() {
   const { user } = useAuth();
@@ -27,13 +29,14 @@ function RegistrationPage() {
   //Add Error Handling
   const [invalidEmail, setInvalidEmail] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [emailsMatch, setEmailsMatch] = useState<boolean>(false);
 
   const [email, setEmail] = useState<string>("");
+  const [confirmEmail, setConfirmEmail] = useState<string>("");
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [joinCode, setJoinCode] = useState<string>("");
-
-  const isFormValid = firstName && lastName && email && joinCode;
+  const [isFormValid, setIsFormValid] = useState<boolean>(false);
 
   // If user is logged in, navigate to Dashboard (?)
   if (user) {
@@ -45,6 +48,18 @@ function RegistrationPage() {
     const pattern = /^[^@]+@[^@]+\.[^@]+$/;
     return pattern.test(email);
   };
+
+  useEffect(() => {
+    const match = 
+      email.length > 0 &&
+      confirmEmail.length > 0 &&
+      trim(email).toLowerCase() === trim(confirmEmail).toLowerCase();
+  
+    
+    setEmailsMatch(match);
+    setIsFormValid(match);
+  }, [email, confirmEmail]);
+
 
   // Handle confirm button click
   const handleConfirm = async (event: any) => {
@@ -151,7 +166,7 @@ function RegistrationPage() {
                 fontSize: "1.1rem",
                 height: 48,
                 borderRadius: "10px",
-                border: invalidEmail
+                border: !emailsMatch
                   ? "2px solid #d32f2f"
                   : "2px solid var(--blue-gray)",
                 "& fieldset": {
@@ -161,13 +176,17 @@ function RegistrationPage() {
                   color: "black",
                 },
               }}
-              value={email}
+              value={confirmEmail}
               // placeholder="Use your ATC Volunteer email"
               onChange={(e) => {
-                setEmail(e.target.value);
+                setConfirmEmail(e.target.value);
+                
               }}
               error={invalidEmail}
             />
+            {!emailsMatch && (
+              <FormHelperText error>Emails don't match</FormHelperText>
+            )}
             </div>
             {/* join code field */}
             <div className={styles.alignLeft}>
