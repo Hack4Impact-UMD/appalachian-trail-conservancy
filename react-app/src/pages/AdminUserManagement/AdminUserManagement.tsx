@@ -1,11 +1,18 @@
 import { useEffect, useState } from "react";
 import styles from "./AdminUserManagement.module.css";
-import { 
+import {
   getVolunteers,
   getAllTrainings,
-  getAllPathways
- } from "../../backend/FirestoreCalls";
-import { Button, InputAdornment, OutlinedInput, MenuItem, FormControl, Select, } from "@mui/material";
+  getAllPathways,
+} from "../../backend/FirestoreCalls";
+import {
+  Button,
+  InputAdornment,
+  OutlinedInput,
+  MenuItem,
+  FormControl,
+  Select,
+} from "@mui/material";
 import { User } from "../../types/UserType.ts";
 import { TrainingID } from "../../types/TrainingType.ts";
 import { PathwayID } from "../../types/PathwayType.ts";
@@ -62,7 +69,7 @@ function AdminUserManagement() {
     if (newAlignment !== null) {
       setAlignment(newAlignment);
       setSearchQuery(""); // Reset search query
-  
+
       // Reset filtered data based on the selected table
       if (newAlignment === "user") {
         setFilteredUsers(usersData);
@@ -73,8 +80,6 @@ function AdminUserManagement() {
       }
     }
   };
-  
-  
 
   useEffect(() => {
     getVolunteers()
@@ -85,18 +90,18 @@ function AdminUserManagement() {
       .catch((error) => {
         console.error("Error fetching users:", error);
       });
-      getAllTrainings()
+    getAllTrainings()
       .then((trainings) => {
         setTrainingsData(trainings);
-        setFilteredTrainings(trainings); 
+        setFilteredTrainings(trainings);
       })
       .catch((error) => {
         console.error("Error fetching users:", error);
       });
-      getAllPathways()
+    getAllPathways()
       .then((pathways) => {
         setPathwaysData(pathways);
-        setFilteredPathways(pathways); 
+        setFilteredPathways(pathways);
       })
       .catch((error) => {
         console.error("Error fetching users:", error);
@@ -173,7 +178,6 @@ function AdminUserManagement() {
       filterPathways();
     }
   }, [alignment]); // Trigger this effect whenever `alignment` changes
-  
 
   // Debounce the search query to prevent excessive filtering
   const updateQuery = (e: { target: { value: string } }) => {
@@ -185,7 +189,7 @@ function AdminUserManagement() {
     setSearchQuery(value); // Update the state immediately for the input field
     debouncedFilter(value); // Apply the filter logic with debounce
   };
-  
+
   // Debounced filter logic
   const debouncedFilter = debounce((value: string) => {
     if (alignment === "user") {
@@ -216,7 +220,7 @@ function AdminUserManagement() {
           : pathwaysData
       );
     }
-  }, 200); // Debounce interval in milliseconds  
+  }, 200); // Debounce interval in milliseconds
 
   const debouncedOnChange = debounce(updateQuery, 200);
 
@@ -224,7 +228,7 @@ function AdminUserManagement() {
     return () => {
       debouncedFilter.cancel();
     };
-  }, []);  
+  }, []);
 
   useEffect(() => {
     filterUsers(); // Filter users whenever the searchQuery changes
@@ -234,7 +238,7 @@ function AdminUserManagement() {
     setFilteredUsers(usersData); // Initialize filteredUsers with all users
   }, []);
 
-  const [selectionModel, setSelectionModel] = useState([]);
+  const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
 
   useEffect(() => {
     // Clear the selection whenever the table (alignment) changes
@@ -272,7 +276,9 @@ function AdminUserManagement() {
               <CustomToggleButtonGroup
                 value={alignment}
                 exclusive
-                onChange={(event, newAlignment) => handleAlignment(newAlignment)}>
+                onChange={(event, newAlignment) =>
+                  handleAlignment(newAlignment)
+                }>
                 <PurpleToggleButton value="user">
                   USER INFORMATION
                 </PurpleToggleButton>
@@ -286,26 +292,26 @@ function AdminUserManagement() {
             </div>
             {/* dropdown container */}
             <div className={styles.dropdownContainer}>
-                <FormControl sx={{ width: 300 }}>
-                  <Select
-                    className={styles.dropdownMenu}
-                    sx={whiteSelectGrayBorder}
-                    value={alignment}
-                    onChange={(e) => handleAlignment(e.target.value)} // Handle the dropdown value directly
-                    displayEmpty
-                    label="Filter">
-                    <MenuItem value="user" sx={selectOptionStyle}>
-                      USER INFORMATION
-                    </MenuItem>
-                    <MenuItem value="training" sx={selectOptionStyle}>
-                      TRAINING INFORMATION
-                    </MenuItem>
-                    <MenuItem value="pathways" sx={selectOptionStyle}>
-                      PATHWAYS
-                    </MenuItem>
-                  </Select>
-                </FormControl>
-              </div>
+              <FormControl sx={{ width: 300 }}>
+                <Select
+                  className={styles.dropdownMenu}
+                  sx={whiteSelectGrayBorder}
+                  value={alignment}
+                  onChange={(e) => handleAlignment(e.target.value)} // Handle the dropdown value directly
+                  displayEmpty
+                  label="Filter">
+                  <MenuItem value="user" sx={selectOptionStyle}>
+                    USER INFORMATION
+                  </MenuItem>
+                  <MenuItem value="training" sx={selectOptionStyle}>
+                    TRAINING INFORMATION
+                  </MenuItem>
+                  <MenuItem value="pathways" sx={selectOptionStyle}>
+                    PATHWAYS
+                  </MenuItem>
+                </Select>
+              </FormControl>
+            </div>
             {/* Conditional Content Rendering */}
             <div className={styles.contentSection}>
               {alignment === "user" && (
@@ -349,7 +355,9 @@ function AdminUserManagement() {
                       onRowClick={(row) => {}}
                       getRowId={(row) => row.auth_id} // Use auth_id as the unique ID for each row
                       selectionModel={selectionModel} // Controlled selection model
-                      onSelectionModelChange={(newSelection) => setSelectionModel(newSelection)}
+                      onSelectionModelChange={(newSelection) =>
+                        setSelectionModel(newSelection)
+                      }
                     />
                   </div>
                 </>
@@ -395,7 +403,9 @@ function AdminUserManagement() {
                       }}
                       onRowClick={(row) => {}}
                       selectionModel={selectionModel} // Controlled selection model
-                      onSelectionModelChange={(newSelection) => setSelectionModel(newSelection)}
+                      onSelectionModelChange={(newSelection) =>
+                        setSelectionModel(newSelection)
+                      }
                     />
                   </div>
                 </>
@@ -440,7 +450,9 @@ function AdminUserManagement() {
                       }}
                       onRowClick={(row) => {}}
                       selectionModel={selectionModel} // Controlled selection model
-                      onSelectionModelChange={(newSelection) => setSelectionModel(newSelection)}
+                      onSelectionModelChange={(newSelection) =>
+                        setSelectionModel(newSelection)
+                      }
                     />
                   </div>
                 </>
