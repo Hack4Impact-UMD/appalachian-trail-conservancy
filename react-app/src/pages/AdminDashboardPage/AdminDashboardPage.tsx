@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../auth/AuthProvider";
+import { useNavigate } from "react-router-dom";
 import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar";
 import styles from "./AdminDashboardPage.module.css";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
@@ -20,6 +21,7 @@ import hamburger from "../../assets/hamburger.svg";
 
 function AdminDashboardPage() {
   const auth = useAuth();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(true);
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
@@ -128,10 +130,16 @@ function AdminDashboardPage() {
             </div>
 
             <div className={styles.buttonContainer}>
-              <Button sx={forestGreenButtonLarge} variant="contained">
+              <Button
+                sx={forestGreenButtonLarge}
+                variant="contained"
+                onClick={() => navigate("/trainings/editor")}>
                 CREATE NEW TRAINING
               </Button>
-              <Button sx={forestGreenButtonLarge} variant="contained">
+              <Button
+                sx={forestGreenButtonLarge}
+                variant="contained"
+                onClick={() => navigate("/pathways/editor")}>
                 CREATE NEW PATHWAY
               </Button>
             </div>
@@ -169,7 +177,9 @@ function AdminDashboardPage() {
                 {trainingsSelected ? (
                   <>
                     {trainingDrafts.length === 0 && (
-                      <div className={styles.subHeader}>lmao u flopped!</div>
+                      <div className={styles.subHeader}>
+                        No drafted trainings
+                      </div>
                     )}
                     {trainingDrafts.length > 0 && (
                       <div className={styles.cardsContainer}>

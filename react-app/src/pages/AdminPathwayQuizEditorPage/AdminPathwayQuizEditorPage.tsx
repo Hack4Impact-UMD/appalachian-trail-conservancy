@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./AdminPathwayQuizEditorPage.module.css";
 import {
   Button,
@@ -27,6 +28,7 @@ import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Hamburger from "../../assets/hamburger.svg";
 
 function PathwayQuizEditorPage() {
+  const navigate = useNavigate();
   const [navigationBarOpen, setNavigationBarOpen] = useState(true);
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
 
@@ -318,6 +320,11 @@ function PathwayQuizEditorPage() {
                     ...styledRectButton,
                     ...whiteButtonGrayBorder,
                     width: "120px",
+                  }}
+                  onClick={() => {
+                    navigate("/pathways/editor", {
+                      // state: { pathway: pathwayData },
+                    });
                   }}>
                   BACK
                 </Button>

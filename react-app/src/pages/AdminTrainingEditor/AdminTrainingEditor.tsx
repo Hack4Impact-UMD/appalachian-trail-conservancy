@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./AdminTrainingEditor.module.css";
-import InfoIcon from "@mui/icons-material/Info";
-
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   TextField,
   Button,
@@ -12,138 +11,336 @@ import {
   FormHelperText,
   Typography,
   Tooltip,
+  Snackbar,
+  Alert,
 } from "@mui/material";
+import { addTraining, updateTraining } from "../../backend/FirestoreCalls";
+import {
+  TrainingID,
+  Training,
+  TrainingResource,
+  Resource,
+  Status,
+} from "../../types/TrainingType";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import { LuUpload } from "react-icons/lu";
+import { styledRectButton } from "../../muiTheme";
+import {
+  forestGreenButton,
+  whiteButtonGrayBorder,
+  whiteSelectGrayBorder,
+} from "../../muiTheme";
+import { IoIosInformationCircleOutline } from "react-icons/io";
+import hamburger from "../../assets/hamburger.svg";
 
 const AdminTrainingEditor: React.FC = () => {
-  const [trainingName, setTrainingName] = useState("");
-  const [blurb, setBlurb] = useState("");
-  const [description, setDescription] = useState("");
-  const [resourceLink, setResourceLink] = useState("");
-  const [resourceType, setResourceType] = useState("");
+  const location = useLocation();
+  const trainingData = location.state?.training as TrainingID | undefined;
+
+  const [trainingId, setTrainingId] = useState<string | undefined>(
+    trainingData?.id
+  );
+  const [trainingName, setTrainingName] = useState(trainingData?.name || "");
+  const [blurb, setBlurb] = useState(trainingData?.shortBlurb || "");
+  const [description, setDescription] = useState(
+    trainingData?.description || ""
+  );
+  const [resourceLink, setResourceLink] = useState(
+    trainingData?.resources[0]?.link || ""
+  );
+  const [resourceType, setResourceType] = useState(
+    trainingData?.resources[0]?.type || ""
+  );
+
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
   );
+  const [status, setStatus] = useState(trainingData?.status || "DRAFT");
+
+  const [isEditMode, setIsEditMode] = useState<boolean>(status !== "DRAFT");
+
+  const navigate = useNavigate();
+
+  const [snackbar, setSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   const [errors, setErrors] = useState({
     trainingName: "",
     blurb: "",
     description: "",
     resourceLink: "",
+    resourceType: "",
   });
+
+  const [invalidName, setInvalidName] = useState<boolean>(false);
+  const [invalidBlurb, setInvalidBlurb] = useState<boolean>(false);
+  const [invalidDescription, setInvalidDescription] = useState<boolean>(false);
 
   const characterLimits = {
     trainingName: 50,
-    blurb: 150,
-    description: 500,
+    blurb: 500,
+    description: 1000,
   };
 
+  // make sure all fields are good before moving on
   const validateFields = () => {
-    let newErrors = { ...errors };
+    let newErrors = {
+      trainingName: "",
+      blurb: "",
+      description: "",
+      resourceLink: "",
+      resourceType: "",
+    };
+    let isValid = true;
 
-    if (trainingName.length > characterLimits.trainingName) {
-      newErrors.trainingName = `Training name cannot exceed ${characterLimits.trainingName} characters.`;
-    } else {
-      newErrors.trainingName = "";
+    // Check for required fields
+    if (!trainingName) {
+      newErrors.trainingName = "Training name is required.";
+      isValid = false;
     }
 
-    if (blurb.length > characterLimits.blurb) {
-      newErrors.blurb = `Blurb cannot exceed ${characterLimits.blurb} characters.`;
-    } else {
-      newErrors.blurb = "";
+    if (!blurb) {
+      newErrors.blurb = "Blurb is required.";
+      isValid = false;
     }
 
-    if (description.length > characterLimits.description) {
-      newErrors.description = `Description cannot exceed ${characterLimits.description} characters.`;
-    } else {
-      newErrors.description = "";
+    if (!description) {
+      newErrors.description = "Description is required.";
+      isValid = false;
     }
 
+    if (!resourceType) {
+      newErrors.resourceType = "Resource Type is required.";
+      isValid = false;
+    }
+
+    // Validate Resource Link if type is video
     const youtubeRegex = /^https:\/\/www\.youtube\.com\/embed\/[\w-]+(\?.*)?$/;
-    if (resourceType === "video" && !youtubeRegex.test(resourceLink)) {
+    if (resourceType === "VIDEO" && !youtubeRegex.test(resourceLink)) {
       newErrors.resourceLink = "Please provide a valid embedded YouTube link.";
-    } else {
-      newErrors.resourceLink = "";
+      isValid = false;
+    } else if (resourceType && !resourceLink) {
+      newErrors.resourceLink = "Resource link is required.";
+      isValid = false;
     }
 
     setErrors(newErrors);
-
-    return Object.values(newErrors).every((error) => error === "");
+    return isValid;
   };
 
-  const handleNextClick = () => {
-    if (validateFields()) {
-      console.log("All validations passed");
+  const handleSaveClick = async () => {
+    // Validate fields only if in edit mode
+    if (isEditMode && !validateFields()) {
+      setSnackbarMessage("Please complete all required fields.");
+      setSnackbar(true);
+      return;
     }
+
+    let blankErrors = {
+      trainingName: "",
+      blurb: "",
+      description: "",
+      resourceLink: "",
+      resourceType: "",
+    };
+    setErrors(blankErrors);
+
+    const updatedTraining = {
+      name: trainingName,
+      shortBlurb: blurb,
+      description: description,
+      resources: [
+        { link: resourceLink, type: resourceType } as TrainingResource,
+      ],
+      status: isEditMode ? status : "DRAFT",
+    } as Training;
+
+    if (trainingId) {
+      // Update existing training
+      await updateTraining(updatedTraining, trainingId);
+      setSnackbarMessage("Training updated successfully.");
+    } else {
+      // Save as new draft
+      const newTrainingId = (await addTraining(updatedTraining)) as
+        | string
+        | undefined;
+      setTrainingId(newTrainingId);
+      setSnackbarMessage("Draft saved successfully.");
+    }
+    setSnackbar(true);
+  };
+
+  const handleNextClick = async () => {
+    if (validateFields()) {
+      const updatedTraining = {
+        ...trainingData,
+        name: trainingName,
+        shortBlurb: blurb,
+        description: description,
+        resources: [
+          {
+            link: resourceLink,
+            type: resourceType as Resource,
+          } as TrainingResource,
+        ] as TrainingResource[],
+        status: isEditMode ? status : ("DRAFT" as Status),
+      } as TrainingID;
+
+      if (trainingId) {
+        await updateTraining(updatedTraining, trainingId);
+        updatedTraining.id = trainingId;
+        setSnackbarMessage("Training updated successfully.");
+        setSnackbar(true);
+
+        // Navigate to the quiz editor with the training as state
+        navigate("/trainings/editor/quiz", {
+          state: { training: updatedTraining },
+        });
+      } else {
+        const newTrainingId = await addTraining(updatedTraining);
+        updatedTraining.id = newTrainingId;
+        setSnackbarMessage("Draft saved successfully.");
+        setSnackbar(true);
+
+        // Navigate to the quiz editor with the new training as state
+        navigate("/trainings/editor/quiz", {
+          state: { training: updatedTraining },
+        });
+      }
+    } else {
+      setSnackbarMessage("Please complete all required fields.");
+      setSnackbar(true);
+    }
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar(false);
   };
 
   return (
     <>
-      <div className={styles.container}>
-        <div className={styles.navbar}>
-          <NavigationBar
-            open={navigationBarOpen}
-            setOpen={setNavigationBarOpen}
+      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+
+      <div
+        className={`${styles.split} ${styles.right}`}
+        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        {/* Hamburger Menu */}
+        {!navigationBarOpen && (
+          <img
+            src={hamburger}
+            alt="Hamburger Menu"
+            className={styles.hamburger} // Add styles to position it
+            width={30}
+            onClick={() => setNavigationBarOpen(true)} // Set sidebar open when clicked
           />
-        </div>
-        <div className={styles.editor}>
-          <div className={styles.editorContent}>
-            <div className={styles.editorHeader}>
+        )}
+
+        <div className={styles.container}>
+          <div className={styles.content}>
+            <div className={styles.header}>
               <h1 className={styles.headerText}>Training Editor</h1>
               <ProfileIcon />
             </div>
 
             <form noValidate>
               <Button
-                variant="outlined"
-                color="secondary"
-                className={styles.saveButton}>
-                Save as Draft
+                sx={whiteButtonGrayBorder}
+                variant="contained"
+                onClick={handleSaveClick}>
+                {isEditMode ? "Save" : "Save as Draft"}
               </Button>
-              <Typography
-                variant="body2"
-                style={{
-                  color: "black",
-                  fontWeight: "bold",
-                  marginBottom: "4px",
-                  marginTop: "2rem",
-                }}>
-                TRAINING NAME
-              </Typography>
+
+              <div className={styles.inputBoxHeader}>
+                <Typography
+                  variant="body2"
+                  style={{
+                    color: "black",
+                    fontWeight: "bold",
+                    marginTop: "2rem",
+                  }}>
+                  TRAINING NAME
+                </Typography>
+
+                <Typography
+                  variant="body2"
+                  style={{
+                    color: "black",
+                    fontWeight: "500",
+                    marginTop: "2rem",
+                    fontSize: "0.8rem",
+                  }}>
+                  {Math.max(
+                    characterLimits.trainingName - trainingName.length,
+                    0
+                  )}{" "}
+                  Characters Remaining
+                </Typography>
+              </div>
+
               <TextField
                 value={trainingName}
+                onChange={(e) => {
+                  const newValue = e.target.value;
+                  if (newValue.length <= characterLimits.trainingName) {
+                    setTrainingName(newValue);
+                  }
+                }}
+                error={Boolean(errors.trainingName)}
+                helperText={errors.trainingName}
                 sx={{
                   width: "80%",
                   fontSize: "1.1rem",
                   borderRadius: "10px",
                   marginTop: "0.3rem",
                   height: "3.2rem",
-                  border: "2px solid var(--blue-gray)",
+                  border: errors.trainingName
+                    ? "2px solid #d32f2f"
+                    : "2px solid var(--blue-gray)",
                   "& fieldset": {
                     border: "none",
                   },
                 }}
-                onChange={(e) => setTrainingName(e.target.value)}
-                error={Boolean(errors.trainingName)}
-                helperText={errors.trainingName}
+                variant="outlined"
+                rows={1}
                 fullWidth
-                margin="normal"
               />
 
-              <Typography
-                variant="body2"
-                style={{
-                  color: "black",
-                  fontWeight: "bold",
-                  marginBottom: "4px",
-                }}>
-                BLURB
-              </Typography>
+              <div className={styles.inputBoxHeader}>
+                <Typography
+                  variant="body2"
+                  style={{
+                    color: "black",
+                    fontWeight: "bold",
+                    marginTop: "2rem",
+                  }}>
+                  BLURB
+                </Typography>
+
+                <Typography
+                  variant="body2"
+                  style={{
+                    color: "black",
+                    fontWeight: "500",
+                    marginTop: "2rem",
+                    fontSize: "0.8rem",
+                  }}>
+                  {Math.max(characterLimits.blurb - blurb.length, 0)} Characters
+                  Remaining
+                </Typography>
+              </div>
+
               <TextField
                 value={blurb}
+                onChange={(e) => {
+                  const newValue = e.target.value;
+                  if (newValue.length <= characterLimits.blurb) {
+                    setBlurb(newValue);
+                  }
+                }}
+                error={Boolean(errors.blurb)}
+                helperText={errors.blurb}
                 sx={{
                   width: "80%",
                   fontSize: "1.1rem",
@@ -151,50 +348,75 @@ const AdminTrainingEditor: React.FC = () => {
                   minHeight: 100,
                   marginTop: "0.3rem",
                   borderRadius: "10px",
-                  border: "2px solid var(--blue-gray)",
+                  border: errors.blurb
+                    ? "2px solid #d32f2f"
+                    : "2px solid var(--blue-gray)",
                   "& fieldset": {
                     border: "none",
                   },
                 }}
-                onChange={(e) => setBlurb(e.target.value)}
-                error={Boolean(errors.blurb)}
-                helperText={errors.blurb}
+                multiline
+                rows={3}
+                variant="outlined"
                 fullWidth
-                margin="normal"
               />
 
-              <Typography
-                variant="body2"
-                style={{
-                  color: "black",
-                  fontWeight: "bold",
-                  marginBottom: "4px",
-                }}>
-                DESCRIPTION
-              </Typography>
+              <div className={styles.inputBoxHeader}>
+                <Typography
+                  variant="body2"
+                  style={{
+                    color: "black",
+                    fontWeight: "bold",
+                    marginTop: "2rem",
+                  }}>
+                  DESCRIPTION
+                </Typography>
+
+                <Typography
+                  variant="body2"
+                  style={{
+                    color: "black",
+                    fontWeight: "500",
+                    marginTop: "2rem",
+                    fontSize: "0.8rem",
+                  }}>
+                  {Math.max(
+                    characterLimits.description - description.length,
+                    0
+                  )}{" "}
+                  Characters Remaining
+                </Typography>
+              </div>
 
               <TextField
                 value={description}
+                onChange={(e) => {
+                  const newValue = e.target.value;
+                  if (newValue.length <= characterLimits.description) {
+                    setDescription(newValue);
+                  }
+                }}
+                error={Boolean(errors.description)}
+                helperText={errors.description}
                 sx={{
                   width: "80%",
                   fontSize: "1.1rem",
                   minHeight: 100,
                   borderRadius: "10px",
                   marginTop: "0.3rem",
-                  border: "2px solid var(--blue-gray)",
+                  border: errors.description
+                    ? "2px solid #d32f2f"
+                    : "2px solid var(--blue-gray)",
                   "& fieldset": {
                     border: "none",
                   },
                 }}
-                onChange={(e) => setDescription(e.target.value)}
-                error={Boolean(errors.description)}
-                helperText={errors.description}
-                fullWidth
                 multiline
-                rows={4}
-                margin="normal"
+                rows={3}
+                variant="outlined"
+                fullWidth
               />
-              {/* Upload Section with Typography and LuUpload Icon */}
+
               <div
                 className={styles.uploadSection}
                 style={{
@@ -202,15 +424,39 @@ const AdminTrainingEditor: React.FC = () => {
                   flexDirection: "column",
                   alignItems: "flex-start",
                 }}>
-                <Typography
-                  variant="body2"
+                <div
                   style={{
-                    color: "black",
-                    fontWeight: "bold",
+                    display: "flex",
+                    alignItems: "center",
                     marginBottom: "8px",
                   }}>
-                  UPLOAD IMAGE
-                </Typography>
+                  <Typography
+                    variant="body2"
+                    style={{
+                      color: "black",
+                      fontWeight: "bold",
+                    }}>
+                    UPLOAD IMAGE (JPEG, PNG)
+                  </Typography>
+                  <Tooltip
+                    title="Upload will be used as training cover and certificate image"
+                    placement="top"
+                    componentsProps={{
+                      tooltip: {
+                        sx: {
+                          bgcolor: "white",
+                          color: "black",
+                          borderRadius: "8px",
+                          boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)",
+                        },
+                      },
+                    }}>
+                    <span className={styles.icon} style={{ marginLeft: "8px" }}>
+                      <IoIosInformationCircleOutline />
+                    </span>
+                  </Tooltip>
+                </div>
+
                 <Button
                   variant="contained"
                   component="label"
@@ -221,61 +467,62 @@ const AdminTrainingEditor: React.FC = () => {
                       backgroundColor: "#D9D9D9",
                     },
                   }}>
-                  {/* Increase size of LuUpload icon */}
                   <LuUpload style={{ fontSize: "50px" }} />
                   <input type="file" hidden />
                 </Button>
               </div>
 
               {/* Resource Link and Tooltip */}
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginTop: "2rem",
-                }}>
-                <Typography
-                  variant="body2"
+              <div className={styles.resourceHeadersBox}>
+                <div
                   style={{
-                    color: "black",
-                    fontWeight: "bold",
-                    marginBottom: "0.5rem",
+                    display: "flex",
+                    alignItems: "center",
                     marginTop: "2rem",
                   }}>
-                  RESOURCE LINK
-                </Typography>
-                <Tooltip title="Should be link to PDF or Video" placement="top">
-                  <InfoIcon
-                    fontSize="small"
+                  <Typography
+                    variant="body2"
                     style={{
-                      marginLeft: "8px",
-                      color: "#6E6E6E",
-                      cursor: "pointer",
-                      marginTop: "1.5rem",
-                    }}
-                  />
-                </Tooltip>
-              </div>
+                      color: "black",
+                      fontWeight: "bold",
+                      marginBottom: "0.5rem",
+                    }}>
+                    RESOURCE LINK
+                  </Typography>
 
+                  <Tooltip
+                    title="Should be link to PDF or Video"
+                    placement="top"
+                    componentsProps={{
+                      tooltip: {
+                        sx: {
+                          bgcolor: "white",
+                          color: "black",
+                          borderRadius: "8px",
+                          boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)",
+                        },
+                      },
+                    }}>
+                    <span style={{ marginLeft: "8px", marginBottom: "0.5rem" }}>
+                      <IoIosInformationCircleOutline />
+                    </span>
+                  </Tooltip>
+                </div>
+              </div>
               <div className={styles.flexRow}>
                 <TextField
                   value={resourceLink}
                   sx={{
-                    width: "50vw",
-                    height: "3.5rem",
+                    width: "65.5%",
                     fontSize: "1.1rem",
-
                     borderRadius: "10px",
-
-                    marginRight: "1rem",
-                    border: "2px solid var(--blue-gray)",
+                    marginTop: "0.3rem",
+                    height: "3.2rem",
+                    border: errors.resourceLink
+                      ? "2px solid #d32f2f"
+                      : "2px solid var(--blue-gray)",
                     "& fieldset": {
                       border: "none",
-                    },
-                    "& .MuiInputBase-root": {
-                      padding: "0.5rem 1rem",
-                      display: "flex",
-                      alignItems: "center",
                     },
                   }}
                   onChange={(e) => setResourceLink(e.target.value)}
@@ -289,66 +536,75 @@ const AdminTrainingEditor: React.FC = () => {
 
                 <FormControl
                   margin="normal"
-                  className={styles.resourceTypeField}>
-                  <Typography
-                    variant="body2"
-                    style={{
-                      color: "black",
-                      fontWeight: "bold",
-                      marginBottom: "0.5rem",
-                      marginTop: "-2.5rem",
-                    }}>
-                    RESOURCE TYPE
-                  </Typography>
+                  sx={{ marginTop: "0px", width: "180px" }}
+                  className={styles.resourceTypeField}
+                  error={Boolean(errors.resourceType)}>
                   <Select
-                    value={resourceType}
-                    displayEmpty
+                    className={styles.dropdownMenu}
                     sx={{
-                      height: "3.5rem",
+                      ...whiteSelectGrayBorder,
                       fontSize: "1.1rem",
                       borderRadius: "10px",
-                      padding: "0.5rem 1rem",
-                      "& .MuiSelect-select": {
-                        display: "flex",
-                        alignItems: "center",
-                        color: resourceType === "" ? "gray" : "black",
-                      },
+                      height: "3.2rem",
                     }}
-                    onChange={(e) => setResourceType(e.target.value)}
-                    MenuProps={{
-                      PaperProps: {
-                        sx: {
-                          "& .MuiMenuItem-root:hover": {
-                            backgroundColor: "#0A7650",
-                            color: "white",
-                          },
-                        },
-                      },
+                    value={resourceType}
+                    onChange={(e) =>
+                      setResourceType(
+                        e.target.value === "VIDEO" ? "VIDEO" : "PDF"
+                      )
+                    }
+                    displayEmpty
+                    label="Resource Type"
+                    renderValue={(selected) => {
+                      if (selected === "") {
+                        return <em>Resource Type</em>;
+                      }
+                      return selected === "VIDEO" ? "Video" : "PDF";
                     }}>
-                    <MenuItem value="pdf">PDF</MenuItem>
-                    <MenuItem value="video">Video</MenuItem>
+                    <MenuItem value="" disabled sx={{ display: "none" }}>
+                      Resource Type
+                    </MenuItem>
+                    <MenuItem value="PDF">PDF</MenuItem>
+                    <MenuItem value="VIDEO">Video</MenuItem>
                   </Select>
                 </FormControl>
               </div>
 
               {/* Button group */}
-              <div className={styles.buttonGroup}>
+              <div className={styles.addTrainingContainer}>
                 <Button
                   variant="contained"
                   sx={{
-                    backgroundColor: "#49A772",
-                    color: "white",
-                    fontSize: "12px",
-                    marginTop: "1rem",
+                    ...styledRectButton,
+                    ...forestGreenButton,
+                    marginTop: "2%",
+                    width: "40px%",
                   }}
                   onClick={handleNextClick}>
-                  Next: Create Quiz
+                  {isEditMode ? "Next: Edit Quiz" : "Next: Create Quiz"}
                 </Button>
               </div>
             </form>
           </div>
-          <Footer />{" "}
+          {/* Snackbar wrapper container */}
+          <div className={styles.snackbarContainer}>
+            <Snackbar
+              open={snackbar}
+              autoHideDuration={6000}
+              onClose={handleCloseSnackbar}
+              anchorOrigin={{ vertical: "bottom", horizontal: "right" }} // Position within the right section
+            >
+              <Alert
+                onClose={handleCloseSnackbar}
+                severity={
+                  snackbarMessage.includes("successfully") ? "success" : "error"
+                }>
+                {snackbarMessage}
+              </Alert>
+            </Snackbar>
+          </div>
         </div>
+        <Footer />
       </div>
     </>
   );
