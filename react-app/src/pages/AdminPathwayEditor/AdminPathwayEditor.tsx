@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState } from "react";
 import styles from "./AdminPathwayEditor.module.css";
-
+import { useNavigate } from "react-router-dom";
 import {
   TextField,
   Button,
@@ -19,12 +19,13 @@ import {
   grayBorderSearchBar,
   whiteButtonGrayBorder,
 } from "../../muiTheme";
-import { IoIosInformationCircleOutline, IoIosSearch } from "react-icons/io";
+import { IoIosInformationCircleOutline } from "react-icons/io";
 import { styledRectButton } from "../../muiTheme";
 import Paper from "@mui/material/Paper";
 import hamburger from "../../assets/hamburger.svg";
 
 const AdminPathwayEditor: React.FC = () => {
+  const navigate = useNavigate();
   const [pathwayName, setPathwayName] = useState("");
   const [blurb, setBlurb] = useState("");
   const [description, setDescription] = useState("");
@@ -59,9 +60,9 @@ const AdminPathwayEditor: React.FC = () => {
   const [invalidDescription, setInvalidDescription] = useState<boolean>(false);
 
   const characterLimits = {
-    pathwayName: 2,
-    blurb: 5,
-    description: 10,
+    pathwayName: 50,
+    blurb: 500,
+    description: 1000,
   };
 
   const validateFields = () => {
@@ -106,6 +107,10 @@ const AdminPathwayEditor: React.FC = () => {
   const handleNextClick = () => {
     if (validateFields()) {
       console.log("All validations passed");
+      // Navigate to the quiz editor with the new training as state
+      navigate("/pathways/editor/quiz", {
+        // state: { pathway: updatedPathway },
+      });
     }
   };
 
@@ -121,8 +126,7 @@ const AdminPathwayEditor: React.FC = () => {
 
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}
-      >
+        style={{ left: navigationBarOpen ? "250px" : "0" }}>
         {/* Hamburger Menu */}
         {!navigationBarOpen && (
           <img
@@ -134,10 +138,10 @@ const AdminPathwayEditor: React.FC = () => {
           />
         )}
 
-        <div className={styles.editor}>
-          <div className={styles.editorContent}>
+        <div className={styles.container}>
+          <div className={styles.content}>
             {/* Heading */}
-            <div className={styles.editorHeader}>
+            <div className={styles.header}>
               <h1 className={styles.nameHeading}>Pathways Editor</h1>
               <ProfileIcon />
             </div>
@@ -153,8 +157,7 @@ const AdminPathwayEditor: React.FC = () => {
                     color: "black",
                     fontWeight: "bold",
                     marginTop: "2rem",
-                  }}
-                >
+                  }}>
                   PATHWAY NAME
                 </Typography>
 
@@ -165,8 +168,7 @@ const AdminPathwayEditor: React.FC = () => {
                     fontWeight: "500",
                     marginTop: "2rem",
                     fontSize: "0.8rem",
-                  }}
-                >
+                  }}>
                   {Math.max(
                     characterLimits.pathwayName - pathwayName.length,
                     0
@@ -214,8 +216,7 @@ const AdminPathwayEditor: React.FC = () => {
                     color: "black",
                     fontWeight: "bold",
                     marginTop: "2rem",
-                  }}
-                >
+                  }}>
                   BLURB
                 </Typography>
 
@@ -226,8 +227,7 @@ const AdminPathwayEditor: React.FC = () => {
                     fontWeight: "500",
                     marginTop: "2rem",
                     fontSize: "0.8rem",
-                  }}
-                >
+                  }}>
                   {Math.max(characterLimits.blurb - blurb.length, 0)} Characters
                   Remaining
                 </Typography>
@@ -274,8 +274,7 @@ const AdminPathwayEditor: React.FC = () => {
                     color: "black",
                     fontWeight: "bold",
                     marginTop: "2rem",
-                  }}
-                >
+                  }}>
                   DESCRIPTION
                 </Typography>
 
@@ -286,8 +285,7 @@ const AdminPathwayEditor: React.FC = () => {
                     fontWeight: "500",
                     marginTop: "2rem",
                     fontSize: "0.8rem",
-                  }}
-                >
+                  }}>
                   {Math.max(
                     characterLimits.description - description.length,
                     0
@@ -336,22 +334,19 @@ const AdminPathwayEditor: React.FC = () => {
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "flex-start",
-                }}
-              >
+                }}>
                 <div
                   style={{
                     display: "flex",
                     alignItems: "center",
                     marginBottom: "8px",
-                  }}
-                >
+                  }}>
                   <Typography
                     variant="body2"
                     style={{
                       color: "black",
                       fontWeight: "bold",
-                    }}
-                  >
+                    }}>
                     UPLOAD IMAGE (JPEG, PNG)
                   </Typography>
                   <Tooltip
@@ -366,8 +361,7 @@ const AdminPathwayEditor: React.FC = () => {
                           boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)",
                         },
                       },
-                    }}
-                  >
+                    }}>
                     <span style={{ marginLeft: "8px" }}>
                       <IoIosInformationCircleOutline />
                     </span>
@@ -383,8 +377,7 @@ const AdminPathwayEditor: React.FC = () => {
                     "&:hover": {
                       backgroundColor: "#D9D9D9",
                     },
-                  }}
-                >
+                  }}>
                   <LuUpload style={{ fontSize: "50px" }} />
                   <input type="file" hidden />
                 </Button>
@@ -398,8 +391,7 @@ const AdminPathwayEditor: React.FC = () => {
                     color: "black",
                     fontWeight: "bold",
                     marginTop: "2rem",
-                  }}
-                >
+                  }}>
                   TRAINING SELECT
                 </Typography>
                 <div className={styles.searchBarsBox}>
@@ -453,8 +445,7 @@ const AdminPathwayEditor: React.FC = () => {
                         className={styles.searchBarX}
                         style={{
                           visibility: idx === 0 ? "hidden" : "visible", // Hide for the first search bar
-                        }}
-                      >
+                        }}>
                         <CloseIcon
                           onClick={() => handleDeleteSearchBar(idx)}
                           sx={{
@@ -473,8 +464,7 @@ const AdminPathwayEditor: React.FC = () => {
                   <div className={styles.addTrainingContainer}>
                     <Button
                       sx={{ ...whiteButtonGrayBorder, textAlign: "left" }}
-                      onClick={handleAddSearchBar}
-                    >
+                      onClick={handleAddSearchBar}>
                       Add Training
                     </Button>
                   </div>
@@ -491,15 +481,14 @@ const AdminPathwayEditor: React.FC = () => {
                     marginTop: "2%",
                     width: "40px%",
                   }}
-                  onClick={handleNextClick}
-                >
+                  onClick={handleNextClick}>
                   Next: Create Quiz
                 </Button>
               </div>
             </form>
           </div>
-          <Footer />
         </div>
+        <Footer />
       </div>
     </>
   );

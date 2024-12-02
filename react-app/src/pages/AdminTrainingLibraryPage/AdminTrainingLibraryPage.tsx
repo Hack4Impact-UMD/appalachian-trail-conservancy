@@ -16,6 +16,7 @@ import {
   whiteSelectGrayBorder,
   selectOptionStyle,
 } from "../../muiTheme";
+import { useNavigate } from "react-router-dom";
 import { getAllTrainings } from "../../backend/FirestoreCalls";
 import { TrainingID } from "../../types/TrainingType";
 import { useAuth } from "../../auth/AuthProvider.tsx";
@@ -30,6 +31,7 @@ import hamburger from "../../assets/hamburger.svg";
 
 function AdminTrainingLibrary() {
   const auth = useAuth();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(true);
   const [filterType, setFilterType] = useState("drafts");
   const [searchQuery, setSearchQuery] = useState("");
@@ -154,7 +156,10 @@ function AdminTrainingLibrary() {
               <ProfileIcon />
             </div>
             <div>
-              <Button sx={forestGreenButtonLarge} variant="contained">
+              <Button
+                sx={forestGreenButtonLarge}
+                variant="contained"
+                onClick={() => navigate("/trainings/editor")}>
                 CREATE NEW TRAINING
               </Button>
             </div>

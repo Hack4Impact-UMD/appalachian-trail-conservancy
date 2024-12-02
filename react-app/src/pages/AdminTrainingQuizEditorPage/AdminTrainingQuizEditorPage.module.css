@@ -39,7 +39,7 @@
   padding-bottom: 3%;
 }
 
-.editorHeader {
+.header {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
@@ -160,6 +160,47 @@
 @media screen and (min-width: 1500px) {
   .content {
     width: 1200px;
-    padding-bottom: 3%;
+  }
+
+  .cardsContainer {
+    column-gap: 2rem;
+  }
+}
+
+@media screen and (min-width: 1800px) {
+  .content {
+    width: 1400px;
+  }
+
+  .cardsContainer {
+    column-gap: 6.25rem;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .content {
+    width: 600px;
+  }
+
+  .cardsContainer {
+    justify-content: space-between;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .content {
+    width: 425px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .header {
+    margin-top: 5rem;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .content {
+    width: 300px;
   }
 }
