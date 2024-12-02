@@ -276,7 +276,7 @@ function AdminTrainingDetails() {
                     <div
                       className={`${styles.marker} ${styles.pathwayMarker}`}
                       onClick={() => {
-                        navigate(`/pathways/${pathway.id}`); // PLS FIX
+                        navigate(`/management/pathway/${pathway.id}`); 
                       }}
                       key={idx}
                     >

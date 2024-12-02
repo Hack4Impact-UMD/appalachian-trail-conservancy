@@ -290,7 +290,7 @@ function AdminPathwayDetails() {
                     <div
                       className={`${styles.marker} ${styles.pathwayMarker}`}
                       onClick={() => {
-                        navigate(`/pathways/${training.id}`); // FIX PLS
+                        navigate(`/management/training/${training.id}`);
                       }}
                       key={idx}
                     >
