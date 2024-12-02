@@ -65,10 +65,23 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
+  gap: 2%;
+}
+
+.searchBar {
+  flex-grow: 1; /* Make the search bar take up all available space */
+  margin-right: 20px;
+  max-width: 50%;
 }
 
 .innerGrid {
   height: 533px;
+}
+
+.dropdownContainer {
+  display: none;
+  flex-grow: 1;
 }
 
 @media screen and (min-width: 1500px) {
@@ -93,6 +106,28 @@
   .content {
     width: 425px;
   }
+
+  .buttonGroup {
+    display: none;
+  }
+
+  .dropdownContainer {
+    display: flex;
+    width: 425px;
+  }
+
+  .dropdownMenu {
+    width: 425px;
+  }
+
+  .searchBar {
+    max-width: 100%;
+  }
+
+  .export {
+    display: flex;
+    width: 170px;
+  }
 }
 
 @media screen and (max-width: 600px) {
@@ -103,6 +138,10 @@
 
 @media screen and (max-width: 450px) {
   .content {
+    width: 300px;
+  }
+
+  .dropdownMenu {
     width: 300px;
   }
 }
