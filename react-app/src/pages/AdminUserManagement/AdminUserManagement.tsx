@@ -18,6 +18,7 @@ import { TrainingID } from "../../types/TrainingType.ts";
 import { PathwayID } from "../../types/PathwayType.ts";
 import {
   DataGrid,
+  GridRowId,
   GridColumnMenuProps,
   GridColumnMenuContainer,
   GridFilterMenuItem,
