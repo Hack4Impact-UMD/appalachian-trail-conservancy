@@ -25,6 +25,7 @@ import rightTrophy from "../../assets/PathwayTiles/CompletedTiles/RightTrophy.sv
 import downLeftInter from "../../assets/PathwayTiles/IntermediateTiles/DownLeftInter.svg";
 import downRightInter from "../../assets/PathwayTiles/IntermediateTiles/DownRightInter.svg";
 import leftInter from "../../assets/PathwayTiles/IntermediateTiles/LeftInter.svg";
+import rightInter from "../../assets/PathwayTiles/IntermediateTiles/RightInter.svg";
 import leftDownInter from "../../assets/PathwayTiles/IntermediateTiles/LeftDownInter.svg";
 import rightDownInter from "../../assets/PathwayTiles/IntermediateTiles/RightDownInter.svg";
 import verticalInter from "../../assets/PathwayTiles/IntermediateTiles/VerticalInter.svg";
@@ -153,7 +154,7 @@ function getImage(imagesPerRow: number, index: number, numTrainings: number, tra
     }
 
     if (index + 1 <= trainingsCompleted && trainingsCompleted != 0) {
-      return leftCompleted; // TODO: right completed goes here
+      return rightInter; // TODO: right completed goes here
     }
 
     return index === numTrainings ? rightEndIcon : horizontalIcon; 
