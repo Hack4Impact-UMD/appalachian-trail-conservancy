@@ -69,8 +69,8 @@ function VolunteerProfilePage() {
   function updateName() {
     if (volunteerCopy != undefined)
       updateVolunteer(
-        { ...volunteerCopy, firstName, lastName }, // Updated volunteer object
-        volunteerCopy.auth_id // Use the unique ID for updating
+        { ...volunteerCopy, firstName, lastName }, 
+        volunteerCopy.auth_id 
       )
         .then(() => {
           console.log("Volunteer updated successfully");
@@ -110,7 +110,8 @@ function VolunteerProfilePage() {
                 <div className={styles.profileItem}>First Name</div>
                 <div className={styles.profileItem}>
                   <OutlinedInput
-                    value={auth.firstName}
+                    defaultValue={auth.firstName}
+                    value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     sx={{ ...grayBorderTextField }}
                   ></OutlinedInput>
@@ -118,7 +119,8 @@ function VolunteerProfilePage() {
                 <div className={styles.profileItem}>Last Name</div>
                 <div className={styles.profileItem}>
                   <OutlinedInput
-                    value={auth.lastName}
+                    defaultValue={auth.lastName}
+                    value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                     sx={{ ...grayBorderTextField }}
                   ></OutlinedInput>
