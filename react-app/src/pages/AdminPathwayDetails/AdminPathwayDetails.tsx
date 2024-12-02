@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import styles from "./AdminTrainingDetails.module.css";
+import styles from "./AdminPathwayDetails.module.css";
 import { Button, InputAdornment, OutlinedInput } from "@mui/material";
 import {
   DataGrid,
@@ -24,7 +24,6 @@ import Footer from "../../components/Footer/Footer.tsx";
 import { DateTime } from "luxon";
 import { PathwayID } from "../../types/PathwayType.ts";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { TrainingID } from "../../types/TrainingType.ts";
 import {
   getPathway,
   getTraining,
@@ -37,9 +36,9 @@ import {
   VolunteerTraining,
 } from "../../types/UserType.ts";
 
-function AdminTrainingDetails() {
+function AdminPathwayDetails() {
   const navigate = useNavigate();
-  const trainingId = useParams().id;
+  const pathwayId = useParams().id;
   const location = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
   const [navigationBarOpen, setNavigationBarOpen] = useState(
@@ -48,24 +47,39 @@ function AdminTrainingDetails() {
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
   const [filteredVolunteers, setFilteredVolunteers] = useState<Volunteer[]>([]);
   const [showMore, setShowMore] = useState(false);
-  const [pathwayNames, setPathwayNames] = useState<
+  const [trainingNames, setTrainingNames] = useState<
     { name: string; id: string }[]
   >([]);
   const [volunteers, setVolunteers] = useState<Volunteer[]>([]);
-  const [training, setTraining] = useState<TrainingID>({
+  //   const [training, setTraining] = useState<TrainingID>({
+  //     name: "",
+  //     id: "",
+  //     shortBlurb: "",
+  //     description: "",
+  //     coverImage: "",
+  //     resources: [],
+  //     quiz: {
+  //       questions: [],
+  //       numQuestions: 0,
+  //       passingScore: 0,
+  //     },
+  //     associatedPathways: [],
+  //     certificationImage: "",
+  //     status: "DRAFT",
+  //   });
+  const [pathway, setPathway] = useState<PathwayID>({
     name: "",
     id: "",
     shortBlurb: "",
     description: "",
     coverImage: "",
-    resources: [],
+    trainingIDs: [],
     quiz: {
       questions: [],
       numQuestions: 0,
       passingScore: 0,
     },
-    associatedPathways: [],
-    certificationImage: "",
+    badgeImage: "",
     status: "DRAFT",
   });
 
@@ -99,33 +113,31 @@ function AdminTrainingDetails() {
 
   // map the filtered volunteers to rows for DataGrid
   const rows = filteredVolunteers.flatMap((volunteer) => {
-    return volunteer.trainingInformation
+    return volunteer.pathwayInformation
       .filter(
-        (volunteerTraining) =>
-          volunteerTraining.progress === "INPROGRESS" ||
-          volunteerTraining.progress === "COMPLETED"
+        (volunteerPathway) =>
+          volunteerPathway.progress === "INPROGRESS" ||
+          volunteerPathway.progress === "COMPLETED"
       )
-      .filter(
-        (volunteerTraining) => volunteerTraining.trainingID === training.id
-      )
-      .map((volunteerTraining) => {
-        const passingScore = training.quiz.passingScore;
-        const quizScoreFormatted = `${volunteerTraining.quizScoreRecieved} / ${training.quiz.numQuestions}`;
+      .filter((volunteerPathway) => volunteerPathway.pathwayID === pathway.id)
+      .map((volunteerPathway) => {
+        const passingScore = pathway.quiz.passingScore;
+        const quizScoreFormatted = `${volunteerPathway.quizScoreRecieved} / ${pathway.quiz.numQuestions}`;
 
         return {
-          id: `${volunteer.auth_id}-${training.id}`,
+          id: `${volunteer.auth_id}-${pathway.id}`,
           volunteerName: `${volunteer.firstName} ${volunteer.lastName}`,
           email: volunteer.email, // Added email field
-          dateCompleted: formatDate(volunteerTraining.dateCompleted),
-          timeCompleted: formatTime(volunteerTraining.dateCompleted),
+          dateCompleted: formatDate(volunteerPathway.dateCompleted),
+          timeCompleted: formatTime(volunteerPathway.dateCompleted),
           quizScore: quizScoreFormatted || "Not Available",
           passFailStatus:
-            volunteerTraining.quizScoreRecieved === undefined
+            volunteerPathway.quizScoreRecieved === undefined
               ? "N/A"
-              : volunteerTraining.quizScoreRecieved >= passingScore
+              : volunteerPathway.quizScoreRecieved >= passingScore
               ? "Passed"
               : "Failed",
-          status: volunteerTraining.progress,
+          status: volunteerPathway.progress,
         };
       });
   });
@@ -141,11 +153,11 @@ function AdminTrainingDetails() {
           return (
             (fullName.includes(searchQuery.toLowerCase()) ||
               email.includes(searchQuery.toLowerCase())) && // Name or Email match
-            volunteer.trainingInformation.some(
-              (volunteerTraining) =>
-                volunteerTraining.trainingID === training.id &&
-                (volunteerTraining.progress === "INPROGRESS" ||
-                  volunteerTraining.progress === "COMPLETED")
+            volunteer.pathwayInformation.some(
+              (volunteerPathway) =>
+                volunteerPathway.pathwayID === pathway.id &&
+                (volunteerPathway.progress === "INPROGRESS" ||
+                  volunteerPathway.progress === "COMPLETED")
             )
           );
         })
@@ -154,25 +166,27 @@ function AdminTrainingDetails() {
     setFilteredVolunteers(filtered);
   };
 
-  //get associated pathways
-  const fetchPathways = async (associatedPathways: string[]) => {
+  //get associated trainings
+  const fetchTrainings = async (associatedTrainings: string[]) => {
     try {
-      const pathwayPromises = associatedPathways.map((pathwayID) =>
-        getPathway(pathwayID)
+      const trainingPromises = associatedTrainings.map((trainingID) =>
+        getTraining(trainingID)
       );
-      const pathways = await Promise.all(pathwayPromises);
-      let associatedPathwayNames: { name: string; id: string }[] = [];
-      pathways.forEach((pathway) =>
-        associatedPathwayNames.push({ name: pathway.name, id: pathway.id })
+      const trainings = await Promise.all(trainingPromises);
+      let associatedTrainingNames: { name: string; id: string }[] = [];
+      trainings.forEach((training) =>
+        associatedTrainingNames.push({ name: training.name, id: training.id })
       );
-      setPathwayNames(associatedPathwayNames);
+      setTrainingNames(associatedTrainingNames);
     } catch (error) {
       console.log("Failed to get pathways");
     }
   };
 
   //get pathways to display
-  const displayedPathways = showMore ? pathwayNames : pathwayNames.slice(0, 4);
+  const displayedTrainings = showMore
+    ? trainingNames
+    : trainingNames.slice(0, 4);
 
   // Debounced search
   const updateQuery = (e: {
@@ -211,25 +225,25 @@ function AdminTrainingDetails() {
   }, []);
 
   useEffect(() => {
-    if (trainingId !== undefined && !location.state?.trainingID) {
-      getTraining(trainingId)
-        .then((trainingData) => {
-          setTraining(trainingData);
+    if (pathwayId !== undefined && !location.state?.pathwayID) {
+      getPathway(pathwayId)
+        .then((pathwayData) => {
+          setPathway(pathwayData);
           getVolunteers().then(async (volunteerData) => {
             setVolunteers(volunteerData);
             filterVolunteers(volunteerData);
           });
-          fetchPathways(trainingData.associatedPathways);
+          fetchTrainings(pathwayData.trainingIDs);
         })
         .catch(() => {
           console.log("Failed to get training");
         });
     } else {
-      if (location.state.trainingID) {
-        setTraining(location.state.trainingID);
+      if (location.state.pathwayID) {
+        setPathway(location.state.pathwayID);
       }
     }
-  }, [trainingId, location.state]);
+  }, [pathwayId, location.state]);
 
   useEffect(() => {
     filterVolunteers(volunteers);
@@ -260,31 +274,31 @@ function AdminTrainingDetails() {
         <div className={styles.outerContainer}>
           <div className={styles.content}>
             <div className={styles.header}>
-              <h1 className={styles.nameHeading}>Training Details</h1>
+              <h1 className={styles.nameHeading}>Pathway Details</h1>
               <ProfileIcon />
             </div>
 
             <div className={styles.volunteerInfo}>
               <div>
-                <h2 className={styles.text}>NAME: {training.name} </h2>
+                <h2 className={styles.text}>NAME: {pathway.name} </h2>
               </div>
               <br></br>
               <div>
-                <b className={styles.text}>Part of Pathways: </b>
-                <div className={styles.relatedPathways}>
-                  {displayedPathways.map((pathway, idx) => (
+                <b className={styles.text}>Included Trainings: </b>
+                <div className={styles.relatedTrainings}>
+                  {displayedTrainings.map((training, idx) => (
                     <div
                       className={`${styles.marker} ${styles.pathwayMarker}`}
                       onClick={() => {
-                        navigate(`/pathways/${pathway.id}`); // PLS FIX
+                        navigate(`/pathways/${training.id}`); // FIX PLS
                       }}
                       key={idx}
                     >
-                      {pathway.name}
+                      {training.name}
                     </div>
                   ))}
 
-                  {pathwayNames.length > 4 && (
+                  {trainingNames.length > 4 && (
                     <button
                       onClick={() => setShowMore(!showMore)}
                       className={styles.toggleButton}
@@ -368,4 +382,4 @@ function AdminTrainingDetails() {
   );
 }
 
-export default AdminTrainingDetails;
+export default AdminPathwayDetails;

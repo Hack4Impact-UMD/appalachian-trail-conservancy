@@ -36,7 +36,7 @@ import AdminPathwayLibrary from "./pages/AdminPathwayLibraryPage/AdminPathwayLib
 import AdminUserManagement from "./pages/AdminUserManagement/AdminUserManagement.tsx";
 import AdminVolunteerDetails from "./pages/AdminVolunteerDetails/AdminVolunteerDetails.tsx";
 import AdminTrainingDetails from "./pages/AdminTrainingDetails/AdminTrainingDetails.tsx";
-import { getTraining, getVolunteers } from "./backend/FirestoreCalls.ts";
+import AdminPathwayDetails from "./pages/AdminPathwayDetails/AdminPathwayDetails.tsx";
 
 interface RoleBasedRouteProps {
   adminComponent: JSX.Element;
@@ -101,6 +101,14 @@ function App() {
               element={
                 <RequireAdminAuth>
                   <AdminTrainingDetails />
+                </RequireAdminAuth>
+              }
+            />
+            <Route
+              path="/management/pathway/:id"
+              element={
+                <RequireAdminAuth>
+                  <AdminPathwayDetails />
                 </RequireAdminAuth>
               }
             />
