@@ -96,7 +96,7 @@ export function createVolunteerUser(
   newEmail: string,
   newFirstName: string,
   newLastName: string,
-  code: number
+  code: string
 ): Promise<void> {
   return new Promise((resolve, reject) => {
     const createUserCloudFunction = httpsCallable(

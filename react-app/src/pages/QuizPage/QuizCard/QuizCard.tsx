@@ -12,7 +12,7 @@ interface QuizCardProps {
   currentQuestion: number;
   question: string;
   answerOptions: string[];
-  selectedAnswers: string[];
+  selectedAnswers: (string | undefined)[];
   setSelectedAnswers: any;
   index: number;
 }
