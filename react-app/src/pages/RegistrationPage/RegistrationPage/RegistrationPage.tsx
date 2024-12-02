@@ -54,7 +54,7 @@ function RegistrationPage() {
     if (!validateEmail(email)) {
       setInvalidEmail(true);
     } else {
-      await createVolunteerUser(email, firstName, lastName, parseInt(joinCode))
+      await createVolunteerUser(email, firstName, lastName, joinCode)
         .then(() => {
           navigate("/registration-confirmation", {
             state: { fromApp: true },
