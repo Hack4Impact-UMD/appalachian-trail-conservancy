@@ -69,8 +69,8 @@ function VolunteerProfilePage() {
   function updateName() {
     if (volunteerCopy != undefined)
       updateVolunteer(
-        { ...volunteerCopy, firstName, lastName }, 
-        volunteerCopy.auth_id 
+        { ...volunteerCopy, firstName, lastName },
+        volunteerCopy.auth_id
       )
         .then(() => {
           console.log("Volunteer updated successfully");
