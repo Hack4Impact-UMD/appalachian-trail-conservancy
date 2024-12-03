@@ -54,14 +54,12 @@
     margin: 0;
   }
 
-  .profileContainer {
-    display: flex;
-    justify-content: space-between;
-  }
+ 
 
   .leftContainer {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
   }
 
   .profileItem {
@@ -69,13 +67,22 @@
     font-size: 1.3rem;
   }
 
-  .profileIcon {
-    font-size: 3rem;
-  }
-
   .emailBox {
     display: flex;
-    
+  }
+
+  .profileEmail {
+    margin: 3%;
+    font-size: 1.3rem;
+    color:grey;
+  }
+
+  .profileIcon {
+    font-size: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* margin-left: -10%; */
   }
   
   .subHeader {

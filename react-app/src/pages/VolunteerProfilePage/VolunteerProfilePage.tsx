@@ -56,6 +56,8 @@ function VolunteerProfilePage() {
       if (!auth.loading && auth.id) {
         try {
           const volunteer = await getVolunteer(auth.id.toString());
+          setFirstName(auth.firstName);
+          setLastName(auth.lastName);
           console.log(volunteer);
           setVolunteerCopy(volunteer);
           setLoading(false);
@@ -68,10 +70,7 @@ function VolunteerProfilePage() {
 
   function updateName() {
     if (volunteerCopy != undefined)
-      updateVolunteer(
-        { ...volunteerCopy, firstName, lastName },
-        volunteerCopy.auth_id
-      )
+      updateVolunteer({ ...volunteerCopy, firstName, lastName }, auth.id)
         .then(() => {
           console.log("Volunteer updated successfully");
         })
@@ -126,7 +125,7 @@ function VolunteerProfilePage() {
                   ></OutlinedInput>
                 </div>
                 <div className={styles.emailBox}>
-                  <div className={styles.profileItem}>Registered email</div>
+                  <div className={styles.profileEmail}>Registered email</div>
                   <div>
                     <Tooltip
                       title="You cannot edit this email. You must create a new account if so."
@@ -146,10 +145,16 @@ function VolunteerProfilePage() {
                 </div>
                 <div className={styles.profileItem}>
                   <OutlinedInput
-                    sx={{ ...grayBorderTextField }}
-                  ></OutlinedInput>
+                    value={ volunteerCopy ? volunteerCopy.email : ""} // Optional: Set a default value
+                    disabled // Disables editing
+                    sx={{
+                      ...grayBorderTextField, // Your existing styles
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "grey", // Grey border
+                      },
+                    }}
+                  />
                 </div>
-
                 <div className={styles.profileItem}>
                   <Button
                     sx={forestGreenButton}
