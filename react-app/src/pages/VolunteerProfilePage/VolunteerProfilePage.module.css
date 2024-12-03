@@ -54,7 +54,10 @@
     margin: 0;
   }
 
- 
+  .profileContainer {
+    display: flex;
+    justify-content: space-between;
+  }
 
   .leftContainer {
     display: flex;
