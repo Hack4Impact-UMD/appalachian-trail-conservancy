@@ -2,7 +2,8 @@ import { useState, useRef, useEffect } from "react";
 import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar.tsx";
 import styles from "./AdminRegistrationManagementPage.module.css";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon.tsx";
-import { Button, TextField, Typography } from "@mui/material";
+import { Button, Tooltip, IconButton, TextField, Typography } from "@mui/material";
+import { ContentCopy as ContentCopyIcon } from "@mui/icons-material";
 import Footer from "../../components/Footer/Footer.tsx";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
@@ -10,6 +11,8 @@ import hamburger from "../../assets/hamburger.svg";
 import { updateRegistrationEmail } from "../../backend/AdminFirestoreCalls.ts";
 import { EmailType } from "../../types/AssetsType.ts";
 import { CustomToggleButtonGroup, PurpleToggleButton } from "../../muiTheme.ts";
+import { doc, getDocs, query, where, collection, updateDoc } from "firebase/firestore"; 
+import { db } from "../../config/firebase"; 
 
 function AdminRegistrationManagementPage() {
   const [navigationBarOpen, setNavigationBarOpen] = useState(
@@ -20,6 +23,13 @@ function AdminRegistrationManagementPage() {
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
   const [errors, setErrors] = useState({ subject: "", body: "" });
+
+  const [copied, setCopied] = useState(false);
+  const [codeText, setCodeText] = useState("XXXXX");
+  const [editedCode, setEditedCode] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+  const [docId, setDocId] = useState<string | null>(null); 
+  const [dateUpdated, setDateUpdated] = useState("");
 
   const editorContainerRef = useRef<HTMLDivElement>(null);
   const quillRef = useRef<Quill | null>(null);
@@ -79,6 +89,55 @@ function AdminRegistrationManagementPage() {
       .catch((error) => {
         console.error("Error updating email:", error);
       });
+  };
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(codeText)
+      .then(() => setCopied(true))
+      .catch((err) => console.error("Copy failed:", err));
+
+    // Reset tooltip text after a delay
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  useEffect(() => {
+    const fetchRegistrationCode = async () => {
+      try {
+        const assetsCollection = collection(db, "Assets");
+        const querySnapshot = await getDocs(
+          query(assetsCollection, where("type", "==", "REGISTRATIONCODE"))
+        );
+
+        if (!querySnapshot.empty) {
+          const docData = querySnapshot.docs[0].data(); 
+          setCodeText(docData.code); 
+          setDateUpdated(docData.dateUpdated);
+          setDocId(querySnapshot.docs[0].id); 
+        } 
+      } catch (err) {
+        console.error("Error fetching registration code:", err);
+        setCodeText("Error loading registration code.");
+      }
+    };
+
+    fetchRegistrationCode();
+  }, []);
+
+  const handleCodeSave = async () => {
+    try {
+      if (!docId) {
+        throw new Error("Document ID not found. Unable to save changes.");
+      }
+      setCodeText(editedCode);
+      const todayDate = new Date().toISOString().split("T")[0];
+      const docRef = doc(db, "Assets", docId);
+      await updateDoc(docRef, { code: editedCode, dateUpdated: todayDate}); 
+      console.log("Registration code updated successfully.");
+    } catch (err) {
+      console.error("Error saving registration code:", err);
+    } finally {
+      setIsEditing(false); // Exit edit mode after attempting to save
+    }
   };
 
   return (
@@ -203,7 +262,7 @@ function AdminRegistrationManagementPage() {
                     }}
                   ></div>
                 </div>
-                <div className={styles.buttonContainer}>
+                <div className={styles.buttonCodeContainer}>
                   <Button
                     variant="outlined"
                     color="secondary"
@@ -212,17 +271,108 @@ function AdminRegistrationManagementPage() {
                   >
                     SAVE
                   </Button>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    className={styles.backButton}
-                  >
-                    BACK
-                  </Button>
                 </div>
               </div>
             )}
-            {alignment === "registration" && <p> Registration Code</p>}
+            {alignment === "registration" && (
+                <div>
+                {" "}
+                <Typography
+                  variant="body2"
+                  style={{
+                    color: "black",
+                    fontWeight: "bold",
+                    marginBottom: "4px",
+                    marginTop: "2rem",
+                  }}
+                >
+                  CURRENT CODE
+                </Typography>
+                {/* Read-only TextField */}
+                <TextField
+                  value={isEditing ? editedCode : codeText}
+                  onChange={(e) => {
+                    if (isEditing) {
+                      setEditedCode(e.target.value); 
+                    }
+                  }}
+                  sx={{
+                    width: "80%",
+                    fontSize: "1.1rem",
+                    borderRadius: "10px",
+                    marginTop: "0.3rem",
+                    height: "3.2rem",
+                    border: "1px solid var(--blue-gray)",
+                    "& fieldset": {
+                      border: "none",
+                    },
+                  }}
+                  InputProps={{
+                    readOnly: !isEditing,
+                    endAdornment: !isEditing && (
+                      <Tooltip title={copied ? "Copied!" : "Copy"}>
+                        <IconButton onClick={handleCopy} sx={{ color: "black" }}>
+                          <ContentCopyIcon />
+                        </IconButton>
+                      </Tooltip>
+                    ),
+                  }}
+                />
+                {/* Last Updated Text */}
+                <Typography
+                  variant="body2"
+                  style={{
+                    display: "block",
+                    textAlign: "right",
+                    marginTop: "1.5rem",
+                    color: "gray",
+                    alignSelf: "flex-end",
+                    width: "80%",
+                    gap: "1rem",
+                    fontWeight: "bold"
+                  }}
+                >
+                  Last updated: {dateUpdated || "Unknown"}
+                </Typography>
+                <div className={styles.buttonCodeContainer}>
+                  {isEditing ? (
+                    <>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        className={styles.saveButton}
+                        onClick={() => {
+                          setEditedCode(codeText); 
+                          setIsEditing(false); 
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        className={styles.saveButton}
+                        onClick={handleCodeSave}
+                      >
+                        Save
+                      </Button>
+                    </>
+                  ) : (
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      className={styles.saveButton}
+                      onClick={() => {
+                        setEditedCode(codeText); 
+                        setIsEditing(true);
+                      }}
+                    >
+                      Edit
+                    </Button>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>{" "}
         <Footer />
