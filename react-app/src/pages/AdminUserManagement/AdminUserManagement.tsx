@@ -1,9 +1,26 @@
 import { useEffect, useState } from "react";
 import styles from "./AdminUserManagement.module.css";
-import { Button, InputAdornment, OutlinedInput, Snackbar } from "@mui/material";
+import {
+  getVolunteers,
+  getAllTrainings,
+  getAllPathways,
+} from "../../backend/FirestoreCalls";
+import {
+  Button,
+  InputAdornment,
+  OutlinedInput,
+  MenuItem,
+  FormControl,
+  Select,
+  Snackbar,
+  Alert,
+} from "@mui/material";
 import { User } from "../../types/UserType.ts";
+import { TrainingID } from "../../types/TrainingType.ts";
+import { PathwayID } from "../../types/PathwayType.ts";
 import {
   DataGrid,
+  GridRowId,
   GridColumnMenuProps,
   GridColumnMenuContainer,
   GridFilterMenuItem,
@@ -17,6 +34,8 @@ import {
   PurpleToggleButton,
   whiteButtonOceanGreenBorder,
   DataGridStyles,
+  whiteSelectGrayBorder,
+  selectOptionStyle,
 } from "../../muiTheme";
 import debounce from "lodash.debounce";
 import hamburger from "../../assets/hamburger.svg";
@@ -29,6 +48,11 @@ function AdminUserManagement() {
   const [alignment, setAlignment] = useState<string | null>("user");
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+  const [usersData, setUsersData] = useState<User[]>([]);
+  const [filteredTrainings, setFilteredTrainings] = useState<TrainingID[]>([]);
+  const [trainingsData, setTrainingsData] = useState<TrainingID[]>([]);
+  const [filteredPathways, setFilteredPathways] = useState<PathwayID[]>([]);
+  const [pathwaysData, setPathwaysData] = useState<PathwayID[]>([]);
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
   );
@@ -45,61 +69,73 @@ function AdminUserManagement() {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-  const handleAlignment = (
-    event: React.MouseEvent<HTMLElement>,
-    newAlignment: string | null
-  ) => {
+  const handleAlignment = (newAlignment: string | null) => {
     if (newAlignment !== null) {
       setAlignment(newAlignment);
+      setSearchQuery(""); // Reset search query
+
+      // Reset filtered data based on the selected table
+      if (newAlignment === "user") {
+        setFilteredUsers(usersData);
+      } else if (newAlignment === "training") {
+        setFilteredTrainings(trainingsData);
+      } else if (newAlignment === "pathways") {
+        setFilteredPathways(pathwaysData);
+      }
     }
   };
 
-  const [user1] = useState<User>({
-    auth_id: "U6ICu0t0MxOuUCygwXY7aLeJCCv2",
-    email: "sophietsai31@gmail.com",
-    firstName: "Sophie",
-    lastName: "Tsai",
-    type: "ADMIN",
-  });
+  useEffect(() => {
+    getVolunteers()
+      .then((users) => {
+        setUsersData(users);
+        setFilteredUsers(users); // Initialize filteredUsers with all users from Firestore
+      })
+      .catch((error) => {
+        console.error("Error fetching users:", error);
+      });
+    getAllTrainings()
+      .then((trainings) => {
+        setTrainingsData(trainings);
+        setFilteredTrainings(trainings);
+      })
+      .catch((error) => {
+        console.error("Error fetching users:", error);
+      });
+    getAllPathways()
+      .then((pathways) => {
+        setPathwaysData(pathways);
+        setFilteredPathways(pathways);
+      })
+      .catch((error) => {
+        console.error("Error fetching users:", error);
+      });
+  }, []);
 
-  const [user2] = useState<User>({
-    auth_id: "wZO7L1uS1dc9YIrq7FU6YXzZk1J3",
-    email: "h4iatctest@gmail.com",
-    firstName: "Akash",
-    lastName: "Patil",
-    type: "VOLUNTEER",
-  });
-
-  const users = [
-    { id: user1.auth_id, ...user1 },
-    { id: user2.auth_id, ...user2 },
-    { id: 2, ...user2 },
-    { id: 3, ...user2 },
-    { id: 4, ...user2 },
-    { id: 5, ...user2 },
-    { id: 6, ...user2 },
-    { id: 7, ...user2 },
-    { id: 8, ...user2 },
-    { id: 9, ...user2 },
-    { id: 10, ...user2 },
-    { id: 11, ...user2 },
-  ];
-  const columns = [
+  const usersColumns = [
     { field: "firstName", headerName: "First Name", width: 150 },
     { field: "lastName", headerName: "Last Name", width: 150 },
     { field: "email", headerName: "Email", width: 200 },
     { field: "misc", headerName: "Miscellaneous", width: 200 },
   ];
 
+  const pathwaysColumns = [
+    { field: "name", headerName: "Pathway Name", width: 350 },
+  ];
+
+  const trainingsColumns = [
+    { field: "name", headerName: "Training Name", width: 350 },
+  ];
+
   const filterUsers = () => {
     let filtered = searchQuery
-      ? users.filter(
+      ? usersData.filter(
           (user) =>
             user.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
             user.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
             user.email.toLowerCase().includes(searchQuery.toLowerCase())
         )
-      : users; // Show all users if searchQuery is empty
+      : usersData; // Show all users if searchQuery is empty
     setFilteredUsers(filtered);
   };
 
@@ -118,32 +154,110 @@ function AdminUserManagement() {
     );
   };
 
-  const updateQuery = (e: {
-    target: { value: React.SetStateAction<string> };
-  }) => {
+  const filterTrainings = () => {
+    const filtered = searchQuery
+      ? trainingsData.filter((training) =>
+          training.name.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      : trainingsData; // Show all trainings if searchQuery is empty
+    setFilteredTrainings(filtered);
+  };
+
+  const filterPathways = () => {
+    const filtered = searchQuery
+      ? pathwaysData.filter((pathway) =>
+          pathway.name.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      : pathwaysData; // Show all pathways if searchQuery is empty
+    setFilteredPathways(filtered);
+  };
+
+  // Apply the appropriate filter based on the active tab and search query
+  useEffect(() => {
+    setSearchQuery(""); // Clear the search query when the table is switched
+    if (alignment === "user") {
+      filterUsers();
+    } else if (alignment === "training") {
+      filterTrainings();
+    } else if (alignment === "pathways") {
+      filterPathways();
+    }
+  }, [alignment]); // Trigger this effect whenever `alignment` changes
+
+  // Debounce the search query to prevent excessive filtering
+  const updateQuery = (e: { target: { value: string } }) => {
     setSearchQuery(e.target.value);
   };
 
+  const handleSearchChange = (e: { target: { value: string } }) => {
+    const value = e.target.value;
+    setSearchQuery(value); // Update the state immediately for the input field
+    debouncedFilter(value); // Apply the filter logic with debounce
+  };
+
+  // Debounced filter logic
+  const debouncedFilter = debounce((value: string) => {
+    if (alignment === "user") {
+      setFilteredUsers(
+        value
+          ? usersData.filter(
+              (user) =>
+                user.firstName.toLowerCase().includes(value.toLowerCase()) ||
+                user.lastName.toLowerCase().includes(value.toLowerCase()) ||
+                user.email.toLowerCase().includes(value.toLowerCase())
+            )
+          : usersData
+      );
+    } else if (alignment === "training") {
+      setFilteredTrainings(
+        value
+          ? trainingsData.filter((training) =>
+              training.name.toLowerCase().includes(value.toLowerCase())
+            )
+          : trainingsData
+      );
+    } else if (alignment === "pathways") {
+      setFilteredPathways(
+        value
+          ? pathwaysData.filter((pathway) =>
+              pathway.name.toLowerCase().includes(value.toLowerCase())
+            )
+          : pathwaysData
+      );
+    }
+  }, 200); // Debounce interval in milliseconds
+
   const debouncedOnChange = debounce(updateQuery, 200);
+
+  useEffect(() => {
+    return () => {
+      debouncedFilter.cancel();
+    };
+  }, []);
 
   useEffect(() => {
     filterUsers(); // Filter users whenever the searchQuery changes
   }, [searchQuery]);
 
   useEffect(() => {
-    setFilteredUsers(users); // Initialize filteredUsers with all users
+    setFilteredUsers(usersData); // Initialize filteredUsers with all users
   }, []);
+
+  const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
+
+  useEffect(() => {
+    // Clear the selection whenever the table (alignment) changes
+    setSelectionModel([]);
+  }, [alignment]);
 
   //Delete user snackbar
   const location = useLocation();
   const [openSnackbar, setOpenSnackbar] = useState(false);
-
   useEffect(() => {
     if (location.state?.showSnackbar) {
       setOpenSnackbar(true);
     }
   }, [location.state]);
-
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
   };
@@ -180,7 +294,9 @@ function AdminUserManagement() {
               <CustomToggleButtonGroup
                 value={alignment}
                 exclusive
-                onChange={handleAlignment}
+                onChange={(event, newAlignment) =>
+                  handleAlignment(newAlignment)
+                }
               >
                 <PurpleToggleButton value="user">
                   USER INFORMATION
@@ -193,15 +309,40 @@ function AdminUserManagement() {
                 </PurpleToggleButton>
               </CustomToggleButtonGroup>
             </div>
+            {/* dropdown container */}
+            <div className={styles.dropdownContainer}>
+              <FormControl sx={{ width: 300 }}>
+                <Select
+                  className={styles.dropdownMenu}
+                  sx={whiteSelectGrayBorder}
+                  value={alignment}
+                  onChange={(e) => handleAlignment(e.target.value)} // Handle the dropdown value directly
+                  displayEmpty
+                  label="Filter"
+                >
+                  <MenuItem value="user" sx={selectOptionStyle}>
+                    USER INFORMATION
+                  </MenuItem>
+                  <MenuItem value="training" sx={selectOptionStyle}>
+                    TRAINING INFORMATION
+                  </MenuItem>
+                  <MenuItem value="pathways" sx={selectOptionStyle}>
+                    PATHWAYS
+                  </MenuItem>
+                </Select>
+              </FormControl>
+            </div>
             {/* Conditional Content Rendering */}
             <div className={styles.contentSection}>
               {alignment === "user" && (
                 <>
                   <div className={styles.searchBarContainer}>
                     <OutlinedInput
+                      className={styles.searchBar}
                       sx={grayBorderSearchBar}
                       placeholder="Search..."
-                      onChange={debouncedOnChange}
+                      value={searchQuery}
+                      onChange={handleSearchChange}
                       startAdornment={
                         <InputAdornment position="start">
                           <IoIosSearch />
@@ -223,7 +364,7 @@ function AdminUserManagement() {
                   <div className={styles.innerGrid}>
                     <DataGrid
                       rows={filteredUsers}
-                      columns={columns}
+                      columns={usersColumns}
                       rowHeight={40}
                       checkboxSelection
                       pageSize={10}
@@ -233,33 +374,128 @@ function AdminUserManagement() {
                         ColumnMenu: CustomColumnMenu,
                       }}
                       onRowClick={(row) => {}}
+                      getRowId={(row) => row.auth_id} // Use auth_id as the unique ID for each row
+                      selectionModel={selectionModel} // Controlled selection model
+                      onSelectionModelChange={(newSelection) =>
+                        setSelectionModel(newSelection)
+                      }
                     />
                   </div>
                 </>
               )}
               {alignment === "training" && (
                 <>
-                  <h2>Training Information</h2>
-                  <p>Details about training information go here.</p>
+                  <div className={styles.searchBarContainer}>
+                    <OutlinedInput
+                      className={styles.searchBar}
+                      sx={grayBorderSearchBar}
+                      placeholder="Search..."
+                      value={searchQuery}
+                      onChange={handleSearchChange}
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <IoIosSearch />
+                        </InputAdornment>
+                      }
+                    />
+                    <Button
+                      className={styles.export}
+                      sx={{
+                        ...whiteButtonOceanGreenBorder,
+                        paddingLeft: "20px",
+                        paddingRight: "20px",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Export
+                    </Button>
+                  </div>
+
+                  <div className={styles.innerGrid}>
+                    <DataGrid
+                      rows={filteredTrainings}
+                      columns={trainingsColumns}
+                      rowHeight={40}
+                      checkboxSelection
+                      pageSize={10}
+                      sx={DataGridStyles}
+                      components={{
+                        ColumnUnsortedIcon: TbArrowsSort,
+                        ColumnMenu: CustomColumnMenu,
+                      }}
+                      onRowClick={(row) => {}}
+                      selectionModel={selectionModel} // Controlled selection model
+                      onSelectionModelChange={(newSelection) =>
+                        setSelectionModel(newSelection)
+                      }
+                    />
+                  </div>
                 </>
               )}
               {alignment === "pathways" && (
                 <>
-                  <h2>Pathways Information</h2>
-                  <p>Details about pathways information go here.</p>
+                  <div className={styles.searchBarContainer}>
+                    <OutlinedInput
+                      className={styles.searchBar}
+                      sx={grayBorderSearchBar}
+                      placeholder="Search..."
+                      value={searchQuery}
+                      onChange={handleSearchChange}
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <IoIosSearch />
+                        </InputAdornment>
+                      }
+                    />
+                    <Button
+                      sx={{
+                        ...whiteButtonOceanGreenBorder,
+                        paddingLeft: "20px",
+                        paddingRight: "20px",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Export
+                    </Button>
+                  </div>
+
+                  <div className={styles.innerGrid}>
+                    <DataGrid
+                      rows={filteredPathways}
+                      columns={pathwaysColumns}
+                      rowHeight={40}
+                      checkboxSelection
+                      pageSize={10}
+                      sx={DataGridStyles}
+                      components={{
+                        ColumnUnsortedIcon: TbArrowsSort,
+                        ColumnMenu: CustomColumnMenu,
+                      }}
+                      onRowClick={(row) => {}}
+                      selectionModel={selectionModel} // Controlled selection model
+                      onSelectionModelChange={(newSelection) =>
+                        setSelectionModel(newSelection)
+                      }
+                    />
+                  </div>
                 </>
               )}
             </div>
+             <div className={styles.snackbarContainer}>
             <Snackbar
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "center",
-              }}
               open={openSnackbar}
-              autoHideDuration={3000}
+              autoHideDuration={6000}
               onClose={handleCloseSnackbar}
-              message="Volunteer successfully deleted."
-            />
+              anchorOrigin={{ vertical: "bottom", horizontal: "right" }} // Position within the right section
+            >
+              <Alert
+                onClose={handleCloseSnackbar}
+                severity="success"
+              >
+                {"Volunteer successfully deleted."}
+              </Alert>
+            </Snackbar>
+          </div>
           </div>
         </div>
         <Footer />

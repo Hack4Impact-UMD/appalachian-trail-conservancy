@@ -22,17 +22,17 @@ import {
 import { Training, TrainingID, Quiz } from "../types/TrainingType";
 import { Pathway, PathwayID } from "../types/PathwayType";
 
-export function getVolunteers(): Promise<Volunteer[]> {
+export function getVolunteers(): Promise<User[]> {
   const collectionName = "Users";
   const collectionRef = collection(db, collectionName);
 
   return new Promise((resolve, reject) => {
     getDocs(collectionRef)
       .then((snapshot) => {
-        const allDocuments: Volunteer[] = snapshot.docs
+        const allDocuments: User[] = snapshot.docs
           .map((doc) => {
             const document = doc.data();
-            return { ...document, auth_id: doc.id } as Volunteer;
+            return { ...document, auth_id: doc.id } as User;
           })
           .filter((user) => user.type === "VOLUNTEER"); // Filter for VOLUNTEER users only
         resolve(allDocuments);
@@ -86,7 +86,7 @@ export function getVolunteer(id: string): Promise<Volunteer> {
   });
 }
 
-export function addTraining(training: Training): Promise<void> {
+export function addTraining(training: Training): Promise<string> {
   return new Promise((resolve, reject) => {
     /* runTransaction provides protection against race conditions where
        2 people are modifying the data at once. It also ensures that either
@@ -97,6 +97,8 @@ export function addTraining(training: Training): Promise<void> {
       await addDoc(collection(db, "Trainings"), training)
         .then(async (docRef) => {
           const trainingId = docRef.id;
+
+          resolve(trainingId)
 
           // get pathways associated with training
           const pathwayPromises = [];
@@ -135,7 +137,7 @@ export function addTraining(training: Training): Promise<void> {
 
             await Promise.all(updatePromises)
               .then(() => {
-                resolve();
+                resolve("");
               })
               .catch(() => {
                 reject();
@@ -147,7 +149,7 @@ export function addTraining(training: Training): Promise<void> {
         });
     })
       .then(() => {
-        resolve();
+        resolve("");
       })
       .catch(() => {
         reject();

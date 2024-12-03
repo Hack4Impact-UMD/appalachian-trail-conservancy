@@ -2,12 +2,15 @@ import styles from "./AdminTrainingCard.module.css";
 import { TrainingID } from "../../types/TrainingType";
 import { Tooltip } from "@mui/material";
 import { grayTooltip } from "../../muiTheme";
+import { useNavigate } from "react-router-dom";
 
 interface AdminTrainingCardProps {
   training: TrainingID;
 }
 
 const AdminTrainingCard: React.FC<AdminTrainingCardProps> = ({ training }) => {
+  const navigate = useNavigate();
+
   const renderMarker = () => {
     if (training.status === "DRAFT") {
       // Training drafted
@@ -33,7 +36,11 @@ const AdminTrainingCard: React.FC<AdminTrainingCardProps> = ({ training }) => {
 
   return (
     <>
-      <div className={styles.trainingCard}>
+      <div
+        className={styles.trainingCard}
+        onClick={() => {
+          navigate("/trainings/editor", { state: { training } });
+        }}>
         <div className={styles.trainingImage}>
           <img src={training.coverImage} alt="Training" />
         </div>

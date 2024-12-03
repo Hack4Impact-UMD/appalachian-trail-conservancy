@@ -1,4 +1,3 @@
-import { useState } from "react";
 import styles from "./AdminPathwayCard.module.css";
 import pathwayCard from "../../assets/pathwayCard.svg";
 import { useNavigate } from "react-router-dom";
@@ -37,7 +36,11 @@ const AdminPathwayCard: React.FC<PathwayCardProps> = ({ pathway }) => {
   };
 
   return (
-    <div className={styles.pathwayCard}>
+    <div
+      className={styles.pathwayCard}
+      onClick={() => {
+        navigate("/pathways/editor", { state: { pathway } });
+      }}>
       <div className={styles.pathwayImage}>
         <img src={pathwayCard} alt="Pathway" />
       </div>
