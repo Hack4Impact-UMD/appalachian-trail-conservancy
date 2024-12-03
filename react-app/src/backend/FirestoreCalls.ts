@@ -98,7 +98,7 @@ export function addTraining(training: Training): Promise<string> {
         .then(async (docRef) => {
           const trainingId = docRef.id;
 
-          resolve(trainingId)
+          resolve(trainingId);
 
           // get pathways associated with training
           const pathwayPromises = [];
@@ -585,6 +585,18 @@ export function addVolunteerPathway(
         } else {
           reject(new Error("Volunteer does not exist"));
         }
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+}
+
+export function deleteUser(id: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    deleteDoc(doc(db, "Users", id))
+      .then(() => {
+        resolve();
       })
       .catch((e) => {
         reject(e);

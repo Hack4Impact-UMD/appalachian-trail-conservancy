@@ -7,6 +7,7 @@ import { useNavigate } from "react-router";
 import { logOut } from "../../../backend/AuthFunctions";
 import Modal from "../../../components/ModalWrapper/Modal";
 import Snackbar from "@mui/material/Snackbar";
+import { deleteUser } from "../../../backend/FirestoreCalls";
 
 interface modalPropsType {
   open: boolean;
@@ -14,32 +15,24 @@ interface modalPropsType {
   volunteerId: string;
 }
 
-function deleteUser(volunteerId: string) {
-  return new Promise<void>((resolve) => {
-    //DO STUFF
-    resolve();
-  });
-}
-
 const DeleteUserPopup = ({
   open,
   onClose,
   volunteerId,
-  
 }: modalPropsType): React.ReactElement => {
   const navigate = useNavigate();
 
-  function startLogOut() {
-    deleteUser(volunteerId)
-      .then(() => {
-        navigate("/management", {
-          state: { fromApp: true, showSnackbar: true }, //use state to pass that it should show snackbar
-        });
-      })
-      .catch((error) => {
-        console.log(error);
+  const startLogOut = async () => {
+    try {
+      await deleteUser(volunteerId);
+      navigate("/management", {
+        state: { fromApp: true, showSnackbar: true }, //use state to pass that it should show snackbar
       });
-  }
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  };
+
   return (
     <Modal
       height={250}
