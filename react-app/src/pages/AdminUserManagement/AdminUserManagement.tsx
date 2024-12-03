@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "./AdminUserManagement.module.css";
-import { Button, InputAdornment, OutlinedInput } from "@mui/material";
+import { Button, InputAdornment, OutlinedInput, Snackbar } from "@mui/material";
 import { User } from "../../types/UserType.ts";
 import {
   DataGrid,
@@ -23,6 +23,7 @@ import hamburger from "../../assets/hamburger.svg";
 import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Footer from "../../components/Footer/Footer";
+import { useLocation } from "react-router-dom";
 
 function AdminUserManagement() {
   const [alignment, setAlignment] = useState<string | null>("user");
@@ -109,7 +110,8 @@ function AdminUserManagement() {
       <GridColumnMenuContainer
         hideMenu={hideMenu}
         currentColumn={currentColumn}
-        open={open}>
+        open={open}
+      >
         <GridFilterMenuItem onClick={hideMenu} column={currentColumn!} />
         <SortGridMenuItems onClick={hideMenu} column={currentColumn!} />
       </GridColumnMenuContainer>
@@ -132,6 +134,20 @@ function AdminUserManagement() {
     setFilteredUsers(users); // Initialize filteredUsers with all users
   }, []);
 
+  //Delete user snackbar
+  const location = useLocation();
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  useEffect(() => {
+    if (location.state?.showSnackbar) {
+      setOpenSnackbar(true);
+    }
+  }, [location.state]);
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
+
   return (
     <>
       <AdminNavigationBar
@@ -143,7 +159,8 @@ function AdminUserManagement() {
         style={{
           // Only apply left shift when screen width is greater than 1200px
           left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-        }}>
+        }}
+      >
         {!navigationBarOpen && (
           <img
             src={hamburger}
@@ -163,7 +180,8 @@ function AdminUserManagement() {
               <CustomToggleButtonGroup
                 value={alignment}
                 exclusive
-                onChange={handleAlignment}>
+                onChange={handleAlignment}
+              >
                 <PurpleToggleButton value="user">
                   USER INFORMATION
                 </PurpleToggleButton>
@@ -196,7 +214,8 @@ function AdminUserManagement() {
                         paddingLeft: "20px",
                         paddingRight: "20px",
                         fontWeight: "bold",
-                      }}>
+                      }}
+                    >
                       Export
                     </Button>
                   </div>
@@ -231,6 +250,16 @@ function AdminUserManagement() {
                 </>
               )}
             </div>
+            <Snackbar
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "center",
+              }}
+              open={openSnackbar}
+              autoHideDuration={3000}
+              onClose={handleCloseSnackbar}
+              message="Volunteer successfully deleted."
+            />
           </div>
         </div>
         <Footer />

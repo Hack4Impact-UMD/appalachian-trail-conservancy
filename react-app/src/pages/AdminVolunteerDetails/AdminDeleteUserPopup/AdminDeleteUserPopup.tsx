@@ -6,10 +6,18 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router";
 import { logOut } from "../../../backend/AuthFunctions";
 import Modal from "../../../components/ModalWrapper/Modal";
+import Snackbar from "@mui/material/Snackbar";
 
 interface modalPropsType {
   open: boolean;
   onClose: any;
+}
+
+function deleteUser() {
+  return new Promise<void>((resolve) => {
+    //REPLACE WITH REAL DELETE USER FUNC
+    resolve();
+  });
 }
 
 const DeleteUserPopup = ({
@@ -19,15 +27,16 @@ const DeleteUserPopup = ({
   const navigate = useNavigate();
 
   function startLogOut() {
-    logOut()
+    deleteUser()
       .then(() => {
-        navigate("/logout", { state: { fromApp: true } });
+        navigate("/management", {
+          state: { fromApp: true, showSnackbar: true }, //use state to pass that it should show snackbar
+        });
       })
       .catch((error) => {
         console.log(error);
       });
   }
-
   return (
     <Modal
       height={250}
