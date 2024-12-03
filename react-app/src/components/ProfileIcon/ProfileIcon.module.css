@@ -8,6 +8,11 @@
   color: var(--blue-gray);
 }
 
+.linkStyle {
+  text-decoration: none;
+  color: inherit;
+}
+
 .profileIcon {
   width: 50px;
   height: 50px;
@@ -19,5 +24,5 @@
   color: white;
   font-size: 1.25rem;
   font-weight: bold;
-  text-decoration: "none"
+  text-decoration: none;
 }

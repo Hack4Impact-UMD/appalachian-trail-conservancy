@@ -211,9 +211,9 @@ function App() {
             <Route
               path="/profile"
               element={
-                <RequireVolunteerAuth>
+                <RequireAuth>
                   <VolunteerProfilePage />
-                </RequireVolunteerAuth>
+                </RequireAuth>
               }
             />
             <Route
