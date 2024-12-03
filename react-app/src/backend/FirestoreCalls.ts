@@ -22,17 +22,17 @@ import {
 import { Training, TrainingID, Quiz } from "../types/TrainingType";
 import { Pathway, PathwayID } from "../types/PathwayType";
 
-export function getVolunteers(): Promise<User[]> {
+export function getVolunteers(): Promise<Volunteer[]> {
   const collectionName = "Users";
   const collectionRef = collection(db, collectionName);
 
   return new Promise((resolve, reject) => {
     getDocs(collectionRef)
       .then((snapshot) => {
-        const allDocuments: User[] = snapshot.docs
+        const allDocuments: Volunteer[] = snapshot.docs
           .map((doc) => {
             const document = doc.data();
-            return { ...document, auth_id: doc.id } as User;
+            return { ...document, auth_id: doc.id } as Volunteer;
           })
           .filter((user) => user.type === "VOLUNTEER"); // Filter for VOLUNTEER users only
         resolve(allDocuments);
