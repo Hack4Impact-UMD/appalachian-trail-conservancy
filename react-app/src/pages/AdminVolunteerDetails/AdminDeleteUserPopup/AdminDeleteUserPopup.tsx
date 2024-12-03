@@ -11,11 +11,12 @@ import Snackbar from "@mui/material/Snackbar";
 interface modalPropsType {
   open: boolean;
   onClose: any;
+  volunteerId: string;
 }
 
-function deleteUser() {
+function deleteUser(volunteerId: string) {
   return new Promise<void>((resolve) => {
-    //REPLACE WITH REAL DELETE USER FUNC
+    //DO STUFF
     resolve();
   });
 }
@@ -23,11 +24,13 @@ function deleteUser() {
 const DeleteUserPopup = ({
   open,
   onClose,
+  volunteerId,
+  
 }: modalPropsType): React.ReactElement => {
   const navigate = useNavigate();
 
   function startLogOut() {
-    deleteUser()
+    deleteUser(volunteerId)
       .then(() => {
         navigate("/management", {
           state: { fromApp: true, showSnackbar: true }, //use state to pass that it should show snackbar

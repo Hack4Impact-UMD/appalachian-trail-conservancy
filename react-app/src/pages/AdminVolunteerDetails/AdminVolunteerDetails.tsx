@@ -353,6 +353,7 @@ function AdminVolunteerDetails() {
       <DeleteUserPopup
         open={openDeleteUserPopup}
         onClose={setOpenDeleteUserPopup}
+        volunteerId={volunteerId || ""}
       />
       <div
         className={`${styles.split} ${styles.right} ${
