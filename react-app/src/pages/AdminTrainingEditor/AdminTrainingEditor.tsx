@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styles from "./AdminTrainingEditor.module.css";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
@@ -6,9 +6,7 @@ import {
   Button,
   MenuItem,
   Select,
-  InputLabel,
   FormControl,
-  FormHelperText,
   Typography,
   Tooltip,
   Snackbar,
@@ -22,7 +20,7 @@ import {
   Resource,
   Status,
 } from "../../types/TrainingType";
-import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar";
 import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import { LuUpload } from "react-icons/lu";
@@ -221,12 +219,14 @@ const AdminTrainingEditor: React.FC = () => {
 
   return (
     <>
-      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <AdminNavigationBar
+        open={navigationBarOpen}
+        setOpen={setNavigationBarOpen}
+      />
 
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}
-      >
+        style={{ left: navigationBarOpen ? "250px" : "0" }}>
         {/* Hamburger Menu */}
         {!navigationBarOpen && (
           <img
@@ -249,8 +249,7 @@ const AdminTrainingEditor: React.FC = () => {
               <Button
                 sx={whiteButtonGrayBorder}
                 variant="contained"
-                onClick={handleSaveClick}
-              >
+                onClick={handleSaveClick}>
                 {isEditMode ? "Save" : "Save as Draft"}
               </Button>
 
@@ -261,8 +260,7 @@ const AdminTrainingEditor: React.FC = () => {
                     color: "black",
                     fontWeight: "bold",
                     marginTop: "2rem",
-                  }}
-                >
+                  }}>
                   TRAINING NAME
                 </Typography>
 
@@ -273,8 +271,7 @@ const AdminTrainingEditor: React.FC = () => {
                     fontWeight: "500",
                     marginTop: "2rem",
                     fontSize: "0.8rem",
-                  }}
-                >
+                  }}>
                   {Math.max(
                     characterLimits.trainingName - trainingName.length,
                     0
@@ -318,8 +315,7 @@ const AdminTrainingEditor: React.FC = () => {
                     color: "black",
                     fontWeight: "bold",
                     marginTop: "2rem",
-                  }}
-                >
+                  }}>
                   BLURB
                 </Typography>
 
@@ -330,8 +326,7 @@ const AdminTrainingEditor: React.FC = () => {
                     fontWeight: "500",
                     marginTop: "2rem",
                     fontSize: "0.8rem",
-                  }}
-                >
+                  }}>
                   {Math.max(characterLimits.blurb - blurb.length, 0)} Characters
                   Remaining
                 </Typography>
@@ -374,8 +369,7 @@ const AdminTrainingEditor: React.FC = () => {
                     color: "black",
                     fontWeight: "bold",
                     marginTop: "2rem",
-                  }}
-                >
+                  }}>
                   DESCRIPTION
                 </Typography>
 
@@ -386,8 +380,7 @@ const AdminTrainingEditor: React.FC = () => {
                     fontWeight: "500",
                     marginTop: "2rem",
                     fontSize: "0.8rem",
-                  }}
-                >
+                  }}>
                   {Math.max(
                     characterLimits.description - description.length,
                     0
@@ -431,22 +424,19 @@ const AdminTrainingEditor: React.FC = () => {
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "flex-start",
-                }}
-              >
+                }}>
                 <div
                   style={{
                     display: "flex",
                     alignItems: "center",
                     marginBottom: "8px",
-                  }}
-                >
+                  }}>
                   <Typography
                     variant="body2"
                     style={{
                       color: "black",
                       fontWeight: "bold",
-                    }}
-                  >
+                    }}>
                     UPLOAD IMAGE (JPEG, PNG)
                   </Typography>
                   <Tooltip
@@ -461,8 +451,7 @@ const AdminTrainingEditor: React.FC = () => {
                           boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)",
                         },
                       },
-                    }}
-                  >
+                    }}>
                     <span className={styles.icon} style={{ marginLeft: "8px" }}>
                       <IoIosInformationCircleOutline />
                     </span>
@@ -478,8 +467,7 @@ const AdminTrainingEditor: React.FC = () => {
                     "&:hover": {
                       backgroundColor: "#D9D9D9",
                     },
-                  }}
-                >
+                  }}>
                   <LuUpload style={{ fontSize: "50px" }} />
                   <input type="file" hidden />
                 </Button>
@@ -492,16 +480,14 @@ const AdminTrainingEditor: React.FC = () => {
                     display: "flex",
                     alignItems: "center",
                     marginTop: "2rem",
-                  }}
-                >
+                  }}>
                   <Typography
                     variant="body2"
                     style={{
                       color: "black",
                       fontWeight: "bold",
                       marginBottom: "0.5rem",
-                    }}
-                  >
+                    }}>
                     RESOURCE LINK
                   </Typography>
 
@@ -517,8 +503,7 @@ const AdminTrainingEditor: React.FC = () => {
                           boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)",
                         },
                       },
-                    }}
-                  >
+                    }}>
                     <span style={{ marginLeft: "8px", marginBottom: "0.5rem" }}>
                       <IoIosInformationCircleOutline />
                     </span>
@@ -554,8 +539,7 @@ const AdminTrainingEditor: React.FC = () => {
                   margin="normal"
                   sx={{ marginTop: "0px", width: "180px" }}
                   className={styles.resourceTypeField}
-                  error={Boolean(errors.resourceType)}
-                >
+                  error={Boolean(errors.resourceType)}>
                   <Select
                     className={styles.dropdownMenu}
                     sx={{
@@ -577,8 +561,7 @@ const AdminTrainingEditor: React.FC = () => {
                         return <em>Resource Type</em>;
                       }
                       return selected === "VIDEO" ? "Video" : "PDF";
-                    }}
-                  >
+                    }}>
                     <MenuItem value="" disabled sx={{ display: "none" }}>
                       Resource Type
                     </MenuItem>
@@ -598,8 +581,7 @@ const AdminTrainingEditor: React.FC = () => {
                     marginTop: "2%",
                     width: "40px%",
                   }}
-                  onClick={handleNextClick}
-                >
+                  onClick={handleNextClick}>
                   {isEditMode ? "Next: Edit Quiz" : "Next: Create Quiz"}
                 </Button>
               </div>
@@ -617,8 +599,7 @@ const AdminTrainingEditor: React.FC = () => {
                 onClose={handleCloseSnackbar}
                 severity={
                   snackbarMessage.includes("successfully") ? "success" : "error"
-                }
-              >
+                }>
                 {snackbarMessage}
               </Alert>
             </Snackbar>

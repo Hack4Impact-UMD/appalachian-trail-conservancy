@@ -22,20 +22,23 @@ import {
 import { Training, TrainingID, Quiz } from "../types/TrainingType";
 import { Pathway, PathwayID } from "../types/PathwayType";
 
-export function getVolunteers(): Promise<Volunteer[]> {
+export function getVolunteers(): Promise<VolunteerID[]> {
   const collectionName = "Users";
   const collectionRef = collection(db, collectionName);
 
   return new Promise((resolve, reject) => {
     getDocs(collectionRef)
-      .then((snapshot) => {
-        const allDocuments: Volunteer[] = snapshot.docs
-          .map((doc) => {
-            const document = doc.data();
-            return { ...document, auth_id: doc.id } as Volunteer;
-          })
-          .filter((user) => user.type === "VOLUNTEER"); // Filter for VOLUNTEER users only
-        resolve(allDocuments);
+      .then((userSnapshot) => {
+        const allVolunteers: VolunteerID[] = [];
+        const users = userSnapshot.docs.map((doc) => {
+          const user = doc.data();
+          if (user.type === "VOLUNTEER") {
+            const newVolunteer = { ...user, id: doc.id } as VolunteerID;
+            allVolunteers.push(newVolunteer);
+          }
+        });
+        // .filter((user) => user.type === "VOLUNTEER"); // Filter for VOLUNTEER users only
+        resolve(allVolunteers);
       })
       .catch((error) => {
         reject(error);

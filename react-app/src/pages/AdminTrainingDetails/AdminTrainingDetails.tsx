@@ -22,7 +22,6 @@ import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigat
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon.tsx";
 import Footer from "../../components/Footer/Footer.tsx";
 import { DateTime } from "luxon";
-import { PathwayID } from "../../types/PathwayType.ts";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { TrainingID } from "../../types/TrainingType.ts";
 import {
@@ -30,12 +29,7 @@ import {
   getTraining,
   getVolunteers,
 } from "../../backend/FirestoreCalls.ts";
-import {
-  User,
-  Volunteer,
-  VolunteerID,
-  VolunteerTraining,
-} from "../../types/UserType.ts";
+import { VolunteerID } from "../../types/UserType.ts";
 import Loading from "../../components/LoadingScreen/Loading.tsx";
 
 function AdminTrainingDetails() {
@@ -48,12 +42,14 @@ function AdminTrainingDetails() {
     window.innerWidth >= 1200
   );
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
-  const [filteredVolunteers, setFilteredVolunteers] = useState<Volunteer[]>([]);
+  const [filteredVolunteers, setFilteredVolunteers] = useState<VolunteerID[]>(
+    []
+  );
   const [showMore, setShowMore] = useState(false);
   const [pathwayNames, setPathwayNames] = useState<
     { name: string; id: string }[]
   >([]);
-  const [volunteers, setVolunteers] = useState<Volunteer[]>([]);
+  const [volunteers, setVolunteers] = useState<VolunteerID[]>([]);
   const [training, setTraining] = useState<TrainingID>({
     name: "",
     id: "",
@@ -115,7 +111,7 @@ function AdminTrainingDetails() {
         const quizScoreFormatted = `${volunteerTraining.quizScoreRecieved} / ${training.quiz.numQuestions}`;
 
         return {
-          id: `${volunteer.auth_id}-${training.id}`,
+          id: volunteer.id,
           volunteerName: `${volunteer.firstName} ${volunteer.lastName}`,
           email: volunteer.email, // Added email field
           dateCompleted: formatDate(volunteerTraining.dateCompleted),
@@ -133,7 +129,7 @@ function AdminTrainingDetails() {
   });
 
   //search bar
-  const filterVolunteers = (associatedVolunteers: Volunteer[]) => {
+  const filterVolunteers = (associatedVolunteers: VolunteerID[]) => {
     const filtered = searchQuery
       ? associatedVolunteers.filter((volunteer) => {
           const fullName =
@@ -192,8 +188,7 @@ function AdminTrainingDetails() {
       <GridColumnMenuContainer
         hideMenu={hideMenu}
         currentColumn={currentColumn}
-        open={open}
-      >
+        open={open}>
         <GridFilterMenuItem onClick={hideMenu} column={currentColumn!} />
         <SortGridMenuItems onClick={hideMenu} column={currentColumn!} />
       </GridColumnMenuContainer>
@@ -254,8 +249,7 @@ function AdminTrainingDetails() {
         style={{
           // Only apply left shift when screen width is greater than 1200px
           left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-        }}
-      >
+        }}>
         {!navigationBarOpen && (
           <img
             src={hamburger}
@@ -293,8 +287,7 @@ function AdminTrainingDetails() {
                             onClick={() => {
                               navigate(`/management/pathway/${pathway.id}`);
                             }}
-                            key={idx}
-                          >
+                            key={idx}>
                             {pathway.name}
                           </div>
                         ))}
@@ -302,8 +295,7 @@ function AdminTrainingDetails() {
                         {pathwayNames.length > 4 && (
                           <button
                             onClick={() => setShowMore(!showMore)}
-                            className={styles.toggleButton}
-                          >
+                            className={styles.toggleButton}>
                             {showMore ? "SEE LESS" : "SEE MORE"}
                           </button>
                         )}
@@ -337,8 +329,7 @@ function AdminTrainingDetails() {
                       paddingRight: "20px",
                       fontWeight: "bold",
                       width: "375px",
-                    }}
-                  >
+                    }}>
                     Export
                   </Button>
                 </div>
@@ -357,7 +348,9 @@ function AdminTrainingDetails() {
                           ColumnUnsortedIcon: TbArrowsSort,
                           ColumnMenu: CustomColumnMenu,
                         }}
-                        onRowClick={(row) => {}}
+                        onRowClick={(row) => {
+                          navigate(`/management/volunteer/${row.id}`);
+                        }}
                       />
                     </div>
                   </>
@@ -372,7 +365,7 @@ function AdminTrainingDetails() {
                       fontWeight: "bold",
                       width: "100px",
                     }}
-                  >
+                    onClick={() => navigate("/management")}>
                     BACK
                   </Button>
                 </div>
