@@ -15,12 +15,27 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
+import { 
+  getStorage, 
+  ref, 
+  uploadBytes, 
+  getDownloadURL, 
+  deleteObject 
+} from "firebase/storage";
 import {
   addTraining,
   updateTraining,
   getAllTrainings,
 } from "../../backend/FirestoreCalls";
-import { TrainingID, Training, TrainingResource, Resource, Quiz, Question, Status } from "../../types/TrainingType";
+import { 
+  TrainingID, 
+  Training, 
+  TrainingResource, 
+  Resource, 
+  Quiz, 
+  Question, 
+  Status 
+} from "../../types/TrainingType";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
@@ -54,6 +69,8 @@ const AdminTrainingEditor: React.FC = () => {
     trainingData?.resources[0]?.type || ""
   );
 
+  const [coverImage, setCoverImage] = useState(trainingData?.coverImage || null);
+
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
   );
@@ -82,6 +99,51 @@ const AdminTrainingEditor: React.FC = () => {
     trainingName: 50,
     blurb: 500,
     description: 1000,
+  };
+
+  const onUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const storage = getStorage();
+      const fileExtension = file.name.split(".").pop();
+      // Upload file to firebase storage
+      const randomName = crypto.randomUUID();
+    
+      const storageRef = ref(storage, `coverImages/${randomName}.${fileExtension}`);
+    
+      await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(storageRef);
+      setCoverImage(downloadURL);
+
+      setSnackbarMessage("Image uploaded successfully.");
+      setSnackbar(true);
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      setSnackbarMessage("Failed to upload image. Please try again.");
+      setSnackbar(true);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!coverImage) return;
+
+    try {
+      const storage = getStorage();
+      const fileRef = ref(storage, coverImage);
+
+      // Delete the file from Firebase Storage
+      await deleteObject(fileRef);
+      setCoverImage(null);
+
+      setSnackbarMessage("Image deleted successfully.");
+      setSnackbar(true);
+    } catch (error) {
+      console.error("Error deleting file:", error);
+      setSnackbarMessage("Failed to delete image. Please try again.");
+      setSnackbar(true);
+    }
   };
 
   // make sure all fields are good before moving on
@@ -151,6 +213,7 @@ const AdminTrainingEditor: React.FC = () => {
       name: trainingName,
       shortBlurb: blurb,
       description: description,
+      coverImage,
       resources: [
         { link: resourceLink, type: resourceType } as TrainingResource,
       ],
@@ -177,6 +240,7 @@ const AdminTrainingEditor: React.FC = () => {
         name: trainingName,
         shortBlurb: blurb,
         description: description,
+        coverImage,
         resources: [
           { link: resourceLink, type: resourceType as Resource } as TrainingResource,
         ] as TrainingResource[],
@@ -476,8 +540,26 @@ const AdminTrainingEditor: React.FC = () => {
                     }}
                   >
                     <LuUpload style={{ fontSize: "50px" }} />
-                    <input type="file" hidden />
+                    <input
+                      type="file"
+                      accept="image/jpeg,image/png"
+                      onChange={onUpload}
+                      hidden
+                    />
                   </Button>
+                  {coverImage && (
+                    <div style={{ marginTop: "10px" }}>
+                      <img src={coverImage} alt="Cover Preview" style={{ width: "100px", height: "auto", marginRight: "10px" }} />
+                      <Button
+                        variant="contained"
+                        color="error"
+                        onClick={handleDelete}
+                        sx={{ marginTop: "10px" }}
+                      >
+                        Delete Image
+                      </Button>
+                    </div>
+                  )}
                 </div>
 
                 {/* Resource Link and Tooltip */}
