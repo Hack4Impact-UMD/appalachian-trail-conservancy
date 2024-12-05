@@ -35,11 +35,13 @@ import {
   VolunteerID,
   VolunteerTraining,
 } from "../../types/UserType.ts";
+import Loading from "../../components/LoadingScreen/Loading.tsx";
 
 function AdminPathwayDetails() {
   const navigate = useNavigate();
   const pathwayId = useParams().id;
   const location = useLocation();
+  const [loading, setLoading] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     window.innerWidth >= 1200
@@ -51,22 +53,6 @@ function AdminPathwayDetails() {
     { name: string; id: string }[]
   >([]);
   const [volunteers, setVolunteers] = useState<Volunteer[]>([]);
-  //   const [training, setTraining] = useState<TrainingID>({
-  //     name: "",
-  //     id: "",
-  //     shortBlurb: "",
-  //     description: "",
-  //     coverImage: "",
-  //     resources: [],
-  //     quiz: {
-  //       questions: [],
-  //       numQuestions: 0,
-  //       passingScore: 0,
-  //     },
-  //     associatedPathways: [],
-  //     certificationImage: "",
-  //     status: "DRAFT",
-  //   });
   const [pathway, setPathway] = useState<PathwayID>({
     name: "",
     id: "",
@@ -226,6 +212,7 @@ function AdminPathwayDetails() {
 
   useEffect(() => {
     if (pathwayId !== undefined && !location.state?.pathwayID) {
+      setLoading(true);
       getPathway(pathwayId)
         .then((pathwayData) => {
           setPathway(pathwayData);
@@ -237,11 +224,16 @@ function AdminPathwayDetails() {
         })
         .catch(() => {
           console.log("Failed to get training");
+        })
+        .finally(() => {
+          setLoading(false);
         });
     } else {
+      setLoading(true);
       if (location.state.pathwayID) {
         setPathway(location.state.pathwayID);
       }
+      setLoading(false);
     }
   }, [pathwayId, location.state]);
 
@@ -278,102 +270,108 @@ function AdminPathwayDetails() {
               <ProfileIcon />
             </div>
 
-            <div className={styles.volunteerInfo}>
-              <div>
-                <h2 className={styles.text}>NAME: {pathway.name} </h2>
-              </div>
-              <br></br>
-              <div>
-                <b className={styles.text}>Included Trainings: </b>
-                <div className={styles.relatedTrainings}>
-                  {displayedTrainings.map((training, idx) => (
-                    <div
-                      className={`${styles.marker} ${styles.pathwayMarker}`}
-                      onClick={() => {
-                        navigate(`/management/training/${training.id}`);
-                      }}
-                      key={idx}
-                    >
-                      {training.name}
-                    </div>
-                  ))}
-
-                  {trainingNames.length > 4 && (
-                    <button
-                      onClick={() => setShowMore(!showMore)}
-                      className={styles.toggleButton}
-                    >
-                      {showMore ? "SEE LESS" : "SEE MORE"}
-                    </button>
-                  )}
-                </div>
-              </div>
-              <br></br>
-              <div>
-                <b className={styles.text}>Enrolled Volunteers: </b>
-              </div>
-            </div>
-
-            <div className={styles.queryContainer}>
-              <div className={styles.searchBarContainer}>
-                <OutlinedInput
-                  sx={{ ...grayBorderSearchBar, width: "95%" }}
-                  placeholder="Search..."
-                  onChange={debouncedOnChange}
-                  startAdornment={
-                    <InputAdornment position="start">
-                      <IoIosSearch />
-                    </InputAdornment>
-                  }
-                />
-              </div>
-
-              <Button
-                sx={{
-                  ...whiteButtonOceanGreenBorder,
-                  paddingLeft: "20px",
-                  paddingRight: "20px",
-                  fontWeight: "bold",
-                  width: "375px",
-                }}
-              >
-                Export
-              </Button>
-            </div>
-
-            <div className={styles.contentSection}>
+            {loading ? (
+              <Loading />
+            ) : (
               <>
-                <div className={styles.innerGrid}>
-                  <DataGrid
-                    rows={rows}
-                    columns={columns}
-                    rowHeight={40}
-                    checkboxSelection
-                    pageSize={10}
-                    sx={DataGridStyles}
-                    components={{
-                      ColumnUnsortedIcon: TbArrowsSort,
-                      ColumnMenu: CustomColumnMenu,
+                <div className={styles.volunteerInfo}>
+                  <div>
+                    <h2 className={styles.text}>{pathway.name}</h2>
+                  </div>
+                  <br></br>
+                  <div>
+                    <b className={styles.text}>Included Trainings: </b>
+                    <div className={styles.relatedTrainings}>
+                      {displayedTrainings.map((training, idx) => (
+                        <div
+                          className={`${styles.marker} ${styles.pathwayMarker}`}
+                          onClick={() => {
+                            navigate(`/management/training/${training.id}`);
+                          }}
+                          key={idx}
+                        >
+                          {training.name}
+                        </div>
+                      ))}
+
+                      {trainingNames.length > 4 && (
+                        <button
+                          onClick={() => setShowMore(!showMore)}
+                          className={styles.toggleButton}
+                        >
+                          {showMore ? "SEE LESS" : "SEE MORE"}
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                  <br></br>
+                  <div>
+                    <b className={styles.text}>Enrolled Volunteers: </b>
+                  </div>
+                </div>
+
+                <div className={styles.queryContainer}>
+                  <div className={styles.searchBarContainer}>
+                    <OutlinedInput
+                      sx={{ ...grayBorderSearchBar, width: "95%" }}
+                      placeholder="Search..."
+                      onChange={debouncedOnChange}
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <IoIosSearch />
+                        </InputAdornment>
+                      }
+                    />
+                  </div>
+
+                  <Button
+                    sx={{
+                      ...whiteButtonOceanGreenBorder,
+                      paddingLeft: "20px",
+                      paddingRight: "20px",
+                      fontWeight: "bold",
+                      width: "375px",
                     }}
-                    onRowClick={(row) => {}}
-                  />
+                  >
+                    Export
+                  </Button>
+                </div>
+
+                <div className={styles.contentSection}>
+                  <>
+                    <div className={styles.innerGrid}>
+                      <DataGrid
+                        rows={rows}
+                        columns={columns}
+                        rowHeight={40}
+                        checkboxSelection
+                        pageSize={10}
+                        sx={DataGridStyles}
+                        components={{
+                          ColumnUnsortedIcon: TbArrowsSort,
+                          ColumnMenu: CustomColumnMenu,
+                        }}
+                        onRowClick={(row) => {}}
+                      />
+                    </div>
+                  </>
+                </div>
+
+                <div className={styles.buttonContainer}>
+                  <Button
+                    sx={{
+                      ...whiteButtonGrayBorder,
+                      paddingLeft: "20px",
+                      paddingRight: "20px",
+                      fontWeight: "bold",
+                      width: "100px",
+                    }}
+                  >
+                    BACK
+                  </Button>
                 </div>
               </>
-            </div>
-
-            <div className={styles.buttonContainer}>
-              <Button
-                sx={{
-                  ...whiteButtonGrayBorder,
-                  paddingLeft: "20px",
-                  paddingRight: "20px",
-                  fontWeight: "bold",
-                  width: "100px",
-                }}
-              >
-                BACK
-              </Button>
-            </div>
+            )}
           </div>
         </div>
         <Footer />

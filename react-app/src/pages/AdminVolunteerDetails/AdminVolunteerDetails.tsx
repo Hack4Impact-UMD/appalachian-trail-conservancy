@@ -44,6 +44,7 @@ import {
 import { TrainingID } from "../../types/TrainingType.ts";
 import { PathwayID } from "../../types/PathwayType.ts";
 import DeleteUserPopup from "./AdminDeleteUserPopup/AdminDeleteUserPopup.tsx";
+import Loading from "../../components/LoadingScreen/Loading.tsx";
 
 function AdminVolunteerDetails() {
   const navigate = useNavigate();
@@ -58,6 +59,7 @@ function AdminVolunteerDetails() {
   };
   const volunteerId = useParams().id;
   const location = useLocation();
+  const [loading, setLoading] = useState<boolean>(true);
   const [alignment, setAlignment] = useState<string | null>("trainings");
   const [searchQuery, setSearchQuery] = useState("");
   const [navigationBarOpen, setNavigationBarOpen] = useState(
@@ -299,6 +301,7 @@ function AdminVolunteerDetails() {
 
   useEffect(() => {
     if (volunteerId !== undefined && !location.state?.volunteerID) {
+      setLoading(true);
       getVolunteer(volunteerId)
         .then(async (volunteerData) => {
           setVolunteer({ ...volunteerData, id: volunteerId });
@@ -309,12 +312,16 @@ function AdminVolunteerDetails() {
         })
         .catch(() => {
           console.log("Failed to get volunteer information");
+        })
+        .finally(() => {
+          setLoading(false);
         });
     } else {
+      setLoading(true);
       if (location.state.volunteerID) {
         setVolunteer(location.state.volunteerID);
       }
-      // set loading
+      setLoading(false);
     }
   }, [volunteerId, location.state]);
 
@@ -382,147 +389,153 @@ function AdminVolunteerDetails() {
               <ProfileIcon />
             </div>
 
-            <div className={styles.volunteerInfo}>
-              <div className={styles.text}>
-                <b>Name: </b>
-                {volunteer.firstName} {volunteer.lastName}
-              </div>
-              <div className={styles.text}>
-                <b>Email: </b>
-                {volunteer.email}
-              </div>
-              <br></br>
-              <div className={styles.text}>
-                <b>Training(s) Completed: </b>
-                {numTrainingsCompleted}
-              </div>
-              <div className={styles.text}>
-                <b>Pathways(s) Completed: </b>
-                {numPathwaysCompleted}
-              </div>
-            </div>
+            {loading ? (
+              <Loading />
+            ) : (
+              <>
+                <div className={styles.volunteerInfo}>
+                  <div className={styles.text}>
+                    <b>Name: </b>
+                    {volunteer.firstName} {volunteer.lastName}
+                  </div>
+                  <div className={styles.text}>
+                    <b>Email: </b>
+                    {volunteer.email}
+                  </div>
+                  <br></br>
+                  <div className={styles.text}>
+                    <b>Training(s) Completed: </b>
+                    {numTrainingsCompleted}
+                  </div>
+                  <div className={styles.text}>
+                    <b>Pathways(s) Completed: </b>
+                    {numPathwaysCompleted}
+                  </div>
+                </div>
 
-            <div className={styles.queryContainer}>
-              <div className={styles.searchBarContainer}>
-                <OutlinedInput
-                  sx={{ ...grayBorderSearchBar, width: "95%" }}
-                  placeholder="Search..."
-                  onChange={debouncedOnChange}
-                  startAdornment={
-                    <InputAdornment position="start">
-                      <IoIosSearch />
-                    </InputAdornment>
-                  }
-                />
-              </div>
-
-              <div className={styles.buttonGroup}>
-                <Button
-                  sx={
-                    alignment === "trainings"
-                      ? forestGreenButtonPadding
-                      : whiteButtonGrayBorder
-                  }
-                  onClick={(event) => handleAlignment(event, "trainings")}
-                >
-                  TRAININGS
-                </Button>
-                <Button
-                  sx={
-                    alignment === "pathways"
-                      ? forestGreenButtonPadding
-                      : whiteButtonGrayBorder
-                  }
-                  onClick={(event) => handleAlignment(event, "pathways")}
-                >
-                  PATHWAYS
-                </Button>
-              </div>
-            </div>
-
-            <div className={styles.contentSection}>
-              {alignment === "trainings" && (
-                <>
-                  <div className={styles.innerGrid}>
-                    <DataGrid
-                      rows={rows}
-                      columns={columns}
-                      rowHeight={40}
-                      checkboxSelection
-                      pageSize={10}
-                      sx={DataGridStyles}
-                      components={{
-                        ColumnUnsortedIcon: TbArrowsSort,
-                        ColumnMenu: CustomColumnMenu,
-                      }}
-                      onRowClick={(row) => {}}
+                <div className={styles.queryContainer}>
+                  <div className={styles.searchBarContainer}>
+                    <OutlinedInput
+                      sx={{ ...grayBorderSearchBar, width: "95%" }}
+                      placeholder="Search..."
+                      onChange={debouncedOnChange}
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <IoIosSearch />
+                        </InputAdornment>
+                      }
                     />
                   </div>
-                </>
-              )}
-              {alignment === "pathways" && (
-                <>
-                  <div className={styles.innerGrid}>
-                    <DataGrid
-                      rows={pathwayRows}
-                      columns={pathwayColumns}
-                      rowHeight={40}
-                      checkboxSelection
-                      pageSize={10}
-                      sx={DataGridStyles}
-                      components={{
-                        ColumnUnsortedIcon: TbArrowsSort,
-                        ColumnMenu: CustomColumnMenu,
-                      }}
-                      onRowClick={(row) => {}}
-                    />
-                  </div>
-                </>
-              )}
-            </div>
 
-            <div className={styles.buttonContainer}>
-              <Button
-                sx={{
-                  ...whiteButtonGrayBorder,
-                  paddingLeft: "20px",
-                  paddingRight: "20px",
-                  fontWeight: "bold",
-                  width: "100px",
-                }}
-              >
-                BACK
-              </Button>
-              <div className={styles.buttonContainerInner}>
-                <Button
-                  sx={{
-                    ...whiteButtonOceanGreenBorder,
-                    color: "var(--steel-purple)",
-                    border: "2px solid var(--steel-purple)",
-                    "&:hover": {
-                      color: "#BF3232",
-                      border: "2px solid #BF3232",
-                    },
-                    fontWeight: "bold",
-                    width: "100px",
-                  }}
-                  onClick={() => {
-                    handleDeleteUser();
-                  }}
-                >
-                  Delete
-                </Button>
-                <Button
-                  sx={{
-                    ...whiteButtonOceanGreenBorder,
-                    fontWeight: "bold",
-                    width: "100px",
-                  }}
-                >
-                  Export
-                </Button>
-              </div>
-            </div>
+                  <div className={styles.buttonGroup}>
+                    <Button
+                      sx={
+                        alignment === "trainings"
+                          ? forestGreenButtonPadding
+                          : whiteButtonGrayBorder
+                      }
+                      onClick={(event) => handleAlignment(event, "trainings")}
+                    >
+                      TRAININGS
+                    </Button>
+                    <Button
+                      sx={
+                        alignment === "pathways"
+                          ? forestGreenButtonPadding
+                          : whiteButtonGrayBorder
+                      }
+                      onClick={(event) => handleAlignment(event, "pathways")}
+                    >
+                      PATHWAYS
+                    </Button>
+                  </div>
+                </div>
+
+                <div className={styles.contentSection}>
+                  {alignment === "trainings" && (
+                    <>
+                      <div className={styles.innerGrid}>
+                        <DataGrid
+                          rows={rows}
+                          columns={columns}
+                          rowHeight={40}
+                          checkboxSelection
+                          pageSize={10}
+                          sx={DataGridStyles}
+                          components={{
+                            ColumnUnsortedIcon: TbArrowsSort,
+                            ColumnMenu: CustomColumnMenu,
+                          }}
+                          onRowClick={(row) => {}}
+                        />
+                      </div>
+                    </>
+                  )}
+                  {alignment === "pathways" && (
+                    <>
+                      <div className={styles.innerGrid}>
+                        <DataGrid
+                          rows={pathwayRows}
+                          columns={pathwayColumns}
+                          rowHeight={40}
+                          checkboxSelection
+                          pageSize={10}
+                          sx={DataGridStyles}
+                          components={{
+                            ColumnUnsortedIcon: TbArrowsSort,
+                            ColumnMenu: CustomColumnMenu,
+                          }}
+                          onRowClick={(row) => {}}
+                        />
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                <div className={styles.buttonContainer}>
+                  <Button
+                    sx={{
+                      ...whiteButtonGrayBorder,
+                      paddingLeft: "20px",
+                      paddingRight: "20px",
+                      fontWeight: "bold",
+                      width: "100px",
+                    }}
+                  >
+                    BACK
+                  </Button>
+                  <div className={styles.buttonContainerInner}>
+                    <Button
+                      sx={{
+                        ...whiteButtonOceanGreenBorder,
+                        color: "var(--steel-purple)",
+                        border: "2px solid var(--steel-purple)",
+                        "&:hover": {
+                          color: "#BF3232",
+                          border: "2px solid #BF3232",
+                        },
+                        fontWeight: "bold",
+                        width: "100px",
+                      }}
+                      onClick={() => {
+                        handleDeleteUser();
+                      }}
+                    >
+                      Delete
+                    </Button>
+                    <Button
+                      sx={{
+                        ...whiteButtonOceanGreenBorder,
+                        fontWeight: "bold",
+                        width: "100px",
+                      }}
+                    >
+                      Export
+                    </Button>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
         <Footer />
