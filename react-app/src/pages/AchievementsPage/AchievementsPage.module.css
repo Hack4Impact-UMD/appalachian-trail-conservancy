@@ -43,6 +43,18 @@
   margin: 0;
 }
 
+.hamburger {
+  color: var(--blue-gray);
+  font-size: 1.5rem;
+  margin: 1.5rem;
+  position: absolute;
+  top: 20px;
+  left: 10px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
 .buttonContainer {
   display: flex;
   justify-content: space-between;
@@ -59,6 +71,116 @@
   flex-wrap: wrap;
   flex-direction: row;
   row-gap: 1em;
-  column-gap: 1em;
+  column-gap: 1.5em;
   margin-bottom: 1rem;
+}
+
+.noCards {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin: 10% 15% 15% 15%;
+}
+
+/* show buttons when screen width is above 1201px */
+@media screen and (min-width: 1201px) {
+  .buttonContainer {
+    display: flex;
+  }
+
+  .dropdownContainer {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 1500px) {
+  .content {
+    width: 1200px;
+  }
+
+  .cardsContainer {
+    column-gap: 3.1rem;
+  }
+}
+
+@media screen and (min-width: 1800px) {
+  .content {
+    width: 1400px;
+  }
+
+  .cardsContainer {
+    column-gap: 2.5rem;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .content {
+    width: 600px;
+  }
+
+  .cardsContainer {
+    justify-content: space-between;
+    column-gap: 0;
+  }
+
+  .buttonContainer {
+    flex-direction: column;
+    gap: 10px; /* Add a gap between the buttons and the dropdown */
+  }
+
+  .leftButtonContainer {
+    justify-content: space-between;
+  }
+
+  .toggleButton {
+    width: 300px !important;
+  }
+
+  .rightButtonContainer {
+    align-items: stretch;
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .content {
+    width: 425px;
+  }
+
+  .cardsContainer {
+    justify-content: space-around;
+  }
+
+  .buttonContainer {
+    flex-direction: column;
+    gap: 10px; /* Add a gap between the buttons and the dropdown */
+  }
+
+  .leftButtonContainer {
+    justify-content: space-between;
+  }
+
+  .rightButtonContainer {
+    width: 425px !important;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .header {
+    margin-top: 5rem;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .content {
+    width: 300px;
+  }
+
+  .rightButtonContainer {
+    width: 300px !important;
+  }
+
+  .dropdownMenu {
+    width: 300px;
+  }
 }

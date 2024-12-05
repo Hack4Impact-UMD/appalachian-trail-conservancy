@@ -17,28 +17,49 @@ import { PathwayID } from "../../types/PathwayType";
 import { DateTime } from "luxon";
 import styles from "./AchievementsPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import hamburger from "../../assets/hamburger.svg";
+
 import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Certificate from "../../components/CertificateCard/CertificateCard";
 import { useAuth } from "../../auth/AuthProvider";
 import Badge from "../../components/BadgeCard/BadgeCard";
+import { useNavigate } from "react-router-dom";
+import Loading from "../../components/LoadingScreen/Loading";
 
 function AchievementsPage() {
   const auth = useAuth();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(true);
   const [badgesSelected, setBadgesSelected] = useState<boolean>(true);
   const [sortMode, setSortMode] = useState<string>("newest");
-
-  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
   const [correlatedTrainings, setCorrelatedTrainings] = useState<
     { genericTraining: TrainingID; volunteerTraining: VolunteerTraining }[]
   >([]);
   const [correlatedPathways, setCorrelatedPathways] = useState<
     { genericPathway: PathwayID; volunteerPathway: VolunteerPathway }[]
   >([]);
+  const [navigationBarOpen, setNavigationBarOpen] = useState(
+    !(window.innerWidth < 1200)
+  );
+  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
+
+  // Update screen width on resize
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     getAllTrainings().then((genericTrainings) => {
       if (!auth.loading && auth.id) {
+        setLoading(true);
         getVolunteer(auth.id.toString()).then((volunteer) => {
           const volunteerTrainings = volunteer.trainingInformation;
           let allCorrelatedTrainings: {
@@ -59,13 +80,20 @@ function AchievementsPage() {
               }
             }
           }
-          setCorrelatedTrainings(allCorrelatedTrainings);
+          let sortedCopy = allCorrelatedTrainings.slice();
+          sortedCopy.sort((a, b) => {
+            const dateA = DateTime.fromISO(a.volunteerTraining.dateCompleted);
+            const dateB = DateTime.fromISO(b.volunteerTraining.dateCompleted);
+            return dateB.toMillis() - dateA.toMillis();
+          });
+          setCorrelatedTrainings(sortedCopy);
+          setLoading(false);
         });
       }
     });
-
     getAllPathways().then((genericPathways) => {
       if (!auth.loading && auth.id) {
+        setLoading(true);
         getVolunteer(auth.id.toString()).then((volunteer) => {
           const volunteerPathways = volunteer.pathwayInformation;
           let allCorrelatedPathways: {
@@ -86,11 +114,18 @@ function AchievementsPage() {
               }
             }
           }
-          setCorrelatedPathways(allCorrelatedPathways);
+          let sortedCopy = allCorrelatedPathways.slice();
+          sortedCopy.sort((a, b) => {
+            const dateA = DateTime.fromISO(a.volunteerPathway.dateCompleted);
+            const dateB = DateTime.fromISO(b.volunteerPathway.dateCompleted);
+            return dateB.toMillis() - dateA.toMillis();
+          });
+          setCorrelatedPathways(sortedCopy);
+          setLoading(false);
         });
       }
     });
-  });
+  }, [auth.loading, auth.id]);
 
   const sortCards = () => {
     let sortedCopy;
@@ -131,7 +166,6 @@ function AchievementsPage() {
           sortedCopy.sort((a, b) =>
             a.genericTraining.name.localeCompare(b.genericTraining.name)
           );
-
           break;
         case "reverseAlphabetically":
           sortedCopy.sort((a, b) =>
@@ -172,8 +206,20 @@ function AchievementsPage() {
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}
+        style={{
+          // Only apply left shift when screen width is greater than 1200px
+          left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
+        }}
       >
+        {!navigationBarOpen && (
+          <img
+            src={hamburger}
+            alt="Hamburger Menu"
+            className={styles.hamburger} // Add styles to position it
+            width={30}
+            onClick={() => setNavigationBarOpen(true)} // Set sidebar open when clicked
+          />
+        )}
         <div className={styles.outerContainer}>
           <div className={styles.content}>
             <div className={styles.header}>
@@ -183,7 +229,12 @@ function AchievementsPage() {
             <div className={styles.buttonContainer}>
               <div className={styles.leftButtonContainer}>
                 <Button
-                  onClick={() => setBadgesSelected(true)}
+                  onClick={() => {
+                    setBadgesSelected(true);
+                    setSortMode("newest");
+                    handleSortChange;
+                  }}
+                  className={styles.toggleButton}
                   sx={
                     badgesSelected
                       ? forestGreenButtonPadding
@@ -194,7 +245,12 @@ function AchievementsPage() {
                   Pathway Badges
                 </Button>
                 <Button
-                  onClick={() => setBadgesSelected(false)}
+                  onClick={() => {
+                    setBadgesSelected(false);
+                    setSortMode("newest");
+                    handleSortChange;
+                  }}
+                  className={styles.toggleButton}
                   sx={
                     !badgesSelected
                       ? forestGreenButtonPadding
@@ -212,7 +268,7 @@ function AchievementsPage() {
                   size="small"
                   sx={{
                     ...whiteSelectGrayBorder,
-                    width: "154px",
+                    width: "100%",
                   }}
                 >
                   <MenuItem value={"newest"} sx={selectOptionStyle}>
@@ -233,28 +289,80 @@ function AchievementsPage() {
                 </Select>
               </div>
             </div>
-            <div className={styles.cardsContainer}>
-              {badgesSelected ? (
-                <>
-                  {correlatedPathways.map((pathway, index) => (
-                    <Badge
-                      title={pathway.genericPathway.name}
-                      date={pathway.volunteerPathway.dateCompleted}
-                    />
-                  ))}
-                </>
-              ) : (
-                <>
-                  {correlatedTrainings.map((training, index) => (
-                    <Certificate
-                      title={training.genericTraining.name}
-                      image={training.genericTraining.coverImage}
-                      date={training.volunteerTraining.dateCompleted}
-                    />
-                  ))}
-                </>
-              )}
-            </div>
+            {loading ? (
+              <Loading />
+            ) : (
+              <>
+                {badgesSelected ? (
+                  <>
+                    {correlatedPathways.length == 0 ? (
+                      <>
+                        <div className={styles.noCards}>
+                          <h1>No Badges Earned!</h1>
+                          <div className={styles.leftButtonContainer}>
+                            <Button
+                              onClick={() => {
+                                navigate("/pathways");
+                              }}
+                              sx={forestGreenButtonPadding}
+                              variant="contained"
+                            >
+                              Go to Pathways Library
+                            </Button>
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      <></>
+                    )}
+                    <div className={styles.cardsContainer}>
+                      {correlatedPathways.map((pathway, index) => (
+                        <Badge
+                          title={pathway.genericPathway.name}
+                          date={pathway.volunteerPathway.dateCompleted}
+                          image={pathway.genericPathway.badgeImage}
+                          key={index}
+                        />
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {correlatedTrainings.length == 0 ? (
+                      <>
+                        <div className={styles.noCards}>
+                          <h1>No Certifications Earned!</h1>
+                          <div className={styles.leftButtonContainer}>
+                            <Button
+                              onClick={() => {
+                                navigate("/trainings");
+                              }}
+                              sx={forestGreenButtonPadding}
+                              variant="contained"
+                            >
+                              Go to Trainings Library
+                            </Button>
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className={styles.cardsContainer}>
+                          {correlatedTrainings.map((training, index) => (
+                            <Certificate
+                              title={training.genericTraining.name}
+                              image={training.genericTraining.coverImage}
+                              date={training.volunteerTraining.dateCompleted}
+                              key={index}
+                            />
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </>
+                )}
+              </>
+            )}
           </div>
         </div>
         <Footer />

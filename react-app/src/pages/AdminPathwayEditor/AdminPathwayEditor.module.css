@@ -1,0 +1,209 @@
+.split {
+  height: 100%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  transition: left 0.3s ease; /* Add transition for smooth animation */
+}
+
+.right {
+  right: 0;
+  left: 250px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.content {
+  width: 875px;
+  padding-bottom: 3%;
+}
+
+.hamburger {
+  color: var(--blue-gray);
+  font-size: 1.5rem;
+  margin: 1.5rem;
+  position: absolute;
+  top: 20px;
+  left: 10px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.nameHeading {
+  color: var(--blue-gray);
+  font-size: 3rem;
+  margin: 0;
+  max-width: 90%;
+  white-space: normal;
+}
+
+.trainingSelection {
+  width: 80%;
+}
+
+.searchBarNumber {
+  width: 0.5%;
+  margin-left: -3.5%;
+  padding-right: 3%;
+  font-weight: bold;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.searchBarX {
+  margin-left: 2.1%;
+  align-items: center;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding-top: 2px;
+}
+
+.addTrainingContainer {
+  margin-top: 1.2rem;
+  margin-bottom: 1rem;
+  display: flex;
+  width: 100%;
+  align-items: left;
+}
+
+.searchBarContainer {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  vertical-align: middle;
+}
+
+.inputBoxHeader {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+}
+
+.textFieldLabel {
+  color: black;
+  font-weight: bold;
+  margin-bottom: 4px;
+  margin-top: 2rem;
+}
+
+.uploadSection {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.uploadSection button {
+  background-color: #49a772;
+  color: white;
+  padding: 0.5rem 1rem;
+  text-transform: none;
+}
+
+.buttonGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+  width: 150px;
+}
+
+.buttonGroup button {
+  width: 150px;
+}
+
+.flexRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.flexRow .resourceLinkField {
+  flex-grow: 2;
+  min-width: 250px;
+  margin-bottom: 8px !important;
+}
+
+.flexRow .resourceTypeField {
+  flex-grow: 1;
+  min-width: 150px;
+  margin-top: 0rem !important;
+}
+
+.saveButton {
+  margin-left: 1rem;
+  width: 180px;
+  background-color: transparent !important;
+  color: black !important;
+  border: 2px solid black !important;
+  border-radius: 10px !important;
+}
+
+@media screen and (min-width: 1500px) {
+  .content {
+    width: 1200px;
+  }
+
+  .cardsContainer {
+    column-gap: 2rem;
+  }
+}
+
+@media screen and (min-width: 1800px) {
+  .content {
+    width: 1400px;
+  }
+
+  .cardsContainer {
+    column-gap: 6.25rem;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .content {
+    width: 600px;
+  }
+
+  .cardsContainer {
+    justify-content: space-between;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .content {
+    width: 425px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .header {
+    margin-top: 5rem;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .content {
+    width: 300px;
+  }
+}

@@ -10,11 +10,11 @@ import leftEndIcon from "../../assets/PathwayTiles/LeftEnd.svg";
 import rightDownIcon from "../../assets/PathwayTiles/RightDown.svg";
 import rightEndIcon from "../../assets/PathwayTiles/RightEnd.svg";
 import verticalIcon from "../../assets/PathwayTiles/Vertical.svg";
-import TrainingPopup from "../../components/TrainingPopup/TrainingPopup";
+import PathwayTrainingPopup from "../../components/PathwayTrainingPopup/PathwayTrainingPopup";
 
-import downLeftCompleted from "../../assets/PathwayTiles/CompletedTiles/DownLeftCompleted.svg"; 
+import downLeftCompleted from "../../assets/PathwayTiles/CompletedTiles/DownLeftCompleted.svg";
 import downTrophy from "../../assets/PathwayTiles/CompletedTiles/DownTrophy.svg";
-import leftDownCompleted from "../../assets/PathwayTiles/CompletedTiles/LeftDownCompleted.svg"; 
+import leftDownCompleted from "../../assets/PathwayTiles/CompletedTiles/LeftDownCompleted.svg";
 import rightDownCompleted from "../../assets/PathwayTiles/CompletedTiles/RightDownCompleted.svg";
 import verticalCompleted from "../../assets/PathwayTiles/CompletedTiles/VerticalCompleted.svg";
 import downRightCompleted from "../../assets/PathwayTiles/CompletedTiles/DownRightCompleted.svg";
@@ -52,7 +52,12 @@ interface PathwayTileProps {
 // index: specific index of the training in pathway
 // count: total number of trainings in pathway
 // trainingsCompleted: the number of trainings in this pathway that have been finished
-function getImage(imagesPerRow: number, index: number, numTrainings: number, trainingsCompleted: number) {
+function getImage(
+  imagesPerRow: number,
+  index: number,
+  numTrainings: number,
+  trainingsCompleted: number
+) {
   // Empty
   if (index > numTrainings) return emptyIcon;
   // Straight down
@@ -60,12 +65,10 @@ function getImage(imagesPerRow: number, index: number, numTrainings: number, tra
     // Check that the index has been completed
     if (index <= trainingsCompleted && trainingsCompleted != 0) {
       // Check if it is the final  one
-      if (index === numTrainings)
-        return downTrophy;
+      if (index === numTrainings) return downTrophy;
       // Check if it is the last one in the sequence
-      if (index + 1 === trainingsCompleted)
-        return verticalInter;
-      
+      if (index + 1 === trainingsCompleted) return verticalInter;
+
       // Check if it hasn't been completed
       return index === trainingsCompleted ? verticalIcon : verticalCompleted;
     }
@@ -78,33 +81,34 @@ function getImage(imagesPerRow: number, index: number, numTrainings: number, tra
       // Check if this has been completed or its an intermediate icon
       if (index <= trainingsCompleted && trainingsCompleted != 0) {
         // Check if this is the last one completed
-        if (index === numTrainings)
-          return rightTrophy;
+        if (index === numTrainings) return rightTrophy;
         // Check if this icon is the most recent completed
-        if (index + 1 === trainingsCompleted) 
-          return rightDownInter;
-        
+        if (index + 1 === trainingsCompleted) return rightDownInter;
+
         // Check if this should be a normal icon or completed
-        return index === trainingsCompleted ? rightDownIcon : rightDownCompleted;
+        return index === trainingsCompleted
+          ? rightDownIcon
+          : rightDownCompleted;
       }
       return index === numTrainings ? leftEndIcon : rightDownIcon;
       // Left-most icon
     } else if (index % imagesPerRow === 0) {
-        // Check if either intermediate icon or completed icon
-        if (index <= trainingsCompleted && trainingsCompleted != 0) {
-          // Check if this is the final one 
-          if (index === numTrainings)
-            // Check if it is going down or not
-            return index > 0 ? downTrophy : rightTrophy;
-          // Check if this icon is the first icon and whether it's an intermediate
-          if (index === 0)
-            return index + 1 === trainingsCompleted ? leftInter : leftCompleted;
-          // Check if this is an intermediate icon
-          if (index + 1 === trainingsCompleted)
-            return downRightInter;
-          
-          return index === trainingsCompleted ? downRightIcon : downRightCompleted;
-        }
+      // Check if either intermediate icon or completed icon
+      if (index <= trainingsCompleted && trainingsCompleted != 0) {
+        // Check if this is the final one
+        if (index === numTrainings)
+          // Check if it is going down or not
+          return index > 0 ? downTrophy : rightTrophy;
+        // Check if this icon is the first icon and whether it's an intermediate
+        if (index === 0)
+          return index + 1 === trainingsCompleted ? leftInter : leftCompleted;
+        // Check if this is an intermediate icon
+        if (index + 1 === trainingsCompleted) return downRightInter;
+
+        return index === trainingsCompleted
+          ? downRightIcon
+          : downRightCompleted;
+      }
 
       // Check if very first icon
       if (index === 0) {
@@ -117,12 +121,10 @@ function getImage(imagesPerRow: number, index: number, numTrainings: number, tra
     // Check for completeness for middle icons
     if (index <= trainingsCompleted && trainingsCompleted != 0) {
       // Check for trophy
-      if (index == numTrainings)
-        return rightTrophy;
+      if (index == numTrainings) return rightTrophy;
       // Check if its an intermediate card
-      if (index + 1 == trainingsCompleted)
-        return leftInter;
-      
+      if (index + 1 == trainingsCompleted) return leftInter;
+
       return index === trainingsCompleted ? horizontalIcon : leftCompleted;
     }
 
@@ -136,11 +138,9 @@ function getImage(imagesPerRow: number, index: number, numTrainings: number, tra
       // Check if icon should be intermediate or completed
       if (index <= trainingsCompleted && trainingsCompleted != 0) {
         // Check if final icon
-        if (index === numTrainings)
-          return leftTrophy;
+        if (index === numTrainings) return leftTrophy;
         // Check if icon is intermediate
-        if (index + 1 === trainingsCompleted)
-          return leftDownInter;
+        if (index + 1 === trainingsCompleted) return leftDownInter;
 
         // Check if the icon is not started or already completed
         return index == trainingsCompleted ? leftDownIcon : leftDownCompleted;
@@ -152,13 +152,11 @@ function getImage(imagesPerRow: number, index: number, numTrainings: number, tra
       // Check if icon should be intermediate or completed
       if (index <= trainingsCompleted && trainingsCompleted != 0) {
         // Check if icon is final
-        if (index === numTrainings)
-          return downTrophy;
+        if (index === numTrainings) return downTrophy;
         // Check if icon is an intermediate card
-        if (index + 1 === trainingsCompleted)
-          return downLeftInter;
+        if (index + 1 === trainingsCompleted) return downLeftInter;
 
-        return index === trainingsCompleted ? downLeftIcon : downLeftCompleted;;
+        return index === trainingsCompleted ? downLeftIcon : downLeftCompleted;
       }
 
       return index === numTrainings ? downEndIcon : downLeftIcon;
@@ -167,16 +165,14 @@ function getImage(imagesPerRow: number, index: number, numTrainings: number, tra
     // Middle icons
     if (index <= trainingsCompleted && trainingsCompleted != 0) {
       // Check for trophy
-      if (index == numTrainings)
-        return leftTrophy;
+      if (index == numTrainings) return leftTrophy;
       // Check if its an intermediate card
-      if (index + 1 == trainingsCompleted)
-        return rightInter;
-      
+      if (index + 1 == trainingsCompleted) return rightInter;
+
       return index === trainingsCompleted ? horizontalIcon : rightCompleted;
     }
 
-    return index === numTrainings ? rightEndIcon : horizontalIcon; 
+    return index === numTrainings ? rightEndIcon : horizontalIcon;
   }
 }
 
@@ -191,7 +187,12 @@ const PathwayTile: React.FC<PathwayTileProps> = ({
   const imgWidth = 300;
 
   const imagesPerRow = Math.floor(width / imgWidth);
-  const image = getImage(imagesPerRow, tileNum, numTrainings, trainingsCompleted);
+  const image = getImage(
+    imagesPerRow,
+    tileNum,
+    numTrainings,
+    trainingsCompleted
+  );
 
   return (
     <>
@@ -202,8 +203,7 @@ const PathwayTile: React.FC<PathwayTileProps> = ({
         }}
         onClick={() => {
           setOpenTrainingPopup(true);
-        }}
-      >
+        }}>
         <img src={image} style={{ width: "300px", height: "300px" }} />
         <div
           style={{
@@ -214,16 +214,18 @@ const PathwayTile: React.FC<PathwayTileProps> = ({
             color: "white",
             fontSize: "3rem",
             fontWeight: "bold",
-          }}
-        >
-          {trainingID != null && tileNum >= trainingsCompleted ? tileNum + 1 : ""}
+          }}>
+          {trainingID != null && tileNum >= trainingsCompleted
+            ? tileNum + 1
+            : ""}
         </div>
       </div>
       {trainingID ? (
-        <TrainingPopup
+        <PathwayTrainingPopup
           open={openTrainingPopup}
           onClose={setOpenTrainingPopup}
-          training={trainingID}
+          record={trainingID}
+          mode={"training"}
         />
       ) : (
         <></>

@@ -11,6 +11,7 @@ import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import QuizCard from "./QuizCard/QuizCard";
 import Loading from "../../components/LoadingScreen/Loading";
+import hamburger from "../../assets/hamburger.svg";
 
 function QuizPage() {
   const auth = useAuth();
@@ -19,8 +20,12 @@ function QuizPage() {
   const location = useLocation();
   const [loading, setLoading] = useState<boolean>(true);
   const [quizLoading, setQuizLoading] = useState<boolean>(false);
-  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
-  const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
+  const [navigationBarOpen, setNavigationBarOpen] = useState(
+    !(window.innerWidth < 1200)
+  );
+  const [selectedAnswers, setSelectedAnswers] = useState<
+    (string | undefined)[] // undefined allows to check for "empty" positions in sparse array
+  >([]);
   const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
     {
       trainingID: "",
@@ -44,6 +49,7 @@ function QuizPage() {
       numQuestions: 0,
       passingScore: 0,
     },
+    status: "PUBLISHED",
     associatedPathways: [],
     certificationImage: "",
   });
@@ -61,16 +67,49 @@ function QuizPage() {
         setTraining(location.state.training);
         setVolunteerTraining(location.state.volunteerTraining);
         setSelectedAnswers(
-          Array(location.state.training.quiz.questions.length)
+          Array(location.state.training.quiz.questions.length).fill(undefined) // fill with undefined to allow for pre-submit warning
         );
         setLoading(false);
       }
     }
   }, []);
 
+  useEffect(() => {
+    // prompt user before closing/refreshing page
+    const preventUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+    };
+
+    window.addEventListener("beforeunload", preventUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", preventUnload);
+    };
+  }, []);
+
   const handleSubmitQuiz = () => {
     setQuizLoading(true);
-    validateQuiz(volunteerTraining.trainingID, volunteerId, selectedAnswers)
+
+    // check if any questions are unanswered
+    if (selectedAnswers.some((answer) => answer === undefined)) {
+      setQuizLoading(false);
+      const prompt = window.confirm("Not all questions are answered. Submit?");
+      if (!prompt) {
+        return; // don't proceed if user hits cancel
+      }
+      setQuizLoading(true);
+    }
+
+    // replace any undefined values with empty string for quiz validation function
+    const cleanedSelectedAnswers = selectedAnswers.map((value) =>
+      value === undefined ? "" : value
+    );
+
+    validateQuiz(
+      volunteerTraining.trainingID,
+      volunteerId,
+      cleanedSelectedAnswers
+    )
       .then((validateResults) => {
         const numAnswersCorrect = validateResults.data;
         navigate(`/trainings/quizresult`, {
@@ -82,6 +121,7 @@ function QuizPage() {
             fromApp: true,
           },
         });
+        setQuizLoading(false);
       })
       .catch((error) => {
         console.error("Error validating quiz:", error);
@@ -99,8 +139,18 @@ function QuizPage() {
         className={`${styles.split} ${styles.right}`}
         style={{ left: navigationBarOpen ? "250px" : "0" }}
       >
+        {!navigationBarOpen && (
+          <img
+            src={hamburger}
+            alt="Hamburger Menu"
+            className={styles.hamburger} // Add styles to position it
+            width={30}
+            onClick={() => setNavigationBarOpen(true)} // Set sidebar open when clicked
+          />
+        )}
+
         <div className={styles.outerContainer}>
-          <div className={styles.bodyContainer}>
+          <div className={styles.content}>
             {/* HEADER */}
             {loading ? (
               <Loading />

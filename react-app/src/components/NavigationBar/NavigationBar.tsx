@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import achievementInactive from "../../assets/achievementsGray.svg";
 import achievementsActive from "../../assets/achievementsWhite.svg";
@@ -6,7 +6,6 @@ import atcprimarylogo from "../../assets/atc-primary-logo.png";
 import collapseArrow from "../../assets/collapseArrow.svg";
 import dashboardInactive from "../../assets/dashboardGray.svg";
 import dashboardActive from "../../assets/dashboardWhite.svg";
-import hamburger from "../../assets/hamburger.svg";
 import logout from "../../assets/logout.svg";
 import pathwaysInactive from "../../assets/pathwaysGray.svg";
 import pathwaysActive from "../../assets/pathwaysWhite.svg";
@@ -27,6 +26,22 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
     setOpenLogoutPopup(true);
   };
 
+  // Automatically close NavBar when window width is below 1200px
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 1200 && open) {
+        setOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup event listener on unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [open, setOpen]);
+
   return (
     <div
       className={`${styles.navigationContainer} ${open ? "" : styles.closed} ${
@@ -43,6 +58,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
               <div className={styles.arrowBox}>
                 <img
                   src={collapseArrow}
+                  className={styles.collapseArrow}
                   width={20}
                   onClick={() => setOpen(false)}
                 />
@@ -171,14 +187,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
           <LogoutPopup open={openLogoutPopup} onClose={setOpenLogoutPopup} />
         </>
       ) : (
-        <div>
-          <img
-            src={hamburger}
-            className={styles.hamburger}
-            width={30}
-            onClick={() => setOpen(true)}
-          />
-        </div>
+        <div></div>
       )}
     </div>
   );

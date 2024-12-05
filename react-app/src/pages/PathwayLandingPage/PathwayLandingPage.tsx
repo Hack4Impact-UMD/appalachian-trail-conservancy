@@ -1,24 +1,42 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import TitleInfo from "./TitleInfo";
 import styles from "./PathwayLandingPage.module.css";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import PathwayTile from "./PathwayTile";
-import { VolunteerPathway } from "../../types/UserType";
+import { TrainingID } from "../../types/TrainingType";
 import { PathwayID } from "../../types/PathwayType";
 import { useAuth } from "../../auth/AuthProvider";
+import {
+  getPathway,
+  getTraining,
+  getVolunteer,
+} from "../../backend/FirestoreCalls";
 import Loading from "../../components/LoadingScreen/Loading";
-import { getPathway, getTraining, getVolunteer } from "../../backend/FirestoreCalls";
-import { TrainingID } from "../../types/TrainingType";
-import { useParams } from "react-router-dom";
-import { WidthFull } from "@mui/icons-material";
 
-const PathwayLandingPage: React.FC = () => {
+const styledProgressShape = {
+  height: 24,
+  borderRadius: 12,
+  width: "100%",
+};
+
+// if score > 0, dark green & light gray
+const styledProgressPass = {
+  ...styledProgressShape,
+  backgroundColor: "lightgray",
+  "& .MuiLinearProgress-bar": {
+    backgroundColor: "var(--forest-green)",
+  },
+};
+
+function PathwayLandingPage() {
   const auth = useAuth();
   const pathwayId = useParams().id;
   const navigate = useNavigate();
   const location = useLocation();
-  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+  const [navigationBarOpen, setNavigationBarOpen] = useState(
+    !(window.innerWidth < 1200)
+  );
   const [divWidth, setDivWidth] = useState<number>(0);
   const [trainings, setTrainings] = useState<TrainingID[]>([]);
   const [numCompleted, setNumCompleted] = useState<number>(0);
@@ -37,6 +55,7 @@ const PathwayLandingPage: React.FC = () => {
       passingScore: 0,
     },
     badgeImage: "",
+    status: "DRAFT",
   });
 
   const div = useRef<HTMLDivElement>(null);
@@ -63,7 +82,7 @@ const PathwayLandingPage: React.FC = () => {
           setPathway(location.state.pathway);
           const trainingPromises =
             location.state.pathway.trainingIDs.map(getTraining);
-          const fetchedTrainings = await Promise.all(trainingPromises);  // I think it's breaking here
+          const fetchedTrainings = await Promise.all(trainingPromises); // I think it's breaking here
           setTrainings(fetchedTrainings);
         }
       }
@@ -76,11 +95,11 @@ const PathwayLandingPage: React.FC = () => {
       if (!auth.loading && auth.id && pathwayId !== undefined) {
         try {
           const volunteer = await getVolunteer(auth.id.toString());
-          const pathwayList = volunteer.pathwayInformation;    
+          const pathwayList = volunteer.pathwayInformation;
           const volunteerPathway = pathwayList.filter(
             (thePathway) => pathwayId === thePathway.pathwayID
           );
-    
+
           if (volunteerPathway.length > 0) {
             const numTrainings = volunteerPathway[0].numTrainingsCompleted;
             setNumCompleted(numTrainings);
@@ -94,7 +113,6 @@ const PathwayLandingPage: React.FC = () => {
     };
 
     getTrainingsCompleted();
-
   }, [auth.loading, auth.id]);
 
   useEffect(() => {
@@ -166,21 +184,18 @@ const PathwayLandingPage: React.FC = () => {
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}
-      >
+        style={{ left: navigationBarOpen ? "250px" : "0" }}>
         <div className={styles.pageContainer}>
           <div className={styles.content} ref={div}>
             <TitleInfo title={pathway.name} description={pathway.shortBlurb} />
 
             {/* Pathway Tiles Section */}
-            <div className={styles.pathwayTiles}>
-              {elements}
-            </div>
+            <div className={styles.pathwayTiles}>{elements}</div>
           </div>
         </div>
       </div>
     </>
   );
-};
+}
 
 export default PathwayLandingPage;

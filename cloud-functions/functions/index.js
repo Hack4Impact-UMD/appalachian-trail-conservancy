@@ -5,29 +5,56 @@ const { onCall } = require("firebase-functions/v2/https");
 const admin = require("firebase-admin");
 admin.initializeApp();
 const db = admin.firestore();
+const dotenv = require("dotenv");
+require("dotenv").config();
+const nodemailer = require("nodemailer");
+const { google } = require("googleapis");
+const OAuth2 = google.auth.OAuth2;
 
-/**
- * General Cloud Function
- */
-
-exports.generalCloudFunction = onCall(
-  { region: "us-east4", cors: true },
-  async ({ auth, data }) => {
-    return new Promise(async (resolve, reject) => {
-      // Parameters found by doing data.parameterName
-      // Auth of the user that called the function
-      if (
-        // Validate parameters here
-
-        // Validate auth
-        auth &&
-        auth.token &&
-        auth.token.role.toLowerCase() == "" // Desired Role
-      ) {
-      }
-    });
-  }
+const oauth2Client = new OAuth2(
+  process.env.CLIENT_ID,
+  process.env.CLIENT_SECRET,
+  "https://developers.google.com/oauthplayground"
 );
+
+oauth2Client.setCredentials({
+  refresh_token: process.env.REFRESH_TOKEN,
+});
+
+const accessToken = oauth2Client.getAccessToken();
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    type: "OAuth2",
+    user: process.env.EMAIL,
+    accessToken: accessToken,
+    clientId: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
+    refreshToken: process.env.REFRESH_TOKEN,
+  },
+  tls: {
+    rejectUnauthorized: false,
+  },
+});
+
+const baseEmail = {
+  subject: "Welcome to the ATC Training Portal",
+  body: `
+    <div>
+      <div style="max-width: 600px; margin: auto">
+        <br><br><br>
+        <p style="font-size: 16px">
+        Hello,<br>
+        <br>
+        Your account has been created.<br>
+        <br>
+        <span style="font-weight: 600; text-decoration: underline">Appalachian Trail Conservancy Training Portal</span><br>
+        <br>
+      <div>
+    </div>
+  `,
+};
 
 /*
  * Creates a new volunteer.
@@ -43,7 +70,27 @@ exports.createVolunteerUser = onCall(
   async ({ auth, data }) => {
     return new Promise(async (resolve, reject) => {
       const authorization = admin.auth();
-      if (data?.code === 123) {
+      // pull registration code from firestore
+      let registrationCode;
+      await db
+        .collection("Assets")
+        .where("type", "==", "REGISTRATIONCODE")
+        .get()
+        .then((querySnapshot) => {
+          if (querySnapshot.docs.length == 0) {
+            throw new Error("No registration code exists");
+          }
+          registrationCode = querySnapshot.docs[0].data();
+        })
+        .catch((error) => {
+          reject({
+            reason: "Registration Code Query Failed",
+            text: "Unable to find registration code in the database.",
+          });
+          throw new functions.https.HttpsError("unknown", `${error}`);
+        });
+
+      if (data?.code === registrationCode.code) {
         await authorization
           .createUser({
             email: data.email,
@@ -74,7 +121,63 @@ exports.createVolunteerUser = onCall(
                         .collection("Users")
                         .add(collectionObject)
                         .then(async () => {
-                          resolve({ reason: "Success", text: "Success" });
+                          // get email template from DB or use base email
+                          let email;
+                          await db
+                            .collection("Assets")
+                            .where("type", "==", "EMAIL")
+                            .get()
+                            .then(async (querySnapshot) => {
+                              if (querySnapshot.docs.length != 0) {
+                                email = querySnapshot.docs[0].data();
+                              } else {
+                                // Email has not been set by ATC Admin, defer to base email
+                                email = baseEmail;
+                              }
+
+                              email = {
+                                ...email,
+                                body: email.body
+                                  .replace("FIRSTNAME", data.firstName)
+                                  .replace("LASTNAME", data.lastName),
+                              };
+                              console.log("pls send");
+                              //send email to Volunteer
+                              await transporter
+                                .sendMail({
+                                  from: '"ATC" <h4iatctest2@gmail.com>',
+                                  to: data.email,
+                                  subject: email.subject,
+                                  html: email.body,
+                                })
+                                .then(() => {
+                                  resolve({
+                                    reason: "Success",
+                                    text: "Success",
+                                  });
+                                })
+                                .catch((error) => {
+                                  console.log(error);
+                                  reject({
+                                    reason: "Intro Email Not Sent",
+                                    text: "User has been created, but the introduction email failed to be sent to them.",
+                                  });
+                                  throw new functions.https.HttpsError(
+                                    "Unknown",
+                                    "Unable to send introduction email to new user."
+                                  );
+                                });
+                            })
+                            .catch((error) => {
+                              reject({
+                                reason: "Email Query Failed",
+                                text: "Unable to find email in the database.",
+                              });
+                              throw new functions.https.HttpsError(
+                                "unknown",
+                                `${error}`
+                              );
+                            });
                         })
                         .catch((error) => {
                           reject({
@@ -100,8 +203,8 @@ exports.createVolunteerUser = onCall(
                   })
                   .catch((error) => {
                     reject({
-                      reason: "Database Deletion Failed",
-                      text: "Unable to find user in the database. Make sure they exist.",
+                      reason: "Database Email Query Failed",
+                      text: "Unable to find email in the database. Make sure it exists.",
                     });
                     throw new functions.https.HttpsError("unknown", `${error}`);
                   });
