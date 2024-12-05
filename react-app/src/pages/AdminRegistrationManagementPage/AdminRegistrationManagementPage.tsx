@@ -2,7 +2,13 @@ import { useState, useRef, useEffect } from "react";
 import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar.tsx";
 import styles from "./AdminRegistrationManagementPage.module.css";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon.tsx";
-import { Button, Tooltip, IconButton, TextField, Typography } from "@mui/material";
+import {
+  Button,
+  Tooltip,
+  IconButton,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { ContentCopy as ContentCopyIcon } from "@mui/icons-material";
 import Footer from "../../components/Footer/Footer.tsx";
 import Quill from "quill";
@@ -10,9 +16,22 @@ import "quill/dist/quill.snow.css";
 import hamburger from "../../assets/hamburger.svg";
 import { updateRegistrationEmail } from "../../backend/AdminFirestoreCalls.ts";
 import { EmailType } from "../../types/AssetsType.ts";
-import { CustomToggleButtonGroup, PurpleToggleButton } from "../../muiTheme.ts";
-import { doc, getDocs, query, where, collection, updateDoc } from "firebase/firestore"; 
-import { db } from "../../config/firebase"; 
+import {
+  CustomToggleButtonGroup,
+  PurpleToggleButton,
+  forestGreenButton,
+  whiteButtonGrayBorder,
+  styledRectButton,
+} from "../../muiTheme.ts";
+import {
+  doc,
+  getDocs,
+  query,
+  where,
+  collection,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "../../config/firebase";
 
 function AdminRegistrationManagementPage() {
   const [navigationBarOpen, setNavigationBarOpen] = useState(
@@ -28,7 +47,7 @@ function AdminRegistrationManagementPage() {
   const [codeText, setCodeText] = useState("XXXXX");
   const [editedCode, setEditedCode] = useState("");
   const [isEditing, setIsEditing] = useState(false);
-  const [docId, setDocId] = useState<string | null>(null); 
+  const [docId, setDocId] = useState<string | null>(null);
   const [dateUpdated, setDateUpdated] = useState("");
 
   const editorContainerRef = useRef<HTMLDivElement>(null);
@@ -92,7 +111,8 @@ function AdminRegistrationManagementPage() {
   };
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(codeText)
+    navigator.clipboard
+      .writeText(codeText)
       .then(() => setCopied(true))
       .catch((err) => console.error("Copy failed:", err));
 
@@ -109,11 +129,11 @@ function AdminRegistrationManagementPage() {
         );
 
         if (!querySnapshot.empty) {
-          const docData = querySnapshot.docs[0].data(); 
-          setCodeText(docData.code); 
+          const docData = querySnapshot.docs[0].data();
+          setCodeText(docData.code);
           setDateUpdated(docData.dateUpdated);
-          setDocId(querySnapshot.docs[0].id); 
-        } 
+          setDocId(querySnapshot.docs[0].id);
+        }
       } catch (err) {
         console.error("Error fetching registration code:", err);
         setCodeText("Error loading registration code.");
@@ -131,7 +151,7 @@ function AdminRegistrationManagementPage() {
       setCodeText(editedCode);
       const todayDate = new Date().toISOString().split("T")[0];
       const docRef = doc(db, "Assets", docId);
-      await updateDoc(docRef, { code: editedCode, dateUpdated: todayDate}); 
+      await updateDoc(docRef, { code: editedCode, dateUpdated: todayDate });
       console.log("Registration code updated successfully.");
     } catch (err) {
       console.error("Error saving registration code:", err);
@@ -150,8 +170,7 @@ function AdminRegistrationManagementPage() {
         className={`${styles.split} ${styles.right}`}
         style={{
           left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-        }}
-      >
+        }}>
         {!navigationBarOpen && (
           <img
             src={hamburger}
@@ -171,40 +190,21 @@ function AdminRegistrationManagementPage() {
               <CustomToggleButtonGroup
                 value={alignment}
                 exclusive
-                onChange={handleAlignment}
-              >
+                onChange={handleAlignment}>
                 <PurpleToggleButton
                   value="user"
                   sx={{
-                    fontSize: "0.875rem",
-                    padding: "0.5rem 1rem",
+                    padding: "0.75rem 1rem",
                     minWidth: "100px",
-                    "&.Mui-selected": {
-                      backgroundColor: "lightgray",
-                      color: "black",
-                      "&:hover": {
-                        backgroundColor: "lightgray",
-                      },
-                    },
-                  }}
-                >
+                  }}>
                   EDIT NEW USER EMAIL
                 </PurpleToggleButton>
                 <PurpleToggleButton
                   value="registration"
                   sx={{
-                    fontSize: "0.875rem",
-                    padding: "0.5rem 1rem",
+                    padding: "0.75rem 1rem",
                     minWidth: "100px",
-                    "&.Mui-selected": {
-                      backgroundColor: "lightgray",
-                      color: "black",
-                      "&:hover": {
-                        backgroundColor: "lightgray",
-                      },
-                    },
-                  }}
-                >
+                  }}>
                   REGISTRATION CODE
                 </PurpleToggleButton>
               </CustomToggleButtonGroup>
@@ -219,8 +219,7 @@ function AdminRegistrationManagementPage() {
                     fontWeight: "bold",
                     marginBottom: "4px",
                     marginTop: "2rem",
-                  }}
-                >
+                  }}>
                   SUBJECT
                 </Typography>
                 <TextField
@@ -252,21 +251,23 @@ function AdminRegistrationManagementPage() {
                   style={{
                     width: "80%",
                     border: "1px solid black",
-                  }}
-                >
+                  }}>
                   <div
                     ref={editorContainerRef}
                     id="quillEditor"
                     style={{
                       height: "300px",
-                    }}
-                  ></div>
+                    }}></div>
                 </div>
                 <div className={styles.buttonCodeContainer}>
                   <Button
-                    variant="outlined"
-                    color="secondary"
-                    className={styles.saveButton}
+                    variant="contained"
+                    sx={{
+                      ...styledRectButton,
+                      ...forestGreenButton,
+                      width: "120px",
+                      marginLeft: "30px",
+                    }}
                     onClick={handleSave} // Save the email when clicked
                   >
                     SAVE
@@ -275,7 +276,7 @@ function AdminRegistrationManagementPage() {
               </div>
             )}
             {alignment === "registration" && (
-                <div>
+              <div>
                 {" "}
                 <Typography
                   variant="body2"
@@ -284,8 +285,7 @@ function AdminRegistrationManagementPage() {
                     fontWeight: "bold",
                     marginBottom: "4px",
                     marginTop: "2rem",
-                  }}
-                >
+                  }}>
                   CURRENT CODE
                 </Typography>
                 {/* Read-only TextField */}
@@ -293,7 +293,7 @@ function AdminRegistrationManagementPage() {
                   value={isEditing ? editedCode : codeText}
                   onChange={(e) => {
                     if (isEditing) {
-                      setEditedCode(e.target.value); 
+                      setEditedCode(e.target.value);
                     }
                   }}
                   sx={{
@@ -311,7 +311,9 @@ function AdminRegistrationManagementPage() {
                     readOnly: !isEditing,
                     endAdornment: !isEditing && (
                       <Tooltip title={copied ? "Copied!" : "Copy"}>
-                        <IconButton onClick={handleCopy} sx={{ color: "black" }}>
+                        <IconButton
+                          onClick={handleCopy}
+                          sx={{ color: "black" }}>
                           <ContentCopyIcon />
                         </IconButton>
                       </Tooltip>
@@ -329,52 +331,59 @@ function AdminRegistrationManagementPage() {
                     alignSelf: "flex-end",
                     width: "80%",
                     gap: "1rem",
-                    fontWeight: "bold"
-                  }}
-                >
+                    fontWeight: "bold",
+                  }}>
                   Last updated: {dateUpdated || "Unknown"}
                 </Typography>
                 <div className={styles.buttonCodeContainer}>
                   {isEditing ? (
                     <>
                       <Button
-                        variant="outlined"
-                        color="secondary"
-                        className={styles.saveButton}
-                        onClick={() => {
-                          setEditedCode(codeText); 
-                          setIsEditing(false); 
+                        variant="contained"
+                        sx={{
+                          ...styledRectButton,
+                          ...whiteButtonGrayBorder,
+                          width: "120px",
                         }}
-                      >
-                        Cancel
+                        onClick={() => {
+                          setEditedCode(codeText);
+                          setIsEditing(false);
+                        }}>
+                        CANCEL
                       </Button>
                       <Button
-                        variant="outlined"
-                        color="secondary"
-                        className={styles.saveButton}
-                        onClick={handleCodeSave}
+                        variant="contained"
+                        sx={{
+                          ...styledRectButton,
+                          ...forestGreenButton,
+                          width: "120px",
+                          marginLeft: "30px",
+                        }}
+                        onClick={handleCodeSave} // Save the email when clicked
                       >
-                        Save
+                        SAVE
                       </Button>
                     </>
                   ) : (
                     <Button
-                      variant="outlined"
-                      color="secondary"
-                      className={styles.saveButton}
-                      onClick={() => {
-                        setEditedCode(codeText); 
-                        setIsEditing(true);
+                      variant="contained"
+                      sx={{
+                        ...styledRectButton,
+                        ...whiteButtonGrayBorder,
+                        width: "120px",
                       }}
-                    >
-                      Edit
+                      onClick={() => {
+                        setEditedCode(codeText);
+                        setIsEditing(true);
+                      }}>
+                      EDIT
                     </Button>
                   )}
                 </div>
               </div>
             )}
           </div>
-        </div>{" "}
+        </div>
         <Footer />
       </div>
     </>

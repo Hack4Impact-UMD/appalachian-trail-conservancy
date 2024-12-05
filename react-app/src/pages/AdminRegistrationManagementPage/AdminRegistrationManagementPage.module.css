@@ -62,20 +62,11 @@
   margin-top: 1.5rem;
 }
 .outerContainer {
-  overflow: visible; 
+  overflow: visible;
 }
 
 #quillEditor {
-  overflow: visible; 
-}
-
-.backButton,
-.saveButton {
-  width: 100px;
-  background-color: transparent !important;
-  color: black !important;
-  border: 2px solid black !important;
-  border-radius: 10px !important;
+  overflow: visible;
 }
 
 .bodyContainer {
@@ -84,15 +75,13 @@
   justify-content: space-between;
   width: 80%;
   margin-top: 1rem;
-  border-radius: 10px; 
-
+  border-radius: 10px;
 }
 
 .bodyLabel {
   font-weight: bold !important;
   color: black;
   border-radius: 10px;
-
 }
 
 #quillEditor {
@@ -102,22 +91,52 @@
   border-radius: 10px;
   margin-bottom: 1rem;
   background-color: #fff;
-  position: relative; 
-  overflow: hidden; 
-  padding-top: 40px; 
+  position: relative;
+  overflow: hidden;
+  padding-top: 40px;
 }
 .ql-toolbar {
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 10; 
-  width: 100%; 
+  z-index: 10;
+  width: 100%;
 }
 .ql-container {
   height: calc(100% - 40px);
   margin-top: 40px;
 }
 
+.buttonGroup {
+  gap: 0.5rem;
+  margin-top: 2rem;
+  width: 60%;
+}
+
+.buttonCodeContainer {
+  display: flex;
+  justify-content: flex-end;
+  width: 80%;
+  margin-top: 1.5rem;
+}
+
+@media screen and (min-width: 1500px) {
+  .content {
+    width: 1200px;
+  }
+}
+
+@media screen and (min-width: 1800px) {
+  .content {
+    width: 1400px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .content {
+    width: 600px;
+  }
+}
 
 @media screen and (max-width: 750px) {
   .content {
@@ -125,22 +144,14 @@
   }
 }
 
+@media screen and (max-width: 600px) {
+  .header {
+    margin-top: 5rem;
+  }
+}
+
 @media screen and (max-width: 450px) {
   .content {
     width: 300px;
   }
-}
-.buttonGroup {
-  gap: 0.5rem; 
-  margin-top: 2rem; 
-  width: 60%;
-  
-}
-
-.buttonCodeContainer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  width: 80%;
-  margin-top: 1.5rem;
 }
