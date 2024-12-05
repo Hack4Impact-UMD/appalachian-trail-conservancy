@@ -1,4 +1,4 @@
-.container {
+/* .container {
   width: calc(100% - 40px);
   max-width: 1200px;
   margin: 0 auto;
@@ -6,7 +6,7 @@
   background-color: white;
   border-radius: 10px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-}
+} */
 
 .blurb {
   margin-top: 10px;
@@ -30,20 +30,35 @@
 
 .header {
   display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
-  justify-content: flex-start;
-  width: 100%;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 .nameHeading {
-  margin-left: 5%;
-  margin-right: 5px; /* Space between title and arrow */
+  color: var(--forest-green);
+  font-size: 3rem;
+  margin: 0 2% 0 0;
 }
 
 .arrowButton {
-  background: transparent;
-  border: none;
-  font-size: 1.5rem;
+  font-size: 2rem;
   cursor: pointer;
   margin-right: auto;
+  display: flex;
+  align-items: center;
+  color: var(--blue-gray);
+}
+
+.blurb {
+  margin: 2% 0 2% 0;
+}
+
+.blurb h2 {
+  font-size: 1.8rem;
+  margin: 0 0 1rem 0;
+  color: var(--blue-gray);
 }

@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
-import TitleInfo from "./TitleInfo";
+import PathwayTile from "./PathwayTile/PathwayTile";
+import TitleInfo from "./TileInfo/TitleInfo";
 import styles from "./PathwayLandingPage.module.css";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
-import PathwayTile from "./PathwayTile";
+import hamburger from "../../assets/hamburger.svg";
+import Footer from "../../components/Footer/Footer";
+import { useParams, useLocation } from "react-router-dom";
 import { TrainingID } from "../../types/TrainingType";
 import { PathwayID } from "../../types/PathwayType";
 import { useAuth } from "../../auth/AuthProvider";
@@ -12,31 +14,13 @@ import {
   getTraining,
   getVolunteer,
 } from "../../backend/FirestoreCalls";
-import Loading from "../../components/LoadingScreen/Loading";
-
-const styledProgressShape = {
-  height: 24,
-  borderRadius: 12,
-  width: "100%",
-};
-
-// if score > 0, dark green & light gray
-const styledProgressPass = {
-  ...styledProgressShape,
-  backgroundColor: "lightgray",
-  "& .MuiLinearProgress-bar": {
-    backgroundColor: "var(--forest-green)",
-  },
-};
 
 function PathwayLandingPage() {
   const auth = useAuth();
   const pathwayId = useParams().id;
-  const navigate = useNavigate();
   const location = useLocation();
-  const [navigationBarOpen, setNavigationBarOpen] = useState(
-    !(window.innerWidth < 1200)
-  );
+  const [open, setOpen] = useState(!(window.innerWidth < 1200));
+  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
   const [divWidth, setDivWidth] = useState<number>(0);
   const [trainings, setTrainings] = useState<TrainingID[]>([]);
   const [numCompleted, setNumCompleted] = useState<number>(0);
@@ -121,11 +105,12 @@ function PathwayLandingPage() {
     // to handle page resize
     const getwidth = () => {
       if (div.current) setDivWidth(div.current.offsetWidth);
+      setScreenWidth(window.innerWidth);
     };
     window.addEventListener("resize", getwidth);
     // remove the event listener before the component gets unmounted
     return () => window.removeEventListener("resize", getwidth);
-  }, [navigationBarOpen]);
+  }, [open]);
 
   useEffect(() => {
     if (trainings.length) renderGrid(trainings);
@@ -181,10 +166,23 @@ function PathwayLandingPage() {
 
   return (
     <>
-      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <NavigationBar open={open} setOpen={setOpen} />
+
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        style={{
+          // Only apply left shift when screen width is greater than 1200px
+          left: open && screenWidth > 1200 ? "250px" : "0",
+        }}>
+        {!open && (
+          <img
+            src={hamburger}
+            alt="Hamburger Menu"
+            className={styles.hamburger} // Add styles to position it
+            width={30}
+            onClick={() => setOpen(true)} // Set sidebar open when clicked
+          />
+        )}
         <div className={styles.pageContainer}>
           <div className={styles.content} ref={div}>
             <TitleInfo title={pathway.name} description={pathway.shortBlurb} />
@@ -193,6 +191,7 @@ function PathwayLandingPage() {
             <div className={styles.pathwayTiles}>{elements}</div>
           </div>
         </div>
+        <Footer />
       </div>
     </>
   );

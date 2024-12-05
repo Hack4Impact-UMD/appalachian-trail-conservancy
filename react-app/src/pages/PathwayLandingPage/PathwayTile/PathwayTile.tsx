@@ -1,37 +1,36 @@
 import React from "react";
-import styles from "./PathwayTile.module.css";
-import emptyIcon from "../../assets/PathwayTiles/Empty.svg";
-import downEndIcon from "../../assets/PathwayTiles/DownEnd.svg";
-import downLeftIcon from "../../assets/PathwayTiles/DownLeft.svg";
-import downRightIcon from "../../assets/PathwayTiles/DownRight.svg";
-import horizontalIcon from "../../assets/PathwayTiles/Horizontal.svg";
-import leftDownIcon from "../../assets/PathwayTiles/LeftDown.svg";
-import leftEndIcon from "../../assets/PathwayTiles/LeftEnd.svg";
-import rightDownIcon from "../../assets/PathwayTiles/RightDown.svg";
-import rightEndIcon from "../../assets/PathwayTiles/RightEnd.svg";
-import verticalIcon from "../../assets/PathwayTiles/Vertical.svg";
-import PathwayTrainingPopup from "../../components/PathwayTrainingPopup/PathwayTrainingPopup";
+import emptyIcon from "../../../assets/PathwayTiles/Empty.svg";
+import downEndIcon from "../../../assets/PathwayTiles/DownEnd.svg";
+import downLeftIcon from "../../../assets/PathwayTiles/DownLeft.svg";
+import downRightIcon from "../../../assets/PathwayTiles/DownRight.svg";
+import horizontalIcon from "../../../assets/PathwayTiles/Horizontal.svg";
+import leftDownIcon from "../../../assets/PathwayTiles/LeftDown.svg";
+import leftEndIcon from "../../../assets/PathwayTiles/LeftEnd.svg";
+import rightDownIcon from "../../../assets/PathwayTiles/RightDown.svg";
+import rightEndIcon from "../../../assets/PathwayTiles/RightEnd.svg";
+import verticalIcon from "../../../assets/PathwayTiles/Vertical.svg";
+import PathwayTrainingPopup from "../../../components/PathwayTrainingPopup/PathwayTrainingPopup";
 
-import downLeftCompleted from "../../assets/PathwayTiles/CompletedTiles/DownLeftCompleted.svg";
-import downTrophy from "../../assets/PathwayTiles/CompletedTiles/DownTrophy.svg";
-import leftDownCompleted from "../../assets/PathwayTiles/CompletedTiles/LeftDownCompleted.svg";
-import rightDownCompleted from "../../assets/PathwayTiles/CompletedTiles/RightDownCompleted.svg";
-import verticalCompleted from "../../assets/PathwayTiles/CompletedTiles/VerticalCompleted.svg";
-import downRightCompleted from "../../assets/PathwayTiles/CompletedTiles/DownRightCompleted.svg";
-import leftCompleted from "../../assets/PathwayTiles/CompletedTiles/LeftCompleted.svg";
-import rightCompleted from "../../assets/PathwayTiles/CompletedTiles/RightCompleted.svg";
-import leftTrophy from "../../assets/PathwayTiles/CompletedTiles/LeftTrophy.svg";
-import rightTrophy from "../../assets/PathwayTiles/CompletedTiles/RightTrophy.svg";
+import downLeftCompleted from "../../../assets/PathwayTiles/CompletedTiles/DownLeftCompleted.svg";
+import downTrophy from "../../../assets/PathwayTiles/CompletedTiles/DownTrophy.svg";
+import leftDownCompleted from "../../../assets/PathwayTiles/CompletedTiles/LeftDownCompleted.svg";
+import rightDownCompleted from "../../../assets/PathwayTiles/CompletedTiles/RightDownCompleted.svg";
+import verticalCompleted from "../../../assets/PathwayTiles/CompletedTiles/VerticalCompleted.svg";
+import downRightCompleted from "../../../assets/PathwayTiles/CompletedTiles/DownRightCompleted.svg";
+import leftCompleted from "../../../assets/PathwayTiles/CompletedTiles/LeftCompleted.svg";
+import rightCompleted from "../../../assets/PathwayTiles/CompletedTiles/RightCompleted.svg";
+import leftTrophy from "../../../assets/PathwayTiles/CompletedTiles/LeftTrophy.svg";
+import rightTrophy from "../../../assets/PathwayTiles/CompletedTiles/RightTrophy.svg";
 
-import downLeftInter from "../../assets/PathwayTiles/IntermediateTiles/DownLeftInter.svg";
-import downRightInter from "../../assets/PathwayTiles/IntermediateTiles/DownRightInter.svg";
-import leftInter from "../../assets/PathwayTiles/IntermediateTiles/LeftInter.svg";
-import rightInter from "../../assets/PathwayTiles/IntermediateTiles/RightInter.svg";
-import leftDownInter from "../../assets/PathwayTiles/IntermediateTiles/LeftDownInter.svg";
-import rightDownInter from "../../assets/PathwayTiles/IntermediateTiles/RightDownInter.svg";
-import verticalInter from "../../assets/PathwayTiles/IntermediateTiles/VerticalInter.svg";
+import downLeftInter from "../../../assets/PathwayTiles/IntermediateTiles/DownLeftInter.svg";
+import downRightInter from "../../../assets/PathwayTiles/IntermediateTiles/DownRightInter.svg";
+import leftInter from "../../../assets/PathwayTiles/IntermediateTiles/LeftInter.svg";
+import rightInter from "../../../assets/PathwayTiles/IntermediateTiles/RightInter.svg";
+import leftDownInter from "../../../assets/PathwayTiles/IntermediateTiles/LeftDownInter.svg";
+import rightDownInter from "../../../assets/PathwayTiles/IntermediateTiles/RightDownInter.svg";
+import verticalInter from "../../../assets/PathwayTiles/IntermediateTiles/VerticalInter.svg";
 import { useState } from "react";
-import { TrainingID } from "../../types/TrainingType";
+import { TrainingID } from "../../../types/TrainingType";
 
 /*
 Cards are inconsistently labelled. For some cards, the directions indicate the 
