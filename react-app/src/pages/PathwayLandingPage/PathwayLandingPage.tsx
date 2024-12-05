@@ -48,7 +48,6 @@ const PathwayLandingPage: React.FC = () => {
         if (pathwayId !== undefined && !auth.loading && auth.id) {
           getPathway(pathwayId)
             .then(async (pathwayData) => {
-              console.log("ran first \n\n\n");
               setPathway(pathwayData);
               const trainingPromises = pathwayData.trainingIDs.map(getTraining);
               const fetchedTrainings = await Promise.all(trainingPromises);
@@ -61,13 +60,10 @@ const PathwayLandingPage: React.FC = () => {
       } else {
         // set pathway from location state
         if (location.state.pathway) {
-          console.log("ran second \n\n\n");
-          console.log(location.state.pathway);
           setPathway(location.state.pathway);
           const trainingPromises =
             location.state.pathway.trainingIDs.map(getTraining);
           const fetchedTrainings = await Promise.all(trainingPromises);  // I think it's breaking here
-          console.log(typeof(trainingPromises));
           setTrainings(fetchedTrainings);
         }
       }
@@ -80,18 +76,13 @@ const PathwayLandingPage: React.FC = () => {
       if (!auth.loading && auth.id && pathwayId !== undefined) {
         try {
           const volunteer = await getVolunteer(auth.id.toString());
-          const pathwayList = volunteer.pathwayInformation;
-    
-          // console.log(pathwayList);
-          // console.log(pathwayId);
-    
+          const pathwayList = volunteer.pathwayInformation;    
           const volunteerPathway = pathwayList.filter(
             (thePathway) => pathwayId === thePathway.pathwayID
           );
     
           if (volunteerPathway.length > 0) {
             const numTrainings = volunteerPathway[0].numTrainingsCompleted;
-            console.log("completed " + numTrainings);
             setNumCompleted(numTrainings);
           } else {
             setNumCompleted(0);
@@ -106,7 +97,6 @@ const PathwayLandingPage: React.FC = () => {
 
   }, [auth.loading, auth.id]);
 
-  //console.log("Width " + divWidth + "\nlength " + trainings.length);
   useEffect(() => {
     // when the component gets mounted
     if (div.current) setDivWidth(div.current.offsetWidth);
@@ -132,9 +122,6 @@ const PathwayLandingPage: React.FC = () => {
         ? 0
         : Math.ceil((trainings.length + 1) / imagesPerRow);
     let count = 0;
-    console.log(divWidth);
-    console.log(height);
-    console.log();
     let newElts = [];
 
     for (let i = 0; i < height; i++) {

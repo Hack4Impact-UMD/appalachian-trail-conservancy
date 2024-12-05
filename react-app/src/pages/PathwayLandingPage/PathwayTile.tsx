@@ -19,6 +19,7 @@ import rightDownCompleted from "../../assets/PathwayTiles/CompletedTiles/RightDo
 import verticalCompleted from "../../assets/PathwayTiles/CompletedTiles/VerticalCompleted.svg";
 import downRightCompleted from "../../assets/PathwayTiles/CompletedTiles/DownRightCompleted.svg";
 import leftCompleted from "../../assets/PathwayTiles/CompletedTiles/LeftCompleted.svg";
+import rightCompleted from "../../assets/PathwayTiles/CompletedTiles/RightCompleted.svg";
 import leftTrophy from "../../assets/PathwayTiles/CompletedTiles/LeftTrophy.svg";
 import rightTrophy from "../../assets/PathwayTiles/CompletedTiles/RightTrophy.svg";
 
@@ -31,6 +32,13 @@ import rightDownInter from "../../assets/PathwayTiles/IntermediateTiles/RightDow
 import verticalInter from "../../assets/PathwayTiles/IntermediateTiles/VerticalInter.svg";
 import { useState } from "react";
 import { TrainingID } from "../../types/TrainingType";
+
+/*
+Cards are inconsistently labelled. For some cards, the directions indicate the 
+footstep order while others don't. rightDownCompleted has the steps going:
+right, down
+while leftCompleted are going to the right?
+*/
 
 interface PathwayTileProps {
   tileNum: number; // index of the tile
@@ -45,21 +53,10 @@ interface PathwayTileProps {
 // count: total number of trainings in pathway
 // trainingsCompleted: the number of trainings in this pathway that have been finished
 function getImage(imagesPerRow: number, index: number, numTrainings: number, trainingsCompleted: number) {
-  console.log("card index " + index);
-  // console.log("num trainings " + numTrainings);
   // Empty
   if (index > numTrainings) return emptyIcon;
   // Straight down
   if (imagesPerRow === 1) {
-    // // Check if the current tile is finished
-    // if (index <= trainingsCompleted) {
-    //   // Check if all tiles have been finished
-    //   if (index + 1 == trainingsCompleted )
-
-    //   // Check if this is the msot recent tile to be finished
-    //   if (index )
-    // }
-
     // Check that the index has been completed
     if (index <= trainingsCompleted && trainingsCompleted != 0) {
       // Check if it is the final  one
@@ -69,92 +66,114 @@ function getImage(imagesPerRow: number, index: number, numTrainings: number, tra
       if (index + 1 === trainingsCompleted)
         return verticalInter;
       
-      // Otherwise it is done and the one behind it is to
-      return verticalCompleted;
+      // Check if it hasn't been completed
+      return index === trainingsCompleted ? verticalIcon : verticalCompleted;
     }
-
     return index === numTrainings ? downEndIcon : verticalIcon;
   }
   // Not reversed
   if (Math.floor(index / imagesPerRow) % 2 === 0) {
-    // Right-most card
+    // Right-most icon
     if ((index + 1) % imagesPerRow === 0) {
-      // Check if this has been completed yet
+      // Check if this has been completed or its an intermediate icon
       if (index <= trainingsCompleted && trainingsCompleted != 0) {
         // Check if this is the last one completed
         if (index === numTrainings)
           return rightTrophy;
-        //
+        // Check if this icon is the most recent completed
         if (index + 1 === trainingsCompleted) 
           return rightDownInter;
-
-        return rightDownCompleted;
+        
+        // Check if this should be a normal icon or completed
+        return index === trainingsCompleted ? rightDownIcon : rightDownCompleted;
       }
       return index === numTrainings ? leftEndIcon : rightDownIcon;
       // Left-most icon
     } else if (index % imagesPerRow === 0) {
-        //
+        // Check if either intermediate icon or completed icon
         if (index <= trainingsCompleted && trainingsCompleted != 0) {
-          //
+          // Check if this is the final one 
           if (index === numTrainings)
-            return leftTrophy;
-          //
-
+            // Check if it is going down or not
+            return index > 0 ? downTrophy : rightTrophy;
+          // Check if this icon is the first icon and whether it's an intermediate
           if (index === 0)
-            return index + 1 === numTrainings ? leftInter : leftCompleted;
-
+            return index + 1 === trainingsCompleted ? leftInter : leftCompleted;
+          // Check if this is an intermediate icon
           if (index + 1 === trainingsCompleted)
-            return leftDownInter;
+            return downRightInter;
           
-          return leftDownCompleted;
+          return index === trainingsCompleted ? downRightIcon : downRightCompleted;
         }
 
+      // Check if very first icon
       if (index === 0) {
         return horizontalIcon;
       } else {
-        // if (index < trainingsCompleted) {
-        // }
         return index === numTrainings ? downEndIcon : downRightIcon;
       }
     }
 
-    // Middle icons
-    if (index + 1 <= trainingsCompleted && trainingsCompleted != 0) {
-      return leftCompleted;
+    // Check for completeness for middle icons
+    if (index <= trainingsCompleted && trainingsCompleted != 0) {
+      // Check for trophy
+      if (index == numTrainings)
+        return rightTrophy;
+      // Check if its an intermediate card
+      if (index + 1 == trainingsCompleted)
+        return leftInter;
+      
+      return index === trainingsCompleted ? horizontalIcon : leftCompleted;
     }
 
+    // Incomplete middle icons
     return index == numTrainings ? leftEndIcon : horizontalIcon;
   }
   // Reversed
   else {
     // Left most icon
     if ((index + 1) % imagesPerRow == 0) {
+      // Check if icon should be intermediate or completed
       if (index <= trainingsCompleted && trainingsCompleted != 0) {
-        if (index ===numTrainings)
+        // Check if final icon
+        if (index === numTrainings)
           return leftTrophy;
-        
+        // Check if icon is intermediate
         if (index + 1 === trainingsCompleted)
           return leftDownInter;
 
-        return leftDownCompleted;
+        // Check if the icon is not started or already completed
+        return index == trainingsCompleted ? leftDownIcon : leftDownCompleted;
       }
+      // Not started yet
       return index === numTrainings ? rightEndIcon : leftDownIcon;
+      // Right most icon
     } else if (index % imagesPerRow === 0) {
+      // Check if icon should be intermediate or completed
       if (index <= trainingsCompleted && trainingsCompleted != 0) {
+        // Check if icon is final
         if (index === numTrainings)
-          return leftTrophy;
-
+          return downTrophy;
+        // Check if icon is an intermediate card
         if (index + 1 === trainingsCompleted)
           return downLeftInter;
 
-        return downLeftCompleted;
+        return index === trainingsCompleted ? downLeftIcon : downLeftCompleted;;
       }
 
       return index === numTrainings ? downEndIcon : downLeftIcon;
     }
 
-    if (index + 1 <= trainingsCompleted && trainingsCompleted != 0) {
-      return rightInter; // TODO: right completed goes here
+    // Middle icons
+    if (index <= trainingsCompleted && trainingsCompleted != 0) {
+      // Check for trophy
+      if (index == numTrainings)
+        return leftTrophy;
+      // Check if its an intermediate card
+      if (index + 1 == trainingsCompleted)
+        return rightInter;
+      
+      return index === trainingsCompleted ? horizontalIcon : rightCompleted;
     }
 
     return index === numTrainings ? rightEndIcon : horizontalIcon; 
@@ -173,7 +192,6 @@ const PathwayTile: React.FC<PathwayTileProps> = ({
 
   const imagesPerRow = Math.floor(width / imgWidth);
   const image = getImage(imagesPerRow, tileNum, numTrainings, trainingsCompleted);
-  //console.log(tileNum +"num")
 
   return (
     <>
