@@ -213,7 +213,7 @@ function App() {
               element={
                 <RequireAuth>
                   <VolunteerProfilePage />
-                </RequireAuth>
+                 </RequireAuth> 
               }
             />
             <Route
