@@ -22,7 +22,7 @@ import {
 } from "../../muiTheme";
 import { Unstable_NumberInput as NumberInput } from "@mui/base/Unstable_NumberInput";
 import AddIcon from "@mui/icons-material/Add";
-import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar";
 import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Hamburger from "../../assets/hamburger.svg";
@@ -150,7 +150,10 @@ function PathwayQuizEditorPage() {
 
   return (
     <>
-      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <AdminNavigationBar
+        open={navigationBarOpen}
+        setOpen={setNavigationBarOpen}
+      />
       <div
         className={`${styles.split} ${styles.right}`}
         style={{

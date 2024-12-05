@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styles from "./AdminTrainingEditor.module.css";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
@@ -6,9 +6,7 @@ import {
   Button,
   MenuItem,
   Select,
-  InputLabel,
   FormControl,
-  FormHelperText,
   Typography,
   Tooltip,
   Snackbar,
@@ -22,7 +20,7 @@ import {
   Resource,
   Status,
 } from "../../types/TrainingType";
-import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar";
 import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import { LuUpload } from "react-icons/lu";
@@ -221,7 +219,10 @@ const AdminTrainingEditor: React.FC = () => {
 
   return (
     <>
-      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <AdminNavigationBar
+        open={navigationBarOpen}
+        setOpen={setNavigationBarOpen}
+      />
 
       <div
         className={`${styles.split} ${styles.right}`}

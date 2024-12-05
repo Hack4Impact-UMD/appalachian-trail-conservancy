@@ -15,6 +15,11 @@
   flex-direction: column;
 }
 
+.popupOpen {
+  position:absolute;
+  z-index: -1;
+}
+
 .hamburger {
   color: var(--blue-gray);
   font-size: 1.5rem;
@@ -38,17 +43,6 @@
   padding-bottom: 3%;
 }
 
-.snackbarContainer {
-  position: fixed;
-  bottom: 16px; /* Adjust as needed */
-  right: 16px;
-  z-index: 1300; /* Make sure it's above other elements */
-  margin-left: 250px; /* Ensure it aligns when navbar is open */
-  width: calc(100% - 250px); /* Take up only right side when navbar is open */
-  display: flex;
-  justify-content: flex-end; /* Align to the right */
-}
-
 .header {
   display: flex;
   flex-wrap: wrap;
@@ -65,10 +59,22 @@
   margin: 0;
 }
 
-.buttonGroup {
+.queryContainer {
+  width: 100%;
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
+
+
+.buttonGroup {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  gap: 10%;
+}
+
 
 .searchBarContainer {
   margin-top: 2rem;
@@ -76,23 +82,36 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
-  gap: 2%;
-}
-
-.searchBar {
-  flex-grow: 1; /* Make the search bar take up all available space */
-  margin-right: 20px;
-  max-width: 50%;
+  width: 400%;
 }
 
 .innerGrid {
   height: 533px;
 }
 
-.dropdownContainer {
-  display: none;
-  flex-grow: 1;
+.label {
+  color: black;
+  font-weight: bold;
+  margin-bottom: 4px;
+  margin-top: 2rem;
+}
+
+.text {
+  color: var(--blue-gray);
+  margin-top: 0.3rem;
+}
+
+.buttonContainer{
+  display: flex;
+  justify-content: space-between;
+  padding-top: 2%;
+}
+
+.buttonContainerInner {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  width: 20%;
 }
 
 @media screen and (min-width: 1500px) {
@@ -117,28 +136,6 @@
   .content {
     width: 425px;
   }
-
-  .buttonGroup {
-    display: none;
-  }
-
-  .dropdownContainer {
-    display: flex;
-    width: 425px;
-  }
-
-  .dropdownMenu {
-    width: 425px;
-  }
-
-  .searchBar {
-    max-width: 100%;
-  }
-
-  .export {
-    display: flex;
-    width: 170px;
-  }
 }
 
 @media screen and (max-width: 600px) {
@@ -149,10 +146,6 @@
 
 @media screen and (max-width: 450px) {
   .content {
-    width: 300px;
-  }
-
-  .dropdownMenu {
     width: 300px;
   }
 }

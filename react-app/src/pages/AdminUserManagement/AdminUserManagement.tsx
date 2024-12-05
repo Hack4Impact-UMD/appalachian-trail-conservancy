@@ -12,8 +12,10 @@ import {
   MenuItem,
   FormControl,
   Select,
+  Snackbar,
+  Alert,
 } from "@mui/material";
-import { User } from "../../types/UserType.ts";
+import { VolunteerID } from "../../types/UserType.ts";
 import { TrainingID } from "../../types/TrainingType.ts";
 import { PathwayID } from "../../types/PathwayType.ts";
 import {
@@ -40,12 +42,14 @@ import hamburger from "../../assets/hamburger.svg";
 import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Footer from "../../components/Footer/Footer";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function AdminUserManagement() {
+  const navigate = useNavigate();
   const [alignment, setAlignment] = useState<string | null>("user");
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
-  const [usersData, setUsersData] = useState<User[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<VolunteerID[]>([]);
+  const [usersData, setUsersData] = useState<VolunteerID[]>([]);
   const [filteredTrainings, setFilteredTrainings] = useState<TrainingID[]>([]);
   const [trainingsData, setTrainingsData] = useState<TrainingID[]>([]);
   const [filteredPathways, setFilteredPathways] = useState<PathwayID[]>([]);
@@ -93,19 +97,25 @@ function AdminUserManagement() {
       });
     getAllTrainings()
       .then((trainings) => {
-        setTrainingsData(trainings);
-        setFilteredTrainings(trainings);
+        const undraftedTrainings = trainings.filter(
+          (training) => training.status !== "DRAFT"
+        );
+        setTrainingsData(undraftedTrainings);
+        setFilteredTrainings(undraftedTrainings);
       })
       .catch((error) => {
-        console.error("Error fetching users:", error);
+        console.error("Error fetching trainings:", error);
       });
     getAllPathways()
       .then((pathways) => {
-        setPathwaysData(pathways);
-        setFilteredPathways(pathways);
+        const undraftedPathways = pathways.filter(
+          (pathawy) => pathawy.status !== "DRAFT"
+        );
+        setPathwaysData(undraftedPathways);
+        setFilteredPathways(undraftedPathways);
       })
       .catch((error) => {
-        console.error("Error fetching users:", error);
+        console.error("Error fetching pathways:", error);
       });
   }, []);
 
@@ -246,6 +256,18 @@ function AdminUserManagement() {
     setSelectionModel([]);
   }, [alignment]);
 
+  //Delete user snackbar
+  const location = useLocation();
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  useEffect(() => {
+    if (location.state?.showSnackbar) {
+      setOpenSnackbar(true);
+    }
+  }, [location.state]);
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
+
   return (
     <>
       <AdminNavigationBar
@@ -353,8 +375,10 @@ function AdminUserManagement() {
                         ColumnUnsortedIcon: TbArrowsSort,
                         ColumnMenu: CustomColumnMenu,
                       }}
-                      onRowClick={(row) => {}}
-                      getRowId={(row) => row.auth_id} // Use auth_id as the unique ID for each row
+                      onRowClick={(row) => {
+                        navigate(`/management/volunteer/${row.id}`);
+                      }}
+                      getRowId={(row) => row.id} // Use id as the unique ID for each row
                       selectionModel={selectionModel} // Controlled selection model
                       onSelectionModelChange={(newSelection) =>
                         setSelectionModel(newSelection)
@@ -402,7 +426,9 @@ function AdminUserManagement() {
                         ColumnUnsortedIcon: TbArrowsSort,
                         ColumnMenu: CustomColumnMenu,
                       }}
-                      onRowClick={(row) => {}}
+                      onRowClick={(row) => {
+                        navigate(`/management/training/${row.id}`);
+                      }}
                       selectionModel={selectionModel} // Controlled selection model
                       onSelectionModelChange={(newSelection) =>
                         setSelectionModel(newSelection)
@@ -449,7 +475,9 @@ function AdminUserManagement() {
                         ColumnUnsortedIcon: TbArrowsSort,
                         ColumnMenu: CustomColumnMenu,
                       }}
-                      onRowClick={(row) => {}}
+                      onRowClick={(row) => {
+                        navigate(`/management/pathway/${row.id}`);
+                      }}
                       selectionModel={selectionModel} // Controlled selection model
                       onSelectionModelChange={(newSelection) =>
                         setSelectionModel(newSelection)
@@ -458,6 +486,18 @@ function AdminUserManagement() {
                   </div>
                 </>
               )}
+            </div>
+            <div className={styles.snackbarContainer}>
+              <Snackbar
+                open={openSnackbar}
+                autoHideDuration={6000}
+                onClose={handleCloseSnackbar}
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }} // Position within the right section
+              >
+                <Alert onClose={handleCloseSnackbar} severity="success">
+                  {"Volunteer successfully deleted."}
+                </Alert>
+              </Snackbar>
             </div>
           </div>
         </div>

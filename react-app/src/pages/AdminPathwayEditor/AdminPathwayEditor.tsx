@@ -10,7 +10,7 @@ import {
   Autocomplete,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar";
 import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import { LuUpload } from "react-icons/lu";
@@ -122,7 +122,10 @@ const AdminPathwayEditor: React.FC = () => {
 
   return (
     <>
-      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <AdminNavigationBar
+        open={navigationBarOpen}
+        setOpen={setNavigationBarOpen}
+      />
 
       <div
         className={`${styles.split} ${styles.right}`}

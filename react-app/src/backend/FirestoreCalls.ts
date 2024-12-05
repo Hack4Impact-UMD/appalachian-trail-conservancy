@@ -22,20 +22,23 @@ import {
 import { Training, TrainingID, Quiz } from "../types/TrainingType";
 import { Pathway, PathwayID } from "../types/PathwayType";
 
-export function getVolunteers(): Promise<User[]> {
+export function getVolunteers(): Promise<VolunteerID[]> {
   const collectionName = "Users";
   const collectionRef = collection(db, collectionName);
 
   return new Promise((resolve, reject) => {
     getDocs(collectionRef)
-      .then((snapshot) => {
-        const allDocuments: User[] = snapshot.docs
-          .map((doc) => {
-            const document = doc.data();
-            return { ...document, auth_id: doc.id } as User;
-          })
-          .filter((user) => user.type === "VOLUNTEER"); // Filter for VOLUNTEER users only
-        resolve(allDocuments);
+      .then((userSnapshot) => {
+        const allVolunteers: VolunteerID[] = [];
+        const users = userSnapshot.docs.map((doc) => {
+          const user = doc.data();
+          if (user.type === "VOLUNTEER") {
+            const newVolunteer = { ...user, id: doc.id } as VolunteerID;
+            allVolunteers.push(newVolunteer);
+          }
+        });
+        // .filter((user) => user.type === "VOLUNTEER"); // Filter for VOLUNTEER users only
+        resolve(allVolunteers);
       })
       .catch((error) => {
         reject(error);
@@ -98,7 +101,7 @@ export function addTraining(training: Training): Promise<string> {
         .then(async (docRef) => {
           const trainingId = docRef.id;
 
-          resolve(trainingId)
+          resolve(trainingId);
 
           // get pathways associated with training
           const pathwayPromises = [];
@@ -585,6 +588,18 @@ export function addVolunteerPathway(
         } else {
           reject(new Error("Volunteer does not exist"));
         }
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+}
+
+export function deleteUser(id: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    deleteDoc(doc(db, "Users", id))
+      .then(() => {
+        resolve();
       })
       .catch((e) => {
         reject(e);
