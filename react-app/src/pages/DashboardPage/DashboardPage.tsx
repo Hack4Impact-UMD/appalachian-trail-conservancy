@@ -243,8 +243,7 @@ function Dashboard() {
         style={{
           // Only apply left shift when screen width is greater than 1200px
           left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-        }}
-      >
+        }}>
         {!navigationBarOpen && (
           <img
             src={hamburger}
@@ -274,8 +273,7 @@ function Dashboard() {
                       <Link to="/trainings">
                         <Button
                           sx={forestGreenButtonPadding}
-                          variant="contained"
-                        >
+                          variant="contained">
                           GO TO TRAINING LIBRARY
                         </Button>
                       </Link>
@@ -341,7 +339,7 @@ function Dashboard() {
                       {pathwaysCompleted.slice(0, 4).map((pathway, index) => (
                         <div className={styles.card} key={index}>
                           <Badge
-                            image={pathway.genericPathway.badgeImage}
+                            image={pathway.genericPathway.coverImage}
                             title={pathway.genericPathway.name}
                             date={pathway.volunteerPathway!.dateCompleted}
                           />
@@ -364,7 +362,7 @@ function Dashboard() {
                       {trainingsCompleted.slice(0, 4).map((training, index) => (
                         <div className={styles.card} key={index}>
                           <Certificate
-                            image={training.genericTraining.certificationImage}
+                            image={training.genericTraining.coverImage}
                             title={training.genericTraining.name}
                             date={training.volunteerTraining!.dateCompleted}
                           />
