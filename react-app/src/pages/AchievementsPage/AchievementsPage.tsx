@@ -209,8 +209,7 @@ function AchievementsPage() {
         style={{
           // Only apply left shift when screen width is greater than 1200px
           left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-        }}
-      >
+        }}>
         {!navigationBarOpen && (
           <img
             src={hamburger}
@@ -240,8 +239,7 @@ function AchievementsPage() {
                       ? forestGreenButtonPadding
                       : whiteButtonGrayBorder
                   }
-                  variant="contained"
-                >
+                  variant="contained">
                   Pathway Badges
                 </Button>
                 <Button
@@ -256,8 +254,7 @@ function AchievementsPage() {
                       ? forestGreenButtonPadding
                       : whiteButtonGrayBorder
                   }
-                  variant="contained"
-                >
+                  variant="contained">
                   Training Certificates
                 </Button>
               </div>
@@ -269,8 +266,7 @@ function AchievementsPage() {
                   sx={{
                     ...whiteSelectGrayBorder,
                     width: "100%",
-                  }}
-                >
+                  }}>
                   <MenuItem value={"newest"} sx={selectOptionStyle}>
                     SORT: NEWEST
                   </MenuItem>
@@ -282,8 +278,7 @@ function AchievementsPage() {
                   </MenuItem>
                   <MenuItem
                     value={"reverseAlphabetically"}
-                    sx={selectOptionStyle}
-                  >
+                    sx={selectOptionStyle}>
                     SORT: Z-A
                   </MenuItem>
                 </Select>
@@ -305,8 +300,7 @@ function AchievementsPage() {
                                 navigate("/pathways");
                               }}
                               sx={forestGreenButtonPadding}
-                              variant="contained"
-                            >
+                              variant="contained">
                               Go to Pathways Library
                             </Button>
                           </div>
@@ -320,7 +314,7 @@ function AchievementsPage() {
                         <Badge
                           title={pathway.genericPathway.name}
                           date={pathway.volunteerPathway.dateCompleted}
-                          image={pathway.genericPathway.badgeImage}
+                          image={pathway.genericPathway.coverImage}
                           key={index}
                         />
                       ))}
@@ -338,8 +332,7 @@ function AchievementsPage() {
                                 navigate("/trainings");
                               }}
                               sx={forestGreenButtonPadding}
-                              variant="contained"
-                            >
+                              variant="contained">
                               Go to Trainings Library
                             </Button>
                           </div>
