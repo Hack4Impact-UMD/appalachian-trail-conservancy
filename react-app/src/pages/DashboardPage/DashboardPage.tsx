@@ -196,6 +196,7 @@ function Dashboard() {
               );
               const recommendedTrainings = allTrainings.filter(
                 (training) =>
+                  training.status === "PUBLISHED" &&
                   !userCompletedTrainings.includes(training.id) &&
                   !userInProgressTrainings.includes(training.id)
               );
@@ -209,6 +210,7 @@ function Dashboard() {
               );
               const recommendedPathways = allPathways.filter(
                 (pathway) =>
+                  pathway.status === "PUBLISHED" &&
                   !userCompletedPathways.includes(pathway.id) &&
                   !userInProgressPathways.includes(pathway.id)
               );
@@ -337,7 +339,7 @@ function Dashboard() {
                       {pathwaysCompleted.slice(0, 4).map((pathway, index) => (
                         <div className={styles.card} key={index}>
                           <Badge
-                            image={pathway.genericPathway.badgeImage}
+                            image={pathway.genericPathway.coverImage}
                             title={pathway.genericPathway.name}
                             date={pathway.volunteerPathway!.dateCompleted}
                           />
@@ -360,7 +362,7 @@ function Dashboard() {
                       {trainingsCompleted.slice(0, 4).map((training, index) => (
                         <div className={styles.card} key={index}>
                           <Certificate
-                            image={training.genericTraining.certificationImage}
+                            image={training.genericTraining.coverImage}
                             title={training.genericTraining.name}
                             date={training.volunteerTraining!.dateCompleted}
                           />

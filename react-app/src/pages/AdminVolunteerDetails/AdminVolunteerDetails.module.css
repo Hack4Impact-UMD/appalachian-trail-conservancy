@@ -1,4 +1,3 @@
-/* split screen in two */
 .split {
   height: 100%;
   position: fixed;
@@ -16,31 +15,9 @@
   flex-direction: column;
 }
 
-.pageContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.content {
-  width: 875px;
-  margin-bottom: 3%;
-}
-
-.header {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-}
-
-.nameHeading {
-  color: var(--forest-green);
-  font-size: 3rem;
-  margin: 0;
+.popupOpen {
+  position:absolute;
+  z-index: -1;
 }
 
 .hamburger {
@@ -55,10 +32,86 @@
   cursor: pointer;
 }
 
-.pathwayTiles {
+.outerContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.content {
+  width: 875px;
+  padding-bottom: 3%;
+}
+
+.header {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.nameHeading {
+  color: var(--blue-gray);
+  font-size: 3rem;
+  margin: 0;
+}
+
+.queryContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.buttonGroup {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  gap: 10%;
+}
+
+
+.searchBarContainer {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 400%;
+}
+
+.innerGrid {
+  height: 533px;
+}
+
+.label {
+  color: black;
+  font-weight: bold;
+  margin-bottom: 4px;
+  margin-top: 2rem;
+}
+
+.text {
+  color: var(--blue-gray);
+  margin-top: 0.3rem;
+}
+
+.buttonContainer{
+  display: flex;
+  justify-content: space-between;
+  padding-top: 2%;
+}
+
+.buttonContainerInner {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  width: 20%;
 }
 
 @media screen and (min-width: 1500px) {
