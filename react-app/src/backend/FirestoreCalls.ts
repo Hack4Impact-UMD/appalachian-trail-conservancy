@@ -212,11 +212,17 @@ export function getQuiz(trainingId: string): Promise<Quiz> {
 export function validateQuiz(
   trainingId: string,
   volunteerId: string,
-  volunteerAnswers: string[]
+  volunteerAnswers: string[],
+  timeCompleted: string
 ): Promise<any> {
   return new Promise((resolve, reject) => {
     const validateQuizResults = httpsCallable(functions, "validateQuizResults");
-    validateQuizResults({ trainingId, volunteerId, volunteerAnswers })
+    validateQuizResults({
+      trainingId,
+      volunteerId,
+      volunteerAnswers,
+      timeCompleted,
+    })
       .then((numAnswersCorrect) => {
         resolve(numAnswersCorrect);
       })
