@@ -8,6 +8,7 @@ import {
   IconButton,
   TextField,
   Typography,
+  OutlinedInput
 } from "@mui/material";
 import { ContentCopy as ContentCopyIcon } from "@mui/icons-material";
 import Footer from "../../components/Footer/Footer.tsx";
@@ -57,7 +58,6 @@ function AdminRegistrationManagementPage() {
 
   useEffect(() => {
     if (editorContainerRef.current && !quillRef.current) {
-      console.log("Initializing Quill editor");
       quillRef.current = new Quill(editorContainerRef.current, {
         theme: "snow",
         modules: {
@@ -67,11 +67,10 @@ function AdminRegistrationManagementPage() {
 
       quillRef.current.on("text-change", () => {
         const editorContent = quillRef.current!.root.innerHTML;
-        console.log("Editor content changed:", editorContent);
         setBody(editorContent);
       });
     }
-  }, []);
+  }, [alignment]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -83,14 +82,17 @@ function AdminRegistrationManagementPage() {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
   const handleAlignment = (
     event: React.MouseEvent<HTMLElement>,
     newAlignment: string | null
   ) => {
     if (newAlignment !== null) {
       setAlignment(newAlignment);
+      quillRef.current = null;
     }
   };
+
   const handleSave = () => {
     const todayDate = new Date().toISOString().split("T")[0];
 
@@ -196,7 +198,6 @@ function AdminRegistrationManagementPage() {
                     <PurpleToggleButton
                       value="user"
                       sx={{
-                        // padding: "0.75rem 1rem",
                         minWidth: "100px",
                       }}>
                       EDIT NEW USER EMAIL
@@ -224,23 +225,20 @@ function AdminRegistrationManagementPage() {
                         }}>
                         SUBJECT
                       </Typography>
-                      <TextField
+                      <OutlinedInput
                         value={subject}
                         sx={{
                           fontSize: "1.1rem",
                           borderRadius: "10px",
                           marginTop: "0.3rem",
                           height: "3.2rem",
-                          border: "1px solid var(--blue-gray)",
+                          border: "2px solid var(--blue-gray)",
                           "& fieldset": {
                             border: "none",
                           },
                         }}
                         onChange={(e) => setSubject(e.target.value)}
-                        error={Boolean(errors.subject)}
-                        helperText={errors.subject}
-                        fullWidth
-                        margin="normal"
+                        error={true}
                       />
                       <div className={styles.bodyContainer}>
                         <Typography variant="body2" className={styles.bodyLabel}>
@@ -250,11 +248,12 @@ function AdminRegistrationManagementPage() {
                       {/* Quill Editor Container */}
                       <div
                         style={{
-                          border: "1px solid black",
+                          border: "2px solid var(--blue-gray)",
+                          borderRadius: "10px",
                         }}>
                         <div
                           ref={editorContainerRef}
-                          id="quillEditor"
+                          id={styles.quillEditor}
                           style={{
                             height: "300px",
                           }}></div>
@@ -300,7 +299,7 @@ function AdminRegistrationManagementPage() {
                           borderRadius: "10px",
                           marginTop: "0.3rem",
                           height: "3.2rem",
-                          border: "1px solid var(--blue-gray)",
+                          border: "2px solid var(--blue-gray)",
                           "& fieldset": {
                             border: "none",
                           },
@@ -311,7 +310,7 @@ function AdminRegistrationManagementPage() {
                             <Tooltip title={copied ? "Copied!" : "Copy"}>
                               <IconButton
                                 onClick={handleCopy}
-                                sx={{ color: "black" }}>
+                                sx={{ color: "var(--blue-gray)" }}>
                                 <ContentCopyIcon />
                               </IconButton>
                             </Tooltip>
@@ -325,7 +324,7 @@ function AdminRegistrationManagementPage() {
                           display: "block",
                           textAlign: "right",
                           marginTop: "1.5rem",
-                          color: "gray",
+                          color: "var(--blue-gray)",
                           alignSelf: "flex-end",
                           width: "80%",
                           gap: "1rem",
