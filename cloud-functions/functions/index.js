@@ -625,7 +625,7 @@ exports.validateQuizResults = onCall(
   { region: "us-east4", cors: true },
   async ({ auth, data }) => {
     return new Promise(async (resolve, reject) => {
-      const { trainingId, volunteerAnswers, volunteerId } = data;
+      const { trainingId, volunteerAnswers, volunteerId, timeCompleted } = data;
       if (
         // Validate auth
         auth &&
@@ -634,7 +634,8 @@ exports.validateQuizResults = onCall(
         // Validate parameters here
         trainingId &&
         volunteerAnswers &&
-        volunteerId
+        volunteerId &&
+        timeCompleted
       ) {
         await db
           .collection("Trainings")
@@ -684,9 +685,7 @@ exports.validateQuizResults = onCall(
                   ) {
                     // Update volunteerTraining if quiz score does not exist or higher score is recieved
                     volunteerTrainingInfo.quizScoreRecieved = numAnswersCorrect;
-                    volunteerTrainingInfo.dateCompleted = new Date()
-                      .toISOString()
-                      .slice(0, 10);
+                    volunteerTrainingInfo.dateCompleted = timeCompleted;
                     volunteerTrainingInfo.progress =
                       numAnswersCorrect >= quiz.passingScore
                         ? "COMPLETED"
