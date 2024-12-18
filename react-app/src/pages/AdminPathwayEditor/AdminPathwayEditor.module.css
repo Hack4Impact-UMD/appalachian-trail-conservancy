@@ -1,40 +1,41 @@
-html,
-body {
+.split {
   height: 100%;
-  margin: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  transition: left 0.3s ease; /* Add transition for smooth animation */
 }
+
+.right {
+  right: 0;
+  left: 250px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 .container {
   display: flex;
-  height: 100vh;
-}
-
-.navbar {
-  width: 250px;
-  background-color: #2e3b4e;
-}
-
-.editorHeader {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-}
-
-.editorProfileHeader {
-  display: flex;
+  flex-direction: column;
   align-items: center;
 }
 
-.adminText {
-  margin-right: 1rem;
+.content {
+  width: 875px;
+  padding-bottom: 3%;
 }
 
-.editor {
-  flex-grow: 1;
-  background-color: #fafafa;
-  overflow-y: auto;
+.hamburger {
+  color: var(--blue-gray);
+  font-size: 1.5rem;
+  margin: 1.5rem;
+  position: absolute;
+  top: 20px;
+  left: 10px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
 }
 
 .header {
@@ -60,14 +61,16 @@ body {
 }
 
 .searchBarNumber {
-  margin-right: 3%;
+  width: 0.5%;
+  margin-left: -3.5%;
+  padding-right: 3%;
   font-weight: bold;
   margin-top: 0px;
   margin-bottom: 0px;
 }
 
 .searchBarX {
-  margin-left: 3%;
+  margin-left: 2.1%;
   align-items: center;
   margin-top: 0px;
   margin-bottom: 0px;
@@ -91,16 +94,10 @@ body {
   vertical-align: middle;
 }
 
-.editorContent {
-  flex-grow: 1;
-  background-color: #fafafa;
-  overflow-y: auto;
-  margin-left: 2rem;
-  margin-bottom: 2rem;
-  margin-top: 2rem;
-  margin-right: 2rem;
-  padding-left: 3.5%;
-  padding-right: 3.5%;
+.inputBoxHeader {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
 }
 
 .textFieldLabel {
@@ -163,7 +160,50 @@ body {
   border-radius: 10px !important;
 }
 
-.headerText {
-  color: #2e3b4e;
-  font-size: 2rem;
+@media screen and (min-width: 1500px) {
+  .content {
+    width: 1200px;
+  }
+
+  .cardsContainer {
+    column-gap: 2rem;
+  }
+}
+
+@media screen and (min-width: 1800px) {
+  .content {
+    width: 1400px;
+  }
+
+  .cardsContainer {
+    column-gap: 6.25rem;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .content {
+    width: 600px;
+  }
+
+  .cardsContainer {
+    justify-content: space-between;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .content {
+    width: 425px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .header {
+    margin-top: 5rem;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .content {
+    width: 300px;
+  }
 }

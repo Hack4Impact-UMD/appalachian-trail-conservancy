@@ -49,9 +49,8 @@ const AdminNavigationBar: React.FC<AdminNavigationBarProps> = ({
 
   return (
     <div
-      className={`${styles.navigationContainer} ${open ? "" : styles.closed} ${
-        openLogoutPopup ? styles.popupOpen : ""
-      }`}>
+      className={`${styles.navigationContainer} ${open ? "" : styles.closed} ${openLogoutPopup ? styles.popupOpen : ""
+        }`}>
       {open ? (
         <>
           <div className={styles.logoContainer}>
@@ -149,7 +148,7 @@ const AdminNavigationBar: React.FC<AdminNavigationBarProps> = ({
 
                 <div className={styles.tabContainer}>
                   <NavLink
-                    to="/data"
+                    to="/management"
                     className={({ isActive }) =>
                       isActive
                         ? `${styles.tab} ${styles.tabActive}`

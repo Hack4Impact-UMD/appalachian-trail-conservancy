@@ -35,6 +35,9 @@ import AdminTrainingLibrary from "./pages/AdminTrainingLibraryPage/AdminTraining
 import AdminPathwayLibrary from "./pages/AdminPathwayLibraryPage/AdminPathwayLibraryPage.tsx";
 import AdminRegistrationManagementPage from "./pages/AdminRegistrationManagementPage/AdminRegistrationManagementPage.tsx";
 import AdminUserManagement from "./pages/AdminUserManagement/AdminUserManagement.tsx";
+import AdminVolunteerDetails from "./pages/AdminVolunteerDetails/AdminVolunteerDetails.tsx";
+import AdminPathwayDetails from "./pages/AdminPathwayDetails/AdminPathwayDetails.tsx";
+import AdminTrainingDetails from "./pages/AdminTrainingDetails/AdminTrainingDetails.tsx";
 
 interface RoleBasedRouteProps {
   adminComponent: JSX.Element;
@@ -201,10 +204,34 @@ function App() {
               }
             />
             <Route
-              path="/data"
+              path="/management"
               element={
                 <RequireAdminAuth>
                   <AdminUserManagement />
+                </RequireAdminAuth>
+              }
+            />
+            <Route
+              path="/management/volunteer/:id"
+              element={
+                <RequireAdminAuth>
+                  <AdminVolunteerDetails />
+                </RequireAdminAuth>
+              }
+            />
+            <Route
+              path="/management/pathway/:id"
+              element={
+                <RequireAdminAuth>
+                  <AdminPathwayDetails />
+                </RequireAdminAuth>
+              }
+            />
+            <Route
+              path="/management/training/:id"
+              element={
+                <RequireAdminAuth>
+                  <AdminTrainingDetails />
                 </RequireAdminAuth>
               }
             />
@@ -228,7 +255,7 @@ function App() {
               path="/testfunctions"
               element={
                 <RequireAuth>
-                  <button onClick={async () => {}}>TEST</button>
+                  <button onClick={async () => { }}>TEST</button>
                 </RequireAuth>
               }
             />
