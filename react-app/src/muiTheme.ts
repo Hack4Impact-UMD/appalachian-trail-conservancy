@@ -323,6 +323,7 @@ export const CustomToggleButtonGroup = styled(ToggleButtonGroup)({
   borderRadius: "15px", // Rounded corners
   border: "2px solid black",
   overflow: "hidden", // Ensures rounded corners display correctly
+  marginTop: "2%",
 });
 
 // toggle button group
