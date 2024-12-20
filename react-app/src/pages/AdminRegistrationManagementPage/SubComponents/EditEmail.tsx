@@ -2,7 +2,13 @@ import { useState, useEffect, useRef } from "react";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 import Loading from "../../../components/LoadingScreen/Loading.tsx";
-import { Typography, OutlinedInput, Button } from "@mui/material";
+import {
+  Typography,
+  OutlinedInput,
+  Button,
+  Snackbar,
+  Alert,
+} from "@mui/material";
 import styles from "./SubComponent.module.css";
 import { styledRectButton, forestGreenButton } from "../../../muiTheme.ts";
 import { EmailType } from "../../../types/AssetsType.ts";
@@ -18,6 +24,16 @@ interface EditEmailProps {
 
 function EditEmail({ tab, quillRef }: EditEmailProps) {
   const [loading, setLoading] = useState<boolean>(false);
+
+  const [snackbar, setSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+
+  const [prevEmail, setPrevEmail] = useState<EmailType>({
+    subject: "",
+    body: "",
+    dateUpdated: "",
+    type: "EMAIL",
+  });
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
 
@@ -27,6 +43,7 @@ function EditEmail({ tab, quillRef }: EditEmailProps) {
     getRegistrationEmail()
       .then((email) => {
         setSubject(email.subject);
+        setPrevEmail(email);
         setLoading(false);
         if (editorContainerRef.current && !quillRef.current) {
           quillRef.current = new Quill(editorContainerRef.current, {
@@ -62,12 +79,21 @@ function EditEmail({ tab, quillRef }: EditEmailProps) {
 
     updateRegistrationEmail(email)
       .then(() => {
-        // TODO: ADD SNACKBAR
-        console.log("Email updated successfully!");
+        //update prev email
+        setPrevEmail(email);
+
+        setSnackbarMessage("Email updated successfully");
       })
       .catch((error) => {
-        // TODO: ADD SNACKBAR
-        console.error("Error updating email:", error);
+        // revert subject and body back to prev email
+        quillRef.current!.root.innerHTML = prevEmail.body;
+        setBody(prevEmail.body);
+        setSubject(prevEmail.subject);
+
+        setSnackbarMessage("Email failed to update");
+      })
+      .finally(() => {
+        setSnackbar(true);
       });
   };
 
@@ -128,6 +154,24 @@ function EditEmail({ tab, quillRef }: EditEmailProps) {
             >
               SAVE
             </Button>
+          </div>
+          {/* Snackbar wrapper container */}
+          <div className={styles.snackbarContainer}>
+            <Snackbar
+              open={snackbar}
+              autoHideDuration={6000}
+              onClose={() => setSnackbar(false)}
+              anchorOrigin={{ vertical: "bottom", horizontal: "right" }} // Position within the right section
+            >
+              <Alert
+                onClose={() => setSnackbar(false)}
+                severity={
+                  snackbarMessage.includes("successfully") ? "success" : "error"
+                }
+              >
+                {snackbarMessage}
+              </Alert>
+            </Snackbar>
           </div>
         </div>
       )}
