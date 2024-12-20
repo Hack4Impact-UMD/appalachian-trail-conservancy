@@ -48,24 +48,62 @@
   margin-bottom: 2rem;
 }
 
+.headerText {
+  color: var(--blue-gray);
+  font-size: 3rem;
+  margin: 0;
+  max-width: 90%;
+  white-space: normal;
+}
+
 .inputBoxHeader {
   display: flex;
   justify-content: space-between;
   width: 80%;
 }
 
+.quillContainer {
+  border: 2px solid var(--blue-gray);
+  border-radius: 10px;
+  width: 80%;
+}
+
+.inputError {
+  border: 2px solid #d32f2f;
+  border-radius: 10px;
+  width: 80%;
+}
+
 .uploadSection {
   margin-top: 2rem;
   display: flex;
-  justify-content: flex-start;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
-.uploadSection button {
-  background-color: #49a772;
-  color: white;
-  padding: 0.5rem 1rem;
-  text-transform: none;
+.uploadResourceHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.iconCenter {
+  display: flex;
+  align-items: center;
+  color: var(--blue-gray);
+}
+
+.flexRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 80.5%;
+}
+
+.resourceHeadersBox {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
 }
 
 .addTrainingContainer {
@@ -95,26 +133,6 @@
   color: black !important;
   border: 2px solid black !important;
   border-radius: 10px !important;
-}
-
-.resourceHeadersBox {
-  display: flex;
-  justify-content: space-between;
-  width: 80%;
-}
-
-.headerText {
-  color: var(--blue-gray);
-  font-size: 3rem;
-  margin: 0;
-  max-width: 90%;
-  white-space: normal;
-}
-
-.flexRow {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
 }
 
 .snackbarContainer {

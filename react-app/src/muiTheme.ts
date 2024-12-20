@@ -210,6 +210,20 @@ export const grayGreenRadioButton = {
   },
 };
 
+// input header text
+export const inputHeaderText = {
+  color: "var(--blue-gray)",
+  fontWeight: "bold",
+};
+
+// input helper text
+export const inputHelperText = {
+  color: "var(--blue-gray)",
+  fontWeight: "500",
+  marginTop: "2rem",
+  fontSize: "0.8rem",
+};
+
 // number input
 export const numberInputRoot = styled("div")(() => ({
   borderRadius: "4px",

@@ -22,6 +22,7 @@
 .ql-toolbar.ql-snow,
 .ql-container.ql-snow {
   border: none !important;
+  font-size: 1.1rem;
 }
 
 .ql-toolbar.ql-snow {
