@@ -145,12 +145,12 @@ function VolunteerProfilePage() {
                 </div>
                 <div className={styles.profileItem}>
                   <OutlinedInput
-                    value={ volunteerCopy ? volunteerCopy.email : ""} // Optional: Set a default value
-                    disabled // Disables editing
+                    value={ volunteerCopy ? volunteerCopy.email : ""} 
+                    disabled 
                     sx={{
-                      ...grayBorderTextField, // Your existing styles
+                      ...grayBorderTextField, 
                       "& .MuiOutlinedInput-notchedOutline": {
-                        borderColor: "grey", // Grey border
+                        borderColor: "grey", 
                       },
                     }}
                   />

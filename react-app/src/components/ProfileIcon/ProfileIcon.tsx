@@ -20,8 +20,7 @@ const ProfileIcon = () => {
       <Link
         to="/profile"
         style={{
-          textDecoration: "none !important", // Force override
-          color: "inherit",
+          textDecoration: "none"
         }}
       >
         <div className={styles.profileIcon}>{initials}</div>

@@ -77,7 +77,6 @@
   .profileEmail {
     margin: 3%;
     font-size: 1.3rem;
-    color:grey;
   }
 
   .profileIcon {
@@ -88,35 +87,7 @@
     /* margin-left: -10%; */
   }
   
-  .subHeader {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    color: var(--blue-gray);
-  }
-  
-  .subHeader h2 {
-    font-size: 1.8rem;
-    margin: 1.5rem 0 1rem 0;
-  }
-  
-  .cardsContainer {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    row-gap: 1rem;
-    column-gap: 1.5rem;
-    margin-bottom: 1rem;
-  }
-  
-  .viewAllLink {
-    color: var(--blue-gray);
-    font-size: 1rem;
-    font-weight: 700;
-    text-align: center;
-    text-decoration: underline;
-  }
+
   
   .footer {
     margin-top: auto;
