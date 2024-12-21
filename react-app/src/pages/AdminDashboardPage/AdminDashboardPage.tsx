@@ -112,8 +112,7 @@ function AdminDashboardPage() {
         className={`${styles.split} ${styles.right}`}
         style={{
           left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-        }}
-      >
+        }}>
         {!navigationBarOpen && (
           <img
             src={hamburger}
@@ -134,11 +133,13 @@ function AdminDashboardPage() {
               <Button
                 sx={forestGreenButtonLarge}
                 variant="contained"
-                onClick={() => navigate("/trainings/editor")}
-              >
+                onClick={() => navigate("/trainings/editor")}>
                 CREATE NEW TRAINING
               </Button>
-              <Button sx={forestGreenButtonLarge} variant="contained">
+              <Button
+                sx={forestGreenButtonLarge}
+                variant="contained"
+                onClick={() => navigate("/pathways/editor")}>
                 CREATE NEW PATHWAY
               </Button>
             </div>
@@ -150,8 +151,7 @@ function AdminDashboardPage() {
                     ? forestGreenButtonPadding
                     : whiteButtonGrayBorder
                 }
-                variant="contained"
-              >
+                variant="contained">
                 TRAINING
               </Button>
               <Button
@@ -161,8 +161,7 @@ function AdminDashboardPage() {
                     ? forestGreenButtonPadding
                     : whiteButtonGrayBorder
                 }
-                variant="contained"
-              >
+                variant="contained">
                 PATHWAYS
               </Button>
             </div>
@@ -178,15 +177,14 @@ function AdminDashboardPage() {
                 {trainingsSelected ? (
                   <>
                     {trainingDrafts.length === 0 && (
-                      <div className={styles.subHeader}>lmao u flopped!</div>
+                      <div className={styles.subHeader}>
+                        No drafted trainings
+                      </div>
                     )}
                     {trainingDrafts.length > 0 && (
                       <div className={styles.cardsContainer}>
                         {trainingDrafts.slice(0, 3).map((training, index) => (
-                          <AdminTrainingCard 
-                            training={training} 
-                            key={index} 
-                          />
+                          <AdminTrainingCard training={training} key={index} />
                         ))}
                       </div>
                     )}
@@ -196,10 +194,7 @@ function AdminDashboardPage() {
                     {pathwayDrafts.length > 0 && (
                       <div className={styles.cardsContainer}>
                         {pathwayDrafts.slice(0, 2).map((pathway, index) => (
-                          <AdminPathwayCard 
-                            pathway={pathway} 
-                            key={index} 
-                          />
+                          <AdminPathwayCard pathway={pathway} key={index} />
                         ))}
                       </div>
                     )}
@@ -228,10 +223,7 @@ function AdminDashboardPage() {
                     {pathwaysPublished.length > 0 && (
                       <div className={styles.cardsContainer}>
                         {pathwaysPublished.slice(0, 2).map((pathway, index) => (
-                          <AdminPathwayCard 
-                            pathway={pathway} 
-                            key={index} 
-                          />
+                          <AdminPathwayCard pathway={pathway} key={index} />
                         ))}
                       </div>
                     )}

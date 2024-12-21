@@ -8,9 +8,7 @@ interface AdminTrainingCardProps {
   training: TrainingID;
 }
 
-const AdminTrainingCard: React.FC<AdminTrainingCardProps> = ({ 
-  training 
-}) => {
+const AdminTrainingCard: React.FC<AdminTrainingCardProps> = ({ training }) => {
   const navigate = useNavigate();
 
   const renderMarker = () => {
@@ -38,7 +36,11 @@ const AdminTrainingCard: React.FC<AdminTrainingCardProps> = ({
 
   return (
     <>
-      <div className={styles.trainingCard}>
+      <div
+        className={styles.trainingCard}
+        onClick={() => {
+          navigate("/trainings/editor", { state: { training } });
+        }}>
         <div className={styles.trainingImage}>
           <img src={training.coverImage} alt="Training" />
         </div>
@@ -53,8 +55,7 @@ const AdminTrainingCard: React.FC<AdminTrainingCardProps> = ({
                   tooltip: {
                     sx: { ...grayTooltip, maxWidth: "200px" },
                   },
-                }}
-              >
+                }}>
                 <div className={styles.trainingTitle}>
                   {training.name.substring(0, 36)}...
                 </div>
@@ -64,14 +65,7 @@ const AdminTrainingCard: React.FC<AdminTrainingCardProps> = ({
             )}
           </div>
           <div className={styles.outsideMarker}>
-            <div
-              className={styles.marker}
-              onClick={() => {
-                navigate("/trainings/editor", { state: { training } });
-              }}
-            >
-              EDIT
-            </div>
+            <div className={styles.marker}>EDIT</div>
             <div>{renderMarker()}</div>
           </div>
         </div>
