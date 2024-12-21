@@ -4,6 +4,7 @@ import {
   Button,
   OutlinedInput,
   FormHelperText,
+  Tooltip,
 } from "@mui/material";
 import {
   forestGreenButton,
@@ -29,7 +30,7 @@ function RegistrationPage() {
   //Add Error Handling
   const [invalidEmail, setInvalidEmail] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const [emailsMatch, setEmailsMatch] = useState<boolean>(false);
+  
 
   const [email, setEmail] = useState<string>("");
   const [confirmEmail, setConfirmEmail] = useState<string>("");
@@ -37,6 +38,7 @@ function RegistrationPage() {
   const [lastName, setLastName] = useState<string>("");
   const [joinCode, setJoinCode] = useState<string>("");
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
+  const [emailsMatch, setEmailsMatch] = useState<boolean>(false);
 
   // If user is logged in, navigate to Dashboard (?)
   if (user) {
@@ -50,18 +52,15 @@ function RegistrationPage() {
   };
 
   useEffect(() => {
-    const match = 
-      email.length > 0 &&
-      confirmEmail.length > 0 &&
-      trim(email).toLowerCase() === trim(confirmEmail).toLowerCase();
+    let match = true;
+    if (email.length > 0 && confirmEmail.length > 0)  
+      match = trim(email).toLowerCase() === trim(confirmEmail).toLowerCase();
   
     
     setEmailsMatch(match);
     setIsFormValid(match);
   }, [email, confirmEmail]);
 
-
-  // Handle confirm button click
   const handleConfirm = async (event: any) => {
     event.preventDefault();
     setShowLoading(true);
@@ -73,7 +72,7 @@ function RegistrationPage() {
         .then(() => {
           navigate("/registration-confirmation", {
             state: { fromApp: true },
-          }); /* proceed to confirmation */
+          });
         })
         .catch(() => {
           setErrorMessage(
@@ -128,6 +127,20 @@ function RegistrationPage() {
             {/* email field */}
             <div className={`${styles.alignLeft} ${styles.emailContainer}`}>
               <h3 className={styles.label}>Email</h3>
+              <Tooltip
+                      title="Please use your ATC volunteer email"
+                      placement="right"
+                      componentsProps={{
+                        tooltip: {
+                          sx: {
+                            bgcolor: "white",
+                            color: "black",
+                          },
+                        },
+                      }}
+                    >
+                      <InfoOutlinedIcon />
+                    </Tooltip>
             </div>
             <OutlinedInput
               sx={{
@@ -180,7 +193,6 @@ function RegistrationPage() {
               // placeholder="Use your ATC Volunteer email"
               onChange={(e) => {
                 setConfirmEmail(e.target.value);
-                
               }}
               error={invalidEmail}
             />
