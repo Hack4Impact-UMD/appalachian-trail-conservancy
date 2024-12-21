@@ -258,6 +258,29 @@ const AdminTrainingEditor: React.FC = () => {
     setSnackbar(false);
   };
 
+  const renderMarker = () => {
+    if (status === "DRAFT") {
+      // Training drafted
+      return (
+        <div className={`${styles.marker} ${styles.draftMarker}`}>DRAFT</div>
+      );
+    } else if (status === "PUBLISHED") {
+      // Training published
+      return (
+        <div className={`${styles.marker} ${styles.publishedMarker}`}>
+          PUBLISHED
+        </div>
+      );
+    } else if (status === "ARCHIVED") {
+      // Training archived
+      return (
+        <div className={`${styles.marker} ${styles.archiveMarker}`}>
+          ARCHIVE
+        </div>
+      );
+    }
+  };
+
   useEffect(() => {
     // description quill editor
     if (descriptionContainerRef.current && !quillDescriptionRef.current) {
@@ -314,11 +337,14 @@ const AdminTrainingEditor: React.FC = () => {
         <div className={styles.container}>
           <div className={styles.content}>
             <div className={styles.header}>
-              <h1 className={styles.headerText}>Training Editor</h1>
+              <div className={styles.headerTitle}>
+                <h1 className={styles.headerText}>Training Editor</h1>
+                <div>{renderMarker()}</div>
+              </div>
               <ProfileIcon />
             </div>
 
-            <form noValidate>
+            <form className={styles.formContent} noValidate>
               <Button
                 sx={whiteButtonGrayBorder}
                 variant="contained"
@@ -353,7 +379,7 @@ const AdminTrainingEditor: React.FC = () => {
                 error={Boolean(errors.trainingName)}
                 sx={{
                   ...grayBorderTextField,
-                  width: "80.5%",
+                  width: "100%",
                   border: errors.trainingName
                     ? "2px solid #d32f2f"
                     : "2px solid var(--blue-gray)",
@@ -385,7 +411,7 @@ const AdminTrainingEditor: React.FC = () => {
                 error={Boolean(errors.blurb)}
                 sx={{
                   ...grayBorderTextField,
-                  width: "80.5%",
+                  width: "100%",
                   height: "auto",
                   minHeight: 100,
                   border: errors.blurb
@@ -486,7 +512,7 @@ const AdminTrainingEditor: React.FC = () => {
                 error={Boolean(errors.resourceTitle)}
                 sx={{
                   ...grayBorderTextField,
-                  width: "80.5%",
+                  width: "100%",
                   border: errors.resourceTitle
                     ? "2px solid #d32f2f"
                     : "2px solid var(--blue-gray)",
@@ -541,7 +567,7 @@ const AdminTrainingEditor: React.FC = () => {
                       ...whiteSelectGrayBorder,
                       fontSize: "1.1rem",
                       borderRadius: "10px",
-                      height: "3.1rem",
+                      height: "3rem",
                       border: errors.resourceType
                         ? "2px solid #d32f2f"
                         : "2px solid var(--blue-gray)",

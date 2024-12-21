@@ -48,6 +48,12 @@
   margin-bottom: 2rem;
 }
 
+.headerTitle {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
 .headerText {
   color: var(--blue-gray);
   font-size: 3rem;
@@ -56,22 +62,52 @@
   white-space: normal;
 }
 
+.marker {
+  display: inline-block;
+  padding: 9px 18px;
+  border-radius: 20px;
+  font-size: 0.9em;
+  font-weight: bold;
+  text-align: center;
+  background-color: var(--blue-gray);
+  color: white;
+}
+
+.draftMarker {
+  border: 1.5px solid var(--blue-gray);
+  background-color: var(--ocean-green-25);
+  color: var(--blue-gray);
+}
+
+.publishedMarker {
+  border: 1.5px solid var(--blue-gray);
+  background-color: var(--ocean-green-50);
+  color: var(--blue-gray);
+}
+
+.archiveMarker {
+  border: 1.5px solid var(--blue-gray);
+  background-color: var(--ocean-green-75);
+  color: var(--blue-gray);
+}
+
+.formContent {
+  width: 80%;
+}
+
 .inputBoxHeader {
   display: flex;
   justify-content: space-between;
-  width: 80%;
 }
 
 .quillContainer {
   border: 2px solid var(--blue-gray);
   border-radius: 10px;
-  width: 80%;
 }
 
 .inputError {
   border: 2px solid #d32f2f;
   border-radius: 10px;
-  width: 80%;
 }
 
 .uploadSection {
@@ -97,13 +133,11 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  width: 80.5%;
 }
 
 .resourceHeadersBox {
   display: flex;
   justify-content: space-between;
-  width: 80%;
 }
 
 .addTrainingContainer {
@@ -179,6 +213,10 @@
 @media screen and (max-width: 750px) {
   .content {
     width: 425px;
+  }
+
+  .formContent {
+    width: 100%;
   }
 }
 
