@@ -1,36 +1,21 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../auth/AuthProvider";
-import { Link } from "react-router-dom";
 import { getVolunteer, updateVolunteer } from "../../backend/FirestoreCalls";
-import { TrainingID } from "../../types/TrainingType";
-import { PathwayID } from "../../types/PathwayType";
-import { VolunteerPathway, VolunteerTraining } from "../../types/UserType";
 import { OutlinedInput, Button, Tooltip } from "@mui/material";
-import InfoIcon from "@mui/icons-material/Info";
-import { forestGreenButtonPadding } from "../../muiTheme";
 import { Volunteer } from "../../types/UserType";
-import TrainingCard from "../../components/TrainingCard/TrainingCard";
-import PathwayCard from "../../components/PathwayCard/PathwayCard";
 import styles from "./VolunteerProfilePage.module.css";
-import Certificate from "../../components/CertificateCard/CertificateCard";
-import Badge from "../../components/BadgeCard/BadgeCard";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
-import Loading from "../../components/LoadingScreen/Loading";
 import SettingsProfileIcon from "../../components/SettingsProfileIcon/SettingsProfileIcon";
 import Footer from "../../components/Footer/Footer";
 import hamburger from "../../assets/hamburger.svg";
 import {
   grayBorderTextField,
-  whiteButtonGrayBorder,
-  whiteButtonOceanGreenBorder,
-  whiteButtonGreenBorder,
   forestGreenButton,
 } from "../../muiTheme";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 function VolunteerProfilePage() {
   const auth = useAuth();
-  const [loading, setLoading] = useState<boolean>(true);
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
   );
@@ -60,7 +45,6 @@ function VolunteerProfilePage() {
           setLastName(auth.lastName);
           console.log(volunteer);
           setVolunteerCopy(volunteer);
-          setLoading(false);
         } catch (error) {}
       }
     };
