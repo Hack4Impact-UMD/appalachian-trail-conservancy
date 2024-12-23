@@ -1,50 +1,31 @@
-import { useState, useEffect } from "react";
-import { useParams, useLocation, useNavigate } from "react-router-dom";
-import { whiteButtonGrayBorder, forestGreenButton } from "../../muiTheme";
-import { Training } from "../../types/TrainingType";
-import { PathwayID } from "../../types/PathwayType";
-import { VolunteerPathway } from "../../types/UserType";
-import { getTraining, getPathway } from "../../backend/FirestoreCalls";
-import { LinearProgress, Box, Typography, Button } from "@mui/material";
-import { useAuth } from "../../auth/AuthProvider";
-import { getVolunteer } from "../../backend/FirestoreCalls";
-import styles from "./PathwayLandingPage.module.css";
+import { useState, useEffect, useRef } from "react";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
-import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
-import CompletedIcon from "../../assets/completedCheck.svg";
-import Loading from "../../components/LoadingScreen/Loading";
+import PathwayTile from "./PathwayTile/PathwayTile";
+import TitleInfo from "./TileInfo/TitleInfo";
+import styles from "./PathwayLandingPage.module.css";
 import hamburger from "../../assets/hamburger.svg";
-
-const styledProgressShape = {
-  height: 24,
-  borderRadius: 12,
-  width: "100%",
-};
-
-// if score > 0, dark green & light gray
-const styledProgressPass = {
-  ...styledProgressShape,
-  backgroundColor: "lightgray",
-  "& .MuiLinearProgress-bar": {
-    backgroundColor: "var(--forest-green)",
-  },
-};
+import Footer from "../../components/Footer/Footer";
+import { useParams, useLocation } from "react-router-dom";
+import { TrainingID } from "../../types/TrainingType";
+import { PathwayID } from "../../types/PathwayType";
+import { useAuth } from "../../auth/AuthProvider";
+import {
+  getPathway,
+  getTraining,
+  getVolunteer,
+} from "../../backend/FirestoreCalls";
 
 function PathwayLandingPage() {
   const auth = useAuth();
-  const navigate = useNavigate();
   const pathwayId = useParams().id;
   const location = useLocation();
-  const [loading, setLoading] = useState<boolean>(true);
-  const [navigationBarOpen, setNavigationBarOpen] = useState(
-    !(window.innerWidth < 1200)
-  );
-  const [trainingNames, setTrainingNames] = useState<
-    { name: string; id: string }[]
-  >([]);
+  const [open, setOpen] = useState(!(window.innerWidth < 1200));
+  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
+  const [divWidth, setDivWidth] = useState<number>(0);
+  const [trainings, setTrainings] = useState<TrainingID[]>([]);
+  const [numCompleted, setNumCompleted] = useState<number>(0);
+  const [elements, setElements] = useState<any[]>([]);
 
-  // If training & volunteerTraining is passed via state, then set it accordingly.
-  // Otherwise, retrieve training via id from url parameter then check if a VolunteerTraining exists for it
   const [pathway, setPathway] = useState<PathwayID>({
     name: "",
     id: "",
@@ -61,336 +42,156 @@ function PathwayLandingPage() {
     status: "DRAFT",
   });
 
-  const [volunteerPathway, setVolunteerPathway] = useState<VolunteerPathway>({
-    pathwayID: "",
-    progress: "INPROGRESS",
-    dateCompleted: "",
-    trainingsCompleted: [],
-    numTrainingsCompleted: 0,
-    numTotalTrainings: 0,
-  });
-
-  const fetchTrainingNames = async (trainingIDs: string[]) => {
-    try {
-      const trainingPromises = trainingIDs.map((trainingId) =>
-        getTraining(trainingId)
-      );
-      const allTrainingsData = await Promise.all(trainingPromises);
-      const associatedTrainingNames: { name: string; id: string }[] = [];
-      allTrainingsData.forEach((training) =>
-        associatedTrainingNames.push({ name: training.name, id: training.id })
-      );
-      setTrainingNames(allTrainingsData);
-    } catch (error) {
-      console.log("Failed to get trainings");
-    }
-  };
+  const div = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (
-      pathwayId !== undefined &&
-      !location.state?.pathway &&
-      !location.state?.volunteerPathway
-    ) {
-      setLoading(true);
-
-      // fetch data if pathwayId is available and if auth is finished loading
-      if (pathwayId !== undefined && !auth.loading && auth.id) {
-        getPathway(pathwayId)
-          .then(async (pathwayData) => {
-            setPathway(pathwayData);
-            // since no state is passed from navigation, get current user data
-            getVolunteer(auth.id.toString())
-              .then(async (volunteerData) => {
-                // filter volunteer pathway information to find current pathway
-                const VolunteerPathway =
-                  volunteerData.pathwayInformation.filter(
-                    (volunteerPathway) =>
-                      volunteerPathway.pathwayID === pathwayId
-                  );
-
-                // only replace if pathway exists
-                if (VolunteerPathway.length > 0)
-                  setVolunteerPathway(VolunteerPathway[0]);
-
-                fetchTrainingNames(pathwayData.trainingIDs);
-              })
-              .catch(() => {
-                console.log("Failed to get volunteer data");
-              });
-          })
-          .catch(() => {
-            console.log("Failed to get pathway");
-          })
-          .finally(() => {
-            setLoading(false);
-          });
-      }
-    } else {
-      // Update state with data from location's state
-      setLoading(true);
-      if (location.state.pathway) {
-        setPathway(location.state.pathway);
-        fetchTrainingNames(location.state.pathway.trainingIDs);
-      }
-      if (location.state.volunteerPathway) {
-        setVolunteerPathway(location.state.volunteerPathway);
-      }
-      setLoading(false);
-    }
-  }, [pathwayId, location.state, auth.loading, auth.id]);
-
-  const renderTrainings = () => {
-    return trainingNames.map((training, index) => (
-      <div key={index}>
-        <div className={styles.trainingRow}>
-          {/* conditionally render opacity of training titles */}
-          <div
-            className={`${styles.trainingInfo} ${
-              volunteerPathway.pathwayID !== "" &&
-              (index + 1 <= volunteerPathway.numTrainingsCompleted
-                ? styles.opacityContainer
-                : "")
-            }`}>
-            {/* row for each training */}
-            <p className={styles.trainingNumber}>{index + 1}</p>
-            <p className={styles.trainingTitle}>{training.name}</p>
-          </div>
-          <div>
-            {/* conditionally render completed icon if resource is completed */}
-            {(volunteerPathway.pathwayID !== "" &&
-              index + 1 <= volunteerPathway.numTrainingsCompleted && (
-                <img
-                  className={styles.completedIcon}
-                  src={CompletedIcon}
-                  alt="Completed"
-                />
-              )) ||
-              (volunteerPathway.pathwayID !== "" &&
-                volunteerPathway.progress === "INPROGRESS" && (
-                  <div className={`${styles.marker} ${styles.progressMarker}`}>
-                    IN PROGRESS
-                  </div>
-                ))}
-          </div>
-        </div>
-      </div>
-    ));
-  };
-
-  const renderMarker = () => {
-    if (volunteerPathway.pathwayID === "") {
-      // training not started
-      return (
-        <div className={`${styles.marker} ${styles.notStartedMarker}`}>
-          NOT STARTED
-        </div>
-      );
-    } else if (
-      volunteerPathway.pathwayID !== "" &&
-      volunteerPathway.numTrainingsCompleted ===
-        volunteerPathway.numTotalTrainings
-    ) {
-      // training completed
-      return (
-        <div className={`${styles.marker} ${styles.progressMarker}`}>
-          COMPLETED
-        </div>
-      );
-    }
-    // training in progress
-    else
-      return (
-        <div className={`${styles.marker} ${styles.progressMarker}`}>
-          IN PROGRESS
-        </div>
-      );
-  };
-
-  const renderButton = () => {
-    if (
-      volunteerPathway.pathwayID === "" ||
-      (volunteerPathway && volunteerPathway.numTrainingsCompleted === 0)
-    ) {
-      return (
-        <Button
-          sx={{ ...forestGreenButton }}
-          variant="contained"
-          onClick={() =>
-            // TODO: Connect to training
-            navigate(`/pathways/quizlanding`, {
-              state: {
-                pathway: pathway,
-                volunteerPathway: volunteerPathway,
-                fromApp: true,
-                from: location,
-              },
+    const getPathwayInfo = async () => {
+      // get pathway if not coming from in app
+      if (pathwayId !== undefined && !location.state?.pathway) {
+        if (pathwayId !== undefined && !auth.loading && auth.id) {
+          getPathway(pathwayId)
+            .then(async (pathwayData) => {
+              setPathway(pathwayData);
+              const trainingPromises = pathwayData.trainingIDs.map(getTraining);
+              const fetchedTrainings = await Promise.all(trainingPromises);
+              setTrainings(fetchedTrainings);
             })
-          }>
-          Start
-        </Button>
-      );
-    } else if (
-      volunteerPathway.numTrainingsCompleted ==
-      volunteerPathway.numTotalTrainings
-    ) {
-      return (
-        <Button
-          sx={{ ...forestGreenButton }}
-          variant="contained"
-          onClick={() =>
-            // TODO: Connect to training
-            navigate(`/pathways/quizlanding`, {
-              state: {
-                pathway: pathway,
-                volunteerPathway: volunteerPathway,
-                fromApp: true,
-                from: location,
-              },
-            })
-          }>
-          Restart
-        </Button>
-      );
-    } else {
-      return (
-        <Button
-          sx={{ ...forestGreenButton }}
-          variant="contained"
-          onClick={() =>
-            // TODO: Connect to training
-            //navigate(`/pathways`)
-            navigate(`/pathways/quizlanding`, {
-              state: {
-                pathway: pathway,
-                volunteerPathway: volunteerPathway,
-                fromApp: true,
-                from: location,
-              },
-            })
-          }>
-          Resume
-        </Button>
-      );
+            .catch(() => {
+              console.log("Failed to get pathway");
+            });
+        }
+      } else {
+        // set pathway from location state
+        if (location.state.pathway) {
+          setPathway(location.state.pathway);
+          const trainingPromises =
+            location.state.pathway.trainingIDs.map(getTraining);
+          const fetchedTrainings = await Promise.all(trainingPromises); // I think it's breaking here
+          setTrainings(fetchedTrainings);
+        }
+      }
+    };
+    getPathwayInfo();
+
+    // Filters based on the current pathway to get the number of trainings the user completed
+    // Commented out until the other stuff is working
+    const getTrainingsCompleted = async () => {
+      if (!auth.loading && auth.id && pathwayId !== undefined) {
+        try {
+          const volunteer = await getVolunteer(auth.id.toString());
+          const pathwayList = volunteer.pathwayInformation;
+          const volunteerPathway = pathwayList.filter(
+            (thePathway) => pathwayId === thePathway.pathwayID
+          );
+
+          if (volunteerPathway.length > 0) {
+            const numTrainings = volunteerPathway[0].numTrainingsCompleted;
+            setNumCompleted(numTrainings);
+          } else {
+            setNumCompleted(0);
+          }
+        } catch (error) {
+          console.error("Error fetching volunteer data:", error);
+        }
+      }
+    };
+
+    getTrainingsCompleted();
+  }, [auth.loading, auth.id]);
+
+  useEffect(() => {
+    // when the component gets mounted
+    if (div.current) setDivWidth(div.current.offsetWidth);
+    // to handle page resize
+    const getwidth = () => {
+      if (div.current) setDivWidth(div.current.offsetWidth);
+      setScreenWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", getwidth);
+    // remove the event listener before the component gets unmounted
+    return () => window.removeEventListener("resize", getwidth);
+  }, [open]);
+
+  useEffect(() => {
+    if (trainings.length) renderGrid(trainings);
+  }, [divWidth, trainings]);
+
+  const renderGrid = (trainings: TrainingID[]) => {
+    const imgWidth = 300;
+    const imagesPerRow = Math.floor(divWidth / imgWidth);
+    // To prevent trainings.length from being used uninitialized
+    const height =
+      trainings.length == 0
+        ? 0
+        : Math.ceil((trainings.length + 1) / imagesPerRow);
+    let count = 0;
+    let newElts = [];
+
+    for (let i = 0; i < height; i++) {
+      if (i % 2 == 0) {
+        for (let j = count; j < count + imagesPerRow; j++) {
+          newElts.push(
+            <div key={j}>
+              <PathwayTile
+                tileNum={j}
+                trainingID={j < trainings.length ? trainings[j] : undefined}
+                width={divWidth}
+                numTrainings={trainings.length}
+                trainingsCompleted={numCompleted} // Filler for now
+              />
+            </div>
+          );
+        }
+      }
+      // Reverse
+      else {
+        for (let j = count + imagesPerRow - 1; j >= count; j--) {
+          newElts.push(
+            <div key={j}>
+              <PathwayTile
+                tileNum={j}
+                trainingID={j < trainings.length ? trainings[j] : undefined}
+                width={divWidth}
+                numTrainings={trainings.length}
+                trainingsCompleted={numCompleted} // Filler for now
+              />
+            </div>
+          );
+        }
+      }
+      count += imagesPerRow;
     }
+    setElements(newElts);
   };
 
   return (
     <>
-      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <NavigationBar open={open} setOpen={setOpen} />
 
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
-        {loading ? (
-          <Loading />
-        ) : (
-          <>
-            {!navigationBarOpen && (
-              <img
-                src={hamburger}
-                alt="Hamburger Menu"
-                className={styles.hamburger} // Add styles to position it
-                width={30}
-                onClick={() => setNavigationBarOpen(true)} // Set sidebar open when clicked
-              />
-            )}
-            <div className={styles.outerContainer}>
-              <div className={styles.bodyContainer}>
-                {/* HEADER */}
-                <div className={styles.header}>
-                  <h1 className={styles.nameHeading}>{pathway.name}</h1>
-                  <ProfileIcon />
-                </div>
-
-                <div className={styles.progressContainer}>
-                  <div className={styles.progressBar}>
-                    <LinearProgress
-                      variant="determinate"
-                      value={
-                        volunteerPathway.pathwayID !== ""
-                          ? ((volunteerPathway.numTrainingsCompleted +
-                              (volunteerPathway.quizScoreRecieved ? 1 : 0)) /
-                              (volunteerPathway.numTotalTrainings + 1)) *
-                            100
-                          : 0
-                      }
-                      sx={styledProgressPass}
-                    />
-                    <Box sx={{ minWidth: 35 }}>
-                      <Typography
-                        variant="body2"
-                        color="var(--blue-gray)"
-                        sx={{ fontSize: "15px" }}>
-                        {volunteerPathway.pathwayID !== ""
-                          ? Math.round(
-                              ((volunteerPathway.numTrainingsCompleted +
-                                (volunteerPathway.quizScoreRecieved ? 1 : 0)) /
-                                (volunteerPathway.numTotalTrainings + 1)) *
-                                100
-                            ) + "%"
-                          : "0%"}
-                      </Typography>
-                    </Box>
-                  </div>
-                  <div>{renderMarker()}</div>
-                </div>
-
-                {/* ABOUT */}
-                <div className={styles.container}>
-                  <h2>About</h2>
-                  <p>{pathway.description}</p>
-                </div>
-
-                {/* OVERVIEW */}
-                <div className={styles.container}>
-                  <h2>Overview</h2>
-                  {renderTrainings()}
-                  <div className={styles.trainingRowFinal}>
-                    <div
-                      className={`${styles.trainingInfo} ${
-                        volunteerPathway.pathwayID !== "" &&
-                        (volunteerPathway.progress === "COMPLETED"
-                          ? styles.opacityContainer
-                          : "")
-                      }`}>
-                      <p className={styles.trainingNumber}>
-                        {pathway.trainingIDs.length + 1}
-                      </p>
-                      <p className={styles.trainingTitle}>Quiz</p>
-                    </div>
-                    <div>
-                      {/* Conditionally render finished icon on quiz row if pathway is completed */}
-                      {volunteerPathway.pathwayID !== "" &&
-                        volunteerPathway.progress === "COMPLETED" && (
-                          <img
-                            className={styles.completedIcon}
-                            src={CompletedIcon}
-                            alt="Completed"
-                          />
-                        )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </>
+        style={{
+          // Only apply left shift when screen width is greater than 1200px
+          left: open && screenWidth > 1200 ? "250px" : "0",
+        }}>
+        {!open && (
+          <img
+            src={hamburger}
+            alt="Hamburger Menu"
+            className={styles.hamburger} // Add styles to position it
+            width={30}
+            onClick={() => setOpen(true)} // Set sidebar open when clicked
+          />
         )}
+        <div className={styles.pageContainer}>
+          <div className={styles.content} ref={div}>
+            <TitleInfo title={pathway.name} description={pathway.shortBlurb} />
 
-        {/* footer */}
-        <div
-          className={styles.footer}
-          style={{ width: navigationBarOpen ? "calc(100% - 250px)" : "100%" }}>
-          <div className={styles.footerButtons}>
-            <Button
-              sx={{ ...whiteButtonGrayBorder }}
-              variant="contained"
-              onClick={() => navigate(-1)}>
-              Back
-            </Button>
-            {renderButton()}
+            {/* Pathway Tiles Section */}
+            <div className={styles.pathwayTiles}>{elements}</div>
           </div>
         </div>
+        <Footer />
       </div>
     </>
   );

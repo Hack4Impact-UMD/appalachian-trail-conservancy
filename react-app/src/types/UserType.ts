@@ -22,7 +22,7 @@ export interface Volunteer extends User {
 export interface VolunteerTraining {
   trainingID: string;
   progress: Progress;
-  dateCompleted: string; // YYYY-MM-DD
+  dateCompleted: string; // ISO
   numCompletedResources: number;
   numTotalResources: number;
   quizScoreRecieved?: number;
@@ -31,7 +31,7 @@ export interface VolunteerTraining {
 export interface VolunteerPathway {
   pathwayID: string;
   progress: Progress;
-  dateCompleted: string; // YYYY-MM-DD
+  dateCompleted: string; // ISO
   trainingsCompleted: string[]; // training IDs
   numTrainingsCompleted: number;
   numTotalTrainings: number;

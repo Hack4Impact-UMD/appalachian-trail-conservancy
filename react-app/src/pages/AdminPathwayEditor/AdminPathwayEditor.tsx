@@ -1,23 +1,16 @@
 import React, { ChangeEvent, useState } from "react";
 import styles from "./AdminPathwayEditor.module.css";
-import InfoIcon from "@mui/icons-material/Info";
-
+import { useNavigate } from "react-router-dom";
 import {
   TextField,
   Button,
-  MenuItem,
-  Select,
-  InputLabel,
-  FormControl,
   FormHelperText,
   Typography,
   Tooltip,
-  InputAdornment,
-  OutlinedInput,
   Autocomplete,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar";
 import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import { LuUpload } from "react-icons/lu";
@@ -25,11 +18,15 @@ import {
   forestGreenButton,
   grayBorderSearchBar,
   whiteButtonGrayBorder,
-  styledRectButton,
 } from "../../muiTheme";
+import { IoIosInformationCircleOutline } from "react-icons/io";
+import { styledRectButton } from "../../muiTheme";
+import Paper from "@mui/material/Paper";
+import hamburger from "../../assets/hamburger.svg";
 
 const AdminPathwayEditor: React.FC = () => {
-  const [trainingName, setTrainingName] = useState("");
+  const navigate = useNavigate();
+  const [pathwayName, setPathwayName] = useState("");
   const [blurb, setBlurb] = useState("");
   const [description, setDescription] = useState("");
   const [resourceLink, setResourceLink] = useState("");
@@ -37,9 +34,22 @@ const AdminPathwayEditor: React.FC = () => {
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
   );
+  const [searchBars, setSearchBars] = useState([1]); // Start with one search bar (the first one)
+
+  const options = ["blah", "blah blah"];
+
+  const handleAddSearchBar = () => {
+    setSearchBars((prevBars) => [...prevBars, prevBars.length + 1]);
+  };
+
+  const handleDeleteSearchBar = (index: number) => {
+    if (searchBars.length > 1) {
+      setSearchBars((prevBars) => prevBars.filter((_, i) => i !== index));
+    }
+  };
 
   const [errors, setErrors] = useState({
-    trainingName: "",
+    pathwayName: "",
     blurb: "",
     description: "",
     resourceLink: "",
@@ -49,22 +59,20 @@ const AdminPathwayEditor: React.FC = () => {
   const [invalidBlurb, setInvalidBlurb] = useState<boolean>(false);
   const [invalidDescription, setInvalidDescription] = useState<boolean>(false);
 
-  const options = ["blah", "blah blah"];
-
   const characterLimits = {
-    trainingName: 2,
-    blurb: 5,
-    description: 10,
+    pathwayName: 50,
+    blurb: 500,
+    description: 1000,
   };
 
   const validateFields = () => {
     let newErrors = { ...errors };
 
-    if (trainingName.length > characterLimits.trainingName) {
+    if (pathwayName.length > characterLimits.pathwayName) {
       setInvalidName(true);
-      newErrors.trainingName = `Training name cannot exceed ${characterLimits.trainingName} characters.`;
+      newErrors.pathwayName = `Training name cannot exceed ${characterLimits.pathwayName} characters.`;
     } else {
-      newErrors.trainingName = "";
+      newErrors.pathwayName = "";
       setInvalidName(false);
     }
 
@@ -99,6 +107,10 @@ const AdminPathwayEditor: React.FC = () => {
   const handleNextClick = () => {
     if (validateFields()) {
       console.log("All validations passed");
+      // Navigate to the quiz editor with the new training as state
+      navigate("/pathways/editor/quiz", {
+        // state: { pathway: updatedPathway },
+      });
     }
   };
 
@@ -110,36 +122,66 @@ const AdminPathwayEditor: React.FC = () => {
 
   return (
     <>
-      <div className={styles.container}>
-        <div className={styles.navbar}>
-          <NavigationBar
-            open={navigationBarOpen}
-            setOpen={setNavigationBarOpen}
+      <AdminNavigationBar
+        open={navigationBarOpen}
+        setOpen={setNavigationBarOpen}
+      />
+
+      <div
+        className={`${styles.split} ${styles.right}`}
+        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        {/* Hamburger Menu */}
+        {!navigationBarOpen && (
+          <img
+            src={hamburger}
+            alt="Hamburger Menu"
+            className={styles.hamburger} // Add styles to position it
+            width={30}
+            onClick={() => setNavigationBarOpen(true)} // Set sidebar open when clicked
           />
-        </div>
-        <div className={styles.editor}>
-          <div className={styles.editorContent}>
-            <div className={styles.editorHeader}>
+        )}
+
+        <div className={styles.container}>
+          <div className={styles.content}>
+            {/* Heading */}
+            <div className={styles.header}>
               <h1 className={styles.nameHeading}>Pathways Editor</h1>
-              <div className={styles.editorProfileHeader}>
-                <h5 className={styles.adminText}> Admin </h5>
-                <ProfileIcon />
-              </div>
+              <ProfileIcon />
             </div>
 
+            {/* Input Boxes */}
             <form noValidate>
               <Button sx={whiteButtonGrayBorder}>Save as Draft</Button>
-              <Typography
-                variant="body2"
-                style={{
-                  color: "black",
-                  fontWeight: "bold",
-                  marginTop: "2rem",
-                }}>
-                TRAINING NAME
-              </Typography>
+
+              <div className={styles.inputBoxHeader}>
+                <Typography
+                  variant="body2"
+                  style={{
+                    color: "black",
+                    fontWeight: "bold",
+                    marginTop: "2rem",
+                  }}>
+                  PATHWAY NAME
+                </Typography>
+
+                <Typography
+                  variant="body2"
+                  style={{
+                    color: "black",
+                    fontWeight: "500",
+                    marginTop: "2rem",
+                    fontSize: "0.8rem",
+                  }}>
+                  {Math.max(
+                    characterLimits.pathwayName - pathwayName.length,
+                    0
+                  )}{" "}
+                  Characters Remaining
+                </Typography>
+              </div>
+
               <TextField
-                value={trainingName}
+                value={pathwayName}
                 sx={{
                   width: "80%",
                   fontSize: "1.1rem",
@@ -153,27 +195,47 @@ const AdminPathwayEditor: React.FC = () => {
                     border: "none",
                   },
                 }}
-                onChange={(e) => setTrainingName(e.target.value)}
+                onChange={(e) => {
+                  const newValue = e.target.value;
+                  if (newValue.length <= characterLimits.pathwayName) {
+                    setPathwayName(newValue);
+                  }
+                }}
                 variant="outlined"
                 rows={1}
                 fullWidth
               />
               {invalidName && (
                 <FormHelperText error>
-                  Training name cannot exceed {characterLimits.trainingName}{" "}
+                  Training name cannot exceed {characterLimits.pathwayName}{" "}
                   characters.
                 </FormHelperText>
               )}
 
-              <Typography
-                variant="body2"
-                style={{
-                  color: "black",
-                  fontWeight: "bold",
-                  marginTop: "2rem",
-                }}>
-                BLURB
-              </Typography>
+              <div className={styles.inputBoxHeader}>
+                <Typography
+                  variant="body2"
+                  style={{
+                    color: "black",
+                    fontWeight: "bold",
+                    marginTop: "2rem",
+                  }}>
+                  BLURB
+                </Typography>
+
+                <Typography
+                  variant="body2"
+                  style={{
+                    color: "black",
+                    fontWeight: "500",
+                    marginTop: "2rem",
+                    fontSize: "0.8rem",
+                  }}>
+                  {Math.max(characterLimits.blurb - blurb.length, 0)} Characters
+                  Remaining
+                </Typography>
+              </div>
+
               <TextField
                 value={blurb}
                 sx={{
@@ -190,7 +252,12 @@ const AdminPathwayEditor: React.FC = () => {
                     border: "none",
                   },
                 }}
-                onChange={(e) => setBlurb(e.target.value)}
+                onChange={(e) => {
+                  const newValue = e.target.value;
+                  if (newValue.length <= characterLimits.blurb) {
+                    setBlurb(newValue);
+                  }
+                }}
                 multiline
                 rows={3}
                 variant="outlined"
@@ -203,15 +270,33 @@ const AdminPathwayEditor: React.FC = () => {
                 </FormHelperText>
               )}
 
-              <Typography
-                variant="body2"
-                style={{
-                  color: "black",
-                  fontWeight: "bold",
-                  marginTop: "2rem",
-                }}>
-                DESCRIPTION
-              </Typography>
+              <div className={styles.inputBoxHeader}>
+                <Typography
+                  variant="body2"
+                  style={{
+                    color: "black",
+                    fontWeight: "bold",
+                    marginTop: "2rem",
+                  }}>
+                  DESCRIPTION
+                </Typography>
+
+                <Typography
+                  variant="body2"
+                  style={{
+                    color: "black",
+                    fontWeight: "500",
+                    marginTop: "2rem",
+                    fontSize: "0.8rem",
+                  }}>
+                  {Math.max(
+                    characterLimits.description - description.length,
+                    0
+                  )}{" "}
+                  Characters Remaining
+                </Typography>
+              </div>
+
               <TextField
                 value={description}
                 sx={{
@@ -227,7 +312,12 @@ const AdminPathwayEditor: React.FC = () => {
                     border: "none",
                   },
                 }}
-                onChange={(e) => setDescription(e.target.value)}
+                onChange={(e) => {
+                  const newValue = e.target.value;
+                  if (newValue.length <= characterLimits.description) {
+                    setDescription(newValue);
+                  }
+                }}
                 multiline
                 rows={3}
                 variant="outlined"
@@ -241,7 +331,6 @@ const AdminPathwayEditor: React.FC = () => {
                 </FormHelperText>
               )}
 
-              {/* Upload Section with Typography and LuUpload Icon */}
               <div
                 className={styles.uploadSection}
                 style={{
@@ -249,15 +338,39 @@ const AdminPathwayEditor: React.FC = () => {
                   flexDirection: "column",
                   alignItems: "flex-start",
                 }}>
-                <Typography
-                  variant="body2"
+                <div
                   style={{
-                    color: "black",
-                    fontWeight: "bold",
+                    display: "flex",
+                    alignItems: "center",
                     marginBottom: "8px",
                   }}>
-                  UPLOAD IMAGE (JPEG, PNG)
-                </Typography>
+                  <Typography
+                    variant="body2"
+                    style={{
+                      color: "black",
+                      fontWeight: "bold",
+                    }}>
+                    UPLOAD IMAGE (JPEG, PNG)
+                  </Typography>
+                  <Tooltip
+                    title="Upload will be used as pathway cover and certificate image"
+                    placement="top"
+                    componentsProps={{
+                      tooltip: {
+                        sx: {
+                          bgcolor: "white",
+                          color: "black",
+                          borderRadius: "8px",
+                          boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)",
+                        },
+                      },
+                    }}>
+                    <span style={{ marginLeft: "8px" }}>
+                      <IoIosInformationCircleOutline />
+                    </span>
+                  </Tooltip>
+                </div>
+
                 <Button
                   variant="contained"
                   component="label"
@@ -268,38 +381,32 @@ const AdminPathwayEditor: React.FC = () => {
                       backgroundColor: "#D9D9D9",
                     },
                   }}>
-                  {/* Increase size of LuUpload icon */}
                   <LuUpload style={{ fontSize: "50px" }} />
                   <input type="file" hidden />
                 </Button>
               </div>
 
-              {/* Resource Link and Tooltip */}
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                }}>
-                <div className={styles.trainingSelection}>
-                  <Typography
-                    variant="body2"
-                    style={{
-                      color: "black",
-                      fontWeight: "bold",
-                      marginTop: "2rem",
-                    }}>
-                    TRAINING SELECT
-                  </Typography>
-
-                  <div className={styles.searchBarsBox}>
-                    <div className={styles.searchBarContainer}>
-                      <p className={styles.searchBarNumber}>1</p>
+              {/* Training Selection */}
+              <div className={styles.trainingSelection}>
+                <Typography
+                  variant="body2"
+                  style={{
+                    color: "black",
+                    fontWeight: "bold",
+                    marginTop: "2rem",
+                  }}>
+                  TRAINING SELECT
+                </Typography>
+                <div className={styles.searchBarsBox}>
+                  {searchBars.map((_, idx) => (
+                    <div key={idx} className={styles.searchBarContainer}>
+                      <p className={styles.searchBarNumber}>{idx + 1}</p>{" "}
                       <Autocomplete
                         disablePortal
                         options={options}
                         sx={{
                           ...grayBorderSearchBar,
-                          width: "1000%",
+                          width: "100%",
                           display: "flex",
                           alignItems: "center",
                         }}
@@ -307,135 +414,67 @@ const AdminPathwayEditor: React.FC = () => {
                           <TextField
                             {...params}
                             variant="outlined"
-                            label="SEARCH"
+                            placeholder="SEARCH"
                             InputLabelProps={{
                               shrink: false,
                             }}
                             sx={{
-                              "& .MuiInputLabel-root": {
-                                color: "var(--blue-gray)",
-                                opacity: "50%",
-                                paddingBottom: "18%",
-                                "&.Mui-focused": {
-                                  visibility: "hidden",
-                                },
-                              },
                               "& .MuiOutlinedInput-root": {
                                 padding: "8px",
                                 display: "flex",
                                 alignItems: "center",
                               },
                             }}
-                            className="custom-text-field"
                           />
                         )}
+                        /*  CLOSEST ATTEMPT FOR DROPDOWN STYLE: 
+                        PaperComponent={(props) => (
+                            <Paper
+                              sx={{
+                                background: "lightblue",
+                                color: "var(--blue-gray)",
+                                fontSize: "25px",
+                                "&:hover": {
+                                  border: "1px solid #00FF00",
+                                  color: "gray",
+                                  backgroundColor: "white"
+                                }
+                              }}
+                              {...props}
+                            />
+                          )}*/
                       />
-
                       <div
                         className={styles.searchBarX}
-                        style={{ visibility: "hidden" }}>
-                        <CloseIcon></CloseIcon>
+                        style={{
+                          visibility: idx === 0 ? "hidden" : "visible", // Hide for the first search bar
+                        }}>
+                        <CloseIcon
+                          onClick={() => handleDeleteSearchBar(idx)}
+                          sx={{
+                            marginTop: "2px",
+                            color: "var(--blue-gray)",
+                            cursor: "pointer",
+                            "&:hover": {
+                              color: "#d32f2f",
+                            },
+                          }}
+                        />
                       </div>
                     </div>
-                    <div className={styles.searchBarContainer}>
-                      <p className={styles.searchBarNumber}>2</p>
-                      <Autocomplete
-                        disablePortal
-                        options={options}
-                        sx={{
-                          ...grayBorderSearchBar,
-                          width: "600%",
-                          display: "flex",
-                          alignItems: "center",
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            variant="outlined"
-                            label="SEARCH"
-                            InputLabelProps={{
-                              shrink: false,
-                            }}
-                            sx={{
-                              "& .MuiInputLabel-root": {
-                                color: "var(--blue-gray)",
-                                opacity: "50%",
-                                paddingBottom: "18%",
-                                "&.Mui-focused": {
-                                  visibility: "hidden",
-                                },
-                              },
-                              "& .MuiOutlinedInput-root": {
-                                padding: "8px",
-                                display: "flex",
-                                alignItems: "center",
-                              },
-                            }}
-                            className="custom-text-field"
-                          />
-                        )}
-                      />
-                      <div className={styles.searchBarX}>
-                        <CloseIcon></CloseIcon>
-                      </div>
-                    </div>
-                    <div className={styles.searchBarContainer}>
-                      <p className={styles.searchBarNumber}>3</p>
-                      <Autocomplete
-                        disablePortal
-                        options={options}
-                        sx={{
-                          ...grayBorderSearchBar,
-                          width: "600%",
-                          display: "flex",
-                          alignItems: "center",
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            variant="outlined"
-                            label="SEARCH"
-                            InputLabelProps={{
-                              shrink: false,
-                            }}
-                            sx={{
-                              "& .MuiInputLabel-root": {
-                                color: "var(--blue-gray)",
-                                opacity: "50%",
-                                paddingBottom: "18%",
-                                "&.Mui-focused": {
-                                  visibility: "hidden",
-                                },
-                              },
-                              "& .MuiOutlinedInput-root": {
-                                padding: "8px",
-                                display: "flex",
-                                alignItems: "center",
-                              },
-                            }}
-                            className="custom-text-field"
-                          />
-                        )}
-                      />
-                      <div className={styles.searchBarX}>
-                        <CloseIcon></CloseIcon>
-                      </div>
-                    </div>
-                    <div className={styles.addTrainingContainer}>
-                      <p
-                        className={styles.searchBarNumber}
-                        style={{ visibility: "hidden" }}>
-                        4
-                      </p>
-                      <Button
-                        sx={{ ...whiteButtonGrayBorder, textAlign: "left" }}>
-                        Add Training
-                      </Button>
-                    </div>
+                  ))}
+
+                  <div className={styles.addTrainingContainer}>
+                    <Button
+                      sx={{ ...whiteButtonGrayBorder, textAlign: "left" }}
+                      onClick={handleAddSearchBar}>
+                      Add Training
+                    </Button>
                   </div>
                 </div>
               </div>
-              {/* Button group */}
+
+              {/* Button Group */}
               <div className={styles.addTrainingContainer}>
                 <Button
                   variant="contained"
@@ -443,7 +482,6 @@ const AdminPathwayEditor: React.FC = () => {
                     ...styledRectButton,
                     ...forestGreenButton,
                     marginTop: "2%",
-                    marginLeft: "3%",
                     width: "40px%",
                   }}
                   onClick={handleNextClick}>
@@ -452,8 +490,8 @@ const AdminPathwayEditor: React.FC = () => {
               </div>
             </form>
           </div>
-          <Footer />{" "}
         </div>
+        <Footer />
       </div>
     </>
   );

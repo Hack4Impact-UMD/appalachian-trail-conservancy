@@ -22,6 +22,30 @@ import {
 import { Training, TrainingID, Quiz } from "../types/TrainingType";
 import { Pathway, PathwayID } from "../types/PathwayType";
 
+export function getVolunteers(): Promise<VolunteerID[]> {
+  const collectionName = "Users";
+  const collectionRef = collection(db, collectionName);
+
+  return new Promise((resolve, reject) => {
+    getDocs(collectionRef)
+      .then((userSnapshot) => {
+        const allVolunteers: VolunteerID[] = [];
+        const users = userSnapshot.docs.map((doc) => {
+          const user = doc.data();
+          if (user.type === "VOLUNTEER") {
+            const newVolunteer = { ...user, id: doc.id } as VolunteerID;
+            allVolunteers.push(newVolunteer);
+          }
+        });
+        // .filter((user) => user.type === "VOLUNTEER"); // Filter for VOLUNTEER users only
+        resolve(allVolunteers);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}
+
 export function getUserWithAuth(auth_id: string): Promise<Admin | VolunteerID> {
   return new Promise((resolve, reject) => {
     const userRef = query(
@@ -65,7 +89,7 @@ export function getVolunteer(id: string): Promise<Volunteer> {
   });
 }
 
-export function addTraining(training: Training): Promise<void> {
+export function addTraining(training: Training): Promise<string> {
   return new Promise((resolve, reject) => {
     /* runTransaction provides protection against race conditions where
        2 people are modifying the data at once. It also ensures that either
@@ -76,6 +100,8 @@ export function addTraining(training: Training): Promise<void> {
       await addDoc(collection(db, "Trainings"), training)
         .then(async (docRef) => {
           const trainingId = docRef.id;
+
+          resolve(trainingId);
 
           // get pathways associated with training
           const pathwayPromises = [];
@@ -114,7 +140,7 @@ export function addTraining(training: Training): Promise<void> {
 
             await Promise.all(updatePromises)
               .then(() => {
-                resolve();
+                resolve("");
               })
               .catch(() => {
                 reject();
@@ -126,7 +152,7 @@ export function addTraining(training: Training): Promise<void> {
         });
     })
       .then(() => {
-        resolve();
+        resolve("");
       })
       .catch(() => {
         reject();
@@ -186,11 +212,17 @@ export function getQuiz(trainingId: string): Promise<Quiz> {
 export function validateQuiz(
   trainingId: string,
   volunteerId: string,
-  volunteerAnswers: string[]
+  volunteerAnswers: string[],
+  timeCompleted: string
 ): Promise<any> {
   return new Promise((resolve, reject) => {
     const validateQuizResults = httpsCallable(functions, "validateQuizResults");
-    validateQuizResults({ trainingId, volunteerId, volunteerAnswers })
+    validateQuizResults({
+      trainingId,
+      volunteerId,
+      volunteerAnswers,
+      timeCompleted,
+    })
       .then((numAnswersCorrect) => {
         resolve(numAnswersCorrect);
       })
@@ -324,7 +356,10 @@ export function getAllTrainings(): Promise<TrainingID[]> {
 
 export function getAllPublishedTrainings(): Promise<TrainingID[]> {
   const trainingsRef = collection(db, "Trainings");
-  const publishedTrainingsQuery = query(trainingsRef, where("status", "==", "PUBLISHED"));
+  const publishedTrainingsQuery = query(
+    trainingsRef,
+    where("status", "==", "PUBLISHED")
+  );
 
   return new Promise((resolve, reject) => {
     getDocs(publishedTrainingsQuery)
@@ -361,7 +396,10 @@ export function getAllPathways(): Promise<PathwayID[]> {
 }
 export function getAllPublishedPathways(): Promise<PathwayID[]> {
   const pathwaysRef = collection(db, "Pathways");
-  const publishedPathwaysQuery = query(pathwaysRef, where("status", "==", "PUBLISHED"));
+  const publishedPathwaysQuery = query(
+    pathwaysRef,
+    where("status", "==", "PUBLISHED")
+  );
 
   return new Promise((resolve, reject) => {
     getDocs(publishedPathwaysQuery)
@@ -565,25 +603,25 @@ export function addVolunteerPathway(
 
 export function exportTableToCSV(data: any[]): void {
   if (!data || data.length === 0) {
-      console.error("No data available to export.");
-      return;
+    console.error("No data available to export.");
+    return;
   }
 
   const headers = Object.keys(data[0]);
 
   // Create CSV content
   const csvRows = [
-      headers.join(","), 
-      ...data.map(row =>
-          headers
-              .map(header => {
-                  const value = row[header];
-                  return typeof value === "string" 
-                      ? `"${value.replace(/"/g, '""')}"` 
-                      : value;
-              })
-              .join(",")
-      )
+    headers.join(","),
+    ...data.map((row) =>
+      headers
+        .map((header) => {
+          const value = row[header];
+          return typeof value === "string"
+            ? `"${value.replace(/"/g, '""')}"`
+            : value;
+        })
+        .join(",")
+    ),
   ];
 
   const csvContent = csvRows.join("\n");
@@ -593,7 +631,7 @@ export function exportTableToCSV(data: any[]): void {
 
   const link = document.createElement("a");
   link.href = url;
-  link.download = "export.csv"; 
+  link.download = "export.csv";
   link.style.display = "none";
 
   document.body.appendChild(link);
@@ -601,4 +639,16 @@ export function exportTableToCSV(data: any[]): void {
   document.body.removeChild(link);
 
   URL.revokeObjectURL(url);
+}
+
+export function deleteUser(id: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    deleteDoc(doc(db, "Users", id))
+      .then(() => {
+        resolve();
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
 }
