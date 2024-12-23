@@ -20,6 +20,7 @@ import {
   getRegistrationCode,
   updateRegistrationCode,
 } from "../../../backend/AdminFirestoreCalls.ts";
+import { DateTime } from "luxon";
 
 function EditRegistrationCode() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -57,7 +58,7 @@ function EditRegistrationCode() {
   };
 
   const handleCodeSave = async () => {
-    const todayDate = new Date().toISOString().split("T")[0];
+    const todayDate = new Date(Date.now()).toISOString();
 
     updateRegistrationCode({
       code: editedCode,
@@ -135,7 +136,10 @@ function EditRegistrationCode() {
               fontWeight: "bold",
             }}
           >
-            Last updated: {dateUpdated || "Unknown"}
+            Last updated:{" "}
+            {DateTime.fromISO(dateUpdated)
+              .toFormat("hh:mm a, MM-dd-yyyy")
+              .toUpperCase() || "Unknown"}
           </Typography>
           <div className={styles.buttonCodeContainer}>
             {isEditing ? (

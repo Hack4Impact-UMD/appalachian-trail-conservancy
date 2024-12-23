@@ -68,7 +68,7 @@ function EditEmail({ tab, quillRef }: EditEmailProps) {
   }, [tab]);
 
   const handleEmailSave = () => {
-    const todayDate = new Date().toISOString().split("T")[0];
+    const todayDate = new Date(Date.now()).toISOString();
 
     const email: EmailType = {
       subject,
