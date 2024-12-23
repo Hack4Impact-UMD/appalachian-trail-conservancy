@@ -51,6 +51,7 @@
 }
 
 .tabContainer {
+  text-align: start;
   display: flex;
   flex-direction: row;
   align-items: center;
