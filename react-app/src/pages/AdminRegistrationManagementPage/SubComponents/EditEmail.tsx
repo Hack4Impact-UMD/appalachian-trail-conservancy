@@ -8,7 +8,9 @@ import {
   Button,
   Snackbar,
   Alert,
+  Tooltip,
 } from "@mui/material";
+import { IoIosInformationCircleOutline } from "react-icons/io";
 import styles from "./SubComponent.module.css";
 import { styledRectButton, forestGreenButton } from "../../../muiTheme.ts";
 import { EmailType } from "../../../types/AssetsType.ts";
@@ -113,7 +115,6 @@ function EditEmail({ tab, quillRef }: EditEmailProps) {
             sx={{
               fontSize: "1.1rem",
               borderRadius: "10px",
-              marginTop: "0.3rem",
               height: "3.2rem",
               border: "2px solid var(--blue-gray)",
               "& fieldset": {
@@ -123,19 +124,40 @@ function EditEmail({ tab, quillRef }: EditEmailProps) {
             onChange={(e) => setSubject(e.target.value)}
             error={true}
           />
-          <Typography variant="body2" className={styles.subHeaderLabel}>
-            BODY
-          </Typography>
+
+          <div className={styles.subHeaderLabel}>
+            <Typography
+              variant="body2"
+              sx={{ fontWeight: "bold", color: "var(--blue-gray)" }}
+            >
+              BODY
+            </Typography>
+            <Tooltip
+              title="When sent, FIRSTNAME will be replaced with the recipient's first name, 
+                      and LASTNAME will be replaced with the recipient's last name."
+              placement="right"
+              componentsProps={{
+                tooltip: {
+                  sx: {
+                    bgcolor: "white",
+                    color: "black",
+                    borderRadius: "8px",
+                    padding: "10px",
+                    boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)",
+                  },
+                },
+              }}
+            >
+              <span style={{ marginLeft: "8px" }}>
+                <IoIosInformationCircleOutline />
+              </span>
+            </Tooltip>
+          </div>
+
           {/* Quill Editor Container */}
-          <div
-            style={{
-              border: "2px solid var(--blue-gray)",
-              borderRadius: "10px",
-            }}
-          >
+          <div className={styles.quillEditor}>
             <div
               ref={editorContainerRef}
-              id={styles.quillEditor}
               style={{
                 height: "300px",
               }}
