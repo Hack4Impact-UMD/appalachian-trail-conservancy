@@ -2,8 +2,14 @@ import { useState, useRef, useEffect } from "react";
 import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar.tsx";
 import EditRegistrationCode from "./SubComponents/EditRegistrationCode.tsx";
 import EditEmail from "./SubComponents/EditEmail.tsx";
+import { FormControl, MenuItem, Select } from "@mui/material";
 import styles from "./AdminRegistrationManagementPage.module.css";
-import { CustomToggleButtonGroup, PurpleToggleButton } from "../../muiTheme.ts";
+import {
+  CustomToggleButtonGroup,
+  PurpleToggleButton,
+  whiteSelectGrayBorder,
+  selectOptionStyle,
+} from "../../muiTheme.ts";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon.tsx";
 import Footer from "../../components/Footer/Footer.tsx";
 import hamburger from "../../assets/hamburger.svg";
@@ -78,6 +84,26 @@ function AdminRegistrationManagementPage() {
                       REGISTRATION CODE
                     </PurpleToggleButton>
                   </CustomToggleButtonGroup>
+                </div>
+                {/* dropdown container */}
+                <div className={styles.dropdownContainer}>
+                  <FormControl sx={{ width: 300 }}>
+                    <Select
+                      className={styles.dropdownMenu}
+                      sx={whiteSelectGrayBorder}
+                      value={tab}
+                      onChange={(e) => handleTabChange(e.target.value)} // Handle the dropdown value directly
+                      displayEmpty
+                      label="Filter"
+                    >
+                      <MenuItem value="user" sx={selectOptionStyle}>
+                        EDIT NEW USER EMAIL
+                      </MenuItem>
+                      <MenuItem value="registration" sx={selectOptionStyle}>
+                        REGISTRATION CODE
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
                 </div>
                 <div className={styles.emailRegCodeContainer}>
                   {tab === "user" ? (
