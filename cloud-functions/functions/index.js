@@ -11,30 +11,40 @@ const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
 const OAuth2 = google.auth.OAuth2;
 
-const oauth2Client = new OAuth2(
-  process.env.CLIENT_ID,
-  process.env.CLIENT_SECRET,
-  "https://developers.google.com/oauthplayground"
-);
+// const oauth2Client = new OAuth2(
+//   process.env.CLIENT_ID,
+//   process.env.CLIENT_SECRET,
+//   "https://developers.google.com/oauthplayground"
+// );
 
-oauth2Client.setCredentials({
-  refresh_token: process.env.REFRESH_TOKEN,
-});
+// oauth2Client.setCredentials({
+//   refresh_token: process.env.REFRESH_TOKEN,
+// });
 
-const accessToken = oauth2Client.getAccessToken();
+// const accessToken = oauth2Client.getAccessToken();
+
+// const transporter = nodemailer.createTransport({
+//   service: "gmail",
+//   auth: {
+//     type: "OAuth2",
+//     user: process.env.EMAIL,
+//     accessToken: accessToken,
+//     clientId: process.env.CLIENT_ID,
+//     clientSecret: process.env.CLIENT_SECRET,
+//     refreshToken: process.env.REFRESH_TOKEN,
+//   },
+//   tls: {
+//     rejectUnauthorized: false,
+//   },
+// });
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
   auth: {
-    type: "OAuth2",
     user: process.env.EMAIL,
-    accessToken: accessToken,
-    clientId: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
-    refreshToken: process.env.REFRESH_TOKEN,
-  },
-  tls: {
-    rejectUnauthorized: false,
+    pass: process.env.PASS,
   },
 });
 
@@ -615,7 +625,7 @@ exports.validateQuizResults = onCall(
   { region: "us-east4", cors: true },
   async ({ auth, data }) => {
     return new Promise(async (resolve, reject) => {
-      const { trainingId, volunteerAnswers, volunteerId } = data;
+      const { trainingId, volunteerAnswers, volunteerId, timeCompleted } = data;
       if (
         // Validate auth
         auth &&
@@ -624,7 +634,8 @@ exports.validateQuizResults = onCall(
         // Validate parameters here
         trainingId &&
         volunteerAnswers &&
-        volunteerId
+        volunteerId &&
+        timeCompleted
       ) {
         await db
           .collection("Trainings")
@@ -674,9 +685,7 @@ exports.validateQuizResults = onCall(
                   ) {
                     // Update volunteerTraining if quiz score does not exist or higher score is recieved
                     volunteerTrainingInfo.quizScoreRecieved = numAnswersCorrect;
-                    volunteerTrainingInfo.dateCompleted = new Date()
-                      .toISOString()
-                      .slice(0, 10);
+                    volunteerTrainingInfo.dateCompleted = timeCompleted;
                     volunteerTrainingInfo.progress =
                       numAnswersCorrect >= quiz.passingScore
                         ? "COMPLETED"
