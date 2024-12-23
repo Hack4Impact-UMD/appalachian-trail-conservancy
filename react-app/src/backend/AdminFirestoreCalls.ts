@@ -43,7 +43,11 @@ export function getRegistrationEmail(): Promise<EmailType> {
 
 export function updateRegistrationEmail(email: EmailType): Promise<void> {
   return new Promise((resolve, reject) => {
-    if (email.subject === "" || email.body === "") {
+    if (
+      email.subject === "" ||
+      email.body === "" ||
+      email.body === "<p><br></p>" // special case when quill editor is empty
+    ) {
       reject(new Error("Invalid subject or body"));
       return;
     }
@@ -114,7 +118,7 @@ export function updateRegistrationCode(
       .then((regCodeSnapshot) => {
         regCodeSnapshot.forEach((regCodeSnapshot) => {
           deleteDoc(regCodeSnapshot.ref).then(() => {
-            addDoc(collection(db, "Assets"), regCodeSnapshot)
+            addDoc(collection(db, "Assets"), registrationCode)
               .then(() => {
                 resolve();
               })

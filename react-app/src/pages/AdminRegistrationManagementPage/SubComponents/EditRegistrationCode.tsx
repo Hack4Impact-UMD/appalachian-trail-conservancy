@@ -7,6 +7,8 @@ import {
   Button,
   Tooltip,
   IconButton,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { ContentCopy as ContentCopyIcon } from "@mui/icons-material";
 import {
@@ -14,8 +16,6 @@ import {
   whiteButtonGrayBorder,
   styledRectButton,
 } from "../../../muiTheme.ts";
-import { doc, updateDoc } from "firebase/firestore";
-import { db } from "../../../config/firebase.ts";
 import {
   getRegistrationCode,
   updateRegistrationCode,
@@ -23,6 +23,9 @@ import {
 
 function EditRegistrationCode() {
   const [loading, setLoading] = useState<boolean>(true);
+
+  const [snackbar, setSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   const [copied, setCopied] = useState<boolean>(false);
   const [codeText, setCodeText] = useState<string>("XXXXX");
@@ -54,19 +57,24 @@ function EditRegistrationCode() {
   };
 
   const handleCodeSave = async () => {
-    setCodeText(editedCode);
     const todayDate = new Date().toISOString().split("T")[0];
+
     updateRegistrationCode({
       code: editedCode,
       dateUpdated: todayDate,
       type: "REGISTRATIONCODE",
     })
       .then(() => {
-        console.log("Registration code updated successfully.");
-        setIsEditing(false); // Exit edit mode after attempting to save
+        setCodeText(editedCode);
+        setDateUpdated(todayDate);
+        setSnackbarMessage("Registration code updated successfully.");
       })
       .catch((e) => {
-        console.error("Error saving registration code:", e);
+        setSnackbarMessage("Registration code failed to update");
+      })
+      .finally(() => {
+        setIsEditing(false); // Exit edit mode after attempting to save
+        setSnackbar(true);
       });
   };
 
@@ -175,6 +183,24 @@ function EditRegistrationCode() {
                 EDIT
               </Button>
             )}
+          </div>
+          {/* Snackbar wrapper container */}
+          <div className={styles.snackbarContainer}>
+            <Snackbar
+              open={snackbar}
+              autoHideDuration={6000}
+              onClose={() => setSnackbar(false)}
+              anchorOrigin={{ vertical: "bottom", horizontal: "right" }} // Position within the right section
+            >
+              <Alert
+                onClose={() => setSnackbar(false)}
+                severity={
+                  snackbarMessage.includes("successfully") ? "success" : "error"
+                }
+              >
+                {snackbarMessage}
+              </Alert>
+            </Snackbar>
           </div>
         </div>
       )}

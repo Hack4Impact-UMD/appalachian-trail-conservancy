@@ -67,7 +67,7 @@ function EditEmail({ tab, quillRef }: EditEmailProps) {
       });
   }, [tab]);
 
-  const handleSave = () => {
+  const handleEmailSave = () => {
     const todayDate = new Date().toISOString().split("T")[0];
 
     const email: EmailType = {
@@ -150,7 +150,7 @@ function EditEmail({ tab, quillRef }: EditEmailProps) {
                 width: "120px",
                 marginLeft: "30px",
               }}
-              onClick={handleSave} // Save the email when clicked
+              onClick={handleEmailSave} // Save the email when clicked
             >
               SAVE
             </Button>
