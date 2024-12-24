@@ -25,6 +25,7 @@ import { DateTime } from "luxon";
 import { PathwayID } from "../../types/PathwayType.ts";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
+  exportTableToCSV,
   getPathway,
   getTraining,
   getVolunteers,
@@ -68,19 +69,15 @@ function AdminPathwayDetails() {
 
   //formatting date/time with iso
   const formatDate = (isoDate: string) => {
-    if (!isoDate) return "Not Available";
+    if (!isoDate) return "N/A";
     const date = DateTime.fromISO(isoDate);
-    return date.isValid
-      ? date.toLocaleString(DateTime.DATE_SHORT)
-      : "Not Available";
+    return date.isValid ? date.toLocaleString(DateTime.DATE_SHORT) : "N/A";
   };
 
   const formatTime = (isoDate: string) => {
-    if (!isoDate) return "Not Available";
+    if (!isoDate) return "N/A";
     const date = DateTime.fromISO(isoDate);
-    return date.isValid
-      ? date.toLocaleString(DateTime.TIME_SIMPLE)
-      : "Not Available";
+    return date.isValid ? date.toLocaleString(DateTime.TIME_SIMPLE) : "N/A";
   };
 
   // DataGrid columns
@@ -105,7 +102,16 @@ function AdminPathwayDetails() {
       .filter((volunteerPathway) => volunteerPathway.pathwayID === pathway.id)
       .map((volunteerPathway) => {
         const passingScore = pathway.quiz.passingScore;
-        const quizScoreFormatted = `${volunteerPathway.quizScoreRecieved} / ${pathway.quiz.numQuestions}`;
+        const quizScore =
+          volunteerPathway.quizScoreRecieved === undefined
+            ? "N/A"
+            : `${volunteerPathway.quizScoreRecieved} / ${pathway.quiz.numQuestions}`;
+        const passFailStatus =
+          volunteerPathway.quizScoreRecieved === undefined
+            ? "N/A"
+            : volunteerPathway.quizScoreRecieved >= passingScore
+            ? "Passed"
+            : "Failed";
 
         return {
           id: volunteer.id,
@@ -113,13 +119,8 @@ function AdminPathwayDetails() {
           email: volunteer.email, // Added email field
           dateCompleted: formatDate(volunteerPathway.dateCompleted),
           timeCompleted: formatTime(volunteerPathway.dateCompleted),
-          quizScore: quizScoreFormatted || "Not Available",
-          passFailStatus:
-            volunteerPathway.quizScoreRecieved === undefined
-              ? "N/A"
-              : volunteerPathway.quizScoreRecieved >= passingScore
-              ? "Passed"
-              : "Failed",
+          quizScore: quizScore,
+          passFailStatus: passFailStatus,
           status: volunteerPathway.progress,
         };
       });
@@ -187,7 +188,8 @@ function AdminPathwayDetails() {
       <GridColumnMenuContainer
         hideMenu={hideMenu}
         currentColumn={currentColumn}
-        open={open}>
+        open={open}
+      >
         <GridFilterMenuItem onClick={hideMenu} column={currentColumn!} />
         <SortGridMenuItems onClick={hideMenu} column={currentColumn!} />
       </GridColumnMenuContainer>
@@ -237,6 +239,22 @@ function AdminPathwayDetails() {
     filterVolunteers(volunteers);
   }, [searchQuery]);
 
+  const exportPathwayData = () => {
+    const header = columns.map((column) => column.headerName);
+    const rowData = rows.map((row) => {
+      return [
+        row.volunteerName,
+        row.email,
+        row.dateCompleted,
+        row.timeCompleted,
+        row.quizScore,
+        row.passFailStatus,
+        row.status,
+      ];
+    });
+    exportTableToCSV([header, ...rowData]);
+  };
+
   return (
     <>
       <AdminNavigationBar
@@ -248,7 +266,8 @@ function AdminPathwayDetails() {
         style={{
           // Only apply left shift when screen width is greater than 1200px
           left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-        }}>
+        }}
+      >
         {!navigationBarOpen && (
           <img
             src={hamburger}
@@ -283,7 +302,8 @@ function AdminPathwayDetails() {
                           onClick={() => {
                             navigate(`/management/training/${training.id}`);
                           }}
-                          key={idx}>
+                          key={idx}
+                        >
                           {training.name}
                         </div>
                       ))}
@@ -291,7 +311,8 @@ function AdminPathwayDetails() {
                       {trainingNames.length > 4 && (
                         <button
                           onClick={() => setShowMore(!showMore)}
-                          className={styles.toggleButton}>
+                          className={styles.toggleButton}
+                        >
                           {showMore ? "SEE LESS" : "SEE MORE"}
                         </button>
                       )}
@@ -324,7 +345,9 @@ function AdminPathwayDetails() {
                       paddingRight: "20px",
                       fontWeight: "bold",
                       width: "375px",
-                    }}>
+                    }}
+                    onClick={exportPathwayData}
+                  >
                     Export
                   </Button>
                 </div>
@@ -360,7 +383,8 @@ function AdminPathwayDetails() {
                       fontWeight: "bold",
                       width: "100px",
                     }}
-                    onClick={() => navigate("/management")}>
+                    onClick={() => navigate("/management")}
+                  >
                     BACK
                   </Button>
                 </div>
