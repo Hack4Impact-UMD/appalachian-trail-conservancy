@@ -1,4 +1,5 @@
 import styles from "./ProfileIcon.module.css";
+import { Link } from "react-router-dom";
 import { useAuth } from "../../auth/AuthProvider.tsx";
 
 const ProfileIcon = () => {
@@ -16,7 +17,14 @@ const ProfileIcon = () => {
       ) : (
         <></>
       )}
-      <div className={styles.profileIcon}>{initials}</div>
+      <Link
+        to="/profile"
+        style={{
+          textDecoration: "none"
+        }}
+      >
+        <div className={styles.profileIcon}>{initials}</div>
+      </Link>
     </div>
   );
 };
