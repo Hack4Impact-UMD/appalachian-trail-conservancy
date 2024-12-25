@@ -78,7 +78,7 @@ const QuizResultPage = () => {
 
   const passed = achievedScore >= (training?.quiz.passingScore ?? 0);
   const scoredFull = achievedScore == training?.quiz.numQuestions;
-  console.log(achievedScore);
+
   return (
     <>
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />

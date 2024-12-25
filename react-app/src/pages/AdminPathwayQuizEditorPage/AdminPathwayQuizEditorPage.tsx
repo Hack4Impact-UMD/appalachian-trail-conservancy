@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./AdminPathwayQuizEditorPage.module.css";
 import {
   Button,
@@ -21,12 +22,13 @@ import {
 } from "../../muiTheme";
 import { Unstable_NumberInput as NumberInput } from "@mui/base/Unstable_NumberInput";
 import AddIcon from "@mui/icons-material/Add";
-import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar";
 import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Hamburger from "../../assets/hamburger.svg";
 
 function PathwayQuizEditorPage() {
+  const navigate = useNavigate();
   const [navigationBarOpen, setNavigationBarOpen] = useState(true);
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
 
@@ -148,7 +150,10 @@ function PathwayQuizEditorPage() {
 
   return (
     <>
-      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <AdminNavigationBar
+        open={navigationBarOpen}
+        setOpen={setNavigationBarOpen}
+      />
       <div
         className={`${styles.split} ${styles.right}`}
         style={{
@@ -318,6 +323,11 @@ function PathwayQuizEditorPage() {
                     ...styledRectButton,
                     ...whiteButtonGrayBorder,
                     width: "120px",
+                  }}
+                  onClick={() => {
+                    navigate("/pathways/editor", {
+                      // state: { pathway: pathwayData },
+                    });
                   }}>
                   BACK
                 </Button>

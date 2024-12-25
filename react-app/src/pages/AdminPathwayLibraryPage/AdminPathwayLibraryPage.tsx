@@ -16,6 +16,7 @@ import {
   whiteSelectGrayBorder,
   selectOptionStyle,
 } from "../../muiTheme";
+import { useNavigate } from "react-router-dom";
 import { getAllPathways } from "../../backend/FirestoreCalls";
 import { PathwayID } from "../../types/PathwayType.ts";
 import { useAuth } from "../../auth/AuthProvider.tsx";
@@ -30,7 +31,7 @@ import hamburger from "../../assets/hamburger.svg";
 
 function AdminPathwayLibrary() {
   const auth = useAuth();
-
+  const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(true);
   const [filterType, setFilterType] = useState("drafts");
   const [searchQuery, setSearchQuery] = useState("");
@@ -142,7 +143,10 @@ function AdminPathwayLibrary() {
               <ProfileIcon />
             </div>
             <div>
-              <Button sx={forestGreenButtonLarge} variant="contained">
+              <Button
+                sx={forestGreenButtonLarge}
+                variant="contained"
+                onClick={() => navigate("/pathways/editor")}>
                 CREATE NEW PATHWAY
               </Button>
             </div>

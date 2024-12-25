@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./AdminTrainingQuizEditorPage.module.css";
 import {
   Button,
@@ -7,6 +8,8 @@ import {
   RadioGroup,
   FormControl,
   FormControlLabel,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { IoCloseOutline } from "react-icons/io5";
 import {
@@ -21,16 +24,40 @@ import {
 } from "../../muiTheme";
 import { Unstable_NumberInput as NumberInput } from "@mui/base/Unstable_NumberInput";
 import AddIcon from "@mui/icons-material/Add";
-import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar";
 import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Hamburger from "../../assets/hamburger.svg";
+import { updateTraining } from "../../backend/FirestoreCalls";
+import { Quiz, TrainingID } from "../../types/TrainingType";
+
+interface Answer {
+  text: string;
+  isCorrect: boolean;
+}
+
+interface Question {
+  questionText: string;
+  answers: Answer[];
+}
 
 function TrainingQuizEditorPage() {
+  const location = useLocation();
+  const training = location.state?.training as TrainingID | undefined; // Access training data and id
+  const trainingId = training?.id || "";
+
+  const [trainingData, setTrainingData] = useState<TrainingID | undefined>(
+    training
+  );
+
+  const navigate = useNavigate();
   const [navigationBarOpen, setNavigationBarOpen] = useState(true);
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
+  const [isEditMode, setIsEditMode] = useState<boolean>(
+    training?.status !== "DRAFT"
+  );
 
-  const [questions, setQuestions] = useState([
+  const [questions, setQuestions] = useState<Question[]>([
     {
       questionText: "",
       answers: [
@@ -39,12 +66,22 @@ function TrainingQuizEditorPage() {
       ],
     },
   ]);
-  const [selectedAnswers, setSelectedAnswers] = useState<(number | null)[]>([
-    null,
-  ]);
 
+  const [selectedAnswers, setSelectedAnswers] = useState<(string | null)[]>([
+    "N/A",
+  ]);
   const [pointsToPass, setPointsToPass] = useState(0);
   const [maxPoints, setMaxPoints] = useState(questions.length);
+
+  const [snackbar, setSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+
+  const isQuestionBlank = (question: Question) => {
+    return (
+      !question.questionText.trim() &&
+      question.answers.every((answer) => !answer.text.trim())
+    );
+  };
 
   // Update screen width on resize
   useEffect(() => {
@@ -58,10 +95,38 @@ function TrainingQuizEditorPage() {
     };
   }, []);
 
+  // Load existing quiz data when the page loads
   useEffect(() => {
-    setMaxPoints(questions.length);
-    if (pointsToPass > questions.length) {
-      setPointsToPass(questions.length);
+    if (training?.quiz) {
+      setQuestions([
+        ...training.quiz.questions.map((q) => ({
+          questionText: q.question,
+          answers: q.choices.map((choice) => ({
+            text: choice,
+            isCorrect: choice === q.answer, // Set `isCorrect` if this choice is the answer
+          })),
+        })),
+        {
+          questionText: "", // Add a blank question
+          answers: [
+            { text: "", isCorrect: false },
+            { text: "", isCorrect: false },
+          ],
+        },
+      ]);
+
+      // Map the correct answer indices
+      const correctAnswers = training.quiz.questions.map((q) => q.answer);
+      setSelectedAnswers([...correctAnswers, "N/A"]);
+      setPointsToPass(training.quiz.passingScore || 0);
+    }
+  }, [training]);
+
+  useEffect(() => {
+    const numQuestions = questions.filter((q) => !isQuestionBlank(q)).length;
+    setMaxPoints(numQuestions);
+    if (pointsToPass > numQuestions) {
+      setPointsToPass(numQuestions);
     }
   }, [questions, pointsToPass]);
 
@@ -82,7 +147,7 @@ function TrainingQuizEditorPage() {
         ],
       },
     ]);
-    setSelectedAnswers([...selectedAnswers, null]);
+    setSelectedAnswers([...selectedAnswers, "N/A"]);
   };
 
   const handleRemoveQuestion = (index: number) => {
@@ -111,13 +176,18 @@ function TrainingQuizEditorPage() {
   };
 
   const handleRemoveAnswer = (questionIndex: number, answerIndex: number) => {
+    const newQuestions = [...questions];
+    const removedAnswerText =
+      newQuestions[questionIndex].answers[answerIndex].text;
+
+    // Update the selectedAnswers array
     const newSelectedAnswers = [...selectedAnswers];
-    if (newSelectedAnswers[questionIndex] == answerIndex) {
+    if (newSelectedAnswers[questionIndex] === removedAnswerText) {
       newSelectedAnswers[questionIndex] = null;
     }
     setSelectedAnswers(newSelectedAnswers);
 
-    const newQuestions = [...questions];
+    // Remove the answer from the question's answers
     newQuestions[questionIndex].answers = newQuestions[
       questionIndex
     ].answers.filter((_, i) => i !== answerIndex);
@@ -126,17 +196,21 @@ function TrainingQuizEditorPage() {
 
   const handleCorrectAnswerChange = (
     questionIndex: number,
-    answerIndex: number
+    answerText: string
   ) => {
     const newQuestions = [...questions];
-    newQuestions[questionIndex].answers.map((answer, idx) => ({
+
+    // Update the answers with correct answer set
+    newQuestions[questionIndex].answers = newQuestions[
+      questionIndex
+    ].answers.map((answer) => ({
       ...answer,
-      isCorrect: idx === answerIndex,
+      isCorrect: answerText !== "" && answer.text === answerText,
     }));
     setQuestions(newQuestions);
 
     const newSelectedAnswers = [...selectedAnswers];
-    newSelectedAnswers[questionIndex] = answerIndex;
+    newSelectedAnswers[questionIndex] = answerText;
     setSelectedAnswers(newSelectedAnswers);
   };
 
@@ -146,9 +220,148 @@ function TrainingQuizEditorPage() {
     }
   };
 
+  const validateFields = (qs: Question[]) => {
+    for (let i = 0; i < qs.length; i++) {
+      const question = qs[i];
+
+      // Check that question text is filled out
+      if (!question.questionText) {
+        console.log(`Validation failed: Question ${i + 1} has no text.`);
+        return false;
+      }
+
+      // Check that there's at least one answer with text
+      const hasAnswers = question.answers.some(
+        (answer) => answer.text.trim() !== ""
+      );
+      if (!hasAnswers) {
+        console.log(
+          `Validation failed: Question ${i + 1} has no answers with text.`
+        );
+        return false;
+      }
+
+      // Check that at least one answer is marked as correct
+      const hasCorrectAnswer = question.answers.some(
+        (answer) => answer.isCorrect
+      );
+      if (!hasCorrectAnswer) {
+        console.log(
+          `Validation failed: Question ${i + 1} has no correct answer selected.`
+        );
+        return false;
+      }
+    }
+
+    // Ensure points to pass is greater than 0 and does not exceed total number of questions
+    if (pointsToPass < 1 || pointsToPass > qs.length) {
+      console.log(
+        `Validation failed: Points to pass is invalid. Points to pass: ${pointsToPass}, Total questions: ${questions.length}`
+      );
+      return false;
+    }
+
+    console.log("Validation passed: All fields are properly filled.");
+    return true; // All checks passed
+  };
+
+  const handleSaveClick = async () => {
+    const nonBlankQuestions = questions.filter((q) => !isQuestionBlank(q));
+
+    // Validate fields only if in edit mode
+    if (isEditMode && !validateFields(nonBlankQuestions)) {
+      setSnackbarMessage("Please complete all required fields.");
+      setSnackbar(true);
+      return;
+    }
+
+    const quizData = {
+      numQuestions: nonBlankQuestions.length,
+      passingScore: pointsToPass,
+      questions: nonBlankQuestions.map((q) => ({
+        question: q.questionText || "",
+        choices: q.answers.map((a) => a.text || ""),
+        answer: q.answers.find((a) => a.isCorrect)?.text || "",
+      })),
+    } as Quiz;
+
+    const updatedTraining = {
+      ...training,
+      quiz: quizData,
+    } as TrainingID;
+
+    // Update the training in the database
+    await updateTraining(updatedTraining, trainingId);
+    setTrainingData(updatedTraining);
+    setSnackbarMessage("Quiz saved successfully.");
+    setSnackbar(true);
+  };
+
+  const handlePublishClick = async () => {
+    // Filter out blank questions
+    const nonBlankQuestions = questions.filter((q) => !isQuestionBlank(q));
+
+    // Ensure valid fields before proceeding
+    if (nonBlankQuestions.length === 0) {
+      setSnackbarMessage("Please add at least one question.");
+      setSnackbar(true);
+      return;
+    }
+
+    // Validation: Ensure fields are filled
+    if (!validateFields(nonBlankQuestions)) {
+      setSnackbarMessage("Please complete all fields.");
+      setSnackbar(true);
+      return;
+    }
+
+    try {
+      /* Check for duplicate training names in the backend
+      const isDuplicate = await checkDuplicateTrainingName(training.name);
+      if (isDuplicate) {
+        setSnackbarMessage("Training with this name already exists.");
+        setSnackbar(true);
+        return;
+      }*/
+
+      // Prepare quiz data for publishing
+      const quizData = {
+        numQuestions: nonBlankQuestions.length,
+        passingScore: pointsToPass,
+        questions: nonBlankQuestions.map((q) => ({
+          question: q.questionText,
+          choices: q.answers.map((a) => a.text),
+          answer: q.answers.find((a) => a.isCorrect)?.text || "",
+        })),
+      } as Quiz;
+
+      const updatedTraining = {
+        ...training,
+        quiz: quizData,
+        status: training?.status === "PUBLISHED" ? "ARCHIVED" : "PUBLISHED",
+      } as TrainingID;
+
+      // Update Firestore with the published training
+      await updateTraining(updatedTraining, trainingId);
+      setSnackbarMessage("Training published successfully.");
+      setSnackbar(true);
+      navigate("/trainings"); // Redirect to training library
+    } catch (error) {
+      console.error("Error publishing training:", error);
+      setSnackbarMessage("Error publishing training. Please try again.");
+      setSnackbar(true);
+    }
+  };
+
+  // Snackbar close handler
+  const handleCloseSnackbar = () => setSnackbar(false);
+
   return (
     <>
-      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <AdminNavigationBar
+        open={navigationBarOpen}
+        setOpen={setNavigationBarOpen}
+      />
       <div
         className={`${styles.split} ${styles.right}`}
         style={{
@@ -166,13 +379,18 @@ function TrainingQuizEditorPage() {
         )}
         <div className={styles.container}>
           <div className={styles.content}>
-            <div className={styles.editorHeader}>
+            <div className={styles.header}>
               <h1 className={styles.nameHeading}>Trainings Editor</h1>
               <ProfileIcon />
             </div>
 
             <form noValidate onSubmit={(e) => e.preventDefault()}>
-              <Button sx={whiteButtonGrayBorder}>Save as Draft</Button>
+              <Button
+                sx={whiteButtonGrayBorder}
+                variant="contained"
+                onClick={handleSaveClick}>
+                {isEditMode ? "Save" : "Save as Draft"}
+              </Button>
 
               <h2 className={styles.quizEditorText}>CREATE QUIZ</h2>
 
@@ -236,17 +454,21 @@ function TrainingQuizEditorPage() {
                   <div className={styles.answerOptions}>
                     <FormControl>
                       <RadioGroup
-                        value={selectedAnswers[questionIndex]}
-                        onChange={(e) =>
+                        value={selectedAnswers[questionIndex] || ""}
+                        onChange={(e) => {
+                          const answerText = e.target.value;
+                          const answerIndex = question.answers.findIndex(
+                            (answer) => answer.text === answerText
+                          );
                           handleCorrectAnswerChange(
                             questionIndex,
-                            Number(e.target.value)
-                          )
-                        }>
+                            e.target.value
+                          );
+                        }}>
                         {question.answers.map((answer, answerIndex) => (
                           <FormControlLabel
                             key={answerIndex}
-                            value={answerIndex}
+                            value={answer.text}
                             control={<Radio sx={grayGreenRadioButton} />}
                             label={
                               <div className={styles.answerOption}>
@@ -291,9 +513,11 @@ function TrainingQuizEditorPage() {
                       <div className={styles.selectedAnswerBox}>
                         <span className={styles.selectedAnswerText}>
                           ANSWER:{" "}
-                          {selectedAnswers[questionIndex] !== null &&
-                          selectedAnswers[questionIndex]! >= 0
-                            ? Number(selectedAnswers[questionIndex]!) + 1
+                          {selectedAnswers[questionIndex]
+                            ? question.answers.findIndex(
+                                (answer) =>
+                                  answer.text === selectedAnswers[questionIndex]
+                              ) + 1 || "N/A"
                             : "N/A"}
                         </span>
                       </div>
@@ -318,6 +542,11 @@ function TrainingQuizEditorPage() {
                     ...styledRectButton,
                     ...whiteButtonGrayBorder,
                     width: "120px",
+                  }}
+                  onClick={() => {
+                    navigate("/trainings/editor", {
+                      state: { training: trainingData },
+                    });
                   }}>
                   BACK
                 </Button>
@@ -328,13 +557,36 @@ function TrainingQuizEditorPage() {
                     ...forestGreenButton,
                     width: "120px",
                     marginLeft: "30px",
-                  }}>
-                  PUBLISH
+                  }}
+                  onClick={handlePublishClick}>
+                  {isEditMode
+                    ? training?.status === "PUBLISHED"
+                      ? "ARCHIVE"
+                      : "UNARCHIVE"
+                    : "PUBLISH"}
                 </Button>
               </div>
             </form>
           </div>
         </div>
+        {/* Snackbar wrapper container */}
+        <div className={styles.snackbarContainer}>
+          <Snackbar
+            open={snackbar}
+            autoHideDuration={6000}
+            onClose={handleCloseSnackbar}
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }} // Position within the right section
+          >
+            <Alert
+              onClose={handleCloseSnackbar}
+              severity={
+                snackbarMessage.includes("successfully") ? "success" : "error"
+              }>
+              {snackbarMessage}
+            </Alert>
+          </Snackbar>
+        </div>
+
         <Footer />
       </div>
     </>
