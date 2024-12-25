@@ -1,17 +1,14 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../auth/AuthProvider";
 import { getVolunteer, updateVolunteer } from "../../backend/FirestoreCalls";
-import { OutlinedInput, Button, Tooltip } from "@mui/material";
+import { OutlinedInput, Button, Tooltip, Alert, Snackbar } from "@mui/material";
 import { Volunteer } from "../../types/UserType";
 import styles from "./VolunteerProfilePage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import SettingsProfileIcon from "../../components/SettingsProfileIcon/SettingsProfileIcon";
 import Footer from "../../components/Footer/Footer";
 import hamburger from "../../assets/hamburger.svg";
-import {
-  grayBorderTextField,
-  forestGreenButton,
-} from "../../muiTheme";
+import { grayBorderTextField, forestGreenButton } from "../../muiTheme";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 function VolunteerProfilePage() {
@@ -21,8 +18,8 @@ function VolunteerProfilePage() {
   );
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
   const [volunteerCopy, setVolunteerCopy] = useState<Volunteer>();
-  const [firstName, setFirstName] = useState<String>(auth.firstName);
-  const [lastName, setLastName] = useState<String>(auth.lastName);
+  const [firstName, setFirstName] = useState<string>(auth.firstName);
+  const [lastName, setLastName] = useState<string>(auth.lastName);
 
   // Update screen width on resize
   useEffect(() => {
@@ -52,8 +49,8 @@ function VolunteerProfilePage() {
     getTrainingsCompleted();
   }, [auth.loading, auth.id]);
 
-  function updateName() {
-    if (volunteerCopy != undefined)
+  const updateName = () => {
+    if (volunteerCopy != undefined) {
       updateVolunteer({ ...volunteerCopy, firstName, lastName }, auth.id)
         .then(() => {
           console.log("Volunteer updated successfully");
@@ -61,7 +58,8 @@ function VolunteerProfilePage() {
         .catch((error) => {
           console.error("Error updating volunteer:", error);
         });
-  }
+    }
+  };
 
   return (
     <>
@@ -90,27 +88,27 @@ function VolunteerProfilePage() {
             </div>
             <div className={styles.profileContainer}>
               <div className={styles.leftContainer}>
-                <div className={styles.profileItem}>First Name</div>
-                <div className={styles.profileItem}>
+                <div className={styles.subHeader}>First Name</div>
+                <div className={styles.inputContainer}>
                   <OutlinedInput
                     defaultValue={auth.firstName}
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     sx={{ ...grayBorderTextField }}
-                  ></OutlinedInput>
+                  />
                 </div>
-                <div className={styles.profileItem}>Last Name</div>
-                <div className={styles.profileItem}>
+                <div className={styles.subHeader}>Last Name</div>
+                <div className={styles.inputContainer}>
                   <OutlinedInput
                     defaultValue={auth.lastName}
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                     sx={{ ...grayBorderTextField }}
-                  ></OutlinedInput>
+                  />
                 </div>
-                <div className={styles.emailBox}>
-                  <div className={styles.profileEmail}>Registered email</div>
-                  <div>
+                <div className={styles.emailSubHeader}>
+                  <div className={styles.subHeader}>
+                    Registered email
                     <Tooltip
                       title="You cannot edit this email. You must create a new account if so."
                       placement="right-start"
@@ -127,19 +125,20 @@ function VolunteerProfilePage() {
                     </Tooltip>
                   </div>
                 </div>
-                <div className={styles.profileItem}>
+                <div className={styles.inputContainer}>
                   <OutlinedInput
-                    value={ volunteerCopy ? volunteerCopy.email : ""} 
-                    disabled 
+                    value={volunteerCopy ? volunteerCopy.email : ""}
+                    disabled
                     sx={{
-                      ...grayBorderTextField, 
+                      ...grayBorderTextField,
                       "& .MuiOutlinedInput-notchedOutline": {
-                        borderColor: "grey", 
+                        borderColor: "grey",
                       },
                     }}
                   />
                 </div>
-                <div className={styles.profileItem}>
+
+                <div className={styles.buttonContainer}>
                   <Button
                     sx={forestGreenButton}
                     variant="contained"

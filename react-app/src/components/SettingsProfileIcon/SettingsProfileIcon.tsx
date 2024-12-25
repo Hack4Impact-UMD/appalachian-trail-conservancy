@@ -1,6 +1,5 @@
 import styles from "./SettingsProfileIcon.module.css";
-import { useAuth } from "../../auth/AuthProvider.tsx";
-
+import { useAuth } from "../../auth/AuthProvider";
 const SettingsProfileIcon = () => {
   // Subscribe to auth provider, pull first and last name
   const auth = useAuth();

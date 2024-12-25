@@ -17,9 +17,9 @@ interface Props {
 interface AuthContextType {
   user: User;
   token: IdTokenResult;
-  firstName: String;
-  lastName: String;
-  id: String;
+  firstName: string;
+  lastName: string;
+  id: string;
   loading: boolean;
 }
 
@@ -76,7 +76,8 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
 
   return (
     <AuthContext.Provider
-      value={{ user, token, firstName, lastName, id, loading }}>
+      value={{ user, token, firstName, lastName, id, loading }}
+    >
       {children}
     </AuthContext.Provider>
   );
