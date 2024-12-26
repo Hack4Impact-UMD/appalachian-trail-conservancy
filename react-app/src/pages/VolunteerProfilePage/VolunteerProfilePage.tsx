@@ -1,14 +1,19 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../auth/AuthProvider";
 import { getVolunteer, updateVolunteer } from "../../backend/FirestoreCalls";
-import { OutlinedInput, Button, Tooltip, Alert, Snackbar } from "@mui/material";
+import { Button, Tooltip, Alert, Snackbar, TextField } from "@mui/material";
 import { Volunteer } from "../../types/UserType";
 import styles from "./VolunteerProfilePage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import SettingsProfileIcon from "../../components/SettingsProfileIcon/SettingsProfileIcon";
 import Footer from "../../components/Footer/Footer";
 import hamburger from "../../assets/hamburger.svg";
-import { grayBorderTextField, forestGreenButton } from "../../muiTheme";
+import {
+  grayBorderTextField,
+  forestGreenButton,
+  styledRectButton,
+  whiteButtonGrayBorder,
+} from "../../muiTheme";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 function VolunteerProfilePage() {
@@ -17,9 +22,14 @@ function VolunteerProfilePage() {
     !(window.innerWidth < 1200)
   );
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
-  const [volunteerCopy, setVolunteerCopy] = useState<Volunteer>();
+  const [volunteer, setVolunteer] = useState<Volunteer>();
   const [firstName, setFirstName] = useState<string>(auth.firstName);
   const [lastName, setLastName] = useState<string>(auth.lastName);
+
+  const [isEditing, setIsEditing] = useState(false);
+
+  const [snackbar, setSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   // Update screen width on resize
   useEffect(() => {
@@ -36,29 +46,53 @@ function VolunteerProfilePage() {
   useEffect(() => {
     const getTrainingsCompleted = async () => {
       if (!auth.loading && auth.id) {
-        try {
-          const volunteer = await getVolunteer(auth.id.toString());
-          setFirstName(auth.firstName);
-          setLastName(auth.lastName);
-          console.log(volunteer);
-          setVolunteerCopy(volunteer);
-        } catch (error) {}
+        getVolunteer(auth.id.toString())
+          .then((volunteer) => {
+            setFirstName(auth.firstName);
+            setLastName(auth.lastName);
+            setVolunteer(volunteer);
+          })
+          .catch((e) => {
+            //TODO: Handle error
+          });
       }
     };
 
     getTrainingsCompleted();
   }, [auth.loading, auth.id]);
 
-  const updateName = () => {
-    if (volunteerCopy != undefined) {
-      updateVolunteer({ ...volunteerCopy, firstName, lastName }, auth.id)
-        .then(() => {
-          console.log("Volunteer updated successfully");
-        })
-        .catch((error) => {
-          console.error("Error updating volunteer:", error);
-        });
+  const handleUpdateName = () => {
+    if (volunteer != undefined) {
+      if (firstName != "" && lastName != "") {
+        updateVolunteer({ ...volunteer, firstName, lastName }, auth.id)
+          .then(() => {
+            setSnackbarMessage("Volunteer name updated successfully");
+          })
+          .catch((e) => {
+            setSnackbarMessage("Error updating volunteer name");
+          })
+          .finally(() => {
+            setIsEditing(false);
+            setSnackbar(true);
+          });
+      } else {
+        setFirstName(volunteer?.firstName ?? "");
+        setLastName(volunteer?.lastName ?? "");
+        setIsEditing(false);
+        setSnackbarMessage("First name and last name cannot be empty");
+        setSnackbar(true);
+      }
     }
+  };
+
+  const handleCancelEdit = () => {
+    setFirstName(volunteer?.firstName ?? "");
+    setLastName(volunteer?.lastName ?? "");
+    setIsEditing(false);
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar(false);
   };
 
   return (
@@ -90,20 +124,24 @@ function VolunteerProfilePage() {
               <div className={styles.leftContainer}>
                 <div className={styles.subHeader}>First Name</div>
                 <div className={styles.inputContainer}>
-                  <OutlinedInput
-                    defaultValue={auth.firstName}
-                    value={firstName}
+                  <TextField
+                    value={isEditing ? firstName : volunteer?.firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     sx={{ ...grayBorderTextField }}
+                    InputProps={{
+                      readOnly: !isEditing,
+                    }}
                   />
                 </div>
                 <div className={styles.subHeader}>Last Name</div>
                 <div className={styles.inputContainer}>
-                  <OutlinedInput
-                    defaultValue={auth.lastName}
-                    value={lastName}
+                  <TextField
+                    value={isEditing ? lastName : volunteer?.lastName}
                     onChange={(e) => setLastName(e.target.value)}
                     sx={{ ...grayBorderTextField }}
+                    InputProps={{
+                      readOnly: !isEditing,
+                    }}
                   />
                 </div>
                 <div className={styles.emailSubHeader}>
@@ -117,6 +155,9 @@ function VolunteerProfilePage() {
                           sx: {
                             bgcolor: "white",
                             color: "black",
+                            borderRadius: "8px",
+                            padding: "10px",
+                            boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)",
                           },
                         },
                       }}
@@ -126,8 +167,8 @@ function VolunteerProfilePage() {
                   </div>
                 </div>
                 <div className={styles.inputContainer}>
-                  <OutlinedInput
-                    value={volunteerCopy ? volunteerCopy.email : ""}
+                  <TextField
+                    value={volunteer?.email ?? ""}
                     disabled
                     sx={{
                       ...grayBorderTextField,
@@ -139,13 +180,36 @@ function VolunteerProfilePage() {
                 </div>
 
                 <div className={styles.buttonContainer}>
-                  <Button
-                    sx={forestGreenButton}
-                    variant="contained"
-                    onClick={updateName}
-                  >
-                    Save
-                  </Button>
+                  {isEditing ? (
+                    <>
+                      <Button
+                        variant="contained"
+                        sx={{
+                          ...whiteButtonGrayBorder,
+                        }}
+                        onClick={handleCancelEdit}
+                      >
+                        CANCEL
+                      </Button>
+                      <Button
+                        sx={forestGreenButton}
+                        variant="contained"
+                        onClick={handleUpdateName}
+                      >
+                        Save
+                      </Button>
+                    </>
+                  ) : (
+                    <Button
+                      sx={forestGreenButton}
+                      variant="contained"
+                      onClick={() => {
+                        setIsEditing(true);
+                      }}
+                    >
+                      Edit
+                    </Button>
+                  )}
                 </div>
               </div>
               <div className={styles.profileIcon}>
@@ -153,6 +217,24 @@ function VolunteerProfilePage() {
               </div>
             </div>
           </div>
+        </div>
+        {/* Snackbar wrapper container */}
+        <div className={styles.snackbarContainer}>
+          <Snackbar
+            open={snackbar}
+            autoHideDuration={6000}
+            onClose={handleCloseSnackbar}
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }} // Position within the right section
+          >
+            <Alert
+              onClose={handleCloseSnackbar}
+              severity={
+                snackbarMessage.includes("successfully") ? "success" : "error"
+              }
+            >
+              {snackbarMessage}
+            </Alert>
+          </Snackbar>
         </div>
         <Footer />
       </div>

@@ -85,7 +85,9 @@
 }
 
 .buttonContainer {
-  margin-top: 15%;
+  display: flex;
+  gap: 2%;
+  margin-top: 1.5rem;
 }
 
 .footer {
