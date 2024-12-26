@@ -30,3 +30,9 @@
   border: 2px solid var(--blue-gray);
   border-radius: 10px;
 }
+
+@media screen and (max-width: 750px) {
+  .emailRegCodeInnerContainer {
+    width: 100%;
+  }
+}

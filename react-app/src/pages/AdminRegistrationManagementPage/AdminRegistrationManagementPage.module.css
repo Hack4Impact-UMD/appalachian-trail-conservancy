@@ -132,6 +132,10 @@
     width: 425px;
   }
 
+  .bodyContainer {
+    width: 100%;
+  }
+
   .buttonGroup {
     display: none;
   }
