@@ -147,7 +147,7 @@ function VolunteerProfilePage() {
                 </div>
                 <div className={styles.emailSubHeader}>
                   <div className={styles.subHeader}>
-                    Registered email
+                    Registered Email
                     <Tooltip
                       title="You cannot edit this email. You must create a new account if so."
                       placement="right-start"
