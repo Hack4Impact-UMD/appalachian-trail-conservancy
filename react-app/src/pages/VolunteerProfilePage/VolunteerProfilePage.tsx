@@ -11,7 +11,6 @@ import hamburger from "../../assets/hamburger.svg";
 import {
   grayBorderTextField,
   forestGreenButton,
-  styledRectButton,
   whiteButtonGrayBorder,
 } from "../../muiTheme";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
@@ -125,6 +124,7 @@ function VolunteerProfilePage() {
                 <div className={styles.subHeader}>First Name</div>
                 <div className={styles.inputContainer}>
                   <TextField
+                    disabled={!isEditing}
                     value={isEditing ? firstName : volunteer?.firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     sx={{ ...grayBorderTextField }}
@@ -136,6 +136,7 @@ function VolunteerProfilePage() {
                 <div className={styles.subHeader}>Last Name</div>
                 <div className={styles.inputContainer}>
                   <TextField
+                    disabled={!isEditing}
                     value={isEditing ? lastName : volunteer?.lastName}
                     onChange={(e) => setLastName(e.target.value)}
                     sx={{ ...grayBorderTextField }}
@@ -150,6 +151,7 @@ function VolunteerProfilePage() {
                     <Tooltip
                       title="You cannot edit this email. You must create a new account if so."
                       placement="right-start"
+                      sx={{ marginLeft: "5px" }}
                       componentsProps={{
                         tooltip: {
                           sx: {
@@ -170,12 +172,8 @@ function VolunteerProfilePage() {
                   <TextField
                     value={volunteer?.email ?? ""}
                     disabled
-                    sx={{
-                      ...grayBorderTextField,
-                      "& .MuiOutlinedInput-notchedOutline": {
-                        borderColor: "grey",
-                      },
-                    }}
+                    className={styles.emailTextField}
+                    sx={grayBorderTextField}
                   />
                 </div>
 
@@ -193,7 +191,11 @@ function VolunteerProfilePage() {
                         CANCEL
                       </Button>
                       <Button
-                        sx={{ ...forestGreenButton, width: "120px" }}
+                        sx={{
+                          ...forestGreenButton,
+                          width: "120px",
+                          padding: "0",
+                        }}
                         variant="contained"
                         onClick={handleUpdateName}
                       >
