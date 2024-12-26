@@ -186,13 +186,14 @@ function VolunteerProfilePage() {
                         variant="contained"
                         sx={{
                           ...whiteButtonGrayBorder,
+                          width: "120px",
                         }}
                         onClick={handleCancelEdit}
                       >
                         CANCEL
                       </Button>
                       <Button
-                        sx={forestGreenButton}
+                        sx={{ ...forestGreenButton, width: "120px" }}
                         variant="contained"
                         onClick={handleUpdateName}
                       >
@@ -201,7 +202,7 @@ function VolunteerProfilePage() {
                     </>
                   ) : (
                     <Button
-                      sx={forestGreenButton}
+                      sx={{ ...forestGreenButton, width: "100px" }}
                       variant="contained"
                       onClick={() => {
                         setIsEditing(true);
