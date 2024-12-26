@@ -164,7 +164,6 @@ function EditRegistrationCode() {
                     ...styledRectButton,
                     ...forestGreenButton,
                     width: "120px",
-                    marginLeft: "30px",
                   }}
                   onClick={handleCodeSave} // Save the email when clicked
                 >
