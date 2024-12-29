@@ -21,6 +21,7 @@ import {
   getDownloadURL, 
   deleteObject 
 } from "firebase/storage";
+import { getAuth } from "firebase/auth";
 import {
   addTraining,
   updateTraining,
@@ -99,22 +100,48 @@ const AdminTrainingEditor: React.FC = () => {
     description: 1000,
   };
 
-  const onUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
+  const [file, setFile] = useState(null);
 
+  const onUpload = async () => {
+    if (!file) {
+      setSnackbarMessage("No file found. Please try again.");
+      setSnackbar(true);
+      return
+    };
+
+    console.log("File selected:", file.name);
+
+    // Authentication check
+    const auth = getAuth();
+    const currentUser = auth.currentUser;
+
+    if (!currentUser) {
+      alert("You must be signed in as an ADMIN to upload images.");
+      console.log("User is not authenticated. Exiting function.");
+      return;
+    }
+
+    const token = await currentUser.getIdTokenResult();
+    if (token.claims.role !== "ADMIN") {
+      alert("You do not have the required permissions to upload images.");
+      console.log("User is not an ADMIN. Exiting function.");
+      return;
+    }
+
+    console.log("User is authenticated and has ADMIN permissions.");
+
+    const fileExtension = file.name.split(".").pop();
+    const storage = getStorage();
+    // Upload file to firebase storage
     try {
-      const storage = getStorage();
-      const fileExtension = file.name.split(".").pop();
-      // Upload file to firebase storage
       const randomName = crypto.randomUUID();
     
       const storageRef = ref(storage, `coverImages/${randomName}.${fileExtension}`);
     
       await uploadBytes(storageRef, file);
       const downloadURL = await getDownloadURL(storageRef);
-      setCoverImage(downloadURL);
 
+      setCoverImage(downloadURL);
       setSnackbarMessage("Image uploaded successfully.");
       setSnackbar(true);
     } catch (error) {
@@ -211,7 +238,7 @@ const AdminTrainingEditor: React.FC = () => {
       name: trainingName,
       shortBlurb: blurb,
       description: description,
-      coverImage,
+      coverImage: coverImage,
       resources: [
         { link: resourceLink, type: resourceType } as TrainingResource,
       ],
@@ -240,7 +267,7 @@ const AdminTrainingEditor: React.FC = () => {
         name: trainingName,
         shortBlurb: blurb,
         description: description,
-        coverImage,
+        coverImage: coverImage,
         resources: [
           {
             link: resourceLink,
@@ -533,9 +560,14 @@ const AdminTrainingEditor: React.FC = () => {
                     <LuUpload style={{ fontSize: "50px" }} />
                     <input
                       type="file"
-                      accept="image/jpeg,image/png"
-                      onChange={onUpload}
-                      hidden
+                      id="upload"
+                      onChange={async (e) => {
+                        if (e.target.files && e.target.files[0]) {
+                          const selectedFile = e.target.files[0];
+                          setFile(selectedFile); // Update the file state
+                          await onUpload(selectedFile); // Call onUpload directly after file selection
+                        }
+                      }}
                     />
                   </Button>
                   {coverImage && (
