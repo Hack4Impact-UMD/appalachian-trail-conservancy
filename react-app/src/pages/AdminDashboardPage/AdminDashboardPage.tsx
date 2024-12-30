@@ -134,13 +134,15 @@ function AdminDashboardPage() {
               <Button
                 sx={forestGreenButtonLarge}
                 variant="contained"
-                onClick={() => navigate("/trainings/editor")}>
+                onClick={() => navigate("/trainings/editor")}
+              >
                 CREATE NEW TRAINING
               </Button>
               <Button
                 sx={forestGreenButtonLarge}
                 variant="contained"
-                onClick={() => navigate("/pathways/editor")}>
+                onClick={() => navigate("/pathways/editor")}
+              >
                 CREATE NEW PATHWAY
               </Button>
             </div>
@@ -175,16 +177,15 @@ function AdminDashboardPage() {
             ) : (
               <>
                 <div className={styles.subHeader}>
-                  <h2>Recent Drafts</h2>
+                  <h2>Current Drafts</h2>
                 </div>
                 {trainingsSelected ? (
                   <>
-                    {trainingDrafts.length === 0 && (
+                    {trainingDrafts.length === 0 ? (
                       <div className={styles.subHeader}>
                         No drafted trainings
                       </div>
-                    )}
-                    {trainingDrafts.length > 0 && (
+                    ) : (
                       <div className={styles.cardsContainer}>
                         {trainingDrafts.slice(0, 3).map((training, index) => (
                           <AdminTrainingCard training={training} key={index} />
@@ -194,7 +195,11 @@ function AdminDashboardPage() {
                   </>
                 ) : (
                   <>
-                    {pathwayDrafts.length > 0 && (
+                    {pathwayDrafts.length === 0 ? (
+                      <div className={styles.subHeader}>
+                        No drafted pathways
+                      </div>
+                    ) : (
                       <div className={styles.cardsContainer}>
                         {pathwayDrafts.slice(0, 2).map((pathway, index) => (
                           <AdminPathwayCard pathway={pathway} key={index} />
@@ -204,11 +209,15 @@ function AdminDashboardPage() {
                   </>
                 )}
                 <div className={styles.subHeader}>
-                  <h2>Recent Published</h2>
+                  <h2>Published</h2>
                 </div>
                 {trainingsSelected ? (
                   <>
-                    {trainingsPublished.length > 0 && (
+                    {trainingsPublished.length === 0 ? (
+                      <div className={styles.subHeader}>
+                        No published trainings
+                      </div>
+                    ) : (
                       <div className={styles.cardsContainer}>
                         {trainingsPublished
                           .slice(0, 3)
@@ -223,7 +232,11 @@ function AdminDashboardPage() {
                   </>
                 ) : (
                   <>
-                    {pathwaysPublished.length > 0 && (
+                    {pathwaysPublished.length === 0 ? (
+                      <div className={styles.subHeader}>
+                        No published pathways
+                      </div>
+                    ) : (
                       <div className={styles.cardsContainer}>
                         {pathwaysPublished.slice(0, 2).map((pathway, index) => (
                           <AdminPathwayCard pathway={pathway} key={index} />
