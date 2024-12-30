@@ -5,11 +5,15 @@ import {
   OutlinedInput,
   FormHelperText,
   Tooltip,
+  TextField,
+  Alert,
+  Snackbar,
 } from "@mui/material";
 import {
   forestGreenButton,
   grayBorderTextField,
   styledRectButton,
+  whiteTooltip,
 } from "../../../muiTheme.ts";
 import { Navigate } from "react-router";
 import { Link, useNavigate } from "react-router-dom";
@@ -19,7 +23,7 @@ import styles from "./RegistrationPage.module.css";
 import Loading from "../../../components/LoadingScreen/Loading.tsx";
 import primaryLogo from "../../../assets/atc-primary-logo.png";
 import { trim } from "lodash";
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 function RegistrationPage() {
   const { user } = useAuth();
@@ -27,20 +31,19 @@ function RegistrationPage() {
 
   const [showLoading, setShowLoading] = useState<boolean>(false);
 
-  //Add Error Handling
+  const [snackbar, setSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
   const [invalidEmail, setInvalidEmail] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>("");
-  
+  const [emailsMatch, setEmailsMatch] = useState<boolean>(true);
+  const [invalidEmailMessage, setInvalidEmailMessage] = useState<string>("");
 
-  const [email, setEmail] = useState<string>("");
-  const [confirmEmail, setConfirmEmail] = useState<string>("");
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [confirmEmail, setConfirmEmail] = useState<string>("");
   const [joinCode, setJoinCode] = useState<string>("");
-  const [isFormValid, setIsFormValid] = useState<boolean>(false);
-  const [emailsMatch, setEmailsMatch] = useState<boolean>(false);
 
-  // If user is logged in, navigate to Dashboard (?)
+  // If user is logged in, navigate to Dashboard
   if (user) {
     return <Navigate to="/" />;
   }
@@ -52,32 +55,41 @@ function RegistrationPage() {
   };
 
   useEffect(() => {
-    let match = true;
-    if (email.length > 0 && confirmEmail.length > 0)  
-      match = trim(email).toLowerCase() === trim(confirmEmail).toLowerCase();
-  
-    
-    setEmailsMatch(match);
-    setIsFormValid(match);
+    if (email !== "" && confirmEmail !== "") {
+      const match =
+        trim(email).toLowerCase() === trim(confirmEmail).toLowerCase();
+
+      if (!match) {
+        setInvalidEmailMessage("Emails don't match");
+        setInvalidEmail(true);
+      }
+      setEmailsMatch(match);
+    }
   }, [email, confirmEmail]);
 
-  const handleConfirm = async (event: any) => {
+  const handleConfirm = (event: any) => {
     event.preventDefault();
     setShowLoading(true);
 
+    // Confirm button validates that inputs arent empty
+
+    // Check if email is valid
     if (!validateEmail(email)) {
+      setInvalidEmailMessage("Invalid email");
       setInvalidEmail(true);
+      setEmailsMatch(false);
     } else {
-      await createVolunteerUser(email, firstName, lastName, joinCode)
+      createVolunteerUser(email, firstName, lastName, joinCode)
         .then(() => {
           navigate("/registration-confirmation", {
             state: { fromApp: true },
           });
         })
         .catch(() => {
-          setErrorMessage(
+          setSnackbarMessage(
             "Error creating account. Account may already exist or join code may be incorrect."
           );
+          setSnackbar(true);
         });
     }
     setShowLoading(false);
@@ -116,7 +128,7 @@ function RegistrationPage() {
             <div className={styles.alignLeft}>
               <h3 className={styles.label}>Last Name</h3>
             </div>
-            <OutlinedInput
+            <TextField
               value={lastName}
               sx={grayBorderTextField}
               onChange={(event) => {
@@ -126,95 +138,65 @@ function RegistrationPage() {
 
             {/* email field */}
             <div className={`${styles.alignLeft} ${styles.emailContainer}`}>
-              <h3 className={styles.label}>Email</h3>
+              <h3 className={styles.emailLabelContainer}>Email</h3>
               <Tooltip
-                      title="Please use your ATC volunteer email"
-                      placement="right"
-                      componentsProps={{
-                        tooltip: {
-                          sx: {
-                            bgcolor: "white",
-                            color: "black",
-                          },
-                        },
-                      }}
-                    >
-                      <InfoOutlinedIcon />
-                    </Tooltip>
+                title="Please use your ATC volunteer email"
+                placement="right"
+                componentsProps={{
+                  tooltip: {
+                    sx: { ...whiteTooltip },
+                  },
+                }}
+              >
+                <InfoOutlinedIcon />
+              </Tooltip>
             </div>
-            <OutlinedInput
+            <TextField
               sx={{
-                width: 350,
-                fontSize: "1.1rem",
-                height: 48,
-                borderRadius: "10px",
-                border: invalidEmail
+                ...grayBorderTextField,
+                border: !emailsMatch
                   ? "2px solid #d32f2f"
                   : "2px solid var(--blue-gray)",
-                "& fieldset": {
-                  border: "none",
-                },
-                "& input::placeholder": {
-                  color: "black",
-                },
               }}
               value={email}
-              // placeholder="Use your ATC Volunteer email"
               onChange={(e) => {
                 setEmail(e.target.value);
               }}
               error={invalidEmail}
             />
-            {invalidEmail && (
-              <FormHelperText error>Invalid email</FormHelperText>
-            )}
-            {/* Confirm email box */}
-            <div>
+
+            {/* confirm email field */}
             <div className={`${styles.alignLeft} ${styles.emailContainer}`}>
-              <h3 className={styles.label}>Confirm Email</h3>
+              <h3 className={styles.emailLabelContainer}>Confirm Email</h3>
             </div>
-            <OutlinedInput
+            <TextField
               sx={{
-                width: 350,
-                fontSize: "1.1rem",
-                height: 48,
-                borderRadius: "10px",
+                ...grayBorderTextField,
                 border: !emailsMatch
                   ? "2px solid #d32f2f"
                   : "2px solid var(--blue-gray)",
-                "& fieldset": {
-                  border: "none",
-                },
-                "& input::placeholder": {
-                  color: "black",
-                },
               }}
               value={confirmEmail}
-              // placeholder="Use your ATC Volunteer email"
               onChange={(e) => {
                 setConfirmEmail(e.target.value);
               }}
               error={invalidEmail}
             />
-            {!emailsMatch && (
-              <FormHelperText error>Emails don't match</FormHelperText>
-            )}
+            <div className={styles.invalidEmailMessage}>
+              {!emailsMatch && (
+                <FormHelperText sx={{ margin: "0" }} error>
+                  {invalidEmailMessage}
+                </FormHelperText>
+              )}
             </div>
+
             {/* join code field */}
             <div className={styles.alignLeft}>
-              <h3 className={styles.label}>Join Code</h3>
+              <h3 className={styles.joinCodeLabel}>Join Code</h3>
             </div>
-            <OutlinedInput
-              sx={{
-                width: 350,
-                fontSize: "1.1rem",
-                height: 48,
-                borderRadius: "10px",
-                border: "2px solid var(--blue-gray)",
-                "& fieldset": {
-                  border: "none",
-                },
-              }}
+            <TextField
+              sx={grayBorderTextField}
+              value={joinCode}
               onChange={(event) => {
                 setJoinCode(event.target.value);
               }}
@@ -222,20 +204,27 @@ function RegistrationPage() {
           </FormControl>
 
           {/* submit button */}
-          <div className={`${styles.alignLeft} ${styles.button}`}>
+          <div className={styles.confirmButton}>
             <Button
               type="submit"
               sx={{ ...styledRectButton, ...forestGreenButton }}
               variant="contained"
               onClick={(e) => handleConfirm(e)}
-              disabled={!isFormValid}
+              disabled={
+                !(
+                  firstName !== "" &&
+                  lastName !== "" &&
+                  email !== "" &&
+                  confirmEmail !== "" &&
+                  email === confirmEmail &&
+                  joinCode !== ""
+                )
+              }
             >
               {showLoading ? <Loading color="white" /> : "Confirm"}
             </Button>
           </div>
         </form>
-
-        <div className={styles.error}>{errorMessage}</div>
 
         {/* switch to sign in */}
         <Link to="/login/" className={styles.switch}>
