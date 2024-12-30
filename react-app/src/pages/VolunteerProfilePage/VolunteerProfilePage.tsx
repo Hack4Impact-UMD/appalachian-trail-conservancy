@@ -66,6 +66,7 @@ function VolunteerProfilePage() {
       if (firstName != "" && lastName != "") {
         updateVolunteer({ ...volunteer, firstName, lastName }, auth.id)
           .then(() => {
+            setVolunteer({ ...volunteer, firstName, lastName });
             setSnackbarMessage("Volunteer name updated successfully");
           })
           .catch((e) => {
