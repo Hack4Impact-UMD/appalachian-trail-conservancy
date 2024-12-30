@@ -152,10 +152,12 @@ export const selectOptionStyle = {
 export const grayBorderTextField = {
   width: 350,
   fontSize: "1.1rem",
-  height: 48,
   borderRadius: "10px",
   border: "2px solid var(--blue-gray)",
   "& fieldset": { border: "none" },
+  "& .MuiOutlinedInput-input": {
+    padding: "10px",
+  },
 };
 
 // search bar
