@@ -226,6 +226,17 @@ function RegistrationPage() {
           </div>
         </form>
 
+        <Snackbar
+          open={snackbar}
+          autoHideDuration={6000}
+          onClose={() => setSnackbar(false)}
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }} // Position within the right section
+        >
+          <Alert onClose={() => setSnackbar(false)} severity={"error"}>
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
+
         {/* switch to sign in */}
         <Link to="/login/" className={styles.switch}>
           Already have an account? Log in here!
