@@ -49,6 +49,41 @@
   margin-bottom: 2rem;
 }
 
+.headerTitle {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.marker {
+  display: inline-block;
+  padding: 9px 18px;
+  border-radius: 20px;
+  font-size: 0.9em;
+  font-weight: bold;
+  text-align: center;
+  background-color: var(--blue-gray);
+  color: white;
+}
+
+.draftMarker {
+  border: 1.5px solid var(--blue-gray);
+  background-color: var(--ocean-green-25);
+  color: var(--blue-gray);
+}
+
+.publishedMarker {
+  border: 1.5px solid var(--blue-gray);
+  background-color: var(--ocean-green-50);
+  color: var(--blue-gray);
+}
+
+.archiveMarker {
+  border: 1.5px solid var(--blue-gray);
+  background-color: var(--ocean-green-75);
+  color: var(--blue-gray);
+}
+
 .nameHeading {
   color: var(--blue-gray);
   font-size: 3rem;
@@ -134,6 +169,11 @@
   display: flex;
   align-items: center;
   cursor: pointer;
+}
+
+.addAnswerButton:hover,
+.addQuestionContainer:hover {
+  color: var(--forest-green);
 }
 
 .selectedAnswerText {

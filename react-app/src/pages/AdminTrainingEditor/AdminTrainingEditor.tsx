@@ -125,17 +125,17 @@ const AdminTrainingEditor: React.FC = () => {
     }
 
     if (!resourceTitle) {
-      newErrors.resourceTitle = "Resource tit;e is required.";
+      newErrors.resourceTitle = "Resource Title is required.";
       isValid = false;
     }
 
     if (!resourceLink) {
-      newErrors.resourceType = "Resource Type is required.";
+      newErrors.resourceLink = "Resource Link is required.";
       isValid = false;
     }
 
     if (!resourceType) {
-      newErrors.resourceLink = "Resource Type is required.";
+      newErrors.resourceType = "Resource Type is required.";
       isValid = false;
     }
 
@@ -542,7 +542,7 @@ const AdminTrainingEditor: React.FC = () => {
                   </span>
                 </Tooltip>
               </div>
-              <div className={styles.flexRow}>
+              <div className={styles.resourceContainer}>
                 <OutlinedInput
                   value={resourceLink}
                   onChange={(e) => setResourceLink(e.target.value)}
@@ -550,6 +550,7 @@ const AdminTrainingEditor: React.FC = () => {
                   sx={{
                     ...grayBorderTextField,
                     flexGrow: 1,
+                    width: "100%",
                     border: errors.resourceLink
                       ? "2px solid #d32f2f"
                       : "2px solid var(--blue-gray)",
@@ -558,7 +559,7 @@ const AdminTrainingEditor: React.FC = () => {
 
                 <FormControl
                   margin="normal"
-                  sx={{ marginTop: "0px", marginBottom: "0", width: "180px" }}
+                  sx={{ marginTop: "0px", marginBottom: "0" }}
                   className={styles.resourceTypeField}
                   error={Boolean(errors.resourceType)}>
                   <Select
@@ -600,7 +601,7 @@ const AdminTrainingEditor: React.FC = () => {
               </div>
 
               {/* Button group */}
-              <div className={styles.addTrainingContainer}>
+              <div className={styles.nextButton}>
                 <Button
                   variant="contained"
                   sx={{

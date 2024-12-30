@@ -29,7 +29,7 @@ import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Hamburger from "../../assets/hamburger.svg";
 import { updateTraining } from "../../backend/FirestoreCalls";
-import { Quiz, TrainingID } from "../../types/TrainingType";
+import { Quiz, TrainingID, Status } from "../../types/TrainingType";
 
 interface Answer {
   text: string;
@@ -53,8 +53,8 @@ function TrainingQuizEditorPage() {
   const navigate = useNavigate();
   const [navigationBarOpen, setNavigationBarOpen] = useState(true);
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
-  const [isEditMode, setIsEditMode] = useState<boolean>(
-    training?.status !== "DRAFT"
+  const [status, setStatus] = useState<Status>(
+    trainingData?.status || ("DRAFT" as Status)
   );
 
   const [questions, setQuestions] = useState<Question[]>([
@@ -72,6 +72,7 @@ function TrainingQuizEditorPage() {
   ]);
   const [pointsToPass, setPointsToPass] = useState(0);
   const [maxPoints, setMaxPoints] = useState(questions.length);
+  const [errorQuestions, setErrorQuestions] = useState<number[]>([]);
 
   const [snackbar, setSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -81,6 +82,29 @@ function TrainingQuizEditorPage() {
       !question.questionText.trim() &&
       question.answers.every((answer) => !answer.text.trim())
     );
+  };
+
+  const renderMarker = () => {
+    if (status === "DRAFT") {
+      // Training drafted
+      return (
+        <div className={`${styles.marker} ${styles.draftMarker}`}>DRAFT</div>
+      );
+    } else if (status === "PUBLISHED") {
+      // Training published
+      return (
+        <div className={`${styles.marker} ${styles.publishedMarker}`}>
+          PUBLISHED
+        </div>
+      );
+    } else if (status === "ARCHIVED") {
+      // Training archived
+      return (
+        <div className={`${styles.marker} ${styles.archiveMarker}`}>
+          ARCHIVE
+        </div>
+      );
+    }
   };
 
   // Update screen width on resize
@@ -221,13 +245,15 @@ function TrainingQuizEditorPage() {
   };
 
   const validateFields = (qs: Question[]) => {
+    const newErrorQuestions: number[] = [];
     for (let i = 0; i < qs.length; i++) {
       const question = qs[i];
 
       // Check that question text is filled out
       if (!question.questionText) {
+        newErrorQuestions.push(i);
         console.log(`Validation failed: Question ${i + 1} has no text.`);
-        return false;
+        // return false;
       }
 
       // Check that there's at least one answer with text
@@ -235,10 +261,11 @@ function TrainingQuizEditorPage() {
         (answer) => answer.text.trim() !== ""
       );
       if (!hasAnswers) {
+        newErrorQuestions.push(i);
         console.log(
           `Validation failed: Question ${i + 1} has no answers with text.`
         );
-        return false;
+        // return false;
       }
 
       // Check that at least one answer is marked as correct
@@ -246,11 +273,18 @@ function TrainingQuizEditorPage() {
         (answer) => answer.isCorrect
       );
       if (!hasCorrectAnswer) {
+        newErrorQuestions.push(i);
         console.log(
           `Validation failed: Question ${i + 1} has no correct answer selected.`
         );
-        return false;
+        // return false;
       }
+    }
+
+    if (newErrorQuestions.length > 0) {
+      console.log(newErrorQuestions);
+      setErrorQuestions(newErrorQuestions);
+      return false;
     }
 
     // Ensure points to pass is greater than 0 and does not exceed total number of questions
@@ -261,7 +295,6 @@ function TrainingQuizEditorPage() {
       return false;
     }
 
-    console.log("Validation passed: All fields are properly filled.");
     return true; // All checks passed
   };
 
@@ -269,7 +302,7 @@ function TrainingQuizEditorPage() {
     const nonBlankQuestions = questions.filter((q) => !isQuestionBlank(q));
 
     // Validate fields only if in edit mode
-    if (isEditMode && !validateFields(nonBlankQuestions)) {
+    if (!validateFields(nonBlankQuestions)) {
       setSnackbarMessage("Please complete all required fields.");
       setSnackbar(true);
       return;
@@ -380,7 +413,10 @@ function TrainingQuizEditorPage() {
         <div className={styles.container}>
           <div className={styles.content}>
             <div className={styles.header}>
-              <h1 className={styles.nameHeading}>Trainings Editor</h1>
+              <div className={styles.headerTitle}>
+                <h1 className={styles.nameHeading}>Trainings Editor</h1>
+                <div>{renderMarker()}</div>
+              </div>
               <ProfileIcon />
             </div>
 
@@ -389,7 +425,7 @@ function TrainingQuizEditorPage() {
                 sx={whiteButtonGrayBorder}
                 variant="contained"
                 onClick={handleSaveClick}>
-                {isEditMode ? "Save" : "Save as Draft"}
+                {status == "DRAFT" ? "Save" : "Save as Draft"}
               </Button>
 
               <h2 className={styles.quizEditorText}>CREATE QUIZ</h2>
@@ -427,12 +463,22 @@ function TrainingQuizEditorPage() {
                   <div className={styles.questionTitleBox}>
                     <p className={styles.questionNumber}>{questionIndex + 1}</p>
                     <OutlinedInput
-                      sx={{ ...grayBorderTextField, width: "100%" }}
-                      placeholder="TYPE QUESTION HERE"
+                      sx={{
+                        ...grayBorderTextField,
+                        width: "100%",
+                        height: 50,
+                        minHeight: 90,
+                        // border: errorQuestions.includes(questionIndex)
+                        //   ? "2px solid #d32f2f"
+                        //   : "2px solid var(--blue-gray)",
+                      }}
+                      placeholder="QUESTION"
                       value={question.questionText}
                       onChange={(e) =>
                         handleQuestionChange(questionIndex, e.target.value)
                       }
+                      multiline
+                      rows={3}
                     />
                     {questionIndex > 0 ? (
                       <div
@@ -473,7 +519,20 @@ function TrainingQuizEditorPage() {
                             label={
                               <div className={styles.answerOption}>
                                 <OutlinedInput
+                                  sx={{
+                                    ...grayBorderTextField,
+                                    height: 30,
+                                    minHeight: 70,
+                                    width: "850px",
+                                    margin: "5px 0",
+                                    // border: errorQuestions.includes(
+                                    //   questionIndex
+                                    // )
+                                    //   ? "2px solid #d32f2f"
+                                    //   : "2px solid var(--blue-gray)",
+                                  }}
                                   value={answer.text}
+                                  placeholder="ANSWER"
                                   onChange={(e) =>
                                     handleAnswerChange(
                                       questionIndex,
@@ -481,7 +540,9 @@ function TrainingQuizEditorPage() {
                                       e.target.value
                                     )
                                   }
-                                  className={styles.answerBox}
+                                  // className={styles.answerBox}
+                                  multiline
+                                  rows={2}
                                 />
                                 {answerIndex >= 2 && (
                                   <div className={styles.closeIcon}>
@@ -559,11 +620,11 @@ function TrainingQuizEditorPage() {
                     marginLeft: "30px",
                   }}
                   onClick={handlePublishClick}>
-                  {isEditMode
-                    ? training?.status === "PUBLISHED"
-                      ? "ARCHIVE"
-                      : "UNARCHIVE"
-                    : "PUBLISH"}
+                  {status == "DRAFT"
+                    ? "PUBLISH"
+                    : status == "PUBLISHED"
+                    ? "ARCHIVE"
+                    : "UNARCHIVE"}
                 </Button>
               </div>
             </form>
