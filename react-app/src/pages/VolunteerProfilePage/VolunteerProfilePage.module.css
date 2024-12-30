@@ -74,6 +74,7 @@
   display: flex;
   align-items: center;
   margin-top: 15px;
+  color: var(--blue-gray);
 }
 
 .inputContainer {

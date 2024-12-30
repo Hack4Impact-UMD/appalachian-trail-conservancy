@@ -12,6 +12,7 @@ import {
   grayBorderTextField,
   forestGreenButton,
   whiteButtonGrayBorder,
+  whiteTooltip,
 } from "../../muiTheme";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
@@ -155,11 +156,7 @@ function VolunteerProfilePage() {
                       componentsProps={{
                         tooltip: {
                           sx: {
-                            bgcolor: "white",
-                            color: "black",
-                            borderRadius: "8px",
-                            padding: "10px",
-                            boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)",
+                            ...whiteTooltip,
                           },
                         },
                       }}
