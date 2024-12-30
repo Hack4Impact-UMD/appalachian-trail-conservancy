@@ -73,8 +73,16 @@
   height: 1.5rem;
 }
 
-.joinCodeLabel {
+/* join code label and icon container */
+.joinCodeContainer {
+  display: flex;
+  gap: 1%;
+  align-items: center;
   margin: 0 0 0.25rem 0;
+}
+
+.joinCodeLabel {
+  margin: 0;
 }
 
 .error {

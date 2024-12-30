@@ -140,14 +140,13 @@ function RegistrationPage() {
             <div className={`${styles.alignLeft} ${styles.emailContainer}`}>
               <h3 className={styles.emailLabelContainer}>Email</h3>
               <Tooltip
-                title="Please use your ATC volunteer email"
+                title="Please use your email used in the Volunteer Engagement Platform"
                 placement="right"
                 componentsProps={{
                   tooltip: {
                     sx: { ...whiteTooltip },
                   },
-                }}
-              >
+                }}>
                 <InfoOutlinedIcon />
               </Tooltip>
             </div>
@@ -191,8 +190,18 @@ function RegistrationPage() {
             </div>
 
             {/* join code field */}
-            <div className={styles.alignLeft}>
+            <div className={`${styles.alignLeft} ${styles.joinCodeContainer}`}>
               <h3 className={styles.joinCodeLabel}>Join Code</h3>
+              <Tooltip
+                title="Paste the join code that was provided in the Volunteer Engagement Platform"
+                placement="right"
+                componentsProps={{
+                  tooltip: {
+                    sx: { ...whiteTooltip },
+                  },
+                }}>
+                <InfoOutlinedIcon />
+              </Tooltip>
             </div>
             <TextField
               sx={grayBorderTextField}
@@ -219,8 +228,7 @@ function RegistrationPage() {
                   email === confirmEmail &&
                   joinCode !== ""
                 )
-              }
-            >
+              }>
               {showLoading ? <Loading color="white" /> : "Confirm"}
             </Button>
           </div>
