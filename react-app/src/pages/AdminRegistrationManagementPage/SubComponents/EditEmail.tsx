@@ -10,9 +10,14 @@ import {
   Alert,
   Tooltip,
 } from "@mui/material";
-import { IoIosInformationCircleOutline } from "react-icons/io";
 import styles from "./SubComponent.module.css";
-import { styledRectButton, forestGreenButton } from "../../../muiTheme.ts";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import {
+  styledRectButton,
+  forestGreenButton,
+  grayBorderTextField,
+  whiteTooltip,
+} from "../../../muiTheme.ts";
 import { EmailType } from "../../../types/AssetsType.ts";
 import {
   getRegistrationEmail,
@@ -113,13 +118,8 @@ function EditEmail({ tab, quillRef }: EditEmailProps) {
           <OutlinedInput
             value={subject}
             sx={{
-              fontSize: "1.1rem",
-              borderRadius: "10px",
-              height: "3.2rem",
-              border: "2px solid var(--blue-gray)",
-              "& fieldset": {
-                border: "none",
-              },
+              ...grayBorderTextField,
+              width: "100%",
             }}
             onChange={(e) => setSubject(e.target.value)}
             error={true}
@@ -139,18 +139,12 @@ function EditEmail({ tab, quillRef }: EditEmailProps) {
               componentsProps={{
                 tooltip: {
                   sx: {
-                    bgcolor: "white",
-                    color: "black",
-                    borderRadius: "8px",
-                    padding: "10px",
-                    boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)",
+                    ...whiteTooltip,
                   },
                 },
               }}
             >
-              <span style={{ marginLeft: "8px" }}>
-                <IoIosInformationCircleOutline />
-              </span>
+              <InfoOutlinedIcon />
             </Tooltip>
           </div>
 
@@ -170,7 +164,6 @@ function EditEmail({ tab, quillRef }: EditEmailProps) {
                 ...styledRectButton,
                 ...forestGreenButton,
                 width: "120px",
-                marginLeft: "30px",
               }}
               onClick={handleEmailSave} // Save the email when clicked
             >

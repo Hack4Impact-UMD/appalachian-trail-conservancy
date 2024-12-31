@@ -12,6 +12,7 @@
 
 .subHeaderLabel {
   display: flex;
+  gap: 0.5%;
   align-items: center;
   font-weight: bold !important;
   color: var(--blue-gray) !important;
@@ -23,7 +24,6 @@
   display: flex;
   justify-content: flex-end;
   gap: 2%;
-  margin-top: 1.5rem;
 }
 
 .quillEditor {

@@ -15,6 +15,7 @@ import {
   forestGreenButton,
   whiteButtonGrayBorder,
   styledRectButton,
+  grayBorderTextField,
 } from "../../../muiTheme.ts";
 import {
   getRegistrationCode,
@@ -99,14 +100,8 @@ function EditRegistrationCode() {
               }
             }}
             sx={{
-              fontSize: "1.1rem",
-              borderRadius: "10px",
-              marginTop: "0.3rem",
-              height: "3.2rem",
-              border: "2px solid var(--blue-gray)",
-              "& fieldset": {
-                border: "none",
-              },
+              ...grayBorderTextField,
+              width: "100%",
             }}
             InputProps={{
               readOnly: !isEditing,
