@@ -33,6 +33,7 @@ import TrainingQuizEditorPage from "./pages/AdminTrainingQuizEditorPage/AdminTra
 import AdminDashboard from "./pages/AdminDashboardPage/AdminDashboardPage.tsx";
 import AdminTrainingLibrary from "./pages/AdminTrainingLibraryPage/AdminTrainingLibraryPage.tsx";
 import AdminPathwayLibrary from "./pages/AdminPathwayLibraryPage/AdminPathwayLibraryPage.tsx";
+import AdminRegistrationManagementPage from "./pages/AdminRegistrationManagementPage/AdminRegistrationManagementPage.tsx";
 import AdminUserManagement from "./pages/AdminUserManagement/AdminUserManagement.tsx";
 import VolunteerProfilePage from "./pages/VolunteerProfilePage/VolunteerProfilePage.tsx";
 import AdminVolunteerDetails from "./pages/AdminVolunteerDetails/AdminVolunteerDetails.tsx";
@@ -67,7 +68,7 @@ function App() {
             <Route path="/login/volunteer" element={<VolunteerLoginPage />} />
             <Route path="/login/admin" element={<AdminLoginPage />} />
             <Route path="/logout" element={<LogoutPage />} />
-            <Route path="/registration" element={<RegistrationPage />} />
+            <Route path="/register" element={<RegistrationPage />} />
             <Route
               path="/registration-confirmation"
               element={<RegistrationConfirmationPage />}
@@ -79,38 +80,6 @@ function App() {
                   adminComponent={<AdminDashboard />}
                   volunteerComponent={<Dashboard />}
                 />
-              }
-            />
-            <Route
-              path="/management"
-              element={
-                <RequireAdminAuth>
-                  <AdminUserManagement />
-                </RequireAdminAuth>
-              }
-            />
-            <Route
-              path="/management/volunteer/:id"
-              element={
-                <RequireAdminAuth>
-                  <AdminVolunteerDetails />
-                </RequireAdminAuth>
-              }
-            />
-            <Route
-              path="/management/pathway/:id"
-              element={
-                <RequireAdminAuth>
-                  <AdminPathwayDetails />
-                </RequireAdminAuth>
-              }
-            />
-            <Route
-              path="/management/training/:id"
-              element={
-                <RequireAdminAuth>
-                  <AdminTrainingDetails />
-                </RequireAdminAuth>
               }
             />
             <Route
@@ -233,6 +202,46 @@ function App() {
                 <RequireVolunteerAuth>
                   <AchievementsPage />
                 </RequireVolunteerAuth>
+              }
+            />
+            <Route
+              path="/management"
+              element={
+                <RequireAdminAuth>
+                  <AdminUserManagement />
+                </RequireAdminAuth>
+              }
+            />
+            <Route
+              path="/management/volunteer/:id"
+              element={
+                <RequireAdminAuth>
+                  <AdminVolunteerDetails />
+                </RequireAdminAuth>
+              }
+            />
+            <Route
+              path="/management/pathway/:id"
+              element={
+                <RequireAdminAuth>
+                  <AdminPathwayDetails />
+                </RequireAdminAuth>
+              }
+            />
+            <Route
+              path="/management/training/:id"
+              element={
+                <RequireAdminAuth>
+                  <AdminTrainingDetails />
+                </RequireAdminAuth>
+              }
+            />
+            <Route
+              path="/registration"
+              element={
+                <RequireAdminAuth>
+                  <AdminRegistrationManagementPage />
+                </RequireAdminAuth>
               }
             />
             <Route

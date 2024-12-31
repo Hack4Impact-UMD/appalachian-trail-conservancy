@@ -146,7 +146,8 @@ function RegistrationPage() {
                   tooltip: {
                     sx: { ...whiteTooltip },
                   },
-                }}>
+                }}
+              >
                 <InfoOutlinedIcon />
               </Tooltip>
             </div>
@@ -199,7 +200,8 @@ function RegistrationPage() {
                   tooltip: {
                     sx: { ...whiteTooltip },
                   },
-                }}>
+                }}
+              >
                 <InfoOutlinedIcon />
               </Tooltip>
             </div>
@@ -228,7 +230,8 @@ function RegistrationPage() {
                   email === confirmEmail &&
                   joinCode !== ""
                 )
-              }>
+              }
+            >
               {showLoading ? <Loading color="white" /> : "Confirm"}
             </Button>
           </div>
