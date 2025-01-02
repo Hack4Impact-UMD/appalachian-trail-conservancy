@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import styles from "./EditNamePopup.module.css";
 import Modal from "../../../components/ModalWrapper/Modal";
 import { useAuth } from "../../../auth/AuthProvider";
@@ -33,14 +33,15 @@ const EditNamePopup = ({
 }: modalPropsType): React.ReactElement => {
   const auth = useAuth();
 
-  const [newName, setNewName] = useState<string>(
-    (editType === "First" ? admin?.firstName : admin?.lastName) || ""
-  );
+  const nameRef = useRef();
 
   const handleUpdateName = () => {
     if (admin) {
-      if (newName !== "") {
+      //@ts-ignore
+      if (nameRef.current?.value !== "") {
         let newAdmin = admin;
+        //@ts-ignore
+        const newName = nameRef.current?.value;
         if (editType === "First") {
           newAdmin = { ...admin, firstName: newName };
         } else {
@@ -57,7 +58,6 @@ const EditNamePopup = ({
             setSnackbarMessage(`Error updating ${editType.toLowerCase()} name`);
           })
           .finally(() => {
-            setNewName("");
             setSnackbar(true);
             onClose();
           });
@@ -70,7 +70,7 @@ const EditNamePopup = ({
 
   return (
     <Modal
-      height={275}
+      height={260}
       width={450}
       open={open}
       onClose={() => {
@@ -86,9 +86,7 @@ const EditNamePopup = ({
             defaultValue={
               editType === "First" ? admin?.firstName : admin?.lastName
             }
-            onChange={(e) => {
-              setNewName(e.target.value);
-            }}
+            inputRef={nameRef}
           />
         </div>
         <div className={styles.buttons}>

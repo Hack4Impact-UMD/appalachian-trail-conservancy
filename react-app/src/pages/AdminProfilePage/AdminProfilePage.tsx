@@ -18,17 +18,14 @@ function AdminProfilePage() {
     !(window.innerWidth < 1200)
   );
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
-  const [admin, setAdmin] = useState<Admin>();
-  const [firstName, setFirstName] = useState<string>(auth.firstName);
-  const [lastName, setLastName] = useState<string>(auth.lastName);
 
-  const [isEditing, setIsEditing] = useState(false);
+  const [admin, setAdmin] = useState<Admin>();
+
+  const [openEditNamePopup, setEditNamePopup] = useState<boolean>(false);
+  const [editNameType, setEditNameType] = useState<string>("First");
 
   const [snackbar, setSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-
-  const [openLogoutPopup, setOpenLogoutPopup] = useState<boolean>(false);
-  const [editNameType, setEditNameType] = useState<string>("");
 
   // Update screen width on resize
   useEffect(() => {
@@ -46,8 +43,6 @@ function AdminProfilePage() {
     if (!auth.loading && auth.id) {
       getAdmin(auth.id)
         .then((admin) => {
-          setFirstName(auth.firstName);
-          setLastName(auth.lastName);
           setAdmin(admin);
         })
         .catch((e) => {
@@ -57,42 +52,18 @@ function AdminProfilePage() {
     }
   }, [auth.loading, auth.id]);
 
-  const handleUpdateName = () => {
-    if (admin != undefined) {
-      if (firstName != "" && lastName != "") {
-        updateAdmin({ ...admin, firstName, lastName }, auth.id)
-          .then(() => {
-            setAdmin({ ...admin, firstName, lastName });
-            setSnackbarMessage("Admin name updated successfully");
-          })
-          .catch((e) => {
-            console.error(e);
-            setSnackbarMessage("Error updating admin name");
-          })
-          .finally(() => {
-            setIsEditing(false);
-            setSnackbar(true);
-          });
-      } else {
-        setFirstName(admin?.firstName ?? "");
-        setLastName(admin?.lastName ?? "");
-        setIsEditing(false);
-        setSnackbarMessage("First name and last name cannot be empty");
-        setSnackbar(true);
-      }
-    }
-  };
-
   const handleCloseSnackbar = () => {
     setSnackbar(false);
   };
 
   return (
     <>
-      <AdminNavigationBar
-        open={navigationBarOpen}
-        setOpen={setNavigationBarOpen}
-      />
+      <div className={openEditNamePopup ? styles.popupOpen : ""}>
+        <AdminNavigationBar
+          open={navigationBarOpen}
+          setOpen={setNavigationBarOpen}
+        />
+      </div>
 
       <div
         className={`${styles.split} ${styles.right}`}
@@ -120,9 +91,8 @@ function AdminProfilePage() {
                 <div className={styles.subHeader}>First Name</div>
                 <div className={styles.inputContainer}>
                   <TextField
-                    disabled={!isEditing}
-                    value={isEditing ? firstName : admin?.firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
+                    disabled
+                    value={admin?.firstName}
                     sx={grayBorderTextField}
                     InputProps={{
                       endAdornment: (
@@ -130,7 +100,7 @@ function AdminProfilePage() {
                           <IconButton
                             onClick={() => {
                               setEditNameType("First");
-                              setOpenLogoutPopup(true);
+                              setEditNamePopup(true);
                             }}
                             sx={{ color: "var(--blue-gray)" }}
                           >
@@ -145,9 +115,8 @@ function AdminProfilePage() {
                 <div className={styles.subHeader}>Last Name</div>
                 <div className={styles.inputContainer}>
                   <TextField
-                    disabled={!isEditing}
-                    value={isEditing ? lastName : admin?.lastName}
-                    onChange={(e) => setLastName(e.target.value)}
+                    disabled
+                    value={admin?.lastName}
                     sx={grayBorderTextField}
                     InputProps={{
                       endAdornment: (
@@ -155,7 +124,7 @@ function AdminProfilePage() {
                           <IconButton
                             onClick={() => {
                               setEditNameType("Last");
-                              setOpenLogoutPopup(true);
+                              setEditNamePopup(true);
                             }}
                             sx={{ color: "var(--blue-gray)" }}
                           >
@@ -216,6 +185,17 @@ function AdminProfilePage() {
           </div>
         </div>
 
+        {/* Edit Popups */}
+        <EditNamePopup
+          open={openEditNamePopup}
+          onClose={setEditNamePopup}
+          editType={editNameType}
+          admin={admin}
+          setAdmin={setAdmin}
+          setSnackbar={setSnackbar}
+          setSnackbarMessage={setSnackbarMessage}
+        />
+
         {/* Snackbar wrapper container */}
         <div className={styles.snackbarContainer}>
           <Snackbar
@@ -235,16 +215,6 @@ function AdminProfilePage() {
           </Snackbar>
         </div>
 
-        {/* Edit Popups */}
-        <EditNamePopup
-          open={openLogoutPopup}
-          onClose={setOpenLogoutPopup}
-          editType={editNameType}
-          admin={admin}
-          setAdmin={setAdmin}
-          setSnackbar={setSnackbar}
-          setSnackbarMessage={setSnackbarMessage}
-        />
         <Footer />
       </div>
     </>

@@ -214,7 +214,8 @@ function AdminVolunteerDetails() {
       <GridColumnMenuContainer
         hideMenu={hideMenu}
         currentColumn={currentColumn}
-        open={open}>
+        open={open}
+      >
         <GridFilterMenuItem onClick={hideMenu} column={currentColumn!} />
         <SortGridMenuItems onClick={hideMenu} column={currentColumn!} />
       </GridColumnMenuContainer>
@@ -356,11 +357,13 @@ function AdminVolunteerDetails() {
           setOpen={setNavigationBarOpen}
         />
       </div>
+
       <DeleteUserPopup
         open={openDeleteUserPopup}
         onClose={setOpenDeleteUserPopup}
         volunteerId={volunteerId || ""}
       />
+
       <div
         className={`${styles.split} ${styles.right} ${
           openDeleteUserPopup ? styles.popupOpen : ""
@@ -368,7 +371,8 @@ function AdminVolunteerDetails() {
         style={{
           // Only apply left shift when screen width is greater than 1200px
           left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-        }}>
+        }}
+      >
         {!navigationBarOpen && (
           <img
             src={hamburger}
@@ -432,7 +436,8 @@ function AdminVolunteerDetails() {
                           ? forestGreenButtonPadding
                           : whiteButtonGrayBorder
                       }
-                      onClick={(event) => handleAlignment(event, "trainings")}>
+                      onClick={(event) => handleAlignment(event, "trainings")}
+                    >
                       TRAININGS
                     </Button>
                     <Button
@@ -441,7 +446,8 @@ function AdminVolunteerDetails() {
                           ? forestGreenButtonPadding
                           : whiteButtonGrayBorder
                       }
-                      onClick={(event) => handleAlignment(event, "pathways")}>
+                      onClick={(event) => handleAlignment(event, "pathways")}
+                    >
                       PATHWAYS
                     </Button>
                   </div>
@@ -501,7 +507,8 @@ function AdminVolunteerDetails() {
                       fontWeight: "bold",
                       width: "100px",
                     }}
-                    onClick={() => navigate("/management")}>
+                    onClick={() => navigate("/management")}
+                  >
                     BACK
                   </Button>
                   <div className={styles.buttonContainerInner}>
@@ -519,7 +526,8 @@ function AdminVolunteerDetails() {
                       }}
                       onClick={() => {
                         handleDeleteUser();
-                      }}>
+                      }}
+                    >
                       Delete
                     </Button>
                     <Button
@@ -527,7 +535,8 @@ function AdminVolunteerDetails() {
                         ...whiteButtonOceanGreenBorder,
                         fontWeight: "bold",
                         width: "100px",
-                      }}>
+                      }}
+                    >
                       Export
                     </Button>
                   </div>
