@@ -126,3 +126,24 @@
   text-decoration: none;
   color: inherit;
 }
+
+@media screen and (max-height: 625px) {
+  .menuItems {
+    max-height: 275px;
+    overflow-y: auto;
+  }
+}
+
+@media screen and (max-height: 575px) {
+  .menuItems {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+}
+
+@media screen and (max-height: 500px) {
+  .menuItems {
+    max-height: 100px;
+    overflow-y: auto;
+  }
+}

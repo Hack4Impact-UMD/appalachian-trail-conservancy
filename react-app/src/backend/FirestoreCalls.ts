@@ -421,7 +421,7 @@ export function updateVolunteer(
   id: string
 ): Promise<void> {
   return new Promise((resolve, reject) => {
-    if (id === "" || !id) {
+    if (id === "") {
       reject(new Error("Invalid id"));
       return;
     }

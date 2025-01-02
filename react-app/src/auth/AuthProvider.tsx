@@ -57,14 +57,14 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
           .then((newToken) => {
             setToken(newToken);
             getUserWithAuth(newUser.uid)
-              .then((volunteerData) => {
-                const { id, firstName, lastName } = volunteerData;
+              .then((userData) => {
+                const { id, firstName, lastName } = userData;
                 setID(id);
                 setFirstName(firstName);
                 setLastName(lastName);
               })
               .catch((error) => {
-                // Failed to get Volunteer information
+                // Failed to get User information
                 console.log(error);
               });
           })

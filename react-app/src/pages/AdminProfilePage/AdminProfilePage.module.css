@@ -1,0 +1,151 @@
+.split {
+  height: 100%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  transition: left 0.3s ease; /* Add transition for smooth animation */
+}
+
+.right {
+  right: 0;
+  left: 250px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.hamburger {
+  color: var(--blue-gray);
+  font-size: 1.5rem;
+  margin: 1.5rem;
+  position: absolute;
+  top: 20px;
+  left: 10px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.outerContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.content {
+  width: 875px;
+  padding-bottom: 3%;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.nameHeading {
+  color: var(--forest-green);
+  font-size: 3rem;
+  margin: 0;
+}
+
+.profileContainer {
+  display: flex;
+  gap: 15%;
+}
+
+.leftContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 1.3rem;
+}
+
+.profileIcon {
+  margin-top: 3%;
+}
+
+.subHeader {
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
+  color: var(--blue-gray);
+  font-weight: bold;
+}
+
+.inputContainer {
+  margin-top: 5px;
+}
+
+.emailContainer {
+  display: flex;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 2%;
+  margin: 1rem 0 1rem 0;
+}
+
+.footer {
+  margin-top: auto;
+}
+
+/* mobile responsiveness */
+@media screen and (min-width: 1500px) {
+  .content {
+    width: 1200px;
+  }
+}
+
+@media screen and (min-width: 1800px) {
+  .content {
+    width: 1400px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .content {
+    width: 600px;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .content {
+    width: 425px;
+  }
+
+  .profileContainer {
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .header {
+    margin-top: 5rem;
+  }
+
+  .nameHeading {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .content {
+    width: 300px;
+  }
+
+  .subHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+  }
+}
