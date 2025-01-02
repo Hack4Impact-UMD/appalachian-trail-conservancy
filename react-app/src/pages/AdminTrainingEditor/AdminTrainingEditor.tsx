@@ -33,6 +33,7 @@ import {
   inputHeaderText,
   inputHelperText,
   grayBorderTextField,
+  whiteButtonOceanGreenBorder,
   whiteTooltip,
 } from "../../muiTheme";
 import { IoIosInformationCircleOutline } from "react-icons/io";
@@ -345,12 +346,33 @@ const AdminTrainingEditor: React.FC = () => {
             </div>
 
             <form className={styles.formContent} noValidate>
-              <Button
-                sx={whiteButtonGrayBorder}
-                variant="contained"
-                onClick={handleSaveClick}>
-                {status == "DRAFT" ? "Save as Draft" : "Save"}
-              </Button>
+              <div className={styles.topButtonContainer}>
+                <Button
+                  sx={whiteButtonGrayBorder}
+                  variant="contained"
+                  onClick={handleSaveClick}>
+                  {status == "DRAFT" ? "Save as Draft" : "Save"}
+                </Button>
+
+                <Button
+                  sx={{
+                    ...whiteButtonOceanGreenBorder,
+                    color: "#BF3232",
+                    border: "2px solid #BF3232",
+                    "&:hover": {
+                      color: "white",
+                      backgroundColor: "#BF3232",
+                      border: "2px solid #BF3232",
+                    },
+                    fontWeight: "bold",
+                    width: "100px",
+                  }}
+                  onClick={() => {
+                    // handleDeleteUser();
+                  }}>
+                  Delete
+                </Button>
+              </div>
 
               {/* Training Name */}
               <div className={styles.inputBoxHeader}>

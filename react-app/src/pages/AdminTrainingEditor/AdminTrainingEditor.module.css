@@ -95,6 +95,12 @@
   width: 80%;
 }
 
+.topButtonContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .inputBoxHeader {
   display: flex;
   justify-content: space-between;
