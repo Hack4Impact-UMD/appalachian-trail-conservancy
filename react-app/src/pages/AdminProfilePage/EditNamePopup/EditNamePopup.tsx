@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useRef } from "react";
 import styles from "./EditNamePopup.module.css";
 import Modal from "../../../components/ModalWrapper/Modal";
 import { useAuth } from "../../../auth/AuthProvider";

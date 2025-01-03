@@ -3,14 +3,15 @@ import styles from "./AdminProfilePage.module.css";
 import Footer from "../../components/Footer/Footer";
 import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar";
 import EditNamePopup from "./EditNamePopup/EditNamePopup";
+import EditCredentialPopup from "./EditCredentialPopup/EditCredentialPopup";
 import { useAuth } from "../../auth/AuthProvider";
-import { getAdmin, updateAdmin } from "../../backend/AdminFirestoreCalls";
+import { getAdmin } from "../../backend/AdminFirestoreCalls";
 import { Tooltip, Alert, Snackbar, TextField, IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { Admin } from "../../types/UserType";
 import SettingsProfileIcon from "../../components/SettingsProfileIcon/SettingsProfileIcon";
 import hamburger from "../../assets/hamburger.svg";
-import { grayBorderTextField, whiteTooltip } from "../../muiTheme";
+import { grayBorderTextField } from "../../muiTheme";
 
 function AdminProfilePage() {
   const auth = useAuth();
@@ -21,8 +22,14 @@ function AdminProfilePage() {
 
   const [admin, setAdmin] = useState<Admin>();
 
+  // state for handling edit name popup
   const [openEditNamePopup, setEditNamePopup] = useState<boolean>(false);
   const [editNameType, setEditNameType] = useState<string>("First");
+
+  // state for handling edit credential popup
+  const [openEditCredentialPopup, setEditCredentialPopup] =
+    useState<boolean>(false);
+  const [editCredentialType, setEditCredentialType] = useState<string>("Email");
 
   const [snackbar, setSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -58,7 +65,11 @@ function AdminProfilePage() {
 
   return (
     <>
-      <div className={openEditNamePopup ? styles.popupOpen : ""}>
+      <div
+        className={
+          openEditNamePopup || openEditCredentialPopup ? styles.popupOpen : ""
+        }
+      >
         <AdminNavigationBar
           open={navigationBarOpen}
           setOpen={setNavigationBarOpen}
@@ -146,7 +157,10 @@ function AdminProfilePage() {
                       endAdornment: (
                         <Tooltip title={"Edit"}>
                           <IconButton
-                            onClick={() => {}}
+                            onClick={() => {
+                              setEditCredentialType("Email");
+                              setEditCredentialPopup(true);
+                            }}
                             sx={{ color: "var(--blue-gray)" }}
                           >
                             <EditIcon />
@@ -167,7 +181,10 @@ function AdminProfilePage() {
                       endAdornment: (
                         <Tooltip title={"Edit"}>
                           <IconButton
-                            onClick={() => {}}
+                            onClick={() => {
+                              setEditCredentialType("Password");
+                              setEditCredentialPopup(true);
+                            }}
                             sx={{ color: "var(--blue-gray)" }}
                           >
                             <EditIcon />
@@ -190,6 +207,16 @@ function AdminProfilePage() {
           open={openEditNamePopup}
           onClose={setEditNamePopup}
           editType={editNameType}
+          admin={admin}
+          setAdmin={setAdmin}
+          setSnackbar={setSnackbar}
+          setSnackbarMessage={setSnackbarMessage}
+        />
+
+        <EditCredentialPopup
+          open={openEditCredentialPopup}
+          onClose={setEditCredentialPopup}
+          editType={editCredentialType}
           admin={admin}
           setAdmin={setAdmin}
           setSnackbar={setSnackbar}
