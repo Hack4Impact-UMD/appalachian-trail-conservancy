@@ -178,6 +178,23 @@ export function updateTraining(training: Training, id: string): Promise<void> {
   });
 }
 
+export function deleteTraining(id: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (id === "" || !id) {
+      reject(new Error("Invalid id"));
+      return;
+    }
+
+    deleteDoc(doc(db, "Trainings", id))
+      .then(() => {
+        resolve();
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+}
+
 export function getTraining(id: string): Promise<TrainingID> {
   return new Promise((resolve, reject) => {
     getDoc(doc(db, "Trainings", id))

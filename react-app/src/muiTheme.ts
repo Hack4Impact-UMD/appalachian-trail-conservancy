@@ -75,6 +75,18 @@ export const forestGreenButtonLarge = {
   fontSize: "20px",
 };
 
+// hazard red button
+export const hazardRedButton = {
+  ...baseStyles,
+  color: "white",
+  backgroundColor: "var(--hazard-red)",
+  border: "2px solid var(--hazard-red)",
+  "&:hover": {
+    backgroundColor: "var(--hazard-red)",
+    color: "white",
+  },
+};
+
 // white with dark green borders (no hover change)
 export const whiteButtonGreenBorder = {
   ...baseStyles,
@@ -110,6 +122,19 @@ export const whiteButtonGrayBorder = {
     color: "white",
     backgroundColor: "var(--ocean-green)",
     border: "2px solid var(--ocean-green)",
+  },
+};
+
+// white w/ red border; red background on hover
+export const whiteButtonRedBorder = {
+  ...baseStyles,
+  color: "var(--hazard-red)",
+  backgroundColor: "white",
+  border: "2px solid var(--hazard-red)",
+  "&:hover": {
+    color: "white",
+    backgroundColor: "var(--hazard-red)",
+    border: "2px solid var(--hazard-red)",
   },
 };
 

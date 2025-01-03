@@ -121,7 +121,7 @@ function RegistrationPage() {
                 height: 48,
                 borderRadius: "10px",
                 border: invalidEmail
-                  ? "2px solid #d32f2f"
+                  ? "2px solid var(--hazard-red)"
                   : "2px solid var(--blue-gray)",
                 "& fieldset": {
                   border: "none",
@@ -168,8 +168,7 @@ function RegistrationPage() {
               sx={{ ...styledRectButton, ...forestGreenButton }}
               variant="contained"
               onClick={(e) => handleConfirm(e)}
-              disabled={!isFormValid}
-            >
+              disabled={!isFormValid}>
               {showLoading ? <Loading color="white" /> : "Confirm"}
             </Button>
           </div>

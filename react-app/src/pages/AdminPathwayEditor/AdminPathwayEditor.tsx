@@ -189,7 +189,7 @@ const AdminPathwayEditor: React.FC = () => {
                   marginTop: "0.3rem",
                   height: "3.2rem",
                   border: invalidName
-                    ? "2px solid #d32f2f"
+                    ? "2px solid var(--hazard-red)"
                     : "2px solid var(--blue-gray)",
                   "& fieldset": {
                     border: "none",
@@ -246,7 +246,7 @@ const AdminPathwayEditor: React.FC = () => {
                   marginTop: "0.3rem",
                   borderRadius: "10px",
                   border: invalidBlurb
-                    ? "2px solid #d32f2f"
+                    ? "2px solid var(--hazard-red)"
                     : "2px solid var(--blue-gray)",
                   "& fieldset": {
                     border: "none",
@@ -306,7 +306,7 @@ const AdminPathwayEditor: React.FC = () => {
                   borderRadius: "10px",
                   marginTop: "0.3rem",
                   border: invalidDescription
-                    ? "2px solid #d32f2f"
+                    ? "2px solid var(--hazard-red)"
                     : "2px solid var(--blue-gray)",
                   "& fieldset": {
                     border: "none",
@@ -456,7 +456,7 @@ const AdminPathwayEditor: React.FC = () => {
                             color: "var(--blue-gray)",
                             cursor: "pointer",
                             "&:hover": {
-                              color: "#d32f2f",
+                              color: "var(--hazard-red)",
                             },
                           }}
                         />

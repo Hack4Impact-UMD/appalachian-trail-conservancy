@@ -289,7 +289,9 @@ function TrainingQuizEditorPage() {
         setSnackbarMessage("Training updated successfully.");
         setSnackbar(true);
         if (changeStatus) {
-          navigate("/trainings"); // Redirect to training library
+          navigate("/trainings", {
+            state: { fromUpdate: true, showSnackbar: true }, //use state to pass that it should show snackbar
+          }); // Redirect to training library
         }
       })
       .catch((error) => {
@@ -381,7 +383,7 @@ function TrainingQuizEditorPage() {
                         height: 50,
                         minHeight: 90,
                         border: errorQuestions.includes(questionIndex)
-                          ? "2px solid #d32f2f"
+                          ? "2px solid var(--hazard-red)"
                           : "2px solid var(--blue-gray)",
                       }}
                       placeholder="QUESTION"
@@ -436,7 +438,7 @@ function TrainingQuizEditorPage() {
                                     border: errorQuestions.includes(
                                       questionIndex
                                     )
-                                      ? "2px solid #d32f2f"
+                                      ? "2px solid var(--hazard-red)"
                                       : "2px solid var(--blue-gray)",
                                   }}
                                   value={choice}

@@ -1,4 +1,4 @@
-import styles from "./AdminDeleteUserPopup.module.css";
+import styles from "./AdminDeleteDraftPopup.module.css";
 import { useState } from "react";
 import { Button, Snackbar, Alert } from "@mui/material";
 import { IoCloseOutline } from "react-icons/io5";
@@ -6,35 +6,56 @@ import { whiteButtonGrayBorder, hazardRedButton } from "../../../muiTheme";
 import { useNavigate } from "react-router";
 import Modal from "../../../components/ModalWrapper/Modal";
 import Loading from "../../../components/LoadingScreen/Loading";
-import { deleteUser } from "../../../backend/FirestoreCalls";
+import { getTraining, deleteTraining } from "../../../backend/FirestoreCalls";
 
 interface modalPropsType {
   open: boolean;
   onClose: any;
-  volunteerId: string;
+  trainingId: string | undefined;
 }
 
-const DeleteUserPopup = ({
+const AdminDeleteDraftPopup = ({
   open,
   onClose,
-  volunteerId,
+  trainingId,
 }: modalPropsType): React.ReactElement => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
   const [canClose, setCanClose] = useState<boolean>(true); // can close modal state
   const [snackbar, setSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
-  const deleteVolunteer = async () => {
+  const deleteDraft = async () => {
     try {
       setCanClose(false);
       setLoading(true);
-      await deleteUser(volunteerId);
-      navigate("/management", {
-        state: { fromApp: true, showSnackbar: true }, //use state to pass that it should show snackbar
-      });
+
+      if (!trainingId) {
+        // unsaved draft; navigate to training library
+        navigate("/trainings", {
+          state: { fromDelete: true, showSnackbar: true }, //use state to pass that it should show snackbar
+        });
+      } else {
+        // ensure training is draft before deleting
+        const training = await getTraining(trainingId);
+        if (training.status !== "DRAFT") {
+          setLoading(false);
+          setCanClose(true);
+          setSnackbarMessage("Training cannot be deleted.");
+          setSnackbar(true);
+        } else {
+          await deleteTraining(trainingId);
+          setLoading(false);
+          setCanClose(true);
+          navigate("/trainings", {
+            state: { fromDelete: true, showSnackbar: true }, //use state to pass that it should show snackbar
+          });
+        }
+      }
     } catch (error) {
       setLoading(false);
       setCanClose(true);
+      setSnackbarMessage("Error deleting draft. Please try again.");
       setSnackbar(true);
     }
   };
@@ -52,7 +73,7 @@ const DeleteUserPopup = ({
         }}>
         <div className={styles.content}>
           <p className={styles.title}>
-            ARE YOU SURE YOU WANT TO DELETE THIS VOLUNTEER?
+            ARE YOU SURE YOU WANT TO DELETE THIS DRAFT?
           </p>
           <p className={styles.text}>This action cannot be undone.</p>
           <div className={styles.buttons}>
@@ -70,7 +91,7 @@ const DeleteUserPopup = ({
             </div>
             <div className={styles.rightButton}>
               <Button
-                onClick={() => deleteVolunteer()}
+                onClick={() => deleteDraft()}
                 variant="contained"
                 disabled={loading}
                 sx={{
@@ -99,11 +120,11 @@ const DeleteUserPopup = ({
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }} // Position within the right section
       >
         <Alert onClose={() => setSnackbar(false)} severity={"error"}>
-          Error deleting volunteer. Please try again.
+          {snackbarMessage}
         </Alert>
       </Snackbar>
     </>
   );
 };
 
-export default DeleteUserPopup;
+export default AdminDeleteDraftPopup;

@@ -15,6 +15,11 @@
   flex-direction: column;
 }
 
+.popupOpen {
+  position: absolute;
+  z-index: -1;
+}
+
 .hamburger {
   color: var(--blue-gray);
   font-size: 1.5rem;
@@ -112,7 +117,7 @@
 }
 
 .inputError {
-  border: 2px solid #d32f2f;
+  border: 2px solid var(--hazard-red);
   border-radius: 10px;
 }
 

@@ -23,6 +23,7 @@ import {
 import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar";
 import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
+import AdminDeleteDraftPopup from "./AdminDeleteDraftPopup/AdminDeleteDraftPopup";
 import { LuUpload } from "react-icons/lu";
 import {
   styledRectButton,
@@ -33,7 +34,7 @@ import {
   inputHeaderText,
   inputHelperText,
   grayBorderTextField,
-  whiteButtonOceanGreenBorder,
+  whiteButtonRedBorder,
   whiteTooltip,
 } from "../../muiTheme";
 import { IoIosInformationCircleOutline } from "react-icons/io";
@@ -48,6 +49,7 @@ const AdminTrainingEditor: React.FC = () => {
   const [trainingId, setTrainingId] = useState<string | undefined>(
     trainingData?.id
   );
+  const status = trainingData?.status || ("DRAFT" as Status);
   const [trainingName, setTrainingName] = useState<string>(
     trainingData?.name || ""
   );
@@ -71,9 +73,9 @@ const AdminTrainingEditor: React.FC = () => {
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
   );
-  const [status, setStatus] = useState<Status>(
-    trainingData?.status || ("DRAFT" as Status)
-  );
+
+  const [openDeleteDraftPopup, setOpenDeleteDraftPopup] =
+    useState<boolean>(false);
 
   const [snackbar, setSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -316,11 +318,12 @@ const AdminTrainingEditor: React.FC = () => {
 
   return (
     <>
-      <AdminNavigationBar
-        open={navigationBarOpen}
-        setOpen={setNavigationBarOpen}
-      />
-
+      <div className={openDeleteDraftPopup ? styles.popupOpen : ""}>
+        <AdminNavigationBar
+          open={navigationBarOpen}
+          setOpen={setNavigationBarOpen}
+        />
+      </div>
       <div
         className={`${styles.split} ${styles.right}`}
         style={{ left: navigationBarOpen ? "250px" : "0" }}>
@@ -354,24 +357,20 @@ const AdminTrainingEditor: React.FC = () => {
                   {status == "DRAFT" ? "Save as Draft" : "Save"}
                 </Button>
 
-                <Button
-                  sx={{
-                    ...whiteButtonOceanGreenBorder,
-                    color: "#BF3232",
-                    border: "2px solid #BF3232",
-                    "&:hover": {
-                      color: "white",
-                      backgroundColor: "#BF3232",
-                      border: "2px solid #BF3232",
-                    },
-                    fontWeight: "bold",
-                    width: "100px",
-                  }}
-                  onClick={() => {
-                    // handleDeleteUser();
-                  }}>
-                  Delete
-                </Button>
+                {status == "DRAFT" ? (
+                  <Button
+                    sx={{
+                      ...whiteButtonRedBorder,
+                      width: "100px",
+                    }}
+                    onClick={() => {
+                      setOpenDeleteDraftPopup(true);
+                    }}>
+                    DELETE
+                  </Button>
+                ) : (
+                  <></>
+                )}
               </div>
 
               {/* Training Name */}
@@ -403,7 +402,7 @@ const AdminTrainingEditor: React.FC = () => {
                   ...grayBorderTextField,
                   width: "100%",
                   border: errors.trainingName
-                    ? "2px solid #d32f2f"
+                    ? "2px solid var(--hazard-red)"
                     : "2px solid var(--blue-gray)",
                 }}
               />
@@ -437,7 +436,7 @@ const AdminTrainingEditor: React.FC = () => {
                   height: "auto",
                   minHeight: 100,
                   border: errors.blurb
-                    ? "2px solid #d32f2f"
+                    ? "2px solid var(--hazard-red)"
                     : "2px solid var(--blue-gray)",
                 }}
                 multiline
@@ -536,7 +535,7 @@ const AdminTrainingEditor: React.FC = () => {
                   ...grayBorderTextField,
                   width: "100%",
                   border: errors.resourceTitle
-                    ? "2px solid #d32f2f"
+                    ? "2px solid var(--hazard-red)"
                     : "2px solid var(--blue-gray)",
                 }}
               />
@@ -574,7 +573,7 @@ const AdminTrainingEditor: React.FC = () => {
                     flexGrow: 1,
                     width: "100%",
                     border: errors.resourceLink
-                      ? "2px solid #d32f2f"
+                      ? "2px solid var(--hazard-red)"
                       : "2px solid var(--blue-gray)",
                   }}
                 />
@@ -592,7 +591,7 @@ const AdminTrainingEditor: React.FC = () => {
                       borderRadius: "10px",
                       height: "3rem",
                       border: errors.resourceType
-                        ? "2px solid #d32f2f"
+                        ? "2px solid var(--hazard-red)"
                         : "2px solid var(--blue-gray)",
                     }}
                     value={resourceType}
@@ -655,6 +654,11 @@ const AdminTrainingEditor: React.FC = () => {
               </Alert>
             </Snackbar>
           </div>
+          <AdminDeleteDraftPopup
+            open={openDeleteDraftPopup}
+            onClose={setOpenDeleteDraftPopup}
+            trainingId={trainingId}
+          />
         </div>
         <Footer />
       </div>
