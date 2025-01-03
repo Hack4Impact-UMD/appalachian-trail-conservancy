@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import styles from "./EditCredentialPopup.module.css";
 import Modal from "../../../components/ModalWrapper/Modal";
+import Loading from "../../../components/LoadingScreen/Loading";
 import { useAuth } from "../../../auth/AuthProvider";
 import { Button, TextField, InputAdornment, IconButton } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
@@ -34,6 +35,13 @@ const EditCredentialPopup = ({
 }: modalPropsType): React.ReactElement => {
   const auth = useAuth();
 
+  // loading state
+  const [loading, setLoading] = useState<boolean>(false);
+
+  // can close modal state
+  const [canClose, setCanClose] = useState<boolean>(true);
+
+  const passwordRef = useRef();
   const prevCredRef = useRef();
   const newCredRef = useRef();
 
@@ -50,6 +58,10 @@ const EditCredentialPopup = ({
   };
 
   const handleUpdateCredential = () => {
+    // set loading and canClose to false
+    setCanClose(false);
+    setLoading(true);
+
     //@ts-ignore
     const prevCred = prevCredRef.current?.value;
     //@ts-ignore
@@ -60,20 +72,24 @@ const EditCredentialPopup = ({
         else updatePassword();
       }
     } else {
+      setLoading(false);
+      setCanClose(true);
       setSnackbarMessage("Please fill out all fields");
       setSnackbar(true);
     }
   };
 
   const handleClose = () => {
-    setPrevShowPassword(false);
-    setNewShowPassword(false);
-    onClose();
+    if (!loading && canClose) {
+      setPrevShowPassword(false);
+      setNewShowPassword(false);
+      onClose();
+    }
   };
 
   return (
     <Modal
-      height={340}
+      height={editType === "Email" ? 430 : 340}
       width={450}
       open={open}
       onClose={() => {
@@ -81,15 +97,35 @@ const EditCredentialPopup = ({
       }}
     >
       <div className={styles.content}>
-        <p className={styles.title}>Confirm Edit {editType}</p>
+        <p className={styles.title}>
+          {editType === "Email" && "Confirm"} Edit {editType}
+        </p>
         <div className={styles.textFields}>
           {/* conditional rendering based on editType */}
           {editType === "Email" ? (
             <>
-              <h3 className={styles.subHeader}>Previous {editType}</h3>
-              <TextField sx={grayBorderTextField} inputRef={prevCredRef} />
+              <h3 className={styles.subHeader}>Password</h3>
+              <TextField
+                sx={grayBorderTextField}
+                inputRef={passwordRef}
+                type={showPrevPassword ? "text" : "password"}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => setPrevShowPassword(!showPrevPassword)}
+                      >
+                        {showPrevPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
 
-              <h3 className={styles.subHeader}>New {editType}</h3>
+              <h3 className={styles.subHeader}>New Email</h3>
+              <TextField sx={grayBorderTextField} inputRef={newCredRef} />
+
+              <h3 className={styles.subHeader}>Confirm New Email</h3>
               <TextField sx={grayBorderTextField} inputRef={newCredRef} />
             </>
           ) : (
@@ -136,16 +172,18 @@ const EditCredentialPopup = ({
           <Button
             onClick={() => handleClose()}
             variant="contained"
-            sx={whiteButtonGrayBorder}
+            sx={{ ...whiteButtonGrayBorder, width: "120px" }}
+            disabled={loading}
           >
             Cancel
           </Button>
           <Button
             variant="contained"
-            sx={forestGreenButton}
+            sx={{ ...forestGreenButton, width: "120px" }}
             onClick={handleUpdateCredential}
+            disabled={loading}
           >
-            Confirm
+            {loading ? <Loading /> : "Confirm"}
           </Button>
         </div>
       </div>

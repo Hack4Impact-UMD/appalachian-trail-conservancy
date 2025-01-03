@@ -1,6 +1,7 @@
-import { useRef } from "react";
+import { useState, useRef } from "react";
 import styles from "./EditNamePopup.module.css";
 import Modal from "../../../components/ModalWrapper/Modal";
+import Loading from "../../../components/LoadingScreen/Loading";
 import { useAuth } from "../../../auth/AuthProvider";
 import { Button, TextField } from "@mui/material";
 import { IoCloseOutline } from "react-icons/io5";
@@ -11,6 +12,7 @@ import {
 } from "../../../muiTheme";
 import { Admin } from "../../../types/UserType";
 import { updateAdmin } from "../../../backend/AdminFirestoreCalls";
+import { set } from "lodash";
 
 interface modalPropsType {
   open: boolean;
@@ -33,10 +35,19 @@ const EditNamePopup = ({
 }: modalPropsType): React.ReactElement => {
   const auth = useAuth();
 
+  // loading state
+  const [loading, setLoading] = useState<boolean>(false);
+
+  // can close modal state
+  const [canClose, setCanClose] = useState<boolean>(true);
+
   const nameRef = useRef();
 
   const handleUpdateName = () => {
     if (admin) {
+      setCanClose(false);
+      setLoading(true);
+
       //@ts-ignore
       if (nameRef.current?.value !== "") {
         let newAdmin = admin;
@@ -58,13 +69,23 @@ const EditNamePopup = ({
             setSnackbarMessage(`Error updating ${editType.toLowerCase()} name`);
           })
           .finally(() => {
+            setLoading(false);
+            setCanClose(true);
             setSnackbar(true);
             onClose();
           });
       } else {
+        setLoading(false);
+        setCanClose(true);
         setSnackbarMessage(`${editType} name cannot be empty`);
         setSnackbar(true);
       }
+    }
+  };
+
+  const handleClose = () => {
+    if (canClose) {
+      onClose();
     }
   };
 
@@ -74,7 +95,7 @@ const EditNamePopup = ({
       width={450}
       open={open}
       onClose={() => {
-        onClose();
+        handleClose();
       }}
     >
       <div className={styles.content}>
@@ -93,21 +114,23 @@ const EditNamePopup = ({
           <Button
             onClick={() => onClose()}
             variant="contained"
-            sx={whiteButtonGrayBorder}
+            sx={{ ...whiteButtonGrayBorder, width: "120px" }}
+            disabled={loading}
           >
             Cancel
           </Button>
           <Button
             variant="contained"
-            sx={forestGreenButton}
+            sx={{ ...forestGreenButton, width: "120px" }}
             onClick={handleUpdateName}
+            disabled={loading}
           >
-            Confirm
+            {loading ? <Loading /> : "Confirm"}
           </Button>
         </div>
       </div>
       <div className={styles.closeButton}>
-        <IoCloseOutline onClick={() => onClose()} />
+        <IoCloseOutline onClick={() => handleClose()} />
       </div>
     </Modal>
   );
