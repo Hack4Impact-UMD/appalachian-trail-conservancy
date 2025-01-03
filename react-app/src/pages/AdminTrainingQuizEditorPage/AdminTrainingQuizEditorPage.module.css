@@ -132,17 +132,14 @@
   align-items: center;
 }
 
-.answerBox {
-  font-size: 1.1rem;
-  border-radius: 10px;
-  margin: 4px 10px;
-  width: 400px;
-  height: 30px;
-  border: 1.8px solid var(--blue-gray);
+.questionBox {
+  min-width: 845px;
+  max-width: 845px;
 }
 
-.answerBox fieldset {
-  border: none;
+.answerBox {
+  min-width: 775px;
+  max-width: 775px;
 }
 
 .closeIcon {
@@ -202,8 +199,14 @@
     width: 1200px;
   }
 
-  .cardsContainer {
-    column-gap: 2rem;
+  .questionBox {
+    min-width: 1170px;
+    max-width: 1170px;
+  }
+
+  .answerBox {
+    min-width: 1100px;
+    max-width: 1100px;
   }
 }
 
@@ -212,8 +215,14 @@
     width: 1400px;
   }
 
-  .cardsContainer {
-    column-gap: 6.25rem;
+  .questionBox {
+    min-width: 1370px;
+    max-width: 1370px;
+  }
+
+  .answerBox {
+    min-width: 1300px;
+    max-width: 1300px;
   }
 }
 
@@ -222,14 +231,30 @@
     width: 600px;
   }
 
-  .cardsContainer {
-    justify-content: space-between;
+  .questionBox {
+    min-width: 570px;
+    max-width: 570px;
+  }
+
+  .answerBox {
+    min-width: 500px;
+    max-width: 500px;
   }
 }
 
 @media screen and (max-width: 750px) {
   .content {
     width: 425px;
+  }
+
+  .questionBox {
+    min-width: 380px;
+    max-width: 380px;
+  }
+
+  .answerBox {
+    min-width: 310px;
+    max-width: 310px;
   }
 }
 
@@ -242,5 +267,15 @@
 @media screen and (max-width: 450px) {
   .content {
     width: 300px;
+  }
+
+  .questionBox {
+    min-width: 270px;
+    max-width: 270px;
+  }
+
+  .answerBox {
+    min-width: 200px;
+    max-width: 200px;
   }
 }

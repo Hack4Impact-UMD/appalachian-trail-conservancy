@@ -77,6 +77,7 @@ const AdminTrainingEditor: React.FC = () => {
   const [openDeleteDraftPopup, setOpenDeleteDraftPopup] =
     useState<boolean>(false);
 
+  const [loading, setLoading] = useState(false);
   const [snackbar, setSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
 
@@ -154,8 +155,8 @@ const AdminTrainingEditor: React.FC = () => {
   };
 
   const handleSaveClick = async () => {
+    setLoading(true);
     // Validate fields only if in edit mode
-    console.log(errors);
     if (validateFields()) {
       const blankErrors = {
         trainingName: "",
@@ -184,6 +185,7 @@ const AdminTrainingEditor: React.FC = () => {
       if (trainingId) {
         // Update existing training
         await updateTraining(updatedTraining, trainingId);
+        setLoading(false);
         setSnackbarMessage("Training updated successfully.");
       } else {
         // Save as new draft
@@ -191,6 +193,7 @@ const AdminTrainingEditor: React.FC = () => {
           | string
           | undefined;
         setTrainingId(newTrainingId);
+        setLoading(false);
         setSnackbarMessage("Draft saved successfully.");
       }
       setSnackbar(true);
@@ -202,12 +205,14 @@ const AdminTrainingEditor: React.FC = () => {
       } else {
         setSnackbarMessage("Please complete all required fields.");
       }
+      setLoading(false);
       setSnackbar(true);
       return;
     }
   };
 
   const handleNextClick = async () => {
+    setLoading(true);
     if (validateFields()) {
       const updatedTraining = {
         ...trainingData,
@@ -227,6 +232,7 @@ const AdminTrainingEditor: React.FC = () => {
       if (trainingId) {
         await updateTraining(updatedTraining, trainingId);
         updatedTraining.id = trainingId;
+        setLoading(false);
         setSnackbarMessage("Training updated successfully.");
         setSnackbar(true);
 
@@ -237,6 +243,7 @@ const AdminTrainingEditor: React.FC = () => {
       } else {
         const newTrainingId = await addTraining(updatedTraining);
         updatedTraining.id = newTrainingId;
+        setLoading(false);
         setSnackbarMessage("Draft saved successfully.");
         setSnackbar(true);
 
@@ -253,6 +260,7 @@ const AdminTrainingEditor: React.FC = () => {
       } else {
         setSnackbarMessage("Please complete all required fields.");
       }
+      setLoading(false);
       setSnackbar(true);
     }
   };
@@ -353,7 +361,8 @@ const AdminTrainingEditor: React.FC = () => {
                 <Button
                   sx={whiteButtonGrayBorder}
                   variant="contained"
-                  onClick={handleSaveClick}>
+                  onClick={handleSaveClick}
+                  disabled={loading}>
                   {status == "DRAFT" ? "Save as Draft" : "Save"}
                 </Button>
 
@@ -365,7 +374,8 @@ const AdminTrainingEditor: React.FC = () => {
                     }}
                     onClick={() => {
                       setOpenDeleteDraftPopup(true);
-                    }}>
+                    }}
+                    disabled={loading}>
                     DELETE
                   </Button>
                 ) : (
@@ -631,7 +641,8 @@ const AdminTrainingEditor: React.FC = () => {
                     marginTop: "2%",
                     width: "40px%",
                   }}
-                  onClick={handleNextClick}>
+                  onClick={handleNextClick}
+                  disabled={loading}>
                   {status == "DRAFT" ? "Next: Create Quiz" : "Next: Edit Quiz"}
                 </Button>
               </div>

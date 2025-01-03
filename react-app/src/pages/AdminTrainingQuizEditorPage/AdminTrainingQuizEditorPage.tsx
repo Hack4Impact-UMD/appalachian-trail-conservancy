@@ -55,6 +55,7 @@ function TrainingQuizEditorPage() {
   const [maxPoints, setMaxPoints] = useState(questions.length);
   const [errorQuestions, setErrorQuestions] = useState<number[]>([]);
 
+  const [loading, setLoading] = useState(false);
   const [snackbar, setSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
 
@@ -214,7 +215,7 @@ function TrainingQuizEditorPage() {
       }
 
       // Check that all choices contain text
-      const hasChoices = question.choices.some(
+      const hasChoices = question.choices.every(
         (choice) => choice.trim() !== ""
       );
       if (!hasChoices) {
@@ -251,9 +252,10 @@ function TrainingQuizEditorPage() {
 
   // changeStatus: true if the status should be updated, false if saving as current status
   const handleSaveTraining = async (changeStatus: boolean) => {
+    setLoading(true);
     // Validation: Ensure fields are filled
     if (!validateFields(questions)) {
-      // setSnackbarMessage("Please complete all fields.");
+      setLoading(false);
       setSnackbar(true);
       return;
     }
@@ -285,6 +287,7 @@ function TrainingQuizEditorPage() {
     // Update the training in the database
     updateTraining(updatedTraining, trainingId)
       .then(() => {
+        setLoading(false);
         setTraining(updatedTraining);
         setSnackbarMessage("Training updated successfully.");
         setSnackbar(true);
@@ -295,6 +298,7 @@ function TrainingQuizEditorPage() {
         }
       })
       .catch((error) => {
+        setLoading(false);
         setSnackbarMessage("Error updating training. Please try again.");
         setSnackbar(true);
       });
@@ -328,7 +332,7 @@ function TrainingQuizEditorPage() {
           <div className={styles.content}>
             <div className={styles.header}>
               <div className={styles.headerTitle}>
-                <h1 className={styles.nameHeading}>Trainings Editor</h1>
+                <h1 className={styles.nameHeading}>Training Editor</h1>
                 <div>{renderMarker()}</div>
               </div>
               <ProfileIcon />
@@ -338,7 +342,8 @@ function TrainingQuizEditorPage() {
               <Button
                 sx={whiteButtonGrayBorder}
                 variant="contained"
-                onClick={() => handleSaveTraining(false)}>
+                onClick={() => handleSaveTraining(false)}
+                disabled={loading}>
                 {status === "DRAFT" ? "Save as Draft" : "Save"}
               </Button>
 
@@ -379,8 +384,6 @@ function TrainingQuizEditorPage() {
                     <OutlinedInput
                       sx={{
                         ...grayBorderTextField,
-                        width: "100%",
-                        height: 50,
                         minHeight: 90,
                         border: errorQuestions.includes(questionIndex)
                           ? "2px solid var(--hazard-red)"
@@ -391,6 +394,7 @@ function TrainingQuizEditorPage() {
                       onChange={(e) =>
                         handleQuestionChange(questionIndex, e.target.value)
                       }
+                      className={styles.questionBox}
                       multiline
                       rows={3}
                     />
@@ -431,9 +435,7 @@ function TrainingQuizEditorPage() {
                                 <OutlinedInput
                                   sx={{
                                     ...grayBorderTextField,
-                                    height: 30,
                                     minHeight: 70,
-                                    width: "850px",
                                     margin: "5px 0",
                                     border: errorQuestions.includes(
                                       questionIndex
@@ -450,7 +452,7 @@ function TrainingQuizEditorPage() {
                                       e.target.value
                                     )
                                   }
-                                  // className={styles.answerBox}
+                                  className={styles.answerBox}
                                   multiline
                                   rows={2}
                                 />
@@ -518,7 +520,8 @@ function TrainingQuizEditorPage() {
                     navigate("/trainings/editor", {
                       state: { training: training },
                     });
-                  }}>
+                  }}
+                  disabled={loading}>
                   BACK
                 </Button>
                 <Button
@@ -529,7 +532,8 @@ function TrainingQuizEditorPage() {
                     width: "120px",
                     marginLeft: "30px",
                   }}
-                  onClick={() => handleSaveTraining(true)}>
+                  onClick={() => handleSaveTraining(true)}
+                  disabled={loading}>
                   {status === "DRAFT"
                     ? "PUBLISH"
                     : status === "PUBLISHED"
