@@ -200,13 +200,13 @@
   }
 
   .questionBox {
-    min-width: 1170px;
-    max-width: 1170px;
+    min-width: 1100px;
+    max-width: 1100px;
   }
 
   .answerBox {
-    min-width: 1100px;
-    max-width: 1100px;
+    min-width: 1020px;
+    max-width: 1020px;
   }
 }
 
@@ -216,13 +216,13 @@
   }
 
   .questionBox {
-    min-width: 1370px;
-    max-width: 1370px;
+    min-width: 1300px;
+    max-width: 1300px;
   }
 
   .answerBox {
-    min-width: 1300px;
-    max-width: 1300px;
+    min-width: 1220px;
+    max-width: 1220px;
   }
 }
 

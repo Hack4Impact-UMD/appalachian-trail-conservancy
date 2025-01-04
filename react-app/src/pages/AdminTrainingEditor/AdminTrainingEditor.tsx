@@ -101,7 +101,7 @@ const AdminTrainingEditor: React.FC = () => {
   };
 
   // make sure all fields are good before moving on
-  const validateFields = () => {
+  const validateFields = (saveAsIs: boolean) => {
     const newErrors = {
       trainingName: "",
       blurb: "",
@@ -116,6 +116,12 @@ const AdminTrainingEditor: React.FC = () => {
     if (!trainingName) {
       newErrors.trainingName = "Training name is required.";
       isValid = false;
+    }
+
+    // Other fields can be saved empty in draft mode
+    if (saveAsIs && status === "DRAFT") {
+      setErrors(newErrors);
+      return isValid;
     }
 
     if (!blurb) {
@@ -157,7 +163,7 @@ const AdminTrainingEditor: React.FC = () => {
   const handleSaveClick = async () => {
     setLoading(true);
     // Validate fields only if in edit mode
-    if (validateFields()) {
+    if (validateFields(true)) {
       const blankErrors = {
         trainingName: "",
         blurb: "",
@@ -168,10 +174,11 @@ const AdminTrainingEditor: React.FC = () => {
       };
       setErrors(blankErrors);
 
-      const updatedTraining = {
+      const updatedTraining: Training = {
         name: trainingName,
         shortBlurb: blurb,
         description: description,
+        coverImage: "",
         resources: [
           {
             title: resourceTitle,
@@ -179,8 +186,15 @@ const AdminTrainingEditor: React.FC = () => {
             type: resourceType,
           } as TrainingResource,
         ],
+        quiz: {
+          questions: [],
+          numQuestions: 0,
+          passingScore: 0,
+        },
+        associatedPathways: [],
+        certificationImage: "",
         status: status,
-      } as Training;
+      };
 
       if (trainingId) {
         // Update existing training
@@ -213,7 +227,7 @@ const AdminTrainingEditor: React.FC = () => {
 
   const handleNextClick = async () => {
     setLoading(true);
-    if (validateFields()) {
+    if (validateFields(false)) {
       const updatedTraining = {
         ...trainingData,
         name: trainingName,

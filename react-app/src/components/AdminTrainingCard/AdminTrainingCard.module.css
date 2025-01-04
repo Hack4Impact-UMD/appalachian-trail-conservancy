@@ -21,6 +21,15 @@
   object-fit: cover;
 }
 
+.trainingImagePlaceholder {
+  height: 200px;
+  background-color: var(--blue-gray);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .trainingContent {
   flex: 1;
   display: flex;
