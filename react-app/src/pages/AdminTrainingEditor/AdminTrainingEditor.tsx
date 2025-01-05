@@ -462,6 +462,9 @@ const AdminTrainingEditor: React.FC = () => {
                   border: errors.blurb
                     ? "2px solid var(--hazard-red)"
                     : "2px solid var(--blue-gray)",
+                  "& .MuiOutlinedInput-input": {
+                    padding: 0,
+                  },
                 }}
                 multiline
                 rows={3}
