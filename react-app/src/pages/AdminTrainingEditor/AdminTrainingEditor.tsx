@@ -15,7 +15,6 @@ import {
   Alert,
 } from "@mui/material";
 import {
-  getStorage,
   ref,
   uploadBytes,
   getDownloadURL,
@@ -48,6 +47,7 @@ import {
 } from "../../muiTheme";
 import { IoIosInformationCircleOutline } from "react-icons/io";
 import hamburger from "../../assets/hamburger.svg";
+import { storage } from "../../config/firebase";
 
 const AdminTrainingEditor: React.FC = () => {
   const location = useLocation();
@@ -102,9 +102,9 @@ const AdminTrainingEditor: React.FC = () => {
     description: 1000,
   };
 
-  const [file, setFile] = useState<File | null>(null);
+  // const [file, setFile] = useState<File | null>(null);
 
-  const onUpload = async () => {
+  const onUpload = async (file: File) => {
     if (!file) {
       setSnackbarMessage("No file found. Please try again.");
       setSnackbar(true);
@@ -114,17 +114,17 @@ const AdminTrainingEditor: React.FC = () => {
     console.log("File selected:", file.name);
 
     const fileExtension = file.name.split(".").pop();
-    const storage = getStorage();
     // Upload file to firebase storage
     try {
       const randomName = crypto.randomUUID();
 
-      const storageRef = ref(
-        storage,
-        `coverImages/${randomName}.${fileExtension}`
-      );
+      const storageRef = ref(storage, `${randomName}.${fileExtension}`);
 
-      await uploadBytes(storageRef, file);
+      const fileContent = await file.arrayBuffer();
+
+      console.log("Uploading file to Firebase Storage...");
+      await uploadBytes(storageRef, fileContent);
+      console.log("File uploaded to Firebase Storage");
       const downloadURL = await getDownloadURL(storageRef);
 
       setCoverImage(downloadURL);
@@ -141,7 +141,6 @@ const AdminTrainingEditor: React.FC = () => {
     if (!coverImage) return;
 
     try {
-      const storage = getStorage();
       const fileRef = ref(storage, coverImage);
 
       // Delete the file from Firebase Storage
@@ -549,7 +548,7 @@ const AdminTrainingEditor: React.FC = () => {
                     onChange={async (e) => {
                       if (e.target.files && e.target.files[0]) {
                         const selectedFile = e.target.files[0];
-                        setFile(selectedFile); // Update the file state
+                        // setFile(selectedFile); // Update the file state
                         await onUpload(selectedFile); // Call onUpload directly after file selection
                       }
                     }}
