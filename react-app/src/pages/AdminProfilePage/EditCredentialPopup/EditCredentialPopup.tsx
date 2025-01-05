@@ -13,6 +13,11 @@ import {
 } from "../../../muiTheme";
 import { Admin } from "../../../types/UserType";
 import { updateAdmin } from "../../../backend/AdminFirestoreCalls";
+import {
+  authenticateUserEmailAndPassword,
+  updateUserEmail,
+} from "../../../backend/AuthFunctions";
+import { set } from "lodash";
 
 interface modalPropsType {
   open: boolean;
@@ -49,11 +54,73 @@ const EditCredentialPopup = ({
   const [showPrevPassword, setPrevShowPassword] = useState<boolean>(false);
   const [showNewPassword, setNewShowPassword] = useState<boolean>(false);
 
-  const updateEmail = () => {
-    // TODO
+  // handle opening of snackbar and loading and canClose state
+  const handlePostEvent = () => {
+    setSnackbar(true);
+    setLoading(false);
+    setCanClose(true);
   };
 
-  const updatePassword = () => {
+  // Check if email is valid
+  const validateEmail = (email: string) => {
+    const pattern = /^[^@]+@[^@]+\.[^@]+$/;
+    return pattern.test(email);
+  };
+
+  const updateEmail = (newEmail: string, confirmEmail: string) => {
+    //@ts-ignore
+    const password = passwordRef.current?.value;
+
+    // check if any field is empty
+    if (newEmail === "" || confirmEmail === "" || password === "") {
+      setSnackbarMessage("Please fill out all fields");
+      handlePostEvent();
+      return;
+    }
+
+    // validate string are emails
+    if (!validateEmail(newEmail) || !validateEmail(confirmEmail)) {
+      setSnackbarMessage("Invalid email format");
+      handlePostEvent();
+      return;
+    }
+
+    // check if new email and confirm email are the same
+    if (newEmail !== confirmEmail) {
+      setSnackbarMessage("Emails do not match");
+      handlePostEvent();
+      return;
+    }
+
+    authenticateUserEmailAndPassword(auth.user.email!, password)
+      .then(async () => {
+        await updateUserEmail(auth.user.email!, newEmail)
+          .then(() => {
+            setPrevShowPassword(false);
+            //@ts-ignore
+            prevCredRef.current.value = ""; // reset fields
+            //@ts-ignore
+            newCredRef.current.value = ""; // reset fields
+            //@ts-ignore
+            passwordRef.current.value = ""; // reset fields
+            setSnackbarMessage("Email updated successfully");
+            setAdmin({ ...admin, email: newEmail });
+            auth.setUser({ ...auth.user, email: newEmail }); // Update user email in auth context
+          })
+          .catch((e) => {
+            console.error(e);
+            setSnackbarMessage("Failed to update email. Try again later.");
+          });
+      })
+      .catch(() => {
+        setSnackbarMessage("Incorrect password");
+      })
+      .finally(() => {
+        handlePostEvent();
+      });
+  };
+
+  const updatePassword = (prevPassword: string, newPassword: string) => {
     // TODO
   };
 
@@ -66,16 +133,9 @@ const EditCredentialPopup = ({
     const prevCred = prevCredRef.current?.value;
     //@ts-ignore
     const newCred = newCredRef.current?.value;
-    if (prevCred !== "" && newCred !== "") {
-      if (admin) {
-        if (editType === "Email") updateEmail();
-        else updatePassword();
-      }
-    } else {
-      setLoading(false);
-      setCanClose(true);
-      setSnackbarMessage("Please fill out all fields");
-      setSnackbar(true);
+    if (admin) {
+      if (editType === "Email") updateEmail(prevCred, newCred);
+      else updatePassword(prevCred, newCred);
     }
   };
 
@@ -97,9 +157,7 @@ const EditCredentialPopup = ({
       }}
     >
       <div className={styles.content}>
-        <p className={styles.title}>
-          {editType === "Email" && "Confirm"} Edit {editType}
-        </p>
+        <p className={styles.title}>Edit {editType}</p>
         <div className={styles.textFields}>
           {/* conditional rendering based on editType */}
           {editType === "Email" ? (
@@ -123,7 +181,7 @@ const EditCredentialPopup = ({
               />
 
               <h3 className={styles.subHeader}>New Email</h3>
-              <TextField sx={grayBorderTextField} inputRef={newCredRef} />
+              <TextField sx={grayBorderTextField} inputRef={prevCredRef} />
 
               <h3 className={styles.subHeader}>Confirm New Email</h3>
               <TextField sx={grayBorderTextField} inputRef={newCredRef} />

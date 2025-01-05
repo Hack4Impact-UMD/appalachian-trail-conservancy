@@ -16,6 +16,7 @@ interface Props {
 
 interface AuthContextType {
   user: User;
+  setUser: any;
   token: IdTokenResult;
   firstName: string;
   lastName: string;
@@ -76,7 +77,7 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
 
   return (
     <AuthContext.Provider
-      value={{ user, token, firstName, lastName, id, loading }}
+      value={{ user, setUser, token, firstName, lastName, id, loading }}
     >
       {children}
     </AuthContext.Provider>

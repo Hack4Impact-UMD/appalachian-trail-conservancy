@@ -196,7 +196,10 @@ function AdminProfilePage() {
                 </div>
               </div>
               <div className={styles.profileIcon}>
-                <SettingsProfileIcon />
+                <SettingsProfileIcon
+                  firstName={admin?.firstName ?? ""}
+                  lastName={admin?.lastName ?? ""}
+                />
               </div>
             </div>
           </div>
