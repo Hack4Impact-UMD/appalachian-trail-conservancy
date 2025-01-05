@@ -1,78 +1,131 @@
-import React, { useState, useEffect, useRef } from "react";
-import styles from "./AdminTrainingEditor.module.css";
+import React, { useState, useRef, useEffect } from "react";
+import styles from "./AdminPathwayEditorPage.module.css";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
+  TextField,
   OutlinedInput,
   Button,
-  MenuItem,
-  Select,
-  FormControl,
   Typography,
   Tooltip,
+  Autocomplete,
   Snackbar,
   Alert,
 } from "@mui/material";
-import { addTraining, updateTraining } from "../../backend/FirestoreCalls";
 import {
-  TrainingID,
-  Training,
-  TrainingResource,
-  Resource,
-  Status,
-} from "../../types/TrainingType";
-import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar";
-import Footer from "../../components/Footer/Footer";
-import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
-import AdminDeleteDraftPopup from "./AdminDeleteDraftPopup/AdminDeleteDraftPopup";
-import { LuUpload } from "react-icons/lu";
-import {
-  styledRectButton,
   forestGreenButton,
-  whiteButtonGrayBorder,
+  styledRectButton,
+  whiteTooltip,
+  autocompleteText,
   whiteSelectGrayBorder,
-  selectOptionStyle,
+  whiteButtonGrayBorder,
+  whiteButtonRedBorder,
   inputHeaderText,
   inputHelperText,
   grayBorderTextField,
-  whiteButtonRedBorder,
-  whiteTooltip,
 } from "../../muiTheme";
+import AddIcon from "@mui/icons-material/Add";
+import hamburger from "../../assets/hamburger.svg";
+import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar";
+import Footer from "../../components/Footer/Footer";
+import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
+import { IoCloseOutline } from "react-icons/io5";
+import { LuUpload } from "react-icons/lu";
 import { IoIosInformationCircleOutline } from "react-icons/io";
+import { Pathway, PathwayID, Status } from "../../types/PathwayType";
+import { TrainingID } from "../../types/TrainingType";
+import {
+  addPathway,
+  updatePathway,
+  getAllPublishedTrainings,
+} from "../../backend/FirestoreCalls";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
-import hamburger from "../../assets/hamburger.svg";
 
-const AdminTrainingEditor: React.FC = () => {
-  const location = useLocation();
-  const trainingData = location.state?.training as TrainingID | undefined;
+const AdminPathwayEditorPage: React.FC = () => {
   const navigate = useNavigate();
-  const [trainingId, setTrainingId] = useState<string | undefined>(
-    trainingData?.id
+  const location = useLocation();
+  const pathwayData = location.state?.pathway as PathwayID | undefined;
+  const [pathwayId, setPathwayId] = useState<string | undefined>(
+    pathwayData?.id
   );
-  const status = trainingData?.status || ("DRAFT" as Status);
-  const [trainingName, setTrainingName] = useState<string>(
-    trainingData?.name || ""
+  const status = pathwayData?.status || ("DRAFT" as Status);
+  const [pathwayName, setPathwayName] = useState<string>(
+    pathwayData?.name || ""
   );
-  const [blurb, setBlurb] = useState<string>(trainingData?.shortBlurb || "");
+  const [blurb, setBlurb] = useState<string>(pathwayData?.shortBlurb || "");
   const [description, setDescription] = useState<string>(
-    trainingData?.description || ""
+    pathwayData?.description || ""
   );
   const [descriptionPlain, setDescriptionPlain] = useState<string>(
-    trainingData?.description.replace(/<[^>]*>/g, "") || ""
+    pathwayData?.description.replace(/<[^>]*>/g, "") || ""
   );
-  const [resourceTitle, setResourceTitle] = useState<string>(
-    trainingData?.resources[0]?.title || ""
+  const [coverImage, setCoverImage] = useState<string>(
+    pathwayData?.coverImage || ""
   );
-  const [resourceLink, setResourceLink] = useState<string>(
-    trainingData?.resources[0]?.link || ""
-  );
-  const [resourceType, setResourceType] = useState<string>(
-    trainingData?.resources[0]?.type || ""
-  );
+  const blankTraining: TrainingID = {
+    name: "",
+    id: "",
+    shortBlurb: "",
+    description: "",
+    coverImage: "",
+    resources: [],
+    quiz: {
+      questions: [],
+      numQuestions: 0,
+      passingScore: 0,
+    },
+    associatedPathways: [],
+    certificationImage: "",
+    status: "PUBLISHED",
+  };
+
+  const [selectedTrainings, setSelectedTrainings] = useState<TrainingID[]>([
+    blankTraining,
+  ]);
+  const [trainingOptions, setTrainingOptions] = useState<TrainingID[]>([]);
+  const [errorTrainings, setErrorTrainings] = useState<number[]>([]);
 
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
   );
+
+  const handleAddSearchBar = () => {
+    setSelectedTrainings([...selectedTrainings, blankTraining]);
+  };
+
+  const handleTrainingSelection = (
+    selectedTraining: TrainingID | null,
+    index: number
+  ) => {
+    const newTrainings = [...selectedTrainings];
+    newTrainings[index] = selectedTraining ?? blankTraining;
+    setSelectedTrainings(newTrainings);
+  };
+
+  const handleDeleteSearchBar = (index: number) => {
+    if (index > 0) {
+      const newTrainings = selectedTrainings.filter((_, i) => i !== index);
+      setSelectedTrainings(newTrainings);
+
+      // update list of questions with errors
+      if (errorTrainings.length !== 0) {
+        const newErrorTrainings = errorTrainings
+          .filter((errorIndex) => errorIndex !== index)
+          .map((errorIndex) =>
+            errorIndex > index ? errorIndex - 1 : errorIndex
+          );
+        setErrorTrainings(newErrorTrainings);
+      }
+    }
+  };
+
+  const [errors, setErrors] = useState({
+    pathwayName: "",
+    blurb: "",
+    description: "",
+    coverImage: "",
+    trainingIds: "",
+  });
 
   const [openDeleteDraftPopup, setOpenDeleteDraftPopup] =
     useState<boolean>(false);
@@ -81,40 +134,28 @@ const AdminTrainingEditor: React.FC = () => {
   const [snackbar, setSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
 
-  const [errors, setErrors] = useState({
-    trainingName: "",
-    blurb: "",
-    description: "",
-    resourceTitle: "",
-    resourceLink: "",
-    resourceType: "",
-  });
-
   const descriptionContainerRef = useRef<HTMLDivElement>(null);
   const quillDescriptionRef = useRef<Quill | null>(null);
 
   const characterLimits = {
-    trainingName: 70,
+    pathwayName: 50,
     blurb: 255,
     description: 1400,
-    resourceTitle: 50,
   };
 
-  // make sure all fields are good before moving on
   const validateFields = (saveAsIs: boolean) => {
     const newErrors = {
-      trainingName: "",
+      pathwayName: "",
       blurb: "",
       description: "",
-      resourceTitle: "",
-      resourceLink: "",
-      resourceType: "",
+      coverImage: "",
+      trainingIds: "",
     };
     let isValid = true;
 
     // Check for required fields
-    if (!trainingName) {
-      newErrors.trainingName = "Training name is required.";
+    if (!pathwayName) {
+      newErrors.pathwayName = "Pathway name is required.";
       isValid = false;
     }
 
@@ -134,26 +175,31 @@ const AdminTrainingEditor: React.FC = () => {
       isValid = false;
     }
 
-    if (!resourceTitle) {
-      newErrors.resourceTitle = "Resource Title is required.";
+    if (!coverImage) {
+      newErrors.coverImage = "Image is required.";
       isValid = false;
     }
 
-    if (!resourceLink) {
-      newErrors.resourceLink = "Resource Link is required.";
+    let newErrorTrainings = [];
+    if (!selectedTrainings || selectedTrainings.length === 0) {
+      newErrors.trainingIds = "At least one associated training is required.";
       isValid = false;
-    }
+    } else {
+      newErrorTrainings = selectedTrainings.reduce(
+        (indexes, training, index) => {
+          if (!training.name) {
+            indexes.push(index);
+          }
+          return indexes;
+        },
+        [] as number[]
+      );
 
-    if (!resourceType) {
-      newErrors.resourceType = "Resource Type is required.";
-      isValid = false;
-    }
-
-    // Validate Resource Link if type is video
-    const youtubeRegex = /^https:\/\/www\.youtube\.com\/embed\/[\w-]+(\?.*)?$/;
-    if (resourceType === "VIDEO" && !youtubeRegex.test(resourceLink)) {
-      newErrors.resourceLink = "Please provide a valid embedded YouTube link.";
-      isValid = false;
+      if (newErrorTrainings.length > 0) {
+        setErrorTrainings(newErrorTrainings);
+        newErrors.trainingIds = "All associated trainings must be selected.";
+        isValid = false;
+      }
     }
 
     setErrors(newErrors);
@@ -165,60 +211,46 @@ const AdminTrainingEditor: React.FC = () => {
     // Validate fields only if in edit mode
     if (validateFields(true)) {
       const blankErrors = {
-        trainingName: "",
+        pathwayName: "",
         blurb: "",
         description: "",
-        resourceTitle: "",
-        resourceLink: "",
-        resourceType: "",
+        coverImage: "",
+        trainingIds: "",
       };
       setErrors(blankErrors);
 
-      const updatedTraining: Training = {
-        name: trainingName,
+      const updatedPathway: Pathway = {
+        name: pathwayName,
         shortBlurb: blurb,
         description: description,
         coverImage: "",
-        resources: [
-          {
-            title: resourceTitle,
-            link: resourceLink,
-            type: resourceType,
-          } as TrainingResource,
-        ],
+        trainingIDs: selectedTrainings.map((training) => training.id),
         quiz: {
           questions: [],
           numQuestions: 0,
           passingScore: 0,
         },
-        associatedPathways: [],
-        certificationImage: "",
+        badgeImage: "",
         status: status,
       };
 
-      if (trainingId) {
-        // Update existing training
-        await updateTraining(updatedTraining, trainingId);
+      if (pathwayId) {
+        // Update existing pathway
+        await updatePathway(updatedPathway, pathwayId);
         setLoading(false);
-        setSnackbarMessage("Training updated successfully.");
+        setSnackbarMessage("Pathway updated successfully.");
       } else {
         // Save as new draft
-        const newTrainingId = (await addTraining(updatedTraining)) as
+        const newPathwayId = (await addPathway(updatedPathway)) as
           | string
           | undefined;
-        setTrainingId(newTrainingId);
+        setPathwayId(newPathwayId);
         setLoading(false);
         setSnackbarMessage("Draft saved successfully.");
       }
       setSnackbar(true);
     } else {
-      if (
-        errors.resourceLink == "Please provide a valid embedded YouTube link."
-      ) {
-        setSnackbarMessage("Please provide a valid embedded YouTube link.");
-      } else {
-        setSnackbarMessage("Please complete all required fields.");
-      }
+      setSnackbarMessage("Please complete all required fields.");
       setLoading(false);
       setSnackbar(true);
       return;
@@ -228,52 +260,41 @@ const AdminTrainingEditor: React.FC = () => {
   const handleNextClick = async () => {
     setLoading(true);
     if (validateFields(false)) {
-      const updatedTraining = {
-        ...trainingData,
-        name: trainingName,
+      const updatedPathway = {
+        ...pathwayData,
+        name: pathwayName,
         shortBlurb: blurb,
         description: description,
-        resources: [
-          {
-            title: resourceTitle,
-            link: resourceLink,
-            type: resourceType as Resource,
-          } as TrainingResource,
-        ] as TrainingResource[],
+        trainingIDs: selectedTrainings.map((training) => training.id),
         status: status,
-      } as TrainingID;
+      } as PathwayID;
 
-      if (trainingId) {
-        await updateTraining(updatedTraining, trainingId);
-        updatedTraining.id = trainingId;
+      if (pathwayId) {
+        // Update existing pathway
+        await updatePathway(updatedPathway, pathwayId);
+        updatedPathway.id = pathwayId;
         setLoading(false);
-        setSnackbarMessage("Training updated successfully.");
+        setSnackbarMessage("Pathway updated successfully.");
         setSnackbar(true);
 
-        // Navigate to the quiz editor with the training as state
-        navigate("/trainings/editor/quiz", {
-          state: { training: updatedTraining },
+        // Navigate to the quiz editor with the pathway as state
+        navigate("/pathways/editor/quiz", {
+          state: { pathway: updatedPathway },
         });
       } else {
-        const newTrainingId = await addTraining(updatedTraining);
-        updatedTraining.id = newTrainingId;
+        const newPathwayId = await addPathway(updatedPathway);
+        updatedPathway.id = newPathwayId;
         setLoading(false);
         setSnackbarMessage("Draft saved successfully.");
         setSnackbar(true);
 
-        // Navigate to the quiz editor with the new training as state
-        navigate("/trainings/editor/quiz", {
-          state: { training: updatedTraining },
+        // Navigate to the quiz editor with the new pathway as state
+        navigate("/pathways/editor/quiz", {
+          state: { pathway: updatedPathway },
         });
       }
     } else {
-      if (
-        errors.resourceLink == "Please provide a valid embedded YouTube link."
-      ) {
-        setSnackbarMessage("Please provide a valid embedded YouTube link.");
-      } else {
-        setSnackbarMessage("Please complete all required fields.");
-      }
+      setSnackbarMessage("Please complete all required fields.");
       setLoading(false);
       setSnackbar(true);
     }
@@ -338,6 +359,22 @@ const AdminTrainingEditor: React.FC = () => {
     }
   }, []);
 
+  useEffect(() => {
+    setLoading(true);
+    // TODO: SET LOADING FOR SELECT?
+    getAllPublishedTrainings().then((trainings) => {
+      if (pathwayData?.trainingIDs) {
+        // set selected trainings
+        const selected = trainings.filter((training) =>
+          pathwayData?.trainingIDs.includes(training.id)
+        );
+        setSelectedTrainings(selected);
+      }
+      setTrainingOptions(trainings);
+      setLoading(false);
+    });
+  }, [pathwayData]);
+
   return (
     <>
       <div className={openDeleteDraftPopup ? styles.popupOpen : ""}>
@@ -362,14 +399,16 @@ const AdminTrainingEditor: React.FC = () => {
 
         <div className={styles.container}>
           <div className={styles.content}>
+            {/* Heading */}
             <div className={styles.header}>
               <div className={styles.headerTitle}>
-                <h1 className={styles.headerText}>Training Editor</h1>
+                <h1 className={styles.nameHeading}>Pathway Editor</h1>
                 <div>{renderMarker()}</div>
               </div>
               <ProfileIcon />
             </div>
 
+            {/* Input Boxes */}
             <form className={styles.formContent} noValidate>
               <div className={styles.topButtonContainer}>
                 <Button
@@ -397,41 +436,42 @@ const AdminTrainingEditor: React.FC = () => {
                 )}
               </div>
 
-              {/* Training Name */}
+              {/* Pathway Name */}
               <div className={styles.inputBoxHeader}>
                 <Typography
                   variant="body2"
                   sx={{ ...inputHeaderText, marginTop: "2rem" }}>
-                  TRAINING NAME
+                  PATHWAY NAME
                 </Typography>
 
                 <Typography variant="body2" sx={inputHelperText}>
                   {Math.max(
-                    characterLimits.trainingName - trainingName.length,
+                    characterLimits.pathwayName - pathwayName.length,
                     0
                   )}{" "}
                   Characters Remaining
                 </Typography>
               </div>
+
               <OutlinedInput
-                value={trainingName}
+                value={pathwayName}
                 onChange={(e) => {
                   const newValue = e.target.value;
-                  if (newValue.length <= characterLimits.trainingName) {
-                    setTrainingName(newValue);
+                  if (newValue.length <= characterLimits.pathwayName) {
+                    setPathwayName(newValue);
                   }
                 }}
-                error={Boolean(errors.trainingName)}
+                error={Boolean(errors.pathwayName)}
                 sx={{
                   ...grayBorderTextField,
                   width: "100%",
-                  border: errors.trainingName
+                  border: errors.pathwayName
                     ? "2px solid var(--hazard-red)"
                     : "2px solid var(--blue-gray)",
                 }}
               />
 
-              {/* Training Blurb */}
+              {/* Pathway Blurb */}
               <div className={styles.inputBoxHeader}>
                 <Typography
                   variant="body2"
@@ -467,7 +507,7 @@ const AdminTrainingEditor: React.FC = () => {
                 rows={3}
               />
 
-              {/* Training Description */}
+              {/* Pathway Description */}
               <div className={styles.inputBoxHeader}>
                 <Typography
                   variant="body2"
@@ -495,14 +535,14 @@ const AdminTrainingEditor: React.FC = () => {
                   }}></div>
               </div>
 
-              {/* Training Image */}
+              {/* Pathway Image */}
               <div className={styles.uploadSection}>
                 <div className={styles.uploadResourceHeader}>
                   <Typography variant="body2" sx={inputHeaderText}>
                     UPLOAD IMAGE (JPEG, PNG)
                   </Typography>
                   <Tooltip
-                    title="Upload will be used as training cover and certificate image"
+                    title="Upload will be used as badge image"
                     placement="right"
                     componentsProps={{
                       tooltip: {
@@ -530,122 +570,94 @@ const AdminTrainingEditor: React.FC = () => {
                 </Button>
               </div>
 
-              {/* Resource Title */}
-              <div className={styles.inputBoxHeader}>
+              {/* Training Selection */}
+              <div className={styles.trainingSelection}>
                 <Typography
                   variant="body2"
                   sx={{ ...inputHeaderText, marginTop: "2rem" }}>
-                  RESOURCE TITLE
+                  TRAINING SELECT
                 </Typography>
 
-                <Typography variant="body2" sx={inputHelperText}>
-                  {Math.max(
-                    characterLimits.resourceTitle - resourceTitle.length,
-                    0
-                  )}{" "}
-                  Characters Remaining
-                </Typography>
-              </div>
-              <OutlinedInput
-                value={resourceTitle}
-                onChange={(e) => {
-                  const newValue = e.target.value;
-                  if (newValue.length <= characterLimits.resourceTitle) {
-                    setResourceTitle(newValue);
-                  }
-                }}
-                error={Boolean(errors.resourceTitle)}
-                sx={{
-                  ...grayBorderTextField,
-                  width: "100%",
-                  border: errors.resourceTitle
-                    ? "2px solid var(--hazard-red)"
-                    : "2px solid var(--blue-gray)",
-                }}
-              />
-
-              {/* Resource Link and Tooltip */}
-              <div
-                className={styles.uploadResourceHeader}
-                style={{
-                  marginTop: "2rem",
-                }}>
-                <Typography variant="body2" sx={inputHeaderText}>
-                  RESOURCE LINK
-                </Typography>
-
-                <Tooltip
-                  title="Link to PDF or Embedded YouTube Video. To get the embed link, click on the 'share' button on the YouTube video and then click on 'Embed'. Grab the link from the code which is everything inside the src attribute."
-                  placement="right"
-                  componentsProps={{
-                    tooltip: {
-                      sx: { ...whiteTooltip, fontSize: "0.75rem" },
-                    },
-                  }}>
-                  <span className={styles.iconCenter}>
-                    <IoIosInformationCircleOutline />
-                  </span>
-                </Tooltip>
-              </div>
-              <div className={styles.resourceContainer}>
-                <OutlinedInput
-                  value={resourceLink}
-                  onChange={(e) => setResourceLink(e.target.value)}
-                  error={Boolean(errors.resourceLink)}
-                  sx={{
-                    ...grayBorderTextField,
-                    flexGrow: 1,
-                    width: "100%",
-                    border: errors.resourceLink
-                      ? "2px solid var(--hazard-red)"
-                      : "2px solid var(--blue-gray)",
-                  }}
-                />
-
-                <FormControl
-                  margin="normal"
-                  sx={{ marginTop: "0px", marginBottom: "0" }}
-                  className={styles.resourceTypeField}
-                  error={Boolean(errors.resourceType)}>
-                  <Select
-                    className={styles.dropdownMenu}
-                    sx={{
-                      ...whiteSelectGrayBorder,
-                      fontSize: "1.1rem",
-                      borderRadius: "10px",
-                      height: "3rem",
-                      border: errors.resourceType
-                        ? "2px solid var(--hazard-red)"
-                        : "2px solid var(--blue-gray)",
-                    }}
-                    value={resourceType}
-                    onChange={(e) =>
-                      setResourceType(
-                        e.target.value === "VIDEO" ? "VIDEO" : "PDF"
-                      )
-                    }
-                    displayEmpty
-                    label="Resource Type"
-                    renderValue={(selected) => {
-                      if (selected === "") {
-                        return <em>Resource Type</em>;
+                {selectedTrainings.map((training, trainingIndex) => (
+                  <div
+                    key={trainingIndex}
+                    className={styles.searchBarContainer}>
+                    <p className={styles.searchBarNumber}>
+                      {trainingIndex + 1}
+                    </p>
+                    <Autocomplete
+                      sx={{
+                        ...whiteSelectGrayBorder,
+                        width: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                        border: errorTrainings.includes(trainingIndex)
+                          ? "2px solid var(--hazard-red)"
+                          : "2px solid var(--blue-gray)",
+                      }}
+                      slotProps={{
+                        // style options
+                        paper: {
+                          sx: {
+                            "& .MuiAutocomplete-listbox": {
+                              "& .MuiAutocomplete-option": {
+                                color: "var(--blue-gray)",
+                              },
+                            },
+                          },
+                        },
+                      }}
+                      disablePortal
+                      value={training}
+                      getOptionLabel={(option) => option.name}
+                      options={trainingOptions}
+                      getOptionDisabled={(option) =>
+                        selectedTrainings.some(
+                          (selectedTrainings) => selectedTrainings === option
+                        )
                       }
-                      return selected === "VIDEO" ? "Video" : "PDF";
-                    }}>
-                    <MenuItem value="" disabled sx={{ display: "none" }}>
-                      Resource Type
-                    </MenuItem>
-                    <MenuItem value="PDF" sx={selectOptionStyle}>
-                      PDF
-                    </MenuItem>
-                    <MenuItem value="VIDEO" sx={selectOptionStyle}>
-                      Video
-                    </MenuItem>
-                  </Select>
-                </FormControl>
+                      onChange={(event, selected) => {
+                        handleTrainingSelection(selected, trainingIndex);
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          variant="outlined"
+                          placeholder="SEARCH"
+                          InputLabelProps={{
+                            shrink: false,
+                          }}
+                          sx={autocompleteText}
+                        />
+                      )}
+                    />
+                    {trainingIndex > 0 ? (
+                      <div
+                        className={`${styles.closeIcon} ${styles.leftMargin}`}>
+                        <IoCloseOutline
+                          onClick={() => handleDeleteSearchBar(trainingIndex)}
+                        />
+                      </div>
+                    ) : (
+                      <div
+                        className={`${styles.closeIcon} ${styles.leftMargin}`}
+                        style={{ visibility: "hidden" }}>
+                        <IoCloseOutline />
+                      </div>
+                    )}
+                  </div>
+                ))}
+
+                {/* Add Training Button */}
+                <div
+                  className={styles.addTrainingContainer}
+                  onClick={handleAddSearchBar}>
+                  <AddIcon fontSize="medium" />
+                  <h3>ADD TRAINING</h3>
+                </div>
               </div>
 
-              {/* Button group */}
+              {/* Button Group */}
               <div className={styles.nextButton}>
                 <Button
                   variant="contained"
@@ -677,11 +689,6 @@ const AdminTrainingEditor: React.FC = () => {
               {snackbarMessage}
             </Alert>
           </Snackbar>
-          <AdminDeleteDraftPopup
-            open={openDeleteDraftPopup}
-            onClose={setOpenDeleteDraftPopup}
-            trainingId={trainingId}
-          />
         </div>
         <Footer />
       </div>
@@ -689,4 +696,4 @@ const AdminTrainingEditor: React.FC = () => {
   );
 };
 
-export default AdminTrainingEditor;
+export default AdminPathwayEditorPage;

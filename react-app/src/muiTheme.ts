@@ -173,6 +173,13 @@ export const selectOptionStyle = {
   },
 };
 
+// autocomplete TextField
+export const autocompleteText = {
+  "& .MuiOutlinedInput-root": {
+    color: "var(--blue-gray)",
+  },
+};
+
 // used in login page
 export const grayBorderTextField = {
   width: 350,

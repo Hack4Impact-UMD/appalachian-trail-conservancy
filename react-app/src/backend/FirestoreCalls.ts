@@ -249,7 +249,7 @@ export function validateQuiz(
   });
 }
 
-export function addPathway(pathway: Pathway): Promise<void> {
+export function addPathway(pathway: Pathway): Promise<string> {
   return new Promise((resolve, reject) => {
     /* runTransaction provides protection against race conditions where
        2 people are modifying the data at once. It also ensures that either
@@ -260,6 +260,9 @@ export function addPathway(pathway: Pathway): Promise<void> {
       await addDoc(collection(db, "Pathways"), pathway)
         .then(async (docRef) => {
           const pathwayId = docRef.id;
+
+          resolve(pathwayId);
+
           // get trainings associated with pathway
           const trainingPromises = [];
           for (const trainingId of pathway.trainingIDs) {
@@ -297,7 +300,7 @@ export function addPathway(pathway: Pathway): Promise<void> {
 
             await Promise.all(updatePromises)
               .then(() => {
-                resolve();
+                resolve("");
               })
               .catch(() => {
                 reject();
@@ -309,7 +312,7 @@ export function addPathway(pathway: Pathway): Promise<void> {
         });
     })
       .then(() => {
-        resolve();
+        resolve("");
       })
       .catch(() => {
         reject();
