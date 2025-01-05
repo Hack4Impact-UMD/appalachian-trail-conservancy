@@ -48,7 +48,7 @@ function AdminTrainingLibrary() {
     !(window.innerWidth < 1200)
   );
 
-  // delete training snackbar
+  // delete & update training snackbar
   useEffect(() => {
     if (location.state?.fromDelete && location.state?.showSnackbar) {
       setSnackbarMessage("Training successfully deleted.");

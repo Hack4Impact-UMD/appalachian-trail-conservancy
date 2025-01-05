@@ -28,6 +28,7 @@ import hamburger from "../../assets/hamburger.svg";
 import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar";
 import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
+import AdminDeletePathwayDraftPopup from "./AdminDeletePathwayDraftPopup/AdminDeletePathwayDraftPopup";
 import { IoCloseOutline } from "react-icons/io5";
 import { LuUpload } from "react-icons/lu";
 import { IoIosInformationCircleOutline } from "react-icons/io";
@@ -693,6 +694,11 @@ const AdminPathwayEditorPage: React.FC = () => {
               {snackbarMessage}
             </Alert>
           </Snackbar>
+          <AdminDeletePathwayDraftPopup
+            open={openDeleteDraftPopup}
+            onClose={setOpenDeleteDraftPopup}
+            pathwayId={pathwayId}
+          />
         </div>
         <Footer />
       </div>

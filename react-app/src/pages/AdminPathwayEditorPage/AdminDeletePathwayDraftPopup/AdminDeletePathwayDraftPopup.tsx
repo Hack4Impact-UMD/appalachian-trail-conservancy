@@ -1,4 +1,4 @@
-import styles from "./AdminDeleteDraftPopup.module.css";
+import styles from "./AdminDeletePathwayDraftPopup.module.css";
 import { useState } from "react";
 import { Button, Snackbar, Alert } from "@mui/material";
 import { IoCloseOutline } from "react-icons/io5";
@@ -6,18 +6,18 @@ import { whiteButtonGrayBorder, hazardRedButton } from "../../../muiTheme";
 import { useNavigate } from "react-router";
 import Modal from "../../../components/ModalWrapper/Modal";
 import Loading from "../../../components/LoadingScreen/Loading";
-import { getTraining, deleteTraining } from "../../../backend/FirestoreCalls";
+import { getPathway, deletePathway } from "../../../backend/FirestoreCalls";
 
 interface modalPropsType {
   open: boolean;
   onClose: any;
-  trainingId: string | undefined;
+  pathwayId: string | undefined;
 }
 
-const AdminDeleteDraftPopup = ({
+const AdminDeletePathwayDraftPopup = ({
   open,
   onClose,
-  trainingId,
+  pathwayId,
 }: modalPropsType): React.ReactElement => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
@@ -30,24 +30,24 @@ const AdminDeleteDraftPopup = ({
       setCanClose(false);
       setLoading(true);
 
-      if (!trainingId) {
-        // unsaved draft; navigate to training library
-        navigate("/trainings", {
+      if (!pathwayId) {
+        // unsaved draft; navigate to pathway library
+        navigate("/pathways", {
           state: { fromDelete: true, showSnackbar: true }, //use state to pass that it should show snackbar
         });
       } else {
-        // ensure training is draft before deleting
-        const training = await getTraining(trainingId);
-        if (training.status !== "DRAFT") {
+        // ensure pathway is draft before deleting
+        const pathway = await getPathway(pathwayId);
+        if (pathway.status !== "DRAFT") {
           setLoading(false);
           setCanClose(true);
-          setSnackbarMessage("Training cannot be deleted.");
+          setSnackbarMessage("Pathway cannot be deleted.");
           setSnackbar(true);
         } else {
-          await deleteTraining(trainingId);
+          await deletePathway(pathwayId);
           setLoading(false);
           setCanClose(true);
-          navigate("/trainings", {
+          navigate("/pathways", {
             state: { fromDelete: true, showSnackbar: true }, //use state to pass that it should show snackbar
           });
         }
@@ -127,4 +127,4 @@ const AdminDeleteDraftPopup = ({
   );
 };
 
-export default AdminDeleteDraftPopup;
+export default AdminDeletePathwayDraftPopup;

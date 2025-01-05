@@ -406,6 +406,23 @@ export function updatePathway(pathway: Pathway, id: string): Promise<void> {
   });
 }
 
+export function deletePathway(id: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (id === "" || !id) {
+      reject(new Error("Invalid id"));
+      return;
+    }
+
+    deleteDoc(doc(db, "Pathways", id))
+      .then(() => {
+        resolve();
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+}
+
 export function getPathway(id: string): Promise<PathwayID> {
   return new Promise((resolve, reject) => {
     getDoc(doc(db, "Pathways", id))

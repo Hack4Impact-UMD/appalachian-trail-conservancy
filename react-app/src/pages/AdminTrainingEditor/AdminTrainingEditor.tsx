@@ -23,7 +23,7 @@ import {
 import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar";
 import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
-import AdminDeleteDraftPopup from "./AdminDeleteDraftPopup/AdminDeleteDraftPopup";
+import AdminDeleteTrainingDraftPopup from "./AdminDeleteTrainingDraftPopup/AdminDeleteTrainingDraftPopup";
 import { LuUpload } from "react-icons/lu";
 import {
   styledRectButton,
@@ -677,7 +677,7 @@ const AdminTrainingEditor: React.FC = () => {
               {snackbarMessage}
             </Alert>
           </Snackbar>
-          <AdminDeleteDraftPopup
+          <AdminDeleteTrainingDraftPopup
             open={openDeleteDraftPopup}
             onClose={setOpenDeleteDraftPopup}
             trainingId={trainingId}
