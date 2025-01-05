@@ -175,10 +175,10 @@ const AdminPathwayEditorPage: React.FC = () => {
       isValid = false;
     }
 
-    if (!coverImage) {
-      newErrors.coverImage = "Image is required.";
-      isValid = false;
-    }
+    // if (!coverImage) {
+    //   newErrors.coverImage = "Image is required.";
+    //   isValid = false;
+    // }
 
     let newErrorTrainings = [];
     if (!selectedTrainings || selectedTrainings.length === 0) {
