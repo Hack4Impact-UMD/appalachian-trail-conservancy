@@ -361,16 +361,20 @@ const AdminPathwayEditorPage: React.FC = () => {
 
   useEffect(() => {
     setLoading(true);
-    // TODO: SET LOADING FOR SELECT?
     getAllPublishedTrainings().then((trainings) => {
+      // Sort trainings in alphabetical order by name
+      const sortedTrainings = trainings.sort((a, b) =>
+        a.name.localeCompare(b.name)
+      );
+
       if (pathwayData?.trainingIDs) {
         // set selected trainings
-        const selected = trainings.filter((training) =>
+        const selected = sortedTrainings.filter((training) =>
           pathwayData?.trainingIDs.includes(training.id)
         );
         setSelectedTrainings(selected);
       }
-      setTrainingOptions(trainings);
+      setTrainingOptions(sortedTrainings);
       setLoading(false);
     });
   }, [pathwayData]);
