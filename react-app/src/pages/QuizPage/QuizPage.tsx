@@ -108,7 +108,8 @@ function QuizPage() {
     validateQuiz(
       volunteerTraining.trainingID,
       volunteerId,
-      cleanedSelectedAnswers
+      cleanedSelectedAnswers,
+      new Date(Date.now()).toISOString()
     )
       .then((validateResults) => {
         const numAnswersCorrect = validateResults.data;

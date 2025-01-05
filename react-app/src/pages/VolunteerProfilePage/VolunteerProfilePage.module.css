@@ -1,4 +1,3 @@
-/* split screen in two */
 .split {
   height: 100%;
   position: fixed;
@@ -16,33 +15,6 @@
   flex-direction: column;
 }
 
-.pageContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.content {
-  width: 875px;
-  margin-bottom: 3%;
-}
-
-.header {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-}
-
-.nameHeading {
-  color: var(--forest-green);
-  font-size: 3rem;
-  margin: 0;
-}
-
 .hamburger {
   color: var(--blue-gray);
   font-size: 1.5rem;
@@ -55,12 +27,76 @@
   cursor: pointer;
 }
 
-.pathwayTiles {
+.outerContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.content {
+  width: 875px;
+  padding-bottom: 3%;
+}
+
+.header {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
 }
 
+.nameHeading {
+  color: var(--forest-green);
+  font-size: 3rem;
+  margin: 0;
+}
+
+.profileContainer {
+  display: flex;
+  gap: 15%;
+}
+
+.leftContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 1.3rem;
+}
+
+.profileIcon {
+  margin-top: 3%;
+}
+
+.subHeader {
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
+  color: var(--blue-gray);
+  font-weight: bold;
+}
+
+.inputContainer {
+  margin-top: 5px;
+}
+
+.emailContainer {
+  display: flex;
+}
+
+.buttonContainer {
+  display: flex;
+  gap: 2%;
+  margin-top: 1.5rem;
+}
+
+.footer {
+  margin-top: auto;
+}
+
+/* mobile responsiveness */
 @media screen and (min-width: 1500px) {
   .content {
     width: 1200px;
@@ -83,16 +119,32 @@
   .content {
     width: 425px;
   }
+
+  .profileContainer {
+    flex-direction: column-reverse;
+    align-items: center;
+  }
 }
 
 @media screen and (max-width: 600px) {
   .header {
     margin-top: 5rem;
   }
+
+  .nameHeading {
+    width: 100%;
+    text-align: center;
+  }
 }
 
 @media screen and (max-width: 450px) {
   .content {
     width: 300px;
+  }
+
+  .subHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
   }
 }

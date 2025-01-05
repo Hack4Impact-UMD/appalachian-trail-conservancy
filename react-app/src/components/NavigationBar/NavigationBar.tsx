@@ -11,6 +11,8 @@ import pathwaysInactive from "../../assets/pathwaysGray.svg";
 import pathwaysActive from "../../assets/pathwaysWhite.svg";
 import trainingsInactive from "../../assets/trainingsGray.svg";
 import trainingsActive from "../../assets/trainingsWhite.svg";
+import profileActive from "../../assets/gearWhite.svg";
+import profileInactive from "../../assets/gearGray.svg";
 import LogoutPopup from "./LogoutPopup/LogoutPopup";
 import styles from "./NavigationBar.module.css";
 
@@ -168,6 +170,31 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
                       />
                     </div>
                     Achievements
+                  </NavLink>
+                </div>
+
+                <div className={styles.tabContainer}>
+                  <NavLink
+                    to="/profile"
+                    className={({ isActive }) =>
+                      isActive
+                        ? `${styles.tab} ${styles.tabActive}`
+                        : `${styles.tab} ${styles.tabInActive}`
+                    }
+                  >
+                    <div>
+                      <img
+                        className={styles.iconActive}
+                        src={profileActive}
+                        alt="gear icon"
+                      />
+                      <img
+                        className={styles.iconInactive}
+                        src={profileInactive}
+                        alt="gear icon"
+                      />
+                    </div>
+                    Profile
                   </NavLink>
                 </div>
               </div>
