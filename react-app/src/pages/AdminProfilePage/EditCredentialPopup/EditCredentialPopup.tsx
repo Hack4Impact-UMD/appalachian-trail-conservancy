@@ -55,10 +55,12 @@ const EditCredentialPopup = ({
   const [showNewPassword, setNewShowPassword] = useState<boolean>(false);
 
   // handle opening of snackbar and loading and canClose state
-  const handlePostEvent = () => {
+  const handlePostEvent = (success: boolean = false) => {
     setSnackbar(true);
     setLoading(false);
     setCanClose(true);
+
+    if (success) onClose();
   };
 
   // Check if email is valid
@@ -92,17 +94,14 @@ const EditCredentialPopup = ({
       return;
     }
 
+    let success = false;
+
     authenticateUserEmailAndPassword(auth.user.email!, password)
       .then(async () => {
         await updateUserEmail(auth.user.email!, newEmail)
           .then(() => {
+            success = true; // Set success to true to close popup
             setPrevShowPassword(false);
-            //@ts-ignore
-            prevCredRef.current.value = ""; // reset fields
-            //@ts-ignore
-            newCredRef.current.value = ""; // reset fields
-            //@ts-ignore
-            passwordRef.current.value = ""; // reset fields
             setSnackbarMessage("Email updated successfully");
             setAdmin({ ...admin, email: newEmail });
             auth.setUser({ ...auth.user, email: newEmail }); // Update user email in auth context
@@ -116,7 +115,7 @@ const EditCredentialPopup = ({
         setSnackbarMessage("Incorrect password");
       })
       .finally(() => {
-        handlePostEvent();
+        handlePostEvent(success);
       });
   };
 
