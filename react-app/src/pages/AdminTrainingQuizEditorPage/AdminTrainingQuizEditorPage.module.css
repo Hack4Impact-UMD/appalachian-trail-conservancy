@@ -49,6 +49,41 @@
   margin-bottom: 2rem;
 }
 
+.headerTitle {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.marker {
+  display: inline-block;
+  padding: 9px 18px;
+  border-radius: 20px;
+  font-size: 0.9em;
+  font-weight: bold;
+  text-align: center;
+  background-color: var(--blue-gray);
+  color: white;
+}
+
+.draftMarker {
+  border: 1.5px solid var(--blue-gray);
+  background-color: var(--ocean-green-25);
+  color: var(--blue-gray);
+}
+
+.publishedMarker {
+  border: 1.5px solid var(--blue-gray);
+  background-color: var(--ocean-green-50);
+  color: var(--blue-gray);
+}
+
+.archiveMarker {
+  border: 1.5px solid var(--blue-gray);
+  background-color: var(--ocean-green-75);
+  color: var(--blue-gray);
+}
+
 .nameHeading {
   color: var(--blue-gray);
   font-size: 3rem;
@@ -97,17 +132,14 @@
   align-items: center;
 }
 
-.answerBox {
-  font-size: 1.1rem;
-  border-radius: 10px;
-  margin: 4px 10px;
-  width: 400px;
-  height: 30px;
-  border: 1.8px solid var(--blue-gray);
+.questionBox {
+  min-width: 845px;
+  max-width: 845px;
 }
 
-.answerBox fieldset {
-  border: none;
+.answerBox {
+  min-width: 775px;
+  max-width: 775px;
 }
 
 .closeIcon {
@@ -136,6 +168,11 @@
   cursor: pointer;
 }
 
+.addAnswerButton:hover,
+.addQuestionContainer:hover {
+  color: var(--forest-green);
+}
+
 .selectedAnswerText {
   color: var(--forest-green);
   font-weight: bold;
@@ -162,8 +199,14 @@
     width: 1200px;
   }
 
-  .cardsContainer {
-    column-gap: 2rem;
+  .questionBox {
+    min-width: 1100px;
+    max-width: 1100px;
+  }
+
+  .answerBox {
+    min-width: 1020px;
+    max-width: 1020px;
   }
 }
 
@@ -172,8 +215,14 @@
     width: 1400px;
   }
 
-  .cardsContainer {
-    column-gap: 6.25rem;
+  .questionBox {
+    min-width: 1300px;
+    max-width: 1300px;
+  }
+
+  .answerBox {
+    min-width: 1220px;
+    max-width: 1220px;
   }
 }
 
@@ -182,14 +231,30 @@
     width: 600px;
   }
 
-  .cardsContainer {
-    justify-content: space-between;
+  .questionBox {
+    min-width: 570px;
+    max-width: 570px;
+  }
+
+  .answerBox {
+    min-width: 500px;
+    max-width: 500px;
   }
 }
 
 @media screen and (max-width: 750px) {
   .content {
     width: 425px;
+  }
+
+  .questionBox {
+    min-width: 380px;
+    max-width: 380px;
+  }
+
+  .answerBox {
+    min-width: 310px;
+    max-width: 310px;
   }
 }
 
@@ -202,5 +267,15 @@
 @media screen and (max-width: 450px) {
   .content {
     width: 300px;
+  }
+
+  .questionBox {
+    min-width: 270px;
+    max-width: 270px;
+  }
+
+  .answerBox {
+    min-width: 200px;
+    max-width: 200px;
   }
 }

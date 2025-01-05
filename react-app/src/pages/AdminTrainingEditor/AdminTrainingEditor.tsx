@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./AdminTrainingEditor.module.css";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
-  TextField,
+  OutlinedInput,
   Button,
   MenuItem,
   Select,
@@ -18,51 +18,62 @@ import {
   getDownloadURL,
   deleteObject,
 } from "firebase/storage";
-import { getAuth } from "firebase/auth";
-import {
-  addTraining,
-  updateTraining,
-  getAllTrainings,
-} from "../../backend/FirestoreCalls";
+import { addTraining, updateTraining } from "../../backend/FirestoreCalls";
 import {
   TrainingID,
   Training,
   TrainingResource,
   Resource,
-  Quiz,
-  Question,
   Status,
 } from "../../types/TrainingType";
 import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar";
 import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
+import AdminDeleteTrainingDraftPopup from "./AdminDeleteTrainingDraftPopup/AdminDeleteTrainingDraftPopup";
 import { LuUpload } from "react-icons/lu";
-import { styledRectButton } from "../../muiTheme";
 import {
+  styledRectButton,
   forestGreenButton,
   whiteButtonGrayBorder,
   whiteSelectGrayBorder,
+  selectOptionStyle,
+  inputHeaderText,
+  inputHelperText,
+  grayBorderTextField,
+  whiteButtonRedBorder,
+  whiteTooltip,
 } from "../../muiTheme";
 import { IoIosInformationCircleOutline } from "react-icons/io";
+import Quill from "quill";
+import "quill/dist/quill.snow.css";
 import hamburger from "../../assets/hamburger.svg";
 import { storage } from "../../config/firebase";
 
 const AdminTrainingEditor: React.FC = () => {
   const location = useLocation();
   const trainingData = location.state?.training as TrainingID | undefined;
-
+  const navigate = useNavigate();
   const [trainingId, setTrainingId] = useState<string | undefined>(
     trainingData?.id
   );
-  const [trainingName, setTrainingName] = useState(trainingData?.name || "");
-  const [blurb, setBlurb] = useState(trainingData?.shortBlurb || "");
-  const [description, setDescription] = useState(
+  const status = trainingData?.status || ("DRAFT" as Status);
+  const [trainingName, setTrainingName] = useState<string>(
+    trainingData?.name || ""
+  );
+  const [blurb, setBlurb] = useState<string>(trainingData?.shortBlurb || "");
+  const [description, setDescription] = useState<string>(
     trainingData?.description || ""
   );
-  const [resourceLink, setResourceLink] = useState(
+  const [descriptionPlain, setDescriptionPlain] = useState<string>(
+    trainingData?.description.replace(/<[^>]*>/g, "") || ""
+  );
+  const [resourceTitle, setResourceTitle] = useState<string>(
+    trainingData?.resources[0]?.title || ""
+  );
+  const [resourceLink, setResourceLink] = useState<string>(
     trainingData?.resources[0]?.link || ""
   );
-  const [resourceType, setResourceType] = useState(
+  const [resourceType, setResourceType] = useState<string>(
     trainingData?.resources[0]?.type || ""
   );
 
@@ -73,12 +84,11 @@ const AdminTrainingEditor: React.FC = () => {
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
   );
-  const [status, setStatus] = useState(trainingData?.status || "DRAFT");
 
-  const [isEditMode, setIsEditMode] = useState<boolean>(status !== "DRAFT");
+  const [openDeleteDraftPopup, setOpenDeleteDraftPopup] =
+    useState<boolean>(false);
 
-  const navigate = useNavigate();
-
+  const [loading, setLoading] = useState(false);
   const [snackbar, setSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
 
@@ -86,18 +96,19 @@ const AdminTrainingEditor: React.FC = () => {
     trainingName: "",
     blurb: "",
     description: "",
+    resourceTitle: "",
     resourceLink: "",
     resourceType: "",
   });
 
-  const [invalidName, setInvalidName] = useState<boolean>(false);
-  const [invalidBlurb, setInvalidBlurb] = useState<boolean>(false);
-  const [invalidDescription, setInvalidDescription] = useState<boolean>(false);
+  const descriptionContainerRef = useRef<HTMLDivElement>(null);
+  const quillDescriptionRef = useRef<Quill | null>(null);
 
   const characterLimits = {
-    trainingName: 50,
-    blurb: 500,
-    description: 1000,
+    trainingName: 70,
+    blurb: 255,
+    description: 1400,
+    resourceTitle: 50,
   };
 
   // const [file, setFile] = useState<File | null>(null);
@@ -155,11 +166,12 @@ const AdminTrainingEditor: React.FC = () => {
   };
 
   // make sure all fields are good before moving on
-  const validateFields = () => {
-    let newErrors = {
+  const validateFields = (saveAsIs: boolean) => {
+    const newErrors = {
       trainingName: "",
       blurb: "",
       description: "",
+      resourceTitle: "",
       resourceLink: "",
       resourceType: "",
     };
@@ -171,13 +183,29 @@ const AdminTrainingEditor: React.FC = () => {
       isValid = false;
     }
 
+    // Other fields can be saved empty in draft mode
+    if (saveAsIs && status === "DRAFT") {
+      setErrors(newErrors);
+      return isValid;
+    }
+
     if (!blurb) {
       newErrors.blurb = "Blurb is required.";
       isValid = false;
     }
 
-    if (!description) {
+    if (!descriptionPlain) {
       newErrors.description = "Description is required.";
+      isValid = false;
+    }
+
+    if (!resourceTitle) {
+      newErrors.resourceTitle = "Resource Title is required.";
+      isValid = false;
+    }
+
+    if (!resourceLink) {
+      newErrors.resourceLink = "Resource Link is required.";
       isValid = false;
     }
 
@@ -191,9 +219,6 @@ const AdminTrainingEditor: React.FC = () => {
     if (resourceType === "VIDEO" && !youtubeRegex.test(resourceLink)) {
       newErrors.resourceLink = "Please provide a valid embedded YouTube link.";
       isValid = false;
-    } else if (resourceType && !resourceLink) {
-      newErrors.resourceLink = "Resource link is required.";
-      isValid = false;
     }
 
     setErrors(newErrors);
@@ -201,50 +226,73 @@ const AdminTrainingEditor: React.FC = () => {
   };
 
   const handleSaveClick = async () => {
+    setLoading(true);
     // Validate fields only if in edit mode
-    if (isEditMode && !validateFields()) {
-      setSnackbarMessage("Please complete all required fields.");
+    if (validateFields(true)) {
+      const blankErrors = {
+        trainingName: "",
+        blurb: "",
+        description: "",
+        resourceTitle: "",
+        resourceLink: "",
+        resourceType: "",
+      };
+      setErrors(blankErrors);
+
+      const updatedTraining: Training = {
+        name: trainingName,
+        shortBlurb: blurb,
+        description: description,
+        coverImage: "",
+        resources: [
+          {
+            title: resourceTitle,
+            link: resourceLink,
+            type: resourceType,
+          } as TrainingResource,
+        ],
+        quiz: {
+          questions: [],
+          numQuestions: 0,
+          passingScore: 0,
+        },
+        associatedPathways: [],
+        certificationImage: "",
+        status: status,
+      };
+
+      if (trainingId) {
+        // Update existing training
+        await updateTraining(updatedTraining, trainingId);
+        setLoading(false);
+        setSnackbarMessage("Training updated successfully.");
+      } else {
+        // Save as new draft
+        const newTrainingId = (await addTraining(updatedTraining)) as
+          | string
+          | undefined;
+        setTrainingId(newTrainingId);
+        setLoading(false);
+        setSnackbarMessage("Draft saved successfully.");
+      }
+      setSnackbar(true);
+    } else {
+      if (
+        errors.resourceLink == "Please provide a valid embedded YouTube link."
+      ) {
+        setSnackbarMessage("Please provide a valid embedded YouTube link.");
+      } else {
+        setSnackbarMessage("Please complete all required fields.");
+      }
+      setLoading(false);
       setSnackbar(true);
       return;
     }
-
-    let blankErrors = {
-      trainingName: "",
-      blurb: "",
-      description: "",
-      resourceLink: "",
-      resourceType: "",
-    };
-    setErrors(blankErrors);
-
-    const updatedTraining = {
-      name: trainingName,
-      shortBlurb: blurb,
-      description: description,
-      coverImage: coverImage,
-      resources: [
-        { link: resourceLink, type: resourceType } as TrainingResource,
-      ],
-      status: isEditMode ? status : "DRAFT",
-    } as Training;
-
-    if (trainingId) {
-      // Update existing training
-      await updateTraining(updatedTraining, trainingId);
-      setSnackbarMessage("Training updated successfully.");
-    } else {
-      // Save as new draft
-      const newTrainingId = (await addTraining(updatedTraining)) as
-        | string
-        | undefined;
-      setTrainingId(newTrainingId);
-      setSnackbarMessage("Draft saved successfully.");
-    }
-    setSnackbar(true);
   };
 
   const handleNextClick = async () => {
-    if (validateFields()) {
+    setLoading(true);
+    if (validateFields(false)) {
       const updatedTraining = {
         ...trainingData,
         name: trainingName,
@@ -253,16 +301,18 @@ const AdminTrainingEditor: React.FC = () => {
         coverImage: coverImage,
         resources: [
           {
+            title: resourceTitle,
             link: resourceLink,
             type: resourceType as Resource,
           } as TrainingResource,
         ] as TrainingResource[],
-        status: isEditMode ? status : ("DRAFT" as Status),
+        status: status,
       } as TrainingID;
 
       if (trainingId) {
         await updateTraining(updatedTraining, trainingId);
         updatedTraining.id = trainingId;
+        setLoading(false);
         setSnackbarMessage("Training updated successfully.");
         setSnackbar(true);
 
@@ -273,6 +323,7 @@ const AdminTrainingEditor: React.FC = () => {
       } else {
         const newTrainingId = await addTraining(updatedTraining);
         updatedTraining.id = newTrainingId;
+        setLoading(false);
         setSnackbarMessage("Draft saved successfully.");
         setSnackbar(true);
 
@@ -282,7 +333,14 @@ const AdminTrainingEditor: React.FC = () => {
         });
       }
     } else {
-      setSnackbarMessage("Please complete all required fields.");
+      if (
+        errors.resourceLink == "Please provide a valid embedded YouTube link."
+      ) {
+        setSnackbarMessage("Please provide a valid embedded YouTube link.");
+      } else {
+        setSnackbarMessage("Please complete all required fields.");
+      }
+      setLoading(false);
       setSnackbar(true);
     }
   };
@@ -291,13 +349,69 @@ const AdminTrainingEditor: React.FC = () => {
     setSnackbar(false);
   };
 
+  const renderMarker = () => {
+    if (status === "DRAFT") {
+      // Training drafted
+      return (
+        <div className={`${styles.marker} ${styles.draftMarker}`}>DRAFT</div>
+      );
+    } else if (status === "PUBLISHED") {
+      // Training published
+      return (
+        <div className={`${styles.marker} ${styles.publishedMarker}`}>
+          PUBLISHED
+        </div>
+      );
+    } else if (status === "ARCHIVED") {
+      // Training archived
+      return (
+        <div className={`${styles.marker} ${styles.archiveMarker}`}>
+          ARCHIVE
+        </div>
+      );
+    }
+  };
+
+  useEffect(() => {
+    // description quill editor
+    if (descriptionContainerRef.current && !quillDescriptionRef.current) {
+      quillDescriptionRef.current = new Quill(descriptionContainerRef.current, {
+        theme: "snow",
+        modules: {
+          toolbar: [["bold", "italic", "underline", "link"]],
+        },
+      });
+
+      quillDescriptionRef.current!.root.innerHTML = description;
+
+      quillDescriptionRef.current.on("text-change", () => {
+        // Limit the number of characters in the description
+        if (
+          quillDescriptionRef.current!.getLength() > characterLimits.description
+        ) {
+          quillDescriptionRef.current!.deleteText(
+            characterLimits.description,
+            quillDescriptionRef.current!.getLength()
+          );
+        }
+
+        // Update content
+        const editorContent = quillDescriptionRef.current!.root.innerHTML;
+        const plaintext = editorContent.replace(/<[^>]*>/g, "");
+        setDescription(editorContent);
+        setDescriptionPlain(plaintext);
+      });
+    }
+  }, []);
+
   return (
     <>
-      <AdminNavigationBar
-        open={navigationBarOpen}
-        setOpen={setNavigationBarOpen}
-      />
-
+      <div className={openDeleteDraftPopup ? styles.popupOpen : ""}>
+        <AdminNavigationBar
+          open={navigationBarOpen}
+          setOpen={setNavigationBarOpen}
+        />
+      </div>
       <div
         className={`${styles.split} ${styles.right}`}
         style={{ left: navigationBarOpen ? "250px" : "0" }}>
@@ -315,37 +429,49 @@ const AdminTrainingEditor: React.FC = () => {
         <div className={styles.container}>
           <div className={styles.content}>
             <div className={styles.header}>
-              <h1 className={styles.headerText}>Training Editor</h1>
+              <div className={styles.headerTitle}>
+                <h1 className={styles.headerText}>Training Editor</h1>
+                <div>{renderMarker()}</div>
+              </div>
               <ProfileIcon />
             </div>
 
-            <form noValidate>
-              <Button
-                sx={whiteButtonGrayBorder}
-                variant="contained"
-                onClick={handleSaveClick}>
-                {isEditMode ? "Save" : "Save as Draft"}
-              </Button>
+            <form className={styles.formContent} noValidate>
+              <div className={styles.topButtonContainer}>
+                <Button
+                  sx={whiteButtonGrayBorder}
+                  variant="contained"
+                  onClick={handleSaveClick}
+                  disabled={loading}>
+                  {status == "DRAFT" ? "Save as Draft" : "Save"}
+                </Button>
 
+                {status == "DRAFT" ? (
+                  <Button
+                    sx={{
+                      ...whiteButtonRedBorder,
+                      width: "100px",
+                    }}
+                    onClick={() => {
+                      setOpenDeleteDraftPopup(true);
+                    }}
+                    disabled={loading}>
+                    DELETE
+                  </Button>
+                ) : (
+                  <></>
+                )}
+              </div>
+
+              {/* Training Name */}
               <div className={styles.inputBoxHeader}>
                 <Typography
                   variant="body2"
-                  style={{
-                    color: "black",
-                    fontWeight: "bold",
-                    marginTop: "2rem",
-                  }}>
+                  sx={{ ...inputHeaderText, marginTop: "2rem" }}>
                   TRAINING NAME
                 </Typography>
 
-                <Typography
-                  variant="body2"
-                  style={{
-                    color: "black",
-                    fontWeight: "500",
-                    marginTop: "2rem",
-                    fontSize: "0.8rem",
-                  }}>
+                <Typography variant="body2" sx={inputHelperText}>
                   {Math.max(
                     characterLimits.trainingName - trainingName.length,
                     0
@@ -353,8 +479,7 @@ const AdminTrainingEditor: React.FC = () => {
                   Characters Remaining
                 </Typography>
               </div>
-
-              <TextField
+              <OutlinedInput
                 value={trainingName}
                 onChange={(e) => {
                   const newValue = e.target.value;
@@ -363,50 +488,30 @@ const AdminTrainingEditor: React.FC = () => {
                   }
                 }}
                 error={Boolean(errors.trainingName)}
-                helperText={errors.trainingName}
                 sx={{
-                  width: "80%",
-                  fontSize: "1.1rem",
-                  borderRadius: "10px",
-                  marginTop: "0.3rem",
-                  height: "3.2rem",
+                  ...grayBorderTextField,
+                  width: "100%",
                   border: errors.trainingName
-                    ? "2px solid #d32f2f"
+                    ? "2px solid var(--hazard-red)"
                     : "2px solid var(--blue-gray)",
-                  "& fieldset": {
-                    border: "none",
-                  },
                 }}
-                variant="outlined"
-                rows={1}
-                fullWidth
               />
 
+              {/* Training Blurb */}
               <div className={styles.inputBoxHeader}>
                 <Typography
                   variant="body2"
-                  style={{
-                    color: "black",
-                    fontWeight: "bold",
-                    marginTop: "2rem",
-                  }}>
+                  sx={{ ...inputHeaderText, marginTop: "2rem" }}>
                   BLURB
                 </Typography>
 
-                <Typography
-                  variant="body2"
-                  style={{
-                    color: "black",
-                    fontWeight: "500",
-                    marginTop: "2rem",
-                    fontSize: "0.8rem",
-                  }}>
+                <Typography variant="body2" sx={inputHelperText}>
                   {Math.max(characterLimits.blurb - blurb.length, 0)} Characters
                   Remaining
                 </Typography>
               </div>
 
-              <TextField
+              <OutlinedInput
                 value={blurb}
                 onChange={(e) => {
                   const newValue = e.target.value;
@@ -415,118 +520,62 @@ const AdminTrainingEditor: React.FC = () => {
                   }
                 }}
                 error={Boolean(errors.blurb)}
-                helperText={errors.blurb}
                 sx={{
-                  width: "80%",
-                  fontSize: "1.1rem",
+                  ...grayBorderTextField,
+                  width: "100%",
                   height: "auto",
                   minHeight: 100,
-                  marginTop: "0.3rem",
-                  borderRadius: "10px",
                   border: errors.blurb
-                    ? "2px solid #d32f2f"
+                    ? "2px solid var(--hazard-red)"
                     : "2px solid var(--blue-gray)",
-                  "& fieldset": {
-                    border: "none",
-                  },
                 }}
                 multiline
                 rows={3}
-                variant="outlined"
-                fullWidth
               />
 
+              {/* Training Description */}
               <div className={styles.inputBoxHeader}>
                 <Typography
                   variant="body2"
-                  style={{
-                    color: "black",
-                    fontWeight: "bold",
-                    marginTop: "2rem",
-                  }}>
+                  sx={{ ...inputHeaderText, marginTop: "2rem" }}>
                   DESCRIPTION
                 </Typography>
 
-                <Typography
-                  variant="body2"
-                  style={{
-                    color: "black",
-                    fontWeight: "500",
-                    marginTop: "2rem",
-                    fontSize: "0.8rem",
-                  }}>
+                <Typography variant="body2" sx={inputHelperText}>
                   {Math.max(
-                    characterLimits.description - description.length,
+                    characterLimits.description - descriptionPlain.length,
                     0
                   )}{" "}
                   Characters Remaining
                 </Typography>
               </div>
-
-              <TextField
-                value={description}
-                onChange={(e) => {
-                  const newValue = e.target.value;
-                  if (newValue.length <= characterLimits.description) {
-                    setDescription(newValue);
-                  }
-                }}
-                error={Boolean(errors.description)}
-                helperText={errors.description}
-                sx={{
-                  width: "80%",
-                  fontSize: "1.1rem",
-                  minHeight: 100,
-                  borderRadius: "10px",
-                  marginTop: "0.3rem",
-                  border: errors.description
-                    ? "2px solid #d32f2f"
-                    : "2px solid var(--blue-gray)",
-                  "& fieldset": {
-                    border: "none",
-                  },
-                }}
-                multiline
-                rows={3}
-                variant="outlined"
-                fullWidth
-              />
-
               <div
-                className={styles.uploadSection}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "flex-start",
-                }}>
+                className={`${
+                  errors.description ? styles.inputError : styles.quillContainer
+                }`}>
                 <div
+                  ref={descriptionContainerRef}
+                  id={styles.quillEditor}
                   style={{
-                    display: "flex",
-                    alignItems: "center",
-                    marginBottom: "8px",
-                  }}>
-                  <Typography
-                    variant="body2"
-                    style={{
-                      color: "black",
-                      fontWeight: "bold",
-                    }}>
+                    height: "100px",
+                  }}></div>
+              </div>
+
+              {/* Training Image */}
+              <div className={styles.uploadSection}>
+                <div className={styles.uploadResourceHeader}>
+                  <Typography variant="body2" sx={inputHeaderText}>
                     UPLOAD IMAGE (JPEG, PNG)
                   </Typography>
                   <Tooltip
                     title="Upload will be used as training cover and certificate image"
-                    placement="top"
+                    placement="right"
                     componentsProps={{
                       tooltip: {
-                        sx: {
-                          bgcolor: "white",
-                          color: "black",
-                          borderRadius: "8px",
-                          boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)",
-                        },
+                        sx: { ...whiteTooltip, fontSize: "0.75rem" },
                       },
                     }}>
-                    <span className={styles.icon} style={{ marginLeft: "8px" }}>
+                    <span className={styles.iconCenter}>
                       <IoIosInformationCircleOutline />
                     </span>
                   </Tooltip>
@@ -577,71 +626,81 @@ const AdminTrainingEditor: React.FC = () => {
                 )}
               </div>
 
-              {/* Resource Link and Tooltip */}
-              <div className={styles.resourceHeadersBox}>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    marginTop: "2rem",
-                  }}>
-                  <Typography
-                    variant="body2"
-                    style={{
-                      color: "black",
-                      fontWeight: "bold",
-                      marginBottom: "0.5rem",
-                    }}>
-                    RESOURCE LINK
-                  </Typography>
+              {/* Resource Title */}
+              <div className={styles.inputBoxHeader}>
+                <Typography
+                  variant="body2"
+                  sx={{ ...inputHeaderText, marginTop: "2rem" }}>
+                  RESOURCE TITLE
+                </Typography>
 
-                  <Tooltip
-                    title="Should be link to PDF or Video"
-                    placement="top"
-                    componentsProps={{
-                      tooltip: {
-                        sx: {
-                          bgcolor: "white",
-                          color: "black",
-                          borderRadius: "8px",
-                          boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)",
-                        },
-                      },
-                    }}>
-                    <span style={{ marginLeft: "8px", marginBottom: "0.5rem" }}>
-                      <IoIosInformationCircleOutline />
-                    </span>
-                  </Tooltip>
-                </div>
+                <Typography variant="body2" sx={inputHelperText}>
+                  {Math.max(
+                    characterLimits.resourceTitle - resourceTitle.length,
+                    0
+                  )}{" "}
+                  Characters Remaining
+                </Typography>
               </div>
-              <div className={styles.flexRow}>
-                <TextField
-                  value={resourceLink}
-                  sx={{
-                    width: "65.5%",
-                    fontSize: "1.1rem",
-                    borderRadius: "10px",
-                    marginTop: "0.3rem",
-                    height: "3.2rem",
-                    border: errors.resourceLink
-                      ? "2px solid #d32f2f"
-                      : "2px solid var(--blue-gray)",
-                    "& fieldset": {
-                      border: "none",
+              <OutlinedInput
+                value={resourceTitle}
+                onChange={(e) => {
+                  const newValue = e.target.value;
+                  if (newValue.length <= characterLimits.resourceTitle) {
+                    setResourceTitle(newValue);
+                  }
+                }}
+                error={Boolean(errors.resourceTitle)}
+                sx={{
+                  ...grayBorderTextField,
+                  width: "100%",
+                  border: errors.resourceTitle
+                    ? "2px solid var(--hazard-red)"
+                    : "2px solid var(--blue-gray)",
+                }}
+              />
+
+              {/* Resource Link and Tooltip */}
+              <div
+                className={styles.uploadResourceHeader}
+                style={{
+                  marginTop: "2rem",
+                }}>
+                <Typography variant="body2" sx={inputHeaderText}>
+                  RESOURCE LINK
+                </Typography>
+
+                <Tooltip
+                  title="Link to PDF or Embedded YouTube Video. To get the embed link, click on the 'share' button on the YouTube video and then click on 'Embed'. Grab the link from the code which is everything inside the src attribute."
+                  placement="right"
+                  componentsProps={{
+                    tooltip: {
+                      sx: { ...whiteTooltip, fontSize: "0.75rem" },
                     },
-                  }}
+                  }}>
+                  <span className={styles.iconCenter}>
+                    <IoIosInformationCircleOutline />
+                  </span>
+                </Tooltip>
+              </div>
+              <div className={styles.resourceContainer}>
+                <OutlinedInput
+                  value={resourceLink}
                   onChange={(e) => setResourceLink(e.target.value)}
                   error={Boolean(errors.resourceLink)}
-                  helperText={errors.resourceLink}
-                  fullWidth
-                  margin="normal"
-                  className={styles.resourceLinkField}
-                  style={{ marginTop: "0px" }}
+                  sx={{
+                    ...grayBorderTextField,
+                    flexGrow: 1,
+                    width: "100%",
+                    border: errors.resourceLink
+                      ? "2px solid var(--hazard-red)"
+                      : "2px solid var(--blue-gray)",
+                  }}
                 />
 
                 <FormControl
                   margin="normal"
-                  sx={{ marginTop: "0px", width: "180px" }}
+                  sx={{ marginTop: "0px", marginBottom: "0" }}
                   className={styles.resourceTypeField}
                   error={Boolean(errors.resourceType)}>
                   <Select
@@ -650,7 +709,10 @@ const AdminTrainingEditor: React.FC = () => {
                       ...whiteSelectGrayBorder,
                       fontSize: "1.1rem",
                       borderRadius: "10px",
-                      height: "3.2rem",
+                      height: "3rem",
+                      border: errors.resourceType
+                        ? "2px solid var(--hazard-red)"
+                        : "2px solid var(--blue-gray)",
                     }}
                     value={resourceType}
                     onChange={(e) =>
@@ -669,14 +731,18 @@ const AdminTrainingEditor: React.FC = () => {
                     <MenuItem value="" disabled sx={{ display: "none" }}>
                       Resource Type
                     </MenuItem>
-                    <MenuItem value="PDF">PDF</MenuItem>
-                    <MenuItem value="VIDEO">Video</MenuItem>
+                    <MenuItem value="PDF" sx={selectOptionStyle}>
+                      PDF
+                    </MenuItem>
+                    <MenuItem value="VIDEO" sx={selectOptionStyle}>
+                      Video
+                    </MenuItem>
                   </Select>
                 </FormControl>
               </div>
 
               {/* Button group */}
-              <div className={styles.addTrainingContainer}>
+              <div className={styles.nextButton}>
                 <Button
                   variant="contained"
                   sx={{
@@ -685,29 +751,33 @@ const AdminTrainingEditor: React.FC = () => {
                     marginTop: "2%",
                     width: "40px%",
                   }}
-                  onClick={handleNextClick}>
-                  {isEditMode ? "Next: Edit Quiz" : "Next: Create Quiz"}
+                  onClick={handleNextClick}
+                  disabled={loading}>
+                  {status == "DRAFT" ? "Next: Create Quiz" : "Next: Edit Quiz"}
                 </Button>
               </div>
             </form>
           </div>
           {/* Snackbar wrapper container */}
-          <div className={styles.snackbarContainer}>
-            <Snackbar
-              open={snackbar}
-              autoHideDuration={6000}
+          <Snackbar
+            open={snackbar}
+            autoHideDuration={6000}
+            onClose={handleCloseSnackbar}
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }} // Position within the right section
+          >
+            <Alert
               onClose={handleCloseSnackbar}
-              anchorOrigin={{ vertical: "bottom", horizontal: "right" }} // Position within the right section
-            >
-              <Alert
-                onClose={handleCloseSnackbar}
-                severity={
-                  snackbarMessage.includes("successfully") ? "success" : "error"
-                }>
-                {snackbarMessage}
-              </Alert>
-            </Snackbar>
-          </div>
+              severity={
+                snackbarMessage.includes("successfully") ? "success" : "error"
+              }>
+              {snackbarMessage}
+            </Alert>
+          </Snackbar>
+          <AdminDeleteTrainingDraftPopup
+            open={openDeleteDraftPopup}
+            onClose={setOpenDeleteDraftPopup}
+            trainingId={trainingId}
+          />
         </div>
         <Footer />
       </div>

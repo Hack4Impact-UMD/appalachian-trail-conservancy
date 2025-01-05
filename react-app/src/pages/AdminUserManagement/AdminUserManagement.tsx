@@ -233,8 +233,6 @@ function AdminUserManagement() {
     }
   }, 200); // Debounce interval in milliseconds
 
-  const debouncedOnChange = debounce(updateQuery, 200);
-
   useEffect(() => {
     return () => {
       debouncedFilter.cancel();
@@ -357,7 +355,6 @@ function AdminUserManagement() {
                         ...whiteButtonOceanGreenBorder,
                         paddingLeft: "20px",
                         paddingRight: "20px",
-                        fontWeight: "bold",
                       }}>
                       Export
                     </Button>

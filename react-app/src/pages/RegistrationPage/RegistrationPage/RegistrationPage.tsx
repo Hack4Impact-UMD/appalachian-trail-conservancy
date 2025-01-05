@@ -154,7 +154,7 @@ function RegistrationPage() {
               sx={{
                 ...grayBorderTextField,
                 border: !emailsMatch
-                  ? "2px solid #d32f2f"
+                  ? "2px solid var(--hazard-red)"
                   : "2px solid var(--blue-gray)",
               }}
               value={email}
@@ -172,7 +172,7 @@ function RegistrationPage() {
               sx={{
                 ...grayBorderTextField,
                 border: !emailsMatch
-                  ? "2px solid #d32f2f"
+                  ? "2px solid var(--hazard-red)"
                   : "2px solid var(--blue-gray)",
               }}
               value={confirmEmail}

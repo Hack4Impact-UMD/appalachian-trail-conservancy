@@ -75,6 +75,18 @@ export const forestGreenButtonLarge = {
   fontSize: "20px",
 };
 
+// hazard red button
+export const hazardRedButton = {
+  ...baseStyles,
+  color: "white",
+  backgroundColor: "var(--hazard-red)",
+  border: "2px solid var(--hazard-red)",
+  "&:hover": {
+    backgroundColor: "var(--hazard-red)",
+    color: "white",
+  },
+};
+
 // white with dark green borders (no hover change)
 export const whiteButtonGreenBorder = {
   ...baseStyles,
@@ -113,6 +125,19 @@ export const whiteButtonGrayBorder = {
   },
 };
 
+// white w/ red border; red background on hover
+export const whiteButtonRedBorder = {
+  ...baseStyles,
+  color: "var(--hazard-red)",
+  backgroundColor: "white",
+  border: "2px solid var(--hazard-red)",
+  "&:hover": {
+    color: "white",
+    backgroundColor: "var(--hazard-red)",
+    border: "2px solid var(--hazard-red)",
+  },
+};
+
 // white w/ blue gray border for Select Dropdowns
 export const whiteSelectGrayBorder = {
   ...baseStyles,
@@ -145,6 +170,13 @@ export const selectOptionStyle = {
     color: "white",
     "&.Mui-focusVisible": { background: "var(--ocean-green)", color: "white" },
     "&:hover": { background: "var(--forest-green)", color: "white" },
+  },
+};
+
+// autocomplete TextField
+export const autocompleteText = {
+  "& .MuiOutlinedInput-root": {
+    color: "var(--blue-gray)",
   },
 };
 
@@ -210,6 +242,20 @@ export const grayGreenRadioButton = {
   "&.Mui-disabled": {
     color: "var(--blue-gray)",
   },
+};
+
+// input header text
+export const inputHeaderText = {
+  color: "var(--blue-gray)",
+  fontWeight: "bold",
+};
+
+// input helper text
+export const inputHelperText = {
+  color: "var(--blue-gray)",
+  fontWeight: "500",
+  marginTop: "2rem",
+  fontSize: "0.8rem",
 };
 
 // number input
@@ -326,6 +372,7 @@ export const CustomToggleButtonGroup = styled(ToggleButtonGroup)({
   borderRadius: "15px", // Rounded corners
   border: "2px solid black",
   overflow: "hidden", // Ensures rounded corners display correctly
+  marginTop: "2%",
 });
 
 // toggle button group

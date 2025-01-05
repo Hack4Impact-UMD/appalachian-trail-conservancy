@@ -59,7 +59,7 @@
   gap: 1.5rem;
 }
 
-.headerText {
+.nameHeading {
   color: var(--blue-gray);
   font-size: 3rem;
   margin: 0;
@@ -134,20 +134,50 @@
   gap: 8px;
 }
 
-.iconCenter {
+.searchBarNumber {
+  width: 0.5%;
+  margin-left: -3.5%;
+  padding-right: 3%;
+  font-weight: bold;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.leftMargin {
+  margin-left: 0.5rem;
+}
+
+.closeIcon {
   display: flex;
   align-items: center;
+  font-size: 2rem;
   color: var(--blue-gray);
+  cursor: pointer;
 }
 
-.resourceContainer {
+.closeIcon:hover {
+  color: red;
+}
+
+.searchBarContainer {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  vertical-align: middle;
+}
+
+.addTrainingContainer {
+  color: var(--blue-gray);
   display: flex;
   align-items: center;
-  gap: 1rem;
+  width: fit-content;
+  cursor: pointer;
 }
 
-.resourceTypeField {
-  width: 180px;
+.addTrainingContainer:hover {
+  color: var(--forest-green);
 }
 
 .nextButton {
@@ -189,17 +219,6 @@
 @media screen and (max-width: 600px) {
   .header {
     margin-top: 5rem;
-  }
-
-  .resourceContainer {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    width: 100%;
-  }
-
-  .resourceTypeField {
-    width: 100%;
   }
 }
 
