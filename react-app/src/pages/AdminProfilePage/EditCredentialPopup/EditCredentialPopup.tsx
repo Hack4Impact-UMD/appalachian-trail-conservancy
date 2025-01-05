@@ -12,12 +12,11 @@ import {
   grayBorderTextField,
 } from "../../../muiTheme";
 import { Admin } from "../../../types/UserType";
-import { updateAdmin } from "../../../backend/AdminFirestoreCalls";
 import {
   authenticateUserEmailAndPassword,
   updateUserEmail,
+  updateUserPassword,
 } from "../../../backend/AuthFunctions";
-import { set } from "lodash";
 
 interface modalPropsType {
   open: boolean;
@@ -120,7 +119,29 @@ const EditCredentialPopup = ({
   };
 
   const updatePassword = (prevPassword: string, newPassword: string) => {
-    // TODO
+    prevPassword = prevPassword.trim();
+    newPassword = newPassword.trim();
+    if (prevPassword === "" || newPassword === "") {
+      setSnackbarMessage("Please fill out all fields");
+      handlePostEvent();
+      return;
+    }
+
+    let success = false;
+
+    updateUserPassword(prevPassword, newPassword)
+      .then(() => {
+        success = true;
+        setPrevShowPassword(false);
+        setNewShowPassword(false);
+        setSnackbarMessage("Password updated successfully");
+      })
+      .catch((e) => {
+        setSnackbarMessage(e);
+      })
+      .finally(() => {
+        handlePostEvent(success);
+      });
   };
 
   const handleUpdateCredential = () => {
