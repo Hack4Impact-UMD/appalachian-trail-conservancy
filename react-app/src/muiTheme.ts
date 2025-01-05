@@ -184,10 +184,12 @@ export const autocompleteText = {
 export const grayBorderTextField = {
   width: 350,
   fontSize: "1.1rem",
-  height: 48,
   borderRadius: "10px",
   border: "2px solid var(--blue-gray)",
   "& fieldset": { border: "none" },
+  "& .MuiOutlinedInput-input": {
+    padding: "10px",
+  },
 };
 
 // search bar
@@ -352,6 +354,7 @@ export const whiteTooltip = {
   borderRadius: "8px",
   boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)",
   fontSize: "1rem",
+  padding: "10px",
 };
 
 // gray background, white text tooltip
@@ -489,4 +492,14 @@ export const DataGridStyles = {
   "& .MuiDataGrid-footerContainer": {
     borderColor: "black",
   },
+};
+
+// tooltip
+const tooltipStyles = {
+  bgcolor: "white",
+  color: "black",
+  borderRadius: "8px",
+  padding: "10px",
+  boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)",
+  fontSize: ".8rem",
 };
