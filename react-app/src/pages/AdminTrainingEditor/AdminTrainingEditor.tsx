@@ -14,12 +14,12 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
-import { 
-  getStorage, 
-  ref, 
-  uploadBytes, 
-  getDownloadURL, 
-  deleteObject 
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
 } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 import {
@@ -27,14 +27,14 @@ import {
   updateTraining,
   getAllTrainings,
 } from "../../backend/FirestoreCalls";
-import { 
-  TrainingID, 
-  Training, 
-  TrainingResource, 
-  Resource, 
-  Quiz, 
-  Question, 
-  Status 
+import {
+  TrainingID,
+  Training,
+  TrainingResource,
+  Resource,
+  Quiz,
+  Question,
+  Status,
 } from "../../types/TrainingType";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import Footer from "../../components/Footer/Footer";
@@ -68,7 +68,9 @@ const AdminTrainingEditor: React.FC = () => {
     trainingData?.resources[0]?.type || ""
   );
 
-  const [coverImage, setCoverImage] = useState(trainingData?.coverImage || null);
+  const [coverImage, setCoverImage] = useState(
+    trainingData?.coverImage || null
+  );
 
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
@@ -100,44 +102,28 @@ const AdminTrainingEditor: React.FC = () => {
     description: 1000,
   };
 
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState<File | null>(null);
 
   const onUpload = async () => {
     if (!file) {
       setSnackbarMessage("No file found. Please try again.");
       setSnackbar(true);
-      return
-    };
+      return;
+    }
 
     console.log("File selected:", file.name);
-
-    // Authentication check
-    const auth = getAuth();
-    const currentUser = auth.currentUser;
-
-    if (!currentUser) {
-      alert("You must be signed in as an ADMIN to upload images.");
-      console.log("User is not authenticated. Exiting function.");
-      return;
-    }
-
-    const token = await currentUser.getIdTokenResult();
-    if (token.claims.role !== "ADMIN") {
-      alert("You do not have the required permissions to upload images.");
-      console.log("User is not an ADMIN. Exiting function.");
-      return;
-    }
-
-    console.log("User is authenticated and has ADMIN permissions.");
 
     const fileExtension = file.name.split(".").pop();
     const storage = getStorage();
     // Upload file to firebase storage
     try {
       const randomName = crypto.randomUUID();
-    
-      const storageRef = ref(storage, `coverImages/${randomName}.${fileExtension}`);
-    
+
+      const storageRef = ref(
+        storage,
+        `coverImages/${randomName}.${fileExtension}`
+      );
+
       await uploadBytes(storageRef, file);
       const downloadURL = await getDownloadURL(storageRef);
 
@@ -546,44 +532,50 @@ const AdminTrainingEditor: React.FC = () => {
                   </Tooltip>
                 </div>
 
-                  <Button
-                    variant="contained"
-                    component="label"
-                    sx={{
+                <Button
+                  variant="contained"
+                  component="label"
+                  sx={{
+                    backgroundColor: "#D9D9D9",
+                    color: "black",
+                    "&:hover": {
                       backgroundColor: "#D9D9D9",
-                      color: "black",
-                      "&:hover": {
-                        backgroundColor: "#D9D9D9",
-                      },
+                    },
+                  }}>
+                  <LuUpload style={{ fontSize: "50px" }} />
+                  <input
+                    type="file"
+                    id="upload"
+                    onChange={async (e) => {
+                      if (e.target.files && e.target.files[0]) {
+                        const selectedFile = e.target.files[0];
+                        setFile(selectedFile); // Update the file state
+                        await onUpload(selectedFile); // Call onUpload directly after file selection
+                      }
                     }}
-                  >
-                    <LuUpload style={{ fontSize: "50px" }} />
-                    <input
-                      type="file"
-                      id="upload"
-                      onChange={async (e) => {
-                        if (e.target.files && e.target.files[0]) {
-                          const selectedFile = e.target.files[0];
-                          setFile(selectedFile); // Update the file state
-                          await onUpload(selectedFile); // Call onUpload directly after file selection
-                        }
+                  />
+                </Button>
+                {coverImage && (
+                  <div style={{ marginTop: "10px" }}>
+                    <img
+                      src={coverImage}
+                      alt="Cover Preview"
+                      style={{
+                        width: "100px",
+                        height: "auto",
+                        marginRight: "10px",
                       }}
                     />
-                  </Button>
-                  {coverImage && (
-                    <div style={{ marginTop: "10px" }}>
-                      <img src={coverImage} alt="Cover Preview" style={{ width: "100px", height: "auto", marginRight: "10px" }} />
-                      <Button
-                        variant="contained"
-                        color="error"
-                        onClick={handleDelete}
-                        sx={{ marginTop: "10px" }}
-                      >
-                        Delete Image
-                      </Button>
-                    </div>
-                  )}
-                </div>
+                    <Button
+                      variant="contained"
+                      color="error"
+                      onClick={handleDelete}
+                      sx={{ marginTop: "10px" }}>
+                      Delete Image
+                    </Button>
+                  </div>
+                )}
+              </div>
 
               {/* Resource Link and Tooltip */}
               <div className={styles.resourceHeadersBox}>
