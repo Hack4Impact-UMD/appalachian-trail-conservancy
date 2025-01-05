@@ -79,6 +79,10 @@
   gap: 3%;
 }
 
+.dropdownContainer {
+  display: none;
+}
+
 .loadingContainer {
   width: 100%;
   margin-top: 1.5rem;
@@ -149,6 +153,34 @@
     width: 425px;
   }
 
+  .buttonContainer {
+    display: flex;
+    justify-content: center;
+    gap: 5%;
+    margin-bottom: 2rem;
+  }
+
+  .buttonSelect {
+    display: none;
+  }
+
+  .dropdownContainer {
+    display: flex;
+    width: 425px;
+  }
+
+  .dropdownMenu {
+    width: 425px;
+  }
+
+  .subHeader {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    color: var(--blue-gray);
+  }
+
   .cardsContainer {
     justify-content: space-around;
   }
@@ -162,6 +194,22 @@
 
 @media screen and (max-width: 450px) {
   .content {
+    width: 300px;
+  }
+
+  .buttonContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .dropdownContainer {
+    display: flex;
+    width: 300px;
+  }
+
+  .dropdownMenu {
     width: 300px;
   }
 }

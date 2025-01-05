@@ -10,11 +10,13 @@ import AdminPathwayCard from "../../components/AdminPathwayCard/AdminPathwayCard
 import Loading from "../../components/LoadingScreen/Loading";
 import { TrainingID } from "../../types/TrainingType";
 import { PathwayID } from "../../types/PathwayType";
-import { Button } from "@mui/material";
+import { Button, FormControl, Select, MenuItem } from "@mui/material";
 import {
   forestGreenButtonPadding,
   forestGreenButtonLarge,
   whiteButtonGrayBorder,
+  whiteSelectGrayBorder,
+  selectOptionStyle,
 } from "../../muiTheme";
 import { getAllPathways, getAllTrainings } from "../../backend/FirestoreCalls";
 import hamburger from "../../assets/hamburger.svg";
@@ -26,7 +28,7 @@ function AdminDashboardPage() {
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
   );
-  const [trainingsSelected, setTrainingsSelected] = useState<boolean>(true);
+  const [filterType, setFilterType] = useState("trainings");
   const [trainingDrafts, setTrainingDrafts] = useState<TrainingID[]>([]);
   const [trainingsPublished, setTrainingsPublished] = useState<TrainingID[]>(
     []
@@ -112,8 +114,7 @@ function AdminDashboardPage() {
         className={`${styles.split} ${styles.right}`}
         style={{
           left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-        }}
-      >
+        }}>
         {!navigationBarOpen && (
           <img
             src={hamburger}
@@ -134,41 +135,55 @@ function AdminDashboardPage() {
               <Button
                 sx={forestGreenButtonLarge}
                 variant="contained"
-                onClick={() => navigate("/trainings/editor")}
-              >
+                onClick={() => navigate("/trainings/editor")}>
                 CREATE NEW TRAINING
               </Button>
               <Button
                 sx={forestGreenButtonLarge}
                 variant="contained"
-                onClick={() => navigate("/pathways/editor")}
-              >
+                onClick={() => navigate("/pathways/editor")}>
                 CREATE NEW PATHWAY
               </Button>
             </div>
             <div className={styles.buttonSelect}>
               <Button
-                onClick={() => setTrainingsSelected(true)}
+                onClick={() => setFilterType("trainings")}
                 sx={
-                  trainingsSelected
+                  filterType === "trainings"
                     ? forestGreenButtonPadding
                     : whiteButtonGrayBorder
                 }
-                variant="contained"
-              >
+                variant="contained">
                 TRAINING
               </Button>
               <Button
-                onClick={() => setTrainingsSelected(false)}
+                onClick={() => setFilterType("pathways")}
                 sx={
-                  !trainingsSelected
+                  filterType === "pathways"
                     ? forestGreenButtonPadding
                     : whiteButtonGrayBorder
                 }
-                variant="contained"
-              >
+                variant="contained">
                 PATHWAYS
               </Button>
+            </div>
+            <div className={styles.dropdownContainer}>
+              <FormControl sx={{ width: 300 }}>
+                <Select
+                  className={styles.dropdownMenu}
+                  sx={whiteSelectGrayBorder}
+                  value={filterType}
+                  onChange={(e) => setFilterType(e.target.value)} // Handle the dropdown value directly
+                  displayEmpty
+                  label="Filter">
+                  <MenuItem value="trainings" sx={selectOptionStyle}>
+                    TRAININGS
+                  </MenuItem>
+                  <MenuItem value="pathways" sx={selectOptionStyle}>
+                    PATHWAYS
+                  </MenuItem>
+                </Select>
+              </FormControl>
             </div>
             {loading ? (
               <div className={styles.loadingContainer}>
@@ -179,7 +194,7 @@ function AdminDashboardPage() {
                 <div className={styles.subHeader}>
                   <h2>Current Drafts</h2>
                 </div>
-                {trainingsSelected ? (
+                {filterType === "trainings" ? (
                   <>
                     {trainingDrafts.length === 0 ? (
                       <div className={styles.subHeader}>
@@ -211,7 +226,7 @@ function AdminDashboardPage() {
                 <div className={styles.subHeader}>
                   <h2>Published</h2>
                 </div>
-                {trainingsSelected ? (
+                {filterType === "trainings" ? (
                   <>
                     {trainingsPublished.length === 0 ? (
                       <div className={styles.subHeader}>
