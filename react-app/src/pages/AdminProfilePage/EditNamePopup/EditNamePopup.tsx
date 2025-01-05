@@ -62,6 +62,9 @@ const EditNamePopup = ({
         updateAdmin(newAdmin, auth.id)
           .then(() => {
             setAdmin(newAdmin);
+            auth.setUser(newAdmin); // Update user in AuthProvider
+            auth.setFirstName(newAdmin.firstName);
+            auth.setLastName(newAdmin.lastName);
             setSnackbarMessage(`${editType} name updated successfully`);
           })
           .catch((e) => {
@@ -75,9 +78,9 @@ const EditNamePopup = ({
             onClose();
           });
       } else {
+        setSnackbarMessage(`${editType} name cannot be empty`);
         setLoading(false);
         setCanClose(true);
-        setSnackbarMessage(`${editType} name cannot be empty`);
         setSnackbar(true);
       }
     }
