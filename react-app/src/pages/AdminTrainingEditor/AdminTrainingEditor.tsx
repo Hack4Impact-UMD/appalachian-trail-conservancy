@@ -76,10 +76,11 @@ const AdminTrainingEditor: React.FC = () => {
   const [resourceType, setResourceType] = useState<string>(
     trainingData?.resources[0]?.type || ""
   );
-
-  const [coverImage, setCoverImage] = useState(
-    trainingData?.coverImage || null
+  const [coverImage, setCoverImage] = useState<string>(
+    trainingData?.coverImage || ""
   );
+
+  const [uploadedImage, setUploadedImage] = useState<File | null>(null);
 
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
@@ -96,6 +97,7 @@ const AdminTrainingEditor: React.FC = () => {
     trainingName: "",
     blurb: "",
     description: "",
+    coverImage: "",
     resourceTitle: "",
     resourceLink: "",
     resourceType: "",
@@ -111,38 +113,29 @@ const AdminTrainingEditor: React.FC = () => {
     resourceTitle: 50,
   };
 
-  // const [file, setFile] = useState<File | null>(null);
+  const handleUploadImage = async () => {
+    if (uploadedImage) {
+      try {
+        // Upload file to firebase storage
+        const fileExtension = uploadedImage.name.split(".").pop();
+        const randomName = crypto.randomUUID();
+        const storageRef = ref(storage, `${randomName}.${fileExtension}`);
 
-  const onUpload = async (file: File) => {
+        await uploadBytes(storageRef, uploadedImage);
+        const downloadURL = await getDownloadURL(storageRef);
+        setCoverImage(downloadURL);
+        return true;
+      } catch (error) {
+        return false;
+      }
+    }
+  };
+
+  const handleChangeImage = async (file: File) => {
     if (!file) {
       setSnackbarMessage("No file found. Please try again.");
       setSnackbar(true);
       return;
-    }
-
-    console.log("File selected:", file.name);
-
-    const fileExtension = file.name.split(".").pop();
-    // Upload file to firebase storage
-    try {
-      const randomName = crypto.randomUUID();
-
-      const storageRef = ref(storage, `${randomName}.${fileExtension}`);
-
-      const fileContent = await file.arrayBuffer();
-
-      console.log("Uploading file to Firebase Storage...");
-      await uploadBytes(storageRef, fileContent);
-      console.log("File uploaded to Firebase Storage");
-      const downloadURL = await getDownloadURL(storageRef);
-
-      setCoverImage(downloadURL);
-      setSnackbarMessage("Image uploaded successfully.");
-      setSnackbar(true);
-    } catch (error) {
-      console.error("Error uploading file:", error);
-      setSnackbarMessage("Failed to upload image. Please try again.");
-      setSnackbar(true);
     }
   };
 
@@ -154,7 +147,7 @@ const AdminTrainingEditor: React.FC = () => {
 
       // Delete the file from Firebase Storage
       await deleteObject(fileRef);
-      setCoverImage(null);
+      setCoverImage("");
 
       setSnackbarMessage("Image deleted successfully.");
       setSnackbar(true);
@@ -171,6 +164,7 @@ const AdminTrainingEditor: React.FC = () => {
       trainingName: "",
       blurb: "",
       description: "",
+      coverImage: "",
       resourceTitle: "",
       resourceLink: "",
       resourceType: "",
@@ -196,6 +190,11 @@ const AdminTrainingEditor: React.FC = () => {
 
     if (!descriptionPlain) {
       newErrors.description = "Description is required.";
+      isValid = false;
+    }
+
+    if (!coverImage) {
+      newErrors.coverImage = "Cover image is required.";
       isValid = false;
     }
 
@@ -233,6 +232,7 @@ const AdminTrainingEditor: React.FC = () => {
         trainingName: "",
         blurb: "",
         description: "",
+        coverImage: "",
         resourceTitle: "",
         resourceLink: "",
         resourceType: "",
@@ -600,17 +600,18 @@ const AdminTrainingEditor: React.FC = () => {
                     id="upload"
                     onChange={async (e) => {
                       if (e.target.files && e.target.files[0]) {
-                        const selectedFile = e.target.files[0];
+                        setUploadedImage(e.target.files[0]);
+                        // const selectedFile = e.target.files[0];
                         // setFile(selectedFile); // Update the file state
-                        await onUpload(selectedFile); // Call onUpload directly after file selection
+                        // handleChangeImage(selectedFile); // Call onUpload directly after file selection
                       }
                     }}
                   />
                 </Button>
-                {coverImage && (
+                {uploadedImage && (
                   <div style={{ marginTop: "10px" }}>
                     <img
-                      src={coverImage}
+                      src={URL.createObjectURL(uploadedImage)}
                       alt="Cover Preview"
                       style={{
                         width: "100px",
