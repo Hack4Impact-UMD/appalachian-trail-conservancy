@@ -96,7 +96,7 @@ function PathwayQuizEditorPage() {
 
   // Load existing quiz data when the page loads
   useEffect(() => {
-    if (pathway?.quiz) {
+    if (pathway?.quiz && pathway.quiz.numQuestions > 0) {
       setQuestions(pathway.quiz.questions);
       setPointsToPass(pathway.quiz.passingScore || 0);
     }
