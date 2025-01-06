@@ -41,7 +41,7 @@ import Badge from "../../components/BadgeCard/BadgeCard";
 import AdminDeletePathwayDraftPopup from "./AdminDeletePathwayDraftPopup/AdminDeletePathwayDraftPopup";
 import { IoCloseOutline } from "react-icons/io5";
 import { LuUpload } from "react-icons/lu";
-import { IoIosInformationCircleOutline } from "react-icons/io";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { Pathway, PathwayID, Status } from "../../types/PathwayType";
 import { TrainingID } from "../../types/TrainingType";
 import {
@@ -683,7 +683,7 @@ const AdminPathwayEditorPage: React.FC = () => {
                       },
                     }}>
                     <span className={styles.iconCenter}>
-                      <IoIosInformationCircleOutline />
+                      <InfoOutlinedIcon />
                     </span>
                   </Tooltip>
                 </div>

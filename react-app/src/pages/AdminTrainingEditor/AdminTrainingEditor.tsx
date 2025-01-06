@@ -35,7 +35,7 @@ import TrainingCard from "../../components/TrainingCard/TrainingCard";
 import Certificate from "../../components/CertificateCard/CertificateCard";
 import { LuUpload } from "react-icons/lu";
 import { IoCloseOutline } from "react-icons/io5";
-import { IoIosInformationCircleOutline } from "react-icons/io";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import {
   grayButton,
   styledRectButton,
@@ -661,7 +661,7 @@ const AdminTrainingEditor: React.FC = () => {
                       },
                     }}>
                     <span className={styles.iconCenter}>
-                      <IoIosInformationCircleOutline />
+                      <InfoOutlinedIcon />
                     </span>
                   </Tooltip>
                 </div>
@@ -793,7 +793,7 @@ const AdminTrainingEditor: React.FC = () => {
                     },
                   }}>
                   <span className={styles.iconCenter}>
-                    <IoIosInformationCircleOutline />
+                    <InfoOutlinedIcon />
                   </span>
                 </Tooltip>
               </div>
