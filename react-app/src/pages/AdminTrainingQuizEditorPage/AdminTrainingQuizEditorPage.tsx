@@ -388,6 +388,9 @@ function TrainingQuizEditorPage() {
                         border: errorQuestions.includes(questionIndex)
                           ? "2px solid var(--hazard-red)"
                           : "2px solid var(--blue-gray)",
+                        "& .MuiOutlinedInput-input": {
+                          padding: "0",
+                        },
                       }}
                       placeholder="QUESTION"
                       value={question.question}
@@ -442,6 +445,9 @@ function TrainingQuizEditorPage() {
                                     )
                                       ? "2px solid var(--hazard-red)"
                                       : "2px solid var(--blue-gray)",
+                                    "& .MuiOutlinedInput-input": {
+                                      padding: "0",
+                                    },
                                   }}
                                   value={choice}
                                   placeholder="ANSWER"

@@ -185,7 +185,7 @@ function PathwayLandingPage() {
         )}
         <div className={styles.pageContainer}>
           <div className={styles.content} ref={div}>
-            <TitleInfo title={pathway.name} description={pathway.shortBlurb} />
+            <TitleInfo title={pathway.name} description={pathway.description} />
 
             {/* Pathway Tiles Section */}
             <div className={styles.pathwayTiles}>{elements}</div>
