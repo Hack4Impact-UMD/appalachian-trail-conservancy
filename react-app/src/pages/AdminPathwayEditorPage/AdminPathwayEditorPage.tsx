@@ -1,6 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import styles from "./AdminPathwayEditorPage.module.css";
 import { useNavigate, useLocation } from "react-router-dom";
+import { storage } from "../../config/firebase";
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
 import {
   TextField,
   OutlinedInput,
@@ -12,6 +19,7 @@ import {
   Alert,
 } from "@mui/material";
 import {
+  grayButton,
   forestGreenButton,
   styledRectButton,
   whiteTooltip,
@@ -28,6 +36,8 @@ import hamburger from "../../assets/hamburger.svg";
 import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar";
 import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
+import PathwayCard from "../../components/PathwayCard/PathwayCard";
+import Badge from "../../components/BadgeCard/BadgeCard";
 import AdminDeletePathwayDraftPopup from "./AdminDeletePathwayDraftPopup/AdminDeletePathwayDraftPopup";
 import { IoCloseOutline } from "react-icons/io5";
 import { LuUpload } from "react-icons/lu";
@@ -39,6 +49,7 @@ import {
   updatePathway,
   getAllPublishedTrainings,
 } from "../../backend/FirestoreCalls";
+
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 
@@ -63,6 +74,8 @@ const AdminPathwayEditorPage: React.FC = () => {
   const [coverImage, setCoverImage] = useState<string>(
     pathwayData?.coverImage || ""
   );
+  const [uploadedImage, setUploadedImage] = useState<File | null>(null);
+
   const blankTraining: TrainingID = {
     name: "",
     id: "",
@@ -144,6 +157,57 @@ const AdminPathwayEditorPage: React.FC = () => {
     description: 1400,
   };
 
+  const changeUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const maxFileSize = 1048576 * 20; // 20MB
+    if (e.target.files) {
+      const currFile = e.target.files[0];
+      if (!currFile?.size) {
+        setSnackbarMessage("Error. Please try again.");
+        setSnackbar(true);
+        return;
+      }
+      if (currFile?.size > maxFileSize) {
+        e.target.value = "";
+        setSnackbarMessage("File is too large. Files must be less than 20MB.");
+        setSnackbar(true);
+        return;
+      }
+      setUploadedImage(e.target.files[0]);
+    }
+  };
+
+  const handleUploadImage = async () => {
+    if (uploadedImage) {
+      try {
+        // Upload file to firebase storage
+        const fileExtension = uploadedImage.name.split(".").pop();
+        const randomName = crypto.randomUUID();
+        const storageRef = ref(storage, `${randomName}.${fileExtension}`);
+
+        await uploadBytes(storageRef, uploadedImage);
+        const downloadURL = await getDownloadURL(storageRef);
+        setCoverImage(downloadURL);
+
+        if (pathwayData?.coverImage) {
+          // Delete previous image from firebase storage
+          const oldFileRef = ref(storage, pathwayData?.coverImage);
+          await deleteObject(oldFileRef);
+        }
+
+        return [true, downloadURL];
+      } catch (error) {
+        return [false, ""];
+      }
+    } else {
+      if (coverImage == "" && pathwayData?.coverImage) {
+        // Delete previous image from firebase storage
+        const oldFileRef = ref(storage, pathwayData?.coverImage);
+        await deleteObject(oldFileRef);
+      }
+    }
+    return [true, coverImage];
+  };
+
   const validateFields = (saveAsIs: boolean) => {
     const newErrors = {
       pathwayName: "",
@@ -176,10 +240,10 @@ const AdminPathwayEditorPage: React.FC = () => {
       isValid = false;
     }
 
-    // if (!coverImage) {
-    //   newErrors.coverImage = "Image is required.";
-    //   isValid = false;
-    // }
+    if (!coverImage && !uploadedImage) {
+      newErrors.coverImage = "Cover image is required.";
+      isValid = false;
+    }
 
     let newErrorTrainings = [];
     if (!selectedTrainings || selectedTrainings.length === 0) {
@@ -211,7 +275,7 @@ const AdminPathwayEditorPage: React.FC = () => {
     setLoading(true);
     // Validate fields only if in edit mode
     if (validateFields(true)) {
-      const blankErrors = {
+      let blankErrors = {
         pathwayName: "",
         blurb: "",
         description: "",
@@ -220,6 +284,16 @@ const AdminPathwayEditorPage: React.FC = () => {
       };
       setErrors(blankErrors);
 
+      const imageUpload = await handleUploadImage();
+      if (!imageUpload[0]) {
+        blankErrors = { ...blankErrors, coverImage: "Failed to upload image." };
+        setErrors(blankErrors);
+        setSnackbarMessage("Failed to upload image. Please try again.");
+        setLoading(false);
+        setSnackbar(true);
+        return;
+      }
+
       if (pathwayId) {
         // Update existing pathway
         const updatedPathway = {
@@ -227,7 +301,7 @@ const AdminPathwayEditorPage: React.FC = () => {
           name: pathwayName,
           shortBlurb: blurb,
           description: description,
-          coverImage: "",
+          coverImage: imageUpload[1],
           trainingIDs: selectedTrainings.map((training) => training.id),
           status: status,
         } as Pathway;
@@ -241,7 +315,7 @@ const AdminPathwayEditorPage: React.FC = () => {
           name: pathwayName,
           shortBlurb: blurb,
           description: description,
-          coverImage: "",
+          coverImage: imageUpload[1],
           trainingIDs: selectedTrainings.map((training) => training.id),
           quiz: {
             questions: [],
@@ -271,6 +345,25 @@ const AdminPathwayEditorPage: React.FC = () => {
   const handleNextClick = async () => {
     setLoading(true);
     if (validateFields(false)) {
+      let blankErrors = {
+        pathwayName: "",
+        blurb: "",
+        description: "",
+        coverImage: "",
+        trainingIds: "",
+      };
+      setErrors(blankErrors);
+
+      const imageUpload = await handleUploadImage();
+      if (!imageUpload[0]) {
+        blankErrors = { ...blankErrors, coverImage: "Failed to upload image." };
+        setErrors(blankErrors);
+        setSnackbarMessage("Failed to upload image. Please try again.");
+        setLoading(false);
+        setSnackbar(true);
+        return;
+      }
+
       if (pathwayId) {
         // Update existing pathway
         const updatedPathway = {
@@ -278,7 +371,7 @@ const AdminPathwayEditorPage: React.FC = () => {
           name: pathwayName,
           shortBlurb: blurb,
           description: description,
-          coverImage: "",
+          coverImage: imageUpload[1],
           trainingIDs: selectedTrainings.map((training) => training.id),
           status: status,
         } as Pathway;
@@ -301,7 +394,7 @@ const AdminPathwayEditorPage: React.FC = () => {
           name: pathwayName,
           shortBlurb: blurb,
           description: description,
-          coverImage: "",
+          coverImage: imageUpload[1],
           trainingIDs: selectedTrainings.map((training) => training.id),
           quiz: {
             questions: [],
@@ -579,10 +672,10 @@ const AdminPathwayEditorPage: React.FC = () => {
               <div className={styles.uploadSection}>
                 <div className={styles.uploadResourceHeader}>
                   <Typography variant="body2" sx={inputHeaderText}>
-                    UPLOAD IMAGE (JPEG, PNG)
+                    UPLOAD IMAGE (JPG, JPEG, PNG)
                   </Typography>
                   <Tooltip
-                    title="Upload will be used as badge image"
+                    title="Image will be used for pathway badge. Uploaded images must be less than 20MB."
                     placement="right"
                     componentsProps={{
                       tooltip: {
@@ -595,19 +688,71 @@ const AdminPathwayEditorPage: React.FC = () => {
                   </Tooltip>
                 </div>
 
-                <Button
-                  variant="contained"
-                  component="label"
-                  sx={{
-                    backgroundColor: "#D9D9D9",
-                    color: "black",
-                    "&:hover": {
-                      backgroundColor: "#D9D9D9",
-                    },
-                  }}>
-                  <LuUpload style={{ fontSize: "50px" }} />
-                  <input type="file" hidden />
-                </Button>
+                <div className={styles.uploadImageContainer}>
+                  <Button
+                    variant="contained"
+                    component="label"
+                    sx={{
+                      ...grayButton,
+                      border: errors.coverImage
+                        ? "2px solid var(--hazard-red)"
+                        : "2px solid var(--lighter-grey)",
+                    }}>
+                    <LuUpload style={{ fontSize: "50px" }} />
+                    <input
+                      type="file"
+                      id="upload"
+                      hidden
+                      accept=".jpg,.jpeg,.png"
+                      onChange={async (e) => {
+                        changeUploadImage(e);
+                      }}
+                    />
+                  </Button>
+                  <div className={`${styles.closeIcon} ${styles.leftMargin}`}>
+                    <IoCloseOutline
+                      onClick={() => {
+                        setUploadedImage(null);
+                        setCoverImage("");
+                      }}
+                    />
+                  </div>
+                </div>
+                {(coverImage || uploadedImage) && (
+                  <div className={styles.previewSection}>
+                    <PathwayCard
+                      pathway={{
+                        id: pathwayId!,
+                        name: pathwayName,
+                        shortBlurb: blurb,
+                        description: description,
+                        coverImage: uploadedImage
+                          ? URL.createObjectURL(uploadedImage)
+                          : coverImage,
+                        trainingIDs: selectedTrainings.map(
+                          (training) => training.id
+                        ),
+                        quiz: {
+                          questions: [],
+                          numQuestions: 0,
+                          passingScore: 0,
+                        },
+                        badgeImage: "",
+                        status: status,
+                      }}
+                      preview={true}
+                    />
+                    <Badge
+                      image={
+                        uploadedImage
+                          ? URL.createObjectURL(uploadedImage)
+                          : coverImage
+                      }
+                      title={pathwayName}
+                      date={new Date(Date.now()).toISOString()}
+                    />
+                  </div>
+                )}
               </div>
 
               {/* Training Selection */}
@@ -733,6 +878,7 @@ const AdminPathwayEditorPage: React.FC = () => {
             open={openDeleteDraftPopup}
             onClose={setOpenDeleteDraftPopup}
             pathwayId={pathwayId}
+            coverImage={coverImage}
           />
         </div>
         <Footer />

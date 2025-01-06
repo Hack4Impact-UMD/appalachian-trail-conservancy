@@ -7,17 +7,21 @@ import { useNavigate } from "react-router";
 import Modal from "../../../components/ModalWrapper/Modal";
 import Loading from "../../../components/LoadingScreen/Loading";
 import { getTraining, deleteTraining } from "../../../backend/FirestoreCalls";
+import { ref, deleteObject } from "firebase/storage";
+import { storage } from "../../../config/firebase";
 
 interface modalPropsType {
   open: boolean;
   onClose: any;
   trainingId: string | undefined;
+  coverImage: string;
 }
 
 const AdminDeleteTrainingDraftPopup = ({
   open,
   onClose,
   trainingId,
+  coverImage,
 }: modalPropsType): React.ReactElement => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
@@ -45,6 +49,12 @@ const AdminDeleteTrainingDraftPopup = ({
           setSnackbar(true);
         } else {
           await deleteTraining(trainingId);
+          // delete cover image from firebase storage
+          if (coverImage !== "") {
+            const oldFileRef = ref(storage, coverImage);
+            await deleteObject(oldFileRef);
+          }
+
           setLoading(false);
           setCanClose(true);
           navigate("/trainings", {

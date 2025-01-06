@@ -889,6 +889,7 @@ const AdminTrainingEditor: React.FC = () => {
             open={openDeleteDraftPopup}
             onClose={setOpenDeleteDraftPopup}
             trainingId={trainingId}
+            coverImage={coverImage}
           />
         </div>
         <Footer />
