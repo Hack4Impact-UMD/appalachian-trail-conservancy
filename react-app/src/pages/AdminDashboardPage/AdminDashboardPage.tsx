@@ -37,8 +37,8 @@ function AdminDashboardPage() {
   const [pathwaysPublished, setPathwaysPublished] = useState<PathwayID[]>([]);
 
   const correlateTrainings = (genericTrainings: TrainingID[]) => {
-    let trainingsDrafts: TrainingID[] = [];
-    let trainingsPublished: TrainingID[] = [];
+    const trainingsDrafts: TrainingID[] = [];
+    const trainingsPublished: TrainingID[] = [];
 
     for (const genericTraining of genericTrainings) {
       if (genericTraining.status == "DRAFT") {
@@ -53,8 +53,8 @@ function AdminDashboardPage() {
   };
 
   const correlatePathways = (genericPathways: PathwayID[]) => {
-    let pathwayDrafts: PathwayID[] = [];
-    let pathwaysPublished: PathwayID[] = [];
+    const pathwayDrafts: PathwayID[] = [];
+    const pathwaysPublished: PathwayID[] = [];
 
     for (const genericPathway of genericPathways) {
       if (genericPathway.status == "DRAFT") {
@@ -68,6 +68,30 @@ function AdminDashboardPage() {
     setPathwaysPublished(pathwaysPublished);
   };
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
+
+  function displayPathwayItems(pathwayList: PathwayID[]): PathwayID[] {
+    if (screenWidth < 450) {
+      return pathwayList.slice(0, 1);
+    } else if (screenWidth > 1500) {
+      return pathwayList.slice(0, 2);
+    } else if (screenWidth > 1000) {
+      return pathwayList.slice(0, 2);
+    }
+    return pathwayList.slice(0, 1);
+  }
+
+  function displayTrainingItems(trainingList: TrainingID[]): TrainingID[] {
+    if (screenWidth < 450) {
+      return trainingList.slice(0, 2);
+    } else if (screenWidth < 750) {
+      return trainingList.slice(0, 1);
+    } else if (screenWidth > 1500) {
+      return trainingList.slice(0, 4);
+    } else if (screenWidth > 1000) {
+      return trainingList.slice(0, 3);
+    }
+    return trainingList.slice(0, 2);
+  }
 
   // Update screen width on resize
   useEffect(() => {
@@ -202,9 +226,14 @@ function AdminDashboardPage() {
                       </div>
                     ) : (
                       <div className={styles.cardsContainer}>
-                        {trainingDrafts.slice(0, 3).map((training, index) => (
-                          <AdminTrainingCard training={training} key={index} />
-                        ))}
+                        {displayTrainingItems(trainingDrafts).map(
+                          (training, index) => (
+                            <AdminTrainingCard
+                              training={training}
+                              key={index}
+                            />
+                          )
+                        )}
                       </div>
                     )}
                   </>
@@ -216,9 +245,11 @@ function AdminDashboardPage() {
                       </div>
                     ) : (
                       <div className={styles.cardsContainer}>
-                        {pathwayDrafts.slice(0, 2).map((pathway, index) => (
-                          <AdminPathwayCard pathway={pathway} key={index} />
-                        ))}
+                        {displayPathwayItems(pathwayDrafts).map(
+                          (pathway, index) => (
+                            <AdminPathwayCard pathway={pathway} key={index} />
+                          )
+                        )}
                       </div>
                     )}
                   </>
@@ -234,14 +265,14 @@ function AdminDashboardPage() {
                       </div>
                     ) : (
                       <div className={styles.cardsContainer}>
-                        {trainingsPublished
-                          .slice(0, 3)
-                          .map((training, index) => (
+                        {displayTrainingItems(trainingsPublished).map(
+                          (training, index) => (
                             <AdminTrainingCard
                               training={training}
                               key={index}
                             />
-                          ))}
+                          )
+                        )}
                       </div>
                     )}
                   </>
@@ -253,9 +284,11 @@ function AdminDashboardPage() {
                       </div>
                     ) : (
                       <div className={styles.cardsContainer}>
-                        {pathwaysPublished.slice(0, 2).map((pathway, index) => (
-                          <AdminPathwayCard pathway={pathway} key={index} />
-                        ))}
+                        {displayPathwayItems(pathwaysPublished).map(
+                          (pathway, index) => (
+                            <AdminPathwayCard pathway={pathway} key={index} />
+                          )
+                        )}
                       </div>
                     )}
                   </>
