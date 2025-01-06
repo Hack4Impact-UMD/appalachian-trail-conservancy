@@ -223,6 +223,30 @@ function Dashboard() {
     }
   }
 
+  function displayPathwayCard(pathwayList: PathwayID[]): PathwayID[] {
+    if (screenWidth < 450) {
+      return pathwayList.slice(0, 1);
+    } else if (screenWidth > 1500) {
+      return pathwayList.slice(0, 2);
+    } else if (screenWidth > 1000) {
+      return pathwayList.slice(0, 2);
+    }
+    return pathwayList.slice(0, 1);
+  }
+
+  function displayTrainingCard(trainingList: TrainingID[]): TrainingID[] {
+    if (screenWidth < 450) {
+      return trainingList.slice(0, 2);
+    } else if (screenWidth < 750) {
+      return trainingList.slice(0, 1);
+    } else if (screenWidth > 1500) {
+      return trainingList.slice(0, 4);
+    } else if (screenWidth > 1000) {
+      return trainingList.slice(0, 3);
+    }
+    return trainingList.slice(0, 2);
+  }
+
   useEffect(() => {
     // only use auth if it is finished loading
     if (!auth.loading && auth.id) {
@@ -456,13 +480,13 @@ function Dashboard() {
                         </Link>
                       </div>
                       <div className={styles.cardsContainer}>
-                        {recommendedTrainings
-                          .slice(0, 3)
-                          .map((training, index) => (
+                        {displayTrainingCard(recommendedTrainings).map(
+                          (training, index) => (
                             <div className={styles.card} key={index}>
                               <TrainingCard training={training} />
                             </div>
-                          ))}
+                          )
+                        )}
                       </div>
                     </div>
                   )}
@@ -478,13 +502,13 @@ function Dashboard() {
                         </Link>
                       </div>
                       <div className={styles.cardsContainer}>
-                        {recommendedPathways
-                          .slice(0, 2)
-                          .map((pathway, index) => (
+                        {displayPathwayCard(recommendedPathways).map(
+                          (pathway, index) => (
                             <div className={styles.card} key={index}>
                               <PathwayCard pathway={pathway} />
                             </div>
-                          ))}
+                          )
+                        )}
                       </div>
                     </div>
                   )}

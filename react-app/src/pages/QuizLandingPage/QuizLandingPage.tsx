@@ -18,6 +18,7 @@ function QuizLandingPage() {
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
   );
+  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
   const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
     {
       trainingID: "",
@@ -60,6 +61,18 @@ function QuizLandingPage() {
     }
   }, []);
 
+  // Update screen width on resize
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const location = useLocation();
 
   if (!location.state?.fromApp) {
@@ -75,7 +88,9 @@ function QuizLandingPage() {
 
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        style={{
+          left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
+        }}>
         {loading ? (
           <Loading />
         ) : (
@@ -157,7 +172,10 @@ function QuizLandingPage() {
         <div
           className={styles.footer}
           style={{
-            width: navigationBarOpen ? "calc(100% - 250px)" : "100%",
+            width:
+              navigationBarOpen && screenWidth > 1200
+                ? "calc(100% - 250px)"
+                : "100%",
           }}>
           {/* buttons */}
           <div className={styles.footerButtons}>
