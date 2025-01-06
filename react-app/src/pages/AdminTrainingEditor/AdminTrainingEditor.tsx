@@ -23,7 +23,6 @@ import {
   TrainingID,
   Training,
   TrainingResource,
-  Resource,
   Status,
 } from "../../types/TrainingType";
 import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar";
@@ -239,35 +238,49 @@ const AdminTrainingEditor: React.FC = () => {
       };
       setErrors(blankErrors);
 
-      const updatedTraining: Training = {
-        name: trainingName,
-        shortBlurb: blurb,
-        description: description,
-        coverImage: "",
-        resources: [
-          {
-            title: resourceTitle,
-            link: resourceLink,
-            type: resourceType,
-          } as TrainingResource,
-        ],
-        quiz: {
-          questions: [],
-          numQuestions: 0,
-          passingScore: 0,
-        },
-        associatedPathways: [],
-        certificationImage: "",
-        status: status,
-      };
-
       if (trainingId) {
         // Update existing training
+        const updatedTraining = {
+          ...trainingData,
+          name: trainingName,
+          shortBlurb: blurb,
+          description: description,
+          coverImage: "",
+          resources: [
+            {
+              title: resourceTitle,
+              link: resourceLink,
+              type: resourceType,
+            } as TrainingResource,
+          ],
+          status: status,
+        } as Training;
         await updateTraining(updatedTraining, trainingId);
         setLoading(false);
         setSnackbarMessage("Training updated successfully.");
       } else {
         // Save as new draft
+        const updatedTraining = {
+          name: trainingName,
+          shortBlurb: blurb,
+          description: description,
+          coverImage: "",
+          resources: [
+            {
+              title: resourceTitle,
+              link: resourceLink,
+              type: resourceType,
+            } as TrainingResource,
+          ],
+          quiz: {
+            questions: [],
+            numQuestions: 0,
+            passingScore: 0,
+          },
+          associatedPathways: [],
+          certificationImage: "",
+          status: status,
+        } as Training;
         const newTrainingId = (await addTraining(updatedTraining)) as
           | string
           | undefined;
@@ -293,43 +306,70 @@ const AdminTrainingEditor: React.FC = () => {
   const handleNextClick = async () => {
     setLoading(true);
     if (validateFields(false)) {
-      const updatedTraining = {
-        ...trainingData,
-        name: trainingName,
-        shortBlurb: blurb,
-        description: description,
-        coverImage: coverImage,
-        resources: [
-          {
-            title: resourceTitle,
-            link: resourceLink,
-            type: resourceType as Resource,
-          } as TrainingResource,
-        ] as TrainingResource[],
-        status: status,
-      } as TrainingID;
-
       if (trainingId) {
+        const updatedTraining = {
+          ...trainingData,
+          name: trainingName,
+          shortBlurb: blurb,
+          description: description,
+          coverImage: "",
+          resources: [
+            {
+              title: resourceTitle,
+              link: resourceLink,
+              type: resourceType,
+            } as TrainingResource,
+          ],
+          status: status,
+        } as Training;
         await updateTraining(updatedTraining, trainingId);
-        updatedTraining.id = trainingId;
         setLoading(false);
         setSnackbarMessage("Training updated successfully.");
         setSnackbar(true);
 
         // Navigate to the quiz editor with the training as state
+        const updatedTrainingId: TrainingID = {
+          ...updatedTraining,
+          id: trainingId,
+        };
         navigate("/trainings/editor/quiz", {
-          state: { training: updatedTraining },
+          state: { training: updatedTrainingId },
         });
       } else {
+        const updatedTraining = {
+          name: trainingName,
+          shortBlurb: blurb,
+          description: description,
+          coverImage: "",
+          resources: [
+            {
+              title: resourceTitle,
+              link: resourceLink,
+              type: resourceType,
+            } as TrainingResource,
+          ],
+          quiz: {
+            questions: [],
+            numQuestions: 0,
+            passingScore: 0,
+          },
+          associatedPathways: [],
+          certificationImage: "",
+          status: status,
+        } as Training;
         const newTrainingId = await addTraining(updatedTraining);
-        updatedTraining.id = newTrainingId;
+        const updatedTrainingId: TrainingID = {
+          ...updatedTraining,
+          id: newTrainingId,
+        };
+        setTrainingId(newTrainingId);
         setLoading(false);
         setSnackbarMessage("Draft saved successfully.");
         setSnackbar(true);
 
         // Navigate to the quiz editor with the new training as state
         navigate("/trainings/editor/quiz", {
-          state: { training: updatedTraining },
+          state: { training: updatedTrainingId },
         });
       }
     } else {

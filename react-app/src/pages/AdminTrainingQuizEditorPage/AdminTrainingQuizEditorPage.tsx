@@ -96,7 +96,7 @@ function TrainingQuizEditorPage() {
 
   // Load existing quiz data when the page loads
   useEffect(() => {
-    if (training?.quiz) {
+    if (training?.quiz && training?.quiz.numQuestions > 0) {
       setQuestions(training.quiz.questions);
       setPointsToPass(training.quiz.passingScore || 0);
     }

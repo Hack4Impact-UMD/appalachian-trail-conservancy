@@ -220,28 +220,38 @@ const AdminPathwayEditorPage: React.FC = () => {
       };
       setErrors(blankErrors);
 
-      const updatedPathway: Pathway = {
-        name: pathwayName,
-        shortBlurb: blurb,
-        description: description,
-        coverImage: "",
-        trainingIDs: selectedTrainings.map((training) => training.id),
-        quiz: {
-          questions: [],
-          numQuestions: 0,
-          passingScore: 0,
-        },
-        badgeImage: "",
-        status: status,
-      };
-
       if (pathwayId) {
         // Update existing pathway
+        const updatedPathway = {
+          ...pathwayData,
+          name: pathwayName,
+          shortBlurb: blurb,
+          description: description,
+          coverImage: "",
+          trainingIDs: selectedTrainings.map((training) => training.id),
+          status: status,
+        } as Pathway;
+
         await updatePathway(updatedPathway, pathwayId);
         setLoading(false);
         setSnackbarMessage("Pathway updated successfully.");
       } else {
         // Save as new draft
+        const updatedPathway = {
+          name: pathwayName,
+          shortBlurb: blurb,
+          description: description,
+          coverImage: "",
+          trainingIDs: selectedTrainings.map((training) => training.id),
+          quiz: {
+            questions: [],
+            numQuestions: 0,
+            passingScore: 0,
+          },
+          badgeImage: "",
+          status: status,
+        } as Pathway;
+
         const newPathwayId = (await addPathway(updatedPathway)) as
           | string
           | undefined;
@@ -272,26 +282,57 @@ const AdminPathwayEditorPage: React.FC = () => {
 
       if (pathwayId) {
         // Update existing pathway
+        const updatedPathway = {
+          ...pathwayData,
+          name: pathwayName,
+          shortBlurb: blurb,
+          description: description,
+          coverImage: "",
+          trainingIDs: selectedTrainings.map((training) => training.id),
+          status: status,
+        } as Pathway;
+
         await updatePathway(updatedPathway, pathwayId);
-        updatedPathway.id = pathwayId;
+        const updatedPathwayId: PathwayID = {
+          ...updatedPathway,
+          id: pathwayId,
+        };
         setLoading(false);
         setSnackbarMessage("Pathway updated successfully.");
         setSnackbar(true);
 
         // Navigate to the quiz editor with the pathway as state
         navigate("/pathways/editor/quiz", {
-          state: { pathway: updatedPathway },
+          state: { pathway: updatedPathwayId },
         });
       } else {
+        const updatedPathway = {
+          name: pathwayName,
+          shortBlurb: blurb,
+          description: description,
+          coverImage: "",
+          trainingIDs: selectedTrainings.map((training) => training.id),
+          quiz: {
+            questions: [],
+            numQuestions: 0,
+            passingScore: 0,
+          },
+          badgeImage: "",
+          status: status,
+        } as Pathway;
         const newPathwayId = await addPathway(updatedPathway);
-        updatedPathway.id = newPathwayId;
+        const updatedPathwayId: PathwayID = {
+          ...updatedPathway,
+          id: newPathwayId,
+        };
+        setPathwayId(newPathwayId);
         setLoading(false);
         setSnackbarMessage("Draft saved successfully.");
         setSnackbar(true);
 
         // Navigate to the quiz editor with the new pathway as state
         navigate("/pathways/editor/quiz", {
-          state: { pathway: updatedPathway },
+          state: { pathway: updatedPathwayId },
         });
       }
     } else {
