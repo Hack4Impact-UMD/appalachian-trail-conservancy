@@ -675,7 +675,7 @@ const AdminPathwayEditorPage: React.FC = () => {
                     UPLOAD IMAGE (JPG, JPEG, PNG)
                   </Typography>
                   <Tooltip
-                    title="Image will be used for pathway badge. Uploaded images must be less than 20MB."
+                    title="Image will be used on the pathway badge. Uploaded images must be less than 20MB."
                     placement="right"
                     componentsProps={{
                       tooltip: {
