@@ -17,6 +17,13 @@
   border-radius: 20px;
 }
 
+.invalidLink {
+  color: var(--blue-gray);
+  display: flex;
+  justify-content: center;
+  margin-top: 5rem;
+}
+
 .contentLabel {
   display: flex;
   flex-direction: row;
