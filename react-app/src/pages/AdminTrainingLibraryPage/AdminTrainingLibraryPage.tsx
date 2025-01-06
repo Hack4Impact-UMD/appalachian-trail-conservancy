@@ -157,7 +157,10 @@ function AdminTrainingLibrary() {
             </div>
             <div>
               <Button
-                sx={forestGreenButtonLarge}
+                sx={{
+                  ...forestGreenButtonLarge,
+                  width: screenWidth < 750 ? "100%" : "auto",
+                }}
                 variant="contained"
                 onClick={() => navigate("/trainings/editor")}>
                 CREATE NEW TRAINING

@@ -82,7 +82,7 @@ function AdminDashboardPage() {
 
   function displayTrainingItems(trainingList: TrainingID[]): TrainingID[] {
     if (screenWidth < 450) {
-      return trainingList.slice(0, 2);
+      return trainingList.slice(0, 1);
     } else if (screenWidth < 750) {
       return trainingList.slice(0, 1);
     } else if (screenWidth > 1500) {
