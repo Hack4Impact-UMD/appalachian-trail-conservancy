@@ -295,6 +295,7 @@ function Dashboard() {
                           <PathwayCard
                             pathway={pathway.genericPathway}
                             volunteerPathway={pathway.volunteerPathway}
+                            preview={false}
                           />
                         </div>
                       ))}
@@ -413,7 +414,7 @@ function Dashboard() {
                           .slice(0, 2)
                           .map((pathway, index) => (
                             <div className={styles.card} key={index}>
-                              <PathwayCard pathway={pathway} />
+                              <PathwayCard pathway={pathway} preview={false} />
                             </div>
                           ))}
                       </div>
