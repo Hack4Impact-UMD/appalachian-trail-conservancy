@@ -271,15 +271,6 @@ const AdminPathwayEditorPage: React.FC = () => {
   const handleNextClick = async () => {
     setLoading(true);
     if (validateFields(false)) {
-      const updatedPathway = {
-        ...pathwayData,
-        name: pathwayName,
-        shortBlurb: blurb,
-        description: description,
-        trainingIDs: selectedTrainings.map((training) => training.id),
-        status: status,
-      } as PathwayID;
-
       if (pathwayId) {
         // Update existing pathway
         const updatedPathway = {
