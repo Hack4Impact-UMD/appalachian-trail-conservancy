@@ -116,6 +116,25 @@ const AdminTrainingEditor: React.FC = () => {
     resourceTitle: 50,
   };
 
+  const changeUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const maxFileSize = 1048576 * 20; // 20MB
+    if (e.target.files) {
+      const currFile = e.target.files[0];
+      if (!currFile?.size) {
+        setSnackbarMessage("Error. Please try again.");
+        setSnackbar(true);
+        return;
+      }
+      if (currFile?.size > maxFileSize) {
+        e.target.value = "";
+        setSnackbarMessage("File is too large. Files must be less than 20MB.");
+        setSnackbar(true);
+        return;
+      }
+      setUploadedImage(e.target.files[0]);
+    }
+  };
+
   const handleUploadImage = async () => {
     if (uploadedImage) {
       try {
@@ -631,10 +650,10 @@ const AdminTrainingEditor: React.FC = () => {
               <div className={styles.uploadSection}>
                 <div className={styles.uploadResourceHeader}>
                   <Typography variant="body2" sx={inputHeaderText}>
-                    UPLOAD IMAGE (JPEG, PNG)
+                    UPLOAD IMAGE (JPG, JPEG, PNG)
                   </Typography>
                   <Tooltip
-                    title="Image will be used on the training card and certificate"
+                    title="Image will be used on the training card and certificate. Uploaded images must be less than 20MB."
                     placement="right"
                     componentsProps={{
                       tooltip: {
@@ -662,10 +681,9 @@ const AdminTrainingEditor: React.FC = () => {
                       type="file"
                       id="upload"
                       hidden
+                      accept=".jpg,.jpeg,.png"
                       onChange={async (e) => {
-                        if (e.target.files && e.target.files[0]) {
-                          setUploadedImage(e.target.files[0]);
-                        }
+                        changeUploadImage(e);
                       }}
                     />
                   </Button>
