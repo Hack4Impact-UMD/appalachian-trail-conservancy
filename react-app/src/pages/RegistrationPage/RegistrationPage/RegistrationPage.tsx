@@ -43,17 +43,6 @@ function RegistrationPage() {
   const [confirmEmail, setConfirmEmail] = useState<string>("");
   const [joinCode, setJoinCode] = useState<string>("");
 
-  // If user is logged in, navigate to Dashboard
-  if (user) {
-    return <Navigate to="/" />;
-  }
-
-  // Check if email is valid
-  const validateEmail = (email: string) => {
-    const pattern = /^[^@]+@[^@]+\.[^@]+$/;
-    return pattern.test(email);
-  };
-
   useEffect(() => {
     if (email !== "" && confirmEmail !== "") {
       const match =
@@ -66,6 +55,17 @@ function RegistrationPage() {
       setEmailsMatch(match);
     }
   }, [email, confirmEmail]);
+
+  // If user is logged in, navigate to Dashboard
+  if (user) {
+    return <Navigate to="/" />;
+  }
+
+  // Check if email is valid
+  const validateEmail = (email: string) => {
+    const pattern = /^[^@]+@[^@]+\.[^@]+$/;
+    return pattern.test(email);
+  };
 
   const handleConfirm = (event: any) => {
     event.preventDefault();

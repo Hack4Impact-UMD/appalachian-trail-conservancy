@@ -219,7 +219,7 @@ const AdminPathwayEditorPage: React.FC = () => {
     let isValid = true;
 
     // Check for required fields
-    if (!pathwayName) {
+    if (!pathwayName || pathwayName.trim() == "") {
       newErrors.pathwayName = "Pathway name is required.";
       isValid = false;
     }
@@ -230,7 +230,7 @@ const AdminPathwayEditorPage: React.FC = () => {
       return isValid;
     }
 
-    if (!blurb) {
+    if (!blurb || blurb.trim() == "") {
       newErrors.blurb = "Blurb is required.";
       isValid = false;
     }
