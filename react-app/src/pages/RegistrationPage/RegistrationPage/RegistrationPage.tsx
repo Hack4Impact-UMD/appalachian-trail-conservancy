@@ -43,17 +43,6 @@ function RegistrationPage() {
   const [confirmEmail, setConfirmEmail] = useState<string>("");
   const [joinCode, setJoinCode] = useState<string>("");
 
-  // If user is logged in, navigate to Dashboard
-  if (user) {
-    return <Navigate to="/" />;
-  }
-
-  // Check if email is valid
-  const validateEmail = (email: string) => {
-    const pattern = /^[^@]+@[^@]+\.[^@]+$/;
-    return pattern.test(email);
-  };
-
   useEffect(() => {
     if (email !== "" && confirmEmail !== "") {
       const match =
@@ -66,6 +55,17 @@ function RegistrationPage() {
       setEmailsMatch(match);
     }
   }, [email, confirmEmail]);
+
+  // If user is logged in, navigate to Dashboard
+  if (user) {
+    return <Navigate to="/" />;
+  }
+
+  // Check if email is valid
+  const validateEmail = (email: string) => {
+    const pattern = /^[^@]+@[^@]+\.[^@]+$/;
+    return pattern.test(email);
+  };
 
   const handleConfirm = (event: any) => {
     event.preventDefault();
@@ -154,7 +154,7 @@ function RegistrationPage() {
               sx={{
                 ...grayBorderTextField,
                 border: !emailsMatch
-                  ? "2px solid #d32f2f"
+                  ? "2px solid var(--hazard-red)"
                   : "2px solid var(--blue-gray)",
               }}
               value={email}
@@ -172,7 +172,7 @@ function RegistrationPage() {
               sx={{
                 ...grayBorderTextField,
                 border: !emailsMatch
-                  ? "2px solid #d32f2f"
+                  ? "2px solid var(--hazard-red)"
                   : "2px solid var(--blue-gray)",
               }}
               value={confirmEmail}

@@ -11,6 +11,8 @@ import pathwaysInactive from "../../assets/pathwaysGray.svg";
 import pathwaysActive from "../../assets/pathwaysWhite.svg";
 import trainingsInactive from "../../assets/trainingsGray.svg";
 import trainingsActive from "../../assets/trainingsWhite.svg";
+import registrationInactive from "../../assets/registrationGray.svg";
+import registrationActive from "../../assets/registrationWhite.svg";
 import LogoutPopup from "../NavigationBar/LogoutPopup/LogoutPopup";
 import styles from "./AdminNavigationBar.module.css";
 
@@ -47,9 +49,8 @@ const AdminNavigationBar: React.FC<AdminNavigationBarProps> = ({
 
   return (
     <div
-      className={`${styles.navigationContainer} ${open ? "" : styles.closed} ${
-        openLogoutPopup ? styles.popupOpen : ""
-      }`}>
+      className={`${styles.navigationContainer} ${open ? "" : styles.closed} ${openLogoutPopup ? styles.popupOpen : ""
+        }`}>
       {open ? (
         <>
           <div className={styles.logoContainer}>
@@ -166,6 +167,30 @@ const AdminNavigationBar: React.FC<AdminNavigationBarProps> = ({
                       />
                     </div>
                     Data Management
+                  </NavLink>
+                </div>
+
+                <div className={styles.tabContainer}>
+                  <NavLink
+                    to="/registration"
+                    className={({ isActive }) =>
+                      isActive
+                        ? `${styles.tab} ${styles.tabActive}`
+                        : `${styles.tab} ${styles.tabInActive}`
+                    }>
+                    <div>
+                      <img
+                        className={styles.iconActive}
+                        src={registrationActive}
+                        alt="email icon"
+                      />
+                      <img
+                        className={styles.iconInactive}
+                        src={registrationInactive}
+                        alt="email icon"
+                      />
+                    </div>
+                    Registration Management
                   </NavLink>
                 </div>
               </div>

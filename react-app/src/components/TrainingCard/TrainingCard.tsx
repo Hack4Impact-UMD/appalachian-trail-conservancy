@@ -10,20 +10,22 @@ import { grayTooltip } from "../../muiTheme";
 interface TrainingCardProps {
   training: TrainingID;
   volunteerTraining?: VolunteerTraining;
+  preview: boolean;
 }
 
 const TrainingCard: React.FC<TrainingCardProps> = ({
   training,
   volunteerTraining,
+  preview,
 }) => {
   const [openTrainingPopup, setOpenTrainingPopup] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const renderMarker = () => {
-    if (volunteerTraining == undefined) {
+    if (!preview && volunteerTraining == undefined) {
       // Training not started
       return <div className={styles.marker}></div>;
-    } else if (volunteerTraining.progress === "COMPLETED") {
+    } else if (!preview && volunteerTraining!.progress === "COMPLETED") {
       // Training completed
       return (
         <div className={`${styles.marker} ${styles.completedMarker}`}>
@@ -45,16 +47,18 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
       <div
         className={styles.trainingCard}
         onClick={() => {
-          if (volunteerTraining == undefined) {
-            setOpenTrainingPopup(true);
-          } else {
-            // Navigate to training landing page with training and volunteerTraining as state
-            navigate(`/trainings/${training.id}`, {
-              state: {
-                training: training,
-                volunteerTraining: volunteerTraining,
-              },
-            });
+          if (!preview) {
+            if (volunteerTraining == undefined) {
+              setOpenTrainingPopup(true);
+            } else {
+              // Navigate to training landing page with training and volunteerTraining as state
+              navigate(`/trainings/${training.id}`, {
+                state: {
+                  training: training,
+                  volunteerTraining: volunteerTraining,
+                },
+              });
+            }
           }
         }}>
         <div className={styles.trainingImage}>

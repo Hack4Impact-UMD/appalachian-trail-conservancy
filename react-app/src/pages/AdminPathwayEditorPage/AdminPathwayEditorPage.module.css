@@ -15,6 +15,11 @@
   flex-direction: column;
 }
 
+.popupOpen {
+  position: absolute;
+  z-index: -1;
+}
+
 .hamburger {
   color: var(--blue-gray);
   font-size: 1.5rem;
@@ -25,7 +30,6 @@
   width: 30px;
   height: 30px;
   cursor: pointer;
-  z-index: 10; /* Ensure it's above other elements */
 }
 
 .container {
@@ -53,6 +57,14 @@
   display: flex;
   align-items: center;
   gap: 1.5rem;
+}
+
+.nameHeading {
+  color: var(--blue-gray);
+  font-size: 3rem;
+  margin: 0;
+  max-width: 90%;
+  white-space: normal;
 }
 
 .marker {
@@ -84,62 +96,75 @@
   color: var(--blue-gray);
 }
 
-.nameHeading {
-  color: var(--blue-gray);
-  font-size: 3rem;
-  margin: 0;
+.formContent {
+  width: 80%;
 }
 
-.quizEditorText {
-  color: var(--blue-gray);
-  font-weight: bold;
+.topButtonContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.pointsContainer {
+.inputBoxHeader {
+  display: flex;
+  justify-content: space-between;
+}
+
+.quillContainer {
+  border: 2px solid var(--blue-gray);
+  border-radius: 10px;
+}
+
+.inputError {
+  border: 2px solid var(--hazard-red);
+  border-radius: 10px;
+}
+
+.uploadSection {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.uploadResourceHeader {
   display: flex;
   align-items: center;
-  margin-top: 0.5rem;
+  gap: 8px;
+}
+
+.uploadImageContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.previewSection {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.iconCenter {
+  display: flex;
+  align-items: center;
   color: var(--blue-gray);
+}
+
+.searchBarNumber {
+  width: 0.5%;
+  margin-left: -3.5%;
+  padding-right: 3%;
+  font-weight: bold;
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 
 .leftMargin {
   margin-left: 0.5rem;
-}
-
-.questionHeading {
-  margin-top: 1.5rem;
-}
-
-.questionTitleBox {
-  display: flex;
-  width: 80%;
-  justify-content: space-between;
-  margin-top: 1rem;
-  align-items: center;
-}
-
-.questionNumber {
-  margin-right: 2%;
-  font-weight: bold;
-}
-
-.answerOptions {
-  margin-left: 1.5rem;
-}
-
-.answerOption {
-  display: flex;
-  align-items: center;
-}
-
-.questionBox {
-  min-width: 845px;
-  max-width: 845px;
-}
-
-.answerBox {
-  min-width: 775px;
-  max-width: 775px;
 }
 
 .closeIcon {
@@ -154,59 +179,38 @@
   color: red;
 }
 
-.addAnswerRow {
+.searchBarContainer {
+  margin-bottom: 1rem;
   display: flex;
-  width: 75%;
-  align-items: center;
   justify-content: space-between;
-}
-
-.addAnswerButton {
-  color: var(--blue-gray);
-  display: flex;
+  width: 100%;
   align-items: center;
-  cursor: pointer;
+  vertical-align: middle;
 }
 
-.addAnswerButton:hover,
-.addQuestionContainer:hover {
-  color: var(--forest-green);
-}
-
-.selectedAnswerText {
-  color: var(--forest-green);
-  font-weight: bold;
-  cursor: default;
-}
-
-.addQuestionContainer {
+.addTrainingContainer {
   color: var(--blue-gray);
-  margin-top: 1rem;
   display: flex;
   align-items: center;
   width: fit-content;
   cursor: pointer;
 }
 
-.buttonsContainer {
+.addTrainingContainer:hover {
+  color: var(--forest-green);
+}
+
+.nextButton {
+  margin-top: 1.2rem;
+  margin-bottom: 1rem;
   display: flex;
-  align-items: center;
-  justify-content: flex-start;
+  width: 100%;
+  align-items: left;
 }
 
 @media screen and (min-width: 1500px) {
   .content {
     width: 1200px;
-  }
-
-  .questionBox {
-    min-width: 1100px;
-    max-width: 1100px;
-  }
-
-  .answerBox {
-    min-width: 1020px;
-    max-width: 1020px;
   }
 }
 
@@ -214,31 +218,11 @@
   .content {
     width: 1400px;
   }
-
-  .questionBox {
-    min-width: 1300px;
-    max-width: 1300px;
-  }
-
-  .answerBox {
-    min-width: 1220px;
-    max-width: 1220px;
-  }
 }
 
 @media screen and (max-width: 1000px) {
   .content {
     width: 600px;
-  }
-
-  .questionBox {
-    min-width: 570px;
-    max-width: 570px;
-  }
-
-  .answerBox {
-    min-width: 500px;
-    max-width: 500px;
   }
 }
 
@@ -247,14 +231,15 @@
     width: 425px;
   }
 
-  .questionBox {
-    min-width: 380px;
-    max-width: 380px;
+  .formContent {
+    width: 100%;
   }
 
-  .answerBox {
-    min-width: 310px;
-    max-width: 310px;
+  .previewSection {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
   }
 }
 
@@ -269,13 +254,13 @@
     width: 300px;
   }
 
-  .questionBox {
-    min-width: 270px;
-    max-width: 270px;
-  }
-
-  .answerBox {
-    min-width: 200px;
-    max-width: 200px;
+  .previewSection {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    width: 100%;
   }
 }

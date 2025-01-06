@@ -7,6 +7,8 @@ import {
   FormControl,
   Select,
   MenuItem,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import {
   forestGreenButtonPadding,
@@ -16,7 +18,7 @@ import {
   whiteSelectGrayBorder,
   selectOptionStyle,
 } from "../../muiTheme";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { getAllTrainings } from "../../backend/FirestoreCalls";
 import { TrainingID } from "../../types/TrainingType";
 import { useAuth } from "../../auth/AuthProvider.tsx";
@@ -32,7 +34,10 @@ import hamburger from "../../assets/hamburger.svg";
 function AdminTrainingLibrary() {
   const auth = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [loading, setLoading] = useState<boolean>(true);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   const [filterType, setFilterType] = useState("drafts");
   const [searchQuery, setSearchQuery] = useState("");
   const [correlatedTrainings, setCorrelatedTrainings] = useState<TrainingID[]>(
@@ -42,6 +47,19 @@ function AdminTrainingLibrary() {
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
   );
+
+  // delete & update training snackbar
+  useEffect(() => {
+    if (location.state?.fromDelete && location.state?.showSnackbar) {
+      setSnackbarMessage("Training successfully deleted.");
+      setOpenSnackbar(true);
+    }
+
+    if (location.state?.fromUpdate && location.state?.showSnackbar) {
+      setSnackbarMessage("Training successfully updated.");
+      setOpenSnackbar(true);
+    }
+  }, [location.state]);
 
   const filterTrainings = (genericTrainings?: TrainingID[]) => {
     let filtered = correlatedTrainings;
@@ -58,14 +76,12 @@ function AdminTrainingLibrary() {
 
     // status filters
     if (filterType === "drafts") {
-      filtered = filtered.filter((training) => training.status == "DRAFT");
+      filtered = filtered.filter(
+        (corrTraining) => corrTraining.status == "DRAFT"
+      );
     } else if (filterType === "published") {
       filtered = filtered.filter(
         (corrTraining) => corrTraining.status == "PUBLISHED"
-      );
-    } else if (filterType === "drafts") {
-      filtered = filtered.filter(
-        (corrTraining) => corrTraining.status == "DRAFT"
       );
     } else if (filterType === "archives") {
       filtered = filtered.filter(
@@ -266,6 +282,16 @@ function AdminTrainingLibrary() {
               </>
             )}
           </div>
+          <Snackbar
+            open={openSnackbar}
+            autoHideDuration={6000}
+            onClose={() => setOpenSnackbar(false)}
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }} // Position within the right section
+          >
+            <Alert onClose={() => setOpenSnackbar(false)} severity="success">
+              {snackbarMessage}
+            </Alert>
+          </Snackbar>
         </div>
         <Footer />
       </div>
