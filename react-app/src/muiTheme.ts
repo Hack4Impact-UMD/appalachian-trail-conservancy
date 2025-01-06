@@ -138,6 +138,16 @@ export const whiteButtonRedBorder = {
   },
 };
 
+// light gray button; for image upload
+export const grayButton = {
+  borderRadius: "15px",
+  backgroundColor: "var(--lighter-grey)",
+  color: "var(--blue-gray)",
+  "&:hover": {
+    backgroundColor: "var(--lighter-grey)",
+  },
+};
+
 // white w/ blue gray border for Select Dropdowns
 export const whiteSelectGrayBorder = {
   ...baseStyles,

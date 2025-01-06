@@ -18,6 +18,7 @@ import {
   getDownloadURL,
   deleteObject,
 } from "firebase/storage";
+import { storage } from "../../config/firebase";
 import { addTraining, updateTraining } from "../../backend/FirestoreCalls";
 import {
   TrainingID,
@@ -25,12 +26,18 @@ import {
   TrainingResource,
   Status,
 } from "../../types/TrainingType";
+import hamburger from "../../assets/hamburger.svg";
 import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar";
 import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import AdminDeleteTrainingDraftPopup from "./AdminDeleteTrainingDraftPopup/AdminDeleteTrainingDraftPopup";
+import TrainingCard from "../../components/TrainingCard/TrainingCard";
+import Certificate from "../../components/CertificateCard/CertificateCard";
 import { LuUpload } from "react-icons/lu";
+import { IoCloseOutline } from "react-icons/io5";
+import { IoIosInformationCircleOutline } from "react-icons/io";
 import {
+  grayButton,
   styledRectButton,
   forestGreenButton,
   whiteButtonGrayBorder,
@@ -42,11 +49,8 @@ import {
   whiteButtonRedBorder,
   whiteTooltip,
 } from "../../muiTheme";
-import { IoIosInformationCircleOutline } from "react-icons/io";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
-import hamburger from "../../assets/hamburger.svg";
-import { storage } from "../../config/firebase";
 
 const AdminTrainingEditor: React.FC = () => {
   const location = useLocation();
@@ -123,38 +127,25 @@ const AdminTrainingEditor: React.FC = () => {
         await uploadBytes(storageRef, uploadedImage);
         const downloadURL = await getDownloadURL(storageRef);
         setCoverImage(downloadURL);
-        return true;
+
+        if (trainingData?.coverImage) {
+          // Delete previous image from firebase storage
+          const oldFileRef = ref(storage, trainingData?.coverImage);
+          await deleteObject(oldFileRef);
+        }
+
+        return [true, downloadURL];
       } catch (error) {
-        return false;
+        return [false, ""];
+      }
+    } else {
+      if (coverImage == "" && trainingData?.coverImage) {
+        // Delete previous image from firebase storage
+        const oldFileRef = ref(storage, trainingData?.coverImage);
+        await deleteObject(oldFileRef);
       }
     }
-  };
-
-  const handleChangeImage = async (file: File) => {
-    if (!file) {
-      setSnackbarMessage("No file found. Please try again.");
-      setSnackbar(true);
-      return;
-    }
-  };
-
-  const handleDelete = async () => {
-    if (!coverImage) return;
-
-    try {
-      const fileRef = ref(storage, coverImage);
-
-      // Delete the file from Firebase Storage
-      await deleteObject(fileRef);
-      setCoverImage("");
-
-      setSnackbarMessage("Image deleted successfully.");
-      setSnackbar(true);
-    } catch (error) {
-      console.error("Error deleting file:", error);
-      setSnackbarMessage("Failed to delete image. Please try again.");
-      setSnackbar(true);
-    }
+    return [true, coverImage];
   };
 
   // make sure all fields are good before moving on
@@ -192,7 +183,7 @@ const AdminTrainingEditor: React.FC = () => {
       isValid = false;
     }
 
-    if (!coverImage) {
+    if (!coverImage && !uploadedImage) {
       newErrors.coverImage = "Cover image is required.";
       isValid = false;
     }
@@ -227,7 +218,7 @@ const AdminTrainingEditor: React.FC = () => {
     setLoading(true);
     // Validate fields only if in edit mode
     if (validateFields(true)) {
-      const blankErrors = {
+      let blankErrors = {
         trainingName: "",
         blurb: "",
         description: "",
@@ -238,6 +229,16 @@ const AdminTrainingEditor: React.FC = () => {
       };
       setErrors(blankErrors);
 
+      const imageUpload = await handleUploadImage();
+      if (!imageUpload[0]) {
+        blankErrors = { ...blankErrors, coverImage: "Failed to upload image." };
+        setErrors(blankErrors);
+        setSnackbarMessage("Failed to upload image. Please try again.");
+        setLoading(false);
+        setSnackbar(true);
+        return;
+      }
+
       if (trainingId) {
         // Update existing training
         const updatedTraining = {
@@ -245,7 +246,7 @@ const AdminTrainingEditor: React.FC = () => {
           name: trainingName,
           shortBlurb: blurb,
           description: description,
-          coverImage: "",
+          coverImage: imageUpload[1],
           resources: [
             {
               title: resourceTitle,
@@ -264,7 +265,7 @@ const AdminTrainingEditor: React.FC = () => {
           name: trainingName,
           shortBlurb: blurb,
           description: description,
-          coverImage: "",
+          coverImage: imageUpload[1],
           resources: [
             {
               title: resourceTitle,
@@ -306,13 +307,34 @@ const AdminTrainingEditor: React.FC = () => {
   const handleNextClick = async () => {
     setLoading(true);
     if (validateFields(false)) {
+      let blankErrors = {
+        trainingName: "",
+        blurb: "",
+        description: "",
+        coverImage: "",
+        resourceTitle: "",
+        resourceLink: "",
+        resourceType: "",
+      };
+      setErrors(blankErrors);
+
+      const imageUpload = await handleUploadImage();
+      if (!imageUpload[0]) {
+        blankErrors = { ...blankErrors, coverImage: "Failed to upload image." };
+        setErrors(blankErrors);
+        setSnackbarMessage("Failed to upload image. Please try again.");
+        setLoading(false);
+        setSnackbar(true);
+        return;
+      }
+
       if (trainingId) {
         const updatedTraining = {
           ...trainingData,
           name: trainingName,
           shortBlurb: blurb,
           description: description,
-          coverImage: "",
+          coverImage: imageUpload[1],
           resources: [
             {
               title: resourceTitle,
@@ -322,6 +344,7 @@ const AdminTrainingEditor: React.FC = () => {
           ],
           status: status,
         } as Training;
+
         await updateTraining(updatedTraining, trainingId);
         setLoading(false);
         setSnackbarMessage("Training updated successfully.");
@@ -340,7 +363,7 @@ const AdminTrainingEditor: React.FC = () => {
           name: trainingName,
           shortBlurb: blurb,
           description: description,
-          coverImage: "",
+          coverImage: imageUpload[1],
           resources: [
             {
               title: resourceTitle,
@@ -611,7 +634,7 @@ const AdminTrainingEditor: React.FC = () => {
                     UPLOAD IMAGE (JPEG, PNG)
                   </Typography>
                   <Tooltip
-                    title="Upload will be used as training cover and certificate image"
+                    title="Image will be used on the training card and certificate"
                     placement="right"
                     componentsProps={{
                       tooltip: {
@@ -624,48 +647,75 @@ const AdminTrainingEditor: React.FC = () => {
                   </Tooltip>
                 </div>
 
-                <Button
-                  variant="contained"
-                  component="label"
-                  sx={{
-                    backgroundColor: "#D9D9D9",
-                    color: "black",
-                    "&:hover": {
-                      backgroundColor: "#D9D9D9",
-                    },
-                  }}>
-                  <LuUpload style={{ fontSize: "50px" }} />
-                  <input
-                    type="file"
-                    id="upload"
-                    onChange={async (e) => {
-                      if (e.target.files && e.target.files[0]) {
-                        setUploadedImage(e.target.files[0]);
-                        // const selectedFile = e.target.files[0];
-                        // setFile(selectedFile); // Update the file state
-                        // handleChangeImage(selectedFile); // Call onUpload directly after file selection
-                      }
-                    }}
-                  />
-                </Button>
-                {uploadedImage && (
-                  <div style={{ marginTop: "10px" }}>
-                    <img
-                      src={URL.createObjectURL(uploadedImage)}
-                      alt="Cover Preview"
-                      style={{
-                        width: "100px",
-                        height: "auto",
-                        marginRight: "10px",
+                <div className={styles.uploadImageContainer}>
+                  <Button
+                    variant="contained"
+                    component="label"
+                    sx={{
+                      ...grayButton,
+                      border: errors.coverImage
+                        ? "2px solid var(--hazard-red)"
+                        : "2px solid var(--lighter-grey)",
+                    }}>
+                    <LuUpload style={{ fontSize: "50px" }} />
+                    <input
+                      type="file"
+                      id="upload"
+                      hidden
+                      onChange={async (e) => {
+                        if (e.target.files && e.target.files[0]) {
+                          setUploadedImage(e.target.files[0]);
+                        }
                       }}
                     />
-                    <Button
-                      variant="contained"
-                      color="error"
-                      onClick={handleDelete}
-                      sx={{ marginTop: "10px" }}>
-                      Delete Image
-                    </Button>
+                  </Button>
+                  <div className={`${styles.closeIcon} ${styles.leftMargin}`}>
+                    <IoCloseOutline
+                      onClick={() => {
+                        setUploadedImage(null);
+                        setCoverImage("");
+                      }}
+                    />
+                  </div>
+                </div>
+                {(coverImage || uploadedImage) && (
+                  <div className={styles.previewSection}>
+                    <TrainingCard
+                      training={{
+                        id: trainingId!,
+                        name: trainingName,
+                        shortBlurb: blurb,
+                        description: description,
+                        coverImage: uploadedImage
+                          ? URL.createObjectURL(uploadedImage)
+                          : coverImage,
+                        resources: [
+                          {
+                            title: resourceTitle,
+                            link: resourceLink,
+                            type: resourceType,
+                          } as TrainingResource,
+                        ],
+                        quiz: {
+                          questions: [],
+                          numQuestions: 0,
+                          passingScore: 0,
+                        },
+                        associatedPathways: [],
+                        certificationImage: "",
+                        status: status,
+                      }}
+                      preview={true}
+                    />
+                    <Certificate
+                      image={
+                        uploadedImage
+                          ? URL.createObjectURL(uploadedImage)
+                          : coverImage
+                      }
+                      title={trainingName}
+                      date={new Date(Date.now()).toISOString()}
+                    />
                   </div>
                 )}
               </div>
