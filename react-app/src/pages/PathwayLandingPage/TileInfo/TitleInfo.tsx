@@ -24,11 +24,11 @@ const TitleInfo: React.FC<TitleInfoProps> = ({ title, description }) => {
         <ProfileIcon />
       </div>
 
-      {/* Blurb Section */}
+      {/* Description Section */}
       {isOpen && (
-        <div className={styles.blurb}>
+        <div className={styles.description}>
           <h2>Blurb</h2>
-          <p>{description}</p>
+          <div dangerouslySetInnerHTML={{ __html: description }} />
         </div>
       )}
     </div>
