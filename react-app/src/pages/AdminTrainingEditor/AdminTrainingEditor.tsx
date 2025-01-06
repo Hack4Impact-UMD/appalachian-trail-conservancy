@@ -181,7 +181,7 @@ const AdminTrainingEditor: React.FC = () => {
     let isValid = true;
 
     // Check for required fields
-    if (!trainingName) {
+    if (!trainingName || trainingName.trim() == "") {
       newErrors.trainingName = "Training name is required.";
       isValid = false;
     }
@@ -192,7 +192,7 @@ const AdminTrainingEditor: React.FC = () => {
       return isValid;
     }
 
-    if (!blurb) {
+    if (!blurb || blurb.trim() == "") {
       newErrors.blurb = "Blurb is required.";
       isValid = false;
     }
@@ -207,12 +207,12 @@ const AdminTrainingEditor: React.FC = () => {
       isValid = false;
     }
 
-    if (!resourceTitle) {
+    if (!resourceTitle || resourceTitle.trim() == "") {
       newErrors.resourceTitle = "Resource Title is required.";
       isValid = false;
     }
 
-    if (!resourceLink) {
+    if (!resourceLink || resourceLink.trim() == "") {
       newErrors.resourceLink = "Resource Link is required.";
       isValid = false;
     }

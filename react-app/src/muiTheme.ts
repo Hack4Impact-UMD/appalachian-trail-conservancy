@@ -210,6 +210,19 @@ export const grayBorderSearchBar = {
   "& fieldset": { border: "none" },
 };
 
+// radio group
+export const radioGroup = {
+  display: "flex",
+  gap: "0.25rem",
+};
+
+// radio answer style
+export const radioAnswers = {
+  display: "flex",
+  alignItems: "flex-start",
+  justifyContent: "flex-start",
+};
+
 // gray radio button
 export const grayRadioButton = {
   color: "var(--blue-gray)",

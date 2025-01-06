@@ -5,7 +5,7 @@ import {
   FormControl,
   FormControlLabel,
 } from "@mui/material";
-import { grayRadioButton } from "../../../muiTheme";
+import { grayRadioButton, radioGroup, radioAnswers } from "../../../muiTheme";
 import styles from "./QuizCard.module.css";
 
 interface QuizCardProps {
@@ -43,9 +43,13 @@ const QuizCard: React.FC<QuizCardProps> = ({
       </div>
       <div>
         <FormControl>
-          <RadioGroup value={selectedValue} onChange={handleChange}>
+          <RadioGroup
+            value={selectedValue}
+            onChange={handleChange}
+            sx={radioGroup}>
             {answerOptions.map((option, index) => (
               <FormControlLabel
+                sx={radioAnswers}
                 key={index}
                 value={option}
                 control={<Radio sx={grayRadioButton} />}
