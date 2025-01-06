@@ -157,6 +157,72 @@ function Dashboard() {
     });
   }
 
+  function displayPathwayItems(
+    itemType: string,
+    pathwayList: CorrelatedPathway[]
+  ): CorrelatedPathway[] {
+    if (screenWidth < 450) {
+      if (itemType === "card") {
+        return pathwayList.slice(0, 1);
+      } else {
+        return pathwayList.slice(0, 2);
+      }
+    } else if (screenWidth > 1500) {
+      if (itemType === "card") {
+        return pathwayList.slice(0, 2);
+      } else {
+        return pathwayList.slice(0, 5);
+      }
+    } else if (screenWidth > 1000) {
+      if (itemType === "card") {
+        return pathwayList.slice(0, 2);
+      } else {
+        return pathwayList.slice(0, 4);
+      }
+    }
+    if (itemType === "card") {
+      return pathwayList.slice(0, 1);
+    } else {
+      return pathwayList.slice(0, 2);
+    }
+  }
+
+  function displayTrainingItems(
+    itemType: string,
+    trainingList: CorrelatedTraining[]
+  ): CorrelatedTraining[] {
+    if (screenWidth < 450) {
+      if (itemType === "card") {
+        return trainingList.slice(0, 2);
+      } else {
+        return trainingList.slice(0, 2);
+      }
+    } else if (screenWidth < 750) {
+      if (itemType === "card") {
+        return trainingList.slice(0, 1);
+      } else {
+        return trainingList.slice(0, 2);
+      }
+    } else if (screenWidth > 1500) {
+      if (itemType === "card") {
+        return trainingList.slice(0, 4);
+      } else {
+        return trainingList.slice(0, 5);
+      }
+    } else if (screenWidth > 1000) {
+      if (itemType === "card") {
+        return trainingList.slice(0, 3);
+      } else {
+        return trainingList.slice(0, 4);
+      }
+    }
+    if (itemType === "card") {
+      return trainingList.slice(0, 2);
+    } else {
+      return trainingList.slice(0, 2);
+    }
+  }
+
   useEffect(() => {
     // only use auth if it is finished loading
     if (!auth.loading && auth.id) {
@@ -243,8 +309,7 @@ function Dashboard() {
         style={{
           // Only apply left shift when screen width is greater than 1200px
           left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-        }}
-      >
+        }}>
         {!navigationBarOpen && (
           <img
             src={hamburger}
@@ -274,8 +339,7 @@ function Dashboard() {
                       <Link to="/trainings">
                         <Button
                           sx={forestGreenButtonPadding}
-                          variant="contained"
-                        >
+                          variant="contained">
                           GO TO TRAINING LIBRARY
                         </Button>
                       </Link>
@@ -292,14 +356,16 @@ function Dashboard() {
                       </Link>
                     </div>
                     <div className={styles.cardsContainer}>
-                      {pathwaysInProgress.slice(0, 2).map((pathway, index) => (
-                        <div className={styles.card} key={index}>
-                          <PathwayCard
-                            pathway={pathway.genericPathway}
-                            volunteerPathway={pathway.volunteerPathway}
-                          />
-                        </div>
-                      ))}
+                      {displayPathwayItems("card", pathwaysInProgress).map(
+                        (pathway, index) => (
+                          <div className={styles.card} key={index}>
+                            <PathwayCard
+                              pathway={pathway.genericPathway}
+                              volunteerPathway={pathway.volunteerPathway}
+                            />
+                          </div>
+                        )
+                      )}
                     </div>
                   </div>
                 )}
@@ -314,16 +380,16 @@ function Dashboard() {
                       </Link>
                     </div>
                     <div className={styles.cardsContainer}>
-                      {trainingsInProgress
-                        .slice(0, 3)
-                        .map((training, index) => (
+                      {displayTrainingItems("card", trainingsInProgress).map(
+                        (training, index) => (
                           <div className={styles.card} key={index}>
                             <TrainingCard
                               training={training.genericTraining}
                               volunteerTraining={training.volunteerTraining}
                             />
                           </div>
-                        ))}
+                        )
+                      )}
                     </div>
                   </div>
                 )}
@@ -338,15 +404,17 @@ function Dashboard() {
                       </Link>
                     </div>
                     <div className={styles.cardsContainer}>
-                      {pathwaysCompleted.slice(0, 4).map((pathway, index) => (
-                        <div className={styles.card} key={index}>
-                          <Badge
-                            image={pathway.genericPathway.coverImage}
-                            title={pathway.genericPathway.name}
-                            date={pathway.volunteerPathway!.dateCompleted}
-                          />
-                        </div>
-                      ))}
+                      {displayPathwayItems("badge", pathwaysCompleted).map(
+                        (pathway, index) => (
+                          <div className={styles.card} key={index}>
+                            <Badge
+                              image={pathway.genericPathway.coverImage}
+                              title={pathway.genericPathway.name}
+                              date={pathway.volunteerPathway!.dateCompleted}
+                            />
+                          </div>
+                        )
+                      )}
                     </div>
                   </div>
                 )}
@@ -361,7 +429,10 @@ function Dashboard() {
                       </Link>
                     </div>
                     <div className={styles.cardsContainer}>
-                      {trainingsCompleted.slice(0, 4).map((training, index) => (
+                      {displayTrainingItems(
+                        "certificate",
+                        trainingsCompleted
+                      ).map((training, index) => (
                         <div className={styles.card} key={index}>
                           <Certificate
                             image={training.genericTraining.coverImage}
