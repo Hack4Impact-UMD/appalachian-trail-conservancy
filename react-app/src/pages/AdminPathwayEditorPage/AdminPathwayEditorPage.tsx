@@ -709,14 +709,16 @@ const AdminPathwayEditorPage: React.FC = () => {
                       }}
                     />
                   </Button>
-                  <div className={`${styles.closeIcon} ${styles.leftMargin}`}>
-                    <IoCloseOutline
-                      onClick={() => {
-                        setUploadedImage(null);
-                        setCoverImage("");
-                      }}
-                    />
-                  </div>
+                  {(coverImage || uploadedImage) && (
+                    <div className={`${styles.closeIcon} ${styles.leftMargin}`}>
+                      <IoCloseOutline
+                        onClick={() => {
+                          setUploadedImage(null);
+                          setCoverImage("");
+                        }}
+                      />
+                    </div>
+                  )}
                 </div>
                 {(coverImage || uploadedImage) && (
                   <div className={styles.previewSection}>
