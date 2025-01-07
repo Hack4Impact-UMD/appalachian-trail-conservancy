@@ -119,17 +119,28 @@ const EditCredentialPopup = ({
   };
 
   const updatePassword = (prevPassword: string, newPassword: string) => {
-    prevPassword = prevPassword.trim();
-    newPassword = newPassword.trim();
     if (prevPassword === "" || newPassword === "") {
       setSnackbarMessage("Please fill out all fields");
       handlePostEvent();
       return;
     }
 
+    // check if new password has any spaces
+    if (newPassword.includes(" ")) {
+      setSnackbarMessage("New password cannot contain spaces");
+      handlePostEvent();
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      setSnackbarMessage("Password should be at least 6 characters");
+      handlePostEvent();
+      return;
+    }
+
     let success = false;
 
-    updateUserPassword(prevPassword, newPassword)
+    updateUserPassword(newPassword, prevPassword)
       .then(() => {
         success = true;
         setPrevShowPassword(false);
@@ -137,7 +148,7 @@ const EditCredentialPopup = ({
         setSnackbarMessage("Password updated successfully");
       })
       .catch((e) => {
-        setSnackbarMessage(e);
+        setSnackbarMessage("Incorrect credentials, please try again");
       })
       .finally(() => {
         handlePostEvent(success);

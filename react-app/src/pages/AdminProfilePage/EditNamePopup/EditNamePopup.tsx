@@ -49,10 +49,11 @@ const EditNamePopup = ({
       setLoading(true);
 
       //@ts-ignore
-      if (nameRef.current?.value !== "") {
+      const newName = nameRef.current?.value.trim();
+
+      if (newName !== "") {
         let newAdmin = admin;
-        //@ts-ignore
-        const newName = nameRef.current?.value;
+
         if (editType === "First") {
           newAdmin = { ...admin, firstName: newName };
         } else {
