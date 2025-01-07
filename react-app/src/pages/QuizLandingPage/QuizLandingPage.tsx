@@ -6,6 +6,7 @@ import { DateTime } from "luxon";
 import { FaCheck, FaXmark } from "react-icons/fa6";
 import { Training } from "../../types/TrainingType";
 import { type VolunteerTraining } from "../../types/UserType";
+import { useAuth } from "../../auth/AuthProvider";
 import styles from "./QuizLandingPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
@@ -14,6 +15,7 @@ import hamburger from "../../assets/hamburger.svg";
 
 function QuizLandingPage() {
   const navigate = useNavigate();
+  const auth = useAuth();
   const [loading, setLoading] = useState<boolean>(true);
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
@@ -187,6 +189,7 @@ function QuizLandingPage() {
                   state: {
                     training: training,
                     volunteerTraining: volunteerTraining,
+                    volunteerId: auth.id.toString(),
                     fromApp: true,
                   },
                 })
