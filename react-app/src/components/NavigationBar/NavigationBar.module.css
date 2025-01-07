@@ -113,6 +113,7 @@
 }
 
 .logoutContainer button {
+  color: var(--blue-gray);
   background-color: white;
   font-weight: bold;
   text-align: left;
