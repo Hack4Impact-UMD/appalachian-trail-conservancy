@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import styles from "./PathwayTile.module.css";
 import emptyIcon from "../../../assets/PathwayTiles/Empty.svg";
 import downEndIcon from "../../../assets/PathwayTiles/DownEnd.svg";
 import downLeftIcon from "../../../assets/PathwayTiles/DownLeft.svg";
@@ -29,7 +30,6 @@ import rightInter from "../../../assets/PathwayTiles/IntermediateTiles/RightInte
 import leftDownInter from "../../../assets/PathwayTiles/IntermediateTiles/LeftDownInter.svg";
 import rightDownInter from "../../../assets/PathwayTiles/IntermediateTiles/RightDownInter.svg";
 import verticalInter from "../../../assets/PathwayTiles/IntermediateTiles/VerticalInter.svg";
-import { useState } from "react";
 import { TrainingID } from "../../../types/TrainingType";
 
 /*
@@ -196,24 +196,12 @@ const PathwayTile: React.FC<PathwayTileProps> = ({
   return (
     <>
       <div
-        style={{
-          position: "relative",
-          lineHeight: 0,
-        }}
+        className={styles.tile}
         onClick={() => {
           setOpenTrainingPopup(true);
         }}>
-        <img src={image} style={{ width: "300px", height: "300px" }} />
-        <div
-          style={{
-            position: "absolute",
-            left: "50%",
-            top: "50%",
-            transform: "translate(-50%, -50%)",
-            color: "white",
-            fontSize: "3rem",
-            fontWeight: "bold",
-          }}>
+        <img src={image} className={styles.tileImage} />
+        <div className={styles.trainingNumber}>
           {trainingID != null && tileNum >= trainingsCompleted
             ? tileNum + 1
             : ""}

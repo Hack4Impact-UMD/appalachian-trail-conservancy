@@ -1,0 +1,19 @@
+.tile {
+  position: relative;
+  line-height: 0;
+}
+
+.tileImage {
+  width: 300px;
+  height: 300px;
+}
+
+.trainingNumber {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 3rem;
+  font-weight: bold;
+}
