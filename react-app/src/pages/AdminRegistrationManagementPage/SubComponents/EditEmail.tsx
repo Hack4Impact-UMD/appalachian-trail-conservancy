@@ -16,6 +16,7 @@ import {
   styledRectButton,
   forestGreenButton,
   grayBorderTextField,
+  inputHeaderText,
   whiteTooltip,
 } from "../../../muiTheme.ts";
 import { EmailType } from "../../../types/AssetsType.ts";
@@ -73,7 +74,9 @@ function EditEmail({ tab, quillRef }: EditEmailProps) {
         }
       })
       .catch((e) => {
-        // TODO: Handle error
+        setSnackbarMessage("Failed retrieve new user email");
+        setSnackbar(true);
+        console.error(e);
       });
   }, [tab]);
 
@@ -162,14 +165,9 @@ function EditEmail({ tab, quillRef }: EditEmailProps) {
           <Typography
             variant="body2"
             style={{
-              display: "block",
+              ...inputHeaderText,
               textAlign: "right",
               marginTop: "1.5rem",
-              color: "var(--blue-gray)",
-              alignSelf: "flex-end",
-              width: "80%",
-              gap: "1rem",
-              fontWeight: "bold",
             }}>
             Last updated:{" "}
             {DateTime.fromISO(dateUpdated)

@@ -16,6 +16,7 @@ import {
   whiteButtonGrayBorder,
   styledRectButton,
   grayBorderTextField,
+  inputHeaderText,
 } from "../../../muiTheme.ts";
 import {
   getRegistrationCode,
@@ -43,8 +44,7 @@ function EditRegistrationCode() {
         setLoading(false);
       })
       .catch((e) => {
-        // TODO: handle error
-        setSnackbarMessage("Failed retrieve registration code.");
+        setSnackbarMessage("Failed retrieve registration code");
         setSnackbar(true);
         console.error(e);
       });
@@ -55,7 +55,7 @@ function EditRegistrationCode() {
       .writeText(codeText)
       .then(() => setCopied(true))
       .catch((err) => {
-        setSnackbarMessage("Failed copy code.");
+        setSnackbarMessage("Failed copy code to clipboard");
         setSnackbar(true);
         console.error("Copy failed:", err);
       });
@@ -75,7 +75,7 @@ function EditRegistrationCode() {
       .then(() => {
         setCodeText(editedCode);
         setDateUpdated(todayDate);
-        setSnackbarMessage("Registration code updated successfully.");
+        setSnackbarMessage("Registration code updated successfully");
       })
       .catch((e) => {
         setSnackbarMessage("Registration code failed to update");
@@ -127,14 +127,9 @@ function EditRegistrationCode() {
           <Typography
             variant="body2"
             style={{
-              display: "block",
+              ...inputHeaderText,
               textAlign: "right",
               marginTop: "1.5rem",
-              color: "var(--blue-gray)",
-              alignSelf: "flex-end",
-              width: "80%",
-              gap: "1rem",
-              fontWeight: "bold",
             }}>
             Last updated:{" "}
             {DateTime.fromISO(dateUpdated)
