@@ -4,7 +4,7 @@
   z-index: 1;
   top: 0;
   overflow-x: hidden;
-  transition: left 0.3s ease;
+  transition: left 0.3s ease; /* Add transition for smooth animation */
 }
 
 .right {
@@ -13,6 +13,11 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+.popupOpen {
+  position: absolute;
+  z-index: -1;
 }
 
 .hamburger {
@@ -49,60 +54,55 @@
 }
 
 .nameHeading {
-  color: var(--blue-gray);
+  color: var(--forest-green);
   font-size: 3rem;
   margin: 0;
 }
 
-.mainContainer {
+.profileContainer {
   display: flex;
-  justify-content: center;
+  gap: 15%;
 }
 
-.innerMainContainer {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.buttonGroup {
-  width: 90%;
-  margin: auto;
-}
-
-.dropdownContainer {
-  display: none;
-  flex-grow: 1;
-}
-
-.emailRegCodeContainer {
-  display: flex;
-  justify-content: center;
-}
-
-.emailRegCodeInnerContainer {
-  width: 90%;
+.leftContainer {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
+  font-size: 1.3rem;
 }
 
-.bodyContainer {
+.profileIcon {
+  margin-top: 3%;
+}
+
+.subHeader {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 80%;
-  margin-top: 1rem;
-  border-radius: 10px;
+  margin-top: 15px;
+  color: var(--blue-gray);
+  font-weight: bold;
 }
 
-.bodyLabel {
-  font-weight: bold !important;
-  color: black;
-  border-radius: 10px;
+.inputContainer {
+  margin-top: 5px;
 }
 
+.emailContainer {
+  display: flex;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 2%;
+  margin: 1rem 0 1rem 0;
+}
+
+.footer {
+  margin-top: auto;
+}
+
+/* mobile responsiveness */
 @media screen and (min-width: 1500px) {
   .content {
     width: 1200px;
@@ -126,27 +126,20 @@
     width: 425px;
   }
 
-  .bodyContainer {
-    width: 100%;
-  }
-
-  .buttonGroup {
-    display: none;
-  }
-
-  .dropdownContainer {
-    display: flex;
-    width: 425px;
-  }
-
-  .dropdownMenu {
-    width: 425px;
+  .profileContainer {
+    flex-direction: column-reverse;
+    align-items: center;
   }
 }
 
 @media screen and (max-width: 600px) {
   .header {
     margin-top: 5rem;
+  }
+
+  .nameHeading {
+    width: 100%;
+    text-align: center;
   }
 }
 
@@ -155,16 +148,9 @@
     width: 300px;
   }
 
-  .buttonGroup {
-    display: none;
-  }
-
-  .dropdownContainer {
-    display: flex;
-    width: 300px;
-  }
-
-  .dropdownMenu {
-    width: 300px;
+  .subHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
   }
 }

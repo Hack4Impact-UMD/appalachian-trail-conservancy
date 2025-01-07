@@ -25,7 +25,7 @@ import PathwayLibrary from "./pages/PathwayLibraryPage/PathwayLibraryPage.tsx";
 import PathwayQuizLandingPage from "./pages/PathwayQuizLandingPage/PathwayQuizLandingPage.tsx";
 import PathwayQuizPage from "./pages/PathwayQuizPage/PathwayQuizPage.tsx";
 import AdminTrainingEditor from "./pages/AdminTrainingEditor/AdminTrainingEditor.tsx";
-import AdminPathwayEditor from "./pages/AdminPathwayEditor/AdminPathwayEditor.tsx";
+import AdminPathwayEditorPage from "./pages/AdminPathwayEditorPage/AdminPathwayEditorPage.tsx";
 import RegistrationPage from "./pages/RegistrationPage/RegistrationPage/RegistrationPage.tsx";
 import RegistrationConfirmationPage from "./pages/RegistrationPage/RegistrationConfirmationPage/RegistrationConfirmationPage.tsx";
 import PathwayQuizEditorPage from "./pages/AdminPathwayQuizEditorPage/AdminPathwayQuizEditorPage.tsx";
@@ -36,6 +36,7 @@ import AdminPathwayLibrary from "./pages/AdminPathwayLibraryPage/AdminPathwayLib
 import AdminRegistrationManagementPage from "./pages/AdminRegistrationManagementPage/AdminRegistrationManagementPage.tsx";
 import AdminUserManagement from "./pages/AdminUserManagement/AdminUserManagement.tsx";
 import VolunteerProfilePage from "./pages/VolunteerProfilePage/VolunteerProfilePage.tsx";
+import AdminProfilePage from "./pages/AdminProfilePage/AdminProfilePage.tsx";
 import AdminVolunteerDetails from "./pages/AdminVolunteerDetails/AdminVolunteerDetails.tsx";
 import AdminPathwayDetails from "./pages/AdminPathwayDetails/AdminPathwayDetails.tsx";
 import AdminTrainingDetails from "./pages/AdminTrainingDetails/AdminTrainingDetails.tsx";
@@ -168,7 +169,7 @@ function App() {
               path="/pathways/editor"
               element={
                 <RequireAdminAuth>
-                  <AdminPathwayEditor />
+                  <AdminPathwayEditorPage />
                 </RequireAdminAuth>
               }
             />
@@ -247,9 +248,10 @@ function App() {
             <Route
               path="/profile"
               element={
-                <RequireAuth>
-                  <VolunteerProfilePage />
-                </RequireAuth>
+                <RoleBasedRoute
+                  adminComponent={<AdminProfilePage />}
+                  volunteerComponent={<VolunteerProfilePage />}
+                />
               }
             />
             <Route

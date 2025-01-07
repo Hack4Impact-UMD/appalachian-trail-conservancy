@@ -343,7 +343,9 @@ function TrainingLandingPage() {
                 {/* ABOUT */}
                 <div className={styles.container}>
                   <h2>About</h2>
-                  <p>{training.description}</p>
+                  <div
+                    dangerouslySetInnerHTML={{ __html: training.description }}
+                  />
                 </div>
 
                 {/* OVERVIEW */}

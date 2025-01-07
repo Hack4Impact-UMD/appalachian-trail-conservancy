@@ -404,6 +404,7 @@ function Dashboard() {
                             <PathwayCard
                               pathway={pathway.genericPathway}
                               volunteerPathway={pathway.volunteerPathway}
+                              preview={false}
                             />
                           </div>
                         )
@@ -428,6 +429,7 @@ function Dashboard() {
                             <TrainingCard
                               training={training.genericTraining}
                               volunteerTraining={training.volunteerTraining}
+                              preview={false}
                             />
                           </div>
                         )
@@ -501,7 +503,10 @@ function Dashboard() {
                         {displayTrainingCard(recommendedTrainings).map(
                           (training, index) => (
                             <div className={styles.card} key={index}>
-                              <TrainingCard training={training} />
+                              <TrainingCard
+                                training={training}
+                                preview={false}
+                              />
                             </div>
                           )
                         )}
@@ -523,7 +528,7 @@ function Dashboard() {
                         {displayPathwayCard(recommendedPathways).map(
                           (pathway, index) => (
                             <div className={styles.card} key={index}>
-                              <PathwayCard pathway={pathway} />
+                              <PathwayCard pathway={pathway} preview={false} />
                             </div>
                           )
                         )}

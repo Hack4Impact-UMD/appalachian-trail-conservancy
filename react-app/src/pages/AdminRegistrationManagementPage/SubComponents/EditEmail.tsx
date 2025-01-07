@@ -16,6 +16,7 @@ import {
   styledRectButton,
   forestGreenButton,
   grayBorderTextField,
+  inputHeaderText,
   whiteTooltip,
 } from "../../../muiTheme.ts";
 import { EmailType } from "../../../types/AssetsType.ts";
@@ -23,6 +24,7 @@ import {
   getRegistrationEmail,
   updateRegistrationEmail,
 } from "../../../backend/AdminFirestoreCalls.ts";
+import { DateTime } from "luxon";
 
 interface EditEmailProps {
   tab: string;
@@ -43,6 +45,7 @@ function EditEmail({ tab, quillRef }: EditEmailProps) {
   });
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
+  const [dateUpdated, setDateUpdated] = useState<string>("");
 
   const editorContainerRef = useRef<HTMLDivElement>(null);
 
@@ -51,6 +54,7 @@ function EditEmail({ tab, quillRef }: EditEmailProps) {
       .then((email) => {
         setSubject(email.subject);
         setPrevEmail(email);
+        setDateUpdated(email.dateUpdated);
         setLoading(false);
         if (editorContainerRef.current && !quillRef.current) {
           quillRef.current = new Quill(editorContainerRef.current, {
@@ -70,7 +74,9 @@ function EditEmail({ tab, quillRef }: EditEmailProps) {
         }
       })
       .catch((e) => {
-        // TODO: Handle error
+        setSnackbarMessage("Failed retrieve new user email");
+        setSnackbar(true);
+        console.error(e);
       });
   }, [tab]);
 
@@ -88,7 +94,7 @@ function EditEmail({ tab, quillRef }: EditEmailProps) {
       .then(() => {
         //update prev email
         setPrevEmail(email);
-
+        setDateUpdated(todayDate);
         setSnackbarMessage("Email updated successfully");
       })
       .catch((error) => {
@@ -128,8 +134,7 @@ function EditEmail({ tab, quillRef }: EditEmailProps) {
           <div className={styles.subHeaderLabel}>
             <Typography
               variant="body2"
-              sx={{ fontWeight: "bold", color: "var(--blue-gray)" }}
-            >
+              sx={{ fontWeight: "bold", color: "var(--blue-gray)" }}>
               BODY
             </Typography>
             <Tooltip
@@ -142,8 +147,7 @@ function EditEmail({ tab, quillRef }: EditEmailProps) {
                     ...whiteTooltip,
                   },
                 },
-              }}
-            >
+              }}>
               <InfoOutlinedIcon />
             </Tooltip>
           </div>
@@ -154,9 +158,23 @@ function EditEmail({ tab, quillRef }: EditEmailProps) {
               ref={editorContainerRef}
               style={{
                 height: "300px",
-              }}
-            ></div>
+              }}></div>
           </div>
+
+          {/* Last Updated Text */}
+          <Typography
+            variant="body2"
+            style={{
+              ...inputHeaderText,
+              textAlign: "right",
+              marginTop: "1.5rem",
+            }}>
+            Last updated:{" "}
+            {DateTime.fromISO(dateUpdated)
+              .toFormat("hh:mm a, MM-dd-yyyy")
+              .toUpperCase() || "Unknown"}
+          </Typography>
+
           <div className={styles.buttonCodeContainer}>
             <Button
               variant="contained"
@@ -182,8 +200,7 @@ function EditEmail({ tab, quillRef }: EditEmailProps) {
                 onClose={() => setSnackbar(false)}
                 severity={
                   snackbarMessage.includes("successfully") ? "success" : "error"
-                }
-              >
+                }>
                 {snackbarMessage}
               </Alert>
             </Snackbar>

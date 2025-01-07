@@ -28,6 +28,7 @@ import {
   DataGridStyles,
   whiteButtonGrayBorder,
   forestGreenButtonPadding,
+  whiteButtonRedBorder,
 } from "../../muiTheme.ts";
 import debounce from "lodash.debounce";
 import hamburger from "../../assets/hamburger.svg";
@@ -214,7 +215,8 @@ function AdminVolunteerDetails() {
       <GridColumnMenuContainer
         hideMenu={hideMenu}
         currentColumn={currentColumn}
-        open={open}>
+        open={open}
+      >
         <GridFilterMenuItem onClick={hideMenu} column={currentColumn!} />
         <SortGridMenuItems onClick={hideMenu} column={currentColumn!} />
       </GridColumnMenuContainer>
@@ -356,11 +358,13 @@ function AdminVolunteerDetails() {
           setOpen={setNavigationBarOpen}
         />
       </div>
+
       <DeleteUserPopup
         open={openDeleteUserPopup}
         onClose={setOpenDeleteUserPopup}
         volunteerId={volunteerId || ""}
       />
+
       <div
         className={`${styles.split} ${styles.right} ${
           openDeleteUserPopup ? styles.popupOpen : ""
@@ -368,7 +372,8 @@ function AdminVolunteerDetails() {
         style={{
           // Only apply left shift when screen width is greater than 1200px
           left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-        }}>
+        }}
+      >
         {!navigationBarOpen && (
           <img
             src={hamburger}
@@ -432,7 +437,8 @@ function AdminVolunteerDetails() {
                           ? forestGreenButtonPadding
                           : whiteButtonGrayBorder
                       }
-                      onClick={(event) => handleAlignment(event, "trainings")}>
+                      onClick={(event) => handleAlignment(event, "trainings")}
+                    >
                       TRAININGS
                     </Button>
                     <Button
@@ -441,7 +447,8 @@ function AdminVolunteerDetails() {
                           ? forestGreenButtonPadding
                           : whiteButtonGrayBorder
                       }
-                      onClick={(event) => handleAlignment(event, "pathways")}>
+                      onClick={(event) => handleAlignment(event, "pathways")}
+                    >
                       PATHWAYS
                     </Button>
                   </div>
@@ -498,36 +505,30 @@ function AdminVolunteerDetails() {
                       ...whiteButtonGrayBorder,
                       paddingLeft: "20px",
                       paddingRight: "20px",
-                      fontWeight: "bold",
                       width: "100px",
                     }}
-                    onClick={() => navigate("/management")}>
+                    onClick={() => navigate("/management")}
+                  >
                     BACK
                   </Button>
                   <div className={styles.buttonContainerInner}>
                     <Button
                       sx={{
-                        ...whiteButtonOceanGreenBorder,
-                        color: "var(--steel-purple)",
-                        border: "2px solid var(--steel-purple)",
-                        "&:hover": {
-                          color: "#BF3232",
-                          border: "2px solid #BF3232",
-                        },
-                        fontWeight: "bold",
+                        ...whiteButtonRedBorder,
                         width: "100px",
                       }}
                       onClick={() => {
                         handleDeleteUser();
-                      }}>
+                      }}
+                    >
                       Delete
                     </Button>
                     <Button
                       sx={{
                         ...whiteButtonOceanGreenBorder,
-                        fontWeight: "bold",
                         width: "100px",
-                      }}>
+                      }}
+                    >
                       Export
                     </Button>
                   </div>

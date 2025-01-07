@@ -76,6 +76,18 @@ export const forestGreenButtonLarge = {
   fontSize: "20px",
 };
 
+// hazard red button
+export const hazardRedButton = {
+  ...baseStyles,
+  color: "white",
+  backgroundColor: "var(--hazard-red)",
+  border: "2px solid var(--hazard-red)",
+  "&:hover": {
+    backgroundColor: "var(--hazard-red)",
+    color: "white",
+  },
+};
+
 // white with dark green borders (no hover change)
 export const whiteButtonGreenBorder = {
   ...baseStyles,
@@ -114,6 +126,29 @@ export const whiteButtonGrayBorder = {
   },
 };
 
+// white w/ red border; red background on hover
+export const whiteButtonRedBorder = {
+  ...baseStyles,
+  color: "var(--hazard-red)",
+  backgroundColor: "white",
+  border: "2px solid var(--hazard-red)",
+  "&:hover": {
+    color: "white",
+    backgroundColor: "var(--hazard-red)",
+    border: "2px solid var(--hazard-red)",
+  },
+};
+
+// light gray button; for image upload
+export const grayButton = {
+  borderRadius: "15px",
+  backgroundColor: "var(--lighter-grey)",
+  color: "var(--blue-gray)",
+  "&:hover": {
+    backgroundColor: "var(--lighter-grey)",
+  },
+};
+
 // white w/ blue gray border for Select Dropdowns
 export const whiteSelectGrayBorder = {
   ...baseStyles,
@@ -149,8 +184,16 @@ export const selectOptionStyle = {
   },
 };
 
+// autocomplete TextField
+export const autocompleteText = {
+  "& .MuiOutlinedInput-root": {
+    color: "var(--blue-gray)",
+  },
+};
+
 // used in login page
 export const grayBorderTextField = {
+  color: "var(--blue-gray)",
   width: 350,
   fontSize: "1.1rem",
   borderRadius: "10px",
@@ -167,6 +210,19 @@ export const grayBorderSearchBar = {
   width: "55%",
   border: "2px solid var(--blue-gray)",
   "& fieldset": { border: "none" },
+};
+
+// radio group
+export const radioGroup = {
+  display: "flex",
+  gap: "0.25rem",
+};
+
+// radio answer style
+export const radioAnswers = {
+  display: "flex",
+  alignItems: "flex-start",
+  justifyContent: "flex-start",
 };
 
 // gray radio button
@@ -211,6 +267,20 @@ export const grayGreenRadioButton = {
   "&.Mui-disabled": {
     color: "var(--blue-gray)",
   },
+};
+
+// input header text
+export const inputHeaderText = {
+  color: "var(--blue-gray)",
+  fontWeight: "bold",
+};
+
+// input helper text
+export const inputHelperText = {
+  color: "var(--blue-gray)",
+  fontWeight: "500",
+  marginTop: "2rem",
+  fontSize: "0.8rem",
 };
 
 // number input

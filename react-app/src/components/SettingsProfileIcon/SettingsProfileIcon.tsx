@@ -6,7 +6,9 @@ const SettingsProfileIcon = () => {
   if (auth.loading) {
     return <></>;
   }
-  const initials = `${auth.firstName.charAt(0)}${auth.lastName.charAt(0)}`;
+  const initials = `${auth.firstName.charAt(0)}${auth.lastName.charAt(
+    0
+  )}`.toUpperCase();
 
   return (
     <div className={styles.profileContainer}>

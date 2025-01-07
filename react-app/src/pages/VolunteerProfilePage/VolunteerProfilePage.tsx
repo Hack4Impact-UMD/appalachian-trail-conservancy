@@ -44,21 +44,17 @@ function VolunteerProfilePage() {
   }, []);
 
   useEffect(() => {
-    const getTrainingsCompleted = async () => {
-      if (!auth.loading && auth.id) {
-        getVolunteer(auth.id.toString())
-          .then((volunteer) => {
-            setFirstName(auth.firstName);
-            setLastName(auth.lastName);
-            setVolunteer(volunteer);
-          })
-          .catch((e) => {
-            //TODO: Handle error
-          });
-      }
-    };
-
-    getTrainingsCompleted();
+    if (!auth.loading && auth.id) {
+      getVolunteer(auth.id.toString())
+        .then((volunteer) => {
+          setFirstName(auth.firstName);
+          setLastName(auth.lastName);
+          setVolunteer(volunteer);
+        })
+        .catch((e) => {
+          //TODO: Handle error
+        });
+    }
   }, [auth.loading, auth.id]);
 
   const handleUpdateName = () => {

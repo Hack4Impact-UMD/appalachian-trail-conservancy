@@ -178,7 +178,7 @@ function AdminDashboardPage() {
                     : whiteButtonGrayBorder
                 }
                 variant="contained">
-                TRAINING
+                TRAININGS
               </Button>
               <Button
                 onClick={() => setFilterType("pathways")}

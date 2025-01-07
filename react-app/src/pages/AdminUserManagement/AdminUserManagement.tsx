@@ -153,8 +153,7 @@ function AdminUserManagement() {
       <GridColumnMenuContainer
         hideMenu={hideMenu}
         currentColumn={currentColumn}
-        open={open}
-      >
+        open={open}>
         <GridFilterMenuItem onClick={hideMenu} column={currentColumn!} />
         <SortGridMenuItems onClick={hideMenu} column={currentColumn!} />
       </GridColumnMenuContainer>
@@ -234,8 +233,6 @@ function AdminUserManagement() {
     }
   }, 200); // Debounce interval in milliseconds
 
-  const debouncedOnChange = debounce(updateQuery, 200);
-
   useEffect(() => {
     return () => {
       debouncedFilter.cancel();
@@ -280,8 +277,7 @@ function AdminUserManagement() {
         style={{
           // Only apply left shift when screen width is greater than 1200px
           left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-        }}
-      >
+        }}>
         {!navigationBarOpen && (
           <img
             src={hamburger}
@@ -304,8 +300,7 @@ function AdminUserManagement() {
                 exclusive
                 onChange={(event, newAlignment) =>
                   handleAlignment(newAlignment)
-                }
-              >
+                }>
                 <PurpleToggleButton value="user">
                   USER INFORMATION
                 </PurpleToggleButton>
@@ -326,8 +321,7 @@ function AdminUserManagement() {
                   value={alignment}
                   onChange={(e) => handleAlignment(e.target.value)} // Handle the dropdown value directly
                   displayEmpty
-                  label="Filter"
-                >
+                  label="Filter">
                   <MenuItem value="user" sx={selectOptionStyle}>
                     USER INFORMATION
                   </MenuItem>
@@ -363,8 +357,7 @@ function AdminUserManagement() {
                         paddingLeft: "20px",
                         paddingRight: "20px",
                         fontWeight: "bold",
-                      }}
-                    >
+                      }}>
                       Export
                     </Button>
                   </div>
@@ -415,8 +408,7 @@ function AdminUserManagement() {
                         paddingLeft: "20px",
                         paddingRight: "20px",
                         fontWeight: "bold",
-                      }}
-                    >
+                      }}>
                       Export
                     </Button>
                   </div>
@@ -465,8 +457,7 @@ function AdminUserManagement() {
                         paddingLeft: "20px",
                         paddingRight: "20px",
                         fontWeight: "bold",
-                      }}
-                    >
+                      }}>
                       Export
                     </Button>
                   </div>
