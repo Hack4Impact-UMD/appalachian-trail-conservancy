@@ -37,13 +37,15 @@ function EditRegistrationCode() {
 
   useEffect(() => {
     getRegistrationCode()
-      .then((registratioCode) => {
-        setCodeText(registratioCode.code);
-        setDateUpdated(registratioCode.dateUpdated);
+      .then((registrationCode) => {
+        setCodeText(registrationCode.code);
+        setDateUpdated(registrationCode.dateUpdated);
         setLoading(false);
       })
       .catch((e) => {
         // TODO: handle error
+        setSnackbarMessage("Failed retrieve registration code.");
+        setSnackbar(true);
         console.error(e);
       });
   }, []);
@@ -52,7 +54,11 @@ function EditRegistrationCode() {
     navigator.clipboard
       .writeText(codeText)
       .then(() => setCopied(true))
-      .catch((err) => console.error("Copy failed:", err));
+      .catch((err) => {
+        setSnackbarMessage("Failed copy code.");
+        setSnackbar(true);
+        console.error("Copy failed:", err);
+      });
 
     // Reset tooltip text after a delay
     setTimeout(() => setCopied(false), 2000);
@@ -104,13 +110,13 @@ function EditRegistrationCode() {
               width: "100%",
             }}
             InputProps={{
+              disabled: !isEditing,
               readOnly: !isEditing,
               endAdornment: !isEditing && (
                 <Tooltip title={copied ? "Copied!" : "Copy"}>
                   <IconButton
                     onClick={handleCopy}
-                    sx={{ color: "var(--blue-gray)" }}
-                  >
+                    sx={{ color: "var(--blue-gray)" }}>
                     <ContentCopyIcon />
                   </IconButton>
                 </Tooltip>
@@ -129,8 +135,7 @@ function EditRegistrationCode() {
               width: "80%",
               gap: "1rem",
               fontWeight: "bold",
-            }}
-          >
+            }}>
             Last updated:{" "}
             {DateTime.fromISO(dateUpdated)
               .toFormat("hh:mm a, MM-dd-yyyy")
@@ -149,8 +154,7 @@ function EditRegistrationCode() {
                   onClick={() => {
                     setEditedCode(codeText);
                     setIsEditing(false);
-                  }}
-                >
+                  }}>
                   CANCEL
                 </Button>
                 <Button
@@ -176,8 +180,7 @@ function EditRegistrationCode() {
                 onClick={() => {
                   setEditedCode(codeText);
                   setIsEditing(true);
-                }}
-              >
+                }}>
                 EDIT
               </Button>
             )}
@@ -194,8 +197,7 @@ function EditRegistrationCode() {
                 onClose={() => setSnackbar(false)}
                 severity={
                   snackbarMessage.includes("successfully") ? "success" : "error"
-                }
-              >
+                }>
                 {snackbarMessage}
               </Alert>
             </Snackbar>

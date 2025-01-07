@@ -154,4 +154,17 @@
   .content {
     width: 300px;
   }
+
+  .buttonGroup {
+    display: none;
+  }
+
+  .dropdownContainer {
+    display: flex;
+    width: 300px;
+  }
+
+  .dropdownMenu {
+    width: 300px;
+  }
 }
