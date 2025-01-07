@@ -245,7 +245,6 @@ function App() {
                 </RequireAdminAuth>
               }
             />
-
             <Route
               path="/profile"
               element={

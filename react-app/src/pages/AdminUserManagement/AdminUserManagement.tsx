@@ -293,6 +293,7 @@ function AdminUserManagement() {
               <h1 className={styles.nameHeading}>Data Management Portal</h1>
               <ProfileIcon />
             </div>
+            {/* tab select container */}
             <div className={styles.buttonGroup}>
               <CustomToggleButtonGroup
                 value={alignment}
@@ -355,6 +356,7 @@ function AdminUserManagement() {
                         ...whiteButtonOceanGreenBorder,
                         paddingLeft: "20px",
                         paddingRight: "20px",
+                        fontWeight: "bold",
                       }}>
                       Export
                     </Button>

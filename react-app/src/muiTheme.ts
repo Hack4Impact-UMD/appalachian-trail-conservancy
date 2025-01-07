@@ -192,6 +192,7 @@ export const autocompleteText = {
 
 // used in login page
 export const grayBorderTextField = {
+  color: "var(--blue-gray)",
   width: 350,
   fontSize: "1.1rem",
   borderRadius: "10px",
