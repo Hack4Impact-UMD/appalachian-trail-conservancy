@@ -8,7 +8,9 @@ const ProfileIcon = () => {
   if (auth.loading) {
     return <></>;
   }
-  const initials = `${auth.firstName.charAt(0)}${auth.lastName.charAt(0)}`;
+  const initials = `${auth.firstName.charAt(0)}${auth.lastName.charAt(
+    0
+  )}`.toUpperCase();
 
   return (
     <div className={styles.profileContainer}>
@@ -20,9 +22,8 @@ const ProfileIcon = () => {
       <Link
         to="/profile"
         style={{
-          textDecoration: "none"
-        }}
-      >
+          textDecoration: "none",
+        }}>
         <div className={styles.profileIcon}>{initials}</div>
       </Link>
     </div>
