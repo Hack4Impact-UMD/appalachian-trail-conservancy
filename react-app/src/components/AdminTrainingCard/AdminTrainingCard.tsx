@@ -41,8 +41,17 @@ const AdminTrainingCard: React.FC<AdminTrainingCardProps> = ({ training }) => {
         onClick={() => {
           navigate("/trainings/editor", { state: { training } });
         }}>
-        <div className={styles.trainingImage}>
-          <img src={training.coverImage} alt="Training" />
+        <div
+          className={`${styles.trainingImage} ${
+            !training.coverImage || training.coverImage === ""
+              ? styles.trainingImagePlaceholder
+              : ""
+          }`}>
+          {!training.coverImage || training.coverImage === "" ? (
+            "NO IMAGE"
+          ) : (
+            <img src={training.coverImage} alt="Training" />
+          )}
         </div>
         <div className={styles.trainingContent}>
           <div className={styles.trainingTitleWrapper}>

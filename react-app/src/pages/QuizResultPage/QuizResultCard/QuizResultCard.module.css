@@ -25,23 +25,28 @@
 }
 
 .otherChoiceText {
+  margin-top: 0.5rem;
   color: var(--blue-gray);
 }
 
 .correctChoiceText {
+  margin-top: 0.5rem;
   color: var(--forest-green);
 }
 
 .incorrectChoiceText {
+  margin-top: 0.5rem;
   color: red;
 }
 
 .greenIcon {
+  margin-top: 0.5rem;
   color: var(--forest-green);
   font-size: 24px;
 }
 
 .redIcon {
+  margin-top: 0.5rem;
   color: red;
   font-size: 24px;
 }

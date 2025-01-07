@@ -8,6 +8,8 @@ import {
   grayRadioButton,
   greenRadioButton,
   redRadioButton,
+  radioGroup,
+  radioAnswers,
 } from "../../../muiTheme";
 import styles from "./QuizResultCard.module.css";
 import { IoCloseOutline, IoCheckmark } from "react-icons/io5";
@@ -37,12 +39,13 @@ const QuizResultCard: React.FC<QuizResultCardProps> = ({
       </div>
       <div>
         <FormControl>
-          <RadioGroup value={selectedAnswer}>
+          <RadioGroup value={selectedAnswer} sx={radioGroup}>
             {answerOptions.map((option, index) => (
               <FormControlLabel
                 disabled={true}
                 key={index}
                 value={option}
+                sx={radioAnswers}
                 control={
                   <Radio
                     sx={
