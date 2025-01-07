@@ -36,6 +36,7 @@ import AdminPathwayLibrary from "./pages/AdminPathwayLibraryPage/AdminPathwayLib
 import AdminRegistrationManagementPage from "./pages/AdminRegistrationManagementPage/AdminRegistrationManagementPage.tsx";
 import AdminUserManagement from "./pages/AdminUserManagement/AdminUserManagement.tsx";
 import VolunteerProfilePage from "./pages/VolunteerProfilePage/VolunteerProfilePage.tsx";
+import AdminProfilePage from "./pages/AdminProfilePage/AdminProfilePage.tsx";
 import AdminVolunteerDetails from "./pages/AdminVolunteerDetails/AdminVolunteerDetails.tsx";
 import AdminPathwayDetails from "./pages/AdminPathwayDetails/AdminPathwayDetails.tsx";
 import AdminTrainingDetails from "./pages/AdminTrainingDetails/AdminTrainingDetails.tsx";
@@ -247,9 +248,10 @@ function App() {
             <Route
               path="/profile"
               element={
-                <RequireAuth>
-                  <VolunteerProfilePage />
-                </RequireAuth>
+                <RoleBasedRoute
+                  adminComponent={<AdminProfilePage />}
+                  volunteerComponent={<VolunteerProfilePage />}
+                />
               }
             />
             <Route
