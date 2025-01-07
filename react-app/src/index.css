@@ -17,6 +17,18 @@
   --periwinkle-purple: #c1bfe0;
   --blue-purple: #b8c2e3;
   --light-grey: #adb0b3;
+  --lighter-grey: #d9d9d9;
+  --hazard-red: #bf3232;
+}
+
+.ql-toolbar.ql-snow,
+.ql-container.ql-snow {
+  border: none !important;
+  font-size: 1.1rem;
+}
+
+.ql-toolbar.ql-snow {
+  border-bottom: 2px solid var(--blue-gray) !important;
 }
 
 body {

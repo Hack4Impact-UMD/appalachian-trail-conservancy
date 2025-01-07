@@ -13,6 +13,8 @@ import trainingsInactive from "../../assets/trainingsGray.svg";
 import trainingsActive from "../../assets/trainingsWhite.svg";
 import profileActive from "../../assets/gearWhite.svg";
 import profileInactive from "../../assets/gearGray.svg";
+import registrationInactive from "../../assets/registrationGray.svg";
+import registrationActive from "../../assets/registrationWhite.svg";
 import LogoutPopup from "../NavigationBar/LogoutPopup/LogoutPopup";
 import styles from "./AdminNavigationBar.module.css";
 
@@ -178,6 +180,31 @@ const AdminNavigationBar: React.FC<AdminNavigationBarProps> = ({
 
                 <div className={styles.tabContainer}>
                   <NavLink
+                    to="/registration"
+                    className={({ isActive }) =>
+                      isActive
+                        ? `${styles.tab} ${styles.tabActive}`
+                        : `${styles.tab} ${styles.tabInActive}`
+                    }
+                  >
+                    <div>
+                      <img
+                        className={styles.iconActive}
+                        src={registrationActive}
+                        alt="email icon"
+                      />
+                      <img
+                        className={styles.iconInactive}
+                        src={registrationInactive}
+                        alt="email icon"
+                      />
+                    </div>
+                    Registration Management
+                  </NavLink>
+                </div>
+
+                <div className={styles.tabContainer}>
+                  <NavLink
                     to="/profile"
                     className={({ isActive }) =>
                       isActive
@@ -201,6 +228,7 @@ const AdminNavigationBar: React.FC<AdminNavigationBarProps> = ({
                   </NavLink>
                 </div>
               </div>
+
               <div className={styles.logoutContainer}>
                 <button
                   onClick={() => {

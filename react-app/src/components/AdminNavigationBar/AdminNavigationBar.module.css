@@ -51,6 +51,7 @@
 }
 
 .tabContainer {
+  text-align: start;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -127,9 +128,9 @@
   color: inherit;
 }
 
-@media screen and (max-height: 625px) {
+@media screen and (max-height: 650px) {
   .menuItems {
-    max-height: 275px;
+    max-height: 235px;
     overflow-y: auto;
   }
 }

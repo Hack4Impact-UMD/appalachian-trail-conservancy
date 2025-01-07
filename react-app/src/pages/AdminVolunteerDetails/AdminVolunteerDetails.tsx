@@ -28,6 +28,7 @@ import {
   DataGridStyles,
   whiteButtonGrayBorder,
   forestGreenButtonPadding,
+  whiteButtonRedBorder,
 } from "../../muiTheme.ts";
 import debounce from "lodash.debounce";
 import hamburger from "../../assets/hamburger.svg";
@@ -504,7 +505,6 @@ function AdminVolunteerDetails() {
                       ...whiteButtonGrayBorder,
                       paddingLeft: "20px",
                       paddingRight: "20px",
-                      fontWeight: "bold",
                       width: "100px",
                     }}
                     onClick={() => navigate("/management")}
@@ -514,14 +514,7 @@ function AdminVolunteerDetails() {
                   <div className={styles.buttonContainerInner}>
                     <Button
                       sx={{
-                        ...whiteButtonOceanGreenBorder,
-                        color: "var(--steel-purple)",
-                        border: "2px solid var(--steel-purple)",
-                        "&:hover": {
-                          color: "#BF3232",
-                          border: "2px solid #BF3232",
-                        },
-                        fontWeight: "bold",
+                        ...whiteButtonRedBorder,
                         width: "100px",
                       }}
                       onClick={() => {
@@ -533,7 +526,6 @@ function AdminVolunteerDetails() {
                     <Button
                       sx={{
                         ...whiteButtonOceanGreenBorder,
-                        fontWeight: "bold",
                         width: "100px",
                       }}
                     >

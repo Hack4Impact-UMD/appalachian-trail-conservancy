@@ -277,6 +277,7 @@ function PathwayLibrary() {
                         <PathwayCard
                           pathway={pathway.genericPathway}
                           volunteerPathway={pathway.volunteerPathway}
+                          preview={false}
                         />
                       </div>
                     ))}

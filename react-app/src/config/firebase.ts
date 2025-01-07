@@ -17,7 +17,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyD82HS3ovdxxQkMc7dTUoNUsIsHOxHz6fQ",
   authDomain: "atc-training-aa43c.firebaseapp.com",
   projectId: "atc-training-aa43c",
-  storageBucket: "atc-training-aa43c.appspot.com",
+  storageBucket: "atc-training-aa43c.firebasestorage.app",
   messagingSenderId: "545476594455",
   appId: "1:545476594455:web:95e24010a92fba50bb4552",
   measurementId: "G-VVNLT1GTFC",

@@ -15,6 +15,11 @@
   flex-direction: column;
 }
 
+.popupOpen {
+  position: absolute;
+  z-index: -1;
+}
+
 .hamburger {
   color: var(--blue-gray);
   font-size: 1.5rem;
@@ -48,59 +53,10 @@
   margin-bottom: 2rem;
 }
 
-.inputBoxHeader {
+.headerTitle {
   display: flex;
-  justify-content: space-between;
-  width: 80%;
-}
-
-.uploadSection {
-  margin-top: 2rem;
-  display: flex;
-  justify-content: flex-start;
   align-items: center;
-}
-
-.uploadSection button {
-  background-color: #49a772;
-  color: white;
-  padding: 0.5rem 1rem;
-  text-transform: none;
-}
-
-.addTrainingContainer {
-  margin-top: 1.2rem;
-  margin-bottom: 1rem;
-  display: flex;
-  width: 100%;
-  align-items: left;
-}
-
-.buttonGroup {
-  margin-top: 1.2rem;
-  margin-bottom: 1rem;
-  display: flex;
-  width: 100%;
-  align-items: left;
-}
-
-.buttonGroup button {
-  width: 150px;
-}
-
-.saveButton {
-  margin-left: 1rem;
-  width: 180px;
-  background-color: transparent !important;
-  color: black !important;
-  border: 2px solid black !important;
-  border-radius: 10px !important;
-}
-
-.resourceHeadersBox {
-  display: flex;
-  justify-content: space-between;
-  width: 80%;
+  gap: 1.5rem;
 }
 
 .headerText {
@@ -111,30 +67,126 @@
   white-space: normal;
 }
 
-.flexRow {
+.marker {
+  display: inline-block;
+  padding: 9px 18px;
+  border-radius: 20px;
+  font-size: 0.9em;
+  font-weight: bold;
+  text-align: center;
+  background-color: var(--blue-gray);
+  color: white;
+}
+
+.draftMarker {
+  border: 1.5px solid var(--blue-gray);
+  background-color: var(--ocean-green-25);
+  color: var(--blue-gray);
+}
+
+.publishedMarker {
+  border: 1.5px solid var(--blue-gray);
+  background-color: var(--ocean-green-50);
+  color: var(--blue-gray);
+}
+
+.archiveMarker {
+  border: 1.5px solid var(--blue-gray);
+  background-color: var(--ocean-green-75);
+  color: var(--blue-gray);
+}
+
+.formContent {
+  width: 80%;
+}
+
+.topButtonContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.inputBoxHeader {
+  display: flex;
+  justify-content: space-between;
+}
+
+.quillContainer {
+  border: 2px solid var(--blue-gray);
+  border-radius: 10px;
+}
+
+.inputError {
+  border: 2px solid var(--hazard-red);
+  border-radius: 10px;
+}
+
+.uploadSection {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.uploadResourceHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.uploadImageContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.closeIcon {
+  display: flex;
+  align-items: center;
+  font-size: 2rem;
+  color: var(--blue-gray);
+  cursor: pointer;
+}
+
+.closeIcon:hover {
+  color: red;
+}
+
+.previewSection {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.iconCenter {
+  display: flex;
+  align-items: center;
+  color: var(--blue-gray);
+}
+
+.resourceContainer {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.snackbarContainer {
-  position: fixed;
-  bottom: 16px; /* Adjust as needed */
-  right: 16px;
-  z-index: 1300; /* Make sure it's above other elements */
-  margin-left: 250px; /* Ensure it aligns when navbar is open */
-  width: calc(100% - 250px); /* Take up only right side when navbar is open */
+.resourceTypeField {
+  width: 180px;
+}
+
+.nextButton {
+  margin-top: 1.2rem;
+  margin-bottom: 1rem;
   display: flex;
-  justify-content: flex-end; /* Align to the right */
+  width: 100%;
+  align-items: left;
 }
 
 @media screen and (min-width: 1500px) {
   .content {
     width: 1200px;
-  }
-
-  .cardsContainer {
-    column-gap: 2rem;
   }
 }
 
@@ -142,19 +194,11 @@
   .content {
     width: 1400px;
   }
-
-  .cardsContainer {
-    column-gap: 6.25rem;
-  }
 }
 
 @media screen and (max-width: 1000px) {
   .content {
     width: 600px;
-  }
-
-  .cardsContainer {
-    justify-content: space-between;
   }
 }
 
@@ -162,16 +206,48 @@
   .content {
     width: 425px;
   }
+
+  .formContent {
+    width: 100%;
+  }
+
+  .previewSection {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
 }
 
 @media screen and (max-width: 600px) {
   .header {
     margin-top: 5rem;
   }
+
+  .resourceContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .resourceTypeField {
+    width: 100%;
+  }
 }
 
 @media screen and (max-width: 450px) {
   .content {
     width: 300px;
+  }
+
+  .previewSection {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    width: 100%;
   }
 }

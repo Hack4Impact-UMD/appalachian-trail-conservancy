@@ -243,8 +243,7 @@ function Dashboard() {
         style={{
           // Only apply left shift when screen width is greater than 1200px
           left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-        }}
-      >
+        }}>
         {!navigationBarOpen && (
           <img
             src={hamburger}
@@ -274,8 +273,7 @@ function Dashboard() {
                       <Link to="/trainings">
                         <Button
                           sx={forestGreenButtonPadding}
-                          variant="contained"
-                        >
+                          variant="contained">
                           GO TO TRAINING LIBRARY
                         </Button>
                       </Link>
@@ -297,6 +295,7 @@ function Dashboard() {
                           <PathwayCard
                             pathway={pathway.genericPathway}
                             volunteerPathway={pathway.volunteerPathway}
+                            preview={false}
                           />
                         </div>
                       ))}
@@ -321,6 +320,7 @@ function Dashboard() {
                             <TrainingCard
                               training={training.genericTraining}
                               volunteerTraining={training.volunteerTraining}
+                              preview={false}
                             />
                           </div>
                         ))}
@@ -389,7 +389,10 @@ function Dashboard() {
                           .slice(0, 3)
                           .map((training, index) => (
                             <div className={styles.card} key={index}>
-                              <TrainingCard training={training} />
+                              <TrainingCard
+                                training={training}
+                                preview={false}
+                              />
                             </div>
                           ))}
                       </div>
@@ -411,7 +414,7 @@ function Dashboard() {
                           .slice(0, 2)
                           .map((pathway, index) => (
                             <div className={styles.card} key={index}>
-                              <PathwayCard pathway={pathway} />
+                              <PathwayCard pathway={pathway} preview={false} />
                             </div>
                           ))}
                       </div>
