@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../auth/AuthProvider";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   getVolunteer,
   getAllTrainings,
@@ -34,6 +34,7 @@ interface CorrelatedPathway {
 
 function Dashboard() {
   const auth = useAuth();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(true);
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
@@ -443,9 +444,17 @@ function Dashboard() {
                   <div>
                     <div className={styles.subHeader}>
                       <h2>Recent Badges</h2>
-                      <Link className={styles.viewAllLink} to="/achievements">
+                      <div
+                        className={styles.viewAllLink}
+                        onClick={() => {
+                          navigate(`/achievements`, {
+                            state: {
+                              cardType: "badge",
+                            },
+                          });
+                        }}>
                         VIEW ALL
-                      </Link>
+                      </div>
                     </div>
                     <div className={styles.cardsContainer}>
                       {displayPathwayItems("badge", pathwaysCompleted).map(
@@ -468,9 +477,17 @@ function Dashboard() {
                   <div>
                     <div className={styles.subHeader}>
                       <h2>Recent Certifications</h2>
-                      <Link className={styles.viewAllLink} to="/achievements">
+                      <div
+                        className={styles.viewAllLink}
+                        onClick={() => {
+                          navigate(`/achievements`, {
+                            state: {
+                              cardType: "certification",
+                            },
+                          });
+                        }}>
                         VIEW ALL
-                      </Link>
+                      </div>
                     </div>
                     <div className={styles.cardsContainer}>
                       {displayTrainingItems(
