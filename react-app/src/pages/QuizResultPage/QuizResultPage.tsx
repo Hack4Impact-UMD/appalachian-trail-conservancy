@@ -4,6 +4,7 @@ import { forestGreenButton, whiteButtonGrayBorder } from "../../muiTheme";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./QuizResultPage.module.css";
 import QuizResultCard from "./QuizResultCard/QuizResultCard";
+import Certificate from "../../components/CertificateCard/CertificateCard";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import atclogo from "../../assets/atc-primary-logo.png";
@@ -121,9 +122,17 @@ const QuizResultPage = () => {
             </div>
 
             <div className={styles.feedback}>
-              <div className={styles.certificateImg}>
-                <img src={atclogo} alt="certificate image" />
-              </div>
+              {passed ? (
+                <div className={styles.certificateImg}>
+                  <Certificate
+                    title={training.name}
+                    image={training.coverImage}
+                    date={volunteerTraining.dateCompleted}
+                  />
+                </div>
+              ) : (
+                <></>
+              )}
               {/* message about score */}
               <div className={styles.feedbackRight}>
                 <div>
