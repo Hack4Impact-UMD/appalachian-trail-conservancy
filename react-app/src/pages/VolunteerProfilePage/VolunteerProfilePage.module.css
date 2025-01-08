@@ -15,6 +15,11 @@
   flex-direction: column;
 }
 
+.popupOpen {
+  position: absolute;
+  z-index: -1;
+}
+
 .hamburger {
   color: var(--blue-gray);
   font-size: 1.5rem;
@@ -46,6 +51,11 @@
   align-items: center;
   margin-top: 2rem;
   margin-bottom: 1rem;
+}
+
+.loadingContainer {
+  width: 100%;
+  margin-top: 10rem;
 }
 
 .nameHeading {
@@ -82,16 +92,6 @@
   margin-top: 5px;
 }
 
-.emailContainer {
-  display: flex;
-}
-
-.buttonContainer {
-  display: flex;
-  gap: 2%;
-  margin-top: 1.5rem;
-}
-
 .footer {
   margin-top: auto;
 }
@@ -115,7 +115,7 @@
   }
 }
 
-@media screen and (max-width: 750px) {
+@media screen and (max-width: 800px) {
   .content {
     width: 425px;
   }
@@ -123,6 +123,7 @@
   .profileContainer {
     flex-direction: column-reverse;
     align-items: center;
+    margin-bottom: 2rem;
   }
 }
 
