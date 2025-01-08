@@ -53,6 +53,11 @@
   margin-bottom: 1rem;
 }
 
+.loadingContainer {
+  width: 100%;
+  margin-top: 10rem;
+}
+
 .nameHeading {
   color: var(--forest-green);
   font-size: 3rem;
@@ -87,17 +92,6 @@
   margin-top: 5px;
 }
 
-.emailContainer {
-  display: flex;
-}
-
-.buttonContainer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 2%;
-  margin: 1rem 0 1rem 0;
-}
-
 .footer {
   margin-top: auto;
 }
@@ -121,7 +115,7 @@
   }
 }
 
-@media screen and (max-width: 750px) {
+@media screen and (max-width: 800px) {
   .content {
     width: 425px;
   }
@@ -129,6 +123,7 @@
   .profileContainer {
     flex-direction: column-reverse;
     align-items: center;
+    margin-bottom: 2rem;
   }
 }
 

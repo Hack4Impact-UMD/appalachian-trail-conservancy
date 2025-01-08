@@ -1,20 +1,17 @@
+import styles from "./VolunteerProfilePage.module.css";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../auth/AuthProvider";
-import { getVolunteer, updateVolunteer } from "../../backend/FirestoreCalls";
-import { Button, Tooltip, Alert, Snackbar, TextField } from "@mui/material";
+import EditNamePopup from "./EditNamePopup/EditNamePopup";
+import { Tooltip, Alert, Snackbar, TextField, IconButton } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import { getVolunteer } from "../../backend/FirestoreCalls";
 import { Volunteer } from "../../types/UserType";
-import styles from "./VolunteerProfilePage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import Loading from "../../components/LoadingScreen/Loading";
 import SettingsProfileIcon from "../../components/SettingsProfileIcon/SettingsProfileIcon";
 import Footer from "../../components/Footer/Footer";
 import hamburger from "../../assets/hamburger.svg";
-import {
-  grayBorderTextField,
-  forestGreenButton,
-  whiteButtonGrayBorder,
-  whiteTooltip,
-} from "../../muiTheme";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import { grayBorderTextField } from "../../muiTheme";
 
 function VolunteerProfilePage() {
   const auth = useAuth();
@@ -22,11 +19,14 @@ function VolunteerProfilePage() {
     !(window.innerWidth < 1200)
   );
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
-  const [volunteer, setVolunteer] = useState<Volunteer>();
-  const [firstName, setFirstName] = useState<string>(auth.firstName);
-  const [lastName, setLastName] = useState<string>(auth.lastName);
 
-  const [isEditing, setIsEditing] = useState(false);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const [volunteer, setVolunteer] = useState<Volunteer>();
+
+  // state for handling edit name popup
+  const [openEditNamePopup, setEditNamePopup] = useState<boolean>(false);
+  const [editNameType, setEditNameType] = useState<string>("First");
 
   const [snackbar, setSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -47,46 +47,17 @@ function VolunteerProfilePage() {
     if (!auth.loading && auth.id) {
       getVolunteer(auth.id.toString())
         .then((volunteer) => {
-          setFirstName(auth.firstName);
-          setLastName(auth.lastName);
           setVolunteer(volunteer);
         })
         .catch((e) => {
           //TODO: Handle error
+          console.error(e);
+        })
+        .finally(() => {
+          setLoading(false);
         });
     }
   }, [auth.loading, auth.id]);
-
-  const handleUpdateName = () => {
-    if (volunteer != undefined) {
-      if (firstName != "" && lastName != "") {
-        updateVolunteer({ ...volunteer, firstName, lastName }, auth.id)
-          .then(() => {
-            setVolunteer({ ...volunteer, firstName, lastName });
-            setSnackbarMessage("Volunteer name updated successfully");
-          })
-          .catch((e) => {
-            setSnackbarMessage("Error updating volunteer name");
-          })
-          .finally(() => {
-            setIsEditing(false);
-            setSnackbar(true);
-          });
-      } else {
-        setFirstName(volunteer?.firstName ?? "");
-        setLastName(volunteer?.lastName ?? "");
-        setIsEditing(false);
-        setSnackbarMessage("First name and last name cannot be empty");
-        setSnackbar(true);
-      }
-    }
-  };
-
-  const handleCancelEdit = () => {
-    setFirstName(volunteer?.firstName ?? "");
-    setLastName(volunteer?.lastName ?? "");
-    setIsEditing(false);
-  };
 
   const handleCloseSnackbar = () => {
     setSnackbar(false);
@@ -94,7 +65,12 @@ function VolunteerProfilePage() {
 
   return (
     <>
-      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <div className={openEditNamePopup ? styles.popupOpen : ""}>
+        <NavigationBar
+          open={navigationBarOpen}
+          setOpen={setNavigationBarOpen}
+        />
+      </div>
 
       <div
         className={`${styles.split} ${styles.right}`}
@@ -117,104 +93,104 @@ function VolunteerProfilePage() {
             <div className={styles.header}>
               <h1 className={styles.nameHeading}>Profile Page</h1>
             </div>
-            <div className={styles.profileContainer}>
-              <div className={styles.leftContainer}>
-                <div className={styles.subHeader}>First Name</div>
-                <div className={styles.inputContainer}>
-                  <TextField
-                    disabled={!isEditing}
-                    value={isEditing ? firstName : volunteer?.firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    sx={{ ...grayBorderTextField }}
-                    InputProps={{
-                      readOnly: !isEditing,
-                    }}
-                  />
-                </div>
-                <div className={styles.subHeader}>Last Name</div>
-                <div className={styles.inputContainer}>
-                  <TextField
-                    disabled={!isEditing}
-                    value={isEditing ? lastName : volunteer?.lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    sx={{ ...grayBorderTextField }}
-                    InputProps={{
-                      readOnly: !isEditing,
-                    }}
-                  />
-                </div>
-                <div className={styles.emailSubHeader}>
-                  <div className={styles.subHeader}>
-                    Registered Email
-                    <Tooltip
-                      title="You cannot edit this email. You must create a new account if so."
-                      placement="right-start"
-                      sx={{ marginLeft: "5px" }}
-                      componentsProps={{
-                        tooltip: {
-                          sx: {
-                            ...whiteTooltip,
-                          },
-                        },
+
+            {loading ? (
+              <div className={styles.loadingContainer}>
+                <Loading />
+              </div>
+            ) : (
+              <div className={styles.profileContainer}>
+                <div className={styles.leftContainer}>
+                  <div className={styles.subHeader}>First Name</div>
+                  <div className={styles.inputContainer}>
+                    <TextField
+                      disabled
+                      value={volunteer?.firstName}
+                      sx={grayBorderTextField}
+                      InputProps={{
+                        endAdornment: (
+                          <Tooltip title={"Edit"}>
+                            <IconButton
+                              onClick={() => {
+                                setEditNameType("First");
+                                setEditNamePopup(true);
+                              }}
+                              sx={{ color: "var(--blue-gray)" }}
+                            >
+                              <EditIcon />
+                            </IconButton>
+                          </Tooltip>
+                        ),
                       }}
-                    >
-                      <InfoOutlinedIcon />
-                    </Tooltip>
+                    />
+                  </div>
+
+                  <div className={styles.subHeader}>Last Name</div>
+                  <div className={styles.inputContainer}>
+                    <TextField
+                      disabled
+                      value={volunteer?.lastName}
+                      sx={grayBorderTextField}
+                      InputProps={{
+                        endAdornment: (
+                          <Tooltip title={"Edit"}>
+                            <IconButton
+                              onClick={() => {
+                                setEditNameType("Last");
+                                setEditNamePopup(true);
+                              }}
+                              sx={{ color: "var(--blue-gray)" }}
+                            >
+                              <EditIcon />
+                            </IconButton>
+                          </Tooltip>
+                        ),
+                      }}
+                    />
+                  </div>
+
+                  <div className={styles.subHeader}>Registered Email</div>
+                  <div className={styles.inputContainer}>
+                    <TextField
+                      value={volunteer?.email ?? ""}
+                      disabled
+                      className={styles.emailTextField}
+                      sx={grayBorderTextField}
+                      InputProps={{
+                        endAdornment: (
+                          <Tooltip title={"Edit"}>
+                            <IconButton
+                              onClick={() => {
+                                // TODO: Implement email edit
+                              }}
+                              sx={{ color: "var(--blue-gray)" }}
+                            >
+                              <EditIcon />
+                            </IconButton>
+                          </Tooltip>
+                        ),
+                      }}
+                    />
                   </div>
                 </div>
-                <div className={styles.inputContainer}>
-                  <TextField
-                    value={volunteer?.email ?? ""}
-                    disabled
-                    className={styles.emailTextField}
-                    sx={grayBorderTextField}
-                  />
-                </div>
-
-                <div className={styles.buttonContainer}>
-                  {isEditing ? (
-                    <>
-                      <Button
-                        variant="contained"
-                        sx={{
-                          ...whiteButtonGrayBorder,
-                          width: "120px",
-                        }}
-                        onClick={handleCancelEdit}
-                      >
-                        CANCEL
-                      </Button>
-                      <Button
-                        sx={{
-                          ...forestGreenButton,
-                          width: "120px",
-                          padding: "0",
-                        }}
-                        variant="contained"
-                        onClick={handleUpdateName}
-                      >
-                        Save
-                      </Button>
-                    </>
-                  ) : (
-                    <Button
-                      sx={{ ...forestGreenButton, width: "100px" }}
-                      variant="contained"
-                      onClick={() => {
-                        setIsEditing(true);
-                      }}
-                    >
-                      Edit
-                    </Button>
-                  )}
+                <div className={styles.profileIcon}>
+                  <SettingsProfileIcon />
                 </div>
               </div>
-              <div className={styles.profileIcon}>
-                <SettingsProfileIcon />
-              </div>
-            </div>
+            )}
           </div>
         </div>
+        {/* Edit Popups */}
+        <EditNamePopup
+          open={openEditNamePopup}
+          onClose={setEditNamePopup}
+          editType={editNameType}
+          volunteer={volunteer}
+          setVolunteer={setVolunteer}
+          setSnackbar={setSnackbar}
+          setSnackbarMessage={setSnackbarMessage}
+        />
+
         {/* Snackbar wrapper container */}
         <div className={styles.snackbarContainer}>
           <Snackbar
