@@ -160,7 +160,9 @@ function VolunteerProfilePage() {
                         endAdornment: (
                           <Tooltip title={"Edit"}>
                             <IconButton
-                              onClick={() => {}}
+                              onClick={() => {
+                                // TODO: Implement email edit
+                              }}
                               sx={{ color: "var(--blue-gray)" }}
                             >
                               <EditIcon />
