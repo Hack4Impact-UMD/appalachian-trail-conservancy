@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
 import styles from "./AdminProfilePage.module.css";
+import { useEffect, useState } from "react";
 import Footer from "../../components/Footer/Footer";
+import Loading from "../../components/LoadingScreen/Loading";
 import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar";
 import EditNamePopup from "./EditNamePopup/EditNamePopup";
 import EditCredentialPopup from "./EditCredentialPopup/EditCredentialPopup";
@@ -19,6 +20,8 @@ function AdminProfilePage() {
     !(window.innerWidth < 1200)
   );
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
+
+  const [loading, setLoading] = useState<boolean>(true);
 
   const [admin, setAdmin] = useState<Admin>();
 
@@ -55,6 +58,9 @@ function AdminProfilePage() {
         .catch((e) => {
           //TODO: Handle error
           console.error(e);
+        })
+        .finally(() => {
+          setLoading(false);
         });
     }
   }, [auth.loading, auth.id]);
@@ -97,108 +103,115 @@ function AdminProfilePage() {
             <div className={styles.header}>
               <h1 className={styles.nameHeading}>Profile Page</h1>
             </div>
-            <div className={styles.profileContainer}>
-              <div className={styles.leftContainer}>
-                <div className={styles.subHeader}>First Name</div>
-                <div className={styles.inputContainer}>
-                  <TextField
-                    disabled
-                    value={admin?.firstName}
-                    sx={grayBorderTextField}
-                    InputProps={{
-                      endAdornment: (
-                        <Tooltip title={"Edit"}>
-                          <IconButton
-                            onClick={() => {
-                              setEditNameType("First");
-                              setEditNamePopup(true);
-                            }}
-                            sx={{ color: "var(--blue-gray)" }}
-                          >
-                            <EditIcon />
-                          </IconButton>
-                        </Tooltip>
-                      ),
-                    }}
-                  />
-                </div>
 
-                <div className={styles.subHeader}>Last Name</div>
-                <div className={styles.inputContainer}>
-                  <TextField
-                    disabled
-                    value={admin?.lastName}
-                    sx={grayBorderTextField}
-                    InputProps={{
-                      endAdornment: (
-                        <Tooltip title={"Edit"}>
-                          <IconButton
-                            onClick={() => {
-                              setEditNameType("Last");
-                              setEditNamePopup(true);
-                            }}
-                            sx={{ color: "var(--blue-gray)" }}
-                          >
-                            <EditIcon />
-                          </IconButton>
-                        </Tooltip>
-                      ),
-                    }}
-                  />
-                </div>
+            {loading ? (
+              <div className={styles.loadingContainer}>
+                <Loading />
+              </div>
+            ) : (
+              <div className={styles.profileContainer}>
+                <div className={styles.leftContainer}>
+                  <div className={styles.subHeader}>First Name</div>
+                  <div className={styles.inputContainer}>
+                    <TextField
+                      disabled
+                      value={admin?.firstName}
+                      sx={grayBorderTextField}
+                      InputProps={{
+                        endAdornment: (
+                          <Tooltip title={"Edit"}>
+                            <IconButton
+                              onClick={() => {
+                                setEditNameType("First");
+                                setEditNamePopup(true);
+                              }}
+                              sx={{ color: "var(--blue-gray)" }}
+                            >
+                              <EditIcon />
+                            </IconButton>
+                          </Tooltip>
+                        ),
+                      }}
+                    />
+                  </div>
 
-                <div className={styles.subHeader}>Registered Email</div>
-                <div className={styles.inputContainer}>
-                  <TextField
-                    value={admin?.email ?? ""}
-                    disabled
-                    sx={grayBorderTextField}
-                    InputProps={{
-                      endAdornment: (
-                        <Tooltip title={"Edit"}>
-                          <IconButton
-                            onClick={() => {
-                              setEditCredentialType("Email");
-                              setEditCredentialPopup(true);
-                            }}
-                            sx={{ color: "var(--blue-gray)" }}
-                          >
-                            <EditIcon />
-                          </IconButton>
-                        </Tooltip>
-                      ),
-                    }}
-                  />
-                </div>
+                  <div className={styles.subHeader}>Last Name</div>
+                  <div className={styles.inputContainer}>
+                    <TextField
+                      disabled
+                      value={admin?.lastName}
+                      sx={grayBorderTextField}
+                      InputProps={{
+                        endAdornment: (
+                          <Tooltip title={"Edit"}>
+                            <IconButton
+                              onClick={() => {
+                                setEditNameType("Last");
+                                setEditNamePopup(true);
+                              }}
+                              sx={{ color: "var(--blue-gray)" }}
+                            >
+                              <EditIcon />
+                            </IconButton>
+                          </Tooltip>
+                        ),
+                      }}
+                    />
+                  </div>
 
-                <div className={styles.subHeader}>Password</div>
-                <div className={styles.inputContainer}>
-                  <TextField
-                    value={"•••••••••••"}
-                    disabled
-                    sx={grayBorderTextField}
-                    InputProps={{
-                      endAdornment: (
-                        <Tooltip title={"Edit"}>
-                          <IconButton
-                            onClick={() => {
-                              setEditCredentialType("Password");
-                              setEditCredentialPopup(true);
-                            }}
-                            sx={{ color: "var(--blue-gray)" }}
-                          >
-                            <EditIcon />
-                          </IconButton>
-                        </Tooltip>
-                      ),
-                    }}
-                  />
+                  <div className={styles.subHeader}>Registered Email</div>
+                  <div className={styles.inputContainer}>
+                    <TextField
+                      value={admin?.email ?? ""}
+                      disabled
+                      sx={grayBorderTextField}
+                      InputProps={{
+                        endAdornment: (
+                          <Tooltip title={"Edit"}>
+                            <IconButton
+                              onClick={() => {
+                                setEditCredentialType("Email");
+                                setEditCredentialPopup(true);
+                              }}
+                              sx={{ color: "var(--blue-gray)" }}
+                            >
+                              <EditIcon />
+                            </IconButton>
+                          </Tooltip>
+                        ),
+                      }}
+                    />
+                  </div>
+
+                  <div className={styles.subHeader}>Password</div>
+                  <div className={styles.inputContainer}>
+                    <TextField
+                      value={"•••••••••••"}
+                      disabled
+                      sx={grayBorderTextField}
+                      InputProps={{
+                        endAdornment: (
+                          <Tooltip title={"Edit"}>
+                            <IconButton
+                              onClick={() => {
+                                setEditCredentialType("Password");
+                                setEditCredentialPopup(true);
+                              }}
+                              sx={{ color: "var(--blue-gray)" }}
+                            >
+                              <EditIcon />
+                            </IconButton>
+                          </Tooltip>
+                        ),
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className={styles.profileIcon}>
+                  <SettingsProfileIcon />
                 </div>
               </div>
-              <div className={styles.profileIcon}>
-                <SettingsProfileIcon />
-              </div>
-            </div>
+            )}
           </div>
         </div>
 
