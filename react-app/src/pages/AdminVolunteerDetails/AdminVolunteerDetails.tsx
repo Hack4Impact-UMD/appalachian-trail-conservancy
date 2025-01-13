@@ -1,14 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./AdminVolunteerDetails.module.css";
+import { Button, InputAdornment, OutlinedInput } from "@mui/material";
 import {
-  Button,
-  InputAdornment,
-  OutlinedInput,
-  Typography,
-} from "@mui/material";
-import {
-  User,
-  Volunteer,
   VolunteerID,
   VolunteerPathway,
   VolunteerTraining,
@@ -42,6 +35,7 @@ import {
   getTraining,
   getVolunteer,
 } from "../../backend/FirestoreCalls.ts";
+import { exportTableToCSV } from "../../backend/FirestoreCalls.ts";
 import { TrainingID } from "../../types/TrainingType.ts";
 import { PathwayID } from "../../types/PathwayType.ts";
 import DeleteUserPopup from "./AdminDeleteUserPopup/AdminDeleteUserPopup.tsx";
@@ -61,7 +55,7 @@ function AdminVolunteerDetails() {
   const volunteerId = useParams().id;
   const location = useLocation();
   const [loading, setLoading] = useState<boolean>(true);
-  const [alignment, setAlignment] = useState<string | null>("trainings");
+  const [alignment, setAlignment] = useState<string>("trainings");
   const [searchQuery, setSearchQuery] = useState("");
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
@@ -350,6 +344,35 @@ function AdminVolunteerDetails() {
     setOpenDeleteUserPopup(true);
   };
 
+  const exportTrainingData = () => {
+    const header = columns.map((column) => column.headerName);
+    const rowData = rows.map((row) => {
+      return [
+        row.trainingName,
+        row.dateCompleted,
+        row.timeCompleted,
+        row.quizScore,
+        row.passFailStatus,
+        row.status,
+      ];
+    });
+    exportTableToCSV([header, ...rowData]);
+  };
+
+  const exportPathwayData = () => {
+    const header = pathwayColumns.map((column) => column.headerName);
+    const rowData = pathwayRows.map((row) => {
+      return [
+        row.pathwayName,
+        row.progress,
+        row.dateCompleted,
+        row.trainingsCompleted,
+        row.score,
+      ];
+    });
+    exportTableToCSV([header, ...rowData]);
+  };
+
   return (
     <>
       <div className={openDeleteUserPopup ? styles.popupOpen : ""}>
@@ -528,6 +551,11 @@ function AdminVolunteerDetails() {
                         ...whiteButtonOceanGreenBorder,
                         width: "100px",
                       }}
+                      onClick={
+                        alignment === "trainings"
+                          ? exportTrainingData
+                          : exportPathwayData
+                      }
                     >
                       Export
                     </Button>
