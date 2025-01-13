@@ -27,6 +27,8 @@ function TrainingLandingPage() {
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
   );
+  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
+
   const [pathwayNames, setPathwayNames] = useState<
     { name: string; id: string }[]
   >([]);
@@ -78,6 +80,18 @@ function TrainingLandingPage() {
       console.log("Failed to get pathways");
     }
   };
+
+  // Update screen width on resize
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     if (
@@ -298,7 +312,9 @@ function TrainingLandingPage() {
 
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        style={{
+          left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
+        }}>
         {loading ? (
           <Loading />
         ) : (
@@ -392,7 +408,12 @@ function TrainingLandingPage() {
         {/* footer */}
         <div
           className={styles.footer}
-          style={{ width: navigationBarOpen ? "calc(100% - 250px)" : "100%" }}>
+          style={{
+            width:
+              navigationBarOpen && screenWidth > 1200
+                ? "calc(100% - 250px)"
+                : "100%",
+          }}>
           <div className={styles.footerButtons}>
             <Button
               sx={{ ...whiteButtonGrayBorder }}

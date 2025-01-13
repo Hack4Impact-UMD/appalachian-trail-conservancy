@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../auth/AuthProvider";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   getVolunteer,
   getAllTrainings,
@@ -34,11 +34,13 @@ interface CorrelatedPathway {
 
 function Dashboard() {
   const auth = useAuth();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(true);
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
   );
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   // Update screen width on resize
   useEffect(() => {
@@ -157,7 +159,98 @@ function Dashboard() {
     });
   }
 
+  function displayPathwayItems(
+    itemType: string,
+    pathwayList: CorrelatedPathway[]
+  ): CorrelatedPathway[] {
+    if (screenWidth < 450) {
+      if (itemType === "card") {
+        return pathwayList.slice(0, 1);
+      } else {
+        return pathwayList.slice(0, 2);
+      }
+    } else if (screenWidth > 1500) {
+      if (itemType === "card") {
+        return pathwayList.slice(0, 2);
+      } else {
+        return pathwayList.slice(0, 5);
+      }
+    } else if (screenWidth > 1000) {
+      if (itemType === "card") {
+        return pathwayList.slice(0, 2);
+      } else {
+        return pathwayList.slice(0, 4);
+      }
+    }
+    if (itemType === "card") {
+      return pathwayList.slice(0, 1);
+    } else {
+      return pathwayList.slice(0, 2);
+    }
+  }
+
+  function displayTrainingItems(
+    itemType: string,
+    trainingList: CorrelatedTraining[]
+  ): CorrelatedTraining[] {
+    if (screenWidth < 450) {
+      if (itemType === "card") {
+        return trainingList.slice(0, 1);
+      } else {
+        return trainingList.slice(0, 1);
+      }
+    } else if (screenWidth < 750) {
+      if (itemType === "card") {
+        return trainingList.slice(0, 1);
+      } else {
+        return trainingList.slice(0, 2);
+      }
+    } else if (screenWidth > 1500) {
+      if (itemType === "card") {
+        return trainingList.slice(0, 4);
+      } else {
+        return trainingList.slice(0, 5);
+      }
+    } else if (screenWidth > 1000) {
+      if (itemType === "card") {
+        return trainingList.slice(0, 3);
+      } else {
+        return trainingList.slice(0, 4);
+      }
+    }
+    if (itemType === "card") {
+      return trainingList.slice(0, 2);
+    } else {
+      return trainingList.slice(0, 2);
+    }
+  }
+
+  function displayPathwayCard(pathwayList: PathwayID[]): PathwayID[] {
+    if (screenWidth < 450) {
+      return pathwayList.slice(0, 1);
+    } else if (screenWidth > 1500) {
+      return pathwayList.slice(0, 2);
+    } else if (screenWidth > 1000) {
+      return pathwayList.slice(0, 2);
+    }
+    return pathwayList.slice(0, 1);
+  }
+
+  function displayTrainingCard(trainingList: TrainingID[]): TrainingID[] {
+    if (screenWidth < 450) {
+      return trainingList.slice(0, 1);
+    } else if (screenWidth < 750) {
+      return trainingList.slice(0, 1);
+    } else if (screenWidth > 1500) {
+      return trainingList.slice(0, 4);
+    } else if (screenWidth > 1000) {
+      return trainingList.slice(0, 3);
+    }
+    return trainingList.slice(0, 1);
+  }
+
   useEffect(() => {
+    setLoading(true);
     // only use auth if it is finished loading
     if (!auth.loading && auth.id) {
       // get volunteer info from firebase. will contain volunteer progress on trainings & pathways
@@ -172,6 +265,10 @@ function Dashboard() {
               correlateTrainings(genericTrainings, volunteerTrainings);
             })
             .catch((error) => {
+              setErrorMessage(
+                "Error retrieving trainings. Please try again later."
+              );
+              setLoading(false);
               console.error("Error fetching trainings:", error);
             });
 
@@ -181,6 +278,10 @@ function Dashboard() {
               correlatePathways(genericPathways, volunteerPathways);
             })
             .catch((error) => {
+              setErrorMessage(
+                "Error retrieving pathways. Please try again later."
+              );
+              setLoading(false);
               console.error("Error fetching pathways:", error);
             });
 
@@ -220,6 +321,10 @@ function Dashboard() {
               setRecommendedPathways(recommendedPathways);
             })
             .catch((error) => {
+              setErrorMessage(
+                "Error retrieving recommended trainings and pathways. Please try again later."
+              );
+              setLoading(false);
               console.error(
                 "Error fetching recommended trainings and pathways:",
                 error
@@ -229,6 +334,8 @@ function Dashboard() {
           setLoading(false);
         })
         .catch((error) => {
+          setErrorMessage("Error retrieving data. Please try again later.");
+          setLoading(false);
           console.error("Error fetching volunteer:", error);
         });
     }
@@ -260,8 +367,10 @@ function Dashboard() {
               <ProfileIcon />
             </div>
             {loading ? (
-              <Loading />
-            ) : (
+              <div className={styles.loadingContainer}>
+                <Loading />
+              </div>
+            ) : errorMessage == "" ? (
               <>
                 {/* Conditional rendering for no volunteer trainings and pathways */}
                 {trainingsInProgress.length === 0 &&
@@ -290,15 +399,17 @@ function Dashboard() {
                       </Link>
                     </div>
                     <div className={styles.cardsContainer}>
-                      {pathwaysInProgress.slice(0, 2).map((pathway, index) => (
-                        <div className={styles.card} key={index}>
-                          <PathwayCard
-                            pathway={pathway.genericPathway}
-                            volunteerPathway={pathway.volunteerPathway}
-                            preview={false}
-                          />
-                        </div>
-                      ))}
+                      {displayPathwayItems("card", pathwaysInProgress).map(
+                        (pathway, index) => (
+                          <div className={styles.card} key={index}>
+                            <PathwayCard
+                              pathway={pathway.genericPathway}
+                              volunteerPathway={pathway.volunteerPathway}
+                              preview={false}
+                            />
+                          </div>
+                        )
+                      )}
                     </div>
                   </div>
                 )}
@@ -313,9 +424,8 @@ function Dashboard() {
                       </Link>
                     </div>
                     <div className={styles.cardsContainer}>
-                      {trainingsInProgress
-                        .slice(0, 3)
-                        .map((training, index) => (
+                      {displayTrainingItems("card", trainingsInProgress).map(
+                        (training, index) => (
                           <div className={styles.card} key={index}>
                             <TrainingCard
                               training={training.genericTraining}
@@ -323,7 +433,8 @@ function Dashboard() {
                               preview={false}
                             />
                           </div>
-                        ))}
+                        )
+                      )}
                     </div>
                   </div>
                 )}
@@ -333,20 +444,30 @@ function Dashboard() {
                   <div>
                     <div className={styles.subHeader}>
                       <h2>Recent Badges</h2>
-                      <Link className={styles.viewAllLink} to="/achievements">
+                      <div
+                        className={styles.viewAllLink}
+                        onClick={() => {
+                          navigate(`/achievements`, {
+                            state: {
+                              cardType: "badge",
+                            },
+                          });
+                        }}>
                         VIEW ALL
-                      </Link>
+                      </div>
                     </div>
                     <div className={styles.cardsContainer}>
-                      {pathwaysCompleted.slice(0, 4).map((pathway, index) => (
-                        <div className={styles.card} key={index}>
-                          <Badge
-                            image={pathway.genericPathway.coverImage}
-                            title={pathway.genericPathway.name}
-                            date={pathway.volunteerPathway!.dateCompleted}
-                          />
-                        </div>
-                      ))}
+                      {displayPathwayItems("badge", pathwaysCompleted).map(
+                        (pathway, index) => (
+                          <div className={styles.card} key={index}>
+                            <Badge
+                              image={pathway.genericPathway.coverImage}
+                              title={pathway.genericPathway.name}
+                              date={pathway.volunteerPathway!.dateCompleted}
+                            />
+                          </div>
+                        )
+                      )}
                     </div>
                   </div>
                 )}
@@ -356,12 +477,23 @@ function Dashboard() {
                   <div>
                     <div className={styles.subHeader}>
                       <h2>Recent Certifications</h2>
-                      <Link className={styles.viewAllLink} to="/achievements">
+                      <div
+                        className={styles.viewAllLink}
+                        onClick={() => {
+                          navigate(`/achievements`, {
+                            state: {
+                              cardType: "certification",
+                            },
+                          });
+                        }}>
                         VIEW ALL
-                      </Link>
+                      </div>
                     </div>
                     <div className={styles.cardsContainer}>
-                      {trainingsCompleted.slice(0, 4).map((training, index) => (
+                      {displayTrainingItems(
+                        "certificate",
+                        trainingsCompleted
+                      ).map((training, index) => (
                         <div className={styles.card} key={index}>
                           <Certificate
                             image={training.genericTraining.coverImage}
@@ -385,16 +517,16 @@ function Dashboard() {
                         </Link>
                       </div>
                       <div className={styles.cardsContainer}>
-                        {recommendedTrainings
-                          .slice(0, 3)
-                          .map((training, index) => (
+                        {displayTrainingCard(recommendedTrainings).map(
+                          (training, index) => (
                             <div className={styles.card} key={index}>
                               <TrainingCard
                                 training={training}
                                 preview={false}
                               />
                             </div>
-                          ))}
+                          )
+                        )}
                       </div>
                     </div>
                   )}
@@ -410,17 +542,19 @@ function Dashboard() {
                         </Link>
                       </div>
                       <div className={styles.cardsContainer}>
-                        {recommendedPathways
-                          .slice(0, 2)
-                          .map((pathway, index) => (
+                        {displayPathwayCard(recommendedPathways).map(
+                          (pathway, index) => (
                             <div className={styles.card} key={index}>
                               <PathwayCard pathway={pathway} preview={false} />
                             </div>
-                          ))}
+                          )
+                        )}
                       </div>
                     </div>
                   )}
               </>
+            ) : (
+              <h2 className={styles.errorMessage}>{errorMessage}</h2>
             )}
           </div>
         </div>

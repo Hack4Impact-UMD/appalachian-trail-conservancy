@@ -61,11 +61,6 @@
   width: 200px;
 }
 
-.certificateImg img {
-  width: 100%;
-  height: 100%;
-}
-
 .feedback {
   width: 100%;
   display: flex;

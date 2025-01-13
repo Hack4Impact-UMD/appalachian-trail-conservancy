@@ -24,14 +24,17 @@ import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Certificate from "../../components/CertificateCard/CertificateCard";
 import { useAuth } from "../../auth/AuthProvider";
 import Badge from "../../components/BadgeCard/BadgeCard";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Loading from "../../components/LoadingScreen/Loading";
 
 function AchievementsPage() {
   const auth = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [loading, setLoading] = useState<boolean>(true);
-  const [badgesSelected, setBadgesSelected] = useState<boolean>(true);
+  const [badgesSelected, setBadgesSelected] = useState<boolean>(
+    location.state?.cardType == "certification" ? false : true
+  );
   const [sortMode, setSortMode] = useState<string>("newest");
   const [correlatedTrainings, setCorrelatedTrainings] = useState<
     { genericTraining: TrainingID; volunteerTraining: VolunteerTraining }[]

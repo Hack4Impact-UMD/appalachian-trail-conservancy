@@ -162,7 +162,10 @@ function AdminPathwayLibrary() {
             </div>
             <div>
               <Button
-                sx={forestGreenButtonLarge}
+                sx={{
+                  ...forestGreenButtonLarge,
+                  width: screenWidth < 750 ? "100%" : "auto",
+                }}
                 variant="contained"
                 onClick={() => navigate("/pathways/editor")}>
                 CREATE NEW PATHWAY

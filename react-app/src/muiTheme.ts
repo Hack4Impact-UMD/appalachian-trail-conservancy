@@ -38,6 +38,7 @@ export default theme;
 
 // common styles
 const baseStyles = {
+  whiteSpace: "nowrap",
   borderRadius: "15px",
   boxShadow: "none",
   height: 44,

@@ -17,6 +17,14 @@
   border-radius: 20px;
 }
 
+.invalidLink {
+  color: var(--blue-gray);
+  display: flex;
+  justify-content: center;
+  margin-top: 5rem;
+  text-align: center;
+}
+
 .contentLabel {
   display: flex;
   flex-direction: row;
