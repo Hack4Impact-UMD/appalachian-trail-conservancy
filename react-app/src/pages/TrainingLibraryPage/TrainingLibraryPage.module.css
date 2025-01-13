@@ -90,6 +90,7 @@
   font-weight: bold;
   text-align: center;
   font-size: 1.1rem;
+  color: var(--blue-gray);
 }
 
 /* show dropdown when screen width is below 1200px */

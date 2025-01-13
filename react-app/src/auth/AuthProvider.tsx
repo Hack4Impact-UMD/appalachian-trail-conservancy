@@ -16,10 +16,13 @@ interface Props {
 
 interface AuthContextType {
   user: User;
+  setUser: any;
   token: IdTokenResult;
-  firstName: String;
-  lastName: String;
-  id: String;
+  firstName: string;
+  setFirstName: any;
+  lastName: string;
+  setLastName: any;
+  id: string;
   loading: boolean;
 }
 
@@ -57,14 +60,14 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
           .then((newToken) => {
             setToken(newToken);
             getUserWithAuth(newUser.uid)
-              .then((volunteerData) => {
-                const { id, firstName, lastName } = volunteerData;
+              .then((userData) => {
+                const { id, firstName, lastName } = userData;
                 setID(id);
                 setFirstName(firstName);
                 setLastName(lastName);
               })
               .catch((error) => {
-                // Failed to get Volunteer information
+                // Failed to get User information
                 console.log(error);
               });
           })
@@ -76,7 +79,18 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
 
   return (
     <AuthContext.Provider
-      value={{ user, token, firstName, lastName, id, loading }}>
+      value={{
+        user,
+        setUser,
+        token,
+        firstName,
+        setFirstName,
+        lastName,
+        setLastName,
+        id,
+        loading,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

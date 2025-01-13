@@ -337,6 +337,7 @@ function TrainingLibrary() {
                         <TrainingCard
                           training={training.genericTraining}
                           volunteerTraining={training.volunteerTraining}
+                          preview={false}
                         />
                       </div>
                     ))}

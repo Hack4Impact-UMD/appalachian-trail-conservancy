@@ -16,7 +16,7 @@
 }
 
 .popupOpen {
-  position:absolute;
+  position: absolute;
   z-index: -1;
 }
 
@@ -67,14 +67,12 @@
   align-items: center;
 }
 
-
 .buttonGroup {
   display: flex;
   justify-content: space-between;
   flex-direction: row;
   gap: 10%;
 }
-
 
 .searchBarContainer {
   margin-top: 2rem;
@@ -101,7 +99,7 @@
   margin-top: 0.3rem;
 }
 
-.buttonContainer{
+.buttonContainer {
   display: flex;
   justify-content: space-between;
   padding-top: 2%;

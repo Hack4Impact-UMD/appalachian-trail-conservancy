@@ -20,6 +20,7 @@ function TrainingPage() {
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
   );
+  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
   const [volunteerId, setVolunteerId] = useState("");
   const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
     {
@@ -62,6 +63,18 @@ function TrainingPage() {
     } else {
       navigate("/trainings");
     }
+  }, []);
+
+  // Update screen width on resize
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   const handleContinueButton = async () => {
@@ -116,7 +129,9 @@ function TrainingPage() {
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        style={{
+          left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
+        }}>
         {!navigationBarOpen && (
           <img
             src={hamburger}
@@ -146,7 +161,12 @@ function TrainingPage() {
         {/* footer */}
         <div
           className={styles.footer}
-          style={{ width: navigationBarOpen ? "calc(100% - 250px)" : "100%" }}>
+          style={{
+            width:
+              navigationBarOpen && screenWidth > 1200
+                ? "calc(100% - 250px)"
+                : "100%",
+          }}>
           <div className={styles.footerButtons}>
             <Button
               sx={whiteButtonGrayBorder}

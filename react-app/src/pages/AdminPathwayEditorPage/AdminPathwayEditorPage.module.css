@@ -1,0 +1,266 @@
+.split {
+  height: 100%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  transition: left 0.3s ease; /* Add transition for smooth animation */
+}
+
+.right {
+  right: 0;
+  left: 250px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.popupOpen {
+  position: absolute;
+  z-index: -1;
+}
+
+.hamburger {
+  color: var(--blue-gray);
+  font-size: 1.5rem;
+  margin: 1.5rem;
+  position: absolute;
+  top: 20px;
+  left: 10px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.content {
+  width: 875px;
+  padding-bottom: 3%;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.headerTitle {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nameHeading {
+  color: var(--blue-gray);
+  font-size: 3rem;
+  margin: 0;
+  max-width: 90%;
+  white-space: normal;
+}
+
+.marker {
+  display: inline-block;
+  padding: 9px 18px;
+  border-radius: 20px;
+  font-size: 0.9em;
+  font-weight: bold;
+  text-align: center;
+  background-color: var(--blue-gray);
+  color: white;
+}
+
+.draftMarker {
+  border: 1.5px solid var(--blue-gray);
+  background-color: var(--ocean-green-25);
+  color: var(--blue-gray);
+}
+
+.publishedMarker {
+  border: 1.5px solid var(--blue-gray);
+  background-color: var(--ocean-green-50);
+  color: var(--blue-gray);
+}
+
+.archiveMarker {
+  border: 1.5px solid var(--blue-gray);
+  background-color: var(--ocean-green-75);
+  color: var(--blue-gray);
+}
+
+.formContent {
+  width: 80%;
+}
+
+.topButtonContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.inputBoxHeader {
+  display: flex;
+  justify-content: space-between;
+}
+
+.quillContainer {
+  border: 2px solid var(--blue-gray);
+  border-radius: 10px;
+}
+
+.inputError {
+  border: 2px solid var(--hazard-red);
+  border-radius: 10px;
+}
+
+.uploadSection {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.uploadResourceHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.uploadImageContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.previewSection {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.iconCenter {
+  display: flex;
+  align-items: center;
+  color: var(--blue-gray);
+}
+
+.searchBarNumber {
+  width: 0.5%;
+  margin-left: -3.5%;
+  padding-right: 3%;
+  font-weight: bold;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.leftMargin {
+  margin-left: 0.5rem;
+}
+
+.closeIcon {
+  display: flex;
+  align-items: center;
+  font-size: 2rem;
+  color: var(--blue-gray);
+  cursor: pointer;
+}
+
+.closeIcon:hover {
+  color: red;
+}
+
+.searchBarContainer {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  vertical-align: middle;
+}
+
+.addTrainingContainer {
+  color: var(--blue-gray);
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  cursor: pointer;
+}
+
+.addTrainingContainer:hover {
+  color: var(--forest-green);
+}
+
+.nextButton {
+  margin-top: 1.2rem;
+  margin-bottom: 1rem;
+  display: flex;
+  width: 100%;
+  align-items: left;
+}
+
+@media screen and (min-width: 1500px) {
+  .content {
+    width: 1200px;
+  }
+}
+
+@media screen and (min-width: 1800px) {
+  .content {
+    width: 1400px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .content {
+    width: 600px;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .content {
+    width: 425px;
+  }
+
+  .formContent {
+    width: 100%;
+  }
+
+  .previewSection {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .header {
+    margin-top: 5rem;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .content {
+    width: 300px;
+  }
+
+  .previewSection {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    width: 100%;
+  }
+}

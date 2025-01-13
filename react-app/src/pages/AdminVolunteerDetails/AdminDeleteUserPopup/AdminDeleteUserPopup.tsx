@@ -1,12 +1,11 @@
 import styles from "./AdminDeleteUserPopup.module.css";
-import { Button } from "@mui/material";
+import { useState } from "react";
+import { Button, Snackbar, Alert } from "@mui/material";
 import { IoCloseOutline } from "react-icons/io5";
-import { whiteButtonGrayBorder, forestGreenButton } from "../../../muiTheme";
-import { Link } from "react-router-dom";
+import { whiteButtonGrayBorder, hazardRedButton } from "../../../muiTheme";
 import { useNavigate } from "react-router";
-import { logOut } from "../../../backend/AuthFunctions";
 import Modal from "../../../components/ModalWrapper/Modal";
-import Snackbar from "@mui/material/Snackbar";
+import Loading from "../../../components/LoadingScreen/Loading";
 import { deleteUser } from "../../../backend/FirestoreCalls";
 
 interface modalPropsType {
@@ -21,81 +20,89 @@ const DeleteUserPopup = ({
   volunteerId,
 }: modalPropsType): React.ReactElement => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [canClose, setCanClose] = useState<boolean>(true); // can close modal state
+  const [snackbar, setSnackbar] = useState(false);
 
-  const startLogOut = async () => {
+  const deleteVolunteer = async () => {
     try {
+      setCanClose(false);
+      setLoading(true);
       await deleteUser(volunteerId);
       navigate("/management", {
         state: { fromApp: true, showSnackbar: true }, //use state to pass that it should show snackbar
       });
     } catch (error) {
-      console.error("Error deleting user:", error);
+      setLoading(false);
+      setCanClose(true);
+      setSnackbar(true);
     }
   };
 
   return (
-    <Modal
-      height={250}
-      width={450}
-      open={open}
-      onClose={() => {
-        onClose();
-      }}
-    >
-      <div className={styles.content}>
-        <p className={styles.title}>
-          ARE YOU SURE YOU WANT TO DELETE THIS VOLUNTEER?
-        </p>
-        <p className={styles.text}>This action cannot be undone.</p>
-        <div className={styles.buttons}>
-          <div className={styles.leftButton}>
-            <Button
-              onClick={() => onClose()}
-              variant="contained"
-              sx={{
-                ...whiteButtonGrayBorder,
-                width: "100px",
-                color: "white",
-                backgroundColor: "gray",
-                border: "2px solid gray",
-                "&:hover": {
-                  color: "gray",
-                  border: "2px solid gray",
-                  backgroundColor: "white",
-                },
-              }}
-            >
-              Cancel
-            </Button>
-          </div>
-          <div className={styles.rightButton}>
-            <Link to="/logout">
+    <>
+      <Modal
+        height={250}
+        width={450}
+        open={open}
+        onClose={() => {
+          if (canClose) {
+            onClose();
+          }
+        }}>
+        <div className={styles.content}>
+          <p className={styles.title}>
+            ARE YOU SURE YOU WANT TO DELETE THIS VOLUNTEER?
+          </p>
+          <p className={styles.text}>This action cannot be undone.</p>
+          <div className={styles.buttons}>
+            <div className={styles.leftButton}>
               <Button
-                onClick={() => startLogOut()}
+                onClick={() => onClose()}
                 variant="contained"
+                disabled={loading}
                 sx={{
-                  ...forestGreenButton,
+                  ...whiteButtonGrayBorder,
                   width: "100px",
-                  color: "white",
-                  backgroundColor: "#BF3232",
-                  border: "2px solid #BF3232",
-                  "&:hover": {
-                    color: "#BF3232",
-                    border: "2px solid #BF3232",
-                    backgroundColor: "white",
-                  },
-                }}
-              >
-                Yes
+                }}>
+                CANCEL
               </Button>
-            </Link>
+            </div>
+            <div className={styles.rightButton}>
+              <Button
+                onClick={() => deleteVolunteer()}
+                variant="contained"
+                disabled={loading}
+                sx={{
+                  ...hazardRedButton,
+                  width: "100px",
+                }}>
+                {loading ? <Loading /> : "YES"}
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
-      <div className={styles.closeButton}>
-        <IoCloseOutline onClick={() => onClose()} />
-      </div>
-    </Modal>
+        <div className={styles.closeButton}>
+          <IoCloseOutline
+            onClick={() => {
+              if (canClose) {
+                onClose();
+              }
+            }}
+          />
+        </div>
+      </Modal>
+      <Snackbar
+        open={snackbar}
+        autoHideDuration={6000}
+        onClose={() => setSnackbar(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }} // Position within the right section
+      >
+        <Alert onClose={() => setSnackbar(false)} severity={"error"}>
+          Error deleting volunteer. Please try again.
+        </Alert>
+      </Snackbar>
+    </>
   );
 };
 

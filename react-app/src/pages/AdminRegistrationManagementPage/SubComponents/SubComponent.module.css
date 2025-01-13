@@ -1,0 +1,39 @@
+.loadingContainer {
+  width: 100%;
+  margin-top: 1.5rem;
+}
+
+.emailRegCodeInnerContainer {
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.subHeaderLabel {
+  display: flex;
+  gap: 0.5%;
+  align-items: center;
+  font-weight: bold !important;
+  color: var(--blue-gray) !important;
+  margin-top: 20px !important;
+  margin-bottom: 5px !important;
+}
+
+.buttonCodeContainer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 2%;
+}
+
+.quillEditor {
+  color: var(--blue-gray);
+  border: 2px solid var(--blue-gray);
+  border-radius: 10px;
+}
+
+@media screen and (max-width: 750px) {
+  .emailRegCodeInnerContainer {
+    width: 100%;
+  }
+}

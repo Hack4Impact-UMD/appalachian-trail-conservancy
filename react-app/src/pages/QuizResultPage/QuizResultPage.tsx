@@ -4,6 +4,7 @@ import { forestGreenButton, whiteButtonGrayBorder } from "../../muiTheme";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./QuizResultPage.module.css";
 import QuizResultCard from "./QuizResultCard/QuizResultCard";
+import Certificate from "../../components/CertificateCard/CertificateCard";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import atclogo from "../../assets/atc-primary-logo.png";
@@ -37,6 +38,7 @@ const QuizResultPage = () => {
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
   );
+  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
   const [training, setTraining] = useState<Training>({
     name: "",
     shortBlurb: "",
@@ -76,6 +78,18 @@ const QuizResultPage = () => {
     }
   }, []);
 
+  // Update screen width on resize
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const passed = achievedScore >= (training?.quiz.passingScore ?? 0);
   const scoredFull = achievedScore == training?.quiz.numQuestions;
 
@@ -84,7 +98,9 @@ const QuizResultPage = () => {
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        style={{
+          left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
+        }}>
         {!navigationBarOpen && (
           <img
             src={hamburger}
@@ -106,9 +122,17 @@ const QuizResultPage = () => {
             </div>
 
             <div className={styles.feedback}>
-              <div className={styles.certificateImg}>
-                <img src={atclogo} alt="certificate image" />
-              </div>
+              {passed ? (
+                <div className={styles.certificateImg}>
+                  <Certificate
+                    title={training.name}
+                    image={training.coverImage}
+                    date={volunteerTraining.dateCompleted}
+                  />
+                </div>
+              ) : (
+                <></>
+              )}
               {/* message about score */}
               <div className={styles.feedbackRight}>
                 <div>
@@ -159,7 +183,12 @@ const QuizResultPage = () => {
         {/* footer */}
         <div
           className={styles.footer}
-          style={{ width: navigationBarOpen ? "calc(100% - 250px)" : "100%" }}>
+          style={{
+            width:
+              navigationBarOpen && screenWidth > 1200
+                ? "calc(100% - 250px)"
+                : "100%",
+          }}>
           {/* buttons */}
           <div className={styles.footerButtons}>
             {passed ? (

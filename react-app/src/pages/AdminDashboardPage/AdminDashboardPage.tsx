@@ -10,11 +10,13 @@ import AdminPathwayCard from "../../components/AdminPathwayCard/AdminPathwayCard
 import Loading from "../../components/LoadingScreen/Loading";
 import { TrainingID } from "../../types/TrainingType";
 import { PathwayID } from "../../types/PathwayType";
-import { Button } from "@mui/material";
+import { Button, FormControl, Select, MenuItem } from "@mui/material";
 import {
   forestGreenButtonPadding,
   forestGreenButtonLarge,
   whiteButtonGrayBorder,
+  whiteSelectGrayBorder,
+  selectOptionStyle,
 } from "../../muiTheme";
 import { getAllPathways, getAllTrainings } from "../../backend/FirestoreCalls";
 import hamburger from "../../assets/hamburger.svg";
@@ -26,7 +28,7 @@ function AdminDashboardPage() {
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
   );
-  const [trainingsSelected, setTrainingsSelected] = useState<boolean>(true);
+  const [filterType, setFilterType] = useState("trainings");
   const [trainingDrafts, setTrainingDrafts] = useState<TrainingID[]>([]);
   const [trainingsPublished, setTrainingsPublished] = useState<TrainingID[]>(
     []
@@ -35,8 +37,8 @@ function AdminDashboardPage() {
   const [pathwaysPublished, setPathwaysPublished] = useState<PathwayID[]>([]);
 
   const correlateTrainings = (genericTrainings: TrainingID[]) => {
-    let trainingsDrafts: TrainingID[] = [];
-    let trainingsPublished: TrainingID[] = [];
+    const trainingsDrafts: TrainingID[] = [];
+    const trainingsPublished: TrainingID[] = [];
 
     for (const genericTraining of genericTrainings) {
       if (genericTraining.status == "DRAFT") {
@@ -51,8 +53,8 @@ function AdminDashboardPage() {
   };
 
   const correlatePathways = (genericPathways: PathwayID[]) => {
-    let pathwayDrafts: PathwayID[] = [];
-    let pathwaysPublished: PathwayID[] = [];
+    const pathwayDrafts: PathwayID[] = [];
+    const pathwaysPublished: PathwayID[] = [];
 
     for (const genericPathway of genericPathways) {
       if (genericPathway.status == "DRAFT") {
@@ -66,6 +68,30 @@ function AdminDashboardPage() {
     setPathwaysPublished(pathwaysPublished);
   };
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
+
+  function displayPathwayItems(pathwayList: PathwayID[]): PathwayID[] {
+    if (screenWidth < 450) {
+      return pathwayList.slice(0, 1);
+    } else if (screenWidth > 1500) {
+      return pathwayList.slice(0, 2);
+    } else if (screenWidth > 1000) {
+      return pathwayList.slice(0, 2);
+    }
+    return pathwayList.slice(0, 1);
+  }
+
+  function displayTrainingItems(trainingList: TrainingID[]): TrainingID[] {
+    if (screenWidth < 450) {
+      return trainingList.slice(0, 1);
+    } else if (screenWidth < 750) {
+      return trainingList.slice(0, 1);
+    } else if (screenWidth > 1500) {
+      return trainingList.slice(0, 4);
+    } else if (screenWidth > 1000) {
+      return trainingList.slice(0, 3);
+    }
+    return trainingList.slice(0, 2);
+  }
 
   // Update screen width on resize
   useEffect(() => {
@@ -112,8 +138,7 @@ function AdminDashboardPage() {
         className={`${styles.split} ${styles.right}`}
         style={{
           left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-        }}
-      >
+        }}>
         {!navigationBarOpen && (
           <img
             src={hamburger}
@@ -146,27 +171,43 @@ function AdminDashboardPage() {
             </div>
             <div className={styles.buttonSelect}>
               <Button
-                onClick={() => setTrainingsSelected(true)}
+                onClick={() => setFilterType("trainings")}
                 sx={
-                  trainingsSelected
+                  filterType === "trainings"
                     ? forestGreenButtonPadding
                     : whiteButtonGrayBorder
                 }
-                variant="contained"
-              >
-                TRAINING
+                variant="contained">
+                TRAININGS
               </Button>
               <Button
-                onClick={() => setTrainingsSelected(false)}
+                onClick={() => setFilterType("pathways")}
                 sx={
-                  !trainingsSelected
+                  filterType === "pathways"
                     ? forestGreenButtonPadding
                     : whiteButtonGrayBorder
                 }
-                variant="contained"
-              >
+                variant="contained">
                 PATHWAYS
               </Button>
+            </div>
+            <div className={styles.dropdownContainer}>
+              <FormControl sx={{ width: 300 }}>
+                <Select
+                  className={styles.dropdownMenu}
+                  sx={whiteSelectGrayBorder}
+                  value={filterType}
+                  onChange={(e) => setFilterType(e.target.value)} // Handle the dropdown value directly
+                  displayEmpty
+                  label="Filter">
+                  <MenuItem value="trainings" sx={selectOptionStyle}>
+                    TRAININGS
+                  </MenuItem>
+                  <MenuItem value="pathways" sx={selectOptionStyle}>
+                    PATHWAYS
+                  </MenuItem>
+                </Select>
+              </FormControl>
             </div>
             {loading ? (
               <div className={styles.loadingContainer}>
@@ -175,59 +216,79 @@ function AdminDashboardPage() {
             ) : (
               <>
                 <div className={styles.subHeader}>
-                  <h2>Recent Drafts</h2>
+                  <h2>Current Drafts</h2>
                 </div>
-                {trainingsSelected ? (
+                {filterType === "trainings" ? (
                   <>
-                    {trainingDrafts.length === 0 && (
+                    {trainingDrafts.length === 0 ? (
                       <div className={styles.subHeader}>
                         No drafted trainings
                       </div>
-                    )}
-                    {trainingDrafts.length > 0 && (
+                    ) : (
                       <div className={styles.cardsContainer}>
-                        {trainingDrafts.slice(0, 3).map((training, index) => (
-                          <AdminTrainingCard training={training} key={index} />
-                        ))}
+                        {displayTrainingItems(trainingDrafts).map(
+                          (training, index) => (
+                            <AdminTrainingCard
+                              training={training}
+                              key={index}
+                            />
+                          )
+                        )}
                       </div>
                     )}
                   </>
                 ) : (
                   <>
-                    {pathwayDrafts.length > 0 && (
+                    {pathwayDrafts.length === 0 ? (
+                      <div className={styles.subHeader}>
+                        No drafted pathways
+                      </div>
+                    ) : (
                       <div className={styles.cardsContainer}>
-                        {pathwayDrafts.slice(0, 2).map((pathway, index) => (
-                          <AdminPathwayCard pathway={pathway} key={index} />
-                        ))}
+                        {displayPathwayItems(pathwayDrafts).map(
+                          (pathway, index) => (
+                            <AdminPathwayCard pathway={pathway} key={index} />
+                          )
+                        )}
                       </div>
                     )}
                   </>
                 )}
                 <div className={styles.subHeader}>
-                  <h2>Recent Published</h2>
+                  <h2>Published</h2>
                 </div>
-                {trainingsSelected ? (
+                {filterType === "trainings" ? (
                   <>
-                    {trainingsPublished.length > 0 && (
+                    {trainingsPublished.length === 0 ? (
+                      <div className={styles.subHeader}>
+                        No published trainings
+                      </div>
+                    ) : (
                       <div className={styles.cardsContainer}>
-                        {trainingsPublished
-                          .slice(0, 3)
-                          .map((training, index) => (
+                        {displayTrainingItems(trainingsPublished).map(
+                          (training, index) => (
                             <AdminTrainingCard
                               training={training}
                               key={index}
                             />
-                          ))}
+                          )
+                        )}
                       </div>
                     )}
                   </>
                 ) : (
                   <>
-                    {pathwaysPublished.length > 0 && (
+                    {pathwaysPublished.length === 0 ? (
+                      <div className={styles.subHeader}>
+                        No published pathways
+                      </div>
+                    ) : (
                       <div className={styles.cardsContainer}>
-                        {pathwaysPublished.slice(0, 2).map((pathway, index) => (
-                          <AdminPathwayCard pathway={pathway} key={index} />
-                        ))}
+                        {displayPathwayItems(pathwaysPublished).map(
+                          (pathway, index) => (
+                            <AdminPathwayCard pathway={pathway} key={index} />
+                          )
+                        )}
                       </div>
                     )}
                   </>

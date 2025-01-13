@@ -7,6 +7,8 @@ import {
   FormControl,
   Select,
   MenuItem,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import {
   forestGreenButtonPadding,
@@ -16,7 +18,7 @@ import {
   whiteSelectGrayBorder,
   selectOptionStyle,
 } from "../../muiTheme";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { getAllPathways } from "../../backend/FirestoreCalls";
 import { PathwayID } from "../../types/PathwayType.ts";
 import { useAuth } from "../../auth/AuthProvider.tsx";
@@ -32,7 +34,10 @@ import hamburger from "../../assets/hamburger.svg";
 function AdminPathwayLibrary() {
   const auth = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [loading, setLoading] = useState<boolean>(true);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   const [filterType, setFilterType] = useState("drafts");
   const [searchQuery, setSearchQuery] = useState("");
   const [correlatedPathways, setCorrelatedPathways] = useState<PathwayID[]>([]);
@@ -53,6 +58,19 @@ function AdminPathwayLibrary() {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  // delete & update training snackbar
+  useEffect(() => {
+    if (location.state?.fromDelete && location.state?.showSnackbar) {
+      setSnackbarMessage("Pathway successfully deleted.");
+      setOpenSnackbar(true);
+    }
+
+    if (location.state?.fromUpdate && location.state?.showSnackbar) {
+      setSnackbarMessage("Pathway successfully updated.");
+      setOpenSnackbar(true);
+    }
+  }, [location.state]);
 
   useEffect(() => {
     if (!auth.loading && auth.id) {
@@ -144,7 +162,10 @@ function AdminPathwayLibrary() {
             </div>
             <div>
               <Button
-                sx={forestGreenButtonLarge}
+                sx={{
+                  ...forestGreenButtonLarge,
+                  width: screenWidth < 750 ? "100%" : "auto",
+                }}
                 variant="contained"
                 onClick={() => navigate("/pathways/editor")}>
                 CREATE NEW PATHWAY
@@ -253,6 +274,16 @@ function AdminPathwayLibrary() {
               </>
             )}
           </div>
+          <Snackbar
+            open={openSnackbar}
+            autoHideDuration={6000}
+            onClose={() => setOpenSnackbar(false)}
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }} // Position within the right section
+          >
+            <Alert onClose={() => setOpenSnackbar(false)} severity="success">
+              {snackbarMessage}
+            </Alert>
+          </Snackbar>
         </div>
         <Footer />
       </div>

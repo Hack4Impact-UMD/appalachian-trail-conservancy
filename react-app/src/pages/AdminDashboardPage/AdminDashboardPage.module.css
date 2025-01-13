@@ -79,6 +79,10 @@
   gap: 3%;
 }
 
+.dropdownContainer {
+  display: none;
+}
+
 .loadingContainer {
   width: 100%;
   margin-top: 1.5rem;
@@ -139,6 +143,27 @@
     width: 600px;
   }
 
+  .buttonContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .buttonSelect {
+    display: none;
+  }
+
+  .dropdownContainer {
+    display: flex;
+    width: 600px;
+  }
+
+  .dropdownMenu {
+    width: 600px;
+  }
+
   .cardsContainer {
     justify-content: space-between;
   }
@@ -147,6 +172,34 @@
 @media screen and (max-width: 750px) {
   .content {
     width: 425px;
+  }
+
+  .buttonContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .buttonSelect {
+    display: none;
+  }
+
+  .dropdownContainer {
+    display: flex;
+    width: 425px;
+  }
+
+  .dropdownMenu {
+    width: 425px;
+  }
+
+  .subHeader {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    color: var(--blue-gray);
   }
 
   .cardsContainer {
@@ -162,6 +215,15 @@
 
 @media screen and (max-width: 450px) {
   .content {
+    width: 300px;
+  }
+
+  .dropdownContainer {
+    display: flex;
+    width: 300px;
+  }
+
+  .dropdownMenu {
     width: 300px;
   }
 }

@@ -27,6 +27,11 @@
   cursor: pointer;
 }
 
+.loadingContainer {
+  width: 100%;
+  margin-top: 3rem;
+}
+
 .outerContainer {
   display: flex;
   flex-direction: column;
@@ -36,6 +41,13 @@
 .content {
   width: 875px;
   padding-bottom: 3%;
+}
+
+.errorMessage {
+  color: var(--blue-gray);
+  display: flex;
+  justify-content: center;
+  margin-top: 5rem;
 }
 
 .header {

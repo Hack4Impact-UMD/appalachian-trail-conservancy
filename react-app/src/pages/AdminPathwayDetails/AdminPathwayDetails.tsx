@@ -380,7 +380,6 @@ function AdminPathwayDetails() {
                       ...whiteButtonGrayBorder,
                       paddingLeft: "20px",
                       paddingRight: "20px",
-                      fontWeight: "bold",
                       width: "100px",
                     }}
                     onClick={() => navigate("/management")}

@@ -12,23 +12,26 @@ import PathwayTrainingPopup from "../PathwayTrainingPopup/PathwayTrainingPopup";
 interface PathwayCardProps {
   pathway: PathwayID;
   volunteerPathway?: VolunteerPathway;
+  preview: boolean;
 }
 
 const PathwayCard: React.FC<PathwayCardProps> = ({
   pathway,
   volunteerPathway,
+  preview,
 }) => {
   const [openTrainingPopup, setOpenTrainingPopup] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
   const renderMarker = () => {
-    if (volunteerPathway == undefined) {
+    if (!preview && volunteerPathway == undefined) {
       // Training not started
       return <div className={styles.marker}></div>;
     } else if (
-      volunteerPathway.numTrainingsCompleted ===
-      volunteerPathway.numTotalTrainings
+      preview ||
+      volunteerPathway!.numTrainingsCompleted ===
+        volunteerPathway!.numTotalTrainings
     ) {
       // Training completed
       return (
@@ -41,9 +44,9 @@ const PathwayCard: React.FC<PathwayCardProps> = ({
       return (
         <LinearProgressWithLabel
           value={
-            ((volunteerPathway.numTrainingsCompleted +
-              (volunteerPathway.quizScoreRecieved ? 1 : 0)) /
-              (volunteerPathway.numTotalTrainings + 1)) *
+            ((volunteerPathway!.numTrainingsCompleted +
+              (volunteerPathway!.quizScoreRecieved ? 1 : 0)) /
+              (volunteerPathway!.numTotalTrainings + 1)) *
             100
           }
         />
@@ -55,15 +58,17 @@ const PathwayCard: React.FC<PathwayCardProps> = ({
     <div
       className={styles.pathwayCard}
       onClick={() => {
-        if (volunteerPathway == undefined) {
-          setOpenTrainingPopup(true);
-        } else {
-          navigate(`/pathways/${pathway.id}`, {
-            state: {
-              pathway: pathway,
-              volunteerPathway: volunteerPathway,
-            },
-          });
+        if (!preview) {
+          if (volunteerPathway == undefined) {
+            setOpenTrainingPopup(true);
+          } else {
+            navigate(`/pathways/${pathway.id}`, {
+              state: {
+                pathway: pathway,
+                volunteerPathway: volunteerPathway,
+              },
+            });
+          }
         }
       }}>
       <div className={styles.pathwayImage}>
