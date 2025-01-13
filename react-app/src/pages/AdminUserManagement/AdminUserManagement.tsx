@@ -1,11 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "./AdminUserManagement.module.css";
 import {
-  getVolunteers,
-  getAllTrainings,
-  getAllPathways,
-} from "../../backend/FirestoreCalls";
-import {
   Button,
   InputAdornment,
   OutlinedInput,
@@ -15,9 +10,23 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
-import { VolunteerID } from "../../types/UserType.ts";
-import { TrainingID } from "../../types/TrainingType.ts";
-import { PathwayID } from "../../types/PathwayType.ts";
+import Loading from "../../components/LoadingScreen/Loading.tsx";
+import {
+  getVolunteers,
+  getAllTrainings,
+  getAllPathways,
+} from "../../backend/FirestoreCalls";
+import {
+  managementVolunteerType,
+  managementTrainingType,
+  managementPathwayType,
+  parseVolunteerData,
+  parseTrainingData,
+  parsePathwayData,
+  usersColumns,
+  pathwaysColumns,
+  trainingsColumns,
+} from "./helpers.ts";
 import {
   DataGrid,
   GridRowId,
@@ -46,14 +55,29 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 function AdminUserManagement() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+
   const [alignment, setAlignment] = useState<string | null>("user");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filteredUsers, setFilteredUsers] = useState<VolunteerID[]>([]);
-  const [usersData, setUsersData] = useState<VolunteerID[]>([]);
-  const [filteredTrainings, setFilteredTrainings] = useState<TrainingID[]>([]);
-  const [trainingsData, setTrainingsData] = useState<TrainingID[]>([]);
-  const [filteredPathways, setFilteredPathways] = useState<PathwayID[]>([]);
-  const [pathwaysData, setPathwaysData] = useState<PathwayID[]>([]);
+
+  const [searchQuery, setSearchQuery] = useState<string>("");
+
+  const [filteredUsers, setFilteredUsers] = useState<managementVolunteerType[]>(
+    []
+  );
+  const [usersData, setUsersData] = useState<managementVolunteerType[]>([]);
+
+  const [filteredTrainings, setFilteredTrainings] = useState<
+    managementTrainingType[]
+  >([]);
+  const [trainingsData, setTrainingsData] = useState<managementTrainingType[]>(
+    []
+  );
+
+  const [filteredPathways, setFilteredPathways] = useState<
+    managementPathwayType[]
+  >([]);
+  const [pathwaysData, setPathwaysData] = useState<managementPathwayType[]>([]);
+
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
   );
@@ -70,6 +94,7 @@ function AdminUserManagement() {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
   const handleAlignment = (newAlignment: string | null) => {
     if (newAlignment !== null) {
       setAlignment(newAlignment);
@@ -87,52 +112,35 @@ function AdminUserManagement() {
   };
 
   useEffect(() => {
-    getVolunteers()
-      .then((users) => {
-        setUsersData(users);
-        setFilteredUsers(users); // Initialize filteredUsers with all users from Firestore
-      })
-      .catch((error) => {
-        console.error("Error fetching users:", error);
-      });
-    getAllTrainings()
-      .then((trainings) => {
-        const undraftedTrainings = trainings.filter(
-          (training) => training.status !== "DRAFT"
-        );
-        setTrainingsData(undraftedTrainings);
-        setFilteredTrainings(undraftedTrainings);
-      })
-      .catch((error) => {
-        console.error("Error fetching trainings:", error);
-      });
-    getAllPathways()
-      .then((pathways) => {
-        const undraftedPathways = pathways.filter(
-          (pathawy) => pathawy.status !== "DRAFT"
-        );
-        setPathwaysData(undraftedPathways);
-        setFilteredPathways(undraftedPathways);
-      })
-      .catch((error) => {
-        console.error("Error fetching pathways:", error);
-      });
+    setLoading(true);
+    const fetchInitialData = async () => {
+      try {
+        const users = await getVolunteers();
+        const trainings = await getAllTrainings();
+        const pathways = await getAllPathways();
+
+        // Parse the volunteer data for the data table
+        const parsedUsers = parseVolunteerData(users);
+        setUsersData(parsedUsers);
+        setFilteredUsers(parsedUsers);
+
+        // Filter out draft trainings and pathways
+        const parsedTrainings = parseTrainingData(trainings, users);
+        setTrainingsData(parsedTrainings);
+        setFilteredTrainings(parsedTrainings);
+
+        const parsedPathways = parsePathwayData(pathways, users);
+        setPathwaysData(parsedPathways);
+        setFilteredPathways(parsedPathways);
+      } catch (e) {
+        console.error("Error fetching initial data:", e);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchInitialData();
   }, []);
-
-  const usersColumns = [
-    { field: "firstName", headerName: "First Name", width: 150 },
-    { field: "lastName", headerName: "Last Name", width: 150 },
-    { field: "email", headerName: "Email", width: 200 },
-    { field: "misc", headerName: "Miscellaneous", width: 200 },
-  ];
-
-  const pathwaysColumns = [
-    { field: "name", headerName: "Pathway Name", width: 350 },
-  ];
-
-  const trainingsColumns = [
-    { field: "name", headerName: "Training Name", width: 350 },
-  ];
 
   const filterUsers = () => {
     let filtered = searchQuery
@@ -153,7 +161,8 @@ function AdminUserManagement() {
       <GridColumnMenuContainer
         hideMenu={hideMenu}
         currentColumn={currentColumn}
-        open={open}>
+        open={open}
+      >
         <GridFilterMenuItem onClick={hideMenu} column={currentColumn!} />
         <SortGridMenuItems onClick={hideMenu} column={currentColumn!} />
       </GridColumnMenuContainer>
@@ -189,11 +198,6 @@ function AdminUserManagement() {
       filterPathways();
     }
   }, [alignment]); // Trigger this effect whenever `alignment` changes
-
-  // Debounce the search query to prevent excessive filtering
-  const updateQuery = (e: { target: { value: string } }) => {
-    setSearchQuery(e.target.value);
-  };
 
   const handleSearchChange = (e: { target: { value: string } }) => {
     const value = e.target.value;
@@ -232,8 +236,6 @@ function AdminUserManagement() {
       );
     }
   }, 200); // Debounce interval in milliseconds
-
-  const debouncedOnChange = debounce(updateQuery, 200);
 
   useEffect(() => {
     return () => {
@@ -279,7 +281,8 @@ function AdminUserManagement() {
         style={{
           // Only apply left shift when screen width is greater than 1200px
           left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-        }}>
+        }}
+      >
         {!navigationBarOpen && (
           <img
             src={hamburger}
@@ -295,210 +298,198 @@ function AdminUserManagement() {
               <h1 className={styles.nameHeading}>Data Management Portal</h1>
               <ProfileIcon />
             </div>
-            <div className={styles.buttonGroup}>
-              <CustomToggleButtonGroup
-                value={alignment}
-                exclusive
-                onChange={(event, newAlignment) =>
-                  handleAlignment(newAlignment)
-                }>
-                <PurpleToggleButton value="user">
-                  USER INFORMATION
-                </PurpleToggleButton>
-                <PurpleToggleButton value="training">
-                  TRAINING INFORMATION
-                </PurpleToggleButton>
-                <PurpleToggleButton value="pathways">
-                  PATHWAYS INFORMATION
-                </PurpleToggleButton>
-              </CustomToggleButtonGroup>
-            </div>
-            {/* dropdown container */}
-            <div className={styles.dropdownContainer}>
-              <FormControl sx={{ width: 300 }}>
-                <Select
-                  className={styles.dropdownMenu}
-                  sx={whiteSelectGrayBorder}
-                  value={alignment}
-                  onChange={(e) => handleAlignment(e.target.value)} // Handle the dropdown value directly
-                  displayEmpty
-                  label="Filter">
-                  <MenuItem value="user" sx={selectOptionStyle}>
-                    USER INFORMATION
-                  </MenuItem>
-                  <MenuItem value="training" sx={selectOptionStyle}>
-                    TRAINING INFORMATION
-                  </MenuItem>
-                  <MenuItem value="pathways" sx={selectOptionStyle}>
-                    PATHWAYS
-                  </MenuItem>
-                </Select>
-              </FormControl>
-            </div>
-            {/* Conditional Content Rendering */}
-            <div className={styles.contentSection}>
-              {alignment === "user" && (
-                <>
-                  <div className={styles.searchBarContainer}>
-                    <OutlinedInput
-                      className={styles.searchBar}
-                      sx={grayBorderSearchBar}
-                      placeholder="Search..."
-                      value={searchQuery}
-                      onChange={handleSearchChange}
-                      startAdornment={
-                        <InputAdornment position="start">
-                          <IoIosSearch />
-                        </InputAdornment>
-                      }
-                    />
-                    <Button
-                      sx={{
-                        ...whiteButtonOceanGreenBorder,
-                        paddingLeft: "20px",
-                        paddingRight: "20px",
-                        fontWeight: "bold",
-                      }}>
-                      Export
-                    </Button>
-                  </div>
+            {loading ? (
+              <Loading />
+            ) : (
+              <>
+                <div className={styles.buttonGroup}>
+                  <CustomToggleButtonGroup
+                    value={alignment}
+                    exclusive
+                    onChange={(event, newAlignment) =>
+                      handleAlignment(newAlignment)
+                    }
+                  >
+                    <PurpleToggleButton value="user">
+                      USER INFORMATION
+                    </PurpleToggleButton>
+                    <PurpleToggleButton value="training">
+                      TRAINING INFORMATION
+                    </PurpleToggleButton>
+                    <PurpleToggleButton value="pathways">
+                      PATHWAYS INFORMATION
+                    </PurpleToggleButton>
+                  </CustomToggleButtonGroup>
+                </div>
+                {/* dropdown container */}
+                <div className={styles.dropdownContainer}>
+                  <FormControl sx={{ width: 300 }}>
+                    <Select
+                      className={styles.dropdownMenu}
+                      sx={whiteSelectGrayBorder}
+                      value={alignment}
+                      onChange={(e) => handleAlignment(e.target.value)} // Handle the dropdown value directly
+                      displayEmpty
+                      label="Filter"
+                    >
+                      <MenuItem value="user" sx={selectOptionStyle}>
+                        USER INFORMATION
+                      </MenuItem>
+                      <MenuItem value="training" sx={selectOptionStyle}>
+                        TRAINING INFORMATION
+                      </MenuItem>
+                      <MenuItem value="pathways" sx={selectOptionStyle}>
+                        PATHWAYS
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
+                </div>
+                {/* Conditional Content Rendering */}
+                <div className={styles.contentSection}>
+                  {alignment === "user" && (
+                    <>
+                      <div className={styles.searchBarContainer}>
+                        <OutlinedInput
+                          className={styles.searchBar}
+                          sx={grayBorderSearchBar}
+                          placeholder="Search..."
+                          value={searchQuery}
+                          onChange={handleSearchChange}
+                          startAdornment={
+                            <InputAdornment position="start">
+                              <IoIosSearch />
+                            </InputAdornment>
+                          }
+                        />
+                        <Button sx={whiteButtonOceanGreenBorder}>Export</Button>
+                      </div>
 
-                  <div className={styles.innerGrid}>
-                    <DataGrid
-                      rows={filteredUsers}
-                      columns={usersColumns}
-                      rowHeight={40}
-                      checkboxSelection
-                      pageSize={10}
-                      sx={DataGridStyles}
-                      components={{
-                        ColumnUnsortedIcon: TbArrowsSort,
-                        ColumnMenu: CustomColumnMenu,
-                      }}
-                      onRowClick={(row) => {
-                        navigate(`/management/volunteer/${row.id}`);
-                      }}
-                      getRowId={(row) => row.id} // Use id as the unique ID for each row
-                      selectionModel={selectionModel} // Controlled selection model
-                      onSelectionModelChange={(newSelection) =>
-                        setSelectionModel(newSelection)
-                      }
-                    />
-                  </div>
-                </>
-              )}
-              {alignment === "training" && (
-                <>
-                  <div className={styles.searchBarContainer}>
-                    <OutlinedInput
-                      className={styles.searchBar}
-                      sx={grayBorderSearchBar}
-                      placeholder="Search..."
-                      value={searchQuery}
-                      onChange={handleSearchChange}
-                      startAdornment={
-                        <InputAdornment position="start">
-                          <IoIosSearch />
-                        </InputAdornment>
-                      }
-                    />
-                    <Button
-                      className={styles.export}
-                      sx={{
-                        ...whiteButtonOceanGreenBorder,
-                        paddingLeft: "20px",
-                        paddingRight: "20px",
-                        fontWeight: "bold",
-                      }}>
-                      Export
-                    </Button>
-                  </div>
+                      <div className={styles.innerGrid}>
+                        <DataGrid
+                          rows={filteredUsers}
+                          columns={usersColumns}
+                          rowHeight={40}
+                          checkboxSelection
+                          pageSize={10}
+                          sx={DataGridStyles}
+                          components={{
+                            ColumnUnsortedIcon: TbArrowsSort,
+                            ColumnMenu: CustomColumnMenu,
+                          }}
+                          onRowClick={(row) => {
+                            navigate(`/management/volunteer/${row.id}`);
+                          }}
+                          getRowId={(row) => row.id} // Use id as the unique ID for each row
+                          selectionModel={selectionModel} // Controlled selection model
+                          onSelectionModelChange={(newSelection) =>
+                            setSelectionModel(newSelection)
+                          }
+                        />
+                      </div>
+                    </>
+                  )}
+                  {alignment === "training" && (
+                    <>
+                      <div className={styles.searchBarContainer}>
+                        <OutlinedInput
+                          className={styles.searchBar}
+                          sx={grayBorderSearchBar}
+                          placeholder="Search..."
+                          value={searchQuery}
+                          onChange={handleSearchChange}
+                          startAdornment={
+                            <InputAdornment position="start">
+                              <IoIosSearch />
+                            </InputAdornment>
+                          }
+                        />
+                        <Button
+                          className={styles.export}
+                          sx={whiteButtonOceanGreenBorder}
+                        >
+                          Export
+                        </Button>
+                      </div>
 
-                  <div className={styles.innerGrid}>
-                    <DataGrid
-                      rows={filteredTrainings}
-                      columns={trainingsColumns}
-                      rowHeight={40}
-                      checkboxSelection
-                      pageSize={10}
-                      sx={DataGridStyles}
-                      components={{
-                        ColumnUnsortedIcon: TbArrowsSort,
-                        ColumnMenu: CustomColumnMenu,
-                      }}
-                      onRowClick={(row) => {
-                        navigate(`/management/training/${row.id}`);
-                      }}
-                      selectionModel={selectionModel} // Controlled selection model
-                      onSelectionModelChange={(newSelection) =>
-                        setSelectionModel(newSelection)
-                      }
-                    />
-                  </div>
-                </>
-              )}
-              {alignment === "pathways" && (
-                <>
-                  <div className={styles.searchBarContainer}>
-                    <OutlinedInput
-                      className={styles.searchBar}
-                      sx={grayBorderSearchBar}
-                      placeholder="Search..."
-                      value={searchQuery}
-                      onChange={handleSearchChange}
-                      startAdornment={
-                        <InputAdornment position="start">
-                          <IoIosSearch />
-                        </InputAdornment>
-                      }
-                    />
-                    <Button
-                      sx={{
-                        ...whiteButtonOceanGreenBorder,
-                        paddingLeft: "20px",
-                        paddingRight: "20px",
-                        fontWeight: "bold",
-                      }}>
-                      Export
-                    </Button>
-                  </div>
+                      <div className={styles.innerGrid}>
+                        <DataGrid
+                          rows={filteredTrainings}
+                          columns={trainingsColumns}
+                          rowHeight={40}
+                          checkboxSelection
+                          pageSize={10}
+                          sx={DataGridStyles}
+                          components={{
+                            ColumnUnsortedIcon: TbArrowsSort,
+                            ColumnMenu: CustomColumnMenu,
+                          }}
+                          onRowClick={(row) => {
+                            navigate(`/management/training/${row.id}`);
+                          }}
+                          selectionModel={selectionModel} // Controlled selection model
+                          onSelectionModelChange={(newSelection) =>
+                            setSelectionModel(newSelection)
+                          }
+                        />
+                      </div>
+                    </>
+                  )}
+                  {alignment === "pathways" && (
+                    <>
+                      <div className={styles.searchBarContainer}>
+                        <OutlinedInput
+                          className={styles.searchBar}
+                          sx={grayBorderSearchBar}
+                          placeholder="Search..."
+                          value={searchQuery}
+                          onChange={handleSearchChange}
+                          startAdornment={
+                            <InputAdornment position="start">
+                              <IoIosSearch />
+                            </InputAdornment>
+                          }
+                        />
+                        <Button sx={whiteButtonOceanGreenBorder}>Export</Button>
+                      </div>
 
-                  <div className={styles.innerGrid}>
-                    <DataGrid
-                      rows={filteredPathways}
-                      columns={pathwaysColumns}
-                      rowHeight={40}
-                      checkboxSelection
-                      pageSize={10}
-                      sx={DataGridStyles}
-                      components={{
-                        ColumnUnsortedIcon: TbArrowsSort,
-                        ColumnMenu: CustomColumnMenu,
-                      }}
-                      onRowClick={(row) => {
-                        navigate(`/management/pathway/${row.id}`);
-                      }}
-                      selectionModel={selectionModel} // Controlled selection model
-                      onSelectionModelChange={(newSelection) =>
-                        setSelectionModel(newSelection)
-                      }
-                    />
-                  </div>
-                </>
-              )}
-            </div>
-            <div className={styles.snackbarContainer}>
-              <Snackbar
-                open={openSnackbar}
-                autoHideDuration={6000}
-                onClose={handleCloseSnackbar}
-                anchorOrigin={{ vertical: "bottom", horizontal: "right" }} // Position within the right section
-              >
-                <Alert onClose={handleCloseSnackbar} severity="success">
-                  {"Volunteer successfully deleted."}
-                </Alert>
-              </Snackbar>
-            </div>
+                      <div className={styles.innerGrid}>
+                        <DataGrid
+                          rows={filteredPathways}
+                          columns={pathwaysColumns}
+                          rowHeight={40}
+                          checkboxSelection
+                          pageSize={10}
+                          sx={DataGridStyles}
+                          components={{
+                            ColumnUnsortedIcon: TbArrowsSort,
+                            ColumnMenu: CustomColumnMenu,
+                          }}
+                          onRowClick={(row) => {
+                            navigate(`/management/pathway/${row.id}`);
+                          }}
+                          selectionModel={selectionModel} // Controlled selection model
+                          onSelectionModelChange={(newSelection) =>
+                            setSelectionModel(newSelection)
+                          }
+                        />
+                      </div>
+                    </>
+                  )}
+                </div>
+                <div className={styles.snackbarContainer}>
+                  <Snackbar
+                    open={openSnackbar}
+                    autoHideDuration={6000}
+                    onClose={handleCloseSnackbar}
+                    anchorOrigin={{ vertical: "bottom", horizontal: "right" }} // Position within the right section
+                  >
+                    <Alert onClose={handleCloseSnackbar} severity="success">
+                      Volunteer successfully deleted.
+                    </Alert>
+                  </Snackbar>
+                </div>
+              </>
+            )}
           </div>
         </div>
         <Footer />
