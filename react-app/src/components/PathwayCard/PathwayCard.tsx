@@ -30,8 +30,9 @@ const PathwayCard: React.FC<PathwayCardProps> = ({
       return <div className={styles.marker}></div>;
     } else if (
       preview ||
-      volunteerPathway!.numTrainingsCompleted ===
-        volunteerPathway!.numTotalTrainings
+      (volunteerPathway!.numTrainingsCompleted ===
+        volunteerPathway!.numTotalTrainings &&
+        volunteerPathway!.dateCompleted !== "")
     ) {
       // Training completed
       return (
@@ -45,7 +46,7 @@ const PathwayCard: React.FC<PathwayCardProps> = ({
         <LinearProgressWithLabel
           value={
             ((volunteerPathway!.numTrainingsCompleted +
-              (volunteerPathway!.quizScoreRecieved ? 1 : 0)) /
+              (volunteerPathway!.dateCompleted !== "" ? 1 : 0)) /
               (volunteerPathway!.numTotalTrainings + 1)) *
             100
           }

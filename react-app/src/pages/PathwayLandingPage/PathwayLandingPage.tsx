@@ -9,13 +9,14 @@ import Loading from "../../components/LoadingScreen/Loading.tsx";
 import { useParams, useLocation } from "react-router-dom";
 import { TrainingID } from "../../types/TrainingType";
 import { PathwayID } from "../../types/PathwayType";
+import { VolunteerPathway } from "../../types/UserType.ts";
 import { useAuth } from "../../auth/AuthProvider";
 import {
   getPathway,
   getTraining,
   getVolunteer,
+  addVolunteerPathway,
 } from "../../backend/FirestoreCalls";
-import { VolunteerPathway } from "../../types/UserType.ts";
 
 function PathwayLandingPage() {
   const auth = useAuth();
@@ -26,7 +27,6 @@ function PathwayLandingPage() {
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
   const [divWidth, setDivWidth] = useState<number>(0);
   const [trainings, setTrainings] = useState<TrainingID[]>([]);
-  const [volunteerPathway, setVolunteerPathway] = useState<VolunteerPathway>();
   const [numCompleted, setNumCompleted] = useState<number>(0);
   const [elements, setElements] = useState<any[]>([]);
   const [quizPassed, setQuizPassed] = useState<boolean>(false);
@@ -47,6 +47,15 @@ function PathwayLandingPage() {
     status: "DRAFT",
   });
 
+  const [volunteerPathway, setVolunteerPathway] = useState<VolunteerPathway>({
+    pathwayID: "",
+    progress: "INPROGRESS",
+    dateCompleted: "",
+    trainingsCompleted: [],
+    trainingsInProgress: [],
+    numTrainingsCompleted: 0,
+    numTotalTrainings: pathway.trainingIDs.length,
+  });
   const div = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -155,6 +164,7 @@ function PathwayLandingPage() {
 
               setNumCompleted(newVolunteerPathway.numTrainingsCompleted);
               console.log("New Volunteer Pathway:", newVolunteerPathway);
+              addVolunteerPathway(auth.id.toString(), newVolunteerPathway);
             } else {
               // volunteer has not started pathway
               setNumCompleted(0);
@@ -259,7 +269,11 @@ function PathwayLandingPage() {
         )}
         <div className={styles.pageContainer}>
           <div className={styles.content} ref={div}>
-            <TitleInfo title={pathway.name} description={pathway.description} />
+            <TitleInfo
+              title={pathway.name}
+              description={pathway.description}
+              volunteerPathway={volunteerPathway}
+            />
 
             {/* Pathway Tiles Section */}
             {loading ? (

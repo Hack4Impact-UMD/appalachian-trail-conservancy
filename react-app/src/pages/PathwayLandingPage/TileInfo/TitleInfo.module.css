@@ -43,6 +43,36 @@
   color: var(--blue-gray);
 }
 
+.progressContainer {
+  display: flex;
+  justify-content: flex-start;
+  gap: 2%;
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.marker {
+  display: inline-block;
+  padding: 6px 15px;
+  border-radius: 20px;
+  font-size: 0.9em;
+  font-weight: bold;
+  text-align: center;
+  margin: -8px 0 -5px 0;
+}
+
+.pathwayMarker {
+  border: 1.5px solid var(--blue-purple);
+  background-color: var(--blue-purple);
+  color: var(--blue-gray);
+}
+
+.progressMarker {
+  border: 1.5px solid var(--blue-gray);
+  background-color: white;
+  color: var(--blue-gray);
+}
+
 .blurb {
   margin: 2% 0 2% 0;
 }
