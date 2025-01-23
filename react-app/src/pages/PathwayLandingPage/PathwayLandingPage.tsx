@@ -29,6 +29,7 @@ function PathwayLandingPage() {
   const [volunteerPathway, setVolunteerPathway] = useState<VolunteerPathway>();
   const [numCompleted, setNumCompleted] = useState<number>(0);
   const [elements, setElements] = useState<any[]>([]);
+  const [quizPassed, setQuizPassed] = useState<boolean>(false);
 
   const [pathway, setPathway] = useState<PathwayID>({
     name: "",
@@ -96,6 +97,9 @@ function PathwayLandingPage() {
             const numTrainings = volunteerPathway[0].numTrainingsCompleted;
             setVolunteerPathway(volunteerPathway[0]);
             setNumCompleted(numTrainings);
+            if (volunteerPathway[0].dateCompleted !== "") {
+              setQuizPassed(true);
+            }
           } else {
             // pathway is not in the volunteer's pathway list (i.e. not started)
             const trainingList = volunteer.trainingInformation;
@@ -205,7 +209,8 @@ function PathwayLandingPage() {
                 trainingID={j < trainings.length ? trainings[j] : undefined}
                 width={divWidth}
                 numTrainings={trainings.length}
-                trainingsCompleted={numCompleted} // Filler for now
+                trainingsCompleted={numCompleted}
+                quizPassed={quizPassed}
               />
             </div>
           );
@@ -221,7 +226,8 @@ function PathwayLandingPage() {
                 trainingID={j < trainings.length ? trainings[j] : undefined}
                 width={divWidth}
                 numTrainings={trainings.length}
-                trainingsCompleted={numCompleted} // Filler for now
+                trainingsCompleted={numCompleted}
+                quizPassed={quizPassed}
               />
             </div>
           );
