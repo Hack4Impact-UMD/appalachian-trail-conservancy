@@ -55,6 +55,11 @@
   cursor: pointer;
 }
 
+.loadingContainer {
+  width: 100%;
+  margin-top: 5rem;
+}
+
 .pathwayTiles {
   display: flex;
   flex-wrap: wrap;

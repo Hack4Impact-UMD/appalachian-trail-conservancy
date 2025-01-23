@@ -5,6 +5,7 @@ import TitleInfo from "./TileInfo/TitleInfo";
 import styles from "./PathwayLandingPage.module.css";
 import hamburger from "../../assets/hamburger.svg";
 import Footer from "../../components/Footer/Footer";
+import Loading from "../../components/LoadingScreen/Loading.tsx";
 import { useParams, useLocation } from "react-router-dom";
 import { TrainingID } from "../../types/TrainingType";
 import { PathwayID } from "../../types/PathwayType";
@@ -19,6 +20,7 @@ function PathwayLandingPage() {
   const auth = useAuth();
   const pathwayId = useParams().id;
   const location = useLocation();
+  const [loading, setLoading] = useState<boolean>(true);
   const [open, setOpen] = useState(!(window.innerWidth < 1200));
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
   const [divWidth, setDivWidth] = useState<number>(0);
@@ -45,6 +47,7 @@ function PathwayLandingPage() {
   const div = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    setLoading(true);
     const getPathwayInfo = async () => {
       // get pathway if not coming from in app
       if (pathwayId !== undefined && !location.state?.pathway) {
@@ -58,6 +61,7 @@ function PathwayLandingPage() {
             })
             .catch(() => {
               console.log("Failed to get pathway");
+              setLoading(false);
             });
         }
       } else {
@@ -92,7 +96,9 @@ function PathwayLandingPage() {
           }
         } catch (error) {
           console.error("Error fetching volunteer data:", error);
+          setLoading(false);
         }
+        setLoading(false);
       }
     };
 
@@ -125,7 +131,7 @@ function PathwayLandingPage() {
         ? 0
         : Math.ceil((trainings.length + 1) / imagesPerRow);
     let count = 0;
-    let newElts = [];
+    const newElts = [];
 
     for (let i = 0; i < height; i++) {
       if (i % 2 == 0) {
@@ -188,7 +194,13 @@ function PathwayLandingPage() {
             <TitleInfo title={pathway.name} description={pathway.description} />
 
             {/* Pathway Tiles Section */}
-            <div className={styles.pathwayTiles}>{elements}</div>
+            {loading ? (
+              <div className={styles.loadingContainer}>
+                <Loading />
+              </div>
+            ) : (
+              <div className={styles.pathwayTiles}>{elements}</div>
+            )}
           </div>
         </div>
         <Footer />
