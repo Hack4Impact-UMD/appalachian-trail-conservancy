@@ -712,7 +712,7 @@ export function exportTableToCSV(data: any[]): void {
     return;
   }
 
-  const headers = Object.keys(data[0]);
+  const headers: string[] = Object.keys(data[0]);
 
   // Create CSV content
   const csvRows = [
@@ -723,13 +723,15 @@ export function exportTableToCSV(data: any[]): void {
           const value = row[header];
           return typeof value === "string"
             ? `"${value.replace(/"/g, '""')}"`
+            : value === null || value === undefined
+            ? ""
             : value;
         })
         .join(",")
     ),
   ];
 
-  const csvContent = csvRows.join("\n");
+  const csvContent = csvRows.slice(1).join("\n");
 
   const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);

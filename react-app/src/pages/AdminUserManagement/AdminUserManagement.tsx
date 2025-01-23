@@ -26,6 +26,9 @@ import {
   usersColumns,
   pathwaysColumns,
   trainingsColumns,
+  exportVolunteerData,
+  exportTrainingData,
+  exportPathwayData,
 } from "./helpers.ts";
 import {
   DataGrid,
@@ -258,16 +261,110 @@ function AdminUserManagement() {
     setSelectionModel([]);
   }, [alignment]);
 
-  //Delete user snackbar
+  // Delete user snackbar
   const location = useLocation();
-  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
   useEffect(() => {
     if (location.state?.showSnackbar) {
       setOpenSnackbar(true);
     }
   }, [location.state]);
+
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
+    setOpenSelectSnackbar(false);
+  };
+
+  const [openSelectSnackbar, setOpenSelectSnackbar] = useState<boolean>(false);
+  const exportData = () => {
+    // Reset the snackbar
+    setOpenSelectSnackbar(false);
+
+    // Check if any row is selected
+    if (selectionModel.length === 0) {
+      setOpenSelectSnackbar(true);
+      return;
+    }
+
+    if (alignment === "user") {
+      exportVolunteerData(selectionModel, filteredUsers);
+    } else if (alignment === "training") {
+      exportTrainingData(selectionModel, filteredTrainings);
+    } else {
+      exportPathwayData(selectionModel, filteredPathways);
+    }
+  };
+
+  // Conditional rendering of the table based on the active tab
+  const table = () => {
+    if (alignment === "user") {
+      return (
+        <DataGrid
+          rows={filteredUsers}
+          columns={usersColumns}
+          rowHeight={40}
+          checkboxSelection
+          pageSize={10}
+          sx={DataGridStyles}
+          components={{
+            ColumnUnsortedIcon: TbArrowsSort,
+            ColumnMenu: CustomColumnMenu,
+          }}
+          onRowClick={(row) => {
+            navigate(`/management/volunteer/${row.id}`);
+          }}
+          getRowId={(row) => row.id} // Use id as the unique ID for each row
+          selectionModel={selectionModel} // Controlled selection model
+          onSelectionModelChange={(newSelection) =>
+            setSelectionModel(newSelection)
+          }
+        />
+      );
+    } else if (alignment === "training") {
+      return (
+        <DataGrid
+          rows={filteredTrainings}
+          columns={trainingsColumns}
+          rowHeight={40}
+          checkboxSelection
+          pageSize={10}
+          sx={DataGridStyles}
+          components={{
+            ColumnUnsortedIcon: TbArrowsSort,
+            ColumnMenu: CustomColumnMenu,
+          }}
+          onRowClick={(row) => {
+            navigate(`/management/training/${row.id}`);
+          }}
+          selectionModel={selectionModel} // Controlled selection model
+          onSelectionModelChange={(newSelection) =>
+            setSelectionModel(newSelection)
+          }
+        />
+      );
+    } else {
+      return (
+        <DataGrid
+          rows={filteredPathways}
+          columns={pathwaysColumns}
+          rowHeight={40}
+          checkboxSelection
+          pageSize={10}
+          sx={DataGridStyles}
+          components={{
+            ColumnUnsortedIcon: TbArrowsSort,
+            ColumnMenu: CustomColumnMenu,
+          }}
+          onRowClick={(row) => {
+            navigate(`/management/pathway/${row.id}`);
+          }}
+          selectionModel={selectionModel} // Controlled selection model
+          onSelectionModelChange={(newSelection) =>
+            setSelectionModel(newSelection)
+          }
+        />
+      );
+    }
   };
 
   return (
@@ -346,137 +443,44 @@ function AdminUserManagement() {
                 </div>
                 {/* Conditional Content Rendering */}
                 <div className={styles.contentSection}>
-                  {alignment === "user" && (
-                    <>
-                      <div className={styles.searchBarContainer}>
-                        <OutlinedInput
-                          className={styles.searchBar}
-                          sx={grayBorderSearchBar}
-                          placeholder="Search..."
-                          value={searchQuery}
-                          onChange={handleSearchChange}
-                          startAdornment={
-                            <InputAdornment position="start">
-                              <IoIosSearch />
-                            </InputAdornment>
-                          }
-                        />
-                        <Button sx={whiteButtonOceanGreenBorder}>Export</Button>
-                      </div>
+                  <div className={styles.searchBarContainer}>
+                    <OutlinedInput
+                      className={styles.searchBar}
+                      sx={grayBorderSearchBar}
+                      placeholder="Search..."
+                      value={searchQuery}
+                      onChange={handleSearchChange}
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <IoIosSearch />
+                        </InputAdornment>
+                      }
+                    />
+                    <Button
+                      className={styles.export}
+                      sx={whiteButtonOceanGreenBorder}
+                      onClick={exportData}
+                    >
+                      Export
+                    </Button>
+                  </div>
 
-                      <div className={styles.innerGrid}>
-                        <DataGrid
-                          rows={filteredUsers}
-                          columns={usersColumns}
-                          rowHeight={40}
-                          checkboxSelection
-                          pageSize={10}
-                          sx={DataGridStyles}
-                          components={{
-                            ColumnUnsortedIcon: TbArrowsSort,
-                            ColumnMenu: CustomColumnMenu,
-                          }}
-                          onRowClick={(row) => {
-                            navigate(`/management/volunteer/${row.id}`);
-                          }}
-                          getRowId={(row) => row.id} // Use id as the unique ID for each row
-                          selectionModel={selectionModel} // Controlled selection model
-                          onSelectionModelChange={(newSelection) =>
-                            setSelectionModel(newSelection)
-                          }
-                        />
-                      </div>
-                    </>
-                  )}
-                  {alignment === "training" && (
-                    <>
-                      <div className={styles.searchBarContainer}>
-                        <OutlinedInput
-                          className={styles.searchBar}
-                          sx={grayBorderSearchBar}
-                          placeholder="Search..."
-                          value={searchQuery}
-                          onChange={handleSearchChange}
-                          startAdornment={
-                            <InputAdornment position="start">
-                              <IoIosSearch />
-                            </InputAdornment>
-                          }
-                        />
-                        <Button
-                          className={styles.export}
-                          sx={whiteButtonOceanGreenBorder}
-                        >
-                          Export
-                        </Button>
-                      </div>
-
-                      <div className={styles.innerGrid}>
-                        <DataGrid
-                          rows={filteredTrainings}
-                          columns={trainingsColumns}
-                          rowHeight={40}
-                          checkboxSelection
-                          pageSize={10}
-                          sx={DataGridStyles}
-                          components={{
-                            ColumnUnsortedIcon: TbArrowsSort,
-                            ColumnMenu: CustomColumnMenu,
-                          }}
-                          onRowClick={(row) => {
-                            navigate(`/management/training/${row.id}`);
-                          }}
-                          selectionModel={selectionModel} // Controlled selection model
-                          onSelectionModelChange={(newSelection) =>
-                            setSelectionModel(newSelection)
-                          }
-                        />
-                      </div>
-                    </>
-                  )}
-                  {alignment === "pathways" && (
-                    <>
-                      <div className={styles.searchBarContainer}>
-                        <OutlinedInput
-                          className={styles.searchBar}
-                          sx={grayBorderSearchBar}
-                          placeholder="Search..."
-                          value={searchQuery}
-                          onChange={handleSearchChange}
-                          startAdornment={
-                            <InputAdornment position="start">
-                              <IoIosSearch />
-                            </InputAdornment>
-                          }
-                        />
-                        <Button sx={whiteButtonOceanGreenBorder}>Export</Button>
-                      </div>
-
-                      <div className={styles.innerGrid}>
-                        <DataGrid
-                          rows={filteredPathways}
-                          columns={pathwaysColumns}
-                          rowHeight={40}
-                          checkboxSelection
-                          pageSize={10}
-                          sx={DataGridStyles}
-                          components={{
-                            ColumnUnsortedIcon: TbArrowsSort,
-                            ColumnMenu: CustomColumnMenu,
-                          }}
-                          onRowClick={(row) => {
-                            navigate(`/management/pathway/${row.id}`);
-                          }}
-                          selectionModel={selectionModel} // Controlled selection model
-                          onSelectionModelChange={(newSelection) =>
-                            setSelectionModel(newSelection)
-                          }
-                        />
-                      </div>
-                    </>
-                  )}
+                  <div className={styles.innerGrid}>{table()}</div>
                 </div>
                 <div className={styles.snackbarContainer}>
+                  {/* No row selected alert */}
+                  <Snackbar
+                    open={openSelectSnackbar}
+                    autoHideDuration={6000}
+                    onClose={handleCloseSnackbar}
+                    anchorOrigin={{ vertical: "bottom", horizontal: "right" }} // Position within the right section
+                  >
+                    <Alert onClose={handleCloseSnackbar} severity="warning">
+                      Please select which rows to export.
+                    </Alert>
+                  </Snackbar>
+
+                  {/* Delete volunteer alert */}
                   <Snackbar
                     open={openSnackbar}
                     autoHideDuration={6000}

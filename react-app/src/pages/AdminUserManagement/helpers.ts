@@ -1,8 +1,9 @@
-import { average } from "firebase/firestore";
 import { PathwayID } from "../../types/PathwayType";
 import { TrainingID } from "../../types/TrainingType";
 import { VolunteerID } from "../../types/UserType";
 import { VolunteerTraining, VolunteerPathway } from "../../types/UserType";
+import { exportTableToCSV } from "../../backend/FirestoreCalls";
+import { GridRowId } from "@mui/x-data-grid";
 import { DateTime } from "luxon";
 
 // Types for the data tables
@@ -17,13 +18,13 @@ export interface managementVolunteerType extends VolunteerID {
 export interface managementTrainingType extends TrainingID {
   numCompletions: number;
   numInProgress: number;
-  averageScore: number;
+  averageScore: number | string;
 }
 
 export interface managementPathwayType extends PathwayID {
   numCompletions: number;
   numInProgress: number;
-  averageScore: number;
+  averageScore: number | string;
 }
 
 // Columns for the data table
@@ -76,7 +77,7 @@ export const trainingsColumns = [
   },
   {
     field: "averageScore",
-    headerName: "Average Score",
+    headerName: "Average Score(%)",
     width: 200,
   },
 ];
@@ -85,7 +86,7 @@ export const pathwaysColumns = [
   { field: "name", headerName: "Pathway Name", width: 350 },
   { field: "numCompletions", headerName: "Completions", width: 200 },
   { field: "numInProgress", headerName: "In Progress", width: 200 },
-  { field: "averageScore", headerName: "Average Score", width: 200 },
+  { field: "averageScore", headerName: "Average Score(%)", width: 200 },
 ];
 
 function getMostRecentCompletion(
@@ -161,27 +162,15 @@ export function parseTrainingData(
 
   // Count the number of completions and in progress trainings
   volunteers.forEach((volunteer) => {
-    volunteer.trainingInformation.forEach((training) => {
-      const trainingData = trainingMap.get(training.trainingID);
+    volunteer.trainingInformation.forEach((volunteerTraining) => {
+      const trainingData = trainingMap.get(volunteerTraining.trainingID);
       if (trainingData) {
-        if (training.progress === "COMPLETED") {
+        if (volunteerTraining.progress === "COMPLETED") {
           trainingData.numCompletions += 1;
+          trainingData.averageScore += volunteerTraining.quizScoreRecieved ?? 0;
         } else {
           trainingData.numInProgress += 1;
         }
-      }
-    });
-  });
-
-  // Calculate the average score for each training
-  volunteers.forEach((volunteer) => {
-    volunteer.trainingInformation.forEach((training) => {
-      const trainingData = trainingMap.get(training.trainingID);
-      if (trainingData && training.progress === "COMPLETED") {
-        trainingData.averageScore =
-          (trainingData.averageScore * (trainingData.numCompletions - 1) +
-            (training.quizScoreRecieved ?? 0)) /
-          trainingData.numCompletions;
       }
     });
   });
@@ -194,7 +183,17 @@ export function parseTrainingData(
         ...training,
         numCompletions: trainingData.numCompletions,
         numInProgress: trainingData.numInProgress,
-        averageScore: trainingData.averageScore,
+        averageScore:
+          trainingData.numCompletions === 0
+            ? "NA"
+            : Number(
+                (
+                  (trainingData.averageScore /
+                    (trainingData.numCompletions *
+                      training.quiz.questions.length)) *
+                  100
+                ).toFixed(2)
+              ),
       });
     }
   });
@@ -230,27 +229,15 @@ export function parsePathwayData(
 
   // Count the number of completions and in progress pathways
   volunteers.forEach((volunteer) => {
-    volunteer.pathwayInformation.forEach((pathway) => {
-      const pathwayData = pathwayMap.get(pathway.pathwayID);
+    volunteer.pathwayInformation.forEach((volunteerPathway) => {
+      const pathwayData = pathwayMap.get(volunteerPathway.pathwayID);
       if (pathwayData) {
-        if (pathway.progress === "COMPLETED") {
+        if (volunteerPathway.progress === "COMPLETED") {
           pathwayData.numCompletions += 1;
+          pathwayData.averageScore += volunteerPathway.quizScoreRecieved ?? 0;
         } else {
           pathwayData.numInProgress += 1;
         }
-      }
-    });
-  });
-
-  // Calculate the average score for each pathway
-  volunteers.forEach((volunteer) => {
-    volunteer.pathwayInformation.forEach((pathway) => {
-      const pathwayData = pathwayMap.get(pathway.pathwayID);
-      if (pathwayData && pathway.progress === "COMPLETED") {
-        pathwayData.averageScore =
-          (pathwayData.averageScore * (pathwayData.numCompletions - 1) +
-            (pathway.quizScoreRecieved ?? 0)) /
-          pathwayData.numCompletions;
       }
     });
   });
@@ -263,10 +250,90 @@ export function parsePathwayData(
         ...pathway,
         numCompletions: pathwayData.numCompletions,
         numInProgress: pathwayData.numInProgress,
-        averageScore: pathwayData.averageScore,
+        averageScore:
+          pathwayData.numCompletions === 0
+            ? "NA"
+            : Number(
+                (
+                  (pathwayData.averageScore /
+                    (pathwayData.numCompletions *
+                      pathway.quiz.questions.length)) *
+                  100
+                ).toFixed(2)
+              ),
       });
     }
   });
 
   return res;
+}
+
+export function exportVolunteerData(
+  selectedRows: GridRowId[],
+  volunteerData: managementVolunteerType[]
+): void {
+  const header = usersColumns.map((column) => column.headerName);
+
+  //Filter volunteer data based on selected rows
+  const rowData = selectedRows.map((row) => {
+    const volunteer = volunteerData.find((volunteer) => volunteer.id === row);
+    if (volunteer) {
+      return [
+        volunteer.firstName,
+        volunteer.lastName,
+        volunteer.email,
+        volunteer.numEnrolledTrainings,
+        volunteer.numCompletedTrainings,
+        volunteer.numEnrolledPathways,
+        volunteer.numCompletedPathways,
+        volunteer.mostRecentCompletion,
+      ];
+    }
+  });
+
+  exportTableToCSV([header, ...rowData]);
+}
+
+export function exportTrainingData(
+  selectedRows: GridRowId[],
+  trainings: managementTrainingType[]
+): void {
+  const header = trainingsColumns.map((column) => column.headerName);
+
+  //Filter training data based on selected rows
+  const rowData = selectedRows.map((row) => {
+    const training = trainings.find((training) => training.id === row);
+    if (training) {
+      return [
+        training.name,
+        training.numCompletions,
+        training.numInProgress,
+        training.averageScore,
+      ];
+    }
+  });
+
+  exportTableToCSV([header, ...rowData]);
+}
+
+export function exportPathwayData(
+  selectedRows: GridRowId[],
+  pathwayData: managementPathwayType[]
+): void {
+  const header = pathwaysColumns.map((column) => column.headerName);
+
+  //Filter pathway data based on selected rows
+  const rowData = selectedRows.map((row) => {
+    const pathway = pathwayData.find((pathway) => pathway.id === row);
+    if (pathway) {
+      return [
+        pathway.name,
+        pathway.numCompletions,
+        pathway.numInProgress,
+        pathway.averageScore,
+      ];
+    }
+  });
+
+  exportTableToCSV([header, ...rowData]);
 }
