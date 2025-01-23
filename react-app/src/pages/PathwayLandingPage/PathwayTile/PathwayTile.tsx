@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./PathwayTile.module.css";
 import emptyIcon from "../../../assets/PathwayTiles/Empty.svg";
 import downEndIcon from "../../../assets/PathwayTiles/DownEnd.svg";
@@ -31,6 +31,9 @@ import leftDownInter from "../../../assets/PathwayTiles/IntermediateTiles/LeftDo
 import rightDownInter from "../../../assets/PathwayTiles/IntermediateTiles/RightDownInter.svg";
 import verticalInter from "../../../assets/PathwayTiles/IntermediateTiles/VerticalInter.svg";
 import { TrainingID } from "../../../types/TrainingType";
+import { useAuth } from "../../../auth/AuthProvider.tsx";
+import { getVolunteer } from "../../../backend/FirestoreCalls";
+import { VolunteerTraining } from "../../../types/UserType";
 
 interface PathwayTileProps {
   tileNum: number; // index of the tile
@@ -39,6 +42,7 @@ interface PathwayTileProps {
   numTrainings: number; // total number of trainings in this pathway
   trainingsCompleted: number;
   quizPassed: boolean;
+  volunteerTrainings: string[];
 }
 
 // imagesPerRow: the total number of images per row, used to identify which direction
@@ -193,9 +197,13 @@ const PathwayTile: React.FC<PathwayTileProps> = ({
   numTrainings,
   trainingsCompleted,
   quizPassed,
+  volunteerTrainings,
 }) => {
   const [openTrainingPopup, setOpenTrainingPopup] = useState<boolean>(false);
+  const [volunteerTrainingRecord, setVolunteerTrainingRecord] =
+    useState<VolunteerTraining>();
   const imgWidth = 300;
+  const auth = useAuth();
 
   const imagesPerRow = Math.floor(width / imgWidth);
   const image = getImage(
@@ -205,6 +213,25 @@ const PathwayTile: React.FC<PathwayTileProps> = ({
     trainingsCompleted,
     quizPassed
   );
+
+  useEffect(() => {
+    if (trainingID && volunteerTrainings.includes(trainingID.id)) {
+      getVolunteer(auth.id.toString())
+        .then((volunteer) => {
+          const volunteerTraining = volunteer.trainingInformation;
+
+          if (volunteerTraining) {
+            const training = volunteerTraining.find(
+              (training) => training.trainingID === trainingID.id
+            );
+            setVolunteerTrainingRecord(training);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching volunteer:", error);
+        });
+    }
+  }, [volunteerTrainings, auth.id, trainingID]);
 
   return (
     <>
@@ -221,12 +248,22 @@ const PathwayTile: React.FC<PathwayTileProps> = ({
         </div>
       </div>
       {trainingID ? (
-        <PathwayTrainingPopup
-          open={openTrainingPopup}
-          onClose={setOpenTrainingPopup}
-          record={trainingID}
-          mode={"training"}
-        />
+        volunteerTrainingRecord ? (
+          <PathwayTrainingPopup
+            open={openTrainingPopup}
+            onClose={setOpenTrainingPopup}
+            record={trainingID}
+            volunteerRecord={volunteerTrainingRecord}
+            mode={"training"}
+          />
+        ) : (
+          <PathwayTrainingPopup
+            open={openTrainingPopup}
+            onClose={setOpenTrainingPopup}
+            record={trainingID}
+            mode={"training"}
+          />
+        )
       ) : (
         <></>
       )}
