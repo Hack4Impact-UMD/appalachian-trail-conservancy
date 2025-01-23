@@ -18,6 +18,7 @@ function PathwayQuizLandingPage() {
     progress: "INPROGRESS",
     dateCompleted: "0000-00-00",
     trainingsCompleted: [],
+    trainingsInProgress: [],
     numTrainingsCompleted: 0,
     numTotalTrainings: 0,
   });

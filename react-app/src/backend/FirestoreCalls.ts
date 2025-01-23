@@ -685,6 +685,7 @@ export function addVolunteerPathway(
               progress: "INPROGRESS", // Assuming initial progress is "INPROGRESS"
               dateCompleted: "", // Initialize with empty string
               trainingsCompleted: [], // Initialize with empty array
+              trainingsInProgress: [], // Initialize with empty array
               numTrainingsCompleted: 0, // Initialize with 0
               numTotalTrainings: pathway.trainingIDs.length, // Initialize with number of trainings in pathway
             });
