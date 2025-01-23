@@ -58,9 +58,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 function AdminUserManagement() {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [errorFetching, setErrorFetching] = useState<boolean>(false);
 
-  const [alignment, setAlignment] = useState<string | null>("user");
+  const [alignment, setAlignment] = useState<string>("user");
 
   const [searchQuery, setSearchQuery] = useState<string>("");
 
@@ -137,6 +138,7 @@ function AdminUserManagement() {
         setFilteredPathways(parsedPathways);
       } catch (e) {
         console.error("Error fetching initial data:", e);
+        setErrorFetching(true);
       } finally {
         setLoading(false);
       }
@@ -442,31 +444,40 @@ function AdminUserManagement() {
                   </FormControl>
                 </div>
                 {/* Conditional Content Rendering */}
-                <div className={styles.contentSection}>
-                  <div className={styles.searchBarContainer}>
-                    <OutlinedInput
-                      className={styles.searchBar}
-                      sx={grayBorderSearchBar}
-                      placeholder="Search..."
-                      value={searchQuery}
-                      onChange={handleSearchChange}
-                      startAdornment={
-                        <InputAdornment position="start">
-                          <IoIosSearch />
-                        </InputAdornment>
-                      }
-                    />
-                    <Button
-                      className={styles.export}
-                      sx={whiteButtonOceanGreenBorder}
-                      onClick={exportData}
-                    >
-                      Export
-                    </Button>
+                {errorFetching ? (
+                  <div>
+                    <h2 className={styles.errorText}>
+                      Error fetching data. Please try again later.
+                    </h2>
                   </div>
+                ) : (
+                  <div className={styles.contentSection}>
+                    <div className={styles.searchBarContainer}>
+                      <OutlinedInput
+                        className={styles.searchBar}
+                        sx={grayBorderSearchBar}
+                        placeholder="Search..."
+                        value={searchQuery}
+                        onChange={handleSearchChange}
+                        startAdornment={
+                          <InputAdornment position="start">
+                            <IoIosSearch />
+                          </InputAdornment>
+                        }
+                      />
+                      <Button
+                        className={styles.export}
+                        sx={whiteButtonOceanGreenBorder}
+                        onClick={exportData}
+                      >
+                        Export
+                      </Button>
+                    </div>
 
-                  <div className={styles.innerGrid}>{table()}</div>
-                </div>
+                    <div className={styles.innerGrid}>{table()}</div>
+                  </div>
+                )}
+
                 <div className={styles.snackbarContainer}>
                   {/* No row selected alert */}
                   <Snackbar
