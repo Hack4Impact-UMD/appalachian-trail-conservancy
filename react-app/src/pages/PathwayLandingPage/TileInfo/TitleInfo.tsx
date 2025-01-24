@@ -70,7 +70,7 @@ const TitleInfo: React.FC<TitleInfoProps> = ({
       {/* Description Section */}
       {isOpen && (
         <div className={styles.description}>
-          <h2>Blurb</h2>
+          <h2>Description</h2>
           <div dangerouslySetInnerHTML={{ __html: description }} />
         </div>
       )}

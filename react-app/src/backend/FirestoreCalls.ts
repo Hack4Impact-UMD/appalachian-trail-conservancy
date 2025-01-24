@@ -227,22 +227,25 @@ export function getQuiz(trainingId: string): Promise<Quiz> {
   });
 }
 
-export function validateQuiz(
+export function validateTrainingQuiz(
   trainingId: string,
   volunteerId: string,
   volunteerAnswers: string[],
   timeCompleted: string
 ): Promise<any> {
   return new Promise((resolve, reject) => {
-    const validateQuizResults = httpsCallable(functions, "validateQuizResults");
-    validateQuizResults({
+    const validateTrainingQuizResults = httpsCallable(
+      functions,
+      "validateTrainingQuizResults"
+    );
+    validateTrainingQuizResults({
       trainingId,
       volunteerId,
       volunteerAnswers,
       timeCompleted,
     })
-      .then((numAnswersCorrect) => {
-        resolve(numAnswersCorrect);
+      .then((quizResults) => {
+        resolve(quizResults);
       })
       .catch((e) => {
         reject(e);
@@ -636,9 +639,24 @@ export function addVolunteerTraining(
               numTotalResources: training.resources.length, // total number of resources in training
             });
 
+            // Update volunteer pathway information if needed
+            if (training.associatedPathways.length > 0) {
+              volunteer.pathwayInformation.forEach((volunteerPathway) => {
+                if (
+                  training.associatedPathways.includes(
+                    volunteerPathway.pathwayID
+                  )
+                ) {
+                  // pathway exists in volunteer pathway list, add training to in progress list
+                  volunteerPathway.trainingsInProgress.push(training.id);
+                }
+              });
+            }
+
             // Add new training to volunteer's training information
             updateDoc(volunteerRef, {
               trainingInformation: volunteer.trainingInformation,
+              pathwayInformation: volunteer.pathwayInformation,
             })
               .then(() => {
                 // Resolve the promise after the document is successfully updated

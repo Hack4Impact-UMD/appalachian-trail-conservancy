@@ -106,7 +106,7 @@ function PathwayLandingPage() {
             const numTrainings = volunteerPathway[0].numTrainingsCompleted;
             setVolunteerPathway(volunteerPathway[0]);
             setNumCompleted(numTrainings);
-            if (volunteerPathway[0].dateCompleted !== "") {
+            if (volunteerPathway[0].progress === "COMPLETED") {
               setQuizPassed(true);
             }
           } else {
@@ -164,6 +164,7 @@ function PathwayLandingPage() {
 
               setNumCompleted(newVolunteerPathway.numTrainingsCompleted);
               addVolunteerPathway(auth.id.toString(), newVolunteerPathway);
+              setVolunteerPathway(newVolunteerPathway);
             } else {
               // volunteer has not started pathway
               setNumCompleted(0);
@@ -208,7 +209,6 @@ function PathwayLandingPage() {
     let count = 0;
     const newElts = [];
 
-    console.log("trainings", volunteerPathway);
     for (let i = 0; i < height; i++) {
       if (i % 2 == 0) {
         for (let j = count; j < count + imagesPerRow; j++) {

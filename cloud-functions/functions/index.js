@@ -621,7 +621,7 @@ exports.setUserRole = onCall(
  * volunteerTraining data corresponding to the current Training given that
  * they recieved a higher score or was their first time taking the quiz
  */
-exports.validateQuizResults = onCall(
+exports.validateTrainingQuizResults = onCall(
   { region: "us-east4", cors: true },
   async ({ auth, data }) => {
     return new Promise(async (resolve, reject) => {
@@ -703,11 +703,96 @@ exports.validateQuizResults = onCall(
                       }
                     );
 
+                    // Update VolunteerPathway list
+                    if (numAnswersCorrect >= quiz.passingScore) {
+                      if (trainingData.associatedPathways.length > 0) {
+                        await Promise.all(
+                          volunteerData.pathwayInformation.map(
+                            async (volunteerPathway) => {
+                              if (
+                                trainingData.associatedPathways.includes(
+                                  volunteerPathway.pathwayID
+                                )
+                              ) {
+                                // Pathway exists in volunteer pathway list, add to completed list and remove from in-progress list
+                                if (
+                                  !volunteerPathway.trainingsCompleted.includes(
+                                    trainingId
+                                  )
+                                ) {
+                                  volunteerPathway.trainingsCompleted.push(
+                                    trainingId
+                                  );
+                                }
+                                volunteerPathway.trainingsInProgress =
+                                  volunteerPathway.trainingsInProgress.filter(
+                                    (id) => id !== trainingId
+                                  );
+
+                                // Retrieve pathway data
+                                const pathwayData = await db
+                                  .collection("Pathways")
+                                  .doc(volunteerPathway.pathwayID)
+                                  .get()
+                                  .then((pathwaySnapshot) =>
+                                    pathwaySnapshot.data()
+                                  )
+                                  .catch((error) => {
+                                    reject({
+                                      reason: "database-retrieval-failed",
+                                      text: "Unable to find pathway in the database.",
+                                    });
+                                    throw new functions.https.HttpsError(
+                                      "unknown",
+                                      `${error}`
+                                    );
+                                  });
+
+                                let consecutiveCompletion = false;
+
+                                // Check to see if training is next one on completed list
+                                let trainingIndex =
+                                  pathwayData.trainingIDs.indexOf(trainingId);
+                                if (trainingIndex !== -1) {
+                                  if (
+                                    trainingIndex ===
+                                    volunteerPathway.numTrainingsCompleted
+                                  ) {
+                                    volunteerPathway.numTrainingsCompleted++;
+                                    consecutiveCompletion = true;
+                                  }
+
+                                  // Check for consecutive completions
+                                  let i = trainingIndex + 1;
+                                  while (consecutiveCompletion) {
+                                    let nextTrainingId =
+                                      pathwayData.trainingIDs[i];
+                                    if (
+                                      volunteerPathway.trainingsCompleted.includes(
+                                        nextTrainingId
+                                      )
+                                    ) {
+                                      volunteerPathway.numTrainingsCompleted++;
+                                      i++;
+                                    } else {
+                                      consecutiveCompletion = false;
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          )
+                        );
+                      }
+                    }
                     // Update the Volunteer document in firestore
                     const updateVolunteer = await db
                       .collection("Users")
                       .doc(volunteerId)
-                      .update({ trainingInformation: newVolunteerTraining })
+                      .update({
+                        trainingInformation: newVolunteerTraining,
+                        pathwayInformation: volunteerData.pathwayInformation,
+                      })
                       .catch((error) => {
                         reject({
                           reason: "database-update-failed",
@@ -721,7 +806,7 @@ exports.validateQuizResults = onCall(
                   }
 
                   // Resolve with score
-                  resolve(numAnswersCorrect);
+                  resolve([numAnswersCorrect, volunteerTrainingInfo]);
                 } else {
                   // Volunteer is not enrolled in Training
                   throw new functions.https.HttpsError(
@@ -730,7 +815,7 @@ exports.validateQuizResults = onCall(
                   );
                 }
 
-                resolve(numAnswersCorrect);
+                resolve([numAnswersCorrect, volunteerTrainingInfo]);
               } else {
                 // Training quiz length and volunteer list of answers are unequal length
                 throw new functions.https.HttpsError(

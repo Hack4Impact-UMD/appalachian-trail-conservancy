@@ -3,7 +3,7 @@ import { Button } from "@mui/material";
 import { forestGreenButton } from "../../muiTheme";
 import { useLocation, Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthProvider";
-import { validateQuiz } from "../../backend/FirestoreCalls";
+import { validateTrainingQuiz } from "../../backend/FirestoreCalls";
 import { Training } from "../../types/TrainingType";
 import { VolunteerTraining } from "../../types/UserType";
 import styles from "./QuizPage.module.css";
@@ -118,18 +118,19 @@ function QuizPage() {
       value === undefined ? "" : value
     );
 
-    validateQuiz(
+    validateTrainingQuiz(
       volunteerTraining.trainingID,
       volunteerId,
       cleanedSelectedAnswers,
       new Date(Date.now()).toISOString()
     )
       .then((validateResults) => {
-        const numAnswersCorrect = validateResults.data;
+        const [numAnswersCorrect, volunteerTrainingInfo] = validateResults.data;
+        setVolunteerTraining(volunteerTrainingInfo);
         navigate(`/trainings/quizresult`, {
           state: {
             training: training,
-            volunteerTraining: volunteerTraining,
+            volunteerTraining: volunteerTrainingInfo,
             selectedAnswers: selectedAnswers,
             achievedScore: numAnswersCorrect,
             fromApp: true,

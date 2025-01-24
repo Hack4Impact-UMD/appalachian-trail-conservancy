@@ -28,12 +28,7 @@ const PathwayCard: React.FC<PathwayCardProps> = ({
     if (!preview && volunteerPathway == undefined) {
       // Training not started
       return <div className={styles.marker}></div>;
-    } else if (
-      preview ||
-      (volunteerPathway!.numTrainingsCompleted ===
-        volunteerPathway!.numTotalTrainings &&
-        volunteerPathway!.dateCompleted !== "")
-    ) {
+    } else if (preview || volunteerPathway!.progress === "COMPLETED") {
       // Training completed
       return (
         <div className={`${styles.marker} ${styles.completedMarker}`}>
@@ -43,10 +38,10 @@ const PathwayCard: React.FC<PathwayCardProps> = ({
     } else {
       // Training in progress
       return (
+        // Quiz is not completed
         <LinearProgressWithLabel
           value={
-            ((volunteerPathway!.numTrainingsCompleted +
-              (volunteerPathway!.dateCompleted !== "" ? 1 : 0)) /
+            (volunteerPathway!.numTrainingsCompleted /
               (volunteerPathway!.numTotalTrainings + 1)) *
             100
           }
