@@ -11,6 +11,7 @@ import { TrainingID } from "../../types/TrainingType";
 import { PathwayID } from "../../types/PathwayType";
 import { VolunteerPathway } from "../../types/UserType.ts";
 import { useAuth } from "../../auth/AuthProvider";
+import { Alert, Snackbar } from "@mui/material";
 import {
   getPathway,
   getTraining,
@@ -30,6 +31,8 @@ function PathwayLandingPage() {
   const [numCompleted, setNumCompleted] = useState<number>(0);
   const [elements, setElements] = useState<any[]>([]);
   const [quizPassed, setQuizPassed] = useState<boolean>(false);
+  const [snackbar, setSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   const [pathway, setPathway] = useState<PathwayID>({
     name: "",
@@ -216,6 +219,7 @@ function PathwayLandingPage() {
             <div key={j}>
               <PathwayTile
                 tileNum={j}
+                pathwayID={pathway}
                 trainingID={j < trainings.length ? trainings[j] : undefined}
                 width={divWidth}
                 numTrainings={trainings.length}
@@ -225,6 +229,9 @@ function PathwayLandingPage() {
                   ...volunteerPathway.trainingsCompleted,
                   ...volunteerPathway.trainingsInProgress,
                 ]}
+                volunteerPathway={volunteerPathway}
+                setSnackbar={setSnackbar}
+                setSnackbarMessage={setSnackbarMessage}
               />
             </div>
           );
@@ -237,6 +244,7 @@ function PathwayLandingPage() {
             <div key={j}>
               <PathwayTile
                 tileNum={j}
+                pathwayID={pathway}
                 trainingID={j < trainings.length ? trainings[j] : undefined}
                 width={divWidth}
                 numTrainings={trainings.length}
@@ -246,6 +254,9 @@ function PathwayLandingPage() {
                   ...volunteerPathway.trainingsCompleted,
                   ...volunteerPathway.trainingsInProgress,
                 ]}
+                volunteerPathway={volunteerPathway}
+                setSnackbar={setSnackbar}
+                setSnackbarMessage={setSnackbarMessage}
               />
             </div>
           );
@@ -293,6 +304,20 @@ function PathwayLandingPage() {
             )}
           </div>
         </div>
+        <Snackbar
+          open={snackbar}
+          autoHideDuration={6000}
+          onClose={() => setSnackbar(false)}
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }} // Position within the right section
+        >
+          <Alert
+            onClose={() => setSnackbar(false)}
+            severity={
+              snackbarMessage.includes("successfully") ? "success" : "error"
+            }>
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
         <Footer />
       </div>
     </>

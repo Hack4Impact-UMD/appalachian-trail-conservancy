@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./PathwayTile.module.css";
 import emptyIcon from "../../../assets/PathwayTiles/Empty.svg";
 import downEndIcon from "../../../assets/PathwayTiles/DownEnd.svg";
@@ -31,18 +32,23 @@ import leftDownInter from "../../../assets/PathwayTiles/IntermediateTiles/LeftDo
 import rightDownInter from "../../../assets/PathwayTiles/IntermediateTiles/RightDownInter.svg";
 import verticalInter from "../../../assets/PathwayTiles/IntermediateTiles/VerticalInter.svg";
 import { TrainingID } from "../../../types/TrainingType";
+import { PathwayID } from "../../../types/PathwayType.ts";
 import { useAuth } from "../../../auth/AuthProvider.tsx";
 import { getVolunteer } from "../../../backend/FirestoreCalls";
-import { VolunteerTraining } from "../../../types/UserType";
+import { VolunteerTraining, VolunteerPathway } from "../../../types/UserType";
 
 interface PathwayTileProps {
   tileNum: number; // index of the tile
-  trainingID?: TrainingID; // training id of the specific training
+  pathwayID: PathwayID; // pathwayID of the pathway
+  trainingID?: TrainingID; // trainingID of the specific training
   width: number; // width of the div
   numTrainings: number; // total number of trainings in this pathway
   trainingsCompleted: number;
   quizPassed: boolean;
   volunteerTrainings: string[];
+  volunteerPathway: VolunteerPathway;
+  setSnackbar: any;
+  setSnackbarMessage: any;
 }
 
 // imagesPerRow: the total number of images per row, used to identify which direction
@@ -192,17 +198,22 @@ function getImage(
 
 const PathwayTile: React.FC<PathwayTileProps> = ({
   tileNum,
+  pathwayID,
   trainingID,
   width,
   numTrainings,
   trainingsCompleted,
   quizPassed,
   volunteerTrainings,
+  volunteerPathway,
+  setSnackbar,
+  setSnackbarMessage,
 }) => {
   const [openTrainingPopup, setOpenTrainingPopup] = useState<boolean>(false);
   const [volunteerTrainingRecord, setVolunteerTrainingRecord] =
     useState<VolunteerTraining>();
   const imgWidth = 300;
+  const navigate = useNavigate();
   const auth = useAuth();
 
   const imagesPerRow = Math.floor(width / imgWidth);
@@ -213,6 +224,23 @@ const PathwayTile: React.FC<PathwayTileProps> = ({
     trainingsCompleted,
     quizPassed
   );
+
+  const handleQuizClick = () => {
+    if (trainingsCompleted !== numTrainings) {
+      setSnackbarMessage(
+        "Please complete all trainings to unlock the pathway quiz"
+      );
+      setSnackbar(true);
+    } else if (volunteerPathway.pathwayID !== "") {
+      navigate(`/pathways/quizlanding`, {
+        state: {
+          pathway: pathwayID,
+          volunteerPathway: volunteerPathway,
+          fromApp: true,
+        },
+      });
+    }
+  };
 
   useEffect(() => {
     if (trainingID && volunteerTrainings.includes(trainingID.id)) {
@@ -239,6 +267,10 @@ const PathwayTile: React.FC<PathwayTileProps> = ({
         className={styles.tile}
         onClick={() => {
           setOpenTrainingPopup(true);
+          // Clicking on the quiz tile
+          if (image.includes("End") || image.includes("Trophy")) {
+            handleQuizClick();
+          }
         }}>
         <img
           src={image}
