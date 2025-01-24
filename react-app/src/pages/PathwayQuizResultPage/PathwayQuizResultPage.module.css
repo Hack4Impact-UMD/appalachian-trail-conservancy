@@ -11,8 +11,9 @@
 .right {
   right: 0;
   left: 250px;
-  overflow: hidden;
-  overflow-y: auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .hamburger {
@@ -56,6 +57,59 @@
   white-space: normal;
 }
 
+.badgeImg {
+  width: 200px;
+}
+
+.feedback {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 4%;
+  margin-top: 0.5rem;
+  margin-bottom: 5%;
+}
+
+.feedbackRight {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.feedbackRight h3 {
+  font-size: 1.5rem;
+}
+
+.score {
+  display: flex;
+  flex-direction: row;
+  font-weight: bold;
+  margin: 2% 0% 2% 0%;
+}
+
+.bigNum {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  font-size: 3rem;
+}
+
+.smallNum {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  font-size: 1.4rem;
+  padding-bottom: 7px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-bottom: 1rem;
+  margin-right: 4%;
+}
+
 .questionContainer {
   background-color: var(--blue-purple);
   display: flex;
@@ -63,7 +117,6 @@
   gap: 1.5rem;
   padding: 4%;
   border-radius: 20px;
-  margin-top: 3%;
 }
 
 .footer {

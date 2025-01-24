@@ -614,7 +614,7 @@ exports.setUserRole = onCall(
 /**
  * This function validates a Volunteer's training quiz answers
  *
- * Arguments: trainingId, volunteerAnswers, volunteerID
+ * Arguments: trainingId, volunteerAnswers, volunteerID, timeCompleted
  *
  * Retrieves training information, then checks the volunteers answers against
  * the quiz answers from the Training data. Retrieves and updates the Volunteer's
@@ -805,7 +805,7 @@ exports.validateTrainingQuizResults = onCall(
                       });
                   }
 
-                  // Resolve with score
+                  // Resolve with score and volunteer training info
                   resolve([numAnswersCorrect, volunteerTrainingInfo]);
                 } else {
                   // Volunteer is not enrolled in Training
@@ -835,6 +835,160 @@ exports.validateTrainingQuizResults = onCall(
             reject({
               reason: "database-retrieval-failed",
               text: "Unable to find training in the database. Make sure it exists.",
+            });
+            throw new functions.https.HttpsError("unknown", `${error}`);
+          });
+      } else {
+        throw new functions.https.HttpsError(
+          "invalid-parameters",
+          "Function was called with invalid parameters."
+        );
+      }
+    });
+  }
+);
+
+/**
+ * This function validates a Volunteer's pathway quiz answers
+ *
+ * Arguments: trainingId, volunteerAnswers, volunteerID, timeCompleted
+ *
+ * Retrieves pathway information, then checks the volunteers answers against
+ * the quiz answers from the Training data. Retrieves and updates the Volunteer's
+ * volunteerPathway data corresponding to the current Pathway given that they
+ * recieved a higher score or was their first time taking the quiz
+ */
+exports.validatePathwayQuizResults = onCall(
+  { region: "us-east4", cors: true },
+  async ({ auth, data }) => {
+    return new Promise(async (resolve, reject) => {
+      const { pathwayId, volunteerAnswers, volunteerId, timeCompleted } = data;
+      if (
+        // Validate auth
+        auth &&
+        auth.token &&
+        auth.token.role.toLowerCase() == "volunteer" &&
+        // Validate parameters here
+        pathwayId &&
+        volunteerAnswers &&
+        volunteerId &&
+        timeCompleted
+      ) {
+        await db
+          .collection("Pathways")
+          .doc(pathwayId)
+          .get()
+          .then(async (pathwaySnapshot) => {
+            if (pathwaySnapshot.exists) {
+              const pathwayData = pathwaySnapshot.data();
+              const { quiz } = pathwayData;
+              const { questions } = quiz;
+
+              if (questions.length === volunteerAnswers.length) {
+                // Check Volunteer answers against quiz answers
+                const numAnswersCorrect = questions.reduce(
+                  (acc, question, idx) => {
+                    return volunteerAnswers[idx] === question.answer
+                      ? acc + 1
+                      : acc;
+                  },
+                  0
+                );
+
+                // Get Volunteer data
+                const volunteerData = await db
+                  .collection("Users")
+                  .doc(volunteerId)
+                  .get()
+                  .then((volunteerSnapshot) => volunteerSnapshot.data())
+                  .catch((error) => {
+                    reject({
+                      reason: "database-retrieval-failed",
+                      text: "Unable to find volunteer in the database. Make sure they exist.",
+                    });
+                    throw new functions.https.HttpsError("unknown", `${error}`);
+                  });
+
+                let volunteerPathwayInfo =
+                  volunteerData.pathwayInformation.find(
+                    (volunteerPathway) =>
+                      volunteerPathway.pathwayID === pathwayId
+                  );
+
+                if (volunteerPathwayInfo) {
+                  if (
+                    volunteerPathwayInfo.quizScoreRecieved == undefined ||
+                    volunteerPathwayInfo.quizScoreRecieved <= numAnswersCorrect
+                  ) {
+                    // Update volunteerPathway if quiz score does not exist or higher score is recieved
+                    volunteerPathwayInfo.quizScoreRecieved = numAnswersCorrect;
+                    volunteerPathwayInfo.dateCompleted = timeCompleted;
+                    volunteerPathwayInfo.progress =
+                      numAnswersCorrect >= quiz.passingScore
+                        ? "COMPLETED"
+                        : "INPROGRESS";
+
+                    // Update VolunteerPathway list
+                    let newVolunteerPathway = [];
+                    volunteerData.pathwayInformation.forEach(
+                      (volunteerPathway) => {
+                        newVolunteerPathway.push(
+                          volunteerPathway.pathwayID === pathwayId
+                            ? volunteerPathwayInfo
+                            : volunteerPathway
+                        );
+                      }
+                    );
+
+                    // Update the Volunteer document in firestore
+                    const updateVolunteer = await db
+                      .collection("Users")
+                      .doc(volunteerId)
+                      .update({
+                        pathwayInformation: newVolunteerPathway,
+                      })
+                      .catch((error) => {
+                        reject({
+                          reason: "database-update-failed",
+                          text: "Unable to update Volunteer in the database.",
+                        });
+                        throw new functions.https.HttpsError(
+                          "unknown",
+                          `${error}`
+                        );
+                      });
+                  }
+
+                  // Resolve with score and volunteer pathway info
+                  resolve([numAnswersCorrect, volunteerPathwayInfo]);
+                } else {
+                  // Volunteer is not enrolled in Training
+                  throw new functions.https.HttpsError(
+                    "volunteer-not-enrolled-in-pathway",
+                    "the volunteer is not enrolled in the pathway"
+                  );
+                }
+
+                resolve([numAnswersCorrect, volunteerPathwayInfo]);
+              } else {
+                // Training quiz length and volunteer list of answers are unequal length
+                throw new functions.https.HttpsError(
+                  "invalid-volunteer-answers",
+                  "The volunteer's answers is of wrong length"
+                );
+              }
+            } else {
+              // Pathway does not exist given the Pathway id parameter
+              throw new functions.https.HttpsError(
+                "invalid-parameter",
+                "Pathway does not exist with the given id"
+              );
+            }
+          })
+          .catch((error) => {
+            reject({
+              reason: "database-retrieval-failed",
+              text: "Unable to find pathway in the database. Make sure it exists.",
             });
             throw new functions.https.HttpsError("unknown", `${error}`);
           });

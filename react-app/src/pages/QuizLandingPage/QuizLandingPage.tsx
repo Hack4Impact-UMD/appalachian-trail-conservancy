@@ -125,8 +125,12 @@ function QuizLandingPage() {
                   <h2>Instructions</h2>
                 </div>
                 <p className={styles.instructions}>
-                  Instruction text goes right here and we can explain what to do
-                  right here yay
+                  Certification for taking this Training involves passing this
+                  quiz. Select the correct answer for each question. To pass,
+                  answer at least {training.quiz.passingScore} out of{" "}
+                  {training.quiz.numQuestions} questions correctly. For Learning
+                  Pathways, passing a training quiz will advance you to the next
+                  step.
                 </p>
                 {/* best attempt */}
                 <div className={styles.subHeader}>

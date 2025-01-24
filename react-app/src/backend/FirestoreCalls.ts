@@ -253,6 +253,32 @@ export function validateTrainingQuiz(
   });
 }
 
+export function validatePathwayQuiz(
+  pathwayId: string,
+  volunteerId: string,
+  volunteerAnswers: string[],
+  timeCompleted: string
+): Promise<any> {
+  return new Promise((resolve, reject) => {
+    const validatePathwayQuizResults = httpsCallable(
+      functions,
+      "validatePathwayQuizResults"
+    );
+    validatePathwayQuizResults({
+      pathwayId,
+      volunteerId,
+      volunteerAnswers,
+      timeCompleted,
+    })
+      .then((quizResults) => {
+        resolve(quizResults);
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+}
+
 export function addPathway(pathway: Pathway): Promise<string> {
   return new Promise((resolve, reject) => {
     /* runTransaction provides protection against race conditions where

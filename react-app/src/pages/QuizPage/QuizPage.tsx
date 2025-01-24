@@ -9,7 +9,7 @@ import { VolunteerTraining } from "../../types/UserType";
 import styles from "./QuizPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
-import QuizCard from "./QuizCard/QuizCard";
+import QuizCard from "../../components/QuizCard/QuizCard";
 import Loading from "../../components/LoadingScreen/Loading";
 import hamburger from "../../assets/hamburger.svg";
 
@@ -154,8 +154,7 @@ function QuizPage() {
         className={`${styles.split} ${styles.right}`}
         style={{
           left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-        }}
-      >
+        }}>
         {!navigationBarOpen && (
           <img
             src={hamburger}
@@ -208,15 +207,13 @@ function QuizPage() {
               navigationBarOpen && screenWidth > 1200
                 ? "calc(100% - 250px)"
                 : "100%",
-          }}
-        >
+          }}>
           <div className={styles.footerButtons}>
             <Button
               sx={{ ...forestGreenButton }}
               variant="contained"
               onClick={handleSubmitQuiz}
-              disabled={quizLoading}
-            >
+              disabled={quizLoading}>
               Submit
             </Button>
           </div>
