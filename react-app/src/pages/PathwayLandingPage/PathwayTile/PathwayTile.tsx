@@ -240,7 +240,12 @@ const PathwayTile: React.FC<PathwayTileProps> = ({
         onClick={() => {
           setOpenTrainingPopup(true);
         }}>
-        <img src={image} className={styles.tileImage} />
+        <img
+          src={image}
+          className={`${styles.tileImage} ${
+            image !== emptyIcon ? styles.cursorPointer : ""
+          }`}
+        />
         <div className={styles.trainingNumber}>
           {trainingID != null && tileNum >= trainingsCompleted
             ? tileNum + 1

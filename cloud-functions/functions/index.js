@@ -612,14 +612,14 @@ exports.setUserRole = onCall(
 );
 
 /**
- * This function validates a Volunteer's quiz answers
+ * This function validates a Volunteer's training quiz answers
  *
  * Arguments: trainingId, volunteerAnswers, volunteerID
  *
  * Retrieves training information, then checks the volunteers answers against
  * the quiz answers from the Training data. Retrieves and updates the Volunteer's
- * volunteerTraining data corresponding to the current Training given that
- * they recieved a higher score or was their first time taking the quiz
+ * volunteerTraining and volunteerPathway data corresponding to the current Training
+ * given that they recieved a higher score or was their first time taking the quiz
  */
 exports.validateTrainingQuizResults = onCall(
   { region: "us-east4", cors: true },

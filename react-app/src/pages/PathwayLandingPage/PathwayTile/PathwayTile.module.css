@@ -3,6 +3,10 @@
   line-height: 0;
 }
 
+.cursorPointer {
+  cursor: pointer;
+}
+
 .tileImage {
   width: 300px;
   height: 300px;
