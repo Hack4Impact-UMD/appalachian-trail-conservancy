@@ -47,6 +47,7 @@ function TrainingLibrary() {
   const [open, setOpen] = useState(!(window.innerWidth < 1200));
 
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
+  const [popupOpen, setPopupOpen] = useState<boolean>(false);
 
   useEffect(() => {
     setLoading(true);
@@ -226,7 +227,9 @@ function TrainingLibrary() {
 
   return (
     <>
-      <NavigationBar open={open} setOpen={setOpen} />
+      <div className={popupOpen ? styles.popupOpen : ""}>
+        <NavigationBar open={open} setOpen={setOpen} />
+      </div>
 
       <div
         className={`${styles.split} ${styles.right}`}
@@ -338,6 +341,7 @@ function TrainingLibrary() {
                           training={training.genericTraining}
                           volunteerTraining={training.volunteerTraining}
                           preview={false}
+                          setPopupOpen={setPopupOpen}
                         />
                       </div>
                     ))}

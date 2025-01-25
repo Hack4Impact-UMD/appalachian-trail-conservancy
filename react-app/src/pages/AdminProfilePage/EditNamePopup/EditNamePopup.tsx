@@ -12,7 +12,6 @@ import {
 } from "../../../muiTheme";
 import { Admin } from "../../../types/UserType";
 import { updateAdmin } from "../../../backend/AdminFirestoreCalls";
-import { set } from "lodash";
 
 interface modalPropsType {
   open: boolean;
@@ -100,8 +99,7 @@ const EditNamePopup = ({
       open={open}
       onClose={() => {
         handleClose();
-      }}
-    >
+      }}>
       <div className={styles.content}>
         <p className={styles.title}>Edit {editType} Name</p>
         <div className={styles.textFields}>
@@ -119,16 +117,14 @@ const EditNamePopup = ({
             onClick={() => onClose()}
             variant="contained"
             sx={{ ...whiteButtonGrayBorder, width: "120px" }}
-            disabled={loading}
-          >
+            disabled={loading}>
             Cancel
           </Button>
           <Button
             variant="contained"
             sx={{ ...forestGreenButton, width: "120px" }}
             onClick={handleUpdateName}
-            disabled={loading}
-          >
+            disabled={loading}>
             {loading ? <Loading /> : "Confirm"}
           </Button>
         </div>

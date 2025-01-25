@@ -41,6 +41,7 @@ function Dashboard() {
   );
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [popupOpen, setPopupOpen] = useState<boolean>(false);
 
   // Update screen width on resize
   useEffect(() => {
@@ -81,7 +82,7 @@ function Dashboard() {
   const correlateTrainings = (
     genericTrainings: TrainingID[],
     volunteerTrainings: VolunteerTraining[]
-  ) => {
+  ): CorrelatedTraining[][] => {
     const trainingsIP: CorrelatedTraining[] = [];
     let trainingsC: CorrelatedTraining[] = [];
 
@@ -106,12 +107,13 @@ function Dashboard() {
     trainingsC = sortTrainingsByDateCompleted(trainingsC);
     setTrainingsInProgress(trainingsIP);
     setTrainingsCompleted(trainingsC);
+    return [trainingsIP, trainingsC];
   };
 
   const correlatePathways = (
     genericPathways: PathwayID[],
     volunteerPathways: VolunteerPathway[]
-  ) => {
+  ): CorrelatedPathway[][] => {
     // match up the genericPathways and volunteerPathways
     const pathwaysIP: CorrelatedPathway[] = [];
     let pathwaysC: CorrelatedPathway[] = [];
@@ -136,6 +138,7 @@ function Dashboard() {
     pathwaysC = sortPathwaysByDateCompleted(pathwaysC);
     setPathwaysInProgress(pathwaysIP);
     setPathwaysCompleted(pathwaysC);
+    return [pathwaysIP, pathwaysC];
   };
 
   // sort by reverse date completed. puts most recently completed first.
@@ -253,6 +256,10 @@ function Dashboard() {
     setLoading(true);
     // only use auth if it is finished loading
     if (!auth.loading && auth.id) {
+      let trainingsIP: CorrelatedTraining[] = [];
+      let trainingsC: CorrelatedTraining[] = [];
+      let pathwaysIP: CorrelatedPathway[] = [];
+      let pathwaysC: CorrelatedPathway[] = [];
       // get volunteer info from firebase. will contain volunteer progress on trainings & pathways
       getVolunteer(auth.id.toString())
         .then((volunteer) => {
@@ -262,7 +269,10 @@ function Dashboard() {
           // get all trainings from firebase
           getAllTrainings()
             .then((genericTrainings) => {
-              correlateTrainings(genericTrainings, volunteerTrainings);
+              [trainingsIP, trainingsC] = correlateTrainings(
+                genericTrainings,
+                volunteerTrainings
+              );
             })
             .catch((error) => {
               setErrorMessage(
@@ -275,7 +285,10 @@ function Dashboard() {
           // get all pathways from firebase
           getAllPathways()
             .then((genericPathways) => {
-              correlatePathways(genericPathways, volunteerPathways);
+              [pathwaysIP, pathwaysC] = correlatePathways(
+                genericPathways,
+                volunteerPathways
+              );
             })
             .catch((error) => {
               setErrorMessage(
@@ -289,10 +302,10 @@ function Dashboard() {
           Promise.all([getAllTrainings(), getAllPathways()])
             .then(([allTrainings, allPathways]) => {
               // Filter out trainings that user has completed or in progress
-              const userCompletedTrainings = trainingsCompleted.map(
+              const userCompletedTrainings = trainingsC.map(
                 (training) => training.genericTraining.id
               );
-              const userInProgressTrainings = trainingsInProgress.map(
+              const userInProgressTrainings = trainingsIP.map(
                 (training) => training.genericTraining.id
               );
               const recommendedTrainings = allTrainings.filter(
@@ -303,10 +316,10 @@ function Dashboard() {
               );
 
               // Filter out pathways that user has completed or in progress
-              const userCompletedPathways = pathwaysCompleted.map(
+              const userCompletedPathways = pathwaysC.map(
                 (pathway) => pathway.genericPathway.id
               );
-              const userInProgressPathways = pathwaysInProgress.map(
+              const userInProgressPathways = pathwaysIP.map(
                 (pathway) => pathway.genericPathway.id
               );
               const recommendedPathways = allPathways.filter(
@@ -343,8 +356,12 @@ function Dashboard() {
 
   return (
     <>
-      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
-
+      <div className={popupOpen ? styles.popupOpen : ""}>
+        <NavigationBar
+          open={navigationBarOpen}
+          setOpen={setNavigationBarOpen}
+        />
+      </div>
       <div
         className={`${styles.split} ${styles.right}`}
         style={{
@@ -406,6 +423,7 @@ function Dashboard() {
                               pathway={pathway.genericPathway}
                               volunteerPathway={pathway.volunteerPathway}
                               preview={false}
+                              setPopupOpen={setPopupOpen}
                             />
                           </div>
                         )
@@ -431,6 +449,7 @@ function Dashboard() {
                               training={training.genericTraining}
                               volunteerTraining={training.volunteerTraining}
                               preview={false}
+                              setPopupOpen={setPopupOpen}
                             />
                           </div>
                         )
@@ -523,6 +542,7 @@ function Dashboard() {
                               <TrainingCard
                                 training={training}
                                 preview={false}
+                                setPopupOpen={setPopupOpen}
                               />
                             </div>
                           )
@@ -545,7 +565,11 @@ function Dashboard() {
                         {displayPathwayCard(recommendedPathways).map(
                           (pathway, index) => (
                             <div className={styles.card} key={index}>
-                              <PathwayCard pathway={pathway} preview={false} />
+                              <PathwayCard
+                                pathway={pathway}
+                                preview={false}
+                                setPopupOpen={setPopupOpen}
+                              />
                             </div>
                           )
                         )}

@@ -16,6 +16,11 @@
   flex-direction: column;
 }
 
+.popupOpen {
+  position: absolute;
+  z-index: -1;
+}
+
 .outerContainer {
   display: flex;
   flex-direction: column;
