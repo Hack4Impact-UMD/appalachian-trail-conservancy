@@ -151,7 +151,7 @@
 }
 
 .closeIcon:hover {
-  color: red;
+  color: var(--hazard-red);
 }
 
 .addAnswerRow {

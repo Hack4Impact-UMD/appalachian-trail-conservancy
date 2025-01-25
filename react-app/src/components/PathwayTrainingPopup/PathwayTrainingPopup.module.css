@@ -20,6 +20,10 @@
   cursor: pointer;
 }
 
+.closeButton:hover {
+  color: var(--hazard-red);
+}
+
 .left {
   width: 425px;
   left: 0;
