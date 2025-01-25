@@ -55,6 +55,7 @@
   margin: 0;
   max-width: 90%;
   white-space: normal;
+  word-break: break-word;
 }
 
 .container {

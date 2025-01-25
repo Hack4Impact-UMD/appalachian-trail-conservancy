@@ -46,6 +46,7 @@
   color: var(--forest-green);
   font-size: 3rem;
   margin: 0;
+  word-break: break-word;
 }
 
 .hamburger {

@@ -48,6 +48,7 @@
   font-size: 1.1rem;
   text-align: center;
   color: var(--forest-green);
+  word-break: break-word;
 }
 
 .certificateDate {
