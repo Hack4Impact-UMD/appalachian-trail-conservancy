@@ -110,21 +110,13 @@
   .right {
     right: 0;
     width: 200px;
-    border-radius: 0 16px 16px 0;
-    background-color: gray;
-    overflow: hidden;
   }
 
   .title {
     font-size: 1.6rem;
-    font-weight: bold;
-    margin: 0;
-    padding: 0;
-    word-break: break-word;
   }
 
   .learnMoreButton {
-    position: absolute;
     bottom: 35px;
   }
 }
@@ -146,19 +138,13 @@
 
   .title {
     font-size: 1.25rem;
-    font-weight: bold;
     margin: 2.6rem 0 0 0;
-    padding: 0;
-    word-break: break-word;
     text-align: center;
   }
 
   .textContainer {
     font-size: 1rem;
     height: 155px;
-    overflow-y: auto;
-    word-break: break-word;
-    color: black;
     text-align: center;
   }
 

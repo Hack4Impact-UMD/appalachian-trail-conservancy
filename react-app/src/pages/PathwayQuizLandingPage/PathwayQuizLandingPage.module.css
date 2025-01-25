@@ -221,15 +221,7 @@
   }
 
   .passedAttemptContainer {
-    background-color: var(--forest-green);
-    display: flex;
     flex-direction: column;
-    align-items: center;
-    margin-bottom: 1rem;
-    padding: 1rem;
-    border-radius: 20px;
-    color: white;
-    font-weight: bold;
   }
 
   .failedAttemptContainer {

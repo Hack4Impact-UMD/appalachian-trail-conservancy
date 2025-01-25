@@ -208,7 +208,7 @@ const QuizResultPage = () => {
                   sx={{ ...whiteButtonGrayBorder }}
                   variant="contained"
                   onClick={() =>
-                    navigate(`/trainings/:${volunteerTraining.trainingID}`, {
+                    navigate(`/trainings/${volunteerTraining.trainingID}`, {
                       state: {
                         volunteerTraining: volunteerTraining,
                         training: training,

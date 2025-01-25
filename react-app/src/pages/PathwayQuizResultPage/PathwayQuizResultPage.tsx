@@ -207,7 +207,7 @@ const PathwayQuizResultPage = () => {
                   sx={{ ...whiteButtonGrayBorder }}
                   variant="contained"
                   onClick={() =>
-                    navigate(`/pathways/:${volunteerPathway.pathwayID}`, {
+                    navigate(`/pathways/${volunteerPathway.pathwayID}`, {
                       state: {
                         volunteerPathway: volunteerPathway,
                         pathway: pathway,
