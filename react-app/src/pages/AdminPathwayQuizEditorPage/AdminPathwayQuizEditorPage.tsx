@@ -352,21 +352,23 @@ function PathwayQuizEditorPage() {
               {/* Points to Pass */}
               <div className={styles.pointsContainer}>
                 <span className={styles.quizEditorText}>POINTS TO PASS:</span>
-                <NumberInput
-                  slots={{
-                    root: numberInputRoot,
-                    input: numberInputElement,
-                    incrementButton: numberInputButton,
-                    decrementButton: numberInputButton,
-                  }}
-                  min={0}
-                  max={maxPoints}
-                  value={pointsToPass}
-                  onChange={handlePointsToPassChange}
-                />
+                {status === "DRAFT" && (
+                  <NumberInput
+                    slots={{
+                      root: numberInputRoot,
+                      input: numberInputElement,
+                      incrementButton: numberInputButton,
+                      decrementButton: numberInputButton,
+                    }}
+                    min={0}
+                    max={maxPoints}
+                    value={pointsToPass}
+                    onChange={handlePointsToPassChange}
+                  />
+                )}
                 <span
                   className={`${styles.quizEditorText} ${styles.leftMargin}`}>
-                  / {maxPoints}
+                  {status !== "DRAFT" ? pointsToPass : ""} / {maxPoints}
                 </span>
               </div>
 
@@ -401,7 +403,7 @@ function PathwayQuizEditorPage() {
                       multiline
                       rows={3}
                     />
-                    {questionIndex > 0 ? (
+                    {questionIndex > 0 && status === "DRAFT" ? (
                       <div
                         className={`${styles.closeIcon} ${styles.leftMargin}`}>
                         <IoCloseOutline
@@ -506,12 +508,14 @@ function PathwayQuizEditorPage() {
               ))}
 
               {/* Add Question Button */}
-              <div
-                className={styles.addQuestionContainer}
-                onClick={handleAddQuestion}>
-                <AddIcon fontSize="large" />
-                <h2>ADD QUESTION</h2>
-              </div>
+              {status === "DRAFT" && (
+                <div
+                  className={styles.addQuestionContainer}
+                  onClick={handleAddQuestion}>
+                  <AddIcon fontSize="large" />
+                  <h2>ADD QUESTION</h2>
+                </div>
+              )}
 
               {/* Button group */}
               <div className={styles.buttonsContainer}>

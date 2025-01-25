@@ -817,8 +817,9 @@ const AdminPathwayEditorPage: React.FC = () => {
                           sx={autocompleteText}
                         />
                       )}
+                      readOnly={status !== "DRAFT"}
                     />
-                    {trainingIndex > 0 ? (
+                    {trainingIndex > 0 && status === "DRAFT" ? (
                       <div
                         className={`${styles.closeIcon} ${styles.leftMargin}`}>
                         <IoCloseOutline
@@ -836,12 +837,14 @@ const AdminPathwayEditorPage: React.FC = () => {
                 ))}
 
                 {/* Add Training Button */}
-                <div
-                  className={styles.addTrainingContainer}
-                  onClick={handleAddSearchBar}>
-                  <AddIcon fontSize="medium" />
-                  <h3>ADD TRAINING</h3>
-                </div>
+                {status === "DRAFT" && (
+                  <div
+                    className={styles.addTrainingContainer}
+                    onClick={handleAddSearchBar}>
+                    <AddIcon fontSize="medium" />
+                    <h3>ADD TRAINING</h3>
+                  </div>
+                )}
               </div>
 
               {/* Button Group */}
