@@ -36,6 +36,8 @@ import { PathwayID } from "../../../types/PathwayType.ts";
 import { useAuth } from "../../../auth/AuthProvider.tsx";
 import { getVolunteer } from "../../../backend/FirestoreCalls";
 import { VolunteerTraining, VolunteerPathway } from "../../../types/UserType";
+import { Tooltip } from "@mui/material";
+import { grayTooltip } from "../../../muiTheme";
 
 interface PathwayTileProps {
   tileNum: number; // index of the tile
@@ -49,6 +51,7 @@ interface PathwayTileProps {
   volunteerPathway: VolunteerPathway;
   setSnackbar: any;
   setSnackbarMessage: any;
+  setPopupOpen: any;
 }
 
 // imagesPerRow: the total number of images per row, used to identify which direction
@@ -208,10 +211,15 @@ const PathwayTile: React.FC<PathwayTileProps> = ({
   volunteerPathway,
   setSnackbar,
   setSnackbarMessage,
+  setPopupOpen,
 }) => {
   const [openTrainingPopup, setOpenTrainingPopup] = useState<boolean>(false);
   const [volunteerTrainingRecord, setVolunteerTrainingRecord] =
     useState<VolunteerTraining>();
+  const [position, setPosition] = useState<{ x: number; y: number }>({
+    x: 0,
+    y: 0,
+  });
   const imgWidth = 300;
   const navigate = useNavigate();
   const auth = useAuth();
@@ -267,17 +275,56 @@ const PathwayTile: React.FC<PathwayTileProps> = ({
         className={styles.tile}
         onClick={() => {
           setOpenTrainingPopup(true);
+          setPopupOpen(true);
           // Clicking on the quiz tile
           if (image.includes("End") || image.includes("Trophy")) {
             handleQuizClick();
           }
         }}>
-        <img
-          src={image}
-          className={`${styles.tileImage} ${
-            image !== emptyIcon ? styles.cursorPointer : ""
-          }`}
-        />
+        <Tooltip
+          title={
+            image.includes("End") || image.includes("Trophy")
+              ? "Quiz"
+              : trainingID?.name
+          }
+          arrow={false}
+          onMouseMove={(e) => setPosition({ x: e.pageX, y: e.pageY })}
+          PopperProps={{
+            anchorEl: {
+              clientHeight: 0,
+              clientWidth: 0,
+              getBoundingClientRect: () => ({
+                top: position.y,
+                left: position.x,
+                right: position.x,
+                bottom: position.y,
+                width: 0,
+                height: 0,
+                x: position.x,
+                y: position.y,
+                toJSON: () => {},
+              }),
+            },
+          }}
+          componentsProps={{
+            tooltip: {
+              sx: {
+                ...grayTooltip,
+                maxWidth: "350px",
+                "&:hover": {
+                  cursor: "pointer",
+                },
+              },
+            },
+          }}>
+          <img
+            src={image}
+            className={`${styles.tileImage} ${
+              image !== emptyIcon ? styles.cursorPointer : ""
+            }`}
+          />
+        </Tooltip>
+
         <div className={styles.trainingNumber}>
           {trainingID != null && tileNum >= trainingsCompleted
             ? tileNum + 1
@@ -288,7 +335,10 @@ const PathwayTile: React.FC<PathwayTileProps> = ({
         volunteerTrainingRecord ? (
           <PathwayTrainingPopup
             open={openTrainingPopup}
-            onClose={setOpenTrainingPopup}
+            onClose={() => {
+              setOpenTrainingPopup(false);
+              setPopupOpen(false);
+            }}
             record={trainingID}
             volunteerRecord={volunteerTrainingRecord}
             mode={"training"}
@@ -296,7 +346,10 @@ const PathwayTile: React.FC<PathwayTileProps> = ({
         ) : (
           <PathwayTrainingPopup
             open={openTrainingPopup}
-            onClose={setOpenTrainingPopup}
+            onClose={() => {
+              setOpenTrainingPopup(false);
+              setPopupOpen(false);
+            }}
             record={trainingID}
             mode={"training"}
           />

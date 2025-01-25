@@ -33,6 +33,7 @@ function PathwayLandingPage() {
   const [quizPassed, setQuizPassed] = useState<boolean>(false);
   const [snackbar, setSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [popupOpen, setPopupOpen] = useState<boolean>(false);
 
   const [pathway, setPathway] = useState<PathwayID>({
     name: "",
@@ -232,6 +233,7 @@ function PathwayLandingPage() {
                 volunteerPathway={volunteerPathway}
                 setSnackbar={setSnackbar}
                 setSnackbarMessage={setSnackbarMessage}
+                setPopupOpen={setPopupOpen}
               />
             </div>
           );
@@ -257,6 +259,7 @@ function PathwayLandingPage() {
                 volunteerPathway={volunteerPathway}
                 setSnackbar={setSnackbar}
                 setSnackbarMessage={setSnackbarMessage}
+                setPopupOpen={setPopupOpen}
               />
             </div>
           );
@@ -269,7 +272,9 @@ function PathwayLandingPage() {
 
   return (
     <>
-      <NavigationBar open={open} setOpen={setOpen} />
+      <div className={popupOpen ? styles.popupOpen : ""}>
+        <NavigationBar open={open} setOpen={setOpen} />
+      </div>
 
       <div
         className={`${styles.split} ${styles.right}`}
