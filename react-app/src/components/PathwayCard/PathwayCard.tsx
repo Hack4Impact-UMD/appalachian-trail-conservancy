@@ -13,7 +13,7 @@ interface PathwayCardProps {
   pathway: PathwayID;
   volunteerPathway?: VolunteerPathway;
   preview: boolean;
-  setPopupOpen: any;
+  setPopupOpen?: any;
 }
 
 const PathwayCard: React.FC<PathwayCardProps> = ({

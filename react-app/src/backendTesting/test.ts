@@ -185,40 +185,39 @@ export const addSampleVolunteerTraining = () => {
     });
 };
 
-export const addSampleVolunteerPathway = () => {
-  addVolunteerPathway("ZpfkIPPdBuaeA6iFyhaR", {
-    id: "test",
-    name: "Pathway",
-    description: "desc",
-    shortBlurb: "shortBlurb",
-    coverImage:
-      "https://media.newyorker.com/photos/5c0195240591e72cf6b59d12/1:1/w_1465,h_1465,c_limit/Duke-Spongebob_01.jpg",
-    trainingIDs: ["test1", "test2", "test3"],
-    quiz: {
-      questions: [
-        {
-          question: "What is the capital of France?",
-          choices: ["London", "Paris", "Berlin"],
-          answer: "Paris",
-        },
-        {
-          question: "What is 2 + 2?",
-          choices: ["3", "4", "5"],
-          answer: "4",
-        },
-      ],
-      numQuestions: 2,
-      passingScore: 1,
-    },
-    status: "DRAFT" as Status,
-  })
-    .then(() => {
-      console.log("Volunteer pathway added successfully.");
-    })
-    .catch((error) => {
-      console.error("Error adding volunteer pathway:", error);
-    });
-};
+// export const addSampleVolunteerPathway = () => {
+//   addVolunteerPathway("ZpfkIPPdBuaeA6iFyhaR", {
+//     name: "Pathway",
+//     description: "desc",
+//     shortBlurb: "shortBlurb",
+//     coverImage:
+//       "https://media.newyorker.com/photos/5c0195240591e72cf6b59d12/1:1/w_1465,h_1465,c_limit/Duke-Spongebob_01.jpg",
+//     trainingIDs: ["test1", "test2", "test3"],
+//     quiz: {
+//       questions: [
+//         {
+//           question: "What is the capital of France?",
+//           choices: ["London", "Paris", "Berlin"],
+//           answer: "Paris",
+//         },
+//         {
+//           question: "What is 2 + 2?",
+//           choices: ["3", "4", "5"],
+//           answer: "4",
+//         },
+//       ],
+//       numQuestions: 2,
+//       passingScore: 1,
+//     },
+//     status: "DRAFT" as Status,
+//   })
+//     .then(() => {
+//       console.log("Volunteer pathway added successfully.");
+//     })
+//     .catch((error) => {
+//       console.error("Error adding volunteer pathway:", error);
+//     });
+// };
 
 export const updateSamplePathway = () => {
   updatePathway(

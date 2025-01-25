@@ -11,7 +11,7 @@ interface TrainingCardProps {
   training: TrainingID;
   volunteerTraining?: VolunteerTraining;
   preview: boolean;
-  setPopupOpen: any;
+  setPopupOpen?: any;
 }
 
 const TrainingCard: React.FC<TrainingCardProps> = ({
