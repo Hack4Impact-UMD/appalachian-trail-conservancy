@@ -44,7 +44,6 @@ function TrainingPage() {
       passingScore: 0,
     },
     associatedPathways: [],
-    certificationImage: "",
     status: "DRAFT",
   });
 

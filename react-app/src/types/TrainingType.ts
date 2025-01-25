@@ -10,7 +10,6 @@ export interface Training {
   resources: TrainingResource[];
   quiz: Quiz;
   associatedPathways: string[]; // pathway IDs
-  certificationImage: string; // URL
   status: Status;
 }
 

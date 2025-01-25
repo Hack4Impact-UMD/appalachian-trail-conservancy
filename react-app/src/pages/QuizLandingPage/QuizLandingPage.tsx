@@ -45,7 +45,6 @@ function QuizLandingPage() {
       passingScore: 0,
     },
     associatedPathways: [],
-    certificationImage: "",
     status: "DRAFT",
   });
 

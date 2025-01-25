@@ -50,7 +50,6 @@ function PathwayQuizPage() {
       numQuestions: 0,
       passingScore: 0,
     },
-    badgeImage: "",
     status: "PUBLISHED",
   });
 

@@ -52,7 +52,6 @@ function QuizPage() {
     },
     status: "PUBLISHED",
     associatedPathways: [],
-    certificationImage: "",
   });
 
   useEffect(() => {

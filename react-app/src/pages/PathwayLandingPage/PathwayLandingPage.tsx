@@ -47,7 +47,6 @@ function PathwayLandingPage() {
       numQuestions: 0,
       passingScore: 0,
     },
-    badgeImage: "",
     status: "DRAFT",
   });
 

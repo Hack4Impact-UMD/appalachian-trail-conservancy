@@ -50,7 +50,6 @@ const QuizResultPage = () => {
       passingScore: 0,
     },
     associatedPathways: [],
-    certificationImage: "",
     status: "DRAFT",
   });
   const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(

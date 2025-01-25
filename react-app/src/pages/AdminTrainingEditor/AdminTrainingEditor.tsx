@@ -298,7 +298,6 @@ const AdminTrainingEditor: React.FC = () => {
             passingScore: 0,
           },
           associatedPathways: [],
-          certificationImage: "",
           status: status,
         } as Training;
         const newTrainingId = (await addTraining(updatedTraining)) as
@@ -396,7 +395,6 @@ const AdminTrainingEditor: React.FC = () => {
             passingScore: 0,
           },
           associatedPathways: [],
-          certificationImage: "",
           status: status,
         } as Training;
         const newTrainingId = await addTraining(updatedTraining);
@@ -722,7 +720,6 @@ const AdminTrainingEditor: React.FC = () => {
                           passingScore: 0,
                         },
                         associatedPathways: [],
-                        certificationImage: "",
                         status: status,
                       }}
                       preview={true}

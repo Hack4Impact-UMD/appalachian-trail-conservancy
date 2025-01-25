@@ -49,7 +49,7 @@ const transporter = nodemailer.createTransport({
 });
 
 const baseEmail = {
-  subject: "Welcome to the ATC Training Portal",
+  subject: "Welcome to Appalachian Trail Learning Pathways",
   body: `
     <div>
       <div style="max-width: 600px; margin: auto">
@@ -57,7 +57,7 @@ const baseEmail = {
         <p style="font-size: 16px">
         Hello,<br>
         <br>
-        Your account has been created.<br>
+        Thank you for joining the Appalachian Trail Learning Pathways! Instead of a password to keep track of, this site is accessed by entering a passcode sent to this email address when you want to log in. All of your progress in trainings and learning pathways will be saved in your Learning Pathways account. For now, this is separate from the Volunteer Engagement Platform. Please reach out to volunteer@appalachiantrail.org with questions about access or your accomplishments.<br>
         <br>
         <span style="font-weight: 600; text-decoration: underline">Appalachian Trail Conservancy Training Portal</span><br>
         <br>

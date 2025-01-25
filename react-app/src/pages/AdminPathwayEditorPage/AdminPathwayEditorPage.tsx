@@ -89,7 +89,6 @@ const AdminPathwayEditorPage: React.FC = () => {
       passingScore: 0,
     },
     associatedPathways: [],
-    certificationImage: "",
     status: "PUBLISHED",
   };
 
@@ -322,7 +321,6 @@ const AdminPathwayEditorPage: React.FC = () => {
             numQuestions: 0,
             passingScore: 0,
           },
-          badgeImage: "",
           status: status,
         } as Pathway;
 
@@ -401,7 +399,6 @@ const AdminPathwayEditorPage: React.FC = () => {
             numQuestions: 0,
             passingScore: 0,
           },
-          badgeImage: "",
           status: status,
         } as Pathway;
         const newPathwayId = await addPathway(updatedPathway);
@@ -739,7 +736,6 @@ const AdminPathwayEditorPage: React.FC = () => {
                           numQuestions: 0,
                           passingScore: 0,
                         },
-                        badgeImage: "",
                         status: status,
                       }}
                       preview={true}

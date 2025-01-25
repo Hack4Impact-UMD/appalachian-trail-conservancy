@@ -49,7 +49,6 @@ const PathwayQuizResultPage = () => {
       numQuestions: 0,
       passingScore: 0,
     },
-    badgeImage: "",
     status: "PUBLISHED",
   });
   const [volunteerPathway, setVolunteerPathway] = useState<VolunteerPathway>({

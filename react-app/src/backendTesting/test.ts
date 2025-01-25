@@ -60,7 +60,6 @@ export const addSampleTraining = ({
     passingScore: 1,
   },
   associatedPathways = [],
-  certificationImage = "https://github.com/Hack4Impact-UMD/y-knot/assets/67646012/fd89b897-4d20-4604-93a4-c28370cbdc2e",
   status = "DRAFT" as Status,
 }) => {
   const training: Training = {
@@ -71,7 +70,6 @@ export const addSampleTraining = ({
     resources,
     quiz,
     associatedPathways,
-    certificationImage,
     status,
   };
   addTraining(training)
@@ -105,7 +103,6 @@ export const addSamplePathway = ({
     numQuestions: 2,
     passingScore: 1,
   },
-  badgeImage = "https://github.com/Hack4Impact-UMD/y-knot/assets/67646012/fd89b897-4d20-4604-93a4-c28370cbdc2e",
   status = "DRAFT" as Status,
 }) => {
   const pathway: Pathway = {
@@ -115,7 +112,6 @@ export const addSamplePathway = ({
     coverImage,
     trainingIDs,
     quiz,
-    badgeImage,
     status,
   };
   addPathway(pathway)
@@ -179,8 +175,6 @@ export const addSampleVolunteerTraining = () => {
       passingScore: 1,
     },
     associatedPathways: [],
-    certificationImage:
-      "https://media.newyorker.com/photos/5c0195240591e72cf6b59d12/1:1/w_1465,h_1465,c_limit/Duke-Spongebob_01.jpg",
     status: "DRAFT" as Status,
   })
     .then(() => {
@@ -216,8 +210,6 @@ export const addSampleVolunteerPathway = () => {
       numQuestions: 2,
       passingScore: 1,
     },
-    badgeImage:
-      "https://media.newyorker.com/photos/5c0195240591e72cf6b59d12/1:1/w_1465,h_1465,c_limit/Duke-Spongebob_01.jpg",
     status: "DRAFT" as Status,
   })
     .then(() => {
@@ -267,8 +259,6 @@ export const updateSamplePathway = () => {
         numQuestions: 2,
         passingScore: 2,
       },
-      badgeImage:
-        "https://github.com/Hack4Impact-UMD/y-knot/assets/67646012/fd89b897-4d20-4604-93a4-c28370cbdc2e",
       status: "DRAFT" as Status,
     },
     "R8inCysiACE7bk1zy3y8"
