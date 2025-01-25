@@ -222,7 +222,7 @@ const PathwayQuizResultPage = () => {
                   sx={{ ...forestGreenButton }}
                   variant="contained"
                   onClick={() =>
-                    navigate(`/pathways/quiz`, {
+                    navigate(`/pathways/quizlanding`, {
                       state: {
                         volunteerPathway: volunteerPathway,
                         pathway: pathway,

@@ -223,7 +223,7 @@ const QuizResultPage = () => {
                   sx={{ ...forestGreenButton }}
                   variant="contained"
                   onClick={() =>
-                    navigate(`/trainings/quiz`, {
+                    navigate(`/trainings/quizlanding`, {
                       state: {
                         volunteerTraining: volunteerTraining,
                         training: training,

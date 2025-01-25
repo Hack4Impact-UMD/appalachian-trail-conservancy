@@ -140,6 +140,7 @@ function QuizPage() {
       })
       .catch((error) => {
         console.error("Error validating quiz:", error);
+        setQuizLoading(false);
       });
   };
 
