@@ -172,7 +172,9 @@ function PathwayQuizPage() {
               <>
                 <div className={styles.header}>
                   <h1 className={styles.nameHeading}>{pathway.name} - Quiz</h1>
-                  <ProfileIcon />
+                  <div className={styles.profileIcon}>
+                    <ProfileIcon />
+                  </div>
                 </div>
 
                 {quizLoading ? (

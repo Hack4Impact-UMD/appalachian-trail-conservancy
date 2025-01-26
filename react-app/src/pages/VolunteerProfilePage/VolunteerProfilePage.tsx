@@ -77,8 +77,7 @@ function VolunteerProfilePage() {
         style={{
           // Only apply left shift when screen width is greater than 1200px
           left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-        }}
-      >
+        }}>
         {!navigationBarOpen && (
           <img
             src={hamburger}
@@ -106,6 +105,7 @@ function VolunteerProfilePage() {
                     <TextField
                       disabled
                       value={volunteer?.firstName}
+                      className={styles.inputTextField}
                       sx={grayBorderTextField}
                       InputProps={{
                         endAdornment: (
@@ -115,8 +115,7 @@ function VolunteerProfilePage() {
                                 setEditNameType("First");
                                 setEditNamePopup(true);
                               }}
-                              sx={{ color: "var(--blue-gray)" }}
-                            >
+                              sx={{ color: "var(--blue-gray)" }}>
                               <EditIcon />
                             </IconButton>
                           </Tooltip>
@@ -130,6 +129,7 @@ function VolunteerProfilePage() {
                     <TextField
                       disabled
                       value={volunteer?.lastName}
+                      className={styles.inputTextField}
                       sx={grayBorderTextField}
                       InputProps={{
                         endAdornment: (
@@ -139,8 +139,7 @@ function VolunteerProfilePage() {
                                 setEditNameType("Last");
                                 setEditNamePopup(true);
                               }}
-                              sx={{ color: "var(--blue-gray)" }}
-                            >
+                              sx={{ color: "var(--blue-gray)" }}>
                               <EditIcon />
                             </IconButton>
                           </Tooltip>
@@ -154,7 +153,7 @@ function VolunteerProfilePage() {
                     <TextField
                       value={volunteer?.email ?? ""}
                       disabled
-                      className={styles.emailTextField}
+                      className={`${styles.emailTextField} ${styles.inputTextField}`}
                       sx={grayBorderTextField}
                       InputProps={{
                         endAdornment: (
@@ -163,8 +162,7 @@ function VolunteerProfilePage() {
                               onClick={() => {
                                 // TODO: Implement email edit
                               }}
-                              sx={{ color: "var(--blue-gray)" }}
-                            >
+                              sx={{ color: "var(--blue-gray)" }}>
                               <EditIcon />
                             </IconButton>
                           </Tooltip>
@@ -203,8 +201,7 @@ function VolunteerProfilePage() {
               onClose={handleCloseSnackbar}
               severity={
                 snackbarMessage.includes("successfully") ? "success" : "error"
-              }
-            >
+              }>
               {snackbarMessage}
             </Alert>
           </Snackbar>

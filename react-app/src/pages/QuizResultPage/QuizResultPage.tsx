@@ -114,7 +114,7 @@ const QuizResultPage = () => {
             {/* HEADER */}
             <div className={styles.header}>
               <h1 className={styles.nameHeading}>{training.name} - Quiz</h1>
-              <div className={styles.profileIconContainer}>
+              <div className={styles.profileIcon}>
                 <ProfileIcon />
               </div>
             </div>
@@ -202,7 +202,7 @@ const QuizResultPage = () => {
                   sx={{ ...whiteButtonGrayBorder }}
                   variant="contained"
                   onClick={() => navigate("/trainings")}>
-                  Exit training
+                  {screenWidth > 450 ? "Exit Training" : "Exit"}
                 </Button>
                 <Button
                   sx={{ ...whiteButtonGrayBorder }}
@@ -216,7 +216,7 @@ const QuizResultPage = () => {
                       },
                     })
                   }>
-                  Restart training
+                  {screenWidth > 450 ? "Restart Training" : "Restart"}
                 </Button>
                 <Button
                   sx={{ ...forestGreenButton }}
@@ -230,7 +230,7 @@ const QuizResultPage = () => {
                       },
                     })
                   }>
-                  Retake quiz
+                  {screenWidth > 450 ? "Retake Quiz" : "Retake"}
                 </Button>
               </>
             )}

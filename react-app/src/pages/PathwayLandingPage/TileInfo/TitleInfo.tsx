@@ -58,12 +58,18 @@ const TitleInfo: React.FC<TitleInfoProps> = ({
     <div className={styles.container}>
       {/* Profile Icon and Title */}
       <div className={styles.header}>
-        <h1 className={styles.nameHeading}>{title}</h1>
-        <div onClick={() => setIsOpen(!isOpen)} className={styles.arrowButton}>
-          {isOpen ? <FaChevronUp /> : <FaChevronDown />}
-          {/* Change arrow direction based on state */}
+        <div className={styles.title}>
+          <h1 className={styles.nameHeading}>{title}</h1>
+          <div
+            onClick={() => setIsOpen(!isOpen)}
+            className={styles.arrowButton}>
+            {isOpen ? <FaChevronUp /> : <FaChevronDown />}
+            {/* Change arrow direction based on state */}
+          </div>
         </div>
-        <ProfileIcon />
+        <div className={styles.profileIcon}>
+          <ProfileIcon />
+        </div>
       </div>
       <div className={styles.progressContainer}>{renderMarker()}</div>
 

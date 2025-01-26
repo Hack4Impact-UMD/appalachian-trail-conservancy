@@ -113,7 +113,7 @@ const PathwayQuizResultPage = () => {
             {/* HEADER */}
             <div className={styles.header}>
               <h1 className={styles.nameHeading}>{pathway.name} - Quiz</h1>
-              <div className={styles.profileIconContainer}>
+              <div className={styles.profileIcon}>
                 <ProfileIcon />
               </div>
             </div>
@@ -201,7 +201,7 @@ const PathwayQuizResultPage = () => {
                   sx={{ ...whiteButtonGrayBorder }}
                   variant="contained"
                   onClick={() => navigate("/pathways")}>
-                  Exit pathway
+                  {screenWidth > 450 ? "Exit Pathway" : "Exit"}
                 </Button>
                 <Button
                   sx={{ ...whiteButtonGrayBorder }}
@@ -215,7 +215,7 @@ const PathwayQuizResultPage = () => {
                       },
                     })
                   }>
-                  Back to Pathway
+                  {screenWidth > 450 ? "Back to Pathway" : "Back"}
                 </Button>
                 <Button
                   sx={{ ...forestGreenButton }}
@@ -229,7 +229,7 @@ const PathwayQuizResultPage = () => {
                       },
                     })
                   }>
-                  Retake quiz
+                  {screenWidth > 450 ? "Retake Quiz" : "Retake"}
                 </Button>
               </>
             )}

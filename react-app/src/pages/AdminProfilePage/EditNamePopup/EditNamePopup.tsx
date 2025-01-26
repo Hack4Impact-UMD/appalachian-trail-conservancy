@@ -95,7 +95,6 @@ const EditNamePopup = ({
   return (
     <Modal
       height={260}
-      width={450}
       open={open}
       onClose={() => {
         handleClose();
@@ -106,6 +105,7 @@ const EditNamePopup = ({
           <h3 className={styles.subHeader}>New {editType} Name</h3>
           <TextField
             sx={grayBorderTextField}
+            className={styles.inputTextField}
             defaultValue={
               editType === "First" ? admin?.firstName : admin?.lastName
             }

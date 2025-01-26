@@ -73,7 +73,6 @@ const AdminDeletePathwayDraftPopup = ({
     <>
       <Modal
         height={250}
-        width={450}
         open={open}
         onClose={() => {
           if (canClose) {

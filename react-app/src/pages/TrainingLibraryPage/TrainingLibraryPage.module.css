@@ -165,6 +165,18 @@
     width: 425px;
   }
 
+  .header {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column-reverse;
+    text-align: center;
+  }
+
+  .profileIcon {
+    margin-left: auto;
+    margin-right: 10px;
+  }
+
   .cardsContainer {
     justify-content: space-around;
   }
@@ -184,15 +196,13 @@
   }
 }
 
-@media screen and (max-width: 600px) {
-  .header {
-    margin-top: 5rem;
-  }
-}
-
 @media screen and (max-width: 450px) {
   .content {
     width: 300px;
+  }
+
+  .nameHeading {
+    font-size: 2rem;
   }
 
   .searchBar {

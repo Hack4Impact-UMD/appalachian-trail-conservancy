@@ -74,8 +74,7 @@ function AdminProfilePage() {
       <div
         className={
           openEditNamePopup || openEditCredentialPopup ? styles.popupOpen : ""
-        }
-      >
+        }>
         <AdminNavigationBar
           open={navigationBarOpen}
           setOpen={setNavigationBarOpen}
@@ -87,8 +86,7 @@ function AdminProfilePage() {
         style={{
           // Only apply left shift when screen width is greater than 1200px
           left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-        }}
-      >
+        }}>
         {!navigationBarOpen && (
           <img
             src={hamburger}
@@ -125,8 +123,7 @@ function AdminProfilePage() {
                                 setEditNameType("First");
                                 setEditNamePopup(true);
                               }}
-                              sx={{ color: "var(--blue-gray)" }}
-                            >
+                              sx={{ color: "var(--blue-gray)" }}>
                               <EditIcon />
                             </IconButton>
                           </Tooltip>
@@ -149,8 +146,7 @@ function AdminProfilePage() {
                                 setEditNameType("Last");
                                 setEditNamePopup(true);
                               }}
-                              sx={{ color: "var(--blue-gray)" }}
-                            >
+                              sx={{ color: "var(--blue-gray)" }}>
                               <EditIcon />
                             </IconButton>
                           </Tooltip>
@@ -173,8 +169,7 @@ function AdminProfilePage() {
                                 setEditCredentialType("Email");
                                 setEditCredentialPopup(true);
                               }}
-                              sx={{ color: "var(--blue-gray)" }}
-                            >
+                              sx={{ color: "var(--blue-gray)" }}>
                               <EditIcon />
                             </IconButton>
                           </Tooltip>
@@ -197,8 +192,7 @@ function AdminProfilePage() {
                                 setEditCredentialType("Password");
                                 setEditCredentialPopup(true);
                               }}
-                              sx={{ color: "var(--blue-gray)" }}
-                            >
+                              sx={{ color: "var(--blue-gray)" }}>
                               <EditIcon />
                             </IconButton>
                           </Tooltip>
@@ -248,8 +242,7 @@ function AdminProfilePage() {
               onClose={handleCloseSnackbar}
               severity={
                 snackbarMessage.includes("successfully") ? "success" : "error"
-              }
-            >
+              }>
               {snackbarMessage}
             </Alert>
           </Snackbar>

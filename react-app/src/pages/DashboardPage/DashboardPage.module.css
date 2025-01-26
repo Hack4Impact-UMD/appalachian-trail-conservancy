@@ -141,14 +141,20 @@
     width: 425px;
   }
 
+  .header {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column-reverse;
+    text-align: center;
+  }
+
+  .profileIcon {
+    margin-left: auto;
+    margin-right: 10px;
+  }
+
   .cardsContainer {
     justify-content: space-around;
-  }
-}
-
-@media screen and (max-width: 600px) {
-  .header {
-    margin-top: 5rem;
   }
 }
 
@@ -157,9 +163,17 @@
     width: 300px;
   }
 
+  .nameHeading {
+    font-size: 2rem;
+  }
+
   .subHeader {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     margin-bottom: 1.5rem;
+  }
+
+  .subHeader h2 {
+    text-align: center;
   }
 }

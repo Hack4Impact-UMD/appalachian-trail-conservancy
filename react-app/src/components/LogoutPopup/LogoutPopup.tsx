@@ -28,7 +28,6 @@ const LogoutPopup = ({ open, onClose }: modalPropsType): React.ReactElement => {
   return (
     <Modal
       height={250}
-      width={450}
       open={open}
       onClose={() => {
         onClose();

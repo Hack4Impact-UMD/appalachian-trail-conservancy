@@ -110,7 +110,9 @@ function QuizLandingPage() {
                 {/* header */}
                 <div className={styles.header}>
                   <h1 className={styles.nameHeading}>{training.name}</h1>
-                  <ProfileIcon />
+                  <div className={styles.profileIcon}>
+                    <ProfileIcon />
+                  </div>
                 </div>
                 <div className={`${styles.subHeader} ${styles.questionInfo}`}>
                   <h2>Number of Questions: {training.quiz.numQuestions}</h2>

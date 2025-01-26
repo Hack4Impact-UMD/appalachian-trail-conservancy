@@ -28,6 +28,13 @@
   margin-bottom: 2rem;
 }
 
+.title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 2%;
+}
+
 .nameHeading {
   color: var(--forest-green);
   font-size: 3rem;
@@ -37,7 +44,6 @@
 .arrowButton {
   font-size: 2rem;
   cursor: pointer;
-  margin-right: auto;
   display: flex;
   align-items: center;
   color: var(--blue-gray);
@@ -81,4 +87,36 @@
   font-size: 1.8rem;
   margin: 0 0 1rem 0;
   color: var(--blue-gray);
+}
+
+@media screen and (max-width: 750px) {
+  .header {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column-reverse;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .profileIcon {
+    margin-left: auto;
+    margin-right: 10px;
+  }
+
+  .title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .progressContainer {
+    justify-content: center;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .nameHeading {
+    font-size: 2rem;
+  }
 }

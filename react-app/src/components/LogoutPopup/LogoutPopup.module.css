@@ -39,3 +39,9 @@
   justify-content: center;
   gap: 10%;
 }
+
+@media screen and (max-width: 450px) {
+  .title {
+    max-width: 250px;
+  }
+}
