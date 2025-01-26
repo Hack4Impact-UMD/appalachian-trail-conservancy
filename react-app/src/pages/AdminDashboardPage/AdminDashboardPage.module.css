@@ -54,20 +54,6 @@
   margin: 0;
 }
 
-.adminIcon {
-  color: var(--blue-gray);
-  font-size: 1.2rem;
-  font-weight: 700;
-  text-align: center;
-  display: flex;
-  flex-direction: row;
-  column-gap: 1rem;
-}
-
-.profileIcon {
-  margin-top: 10%;
-}
-
 .buttonContainer {
   display: flex;
   gap: 5%;
@@ -174,6 +160,18 @@
     width: 425px;
   }
 
+  .header {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column-reverse;
+    text-align: center;
+  }
+
+  .profileIcon {
+    margin-left: auto;
+    margin-right: 10px;
+  }
+
   .buttonContainer {
     display: flex;
     flex-direction: column;
@@ -204,12 +202,6 @@
 
   .cardsContainer {
     justify-content: space-around;
-  }
-}
-
-@media screen and (max-width: 600px) {
-  .header {
-    margin-top: 5rem;
   }
 }
 

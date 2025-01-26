@@ -33,7 +33,9 @@ import { Quiz, TrainingID, Status, Question } from "../../types/TrainingType";
 
 function TrainingQuizEditorPage() {
   const navigate = useNavigate();
-  const [navigationBarOpen, setNavigationBarOpen] = useState(true);
+  const [navigationBarOpen, setNavigationBarOpen] = useState(
+    !(window.innerWidth < 1200)
+  );
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
 
   const location = useLocation();
@@ -335,7 +337,9 @@ function TrainingQuizEditorPage() {
                 <h1 className={styles.nameHeading}>Training Editor</h1>
                 <div>{renderMarker()}</div>
               </div>
-              <ProfileIcon />
+              <div className={styles.profileIcon}>
+                <ProfileIcon />
+              </div>
             </div>
 
             <form noValidate onSubmit={(e) => e.preventDefault()}>

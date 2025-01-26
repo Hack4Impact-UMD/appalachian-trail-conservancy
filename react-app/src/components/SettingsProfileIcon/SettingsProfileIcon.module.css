@@ -16,3 +16,11 @@
   font-weight: bold;
   text-decoration: "none";
 }
+
+@media screen and (max-width: 750px) {
+  .profileIcon {
+    width: 150px;
+    height: 150px;
+    font-size: 3rem;
+  }
+}

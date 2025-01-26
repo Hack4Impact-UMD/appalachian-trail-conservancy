@@ -115,6 +115,7 @@ function AdminProfilePage() {
                       disabled
                       value={admin?.firstName}
                       sx={grayBorderTextField}
+                      className={styles.inputTextField}
                       InputProps={{
                         endAdornment: (
                           <Tooltip title={"Edit"}>
@@ -138,6 +139,7 @@ function AdminProfilePage() {
                       disabled
                       value={admin?.lastName}
                       sx={grayBorderTextField}
+                      className={styles.inputTextField}
                       InputProps={{
                         endAdornment: (
                           <Tooltip title={"Edit"}>
@@ -161,6 +163,7 @@ function AdminProfilePage() {
                       value={admin?.email ?? ""}
                       disabled
                       sx={grayBorderTextField}
+                      className={styles.inputTextField}
                       InputProps={{
                         endAdornment: (
                           <Tooltip title={"Edit"}>
@@ -184,6 +187,7 @@ function AdminProfilePage() {
                       value={"•••••••••••"}
                       disabled
                       sx={grayBorderTextField}
+                      className={styles.inputTextField}
                       InputProps={{
                         endAdornment: (
                           <Tooltip title={"Edit"}>

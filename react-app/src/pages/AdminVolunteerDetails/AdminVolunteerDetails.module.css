@@ -65,13 +65,17 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  gap: 5%;
 }
 
 .buttonGroup {
   display: flex;
-  justify-content: space-between;
   flex-direction: row;
   gap: 10%;
+}
+
+.dropdownContainer {
+  display: none;
 }
 
 .searchBarContainer {
@@ -80,18 +84,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 400%;
+  flex-grow: 1;
 }
 
 .innerGrid {
   height: 533px;
-}
-
-.label {
-  color: black;
-  font-weight: bold;
-  margin-bottom: 4px;
-  margin-top: 2rem;
 }
 
 .text {
@@ -107,9 +104,7 @@
 
 .buttonContainerInner {
   display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  width: 20%;
+  gap: 10%;
 }
 
 @media screen and (min-width: 1500px) {
@@ -128,22 +123,79 @@
   .content {
     width: 600px;
   }
+
+  .queryContainer {
+    flex-direction: column;
+  }
+
+  .searchBarContainer {
+    width: 600px;
+    margin-bottom: 0.5rem;
+  }
+
+  .buttonGroup {
+    display: none;
+  }
+
+  .dropdownContainer {
+    display: flex;
+    width: 600px;
+    margin-bottom: 1rem;
+  }
+
+  .dropdownMenu {
+    width: 600px;
+  }
 }
 
 @media screen and (max-width: 750px) {
   .content {
     width: 425px;
   }
-}
 
-@media screen and (max-width: 600px) {
   .header {
-    margin-top: 5rem;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column-reverse;
+    text-align: center;
+  }
+
+  .profileIcon {
+    margin-left: auto;
+    margin-right: 10px;
+  }
+
+  .searchBarContainer {
+    width: 425px;
+  }
+
+  .dropdownContainer {
+    width: 425px;
+  }
+
+  .dropdownMenu {
+    width: 425px;
   }
 }
 
 @media screen and (max-width: 450px) {
   .content {
     width: 300px;
+  }
+
+  .searchBarContainer {
+    width: 300px;
+  }
+
+  .dropdownContainer {
+    width: 300px;
+  }
+
+  .dropdownMenu {
+    width: 300px;
+  }
+
+  .bottomButton {
+    width: 85px !important;
   }
 }

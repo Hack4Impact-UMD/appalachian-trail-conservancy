@@ -115,9 +115,17 @@
   }
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 750px) {
   .content {
     width: 425px;
+  }
+
+  .header {
+    margin-top: 5rem;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column-reverse;
+    text-align: center;
   }
 
   .profileContainer {
@@ -125,8 +133,12 @@
     align-items: center;
     margin-bottom: 2rem;
   }
-}
 
+  .inputTextField {
+    width: 425px !important;
+  }
+}
+/* 
 @media screen and (max-width: 600px) {
   .header {
     margin-top: 5rem;
@@ -136,7 +148,7 @@
     width: 100%;
     text-align: center;
   }
-}
+} */
 
 @media screen and (max-width: 450px) {
   .content {
@@ -146,6 +158,13 @@
   .subHeader {
     flex-direction: column;
     align-items: flex-start;
-    margin-bottom: 1.5rem;
+  }
+
+  .nameHeading {
+    font-size: 2rem;
+  }
+
+  .inputTextField {
+    width: 300px !important;
   }
 }

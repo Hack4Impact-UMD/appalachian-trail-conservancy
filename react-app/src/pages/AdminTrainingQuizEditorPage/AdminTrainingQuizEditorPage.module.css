@@ -247,6 +247,22 @@
     width: 425px;
   }
 
+  .header {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column-reverse;
+    text-align: center;
+  }
+
+  .profileIcon {
+    margin-left: auto;
+    margin-right: 10px;
+  }
+
+  .headerTitle {
+    flex-direction: column;
+  }
+
   .questionBox {
     min-width: 380px;
     max-width: 380px;
@@ -255,12 +271,6 @@
   .answerBox {
     min-width: 310px;
     max-width: 310px;
-  }
-}
-
-@media screen and (max-width: 600px) {
-  .header {
-    margin-top: 5rem;
   }
 }
 
@@ -277,5 +287,9 @@
   .answerBox {
     min-width: 200px;
     max-width: 200px;
+  }
+
+  .buttonsContainer {
+    justify-content: space-between;
   }
 }

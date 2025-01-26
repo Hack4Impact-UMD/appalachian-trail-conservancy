@@ -33,7 +33,9 @@ import { updatePathway } from "../../backend/FirestoreCalls";
 
 function PathwayQuizEditorPage() {
   const navigate = useNavigate();
-  const [navigationBarOpen, setNavigationBarOpen] = useState(true);
+  const [navigationBarOpen, setNavigationBarOpen] = useState(
+    !(window.innerWidth < 1200)
+  );
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
 
   const location = useLocation();
@@ -335,7 +337,9 @@ function PathwayQuizEditorPage() {
                 <h1 className={styles.nameHeading}>Pathway Editor</h1>
                 <div>{renderMarker()}</div>
               </div>
-              <ProfileIcon />
+              <div className={styles.profileIcon}>
+                <ProfileIcon />
+              </div>
             </div>
 
             <form noValidate onSubmit={(e) => e.preventDefault()}>

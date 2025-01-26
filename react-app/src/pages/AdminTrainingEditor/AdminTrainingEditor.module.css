@@ -207,6 +207,22 @@
     width: 425px;
   }
 
+  .header {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column-reverse;
+    text-align: center;
+  }
+
+  .profileIcon {
+    margin-left: auto;
+    margin-right: 10px;
+  }
+
+  .headerTitle {
+    flex-direction: column;
+  }
+
   .formContent {
     width: 100%;
   }
@@ -220,10 +236,6 @@
 }
 
 @media screen and (max-width: 600px) {
-  .header {
-    margin-top: 5rem;
-  }
-
   .resourceContainer {
     display: flex;
     flex-direction: column;

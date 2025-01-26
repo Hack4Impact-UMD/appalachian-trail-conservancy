@@ -101,6 +101,7 @@ const AdminPathwayEditorPage: React.FC = () => {
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
   );
+  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
 
   const handleAddSearchBar = () => {
     setSelectedTrainings([...selectedTrainings, blankTraining]);
@@ -450,6 +451,18 @@ const AdminPathwayEditorPage: React.FC = () => {
     }
   };
 
+  // Update screen width on resize
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   useEffect(() => {
     // description quill editor
     if (descriptionContainerRef.current && !quillDescriptionRef.current) {
@@ -512,7 +525,9 @@ const AdminPathwayEditorPage: React.FC = () => {
       </div>
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        style={{
+          left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
+        }}>
         {/* Hamburger Menu */}
         {!navigationBarOpen && (
           <img
@@ -532,7 +547,9 @@ const AdminPathwayEditorPage: React.FC = () => {
                 <h1 className={styles.nameHeading}>Pathway Editor</h1>
                 <div>{renderMarker()}</div>
               </div>
-              <ProfileIcon />
+              <div className={styles.profileIcon}>
+                <ProfileIcon />
+              </div>
             </div>
 
             {/* Input Boxes */}
@@ -851,7 +868,7 @@ const AdminPathwayEditorPage: React.FC = () => {
                     ...styledRectButton,
                     ...forestGreenButton,
                     marginTop: "2%",
-                    width: "40px%",
+                    width: "fit-content",
                   }}
                   onClick={handleNextClick}
                   disabled={loading}>
