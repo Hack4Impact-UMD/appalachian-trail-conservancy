@@ -2,6 +2,7 @@ import styles from "./VolunteerProfilePage.module.css";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../auth/AuthProvider";
 import EditNamePopup from "./EditNamePopup/EditNamePopup";
+import EditEmailPopup from "./EditEmailPopup/EditEmailPopup";
 import { Tooltip, Alert, Snackbar, TextField, IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { getVolunteer } from "../../backend/FirestoreCalls";
@@ -27,6 +28,9 @@ function VolunteerProfilePage() {
   // state for handling edit name popup
   const [openEditNamePopup, setEditNamePopup] = useState<boolean>(false);
   const [editNameType, setEditNameType] = useState<string>("First");
+
+  // state for handling edit email popup
+  const [openEditEmailPopup, setEditEmailPopup] = useState<boolean>(false);
 
   const [snackbar, setSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -65,7 +69,10 @@ function VolunteerProfilePage() {
 
   return (
     <>
-      <div className={openEditNamePopup ? styles.popupOpen : ""}>
+      <div
+        className={
+          openEditNamePopup || openEditEmailPopup ? styles.popupOpen : ""
+        }>
         <NavigationBar
           open={navigationBarOpen}
           setOpen={setNavigationBarOpen}
@@ -160,7 +167,7 @@ function VolunteerProfilePage() {
                           <Tooltip title={"Edit"}>
                             <IconButton
                               onClick={() => {
-                                // TODO: Implement email edit
+                                setEditEmailPopup(true);
                               }}
                               sx={{ color: "var(--blue-gray)" }}>
                               <EditIcon />
@@ -183,6 +190,15 @@ function VolunteerProfilePage() {
           open={openEditNamePopup}
           onClose={setEditNamePopup}
           editType={editNameType}
+          volunteer={volunteer}
+          setVolunteer={setVolunteer}
+          setSnackbar={setSnackbar}
+          setSnackbarMessage={setSnackbarMessage}
+        />
+
+        <EditEmailPopup
+          open={openEditEmailPopup}
+          onClose={setEditEmailPopup}
           volunteer={volunteer}
           setVolunteer={setVolunteer}
           setSnackbar={setSnackbar}
