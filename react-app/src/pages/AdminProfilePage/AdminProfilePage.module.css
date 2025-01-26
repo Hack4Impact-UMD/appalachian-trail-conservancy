@@ -77,7 +77,10 @@
 }
 
 .profileIcon {
-  margin-top: 3%;
+  /* margin-top: 3%; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .subHeader {
@@ -138,17 +141,6 @@
     width: 425px !important;
   }
 }
-/* 
-@media screen and (max-width: 600px) {
-  .header {
-    margin-top: 5rem;
-  }
-
-  .nameHeading {
-    width: 100%;
-    text-align: center;
-  }
-} */
 
 @media screen and (max-width: 450px) {
   .content {

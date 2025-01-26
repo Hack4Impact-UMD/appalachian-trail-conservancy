@@ -17,6 +17,14 @@
   text-decoration: "none";
 }
 
+@media screen and (max-width: 1000px) {
+  .profileIcon {
+    width: 200px;
+    height: 200px;
+    font-size: 4rem;
+  }
+}
+
 @media screen and (max-width: 750px) {
   .profileIcon {
     width: 150px;
