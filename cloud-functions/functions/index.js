@@ -52,16 +52,12 @@ const baseEmail = {
   subject: "Welcome to Appalachian Trail Learning Pathways",
   body: `
     <div>
-      <div style="max-width: 600px; margin: auto">
-        <br><br><br>
-        <p style="font-size: 16px">
-        Hello,<br>
-        <br>
-        Thank you for joining the Appalachian Trail Learning Pathways! Instead of a password to keep track of, this site is accessed by entering a passcode sent to this email address when you want to log in. All of your progress in trainings and learning pathways will be saved in your Learning Pathways account. For now, this is separate from the Volunteer Engagement Platform. Please reach out to volunteer@appalachiantrail.org with questions about access or your accomplishments.<br>
-        <br>
-        <span style="font-weight: 600; text-decoration: underline">Appalachian Trail Conservancy Training Portal</span><br>
-        <br>
-      <div>
+      <p>Hello,</p>
+      <p><br></p>
+      <p>Thank you for joining the Appalachian Trail Learning Pathways! Instead of a password to keep track of, this site is accessed by entering a passcode sent to this email address when you want to log in. All of your progress in trainings and learning pathways will be saved in your Learning Pathways account. For now, this is separate from the Volunteer Engagement Platform. Please reach out to <a href="mailto:volunteer@appalachiantrail.org" rel="noopener noreferrer" target="_blank">volunteer@appalachiantrail.org</a> with questions about access or your accomplishments.</p>
+      <p><br></p>
+      <p>Thanks for all you do!</p>
+      <p>ATC Volunteer Team</p>
     </div>
   `,
 };
