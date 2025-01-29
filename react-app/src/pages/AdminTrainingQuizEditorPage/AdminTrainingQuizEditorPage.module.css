@@ -90,6 +90,12 @@
   margin: 0;
 }
 
+.quizEditorHeader {
+  display: flex;
+  align-items: center;
+  gap: 1%;
+}
+
 .quizEditorText {
   color: var(--blue-gray);
   font-weight: bold;

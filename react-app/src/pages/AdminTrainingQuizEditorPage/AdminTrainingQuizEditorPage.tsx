@@ -6,6 +6,7 @@ import {
   OutlinedInput,
   Radio,
   RadioGroup,
+  Tooltip,
   FormControl,
   FormControlLabel,
   Snackbar,
@@ -21,6 +22,7 @@ import {
   numberInputButton,
   grayGreenRadioButton,
   styledRectButton,
+  whiteTooltip,
 } from "../../muiTheme";
 import { Unstable_NumberInput as NumberInput } from "@mui/base/Unstable_NumberInput";
 import AddIcon from "@mui/icons-material/Add";
@@ -28,6 +30,7 @@ import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigat
 import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Hamburger from "../../assets/hamburger.svg";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { updateTraining } from "../../backend/FirestoreCalls";
 import { Quiz, TrainingID, Status, Question } from "../../types/TrainingType";
 
@@ -351,7 +354,21 @@ function TrainingQuizEditorPage() {
                 {status === "DRAFT" ? "Save as Draft" : "Save"}
               </Button>
 
-              <h2 className={styles.quizEditorText}>CREATE QUIZ</h2>
+              <div className={styles.quizEditorHeader}>
+                <h2 className={styles.quizEditorText}>CREATE QUIZ</h2>
+                <Tooltip
+                  title="The number of questions and points to pass cannot be modified for published and archived trainings."
+                  placement="right"
+                  componentsProps={{
+                    tooltip: {
+                      sx: { ...whiteTooltip, fontSize: "0.75rem" },
+                    },
+                  }}>
+                  <span className={styles.iconCenter}>
+                    <InfoOutlinedIcon />
+                  </span>
+                </Tooltip>
+              </div>
 
               {/* Points to Pass */}
               <div className={styles.pointsContainer}>

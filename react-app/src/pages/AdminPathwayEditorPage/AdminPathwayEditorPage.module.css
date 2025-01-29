@@ -179,6 +179,13 @@
   color: var(--hazard-red);
 }
 
+.trainingSelectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 1%;
+  margin-top: 2rem;
+}
+
 .searchBarContainer {
   margin-bottom: 1rem;
   display: flex;

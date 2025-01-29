@@ -772,11 +772,23 @@ const AdminPathwayEditorPage: React.FC = () => {
 
               {/* Training Selection */}
               <div className={styles.trainingSelection}>
-                <Typography
-                  variant="body2"
-                  sx={{ ...inputHeaderText, marginTop: "2rem" }}>
-                  TRAINING SELECT
-                </Typography>
+                <div className={styles.trainingSelectionHeader}>
+                  <Typography variant="body2" sx={{ ...inputHeaderText }}>
+                    TRAINING SELECT
+                  </Typography>
+                  <Tooltip
+                    title="The trainings and order of trainings cannot be modified for published and archived pathways."
+                    placement="right"
+                    componentsProps={{
+                      tooltip: {
+                        sx: { ...whiteTooltip, fontSize: "0.75rem" },
+                      },
+                    }}>
+                    <span className={styles.iconCenter}>
+                      <InfoOutlinedIcon />
+                    </span>
+                  </Tooltip>
+                </div>
 
                 {selectedTrainings.map((training, trainingIndex) => (
                   <div
