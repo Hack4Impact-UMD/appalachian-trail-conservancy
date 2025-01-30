@@ -46,6 +46,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 function AdminUserManagement() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [alignment, setAlignment] = useState<string | null>("user");
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredUsers, setFilteredUsers] = useState<VolunteerID[]>([]);
@@ -85,6 +86,14 @@ function AdminUserManagement() {
       }
     }
   };
+
+  useEffect(() => {
+    if (location.state?.fromPage === "pathway") {
+      setAlignment("pathways");
+    } else if (location.state?.fromPage === "training") {
+      setAlignment("training");
+    }
+  }, [location.state]);
 
   useEffect(() => {
     getVolunteers()
@@ -255,7 +264,6 @@ function AdminUserManagement() {
   }, [alignment]);
 
   //Delete user snackbar
-  const location = useLocation();
   const [openSnackbar, setOpenSnackbar] = useState(false);
   useEffect(() => {
     if (location.state?.showSnackbar) {
@@ -291,7 +299,9 @@ function AdminUserManagement() {
           <div className={styles.content}>
             <div className={styles.header}>
               <h1 className={styles.nameHeading}>Data Management Portal</h1>
-              <ProfileIcon />
+              <div className={styles.profileIcon}>
+                <ProfileIcon />
+              </div>
             </div>
             {/* tab select container */}
             <div className={styles.buttonGroup}>

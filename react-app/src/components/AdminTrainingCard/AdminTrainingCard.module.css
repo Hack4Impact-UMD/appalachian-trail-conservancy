@@ -51,6 +51,7 @@
   margin: 0 0 5px 0;
   color: var(--blue-gray);
   height: 54px;
+  word-break: break-word;
 }
 
 .outsideMarker {

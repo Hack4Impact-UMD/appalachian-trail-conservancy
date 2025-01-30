@@ -1,11 +1,10 @@
-import styles from './Modal.module.css';
+import styles from "./Modal.module.css";
 
 interface modalPropsType {
   open: boolean;
   onClose: any;
   children: React.ReactNode;
   height: number;
-  width: number;
 }
 
 const Modal = ({
@@ -13,25 +12,19 @@ const Modal = ({
   onClose,
   children,
   height,
-  width,
 }: modalPropsType): React.ReactElement => {
-  const heightString = height + 'px';
-  const widthString = width + 'px';
+  const heightString = height + "px";
   return (
     <div
       className={styles.modalContainer}
       onClick={(e) => {
         e.stopPropagation();
-      }}
-    >
+      }}>
       {open ? (
         <>
           <div className={styles.background} onClick={() => onClose()} />
           <div className={styles.centered}>
-            <div
-              className={styles.modal}
-              style={{ height: heightString, width: widthString }}
-            >
+            <div className={styles.modal} style={{ height: heightString }}>
               {children}
             </div>
           </div>

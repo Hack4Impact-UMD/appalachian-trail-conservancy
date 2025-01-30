@@ -47,6 +47,8 @@
   margin: 0 0 5px 0;
   font-size: 1.1rem;
   color: var(--forest-green);
+  text-align: center;
+  word-break: break-word;
 }
 
 .badgeDate {

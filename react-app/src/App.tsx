@@ -19,11 +19,12 @@ import RequireAdminAuth from "./auth/RequireAdminAuth/RequireAdminAuth.tsx";
 import RequireVolunteerAuth from "./auth/RequireVolunteerAuth/RequireVolunteerAuth.tsx";
 import LogoutPage from "./pages/LogoutPage/LogoutPage.tsx";
 import QuizPage from "./pages/QuizPage/QuizPage.tsx";
-import QuizResult from "./pages/QuizResultPage/QuizResultPage.tsx";
+import QuizResultPage from "./pages/QuizResultPage/QuizResultPage.tsx";
 import QuizLandingPage from "./pages/QuizLandingPage/QuizLandingPage.tsx";
 import PathwayLibrary from "./pages/PathwayLibraryPage/PathwayLibraryPage.tsx";
 import PathwayQuizLandingPage from "./pages/PathwayQuizLandingPage/PathwayQuizLandingPage.tsx";
 import PathwayQuizPage from "./pages/PathwayQuizPage/PathwayQuizPage.tsx";
+import PathwayQuizResultPage from "./pages/PathwayQuizResultPage/PathwayQuizResultPage.tsx";
 import AdminTrainingEditor from "./pages/AdminTrainingEditor/AdminTrainingEditor.tsx";
 import AdminPathwayEditorPage from "./pages/AdminPathwayEditorPage/AdminPathwayEditorPage.tsx";
 import RegistrationPage from "./pages/RegistrationPage/RegistrationPage/RegistrationPage.tsx";
@@ -128,7 +129,7 @@ function App() {
               path="/trainings/quizresult"
               element={
                 <RequireVolunteerAuth>
-                  <QuizResult />
+                  <QuizResultPage />
                 </RequireVolunteerAuth>
               }
             />
@@ -194,6 +195,14 @@ function App() {
               element={
                 <RequireVolunteerAuth>
                   <PathwayQuizPage />
+                </RequireVolunteerAuth>
+              }
+            />
+            <Route
+              path="/pathways/quizresult"
+              element={
+                <RequireVolunteerAuth>
+                  <PathwayQuizResultPage />
                 </RequireVolunteerAuth>
               }
             />

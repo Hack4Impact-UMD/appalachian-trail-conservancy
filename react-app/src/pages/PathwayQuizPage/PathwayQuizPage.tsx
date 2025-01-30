@@ -3,14 +3,15 @@ import { Button } from "@mui/material";
 import { forestGreenButton } from "../../muiTheme";
 import { useLocation, Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthProvider";
-import { validateQuiz } from "../../backend/FirestoreCalls";
+import { validatePathwayQuiz } from "../../backend/FirestoreCalls";
 import { Pathway } from "../../types/PathwayType";
 import { VolunteerPathway } from "../../types/UserType";
 import styles from "./PathwayQuizPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
-import QuizCard from "../QuizPage/QuizCard/QuizCard";
+import QuizCard from "../../components/QuizCard/QuizCard";
 import Loading from "../../components/LoadingScreen/Loading";
+import hamburger from "../../assets/hamburger.svg";
 
 function PathwayQuizPage() {
   const auth = useAuth();
@@ -19,7 +20,10 @@ function PathwayQuizPage() {
   const location = useLocation();
   const [loading, setLoading] = useState<boolean>(true);
   const [quizLoading, setQuizLoading] = useState<boolean>(false);
-  const [navigationBarOpen, setNavigationBarOpen] = useState<boolean>(true);
+  const [navigationBarOpen, setNavigationBarOpen] = useState(
+    !(window.innerWidth < 1200)
+  );
+  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
   const [selectedAnswers, setSelectedAnswers] = useState<
     (string | undefined)[] // undefined allows to check for "empty" positions in sparse array
   >([]);
@@ -28,6 +32,7 @@ function PathwayQuizPage() {
     progress: "INPROGRESS",
     dateCompleted: "0000-00-00",
     trainingsCompleted: [],
+    trainingsInProgress: [],
     numTrainingsCompleted: 0,
     numTotalTrainings: 0,
   });
@@ -45,7 +50,6 @@ function PathwayQuizPage() {
       numQuestions: 0,
       passingScore: 0,
     },
-    badgeImage: "",
     status: "PUBLISHED",
   });
 
@@ -82,6 +86,18 @@ function PathwayQuizPage() {
     };
   }, []);
 
+  // Update screen width on resize
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const handleSubmitQuiz = () => {
     setQuizLoading(true);
 
@@ -100,7 +116,30 @@ function PathwayQuizPage() {
       value === undefined ? "" : value
     );
 
-    // TODO: validate quiz
+    validatePathwayQuiz(
+      volunteerPathway.pathwayID,
+      volunteerId,
+      cleanedSelectedAnswers,
+      new Date(Date.now()).toISOString()
+    )
+      .then((validateResults) => {
+        const [numAnswersCorrect, volunteerPathwayInfo] = validateResults.data;
+        setVolunteerPathway(volunteerPathwayInfo);
+        navigate(`/pathways/quizresult`, {
+          state: {
+            pathway: pathway,
+            volunteerPathway: volunteerPathwayInfo,
+            selectedAnswers: selectedAnswers,
+            achievedScore: numAnswersCorrect,
+            fromApp: true,
+          },
+        });
+        setQuizLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error validating quiz:", error);
+        setQuizLoading(false);
+      });
   };
 
   if (!location.state?.fromApp) {
@@ -112,10 +151,20 @@ function PathwayQuizPage() {
       <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}
-      >
+        style={{
+          left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
+        }}>
+        {!navigationBarOpen && (
+          <img
+            src={hamburger}
+            alt="Hamburger Menu"
+            className={styles.hamburger} // Add styles to position it
+            width={30}
+            onClick={() => setNavigationBarOpen(true)} // Set sidebar open when clicked
+          />
+        )}
         <div className={styles.outerContainer}>
-          <div className={styles.bodyContainer}>
+          <div className={styles.content}>
             {/* HEADER */}
             {loading ? (
               <Loading />
@@ -123,7 +172,9 @@ function PathwayQuizPage() {
               <>
                 <div className={styles.header}>
                   <h1 className={styles.nameHeading}>{pathway.name} - Quiz</h1>
-                  <ProfileIcon />
+                  <div className={styles.profileIcon}>
+                    <ProfileIcon />
+                  </div>
                 </div>
 
                 {quizLoading ? (
@@ -151,14 +202,18 @@ function PathwayQuizPage() {
         {/* footer */}
         <div
           className={styles.footer}
-          style={{ width: navigationBarOpen ? "calc(100% - 250px)" : "100%" }}
-        >
+          style={{
+            width:
+              navigationBarOpen && screenWidth > 1200
+                ? "calc(100% - 250px)"
+                : "100%",
+          }}>
           <div className={styles.footerButtons}>
             <Button
               sx={{ ...forestGreenButton }}
               variant="contained"
               onClick={handleSubmitQuiz}
-            >
+              disabled={quizLoading}>
               Submit
             </Button>
           </div>

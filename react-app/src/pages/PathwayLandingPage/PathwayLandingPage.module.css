@@ -16,6 +16,11 @@
   flex-direction: column;
 }
 
+.popupOpen {
+  position: absolute;
+  z-index: -1;
+}
+
 .pageContainer {
   display: flex;
   flex-direction: column;
@@ -41,6 +46,7 @@
   color: var(--forest-green);
   font-size: 3rem;
   margin: 0;
+  word-break: break-word;
 }
 
 .hamburger {
@@ -53,6 +59,11 @@
   width: 30px;
   height: 30px;
   cursor: pointer;
+}
+
+.loadingContainer {
+  width: 100%;
+  margin-top: 5rem;
 }
 
 .pathwayTiles {

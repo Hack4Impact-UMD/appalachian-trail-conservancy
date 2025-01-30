@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import styles from "./PathwayTile.module.css";
 import emptyIcon from "../../../assets/PathwayTiles/Empty.svg";
 import downEndIcon from "../../../assets/PathwayTiles/DownEnd.svg";
 import downLeftIcon from "../../../assets/PathwayTiles/DownLeft.svg";
 import downRightIcon from "../../../assets/PathwayTiles/DownRight.svg";
 import horizontalIcon from "../../../assets/PathwayTiles/Horizontal.svg";
 import leftDownIcon from "../../../assets/PathwayTiles/LeftDown.svg";
-import leftEndIcon from "../../../assets/PathwayTiles/LeftEnd.svg";
-import rightDownIcon from "../../../assets/PathwayTiles/RightDown.svg";
 import rightEndIcon from "../../../assets/PathwayTiles/RightEnd.svg";
+import rightDownIcon from "../../../assets/PathwayTiles/RightDown.svg";
+import leftEndIcon from "../../../assets/PathwayTiles/LeftEnd.svg";
 import verticalIcon from "../../../assets/PathwayTiles/Vertical.svg";
 import PathwayTrainingPopup from "../../../components/PathwayTrainingPopup/PathwayTrainingPopup";
 
@@ -17,34 +19,39 @@ import leftDownCompleted from "../../../assets/PathwayTiles/CompletedTiles/LeftD
 import rightDownCompleted from "../../../assets/PathwayTiles/CompletedTiles/RightDownCompleted.svg";
 import verticalCompleted from "../../../assets/PathwayTiles/CompletedTiles/VerticalCompleted.svg";
 import downRightCompleted from "../../../assets/PathwayTiles/CompletedTiles/DownRightCompleted.svg";
-import leftCompleted from "../../../assets/PathwayTiles/CompletedTiles/LeftCompleted.svg";
 import rightCompleted from "../../../assets/PathwayTiles/CompletedTiles/RightCompleted.svg";
+import leftCompleted from "../../../assets/PathwayTiles/CompletedTiles/LeftCompleted.svg";
 import leftTrophy from "../../../assets/PathwayTiles/CompletedTiles/LeftTrophy.svg";
 import rightTrophy from "../../../assets/PathwayTiles/CompletedTiles/RightTrophy.svg";
 
 import downLeftInter from "../../../assets/PathwayTiles/IntermediateTiles/DownLeftInter.svg";
 import downRightInter from "../../../assets/PathwayTiles/IntermediateTiles/DownRightInter.svg";
-import leftInter from "../../../assets/PathwayTiles/IntermediateTiles/LeftInter.svg";
 import rightInter from "../../../assets/PathwayTiles/IntermediateTiles/RightInter.svg";
+import leftInter from "../../../assets/PathwayTiles/IntermediateTiles/LeftInter.svg";
 import leftDownInter from "../../../assets/PathwayTiles/IntermediateTiles/LeftDownInter.svg";
 import rightDownInter from "../../../assets/PathwayTiles/IntermediateTiles/RightDownInter.svg";
 import verticalInter from "../../../assets/PathwayTiles/IntermediateTiles/VerticalInter.svg";
-import { useState } from "react";
 import { TrainingID } from "../../../types/TrainingType";
-
-/*
-Cards are inconsistently labelled. For some cards, the directions indicate the 
-footstep order while others don't. rightDownCompleted has the steps going:
-right, down
-while leftCompleted are going to the right?
-*/
+import { PathwayID } from "../../../types/PathwayType.ts";
+import { useAuth } from "../../../auth/AuthProvider.tsx";
+import { getVolunteer } from "../../../backend/FirestoreCalls";
+import { VolunteerTraining, VolunteerPathway } from "../../../types/UserType";
+import { Tooltip } from "@mui/material";
+import { grayTooltip } from "../../../muiTheme";
 
 interface PathwayTileProps {
   tileNum: number; // index of the tile
-  trainingID?: TrainingID; // training id of the specific training
+  pathwayID: PathwayID; // pathwayID of the pathway
+  trainingID?: TrainingID; // trainingID of the specific training
   width: number; // width of the div
   numTrainings: number; // total number of trainings in this pathway
   trainingsCompleted: number;
+  quizPassed: boolean;
+  volunteerTrainings: string[];
+  volunteerPathway: VolunteerPathway;
+  setSnackbar: any;
+  setSnackbarMessage: any;
+  setPopupOpen: any;
 }
 
 // imagesPerRow: the total number of images per row, used to identify which direction
@@ -55,7 +62,8 @@ function getImage(
   imagesPerRow: number,
   index: number,
   numTrainings: number,
-  trainingsCompleted: number
+  trainingsCompleted: number,
+  quizPassed: boolean
 ) {
   // Empty
   if (index > numTrainings) return emptyIcon;
@@ -63,10 +71,11 @@ function getImage(
   if (imagesPerRow === 1) {
     // Check that the index has been completed
     if (index <= trainingsCompleted && trainingsCompleted != 0) {
-      // Check if it is the final  one
-      if (index === numTrainings) return downTrophy;
+      // Check if it is the final one
+      if (index === numTrainings) return quizPassed ? downTrophy : downEndIcon;
       // Check if it is the last one in the sequence
-      if (index + 1 === trainingsCompleted) return verticalInter;
+      if (index + 1 === trainingsCompleted)
+        return quizPassed ? verticalCompleted : verticalInter;
 
       // Check if it hasn't been completed
       return index === trainingsCompleted ? verticalIcon : verticalCompleted;
@@ -80,29 +89,38 @@ function getImage(
       // Check if this has been completed or its an intermediate icon
       if (index <= trainingsCompleted && trainingsCompleted != 0) {
         // Check if this is the last one completed
-        if (index === numTrainings) return rightTrophy;
+        if (index === numTrainings)
+          return quizPassed ? rightTrophy : rightEndIcon;
         // Check if this icon is the most recent completed
-        if (index + 1 === trainingsCompleted) return rightDownInter;
+        if (index + 1 === trainingsCompleted)
+          return quizPassed ? rightDownCompleted : rightDownInter;
 
         // Check if this should be a normal icon or completed
         return index === trainingsCompleted
           ? rightDownIcon
           : rightDownCompleted;
       }
-      return index === numTrainings ? leftEndIcon : rightDownIcon;
+      return index === numTrainings ? rightEndIcon : rightDownIcon;
       // Left-most icon
     } else if (index % imagesPerRow === 0) {
       // Check if either intermediate icon or completed icon
       if (index <= trainingsCompleted && trainingsCompleted != 0) {
         // Check if this is the final one
-        if (index === numTrainings)
+        if (index === numTrainings) {
           // Check if it is going down or not
-          return index > 0 ? downTrophy : rightTrophy;
+          if (index > 0) return quizPassed ? downTrophy : downEndIcon;
+          else return quizPassed ? rightTrophy : rightEndIcon;
+        }
         // Check if this icon is the first icon and whether it's an intermediate
-        if (index === 0)
-          return index + 1 === trainingsCompleted ? leftInter : leftCompleted;
+        if (index === 0) {
+          if (index + 1 === trainingsCompleted)
+            return quizPassed ? rightCompleted : rightInter;
+          else return rightCompleted;
+        }
+
         // Check if this is an intermediate icon
-        if (index + 1 === trainingsCompleted) return downRightInter;
+        if (index + 1 === trainingsCompleted)
+          return quizPassed ? downRightCompleted : downRightInter;
 
         return index === trainingsCompleted
           ? downRightIcon
@@ -120,15 +138,16 @@ function getImage(
     // Check for completeness for middle icons
     if (index <= trainingsCompleted && trainingsCompleted != 0) {
       // Check for trophy
-      if (index == numTrainings) return rightTrophy;
+      if (index == numTrainings) return quizPassed ? rightTrophy : rightEndIcon;
       // Check if its an intermediate card
-      if (index + 1 == trainingsCompleted) return leftInter;
+      if (index + 1 == trainingsCompleted)
+        return quizPassed ? rightCompleted : rightInter;
 
-      return index === trainingsCompleted ? horizontalIcon : leftCompleted;
+      return index === trainingsCompleted ? horizontalIcon : rightCompleted;
     }
 
     // Incomplete middle icons
-    return index == numTrainings ? leftEndIcon : horizontalIcon;
+    return index == numTrainings ? rightEndIcon : horizontalIcon;
   }
   // Reversed
   else {
@@ -137,23 +156,27 @@ function getImage(
       // Check if icon should be intermediate or completed
       if (index <= trainingsCompleted && trainingsCompleted != 0) {
         // Check if final icon
-        if (index === numTrainings) return leftTrophy;
+        if (index === numTrainings)
+          return quizPassed ? leftTrophy : leftEndIcon;
         // Check if icon is intermediate
-        if (index + 1 === trainingsCompleted) return leftDownInter;
+        if (index + 1 === trainingsCompleted)
+          return quizPassed ? leftDownCompleted : leftDownInter;
 
         // Check if the icon is not started or already completed
         return index == trainingsCompleted ? leftDownIcon : leftDownCompleted;
       }
       // Not started yet
-      return index === numTrainings ? rightEndIcon : leftDownIcon;
+      return index === numTrainings ? leftEndIcon : leftDownIcon;
       // Right most icon
     } else if (index % imagesPerRow === 0) {
       // Check if icon should be intermediate or completed
       if (index <= trainingsCompleted && trainingsCompleted != 0) {
         // Check if icon is final
-        if (index === numTrainings) return downTrophy;
+        if (index === numTrainings)
+          return quizPassed ? downTrophy : downEndIcon;
         // Check if icon is an intermediate card
-        if (index + 1 === trainingsCompleted) return downLeftInter;
+        if (index + 1 === trainingsCompleted)
+          return quizPassed ? downLeftCompleted : downLeftInter;
 
         return index === trainingsCompleted ? downLeftIcon : downLeftCompleted;
       }
@@ -164,68 +187,173 @@ function getImage(
     // Middle icons
     if (index <= trainingsCompleted && trainingsCompleted != 0) {
       // Check for trophy
-      if (index == numTrainings) return leftTrophy;
+      if (index == numTrainings) return quizPassed ? leftTrophy : leftEndIcon;
       // Check if its an intermediate card
-      if (index + 1 == trainingsCompleted) return rightInter;
+      if (index + 1 == trainingsCompleted)
+        return quizPassed ? leftCompleted : leftInter;
 
-      return index === trainingsCompleted ? horizontalIcon : rightCompleted;
+      return index === trainingsCompleted ? horizontalIcon : leftCompleted;
     }
 
-    return index === numTrainings ? rightEndIcon : horizontalIcon;
+    return index === numTrainings ? leftEndIcon : horizontalIcon;
   }
 }
 
 const PathwayTile: React.FC<PathwayTileProps> = ({
   tileNum,
+  pathwayID,
   trainingID,
   width,
   numTrainings,
   trainingsCompleted,
+  quizPassed,
+  volunteerTrainings,
+  volunteerPathway,
+  setSnackbar,
+  setSnackbarMessage,
+  setPopupOpen,
 }) => {
   const [openTrainingPopup, setOpenTrainingPopup] = useState<boolean>(false);
+  const [volunteerTrainingRecord, setVolunteerTrainingRecord] =
+    useState<VolunteerTraining>();
+  const [position, setPosition] = useState<{ x: number; y: number }>({
+    x: 0,
+    y: 0,
+  });
   const imgWidth = 300;
+  const navigate = useNavigate();
+  const auth = useAuth();
 
   const imagesPerRow = Math.floor(width / imgWidth);
   const image = getImage(
     imagesPerRow,
     tileNum,
     numTrainings,
-    trainingsCompleted
+    trainingsCompleted,
+    quizPassed
   );
+
+  const handleQuizClick = () => {
+    if (trainingsCompleted !== numTrainings) {
+      setSnackbarMessage(
+        "Please complete all trainings to unlock the pathway quiz"
+      );
+      setSnackbar(true);
+    } else if (volunteerPathway.pathwayID !== "") {
+      navigate(`/pathways/quizlanding`, {
+        state: {
+          pathway: pathwayID,
+          volunteerPathway: volunteerPathway,
+          fromApp: true,
+        },
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (trainingID && volunteerTrainings.includes(trainingID.id)) {
+      getVolunteer(auth.id.toString())
+        .then((volunteer) => {
+          const volunteerTraining = volunteer.trainingInformation;
+
+          if (volunteerTraining) {
+            const training = volunteerTraining.find(
+              (training) => training.trainingID === trainingID.id
+            );
+            setVolunteerTrainingRecord(training);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching volunteer:", error);
+        });
+    }
+  }, [volunteerTrainings, auth.id, trainingID]);
 
   return (
     <>
       <div
-        style={{
-          position: "relative",
-          lineHeight: 0,
-        }}
+        className={styles.tile}
         onClick={() => {
           setOpenTrainingPopup(true);
+          setPopupOpen(true);
+          // Clicking on the quiz tile
+          if (image.includes("End") || image.includes("Trophy")) {
+            handleQuizClick();
+          }
         }}>
-        <img src={image} style={{ width: "300px", height: "300px" }} />
-        <div
-          style={{
-            position: "absolute",
-            left: "50%",
-            top: "50%",
-            transform: "translate(-50%, -50%)",
-            color: "white",
-            fontSize: "3rem",
-            fontWeight: "bold",
+        <Tooltip
+          title={
+            image.includes("End") || image.includes("Trophy")
+              ? "Quiz"
+              : trainingID?.name
+          }
+          arrow={false}
+          onMouseMove={(e) => setPosition({ x: e.pageX, y: e.pageY })}
+          PopperProps={{
+            anchorEl: {
+              clientHeight: 0,
+              clientWidth: 0,
+              getBoundingClientRect: () => ({
+                top: position.y,
+                left: position.x,
+                right: position.x,
+                bottom: position.y,
+                width: 0,
+                height: 0,
+                x: position.x,
+                y: position.y,
+                toJSON: () => {},
+              }),
+            },
+          }}
+          componentsProps={{
+            tooltip: {
+              sx: {
+                ...grayTooltip,
+                maxWidth: "350px",
+                "&:hover": {
+                  cursor: "pointer",
+                },
+              },
+            },
           }}>
+          <img
+            src={image}
+            className={`${styles.tileImage} ${
+              image !== emptyIcon ? styles.cursorPointer : ""
+            }`}
+          />
+        </Tooltip>
+
+        <div className={styles.trainingNumber}>
           {trainingID != null && tileNum >= trainingsCompleted
             ? tileNum + 1
             : ""}
         </div>
       </div>
       {trainingID ? (
-        <PathwayTrainingPopup
-          open={openTrainingPopup}
-          onClose={setOpenTrainingPopup}
-          record={trainingID}
-          mode={"training"}
-        />
+        volunteerTrainingRecord ? (
+          <PathwayTrainingPopup
+            open={openTrainingPopup}
+            onClose={() => {
+              setOpenTrainingPopup(false);
+              setPopupOpen(false);
+            }}
+            record={trainingID}
+            volunteerRecord={volunteerTrainingRecord}
+            mode={"training"}
+          />
+        ) : (
+          <PathwayTrainingPopup
+            open={openTrainingPopup}
+            onClose={() => {
+              setOpenTrainingPopup(false);
+              setPopupOpen(false);
+            }}
+            record={trainingID}
+            mode={"training"}
+          />
+        )
       ) : (
         <></>
       )}

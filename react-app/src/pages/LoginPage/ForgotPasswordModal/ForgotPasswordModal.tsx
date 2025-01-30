@@ -49,10 +49,9 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
 
   return (
     <div>
-      <Modal open={open} onClose={onClose} height={350} width={550}>
+      <Modal open={open} onClose={onClose} height={290}>
         {/* x button to close */}
         <IoCloseOutline
-          color="var(--blue-gray)"
           className={styles.closeButton}
           onClick={() => handleOnClose()}
         />
@@ -76,6 +75,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
               <OutlinedInput
                 value={email}
                 sx={grayBorderTextField}
+                className={styles.inputTextField}
                 onChange={(event) => {
                   setEmail(event.target.value);
                 }}
@@ -83,6 +83,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
 
               <Button
                 sx={{ ...styledRectButton, ...forestGreenButton }}
+                className={styles.resetButton}
                 variant="contained"
                 onClick={() => handleSendReset()}>
                 Send Reset Email

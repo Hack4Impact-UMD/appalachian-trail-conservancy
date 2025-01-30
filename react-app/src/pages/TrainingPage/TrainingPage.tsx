@@ -44,7 +44,6 @@ function TrainingPage() {
       passingScore: 0,
     },
     associatedPathways: [],
-    certificationImage: "",
     status: "DRAFT",
   });
 
@@ -147,7 +146,9 @@ function TrainingPage() {
             {/* HEADER */}
             <div className={styles.header}>
               <h1 className={styles.nameHeading}>{training.name}</h1>
-              <ProfileIcon />
+              <div className={styles.profileIcon}>
+                <ProfileIcon />
+              </div>
             </div>
 
             {loading ? (

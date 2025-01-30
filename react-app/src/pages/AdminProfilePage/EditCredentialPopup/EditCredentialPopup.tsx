@@ -181,12 +181,10 @@ const EditCredentialPopup = ({
   return (
     <Modal
       height={editType === "Email" ? 430 : 340}
-      width={450}
       open={open}
       onClose={() => {
         handleClose();
-      }}
-    >
+      }}>
       <div className={styles.content}>
         <p className={styles.title}>Edit {editType}</p>
         <div className={styles.textFields}>
@@ -196,14 +194,14 @@ const EditCredentialPopup = ({
               <h3 className={styles.subHeader}>Password</h3>
               <TextField
                 sx={grayBorderTextField}
+                className={styles.inputTextField}
                 inputRef={passwordRef}
                 type={showPrevPassword ? "text" : "password"}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton
-                        onClick={() => setPrevShowPassword(!showPrevPassword)}
-                      >
+                        onClick={() => setPrevShowPassword(!showPrevPassword)}>
                         {showPrevPassword ? <Visibility /> : <VisibilityOff />}
                       </IconButton>
                     </InputAdornment>
@@ -212,24 +210,32 @@ const EditCredentialPopup = ({
               />
 
               <h3 className={styles.subHeader}>New Email</h3>
-              <TextField sx={grayBorderTextField} inputRef={prevCredRef} />
+              <TextField
+                sx={grayBorderTextField}
+                className={styles.inputTextField}
+                inputRef={prevCredRef}
+              />
 
               <h3 className={styles.subHeader}>Confirm New Email</h3>
-              <TextField sx={grayBorderTextField} inputRef={newCredRef} />
+              <TextField
+                sx={grayBorderTextField}
+                className={styles.inputTextField}
+                inputRef={newCredRef}
+              />
             </>
           ) : (
             <>
               <h3 className={styles.subHeader}>Previous {editType}</h3>
               <TextField
                 sx={grayBorderTextField}
+                className={styles.inputTextField}
                 inputRef={prevCredRef}
                 type={showPrevPassword ? "text" : "password"}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton
-                        onClick={() => setPrevShowPassword(!showPrevPassword)}
-                      >
+                        onClick={() => setPrevShowPassword(!showPrevPassword)}>
                         {showPrevPassword ? <Visibility /> : <VisibilityOff />}
                       </IconButton>
                     </InputAdornment>
@@ -240,14 +246,14 @@ const EditCredentialPopup = ({
               <h3 className={styles.subHeader}>New {editType}</h3>
               <TextField
                 sx={grayBorderTextField}
+                className={styles.inputTextField}
                 inputRef={newCredRef}
                 type={showNewPassword ? "text" : "password"}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton
-                        onClick={() => setNewShowPassword(!showNewPassword)}
-                      >
+                        onClick={() => setNewShowPassword(!showNewPassword)}>
                         {showNewPassword ? <Visibility /> : <VisibilityOff />}
                       </IconButton>
                     </InputAdornment>
@@ -262,16 +268,14 @@ const EditCredentialPopup = ({
             onClick={() => handleClose()}
             variant="contained"
             sx={{ ...whiteButtonGrayBorder, width: "120px" }}
-            disabled={loading}
-          >
+            disabled={loading}>
             Cancel
           </Button>
           <Button
             variant="contained"
             sx={{ ...forestGreenButton, width: "120px" }}
             onClick={handleUpdateCredential}
-            disabled={loading}
-          >
+            disabled={loading}>
             {loading ? <Loading /> : "Confirm"}
           </Button>
         </div>

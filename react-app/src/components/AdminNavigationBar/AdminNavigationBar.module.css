@@ -129,21 +129,28 @@
   color: inherit;
 }
 
-@media screen and (max-height: 650px) {
+@media screen and (max-height: 625px) {
   .menuItems {
-    max-height: 235px;
+    max-height: 290px;
     overflow-y: auto;
   }
 }
 
 @media screen and (max-height: 575px) {
   .menuItems {
-    max-height: 200px;
+    max-height: 210px;
     overflow-y: auto;
   }
 }
 
 @media screen and (max-height: 500px) {
+  .menuItems {
+    max-height: 155px;
+    overflow-y: auto;
+  }
+}
+
+@media screen and (max-height: 440px) {
   .menuItems {
     max-height: 100px;
     overflow-y: auto;

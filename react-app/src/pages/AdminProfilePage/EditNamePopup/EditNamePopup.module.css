@@ -12,6 +12,10 @@
   cursor: pointer;
 }
 
+.closeButton:hover {
+  color: var(--hazard-red);
+}
+
 .content {
   width: 100%;
   height: 100%;
@@ -48,4 +52,10 @@
   justify-content: center;
   gap: 5%;
   margin-top: 0.5rem;
+}
+
+@media screen and (max-width: 450px) {
+  .inputTextField {
+    width: 200px !important;
+  }
 }

@@ -15,15 +15,27 @@
   overflow-y: auto;
 }
 
+.hamburger {
+  color: var(--blue-gray);
+  font-size: 1.5rem;
+  margin: 1.5rem;
+  position: absolute;
+  top: 20px;
+  left: 10px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
 .outerContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.bodyContainer {
+.content {
   width: 875px;
-  margin-bottom: 10%;
+  margin-bottom: 120px;
 }
 
 .header {
@@ -42,6 +54,7 @@
   margin: 0;
   max-width: 90%;
   white-space: normal;
+  word-break: break-word;
 }
 
 .questionContainer {
@@ -72,5 +85,71 @@
   width: 875px;
   display: flex;
   justify-content: flex-end;
-  gap: 1%;
+  gap: 1rem;
+}
+
+@media screen and (min-width: 1500px) {
+  .content {
+    width: 1200px;
+  }
+
+  .footerButtons {
+    width: 1200px;
+  }
+}
+
+@media screen and (min-width: 1800px) {
+  .content {
+    width: 1400px;
+  }
+
+  .footerButtons {
+    width: 1400px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .content {
+    width: 600px;
+  }
+
+  .footerButtons {
+    width: 600px;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .content {
+    width: 425px;
+  }
+
+  .header {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column-reverse;
+    text-align: center;
+  }
+
+  .profileIcon {
+    margin-left: auto;
+    margin-right: 10px;
+  }
+
+  .footerButtons {
+    width: 425px;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .content {
+    width: 300px;
+  }
+
+  .nameHeading {
+    font-size: 2rem;
+  }
+
+  .footerButtons {
+    width: 300px;
+  }
 }

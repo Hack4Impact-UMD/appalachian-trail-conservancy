@@ -36,7 +36,7 @@
 
 .incorrectChoiceText {
   margin-top: 0.5rem;
-  color: red;
+  color: var(--hazard-red);
 }
 
 .greenIcon {
@@ -47,6 +47,6 @@
 
 .redIcon {
   margin-top: 0.5rem;
-  color: red;
+  color: var(--hazard-red);
   font-size: 24px;
 }

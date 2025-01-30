@@ -26,7 +26,7 @@
   font-weight: bold;
   max-width: 300px;
   text-align: center;
-  color: black;
+  color: var(--blue-gray);
   margin-bottom: 0;
 }
 
@@ -35,7 +35,7 @@
   margin: 2rem 0;
   max-width: 300px;
   text-align: center;
-  color: black;
+  color: var(--blue-gray);
 }
 
 .buttons {
@@ -43,4 +43,20 @@
   align-items: center;
   justify-content: center;
   gap: 10%;
+}
+
+@media screen and (max-width: 450px) {
+  .inputTextField {
+    width: 200px !important;
+  }
+
+  .title {
+    max-width: 250px;
+    font-size: 1.1rem;
+  }
+
+  .text {
+    max-width: 250px;
+    margin: 1rem 0;
+  }
 }

@@ -29,7 +29,7 @@ import {
   getTraining,
   getVolunteers,
 } from "../../backend/FirestoreCalls.ts";
-import { Volunteer, VolunteerID } from "../../types/UserType.ts";
+import { VolunteerID } from "../../types/UserType.ts";
 import Loading from "../../components/LoadingScreen/Loading.tsx";
 
 function AdminPathwayDetails() {
@@ -62,7 +62,6 @@ function AdminPathwayDetails() {
       numQuestions: 0,
       passingScore: 0,
     },
-    badgeImage: "",
     status: "DRAFT",
   });
 
@@ -262,7 +261,9 @@ function AdminPathwayDetails() {
           <div className={styles.content}>
             <div className={styles.header}>
               <h1 className={styles.nameHeading}>Pathway Details</h1>
-              <ProfileIcon />
+              <div className={styles.profileIcon}>
+                <ProfileIcon />
+              </div>
             </div>
 
             {loading ? (
@@ -359,7 +360,13 @@ function AdminPathwayDetails() {
                       paddingRight: "20px",
                       width: "100px",
                     }}
-                    onClick={() => navigate("/management")}>
+                    onClick={() =>
+                      navigate("/management", {
+                        state: {
+                          fromPage: "pathway",
+                        },
+                      })
+                    }>
                     BACK
                   </Button>
                 </div>

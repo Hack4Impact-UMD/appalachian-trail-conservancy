@@ -38,6 +38,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
 }
 
 /* welcome! */
@@ -69,7 +70,7 @@
 .showFailureMessage {
   margin-top: 10px;
   font-size: 1rem;
-  color: red;
+  color: var(--hazard-red);
   text-align: center;
 }
 

@@ -4,11 +4,11 @@ import {
   Button,
   InputAdornment,
   OutlinedInput,
-  Typography,
+  FormControl,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import {
-  User,
-  Volunteer,
   VolunteerID,
   VolunteerPathway,
   VolunteerTraining,
@@ -29,6 +29,8 @@ import {
   whiteButtonGrayBorder,
   forestGreenButtonPadding,
   whiteButtonRedBorder,
+  whiteSelectGrayBorder,
+  selectOptionStyle,
 } from "../../muiTheme.ts";
 import debounce from "lodash.debounce";
 import hamburger from "../../assets/hamburger.svg";
@@ -215,8 +217,7 @@ function AdminVolunteerDetails() {
       <GridColumnMenuContainer
         hideMenu={hideMenu}
         currentColumn={currentColumn}
-        open={open}
-      >
+        open={open}>
         <GridFilterMenuItem onClick={hideMenu} column={currentColumn!} />
         <SortGridMenuItems onClick={hideMenu} column={currentColumn!} />
       </GridColumnMenuContainer>
@@ -372,8 +373,7 @@ function AdminVolunteerDetails() {
         style={{
           // Only apply left shift when screen width is greater than 1200px
           left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-        }}
-      >
+        }}>
         {!navigationBarOpen && (
           <img
             src={hamburger}
@@ -389,7 +389,9 @@ function AdminVolunteerDetails() {
           <div className={styles.content}>
             <div className={styles.header}>
               <h1 className={styles.nameHeading}>Volunteer Details</h1>
-              <ProfileIcon />
+              <div className={styles.profileIcon}>
+                <ProfileIcon />
+              </div>
             </div>
 
             {loading ? (
@@ -419,7 +421,7 @@ function AdminVolunteerDetails() {
                 <div className={styles.queryContainer}>
                   <div className={styles.searchBarContainer}>
                     <OutlinedInput
-                      sx={{ ...grayBorderSearchBar, width: "95%" }}
+                      sx={{ ...grayBorderSearchBar, width: "100%" }}
                       placeholder="Search..."
                       onChange={debouncedOnChange}
                       startAdornment={
@@ -437,8 +439,7 @@ function AdminVolunteerDetails() {
                           ? forestGreenButtonPadding
                           : whiteButtonGrayBorder
                       }
-                      onClick={(event) => handleAlignment(event, "trainings")}
-                    >
+                      onClick={(event) => handleAlignment(event, "trainings")}>
                       TRAININGS
                     </Button>
                     <Button
@@ -447,10 +448,29 @@ function AdminVolunteerDetails() {
                           ? forestGreenButtonPadding
                           : whiteButtonGrayBorder
                       }
-                      onClick={(event) => handleAlignment(event, "pathways")}
-                    >
+                      onClick={(event) => handleAlignment(event, "pathways")}>
                       PATHWAYS
                     </Button>
+                  </div>
+                  <div className={styles.dropdownContainer}>
+                    <FormControl sx={{ width: 300 }}>
+                      <Select
+                        className={styles.dropdownMenu}
+                        sx={whiteSelectGrayBorder}
+                        value={alignment}
+                        onChange={(e: any) =>
+                          handleAlignment(e, e.target.value)
+                        } // Handle the dropdown value directly
+                        displayEmpty
+                        label="Filter">
+                        <MenuItem value="trainings" sx={selectOptionStyle}>
+                          TRAININGS
+                        </MenuItem>
+                        <MenuItem value="pathways" sx={selectOptionStyle}>
+                          PATHWAYS
+                        </MenuItem>
+                      </Select>
+                    </FormControl>
                   </div>
                 </div>
 
@@ -501,34 +521,34 @@ function AdminVolunteerDetails() {
 
                 <div className={styles.buttonContainer}>
                   <Button
+                    className={styles.bottomButton}
                     sx={{
                       ...whiteButtonGrayBorder,
                       paddingLeft: "20px",
                       paddingRight: "20px",
                       width: "100px",
                     }}
-                    onClick={() => navigate("/management")}
-                  >
+                    onClick={() => navigate("/management")}>
                     BACK
                   </Button>
                   <div className={styles.buttonContainerInner}>
                     <Button
+                      className={styles.bottomButton}
                       sx={{
                         ...whiteButtonRedBorder,
                         width: "100px",
                       }}
                       onClick={() => {
                         handleDeleteUser();
-                      }}
-                    >
+                      }}>
                       Delete
                     </Button>
                     <Button
+                      className={styles.bottomButton}
                       sx={{
                         ...whiteButtonOceanGreenBorder,
                         width: "100px",
-                      }}
-                    >
+                      }}>
                       Export
                     </Button>
                   </div>

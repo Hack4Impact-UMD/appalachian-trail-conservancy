@@ -42,8 +42,7 @@ const DeleteUserPopup = ({
   return (
     <>
       <Modal
-        height={250}
-        width={450}
+        height={270}
         open={open}
         onClose={() => {
           if (canClose) {

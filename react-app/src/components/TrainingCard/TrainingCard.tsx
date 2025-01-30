@@ -11,12 +11,14 @@ interface TrainingCardProps {
   training: TrainingID;
   volunteerTraining?: VolunteerTraining;
   preview: boolean;
+  setPopupOpen?: any;
 }
 
 const TrainingCard: React.FC<TrainingCardProps> = ({
   training,
   volunteerTraining,
   preview,
+  setPopupOpen,
 }) => {
   const [openTrainingPopup, setOpenTrainingPopup] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -50,6 +52,7 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
           if (!preview) {
             if (volunteerTraining == undefined) {
               setOpenTrainingPopup(true);
+              setPopupOpen(true);
             } else {
               // Navigate to training landing page with training and volunteerTraining as state
               navigate(`/trainings/${training.id}`, {
@@ -89,7 +92,10 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
       </div>
       <PathwayTrainingPopup
         open={openTrainingPopup}
-        onClose={setOpenTrainingPopup}
+        onClose={() => {
+          setOpenTrainingPopup(false);
+          setPopupOpen(false);
+        }}
         record={training}
         volunteerRecord={volunteerTraining}
         mode={"training"}

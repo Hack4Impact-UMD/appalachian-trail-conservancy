@@ -158,7 +158,9 @@ function AdminPathwayLibrary() {
           <div className={styles.content}>
             <div className={styles.header}>
               <h1 className={styles.nameHeading}> Pathways Library </h1>
-              <ProfileIcon />
+              <div className={styles.profileIcon}>
+                <ProfileIcon />
+              </div>
             </div>
             <div>
               <Button

@@ -80,6 +80,7 @@
   align-items: center;
   flex-direction: column;
   margin: 10% 15% 15% 15%;
+  text-align: center;
 }
 
 /* show buttons when screen width is above 1201px */
@@ -147,6 +148,18 @@
     width: 425px;
   }
 
+  .header {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column-reverse;
+    text-align: center;
+  }
+
+  .profileIcon {
+    margin-left: auto;
+    margin-right: 10px;
+  }
+
   .cardsContainer {
     justify-content: space-around;
   }
@@ -165,15 +178,13 @@
   }
 }
 
-@media screen and (max-width: 600px) {
-  .header {
-    margin-top: 5rem;
-  }
-}
-
 @media screen and (max-width: 450px) {
   .content {
     width: 300px;
+  }
+
+  .nameHeading {
+    font-size: 2rem;
   }
 
   .leftButtonContainer {

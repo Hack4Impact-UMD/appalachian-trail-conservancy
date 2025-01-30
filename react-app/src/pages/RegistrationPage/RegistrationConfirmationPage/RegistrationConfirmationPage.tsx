@@ -8,14 +8,9 @@ import styles from "./RegistrationConfirmationPage.module.css";
 
 function RegistrationConfirmationPage() {
   const { user } = useAuth();
-  // If user is logged in, navigate to Dashboard (?)
-  if (user) {
-    return <Navigate to="/" />;
-  }
-
   const location = useLocation();
-
-  if (!location.state?.fromApp) {
+  // If user is logged in, navigate to Dashboard
+  if (user || !location.state?.fromApp) {
     return <Navigate to="/" />;
   }
 

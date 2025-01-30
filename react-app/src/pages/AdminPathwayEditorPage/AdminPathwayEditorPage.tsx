@@ -89,7 +89,6 @@ const AdminPathwayEditorPage: React.FC = () => {
       passingScore: 0,
     },
     associatedPathways: [],
-    certificationImage: "",
     status: "PUBLISHED",
   };
 
@@ -102,6 +101,7 @@ const AdminPathwayEditorPage: React.FC = () => {
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
   );
+  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
 
   const handleAddSearchBar = () => {
     setSelectedTrainings([...selectedTrainings, blankTraining]);
@@ -322,7 +322,6 @@ const AdminPathwayEditorPage: React.FC = () => {
             numQuestions: 0,
             passingScore: 0,
           },
-          badgeImage: "",
           status: status,
         } as Pathway;
 
@@ -401,7 +400,6 @@ const AdminPathwayEditorPage: React.FC = () => {
             numQuestions: 0,
             passingScore: 0,
           },
-          badgeImage: "",
           status: status,
         } as Pathway;
         const newPathwayId = await addPathway(updatedPathway);
@@ -452,6 +450,18 @@ const AdminPathwayEditorPage: React.FC = () => {
       );
     }
   };
+
+  // Update screen width on resize
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     // description quill editor
@@ -515,7 +525,9 @@ const AdminPathwayEditorPage: React.FC = () => {
       </div>
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        style={{
+          left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
+        }}>
         {/* Hamburger Menu */}
         {!navigationBarOpen && (
           <img
@@ -535,7 +547,9 @@ const AdminPathwayEditorPage: React.FC = () => {
                 <h1 className={styles.nameHeading}>Pathway Editor</h1>
                 <div>{renderMarker()}</div>
               </div>
-              <ProfileIcon />
+              <div className={styles.profileIcon}>
+                <ProfileIcon />
+              </div>
             </div>
 
             {/* Input Boxes */}
@@ -739,7 +753,6 @@ const AdminPathwayEditorPage: React.FC = () => {
                           numQuestions: 0,
                           passingScore: 0,
                         },
-                        badgeImage: "",
                         status: status,
                       }}
                       preview={true}
@@ -759,11 +772,23 @@ const AdminPathwayEditorPage: React.FC = () => {
 
               {/* Training Selection */}
               <div className={styles.trainingSelection}>
-                <Typography
-                  variant="body2"
-                  sx={{ ...inputHeaderText, marginTop: "2rem" }}>
-                  TRAINING SELECT
-                </Typography>
+                <div className={styles.trainingSelectionHeader}>
+                  <Typography variant="body2" sx={{ ...inputHeaderText }}>
+                    TRAINING SELECT
+                  </Typography>
+                  <Tooltip
+                    title="The trainings and order of trainings cannot be modified for published and archived pathways."
+                    placement="right"
+                    componentsProps={{
+                      tooltip: {
+                        sx: { ...whiteTooltip, fontSize: "0.75rem" },
+                      },
+                    }}>
+                    <span className={styles.iconCenter}>
+                      <InfoOutlinedIcon />
+                    </span>
+                  </Tooltip>
+                </div>
 
                 {selectedTrainings.map((training, trainingIndex) => (
                   <div
@@ -817,8 +842,9 @@ const AdminPathwayEditorPage: React.FC = () => {
                           sx={autocompleteText}
                         />
                       )}
+                      readOnly={status !== "DRAFT"}
                     />
-                    {trainingIndex > 0 ? (
+                    {trainingIndex > 0 && status === "DRAFT" ? (
                       <div
                         className={`${styles.closeIcon} ${styles.leftMargin}`}>
                         <IoCloseOutline
@@ -836,12 +862,14 @@ const AdminPathwayEditorPage: React.FC = () => {
                 ))}
 
                 {/* Add Training Button */}
-                <div
-                  className={styles.addTrainingContainer}
-                  onClick={handleAddSearchBar}>
-                  <AddIcon fontSize="medium" />
-                  <h3>ADD TRAINING</h3>
-                </div>
+                {status === "DRAFT" && (
+                  <div
+                    className={styles.addTrainingContainer}
+                    onClick={handleAddSearchBar}>
+                    <AddIcon fontSize="medium" />
+                    <h3>ADD TRAINING</h3>
+                  </div>
+                )}
               </div>
 
               {/* Button Group */}
@@ -852,7 +880,7 @@ const AdminPathwayEditorPage: React.FC = () => {
                     ...styledRectButton,
                     ...forestGreenButton,
                     marginTop: "2%",
-                    width: "40px%",
+                    width: "fit-content",
                   }}
                   onClick={handleNextClick}
                   disabled={loading}>

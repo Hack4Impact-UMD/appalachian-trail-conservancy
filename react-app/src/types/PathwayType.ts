@@ -9,7 +9,6 @@ export interface Pathway {
   coverImage: string; // URL
   trainingIDs: string[];
   quiz: Quiz;
-  badgeImage: string; // URL
   status: Status;
 }
 

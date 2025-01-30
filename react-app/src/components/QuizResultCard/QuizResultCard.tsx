@@ -10,7 +10,7 @@ import {
   redRadioButton,
   radioGroup,
   radioAnswers,
-} from "../../../muiTheme";
+} from "../../muiTheme";
 import styles from "./QuizResultCard.module.css";
 import { IoCloseOutline, IoCheckmark } from "react-icons/io5";
 

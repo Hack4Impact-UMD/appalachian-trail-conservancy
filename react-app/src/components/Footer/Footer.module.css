@@ -94,7 +94,42 @@
 
 /* adjust footer height when screen width is below 900px */
 @media screen and (max-width: 900px) {
-  .footerContainer{
+  .footerContainer {
     height: 200px;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    justify-content: center;
+  }
+
+  .topContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 5%;
+    justify-content: center;
+  }
+
+  .ATClogo {
+    height: 50px;
+    width: 50px;
+  }
+
+  .iconsDiv {
+    margin-top: 1rem;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 70%;
+    align-self: center;
+  }
+
+  .statement {
+    text-align: center;
   }
 }

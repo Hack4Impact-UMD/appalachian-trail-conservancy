@@ -6,6 +6,7 @@ import {
   OutlinedInput,
   Radio,
   RadioGroup,
+  Tooltip,
   FormControl,
   FormControlLabel,
   Snackbar,
@@ -21,6 +22,7 @@ import {
   numberInputButton,
   grayGreenRadioButton,
   styledRectButton,
+  whiteTooltip,
 } from "../../muiTheme";
 import { Unstable_NumberInput as NumberInput } from "@mui/base/Unstable_NumberInput";
 import AddIcon from "@mui/icons-material/Add";
@@ -28,12 +30,15 @@ import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigat
 import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Hamburger from "../../assets/hamburger.svg";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { PathwayID, Quiz, Status, Question } from "../../types/PathwayType";
 import { updatePathway } from "../../backend/FirestoreCalls";
 
 function PathwayQuizEditorPage() {
   const navigate = useNavigate();
-  const [navigationBarOpen, setNavigationBarOpen] = useState(true);
+  const [navigationBarOpen, setNavigationBarOpen] = useState(
+    !(window.innerWidth < 1200)
+  );
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
 
   const location = useLocation();
@@ -335,7 +340,9 @@ function PathwayQuizEditorPage() {
                 <h1 className={styles.nameHeading}>Pathway Editor</h1>
                 <div>{renderMarker()}</div>
               </div>
-              <ProfileIcon />
+              <div className={styles.profileIcon}>
+                <ProfileIcon />
+              </div>
             </div>
 
             <form noValidate onSubmit={(e) => e.preventDefault()}>
@@ -347,26 +354,42 @@ function PathwayQuizEditorPage() {
                 {status === "DRAFT" ? "Save as Draft" : "Save"}
               </Button>
 
-              <h2 className={styles.quizEditorText}>CREATE QUIZ</h2>
+              <div className={styles.quizEditorHeader}>
+                <h2 className={styles.quizEditorText}>CREATE QUIZ</h2>
+                <Tooltip
+                  title="The number of questions and points to pass cannot be modified for published and archived pathways."
+                  placement="right"
+                  componentsProps={{
+                    tooltip: {
+                      sx: { ...whiteTooltip, fontSize: "0.75rem" },
+                    },
+                  }}>
+                  <span className={styles.iconCenter}>
+                    <InfoOutlinedIcon />
+                  </span>
+                </Tooltip>
+              </div>
 
               {/* Points to Pass */}
               <div className={styles.pointsContainer}>
                 <span className={styles.quizEditorText}>POINTS TO PASS:</span>
-                <NumberInput
-                  slots={{
-                    root: numberInputRoot,
-                    input: numberInputElement,
-                    incrementButton: numberInputButton,
-                    decrementButton: numberInputButton,
-                  }}
-                  min={0}
-                  max={maxPoints}
-                  value={pointsToPass}
-                  onChange={handlePointsToPassChange}
-                />
+                {status === "DRAFT" && (
+                  <NumberInput
+                    slots={{
+                      root: numberInputRoot,
+                      input: numberInputElement,
+                      incrementButton: numberInputButton,
+                      decrementButton: numberInputButton,
+                    }}
+                    min={0}
+                    max={maxPoints}
+                    value={pointsToPass}
+                    onChange={handlePointsToPassChange}
+                  />
+                )}
                 <span
                   className={`${styles.quizEditorText} ${styles.leftMargin}`}>
-                  / {maxPoints}
+                  {status !== "DRAFT" ? pointsToPass : ""} / {maxPoints}
                 </span>
               </div>
 
@@ -401,7 +424,7 @@ function PathwayQuizEditorPage() {
                       multiline
                       rows={3}
                     />
-                    {questionIndex > 0 ? (
+                    {questionIndex > 0 && status === "DRAFT" ? (
                       <div
                         className={`${styles.closeIcon} ${styles.leftMargin}`}>
                         <IoCloseOutline
@@ -506,12 +529,14 @@ function PathwayQuizEditorPage() {
               ))}
 
               {/* Add Question Button */}
-              <div
-                className={styles.addQuestionContainer}
-                onClick={handleAddQuestion}>
-                <AddIcon fontSize="large" />
-                <h2>ADD QUESTION</h2>
-              </div>
+              {status === "DRAFT" && (
+                <div
+                  className={styles.addQuestionContainer}
+                  onClick={handleAddQuestion}>
+                  <AddIcon fontSize="large" />
+                  <h2>ADD QUESTION</h2>
+                </div>
+              )}
 
               {/* Button group */}
               <div className={styles.buttonsContainer}>
