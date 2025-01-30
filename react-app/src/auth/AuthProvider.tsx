@@ -41,9 +41,14 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
 
   useEffect(() => {
     const auth = getAuth(app);
-    const email = window.localStorage.getItem("emailForSignIn");
+    let email = window.localStorage.getItem("emailForSignIn");
 
     if (isSignInWithEmailLink(auth, window.location.href)) {
+      if (!email) {
+        // User opened the link on a different device. To prevent session fixation
+        // attacks, ask the user to provide the associated email again.
+        email = window.prompt("Please provide your email for confirmation");
+      }
       signInWithEmailLink(auth, email ?? "", window.location.href)
         .then(() => {
           window.localStorage.removeItem("emailForSignIn");
@@ -89,8 +94,7 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
         setLastName,
         id,
         loading,
-      }}
-    >
+      }}>
       {children}
     </AuthContext.Provider>
   );
