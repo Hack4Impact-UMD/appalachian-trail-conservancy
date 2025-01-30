@@ -38,6 +38,11 @@
   padding-bottom: 3%;
 }
 
+.errorText {
+  margin-top: 3rem;
+  text-align: center;
+}
+
 .snackbarContainer {
   position: fixed;
   bottom: 16px; /* Adjust as needed */
