@@ -85,7 +85,7 @@ function PathwayLandingPage() {
           setPathway(location.state.pathway);
           const trainingPromises =
             location.state.pathway.trainingIDs.map(getTraining);
-          const fetchedTrainings = await Promise.all(trainingPromises); // I think it's breaking here
+          const fetchedTrainings = await Promise.all(trainingPromises);
           setTrainings(fetchedTrainings);
         }
       }
@@ -116,58 +116,60 @@ function PathwayLandingPage() {
             // pathway is not in the volunteer's pathway list (i.e. not started)
             const trainingList = volunteer.trainingInformation;
 
-            // check if volunteer started first training in pathway
-            const firstTrainingID = trainings[0].id;
-            const firstVolunteerTraining = trainingList.find(
-              (training) => training.trainingID === firstTrainingID
-            );
+            if (trainings.length !== 0) {
+              // check if volunteer started first training in pathway
+              const firstTrainingID = trainings[0].id;
+              const firstVolunteerTraining = trainingList.find(
+                (training) => training.trainingID === firstTrainingID
+              );
 
-            // if first training is in progress or completed, mark the pathway as in progress
-            if (firstVolunteerTraining) {
-              const newVolunteerPathway: VolunteerPathway = {
-                pathwayID: pathway.id,
-                progress: "INPROGRESS", // Assuming initial progress is "INPROGRESS"
-                dateCompleted: "", // Initialize with empty string
-                trainingsCompleted: [], // Initialize with empty array
-                trainingsInProgress: [], // Initialize with empty array
-                numTrainingsCompleted: 0, // Initialize with 0
-                numTotalTrainings: pathway.trainingIDs.length, // Initialize with number of trainings in pathway
-              };
+              // if first training is in progress or completed, mark the pathway as in progress
+              if (firstVolunteerTraining) {
+                const newVolunteerPathway: VolunteerPathway = {
+                  pathwayID: pathway.id,
+                  progress: "INPROGRESS", // Assuming initial progress is "INPROGRESS"
+                  dateCompleted: "", // Initialize with empty string
+                  trainingsCompleted: [], // Initialize with empty array
+                  trainingsInProgress: [], // Initialize with empty array
+                  numTrainingsCompleted: 0, // Initialize with 0
+                  numTotalTrainings: pathway.trainingIDs.length, // Initialize with number of trainings in pathway
+                };
 
-              let consecutiveCompletion = false;
+                let consecutiveCompletion = false;
 
-              // update volunteer pathway with first training status
-              if (firstVolunteerTraining.progress === "COMPLETED") {
-                newVolunteerPathway.trainingsCompleted.push(firstTrainingID);
-                newVolunteerPathway.numTrainingsCompleted++;
-                consecutiveCompletion = true;
-              } else {
-                newVolunteerPathway.trainingsInProgress.push(firstTrainingID);
-              }
+                // update volunteer pathway with first training status
+                if (firstVolunteerTraining.progress === "COMPLETED") {
+                  newVolunteerPathway.trainingsCompleted.push(firstTrainingID);
+                  newVolunteerPathway.numTrainingsCompleted++;
+                  consecutiveCompletion = true;
+                } else {
+                  newVolunteerPathway.trainingsInProgress.push(firstTrainingID);
+                }
 
-              // check other trainings in pathway if first training is in progress/completed
-              for (let i = 1; i < trainings.length; i++) {
-                const trainingID = trainings[i].id;
-                const volunteerTraining = trainingList.find(
-                  (training) => training.trainingID === trainingID
-                );
+                // check other trainings in pathway if first training is in progress/completed
+                for (let i = 1; i < trainings.length; i++) {
+                  const trainingID = trainings[i].id;
+                  const volunteerTraining = trainingList.find(
+                    (training) => training.trainingID === trainingID
+                  );
 
-                if (volunteerTraining) {
-                  if (volunteerTraining.progress === "COMPLETED") {
-                    newVolunteerPathway.trainingsCompleted.push(trainingID);
-                    if (consecutiveCompletion) {
-                      newVolunteerPathway.numTrainingsCompleted++;
+                  if (volunteerTraining) {
+                    if (volunteerTraining.progress === "COMPLETED") {
+                      newVolunteerPathway.trainingsCompleted.push(trainingID);
+                      if (consecutiveCompletion) {
+                        newVolunteerPathway.numTrainingsCompleted++;
+                      }
+                    } else {
+                      newVolunteerPathway.trainingsInProgress.push(trainingID);
+                      consecutiveCompletion = false;
                     }
-                  } else {
-                    newVolunteerPathway.trainingsInProgress.push(trainingID);
-                    consecutiveCompletion = false;
                   }
                 }
-              }
 
-              setNumCompleted(newVolunteerPathway.numTrainingsCompleted);
-              addVolunteerPathway(auth.id.toString(), newVolunteerPathway);
-              setVolunteerPathway(newVolunteerPathway);
+                setNumCompleted(newVolunteerPathway.numTrainingsCompleted);
+                addVolunteerPathway(auth.id.toString(), newVolunteerPathway);
+                setVolunteerPathway(newVolunteerPathway);
+              }
             } else {
               // volunteer has not started pathway
               setNumCompleted(0);

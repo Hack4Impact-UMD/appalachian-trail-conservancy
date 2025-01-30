@@ -398,13 +398,15 @@ function Dashboard() {
                       <div className={styles.subHeader}>
                         <h2>No Trainings in Progress</h2>
                       </div>
-                      <Link to="/trainings">
-                        <Button
-                          sx={forestGreenButtonPadding}
-                          variant="contained">
-                          GO TO TRAINING LIBRARY
-                        </Button>
-                      </Link>
+                      <div className={styles.libraryButton}>
+                        <Link to="/trainings">
+                          <Button
+                            sx={forestGreenButtonPadding}
+                            variant="contained">
+                            GO TO TRAINING LIBRARY
+                          </Button>
+                        </Link>
+                      </div>
                     </div>
                   )}
 

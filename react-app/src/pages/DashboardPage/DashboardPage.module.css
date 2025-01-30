@@ -153,6 +153,11 @@
     margin-right: 10px;
   }
 
+  .libraryButton {
+    display: flex;
+    justify-content: center;
+  }
+
   .cardsContainer {
     justify-content: space-around;
   }
