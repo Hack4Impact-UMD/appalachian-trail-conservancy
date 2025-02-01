@@ -3,13 +3,13 @@ import { Button } from "@mui/material";
 import { forestGreenButton } from "../../muiTheme";
 import { useLocation, Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthProvider";
-import { validateQuiz } from "../../backend/FirestoreCalls";
+import { validateTrainingQuiz } from "../../backend/FirestoreCalls";
 import { Training } from "../../types/TrainingType";
 import { VolunteerTraining } from "../../types/UserType";
 import styles from "./QuizPage.module.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
-import QuizCard from "./QuizCard/QuizCard";
+import QuizCard from "../../components/QuizCard/QuizCard";
 import Loading from "../../components/LoadingScreen/Loading";
 import hamburger from "../../assets/hamburger.svg";
 
@@ -52,7 +52,6 @@ function QuizPage() {
     },
     status: "PUBLISHED",
     associatedPathways: [],
-    certificationImage: "",
   });
 
   useEffect(() => {
@@ -118,18 +117,19 @@ function QuizPage() {
       value === undefined ? "" : value
     );
 
-    validateQuiz(
+    validateTrainingQuiz(
       volunteerTraining.trainingID,
       volunteerId,
       cleanedSelectedAnswers,
       new Date(Date.now()).toISOString()
     )
       .then((validateResults) => {
-        const numAnswersCorrect = validateResults.data;
+        const [numAnswersCorrect, volunteerTrainingInfo] = validateResults.data;
+        setVolunteerTraining(volunteerTrainingInfo);
         navigate(`/trainings/quizresult`, {
           state: {
             training: training,
-            volunteerTraining: volunteerTraining,
+            volunteerTraining: volunteerTrainingInfo,
             selectedAnswers: selectedAnswers,
             achievedScore: numAnswersCorrect,
             fromApp: true,
@@ -139,6 +139,7 @@ function QuizPage() {
       })
       .catch((error) => {
         console.error("Error validating quiz:", error);
+        setQuizLoading(false);
       });
   };
 
@@ -153,8 +154,7 @@ function QuizPage() {
         className={`${styles.split} ${styles.right}`}
         style={{
           left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-        }}
-      >
+        }}>
         {!navigationBarOpen && (
           <img
             src={hamburger}
@@ -174,7 +174,9 @@ function QuizPage() {
               <>
                 <div className={styles.header}>
                   <h1 className={styles.nameHeading}>{training.name} - Quiz</h1>
-                  <ProfileIcon />
+                  <div className={styles.profileIcon}>
+                    <ProfileIcon />
+                  </div>
                 </div>
 
                 {quizLoading ? (
@@ -207,15 +209,13 @@ function QuizPage() {
               navigationBarOpen && screenWidth > 1200
                 ? "calc(100% - 250px)"
                 : "100%",
-          }}
-        >
+          }}>
           <div className={styles.footerButtons}>
             <Button
               sx={{ ...forestGreenButton }}
               variant="contained"
               onClick={handleSubmitQuiz}
-              disabled={quizLoading}
-            >
+              disabled={quizLoading}>
               Submit
             </Button>
           </div>

@@ -72,7 +72,7 @@
 .showFailureMessage {
   margin-top: 10px;
   font-size: 1rem;
-  color: red;
+  color: var(--hazard-red);
   text-align: center;
 }
 

@@ -88,7 +88,7 @@ const AdminTrainingEditor: React.FC = () => {
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
   );
-
+  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
   const [openDeleteDraftPopup, setOpenDeleteDraftPopup] =
     useState<boolean>(false);
 
@@ -298,7 +298,6 @@ const AdminTrainingEditor: React.FC = () => {
             passingScore: 0,
           },
           associatedPathways: [],
-          certificationImage: "",
           status: status,
         } as Training;
         const newTrainingId = (await addTraining(updatedTraining)) as
@@ -396,7 +395,6 @@ const AdminTrainingEditor: React.FC = () => {
             passingScore: 0,
           },
           associatedPathways: [],
-          certificationImage: "",
           status: status,
         } as Training;
         const newTrainingId = await addTraining(updatedTraining);
@@ -454,6 +452,18 @@ const AdminTrainingEditor: React.FC = () => {
     }
   };
 
+  // Update screen width on resize
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   useEffect(() => {
     // description quill editor
     if (descriptionContainerRef.current && !quillDescriptionRef.current) {
@@ -496,7 +506,9 @@ const AdminTrainingEditor: React.FC = () => {
       </div>
       <div
         className={`${styles.split} ${styles.right}`}
-        style={{ left: navigationBarOpen ? "250px" : "0" }}>
+        style={{
+          left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
+        }}>
         {/* Hamburger Menu */}
         {!navigationBarOpen && (
           <img
@@ -515,7 +527,9 @@ const AdminTrainingEditor: React.FC = () => {
                 <h1 className={styles.headerText}>Training Editor</h1>
                 <div>{renderMarker()}</div>
               </div>
-              <ProfileIcon />
+              <div className={styles.profileIcon}>
+                <ProfileIcon />
+              </div>
             </div>
 
             <form className={styles.formContent} noValidate>
@@ -722,7 +736,6 @@ const AdminTrainingEditor: React.FC = () => {
                           passingScore: 0,
                         },
                         associatedPathways: [],
-                        certificationImage: "",
                         status: status,
                       }}
                       preview={true}
@@ -863,7 +876,7 @@ const AdminTrainingEditor: React.FC = () => {
                     ...styledRectButton,
                     ...forestGreenButton,
                     marginTop: "2%",
-                    width: "40px%",
+                    width: "fit-content",
                   }}
                   onClick={handleNextClick}
                   disabled={loading}>

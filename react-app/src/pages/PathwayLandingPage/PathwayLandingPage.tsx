@@ -5,26 +5,35 @@ import TitleInfo from "./TileInfo/TitleInfo";
 import styles from "./PathwayLandingPage.module.css";
 import hamburger from "../../assets/hamburger.svg";
 import Footer from "../../components/Footer/Footer";
+import Loading from "../../components/LoadingScreen/Loading.tsx";
 import { useParams, useLocation } from "react-router-dom";
 import { TrainingID } from "../../types/TrainingType";
 import { PathwayID } from "../../types/PathwayType";
+import { VolunteerPathway } from "../../types/UserType.ts";
 import { useAuth } from "../../auth/AuthProvider";
+import { Alert, Snackbar } from "@mui/material";
 import {
   getPathway,
   getTraining,
   getVolunteer,
+  addVolunteerPathway,
 } from "../../backend/FirestoreCalls";
 
 function PathwayLandingPage() {
   const auth = useAuth();
   const pathwayId = useParams().id;
   const location = useLocation();
+  const [loading, setLoading] = useState<boolean>(true);
   const [open, setOpen] = useState(!(window.innerWidth < 1200));
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
   const [divWidth, setDivWidth] = useState<number>(0);
   const [trainings, setTrainings] = useState<TrainingID[]>([]);
   const [numCompleted, setNumCompleted] = useState<number>(0);
   const [elements, setElements] = useState<any[]>([]);
+  const [quizPassed, setQuizPassed] = useState<boolean>(false);
+  const [snackbar, setSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [popupOpen, setPopupOpen] = useState<boolean>(false);
 
   const [pathway, setPathway] = useState<PathwayID>({
     name: "",
@@ -38,13 +47,22 @@ function PathwayLandingPage() {
       numQuestions: 0,
       passingScore: 0,
     },
-    badgeImage: "",
     status: "DRAFT",
   });
 
+  const [volunteerPathway, setVolunteerPathway] = useState<VolunteerPathway>({
+    pathwayID: "",
+    progress: "INPROGRESS",
+    dateCompleted: "",
+    trainingsCompleted: [],
+    trainingsInProgress: [],
+    numTrainingsCompleted: 0,
+    numTotalTrainings: pathway.trainingIDs.length,
+  });
   const div = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    setLoading(true);
     const getPathwayInfo = async () => {
       // get pathway if not coming from in app
       if (pathwayId !== undefined && !location.state?.pathway) {
@@ -58,6 +76,7 @@ function PathwayLandingPage() {
             })
             .catch(() => {
               console.log("Failed to get pathway");
+              setLoading(false);
             });
         }
       } else {
@@ -66,15 +85,16 @@ function PathwayLandingPage() {
           setPathway(location.state.pathway);
           const trainingPromises =
             location.state.pathway.trainingIDs.map(getTraining);
-          const fetchedTrainings = await Promise.all(trainingPromises); // I think it's breaking here
+          const fetchedTrainings = await Promise.all(trainingPromises);
           setTrainings(fetchedTrainings);
         }
       }
     };
     getPathwayInfo();
+  }, [auth.loading, auth.id, location.state, pathwayId]);
 
+  useEffect(() => {
     // Filters based on the current pathway to get the number of trainings the user completed
-    // Commented out until the other stuff is working
     const getTrainingsCompleted = async () => {
       if (!auth.loading && auth.id && pathwayId !== undefined) {
         try {
@@ -85,19 +105,86 @@ function PathwayLandingPage() {
           );
 
           if (volunteerPathway.length > 0) {
+            // pathway is in progress or completed
             const numTrainings = volunteerPathway[0].numTrainingsCompleted;
+            setVolunteerPathway(volunteerPathway[0]);
             setNumCompleted(numTrainings);
+            if (volunteerPathway[0].progress === "COMPLETED") {
+              setQuizPassed(true);
+            }
           } else {
-            setNumCompleted(0);
+            // pathway is not in the volunteer's pathway list (i.e. not started)
+            const trainingList = volunteer.trainingInformation;
+
+            if (trainings.length !== 0) {
+              // check if volunteer started first training in pathway
+              const firstTrainingID = trainings[0].id;
+              const firstVolunteerTraining = trainingList.find(
+                (training) => training.trainingID === firstTrainingID
+              );
+
+              // if first training is in progress or completed, mark the pathway as in progress
+              if (firstVolunteerTraining) {
+                const newVolunteerPathway: VolunteerPathway = {
+                  pathwayID: pathway.id,
+                  progress: "INPROGRESS", // Assuming initial progress is "INPROGRESS"
+                  dateCompleted: "", // Initialize with empty string
+                  trainingsCompleted: [], // Initialize with empty array
+                  trainingsInProgress: [], // Initialize with empty array
+                  numTrainingsCompleted: 0, // Initialize with 0
+                  numTotalTrainings: pathway.trainingIDs.length, // Initialize with number of trainings in pathway
+                };
+
+                let consecutiveCompletion = false;
+
+                // update volunteer pathway with first training status
+                if (firstVolunteerTraining.progress === "COMPLETED") {
+                  newVolunteerPathway.trainingsCompleted.push(firstTrainingID);
+                  newVolunteerPathway.numTrainingsCompleted++;
+                  consecutiveCompletion = true;
+                } else {
+                  newVolunteerPathway.trainingsInProgress.push(firstTrainingID);
+                }
+
+                // check other trainings in pathway if first training is in progress/completed
+                for (let i = 1; i < trainings.length; i++) {
+                  const trainingID = trainings[i].id;
+                  const volunteerTraining = trainingList.find(
+                    (training) => training.trainingID === trainingID
+                  );
+
+                  if (volunteerTraining) {
+                    if (volunteerTraining.progress === "COMPLETED") {
+                      newVolunteerPathway.trainingsCompleted.push(trainingID);
+                      if (consecutiveCompletion) {
+                        newVolunteerPathway.numTrainingsCompleted++;
+                      }
+                    } else {
+                      newVolunteerPathway.trainingsInProgress.push(trainingID);
+                      consecutiveCompletion = false;
+                    }
+                  }
+                }
+
+                setNumCompleted(newVolunteerPathway.numTrainingsCompleted);
+                addVolunteerPathway(auth.id.toString(), newVolunteerPathway);
+                setVolunteerPathway(newVolunteerPathway);
+              }
+            } else {
+              // volunteer has not started pathway
+              setNumCompleted(0);
+            }
           }
         } catch (error) {
           console.error("Error fetching volunteer data:", error);
+          setLoading(false);
         }
+        setLoading(false);
       }
     };
 
     getTrainingsCompleted();
-  }, [auth.loading, auth.id]);
+  }, [trainings, auth.loading, auth.id, pathway, pathwayId]);
 
   useEffect(() => {
     // when the component gets mounted
@@ -114,7 +201,7 @@ function PathwayLandingPage() {
 
   useEffect(() => {
     if (trainings.length) renderGrid(trainings);
-  }, [divWidth, trainings]);
+  }, [divWidth, trainings, numCompleted]);
 
   const renderGrid = (trainings: TrainingID[]) => {
     const imgWidth = 300;
@@ -125,7 +212,7 @@ function PathwayLandingPage() {
         ? 0
         : Math.ceil((trainings.length + 1) / imagesPerRow);
     let count = 0;
-    let newElts = [];
+    const newElts = [];
 
     for (let i = 0; i < height; i++) {
       if (i % 2 == 0) {
@@ -134,10 +221,20 @@ function PathwayLandingPage() {
             <div key={j}>
               <PathwayTile
                 tileNum={j}
+                pathwayID={pathway}
                 trainingID={j < trainings.length ? trainings[j] : undefined}
                 width={divWidth}
                 numTrainings={trainings.length}
-                trainingsCompleted={numCompleted} // Filler for now
+                trainingsCompleted={numCompleted}
+                quizPassed={quizPassed}
+                volunteerTrainings={[
+                  ...volunteerPathway.trainingsCompleted,
+                  ...volunteerPathway.trainingsInProgress,
+                ]}
+                volunteerPathway={volunteerPathway}
+                setSnackbar={setSnackbar}
+                setSnackbarMessage={setSnackbarMessage}
+                setPopupOpen={setPopupOpen}
               />
             </div>
           );
@@ -150,10 +247,20 @@ function PathwayLandingPage() {
             <div key={j}>
               <PathwayTile
                 tileNum={j}
+                pathwayID={pathway}
                 trainingID={j < trainings.length ? trainings[j] : undefined}
                 width={divWidth}
                 numTrainings={trainings.length}
-                trainingsCompleted={numCompleted} // Filler for now
+                trainingsCompleted={numCompleted}
+                quizPassed={quizPassed}
+                volunteerTrainings={[
+                  ...volunteerPathway.trainingsCompleted,
+                  ...volunteerPathway.trainingsInProgress,
+                ]}
+                volunteerPathway={volunteerPathway}
+                setSnackbar={setSnackbar}
+                setSnackbarMessage={setSnackbarMessage}
+                setPopupOpen={setPopupOpen}
               />
             </div>
           );
@@ -166,7 +273,9 @@ function PathwayLandingPage() {
 
   return (
     <>
-      <NavigationBar open={open} setOpen={setOpen} />
+      <div className={popupOpen ? styles.popupOpen : ""}>
+        <NavigationBar open={open} setOpen={setOpen} />
+      </div>
 
       <div
         className={`${styles.split} ${styles.right}`}
@@ -185,12 +294,36 @@ function PathwayLandingPage() {
         )}
         <div className={styles.pageContainer}>
           <div className={styles.content} ref={div}>
-            <TitleInfo title={pathway.name} description={pathway.description} />
+            <TitleInfo
+              title={pathway.name}
+              description={pathway.description}
+              volunteerPathway={volunteerPathway}
+            />
 
             {/* Pathway Tiles Section */}
-            <div className={styles.pathwayTiles}>{elements}</div>
+            {loading ? (
+              <div className={styles.loadingContainer}>
+                <Loading />
+              </div>
+            ) : (
+              <div className={styles.pathwayTiles}>{elements}</div>
+            )}
           </div>
         </div>
+        <Snackbar
+          open={snackbar}
+          autoHideDuration={6000}
+          onClose={() => setSnackbar(false)}
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }} // Position within the right section
+        >
+          <Alert
+            onClose={() => setSnackbar(false)}
+            severity={
+              snackbarMessage.includes("successfully") ? "success" : "error"
+            }>
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
         <Footer />
       </div>
     </>

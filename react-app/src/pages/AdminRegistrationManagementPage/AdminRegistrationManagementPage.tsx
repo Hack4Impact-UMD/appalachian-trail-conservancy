@@ -52,8 +52,7 @@ function AdminRegistrationManagementPage() {
         className={`${styles.split} ${styles.right}`}
         style={{
           left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-        }}
-      >
+        }}>
         {!navigationBarOpen && (
           <img
             src={hamburger}
@@ -67,7 +66,9 @@ function AdminRegistrationManagementPage() {
           <div className={styles.content}>
             <div className={styles.header}>
               <h1 className={styles.nameHeading}>Registration Management</h1>
-              <ProfileIcon />
+              <div className={styles.profileIcon}>
+                <ProfileIcon />
+              </div>
             </div>
             <div className={styles.mainContainer}>
               <div className={styles.innerMainContainer}>
@@ -75,8 +76,7 @@ function AdminRegistrationManagementPage() {
                   <CustomToggleButtonGroup
                     value={tab}
                     exclusive
-                    onChange={(event, value) => handleTabChange(value)}
-                  >
+                    onChange={(event, value) => handleTabChange(value)}>
                     <PurpleToggleButton value="user">
                       EDIT NEW USER EMAIL
                     </PurpleToggleButton>
@@ -94,8 +94,7 @@ function AdminRegistrationManagementPage() {
                       value={tab}
                       onChange={(e) => handleTabChange(e.target.value)} // Handle the dropdown value directly
                       displayEmpty
-                      label="Filter"
-                    >
+                      label="Filter">
                       <MenuItem value="user" sx={selectOptionStyle}>
                         EDIT NEW USER EMAIL
                       </MenuItem>

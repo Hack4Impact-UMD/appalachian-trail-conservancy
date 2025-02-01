@@ -63,7 +63,6 @@ function AdminTrainingDetails() {
       passingScore: 0,
     },
     associatedPathways: [],
-    certificationImage: "",
     status: "DRAFT",
   });
 
@@ -263,7 +262,9 @@ function AdminTrainingDetails() {
           <div className={styles.content}>
             <div className={styles.header}>
               <h1 className={styles.nameHeading}>Training Details</h1>
-              <ProfileIcon />
+              <div className={styles.profileIcon}>
+                <ProfileIcon />
+              </div>
             </div>
 
             {loading ? (
@@ -364,7 +365,13 @@ function AdminTrainingDetails() {
                       paddingRight: "20px",
                       width: "100px",
                     }}
-                    onClick={() => navigate("/management")}>
+                    onClick={() =>
+                      navigate("/management", {
+                        state: {
+                          fromPage: "training",
+                        },
+                      })
+                    }>
                     BACK
                   </Button>
                 </div>

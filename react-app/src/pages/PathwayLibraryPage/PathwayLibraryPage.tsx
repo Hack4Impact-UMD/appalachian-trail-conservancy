@@ -46,6 +46,7 @@ function PathwayLibrary() {
   const [open, setOpen] = useState(!(window.innerWidth < 1200)); // nav bar
 
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
+  const [popupOpen, setPopupOpen] = useState<boolean>(false);
 
   // Update screen width on resize
   useEffect(() => {
@@ -167,7 +168,9 @@ function PathwayLibrary() {
 
   return (
     <>
-      <NavigationBar open={open} setOpen={setOpen} />
+      <div className={popupOpen ? styles.popupOpen : ""}>
+        <NavigationBar open={open} setOpen={setOpen} />
+      </div>
       <div
         className={`${styles.split} ${styles.right}`}
         style={{
@@ -187,7 +190,9 @@ function PathwayLibrary() {
           <div className={styles.content}>
             <div className={styles.header}>
               <h1 className={styles.nameHeading}>Pathways</h1>
-              <ProfileIcon />
+              <div className={styles.profileIcon}>
+                <ProfileIcon />
+              </div>
             </div>
 
             <div className={styles.searchBarContainer}>
@@ -278,6 +283,7 @@ function PathwayLibrary() {
                           pathway={pathway.genericPathway}
                           volunteerPathway={pathway.volunteerPathway}
                           preview={false}
+                          setPopupOpen={setPopupOpen}
                         />
                       </div>
                     ))}

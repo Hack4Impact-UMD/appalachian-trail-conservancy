@@ -13,12 +13,14 @@ interface PathwayCardProps {
   pathway: PathwayID;
   volunteerPathway?: VolunteerPathway;
   preview: boolean;
+  setPopupOpen?: any;
 }
 
 const PathwayCard: React.FC<PathwayCardProps> = ({
   pathway,
   volunteerPathway,
   preview,
+  setPopupOpen,
 }) => {
   const [openTrainingPopup, setOpenTrainingPopup] = useState<boolean>(false);
 
@@ -28,11 +30,7 @@ const PathwayCard: React.FC<PathwayCardProps> = ({
     if (!preview && volunteerPathway == undefined) {
       // Training not started
       return <div className={styles.marker}></div>;
-    } else if (
-      preview ||
-      volunteerPathway!.numTrainingsCompleted ===
-        volunteerPathway!.numTotalTrainings
-    ) {
+    } else if (preview || volunteerPathway!.progress === "COMPLETED") {
       // Training completed
       return (
         <div className={`${styles.marker} ${styles.completedMarker}`}>
@@ -42,10 +40,10 @@ const PathwayCard: React.FC<PathwayCardProps> = ({
     } else {
       // Training in progress
       return (
+        // Quiz is not completed
         <LinearProgressWithLabel
           value={
-            ((volunteerPathway!.numTrainingsCompleted +
-              (volunteerPathway!.quizScoreRecieved ? 1 : 0)) /
+            (volunteerPathway!.numTrainingsCompleted /
               (volunteerPathway!.numTotalTrainings + 1)) *
             100
           }
@@ -61,6 +59,7 @@ const PathwayCard: React.FC<PathwayCardProps> = ({
         if (!preview) {
           if (volunteerPathway == undefined) {
             setOpenTrainingPopup(true);
+            setPopupOpen(true);
           } else {
             navigate(`/pathways/${pathway.id}`, {
               state: {
@@ -99,7 +98,10 @@ const PathwayCard: React.FC<PathwayCardProps> = ({
       </div>
       <PathwayTrainingPopup
         open={openTrainingPopup}
-        onClose={setOpenTrainingPopup}
+        onClose={() => {
+          setOpenTrainingPopup(false);
+          setPopupOpen(false);
+        }}
         record={pathway}
         volunteerRecord={volunteerPathway}
         mode={"pathway"}

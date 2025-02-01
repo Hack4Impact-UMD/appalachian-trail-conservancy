@@ -20,9 +20,12 @@
   cursor: pointer;
 }
 
+.closeButton:hover {
+  color: var(--hazard-red);
+}
+
 .left {
-  width: 360px;
-  color: black;
+  width: 425px;
   left: 0;
   padding: 7%;
 }
@@ -30,14 +33,18 @@
 .title {
   font-size: 2rem;
   font-weight: bold;
+  color: var(--blue-gray);
   margin: 0;
   padding: 0;
+  word-break: break-word;
 }
 
 .textContainer {
   font-size: 1rem;
   height: 130px;
   overflow-y: auto;
+  word-break: break-word;
+  color: black;
 }
 
 .learnMoreButton {
@@ -47,7 +54,7 @@
 
 .right {
   right: 0;
-  width: 340px;
+  width: 275px;
   border-radius: 0 16px 16px 0;
   background-color: gray;
   overflow: hidden;
@@ -89,14 +96,63 @@
   display: flex;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 700px) {
   .modal {
+    width: 500px;
+  }
+
+  .left {
     width: 300px;
+    left: 0;
+    padding: 7%;
+  }
+
+  .right {
+    right: 0;
+    width: 200px;
+  }
+
+  .title {
+    font-size: 1.6rem;
+  }
+
+  .learnMoreButton {
+    bottom: 35px;
   }
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 500px) {
   .modal {
-    width: 250px;
+    width: 275px;
+  }
+
+  .left {
+    width: 275px;
+    left: 0;
+    padding: 7%;
+  }
+
+  .right {
+    width: 0;
+  }
+
+  .title {
+    font-size: 1.25rem;
+    margin: 2.6rem 0 0 0;
+    text-align: center;
+  }
+
+  .textContainer {
+    font-size: 1rem;
+    height: 155px;
+    text-align: center;
+  }
+
+  .learnMoreButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 85%;
+    bottom: 35px;
   }
 }

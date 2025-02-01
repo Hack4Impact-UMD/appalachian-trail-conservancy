@@ -48,7 +48,6 @@ function TrainingLandingPage() {
       passingScore: 0,
     },
     associatedPathways: [],
-    certificationImage: "",
     status: "DRAFT",
   });
 
@@ -335,7 +334,9 @@ function TrainingLandingPage() {
                 {/* HEADER */}
                 <div className={styles.header}>
                   <h1 className={styles.nameHeading}>{training.name}</h1>
-                  <ProfileIcon />
+                  <div className={styles.profileIcon}>
+                    <ProfileIcon />
+                  </div>
                 </div>
 
                 <div className={styles.progressContainer}>{renderMarker()}</div>

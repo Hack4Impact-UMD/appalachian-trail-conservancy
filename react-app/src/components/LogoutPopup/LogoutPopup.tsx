@@ -1,11 +1,11 @@
 import styles from "./LogoutPopup.module.css";
 import { Button } from "@mui/material";
 import { IoCloseOutline } from "react-icons/io5";
-import { whiteButtonGrayBorder, forestGreenButton } from "../../../muiTheme";
+import { whiteButtonGrayBorder, forestGreenButton } from "../../muiTheme";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router";
-import { logOut } from "../../../backend/AuthFunctions";
-import Modal from "../../ModalWrapper/Modal";
+import { logOut } from "../../backend/AuthFunctions";
+import Modal from "../ModalWrapper/Modal";
 
 interface modalPropsType {
   open: boolean;
@@ -28,12 +28,10 @@ const LogoutPopup = ({ open, onClose }: modalPropsType): React.ReactElement => {
   return (
     <Modal
       height={250}
-      width={450}
       open={open}
       onClose={() => {
         onClose();
-      }}
-    >
+      }}>
       <div className={styles.content}>
         <p className={styles.title}> Are you sure you want to log out?</p>
         <div className={styles.buttons}>
@@ -41,8 +39,7 @@ const LogoutPopup = ({ open, onClose }: modalPropsType): React.ReactElement => {
             <Button
               onClick={() => onClose()}
               variant="contained"
-              sx={{ ...whiteButtonGrayBorder, width: "100px" }}
-            >
+              sx={{ ...whiteButtonGrayBorder, width: "100px" }}>
               Cancel
             </Button>
           </div>
@@ -51,8 +48,7 @@ const LogoutPopup = ({ open, onClose }: modalPropsType): React.ReactElement => {
               <Button
                 onClick={() => startLogOut()}
                 variant="contained"
-                sx={{ ...forestGreenButton, width: "100px" }}
-              >
+                sx={{ ...forestGreenButton, width: "100px" }}>
                 Confirm
               </Button>
             </Link>

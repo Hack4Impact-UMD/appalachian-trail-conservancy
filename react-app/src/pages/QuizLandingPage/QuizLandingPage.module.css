@@ -55,6 +55,7 @@
   margin-bottom: 0;
   max-width: 90%;
   white-space: normal;
+  word-break: break-word;
 }
 
 .subHeader {
@@ -199,14 +200,20 @@
     width: 425px;
   }
 
+  .header {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column-reverse;
+    text-align: center;
+  }
+
+  .profileIcon {
+    margin-left: auto;
+    margin-right: 10px;
+  }
+
   .footerButtons {
     width: 425px;
-  }
-}
-
-@media screen and (max-width: 600px) {
-  .header {
-    margin-top: 5rem;
   }
 }
 
@@ -219,35 +226,20 @@
     width: 300px;
   }
 
+  .nameHeading {
+    font-size: 2rem;
+  }
+
   .passedAttemptContainer {
-    background-color: var(--forest-green);
-    display: flex;
     flex-direction: column;
-    align-items: center;
-    margin-bottom: 1rem;
-    padding: 1rem;
-    border-radius: 20px;
-    color: white;
-    font-weight: bold;
   }
 
   .failedAttemptContainer {
-    background-color: var(--sky-blue);
-    display: flex;
     flex-direction: column;
-    align-items: center;
-    margin-bottom: 1rem;
-    padding: 1rem;
-    border-radius: 20px;
-    color: var(--blue-gray);
-    font-weight: bold;
   }
 
   .leftContent {
-    display: flex;
     width: 100%;
-    flex-direction: row;
-    align-items: center;
     justify-content: space-between;
   }
 }

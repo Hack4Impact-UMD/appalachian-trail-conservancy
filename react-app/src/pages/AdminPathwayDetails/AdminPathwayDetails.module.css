@@ -185,11 +185,17 @@
   .content {
     width: 425px;
   }
-}
 
-@media screen and (max-width: 600px) {
   .header {
-    margin-top: 5rem;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column-reverse;
+    text-align: center;
+  }
+
+  .profileIcon {
+    margin-left: auto;
+    margin-right: 10px;
   }
 }
 

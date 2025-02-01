@@ -2,13 +2,13 @@ import { useState, useEffect } from "react";
 import { LinearProgress, Button } from "@mui/material";
 import { forestGreenButton, whiteButtonGrayBorder } from "../../muiTheme";
 import { useLocation, useNavigate } from "react-router-dom";
-import styles from "./QuizResultPage.module.css";
+import styles from "./PathwayQuizResultPage.module.css";
 import QuizResultCard from "../../components/QuizResultCard/QuizResultCard";
-import Certificate from "../../components/CertificateCard/CertificateCard";
+import Badge from "../../components/BadgeCard/BadgeCard";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
-import { Training } from "../../types/TrainingType";
-import { VolunteerTraining } from "../../types/UserType";
+import { Pathway } from "../../types/PathwayType";
+import { VolunteerPathway } from "../../types/UserType";
 import hamburger from "../../assets/hamburger.svg";
 
 const styledProgressShape = {
@@ -31,48 +31,47 @@ const styledProgressFail = {
   backgroundColor: "dimgray",
 };
 
-const QuizResultPage = () => {
+const PathwayQuizResultPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
   );
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
-  const [training, setTraining] = useState<Training>({
+  const [pathway, setPathway] = useState<Pathway>({
     name: "",
     shortBlurb: "",
     description: "",
     coverImage: "",
-    resources: [],
+    trainingIDs: [],
     quiz: {
       questions: [],
       numQuestions: 0,
       passingScore: 0,
     },
-    associatedPathways: [],
-    status: "DRAFT",
+    status: "PUBLISHED",
   });
-  const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
-    {
-      trainingID: "",
-      progress: "INPROGRESS",
-      dateCompleted: "0000-00-00",
-      numCompletedResources: 0,
-      numTotalResources: 0,
-    }
-  );
+  const [volunteerPathway, setVolunteerPathway] = useState<VolunteerPathway>({
+    pathwayID: "",
+    progress: "INPROGRESS",
+    dateCompleted: "0000-00-00",
+    trainingsCompleted: [],
+    trainingsInProgress: [],
+    numTrainingsCompleted: 0,
+    numTotalTrainings: 0,
+  });
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
   const [achievedScore, setAchievedScore] = useState<number>(0);
 
   useEffect(() => {
     // Get data from navigation state
-    if (location.state?.fromApp && location.state.training) {
-      setTraining(location.state.training);
-      setVolunteerTraining(location.state.volunteerTraining);
+    if (location.state?.fromApp && location.state.pathway) {
+      setPathway(location.state.pathway);
+      setVolunteerPathway(location.state.volunteerPathway);
       setSelectedAnswers(location.state.selectedAnswers);
       setAchievedScore(location.state.achievedScore);
     } else {
-      navigate("/trainings");
+      navigate("/pathways");
     }
   }, []);
 
@@ -88,8 +87,8 @@ const QuizResultPage = () => {
     };
   }, []);
 
-  const passed = achievedScore >= (training?.quiz.passingScore ?? 0);
-  const scoredFull = achievedScore == training?.quiz.numQuestions;
+  const passed = achievedScore >= (pathway?.quiz.passingScore ?? 0);
+  const scoredFull = achievedScore == pathway?.quiz.numQuestions;
 
   return (
     <>
@@ -113,7 +112,7 @@ const QuizResultPage = () => {
           <div className={styles.content}>
             {/* HEADER */}
             <div className={styles.header}>
-              <h1 className={styles.nameHeading}>{training.name} - Quiz</h1>
+              <h1 className={styles.nameHeading}>{pathway.name} - Quiz</h1>
               <div className={styles.profileIcon}>
                 <ProfileIcon />
               </div>
@@ -121,11 +120,11 @@ const QuizResultPage = () => {
 
             <div className={styles.feedback}>
               {passed ? (
-                <div className={styles.certificateImg}>
-                  <Certificate
-                    title={training.name}
-                    image={training.coverImage}
-                    date={volunteerTraining.dateCompleted}
+                <div className={styles.badgeImg}>
+                  <Badge
+                    title={pathway.name}
+                    image={pathway.coverImage}
+                    date={volunteerPathway.dateCompleted}
                   />
                 </div>
               ) : (
@@ -146,7 +145,7 @@ const QuizResultPage = () => {
                 <div className={styles.score}>
                   <div className={styles.bigNum}>{achievedScore}</div>
                   <div className={styles.smallNum}>
-                    / {training?.quiz.numQuestions}
+                    / {pathway?.quiz.numQuestions}
                   </div>
                 </div>
 
@@ -154,7 +153,7 @@ const QuizResultPage = () => {
                 <LinearProgress
                   variant="determinate"
                   value={
-                    (achievedScore / (training?.quiz.numQuestions ?? 1)) * 100
+                    (achievedScore / (pathway?.quiz.numQuestions ?? 1)) * 100
                   }
                   sx={
                     achievedScore == 0 ? styledProgressFail : styledProgressPass
@@ -164,7 +163,7 @@ const QuizResultPage = () => {
             </div>
 
             <div className={styles.questionContainer}>
-              {training?.quiz?.questions.map((question, index) => (
+              {pathway?.quiz?.questions.map((question, index) => (
                 <QuizResultCard
                   key={index}
                   currentQuestion={index}
@@ -193,39 +192,39 @@ const QuizResultPage = () => {
               <Button
                 sx={forestGreenButton}
                 variant="contained"
-                onClick={() => navigate("/trainings")}>
-                Exit training
+                onClick={() => navigate("/pathways")}>
+                Exit pathway
               </Button>
             ) : (
               <>
                 <Button
                   sx={{ ...whiteButtonGrayBorder }}
                   variant="contained"
-                  onClick={() => navigate("/trainings")}>
-                  {screenWidth > 450 ? "Exit Training" : "Exit"}
+                  onClick={() => navigate("/pathways")}>
+                  {screenWidth > 450 ? "Exit Pathway" : "Exit"}
                 </Button>
                 <Button
                   sx={{ ...whiteButtonGrayBorder }}
                   variant="contained"
                   onClick={() =>
-                    navigate(`/trainings/${volunteerTraining.trainingID}`, {
+                    navigate(`/pathways/${volunteerPathway.pathwayID}`, {
                       state: {
-                        volunteerTraining: volunteerTraining,
-                        training: training,
+                        volunteerPathway: volunteerPathway,
+                        pathway: pathway,
                         fromApp: true,
                       },
                     })
                   }>
-                  {screenWidth > 450 ? "Restart Training" : "Restart"}
+                  {screenWidth > 450 ? "Back to Pathway" : "Back"}
                 </Button>
                 <Button
                   sx={{ ...forestGreenButton }}
                   variant="contained"
                   onClick={() =>
-                    navigate(`/trainings/quizlanding`, {
+                    navigate(`/pathways/quizlanding`, {
                       state: {
-                        volunteerTraining: volunteerTraining,
-                        training: training,
+                        volunteerPathway: volunteerPathway,
+                        pathway: pathway,
                         fromApp: true,
                       },
                     })
@@ -241,4 +240,4 @@ const QuizResultPage = () => {
   );
 };
 
-export default QuizResultPage;
+export default PathwayQuizResultPage;

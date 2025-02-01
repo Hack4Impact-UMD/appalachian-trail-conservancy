@@ -2,6 +2,7 @@ import styles from "./VolunteerProfilePage.module.css";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../auth/AuthProvider";
 import EditNamePopup from "./EditNamePopup/EditNamePopup";
+import EditEmailPopup from "./EditEmailPopup/EditEmailPopup";
 import { Tooltip, Alert, Snackbar, TextField, IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { getVolunteer } from "../../backend/FirestoreCalls";
@@ -27,6 +28,9 @@ function VolunteerProfilePage() {
   // state for handling edit name popup
   const [openEditNamePopup, setEditNamePopup] = useState<boolean>(false);
   const [editNameType, setEditNameType] = useState<string>("First");
+
+  // state for handling edit email popup
+  const [openEditEmailPopup, setEditEmailPopup] = useState<boolean>(false);
 
   const [snackbar, setSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -65,7 +69,10 @@ function VolunteerProfilePage() {
 
   return (
     <>
-      <div className={openEditNamePopup ? styles.popupOpen : ""}>
+      <div
+        className={
+          openEditNamePopup || openEditEmailPopup ? styles.popupOpen : ""
+        }>
         <NavigationBar
           open={navigationBarOpen}
           setOpen={setNavigationBarOpen}
@@ -77,8 +84,7 @@ function VolunteerProfilePage() {
         style={{
           // Only apply left shift when screen width is greater than 1200px
           left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-        }}
-      >
+        }}>
         {!navigationBarOpen && (
           <img
             src={hamburger}
@@ -106,6 +112,7 @@ function VolunteerProfilePage() {
                     <TextField
                       disabled
                       value={volunteer?.firstName}
+                      className={styles.inputTextField}
                       sx={grayBorderTextField}
                       InputProps={{
                         endAdornment: (
@@ -115,8 +122,7 @@ function VolunteerProfilePage() {
                                 setEditNameType("First");
                                 setEditNamePopup(true);
                               }}
-                              sx={{ color: "var(--blue-gray)" }}
-                            >
+                              sx={{ color: "var(--blue-gray)" }}>
                               <EditIcon />
                             </IconButton>
                           </Tooltip>
@@ -130,6 +136,7 @@ function VolunteerProfilePage() {
                     <TextField
                       disabled
                       value={volunteer?.lastName}
+                      className={styles.inputTextField}
                       sx={grayBorderTextField}
                       InputProps={{
                         endAdornment: (
@@ -139,8 +146,7 @@ function VolunteerProfilePage() {
                                 setEditNameType("Last");
                                 setEditNamePopup(true);
                               }}
-                              sx={{ color: "var(--blue-gray)" }}
-                            >
+                              sx={{ color: "var(--blue-gray)" }}>
                               <EditIcon />
                             </IconButton>
                           </Tooltip>
@@ -154,17 +160,16 @@ function VolunteerProfilePage() {
                     <TextField
                       value={volunteer?.email ?? ""}
                       disabled
-                      className={styles.emailTextField}
+                      className={`${styles.emailTextField} ${styles.inputTextField}`}
                       sx={grayBorderTextField}
                       InputProps={{
                         endAdornment: (
                           <Tooltip title={"Edit"}>
                             <IconButton
                               onClick={() => {
-                                // TODO: Implement email edit
+                                setEditEmailPopup(true);
                               }}
-                              sx={{ color: "var(--blue-gray)" }}
-                            >
+                              sx={{ color: "var(--blue-gray)" }}>
                               <EditIcon />
                             </IconButton>
                           </Tooltip>
@@ -191,6 +196,15 @@ function VolunteerProfilePage() {
           setSnackbarMessage={setSnackbarMessage}
         />
 
+        <EditEmailPopup
+          open={openEditEmailPopup}
+          onClose={setEditEmailPopup}
+          volunteer={volunteer}
+          setVolunteer={setVolunteer}
+          setSnackbar={setSnackbar}
+          setSnackbarMessage={setSnackbarMessage}
+        />
+
         {/* Snackbar wrapper container */}
         <div className={styles.snackbarContainer}>
           <Snackbar
@@ -203,8 +217,7 @@ function VolunteerProfilePage() {
               onClose={handleCloseSnackbar}
               severity={
                 snackbarMessage.includes("successfully") ? "success" : "error"
-              }
-            >
+              }>
               {snackbarMessage}
             </Alert>
           </Snackbar>

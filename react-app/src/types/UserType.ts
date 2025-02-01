@@ -33,6 +33,7 @@ export interface VolunteerPathway {
   progress: Progress;
   dateCompleted: string; // ISO
   trainingsCompleted: string[]; // training IDs
+  trainingsInProgress: string[]; // training IDs
   numTrainingsCompleted: number;
   numTotalTrainings: number;
   quizScoreRecieved?: number;
