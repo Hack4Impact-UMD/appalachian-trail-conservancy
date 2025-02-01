@@ -48,11 +48,13 @@ export function getVolunteers(): Promise<VolunteerID[]> {
 }
 
 export function getUserWithAuth(auth_id: string): Promise<Admin | VolunteerID> {
+  console.log("getUserWithAuth called with auth_id: ", auth_id);
   return new Promise((resolve, reject) => {
     const userRef = query(
       collection(db, "Users"),
       where("auth_id", "==", auth_id)
     );
+    console.log("userRef: ", userRef);
     getDocs(userRef)
       .then((userSnapshot) => {
         if (userSnapshot.size > 0) {
