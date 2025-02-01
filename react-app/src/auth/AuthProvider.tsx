@@ -51,9 +51,14 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
       }
       signInWithEmailLink(auth, email ?? "", window.location.href)
         .then(() => {
+          console.log("signInWithEmailLink auth: ", auth);
+          console.log("signInWithEmailLink email: ", email);
+          console.log("signInWithEmailLink loc: ", window.location.href);
           window.localStorage.removeItem("emailForSignIn");
         })
-        .catch(() => {});
+        .catch((e) => {
+          console.log("signInWithEmailLink: ", e);
+        });
     }
 
     onIdTokenChanged(auth, (newUser) => {
@@ -63,6 +68,8 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
         newUser
           .getIdTokenResult()
           .then((newToken) => {
+            console.log("onIdTokenChanged newUser", newUser);
+            console.log("onIdTokenChanged newToken", newToken);
             setToken(newToken);
             getUserWithAuth(newUser.uid)
               .then((userData) => {
@@ -76,7 +83,9 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
                 console.log(error);
               });
           })
-          .catch(() => {});
+          .catch((e) => {
+            console.log("newUser.getIdTokenResult()", e);
+          });
       }
       setLoading(false);
     });
