@@ -39,28 +39,26 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
   const [id, setID] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    const auth = getAuth(app);
-    let email = window.localStorage.getItem("emailForSignIn");
+  const auth = getAuth(app);
+  let email = window.localStorage.getItem("emailForSignIn");
 
-    if (isSignInWithEmailLink(auth, window.location.href)) {
-      if (!email) {
-        // User opened the link on a different device. To prevent session fixation
-        // attacks, ask the user to provide the associated email again.
-        email = window.prompt("Please provide your email for confirmation");
-      }
-      signInWithEmailLink(auth, email ?? "", window.location.href)
-        .then(() => {
-          console.log("signInWithEmailLink auth: ", auth);
-          console.log("signInWithEmailLink email: ", email);
-          console.log("signInWithEmailLink loc: ", window.location.href);
-          window.localStorage.removeItem("emailForSignIn");
-        })
-        .catch((e) => {
-          console.log("signInWithEmailLink: ", e);
-        });
+  if (isSignInWithEmailLink(auth, window.location.href)) {
+    console.log("isSignInWithEmailLink: ", email);
+    if (!email) {
+      // User opened the link on a different device. To prevent session fixation
+      // attacks, ask the user to provide the associated email again. For example:
+      email = window.prompt("Please provide your email for confirmation");
     }
+    signInWithEmailLink(auth, email ?? "", window.location.href)
+      .then(() => {
+        console.log("signInWithEmailLink auth: ", auth);
+        console.log("signInWithEmailLink then: ", email);
+        window.localStorage.removeItem("emailForSignIn");
+      })
+      .catch(() => {});
+  }
 
+  useEffect(() => {
     onIdTokenChanged(auth, (newUser) => {
       newUser?.getIdToken();
       setUser(newUser);
@@ -68,8 +66,6 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
         newUser
           .getIdTokenResult()
           .then((newToken) => {
-            console.log("onIdTokenChanged newUser", newUser);
-            console.log("onIdTokenChanged newToken", newToken);
             setToken(newToken);
             getUserWithAuth(newUser.uid)
               .then((userData) => {
@@ -83,9 +79,7 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
                 console.log(error);
               });
           })
-          .catch((e) => {
-            console.log("newUser.getIdTokenResult()", e);
-          });
+          .catch(() => {});
       }
       setLoading(false);
     });

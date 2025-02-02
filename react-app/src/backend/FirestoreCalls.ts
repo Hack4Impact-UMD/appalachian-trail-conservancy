@@ -18,7 +18,6 @@ import {
   VolunteerTraining,
   User,
   Admin,
-  VolunteerPathway,
 } from "../types/UserType";
 import { Training, TrainingID, Quiz } from "../types/TrainingType";
 import { Pathway, PathwayID } from "../types/PathwayType";
@@ -48,13 +47,11 @@ export function getVolunteers(): Promise<VolunteerID[]> {
 }
 
 export function getUserWithAuth(auth_id: string): Promise<Admin | VolunteerID> {
-  console.log("getUserWithAuth called with auth_id: ", auth_id);
   return new Promise((resolve, reject) => {
     const userRef = query(
       collection(db, "Users"),
       where("auth_id", "==", auth_id)
     );
-    console.log("userRef: ", userRef);
     getDocs(userRef)
       .then((userSnapshot) => {
         if (userSnapshot.size > 0) {
@@ -229,51 +226,22 @@ export function getQuiz(trainingId: string): Promise<Quiz> {
   });
 }
 
-export function validateTrainingQuiz(
+export function validateQuiz(
   trainingId: string,
   volunteerId: string,
   volunteerAnswers: string[],
   timeCompleted: string
 ): Promise<any> {
   return new Promise((resolve, reject) => {
-    const validateTrainingQuizResults = httpsCallable(
-      functions,
-      "validateTrainingQuizResults"
-    );
-    validateTrainingQuizResults({
+    const validateQuizResults = httpsCallable(functions, "validateQuizResults");
+    validateQuizResults({
       trainingId,
       volunteerId,
       volunteerAnswers,
       timeCompleted,
     })
-      .then((quizResults) => {
-        resolve(quizResults);
-      })
-      .catch((e) => {
-        reject(e);
-      });
-  });
-}
-
-export function validatePathwayQuiz(
-  pathwayId: string,
-  volunteerId: string,
-  volunteerAnswers: string[],
-  timeCompleted: string
-): Promise<any> {
-  return new Promise((resolve, reject) => {
-    const validatePathwayQuizResults = httpsCallable(
-      functions,
-      "validatePathwayQuizResults"
-    );
-    validatePathwayQuizResults({
-      pathwayId,
-      volunteerId,
-      volunteerAnswers,
-      timeCompleted,
-    })
-      .then((quizResults) => {
-        resolve(quizResults);
+      .then((numAnswersCorrect) => {
+        resolve(numAnswersCorrect);
       })
       .catch((e) => {
         reject(e);
@@ -667,24 +635,9 @@ export function addVolunteerTraining(
               numTotalResources: training.resources.length, // total number of resources in training
             });
 
-            // Update volunteer pathway information if needed
-            if (training.associatedPathways.length > 0) {
-              volunteer.pathwayInformation.forEach((volunteerPathway) => {
-                if (
-                  training.associatedPathways.includes(
-                    volunteerPathway.pathwayID
-                  )
-                ) {
-                  // pathway exists in volunteer pathway list, add training to in progress list
-                  volunteerPathway.trainingsInProgress.push(training.id);
-                }
-              });
-            }
-
             // Add new training to volunteer's training information
             updateDoc(volunteerRef, {
               trainingInformation: volunteer.trainingInformation,
-              pathwayInformation: volunteer.pathwayInformation,
             })
               .then(() => {
                 // Resolve the promise after the document is successfully updated
@@ -709,7 +662,7 @@ export function addVolunteerTraining(
 
 export function addVolunteerPathway(
   volunteerId: string,
-  pathway: VolunteerPathway
+  pathway: PathwayID
 ): Promise<void> {
   return new Promise((resolve, reject) => {
     // Construct the Firestore document reference
@@ -723,13 +676,20 @@ export function addVolunteerPathway(
           if (
             !volunteer.pathwayInformation.some(
               (pathwayInformation) =>
-                pathwayInformation.pathwayID === pathway.pathwayID
+                pathwayInformation.pathwayID === pathway.id
             )
           ) {
             // Append new VolunteerTraining to existing volunteerInformation array
-            volunteer.pathwayInformation.push(pathway);
+            volunteer.pathwayInformation.push({
+              pathwayID: pathway.id,
+              progress: "INPROGRESS", // Assuming initial progress is "INPROGRESS"
+              dateCompleted: "", // Initialize with empty string
+              trainingsCompleted: [], // Initialize with empty array
+              numTrainingsCompleted: 0, // Initialize with 0
+              numTotalTrainings: pathway.trainingIDs.length, // Initialize with number of trainings in pathway
+            });
 
-            // Add new pathway to volunteer's pathway information
+            // Add new training to volunteer's training information
             updateDoc(volunteerRef, {
               pathwayInformation: volunteer.pathwayInformation,
             });
@@ -742,72 +702,6 @@ export function addVolunteerPathway(
       })
       .catch((e) => {
         reject(e);
-      });
-  });
-}
-
-export function updateVolunteerPathway(
-  volunteerId: string,
-  pathway: VolunteerPathway
-): Promise<void> {
-  return new Promise((resolve, reject) => {
-    if (pathway.pathwayID === "" || !pathway.pathwayID) {
-      reject(new Error("Invalid pathwayID"));
-      return;
-    }
-
-    const volunteerRef = doc(db, "Users", volunteerId);
-    getDoc(volunteerRef)
-      .then((volunteerSnapshot) => {
-        if (volunteerSnapshot.exists()) {
-          const volunteer = volunteerSnapshot.data() as Volunteer;
-
-          // Determine if pathway already exists in volunteer
-          const existingPathway = volunteer.pathwayInformation.find(
-            (pathwayInfo) => pathwayInfo.pathwayID === pathway.pathwayID
-          );
-
-          if (existingPathway) {
-            // Update the existing training record with new volunteerPathway data
-            const updatedPathwayInformation = volunteer.pathwayInformation.map(
-              (pathwayInfo) => {
-                if (pathwayInfo.pathwayID === pathway.pathwayID) {
-                  // Return updated pathway information
-                  return {
-                    ...pathwayInfo,
-                    ...pathway, // Spread the new pathway data here
-                  };
-                }
-                return pathwayInfo; // Return unchanged pathway info for other records
-              }
-            );
-
-            // Update the volunteer object with the new pathway information
-            const updatedVolunteer = {
-              ...volunteer,
-              pathwayInformation: updatedPathwayInformation,
-            };
-
-            // Now, save the updated volunteer object back to Firestore
-            updateDoc(volunteerRef, updatedVolunteer)
-              .then(() => {
-                resolve();
-                console.log("Volunteer pathway updated successfully");
-              })
-              .catch((error) => {
-                reject("Error updating volunteer pathway:");
-                console.error("Error updating volunteer pathway:", error);
-              });
-          } else {
-            reject("Pathway not found in volunteer's pathway information.");
-          }
-        } else {
-          reject("Volunteer does not exist.");
-        }
-      })
-      .catch((error) => {
-        reject("Error fetching volunteer");
-        console.error("Error fetching volunteer:", error);
       });
   });
 }
