@@ -12,7 +12,7 @@ const RequireAuth: React.FC<Props> = ({ children }) => {
   if (authContext.loading) {
     return (
       <div className={styles.loadingContainer}>
-        <Loading />;
+        <Loading />
       </div>
     );
   } else if (!authContext.user) {
