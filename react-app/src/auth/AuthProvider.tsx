@@ -37,44 +37,52 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [id, setID] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const auth = getAuth(app);
-    const email = window.localStorage.getItem("emailForSignIn");
+    let email = window.localStorage.getItem("emailForSignIn");
 
     if (isSignInWithEmailLink(auth, window.location.href)) {
+      console.log("Sign in with email link: ", email);
+      if (!email) {
+        // User opened the link on a different device. To prevent session fixation
+        // attacks, ask the user to provide the associated email again. For example:
+        email = window.prompt("Please provide your email for confirmation");
+      }
       signInWithEmailLink(auth, email ?? "", window.location.href)
         .then(() => {
           window.localStorage.removeItem("emailForSignIn");
+          onIdTokenChanged(auth, (newUser) => {
+            newUser?.getIdToken();
+            setUser(newUser);
+            setLoading(true);
+            console.log("newUser: ", newUser);
+            if (newUser != null) {
+              newUser
+                .getIdTokenResult()
+                .then((newToken) => {
+                  setToken(newToken);
+                  getUserWithAuth(newUser.uid)
+                    .then((userData) => {
+                      const { id, firstName, lastName } = userData;
+                      setID(id);
+                      setFirstName(firstName);
+                      setLastName(lastName);
+                      console.log("userData: ", userData);
+                    })
+                    .catch((error) => {
+                      // Failed to get User information
+                      console.log(error);
+                    });
+                })
+                .catch(() => {});
+            }
+            setLoading(false);
+          });
         })
         .catch(() => {});
     }
-
-    onIdTokenChanged(auth, (newUser) => {
-      newUser?.getIdToken();
-      setUser(newUser);
-      if (newUser != null) {
-        newUser
-          .getIdTokenResult()
-          .then((newToken) => {
-            setToken(newToken);
-            getUserWithAuth(newUser.uid)
-              .then((userData) => {
-                const { id, firstName, lastName } = userData;
-                setID(id);
-                setFirstName(firstName);
-                setLastName(lastName);
-              })
-              .catch((error) => {
-                // Failed to get User information
-                console.log(error);
-              });
-          })
-          .catch(() => {});
-      }
-      setLoading(false);
-    });
   }, []);
 
   return (
@@ -89,8 +97,7 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
         setLastName,
         id,
         loading,
-      }}
-    >
+      }}>
       {children}
     </AuthContext.Provider>
   );

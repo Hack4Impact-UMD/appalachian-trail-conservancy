@@ -95,18 +95,17 @@ const EditNamePopup = ({
   return (
     <Modal
       height={260}
-      width={450}
       open={open}
       onClose={() => {
         handleClose();
-      }}
-    >
+      }}>
       <div className={styles.content}>
         <p className={styles.title}>Edit {editType} Name</p>
         <div className={styles.textFields}>
           <h3 className={styles.subHeader}>New {editType} Name</h3>
           <TextField
             sx={grayBorderTextField}
+            className={styles.inputTextField}
             defaultValue={
               editType === "First" ? volunteer?.firstName : volunteer?.lastName
             }
@@ -118,16 +117,14 @@ const EditNamePopup = ({
             onClick={() => onClose()}
             variant="contained"
             sx={{ ...whiteButtonGrayBorder, width: "120px" }}
-            disabled={loading}
-          >
+            disabled={loading}>
             Cancel
           </Button>
           <Button
             variant="contained"
             sx={{ ...forestGreenButton, width: "120px" }}
             onClick={handleUpdateName}
-            disabled={loading}
-          >
+            disabled={loading}>
             {loading ? <Loading /> : "Confirm"}
           </Button>
         </div>

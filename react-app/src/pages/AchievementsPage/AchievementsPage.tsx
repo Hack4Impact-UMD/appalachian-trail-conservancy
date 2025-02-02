@@ -226,7 +226,9 @@ function AchievementsPage() {
           <div className={styles.content}>
             <div className={styles.header}>
               <h1 className={styles.nameHeading}>Achievements</h1>
-              <ProfileIcon />
+              <div className={styles.profileIcon}>
+                <ProfileIcon />
+              </div>
             </div>
             <div className={styles.buttonContainer}>
               <div className={styles.leftButtonContainer}>

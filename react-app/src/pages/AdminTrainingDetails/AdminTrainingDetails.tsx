@@ -64,7 +64,6 @@ function AdminTrainingDetails() {
       passingScore: 0,
     },
     associatedPathways: [],
-    certificationImage: "",
     status: "DRAFT",
   });
 
@@ -189,8 +188,7 @@ function AdminTrainingDetails() {
       <GridColumnMenuContainer
         hideMenu={hideMenu}
         currentColumn={currentColumn}
-        open={open}
-      >
+        open={open}>
         <GridFilterMenuItem onClick={hideMenu} column={currentColumn!} />
         <SortGridMenuItems onClick={hideMenu} column={currentColumn!} />
       </GridColumnMenuContainer>
@@ -267,8 +265,7 @@ function AdminTrainingDetails() {
         style={{
           // Only apply left shift when screen width is greater than 1200px
           left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-        }}
-      >
+        }}>
         {!navigationBarOpen && (
           <img
             src={hamburger}
@@ -282,7 +279,9 @@ function AdminTrainingDetails() {
           <div className={styles.content}>
             <div className={styles.header}>
               <h1 className={styles.nameHeading}>Training Details</h1>
-              <ProfileIcon />
+              <div className={styles.profileIcon}>
+                <ProfileIcon />
+              </div>
             </div>
 
             {loading ? (
@@ -306,8 +305,7 @@ function AdminTrainingDetails() {
                             onClick={() => {
                               navigate(`/management/pathway/${pathway.id}`);
                             }}
-                            key={idx}
-                          >
+                            key={idx}>
                             {pathway.name}
                           </div>
                         ))}
@@ -315,8 +313,7 @@ function AdminTrainingDetails() {
                         {pathwayNames.length > 4 && (
                           <button
                             onClick={() => setShowMore(!showMore)}
-                            className={styles.toggleButton}
-                          >
+                            className={styles.toggleButton}>
                             {showMore ? "SEE LESS" : "SEE MORE"}
                           </button>
                         )}
@@ -351,8 +348,7 @@ function AdminTrainingDetails() {
                       fontWeight: "bold",
                       width: "375px",
                     }}
-                    onClick={exportTrainingData}
-                  >
+                    onClick={exportTrainingData}>
                     Export
                   </Button>
                 </div>
@@ -387,8 +383,13 @@ function AdminTrainingDetails() {
                       paddingRight: "20px",
                       width: "100px",
                     }}
-                    onClick={() => navigate("/management")}
-                  >
+                    onClick={() =>
+                      navigate("/management", {
+                        state: {
+                          fromPage: "training",
+                        },
+                      })
+                    }>
                     BACK
                   </Button>
                 </div>

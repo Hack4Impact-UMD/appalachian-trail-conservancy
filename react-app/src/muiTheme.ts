@@ -252,12 +252,12 @@ export const greenRadioButton = {
 
 // red radio button
 export const redRadioButton = {
-  color: "red",
+  color: "var(--hazard-red);",
   "&.Mui-checked": {
-    color: "red",
+    color: "var(--hazard-red);",
   },
   "&.Mui-disabled": {
-    color: "red",
+    color: "var(--hazard-red);",
   },
 };
 

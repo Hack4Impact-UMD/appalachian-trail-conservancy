@@ -5,7 +5,7 @@ import {
   FormControl,
   FormControlLabel,
 } from "@mui/material";
-import { grayRadioButton, radioGroup, radioAnswers } from "../../../muiTheme";
+import { grayRadioButton, radioGroup, radioAnswers } from "../../muiTheme";
 import styles from "./QuizCard.module.css";
 
 interface QuizCardProps {

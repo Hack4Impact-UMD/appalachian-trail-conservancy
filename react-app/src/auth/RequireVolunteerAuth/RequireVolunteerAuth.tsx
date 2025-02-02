@@ -13,7 +13,7 @@ const RequireAdminAuth: React.FC<Props> = ({ children }) => {
   if (authContext.loading) {
     return (
       <div className={styles.loadingContainer}>
-        <Loading />;
+        <Loading />
       </div>
     );
   } else if (!authContext.user) {
@@ -28,7 +28,7 @@ const RequireAdminAuth: React.FC<Props> = ({ children }) => {
     );
   }
 
-  return <AuthProvider>{children}</AuthProvider>;
+  return <>{children}</>;
 };
 
 export default RequireAdminAuth;

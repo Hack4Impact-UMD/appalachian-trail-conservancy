@@ -58,6 +58,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 function AdminUserManagement() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [loading, setLoading] = useState<boolean>(true);
   const [errorFetching, setErrorFetching] = useState<boolean>(false);
 
@@ -116,6 +117,14 @@ function AdminUserManagement() {
   };
 
   useEffect(() => {
+    if (location.state?.fromPage === "pathway") {
+      setAlignment("pathways");
+    } else if (location.state?.fromPage === "training") {
+      setAlignment("training");
+    }
+  }, [location.state]);
+
+  useEffect(() => {
     setLoading(true);
     const fetchInitialData = async () => {
       try {
@@ -166,8 +175,7 @@ function AdminUserManagement() {
       <GridColumnMenuContainer
         hideMenu={hideMenu}
         currentColumn={currentColumn}
-        open={open}
-      >
+        open={open}>
         <GridFilterMenuItem onClick={hideMenu} column={currentColumn!} />
         <SortGridMenuItems onClick={hideMenu} column={currentColumn!} />
       </GridColumnMenuContainer>
@@ -264,7 +272,6 @@ function AdminUserManagement() {
   }, [alignment]);
 
   // Delete user snackbar
-  const location = useLocation();
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
   useEffect(() => {
     if (location.state?.showSnackbar) {
@@ -380,8 +387,7 @@ function AdminUserManagement() {
         style={{
           // Only apply left shift when screen width is greater than 1200px
           left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-        }}
-      >
+        }}>
         {!navigationBarOpen && (
           <img
             src={hamburger}
@@ -395,7 +401,9 @@ function AdminUserManagement() {
           <div className={styles.content}>
             <div className={styles.header}>
               <h1 className={styles.nameHeading}>Data Management Portal</h1>
-              <ProfileIcon />
+              <div className={styles.profileIcon}>
+                <ProfileIcon />
+              </div>
             </div>
             {loading ? (
               <Loading />
@@ -407,8 +415,7 @@ function AdminUserManagement() {
                     exclusive
                     onChange={(event, newAlignment) =>
                       handleAlignment(newAlignment)
-                    }
-                  >
+                    }>
                     <PurpleToggleButton value="user">
                       USER INFORMATION
                     </PurpleToggleButton>
@@ -429,8 +436,7 @@ function AdminUserManagement() {
                       value={alignment}
                       onChange={(e) => handleAlignment(e.target.value)} // Handle the dropdown value directly
                       displayEmpty
-                      label="Filter"
-                    >
+                      label="Filter">
                       <MenuItem value="user" sx={selectOptionStyle}>
                         USER INFORMATION
                       </MenuItem>
@@ -468,8 +474,7 @@ function AdminUserManagement() {
                       <Button
                         className={styles.export}
                         sx={whiteButtonOceanGreenBorder}
-                        onClick={exportData}
-                      >
+                        onClick={exportData}>
                         Export
                       </Button>
                     </div>

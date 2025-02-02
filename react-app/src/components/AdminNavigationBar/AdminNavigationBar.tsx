@@ -15,7 +15,7 @@ import profileActive from "../../assets/gearWhite.svg";
 import profileInactive from "../../assets/gearGray.svg";
 import registrationInactive from "../../assets/registrationGray.svg";
 import registrationActive from "../../assets/registrationWhite.svg";
-import LogoutPopup from "../NavigationBar/LogoutPopup/LogoutPopup";
+import LogoutPopup from "../LogoutPopup/LogoutPopup";
 import styles from "./AdminNavigationBar.module.css";
 
 interface AdminNavigationBarProps {
@@ -53,8 +53,7 @@ const AdminNavigationBar: React.FC<AdminNavigationBarProps> = ({
     <div
       className={`${styles.navigationContainer} ${open ? "" : styles.closed} ${
         openLogoutPopup ? styles.popupOpen : ""
-      }`}
-    >
+      }`}>
       {open ? (
         <>
           <div className={styles.logoContainer}>
@@ -85,8 +84,7 @@ const AdminNavigationBar: React.FC<AdminNavigationBarProps> = ({
                       isActive
                         ? `${styles.tab} ${styles.tabActive}`
                         : `${styles.tab} ${styles.tabInActive}`
-                    }
-                  >
+                    }>
                     <div>
                       <img
                         className={styles.iconActive}
@@ -110,8 +108,7 @@ const AdminNavigationBar: React.FC<AdminNavigationBarProps> = ({
                       isActive
                         ? `${styles.tab} ${styles.tabActive}`
                         : `${styles.tab} ${styles.tabInActive}`
-                    }
-                  >
+                    }>
                     <div>
                       <img
                         className={styles.iconActive}
@@ -135,8 +132,7 @@ const AdminNavigationBar: React.FC<AdminNavigationBarProps> = ({
                       isActive
                         ? `${styles.tab} ${styles.tabActive}`
                         : `${styles.tab} ${styles.tabInActive}`
-                    }
-                  >
+                    }>
                     <div>
                       <img
                         className={styles.iconActive}
@@ -160,8 +156,7 @@ const AdminNavigationBar: React.FC<AdminNavigationBarProps> = ({
                       isActive
                         ? `${styles.tab} ${styles.tabActive}`
                         : `${styles.tab} ${styles.tabInActive}`
-                    }
-                  >
+                    }>
                     <div>
                       <img
                         className={styles.iconActive}
@@ -185,8 +180,7 @@ const AdminNavigationBar: React.FC<AdminNavigationBarProps> = ({
                       isActive
                         ? `${styles.tab} ${styles.tabActive}`
                         : `${styles.tab} ${styles.tabInActive}`
-                    }
-                  >
+                    }>
                     <div>
                       <img
                         className={styles.iconActive}
@@ -210,8 +204,7 @@ const AdminNavigationBar: React.FC<AdminNavigationBarProps> = ({
                       isActive
                         ? `${styles.tab} ${styles.tabActive}`
                         : `${styles.tab} ${styles.tabInActive}`
-                    }
-                  >
+                    }>
                     <div>
                       <img
                         className={styles.iconActive}
@@ -234,8 +227,7 @@ const AdminNavigationBar: React.FC<AdminNavigationBarProps> = ({
                   onClick={() => {
                     handleLogOut();
                   }}
-                  className={styles.menuItem}
-                >
+                  className={styles.menuItem}>
                   <img src={logout} alt="Logout" />
                   Log Out
                 </button>

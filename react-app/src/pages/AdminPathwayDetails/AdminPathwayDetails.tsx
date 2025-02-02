@@ -30,7 +30,7 @@ import {
   getTraining,
   getVolunteers,
 } from "../../backend/FirestoreCalls.ts";
-import { Volunteer, VolunteerID } from "../../types/UserType.ts";
+import { VolunteerID } from "../../types/UserType.ts";
 import Loading from "../../components/LoadingScreen/Loading.tsx";
 
 function AdminPathwayDetails() {
@@ -63,7 +63,6 @@ function AdminPathwayDetails() {
       numQuestions: 0,
       passingScore: 0,
     },
-    badgeImage: "",
     status: "DRAFT",
   });
 
@@ -188,8 +187,7 @@ function AdminPathwayDetails() {
       <GridColumnMenuContainer
         hideMenu={hideMenu}
         currentColumn={currentColumn}
-        open={open}
-      >
+        open={open}>
         <GridFilterMenuItem onClick={hideMenu} column={currentColumn!} />
         <SortGridMenuItems onClick={hideMenu} column={currentColumn!} />
       </GridColumnMenuContainer>
@@ -266,8 +264,7 @@ function AdminPathwayDetails() {
         style={{
           // Only apply left shift when screen width is greater than 1200px
           left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-        }}
-      >
+        }}>
         {!navigationBarOpen && (
           <img
             src={hamburger}
@@ -281,7 +278,9 @@ function AdminPathwayDetails() {
           <div className={styles.content}>
             <div className={styles.header}>
               <h1 className={styles.nameHeading}>Pathway Details</h1>
-              <ProfileIcon />
+              <div className={styles.profileIcon}>
+                <ProfileIcon />
+              </div>
             </div>
 
             {loading ? (
@@ -302,8 +301,7 @@ function AdminPathwayDetails() {
                           onClick={() => {
                             navigate(`/management/training/${training.id}`);
                           }}
-                          key={idx}
-                        >
+                          key={idx}>
                           {training.name}
                         </div>
                       ))}
@@ -311,8 +309,7 @@ function AdminPathwayDetails() {
                       {trainingNames.length > 4 && (
                         <button
                           onClick={() => setShowMore(!showMore)}
-                          className={styles.toggleButton}
-                        >
+                          className={styles.toggleButton}>
                           {showMore ? "SEE LESS" : "SEE MORE"}
                         </button>
                       )}
@@ -346,8 +343,7 @@ function AdminPathwayDetails() {
                       fontWeight: "bold",
                       width: "375px",
                     }}
-                    onClick={exportPathwayData}
-                  >
+                    onClick={exportPathwayData}>
                     Export
                   </Button>
                 </div>
@@ -382,8 +378,13 @@ function AdminPathwayDetails() {
                       paddingRight: "20px",
                       width: "100px",
                     }}
-                    onClick={() => navigate("/management")}
-                  >
+                    onClick={() =>
+                      navigate("/management", {
+                        state: {
+                          fromPage: "pathway",
+                        },
+                      })
+                    }>
                     BACK
                   </Button>
                 </div>
