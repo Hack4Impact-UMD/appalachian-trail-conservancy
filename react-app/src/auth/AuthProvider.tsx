@@ -62,6 +62,7 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
     onIdTokenChanged(auth, (newUser) => {
       newUser?.getIdToken();
       setUser(newUser);
+      console.log("onIdTokenChanged newUser: ", newUser);
       if (newUser != null) {
         newUser
           .getIdTokenResult()
@@ -73,6 +74,7 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
                 setID(id);
                 setFirstName(firstName);
                 setLastName(lastName);
+                console.log("onIdTokenChanged userData: ", userData);
               })
               .catch((error) => {
                 // Failed to get User information
