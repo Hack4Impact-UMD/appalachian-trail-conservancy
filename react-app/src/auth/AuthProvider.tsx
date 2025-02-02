@@ -39,26 +39,26 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
   const [id, setID] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
 
-  const auth = getAuth(app);
-  let email = window.localStorage.getItem("emailForSignIn");
-
-  if (isSignInWithEmailLink(auth, window.location.href)) {
-    console.log("isSignInWithEmailLink: ", email);
-    if (!email) {
-      // User opened the link on a different device. To prevent session fixation
-      // attacks, ask the user to provide the associated email again. For example:
-      email = window.prompt("Please provide your email for confirmation");
-    }
-    signInWithEmailLink(auth, email ?? "", window.location.href)
-      .then(() => {
-        console.log("signInWithEmailLink auth: ", auth);
-        console.log("signInWithEmailLink then: ", email);
-        window.localStorage.removeItem("emailForSignIn");
-      })
-      .catch(() => {});
-  }
-
   useEffect(() => {
+    const auth = getAuth(app);
+    let email = window.localStorage.getItem("emailForSignIn");
+
+    if (isSignInWithEmailLink(auth, window.location.href)) {
+      console.log("isSignInWithEmailLink: ", email);
+      if (!email) {
+        // User opened the link on a different device. To prevent session fixation
+        // attacks, ask the user to provide the associated email again. For example:
+        email = window.prompt("Please provide your email for confirmation");
+      }
+      signInWithEmailLink(auth, email ?? "", window.location.href)
+        .then(() => {
+          console.log("signInWithEmailLink auth: ", auth);
+          console.log("signInWithEmailLink then: ", email);
+          window.localStorage.removeItem("emailForSignIn");
+        })
+        .catch(() => {});
+    }
+
     onIdTokenChanged(auth, (newUser) => {
       newUser?.getIdToken();
       setUser(newUser);
