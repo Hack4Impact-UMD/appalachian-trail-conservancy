@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
     const auth = getAuth(app);
     let email = window.localStorage.getItem("emailForSignIn");
 
-    if (isSignInWithEmailLink(auth, window.location.href)) {
+    if (!user && isSignInWithEmailLink(auth, window.location.href)) {
       console.log("isSignInWithEmailLink: ", email);
       if (!email) {
         // User opened the link on a different device. To prevent session fixation
