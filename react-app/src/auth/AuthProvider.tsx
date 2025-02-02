@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [id, setID] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const auth = getAuth(app);
@@ -56,6 +56,7 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
           onIdTokenChanged(auth, (newUser) => {
             newUser?.getIdToken();
             setUser(newUser);
+            setLoading(true);
             console.log("newUser: ", newUser);
             if (newUser != null) {
               newUser
