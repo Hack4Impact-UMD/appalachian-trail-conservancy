@@ -85,7 +85,7 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
       }
       setLoading(false);
     });
-  }, []);
+  }, [user]);
 
   return (
     <AuthContext.Provider
