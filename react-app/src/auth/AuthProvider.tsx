@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
     const auth = getAuth(app);
     let email = window.localStorage.getItem("emailForSignIn");
 
-    if (!user && isSignInWithEmailLink(auth, window.location.href)) {
+    if (isSignInWithEmailLink(auth, window.location.href)) {
       console.log("isSignInWithEmailLink: ", email);
       if (!email) {
         // User opened the link on a different device. To prevent session fixation
@@ -55,37 +55,36 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
           console.log("signInWithEmailLink auth: ", auth);
           console.log("signInWithEmailLink then: ", email);
           window.localStorage.removeItem("emailForSignIn");
+          onIdTokenChanged(auth, (newUser) => {
+            newUser?.getIdToken();
+            setUser(newUser);
+            console.log("onIdTokenChanged newUser: ", newUser);
+            if (newUser != null) {
+              newUser
+                .getIdTokenResult()
+                .then((newToken) => {
+                  setToken(newToken);
+                  getUserWithAuth(newUser.uid)
+                    .then((userData) => {
+                      const { id, firstName, lastName } = userData;
+                      setID(id);
+                      setFirstName(firstName);
+                      setLastName(lastName);
+                      console.log("onIdTokenChanged userData: ", userData);
+                    })
+                    .catch((error) => {
+                      // Failed to get User information
+                      console.log(error);
+                    });
+                })
+                .catch(() => {});
+            }
+            setLoading(false);
+          });
         })
         .catch(() => {});
     }
-
-    onIdTokenChanged(auth, (newUser) => {
-      newUser?.getIdToken();
-      setUser(newUser);
-      console.log("onIdTokenChanged newUser: ", newUser);
-      if (newUser != null) {
-        newUser
-          .getIdTokenResult()
-          .then((newToken) => {
-            setToken(newToken);
-            getUserWithAuth(newUser.uid)
-              .then((userData) => {
-                const { id, firstName, lastName } = userData;
-                setID(id);
-                setFirstName(firstName);
-                setLastName(lastName);
-                console.log("onIdTokenChanged userData: ", userData);
-              })
-              .catch((error) => {
-                // Failed to get User information
-                console.log(error);
-              });
-          })
-          .catch(() => {});
-      }
-      setLoading(false);
-    });
-  }, [user]);
+  }, []);
 
   return (
     <AuthContext.Provider
