@@ -28,7 +28,7 @@ const RequireAdminAuth: React.FC<Props> = ({ children }) => {
     );
   }
 
-  return <AuthProvider>{children}</AuthProvider>;
+  return <>{children}</>;
 };
 
 export default RequireAdminAuth;

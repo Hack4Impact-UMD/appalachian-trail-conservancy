@@ -19,7 +19,7 @@ const RequireAuth: React.FC<Props> = ({ children }) => {
     return <Navigate to="/login" state={{ redir: window.location.pathname }} />;
   }
 
-  return <AuthProvider>{children}</AuthProvider>;
+  return <>{children}</>;
 };
 
 export default RequireAuth;
