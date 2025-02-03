@@ -145,6 +145,33 @@ function TrainingLandingPage() {
     }
   }, [trainingId, location.state, auth.loading, auth.id]);
 
+  useEffect(() => {
+    console.log("reach useEffect");
+    if (
+      trainingId !== undefined &&
+      training &&
+      !location.state?.volunteerTraining
+    ) {
+      console.log("inside useEffect");
+      getVolunteer(auth.id.toString())
+        .then((volunteer) => {
+          const volunteerTraining = volunteer.trainingInformation;
+
+          if (volunteerTraining) {
+            const volTraining = volunteerTraining.find(
+              (training) => training.trainingID === trainingId
+            );
+
+            if (volTraining) setVolunteerTraining(volTraining);
+            console.log("vol useEffect: ", volTraining);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching volunteer:", error);
+        });
+    }
+  }, [trainingId, training, location.state, auth.id]);
+
   const renderTrainingResources = () => {
     return training.resources.map(
       (resource: TrainingResource, index: number) => (
