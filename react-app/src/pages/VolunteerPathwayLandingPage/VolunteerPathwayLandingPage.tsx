@@ -1,25 +1,25 @@
 import { useState, useEffect, useRef } from "react";
 import VolunteerNavigationBar from "../../components/VolunteerNavigationBar/VolunteerNavigationBar.tsx";
-import PathwayTile from "./PathwayTile/PathwayTile";
-import TitleInfo from "./TileInfo/TitleInfo";
-import styles from "./PathwayLandingPage.module.css";
+import PathwayTile from "./PathwayTile/PathwayTile.tsx";
+import TitleInfo from "./TileInfo/TitleInfo.tsx";
+import styles from "./VolunteerPathwayLandingPage.module.css";
 import hamburger from "../../assets/hamburger.svg";
-import Footer from "../../components/Footer/Footer";
+import Footer from "../../components/Footer/Footer.tsx";
 import Loading from "../../components/LoadingScreen/Loading.tsx";
 import { useParams, useLocation } from "react-router-dom";
-import { TrainingID } from "../../types/TrainingType";
-import { PathwayID } from "../../types/PathwayType";
+import { TrainingID } from "../../types/TrainingType.ts";
+import { PathwayID } from "../../types/PathwayType.ts";
 import { VolunteerPathway } from "../../types/UserType.ts";
-import { useAuth } from "../../auth/AuthProvider";
+import { useAuth } from "../../auth/AuthProvider.tsx";
 import { Alert, Snackbar } from "@mui/material";
 import {
   getPathway,
   getTraining,
   getVolunteer,
   addVolunteerPathway,
-} from "../../backend/FirestoreCalls";
+} from "../../backend/FirestoreCalls.ts";
 
-function PathwayLandingPage() {
+function VolunteerPathwayLandingPage() {
   const auth = useAuth();
   const pathwayId = useParams().id;
   const location = useLocation();
@@ -330,4 +330,4 @@ function PathwayLandingPage() {
   );
 }
 
-export default PathwayLandingPage;
+export default VolunteerPathwayLandingPage;

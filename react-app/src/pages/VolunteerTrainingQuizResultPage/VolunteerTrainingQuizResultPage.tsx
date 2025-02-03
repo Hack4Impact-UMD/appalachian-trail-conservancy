@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { LinearProgress, Button } from "@mui/material";
 import { forestGreenButton, whiteButtonGrayBorder } from "../../muiTheme";
 import { useLocation, useNavigate } from "react-router-dom";
-import styles from "./QuizResultPage.module.css";
+import styles from "./VolunteerTrainingQuizResultPage.module.css";
 import QuizResultCard from "../../components/QuizResultCard/QuizResultCard";
 import Certificate from "../../components/CertificateCard/CertificateCard";
 import VolunteerNavigationBar from "../../components/VolunteerNavigationBar/VolunteerNavigationBar";
@@ -31,7 +31,7 @@ const styledProgressFail = {
   backgroundColor: "dimgray",
 };
 
-const QuizResultPage = () => {
+const VolunteerTrainingQuizResultPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [navigationBarOpen, setNavigationBarOpen] = useState(
@@ -244,4 +244,4 @@ const QuizResultPage = () => {
   );
 };
 
-export default QuizResultPage;
+export default VolunteerTrainingQuizResultPage;

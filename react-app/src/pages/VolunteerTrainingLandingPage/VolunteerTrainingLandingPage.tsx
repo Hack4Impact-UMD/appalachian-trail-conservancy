@@ -11,14 +11,14 @@ import {
 } from "../../backend/FirestoreCalls";
 import { Button } from "@mui/material";
 import { useAuth } from "../../auth/AuthProvider";
-import styles from "./TrainingLandingPage.module.css";
+import styles from "./VolunteerTrainingLandingPage.module.css";
 import VolunteerNavigationBar from "../../components/VolunteerNavigationBar/VolunteerNavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import CompletedIcon from "../../assets/completedCheck.svg";
 import Loading from "../../components/LoadingScreen/Loading";
 import hamburger from "../../assets/hamburger.svg";
 
-function TrainingLandingPage() {
+function VolunteerTrainingLandingPage() {
   const auth = useAuth();
   const navigate = useNavigate();
   const trainingId = useParams().id;
@@ -457,4 +457,4 @@ function TrainingLandingPage() {
   );
 }
 
-export default TrainingLandingPage;
+export default VolunteerTrainingLandingPage;

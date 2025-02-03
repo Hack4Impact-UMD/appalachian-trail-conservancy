@@ -1,60 +1,64 @@
-import { useLocation, Navigate, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { PathwayID } from "../../types/PathwayType";
-import { type VolunteerPathway } from "../../types/UserType";
-import VolunteerNavigationBar from "../../components/VolunteerNavigationBar/VolunteerNavigationBar.tsx";
-import styles from "./PathwayQuizLandingPage.module.css";
-import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
-import Loading from "../../components/LoadingScreen/Loading.tsx";
-import hamburger from "../../assets/hamburger.svg";
+import { Button } from "@mui/material";
+import { forestGreenButton, whiteButtonGrayBorder } from "../../muiTheme.ts";
+import { useLocation, Navigate, useNavigate } from "react-router-dom";
 import { DateTime } from "luxon";
 import { FaCheck, FaXmark } from "react-icons/fa6";
-import { Button } from "@mui/material";
-import { forestGreenButton, whiteButtonGrayBorder } from "../../muiTheme";
+import { Training } from "../../types/TrainingType.ts";
+import { type VolunteerTraining } from "../../types/UserType.ts";
+import { useAuth } from "../../auth/AuthProvider.tsx";
+import styles from "./VolunteerTrainingQuizLandingPage.module.css";
+import VolunteerNavigationBar from "../../components/VolunteerNavigationBar/VolunteerNavigationBar.tsx";
+import ProfileIcon from "../../components/ProfileIcon/ProfileIcon.tsx";
+import Loading from "../../components/LoadingScreen/Loading.tsx";
+import hamburger from "../../assets/hamburger.svg";
 
-function PathwayQuizLandingPage() {
+function VolunteerTrainingQuizLandingPage() {
   const navigate = useNavigate();
+  const auth = useAuth();
   const [loading, setLoading] = useState<boolean>(true);
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
   );
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
-  const [volunteerPathway, setVolunteerPathway] = useState<VolunteerPathway>({
-    pathwayID: "",
-    progress: "INPROGRESS",
-    dateCompleted: "0000-00-00",
-    trainingsCompleted: [],
-    trainingsInProgress: [],
-    numTrainingsCompleted: 0,
-    numTotalTrainings: 0,
-  });
+  const [volunteerTraining, setVolunteerTraining] = useState<VolunteerTraining>(
+    {
+      trainingID: "",
+      progress: "INPROGRESS",
+      dateCompleted: "0000-00-00",
+      numCompletedResources: 0,
+      numTotalResources: 0,
+    }
+  );
 
-  const [pathway, setPathway] = useState<PathwayID>({
+  // This training should represent the current training corresponding to the current quiz
+  // This data should be recieved from navigation state
+  const [training, setTraining] = useState<Training>({
     name: "",
-    id: "",
     shortBlurb: "",
     description: "",
     coverImage: "",
-    trainingIDs: [],
+    resources: [],
     quiz: {
       questions: [],
       numQuestions: 0,
       passingScore: 0,
     },
-    status: "PUBLISHED",
+    associatedPathways: [],
+    status: "DRAFT",
   });
 
   useEffect(() => {
     if (
       location.state?.fromApp &&
-      location.state.pathway &&
-      location.state.volunteerPathway
+      location.state.training &&
+      location.state.volunteerTraining
     ) {
-      setPathway(location.state.pathway);
-      setVolunteerPathway(location.state.volunteerPathway);
+      setTraining(location.state.training);
+      setVolunteerTraining(location.state.volunteerTraining);
       setLoading(false);
     } else {
-      navigate("/pathways");
+      navigate("/trainings");
     }
   }, []);
 
@@ -73,10 +77,10 @@ function PathwayQuizLandingPage() {
   const location = useLocation();
 
   if (!location.state?.fromApp) {
-    return <Navigate to="/pathways" />;
+    return <Navigate to="/trainings" />;
   }
 
-  const parsedDate = DateTime.fromISO(volunteerPathway.dateCompleted);
+  const parsedDate = DateTime.fromISO(volunteerTraining.dateCompleted);
   const formattedDate = parsedDate.toFormat("MMMM dd, yyyy").toUpperCase();
 
   return (
@@ -85,6 +89,7 @@ function PathwayQuizLandingPage() {
         open={navigationBarOpen}
         setOpen={setNavigationBarOpen}
       />
+
       <div
         className={`${styles.split} ${styles.right}`}
         style={{
@@ -107,16 +112,16 @@ function PathwayQuizLandingPage() {
               <div className={styles.content}>
                 {/* header */}
                 <div className={styles.header}>
-                  <h1 className={styles.nameHeading}>{pathway.name}</h1>
+                  <h1 className={styles.nameHeading}>{training.name}</h1>
                   <div className={styles.profileIcon}>
                     <ProfileIcon />
                   </div>
                 </div>
                 <div className={`${styles.subHeader} ${styles.questionInfo}`}>
-                  <h2>Number of Questions: {pathway.quiz.numQuestions}</h2>
+                  <h2>Number of Questions: {training.quiz.numQuestions}</h2>
                   <h2>
-                    Passing Score: {pathway.quiz.passingScore}/
-                    {pathway.quiz.numQuestions}
+                    Passing Score: {training.quiz.passingScore}/
+                    {training.quiz.numQuestions}
                   </h2>
                 </div>
                 {/* instructions */}
@@ -124,28 +129,30 @@ function PathwayQuizLandingPage() {
                   <h2>Instructions</h2>
                 </div>
                 <p className={styles.instructions}>
-                  To receive a badge for completing this Learning Pathway, you
-                  must pass this quiz. Select the correct answer for each
-                  question. To pass, answer at least {pathway.quiz.passingScore}{" "}
-                  out of {pathway.quiz.numQuestions} questions correctly.
+                  Certification for taking this Training involves passing this
+                  quiz. Select the correct answer for each question. To pass,
+                  answer at least {training.quiz.passingScore} out of{" "}
+                  {training.quiz.numQuestions} questions correctly. For Learning
+                  Pathways, passing a training quiz will advance you to the next
+                  step.
                 </p>
                 {/* best attempt */}
                 <div className={styles.subHeader}>
                   <h2>Best Attempt</h2>
                 </div>
-                {!volunteerPathway.quizScoreRecieved &&
-                volunteerPathway.quizScoreRecieved !== 0 ? (
+                {!volunteerTraining.quizScoreRecieved &&
+                volunteerTraining.quizScoreRecieved !== 0 ? (
                   <div className={styles.noAttemptContainer}>
                     No Recent Attempt
                   </div>
-                ) : volunteerPathway.quizScoreRecieved >=
-                  pathway.quiz.passingScore ? (
+                ) : volunteerTraining.quizScoreRecieved >=
+                  training.quiz.passingScore ? (
                   <div className={styles.passedAttemptContainer}>
                     <div className={styles.leftContent}>
                       <span className={styles.dateText}>{formattedDate}</span>
                       <span>
-                        {volunteerPathway.quizScoreRecieved}/
-                        {pathway.quiz.numQuestions}
+                        {volunteerTraining.quizScoreRecieved}/
+                        {training.quiz.numQuestions}
                       </span>
                     </div>
                     <div className={styles.rightContent}>
@@ -157,8 +164,8 @@ function PathwayQuizLandingPage() {
                     <div className={styles.leftContent}>
                       <span className={styles.dateText}>{formattedDate}</span>
                       <span>
-                        {volunteerPathway.quizScoreRecieved}/
-                        {pathway.quiz.numQuestions}
+                        {volunteerTraining.quizScoreRecieved}/
+                        {training.quiz.numQuestions}
                       </span>
                     </div>
                     <div className={styles.rightContent}>
@@ -186,10 +193,11 @@ function PathwayQuizLandingPage() {
               sx={{ ...whiteButtonGrayBorder }}
               variant="contained"
               onClick={() =>
-                navigate(`/pathways/${pathway.id}`, {
+                navigate("/trainings/resources", {
                   state: {
-                    pathway: pathway,
-                    volunteerPathway: volunteerPathway,
+                    training: training,
+                    volunteerTraining: volunteerTraining,
+                    volunteerId: auth.id.toString(),
                     fromApp: true,
                   },
                 })
@@ -200,10 +208,10 @@ function PathwayQuizLandingPage() {
               sx={{ ...forestGreenButton }}
               variant="contained"
               onClick={() =>
-                navigate(`/pathways/quiz`, {
+                navigate(`/trainings/quiz`, {
                   state: {
-                    pathway: pathway,
-                    volunteerPathway: volunteerPathway,
+                    training: training,
+                    volunteerTraining: volunteerTraining,
                     fromApp: true,
                   },
                 })
@@ -217,4 +225,4 @@ function PathwayQuizLandingPage() {
   );
 }
 
-export default PathwayQuizLandingPage;
+export default VolunteerTrainingQuizLandingPage;

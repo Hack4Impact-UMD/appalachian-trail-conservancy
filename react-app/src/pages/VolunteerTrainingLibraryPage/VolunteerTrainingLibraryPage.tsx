@@ -14,23 +14,23 @@ import {
   grayBorderSearchBar,
   whiteSelectGrayBorder,
   selectOptionStyle,
-} from "../../muiTheme";
+} from "../../muiTheme.ts";
 import {
   getAllPublishedTrainings,
   getAllTrainings,
   getVolunteer,
-} from "../../backend/FirestoreCalls";
-import { TrainingID } from "../../types/TrainingType";
-import { VolunteerTraining } from "../../types/UserType";
+} from "../../backend/FirestoreCalls.ts";
+import { TrainingID } from "../../types/TrainingType.ts";
+import { VolunteerTraining } from "../../types/UserType.ts";
 import { useAuth } from "../../auth/AuthProvider.tsx";
-import styles from "./TrainingLibraryPage.module.css";
+import styles from "./VolunteerTrainingLibraryPage.module.css";
 import Loading from "../../components/LoadingScreen/Loading.tsx";
 import debounce from "lodash.debounce";
 import VolunteerNavigationBar from "../../components/VolunteerNavigationBar/VolunteerNavigationBar.tsx";
 import hamburger from "../../assets/hamburger.svg";
-import Footer from "../../components/Footer/Footer";
+import Footer from "../../components/Footer/Footer.tsx";
 import VolunteerTrainingCard from "../../components/VolunteerTrainingCard/VolunteerTrainingCard.tsx";
-import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
+import ProfileIcon from "../../components/ProfileIcon/ProfileIcon.tsx";
 
 function TrainingLibrary() {
   const auth = useAuth();

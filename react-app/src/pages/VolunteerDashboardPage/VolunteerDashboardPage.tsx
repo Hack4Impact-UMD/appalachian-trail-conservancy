@@ -13,7 +13,7 @@ import { Button } from "@mui/material";
 import { forestGreenButtonPadding } from "../../muiTheme";
 import VolunteerTrainingCard from "../../components/VolunteerTrainingCard/VolunteerTrainingCard";
 import VolunteerPathwayCard from "../../components/VolunteerPathwayCard/VolunteerPathwayCard";
-import styles from "./DashboardPage.module.css";
+import styles from "./VolunteerDashboardPage.module.css";
 import Certificate from "../../components/CertificateCard/CertificateCard";
 import Badge from "../../components/BadgeCard/BadgeCard";
 import VolunteerNavigationBar from "../../components/VolunteerNavigationBar/VolunteerNavigationBar";

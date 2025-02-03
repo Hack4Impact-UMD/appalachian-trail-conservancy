@@ -6,14 +6,14 @@ import { useAuth } from "../../auth/AuthProvider";
 import { validateTrainingQuiz } from "../../backend/FirestoreCalls";
 import { Training } from "../../types/TrainingType";
 import { VolunteerTraining } from "../../types/UserType";
-import styles from "./QuizPage.module.css";
+import styles from "./VolunteerTrainingQuizPage.module.css";
 import VolunteerNavigationBar from "../../components/VolunteerNavigationBar/VolunteerNavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import QuizCard from "../../components/QuizCard/QuizCard";
 import Loading from "../../components/LoadingScreen/Loading";
 import hamburger from "../../assets/hamburger.svg";
 
-function QuizPage() {
+function VolunteerTrainingQuizPage() {
   const auth = useAuth();
   const volunteerId = auth.id.toString();
   const navigate = useNavigate();
@@ -228,4 +228,4 @@ function QuizPage() {
   );
 }
 
-export default QuizPage;
+export default VolunteerTrainingQuizPage;

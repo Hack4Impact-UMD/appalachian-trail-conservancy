@@ -6,14 +6,14 @@ import { useAuth } from "../../auth/AuthProvider";
 import { validatePathwayQuiz } from "../../backend/FirestoreCalls";
 import { Pathway } from "../../types/PathwayType";
 import { VolunteerPathway } from "../../types/UserType";
-import styles from "./PathwayQuizPage.module.css";
+import styles from "./VolunteerPathwayQuizPage.module.css";
 import VolunteerNavigationBar from "../../components/VolunteerNavigationBar/VolunteerNavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import QuizCard from "../../components/QuizCard/QuizCard";
 import Loading from "../../components/LoadingScreen/Loading";
 import hamburger from "../../assets/hamburger.svg";
 
-function PathwayQuizPage() {
+function VolunteerPathwayQuizPage() {
   const auth = useAuth();
   const volunteerId = auth.id.toString();
   const navigate = useNavigate();
@@ -226,4 +226,4 @@ function PathwayQuizPage() {
   );
 }
 
-export default PathwayQuizPage;
+export default VolunteerPathwayQuizPage;

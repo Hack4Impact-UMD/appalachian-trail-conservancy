@@ -14,22 +14,22 @@ import {
   grayBorderSearchBar,
   whiteSelectGrayBorder,
   selectOptionStyle,
-} from "../../muiTheme";
+} from "../../muiTheme.ts";
 import {
   getAllPublishedPathways,
   getVolunteer,
-} from "../../backend/FirestoreCalls";
-import { PathwayID } from "../../types/PathwayType";
-import { VolunteerPathway } from "../../types/UserType";
+} from "../../backend/FirestoreCalls.ts";
+import { PathwayID } from "../../types/PathwayType.ts";
+import { VolunteerPathway } from "../../types/UserType.ts";
 import { useAuth } from "../../auth/AuthProvider.tsx";
-import styles from "./PathwayLibraryPage.module.css";
+import styles from "./VolunteerPathwayLibraryPage.module.css";
 import Loading from "../../components/LoadingScreen/Loading.tsx";
 import debounce from "lodash.debounce";
 import VolunteerNavigationBar from "../../components/VolunteerNavigationBar/VolunteerNavigationBar.tsx";
 import hamburger from "../../assets/hamburger.svg";
-import Footer from "../../components/Footer/Footer";
+import Footer from "../../components/Footer/Footer.tsx";
 import VolunteerPathwayCard from "../../components/VolunteerPathwayCard/VolunteerPathwayCard.tsx";
-import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
+import ProfileIcon from "../../components/ProfileIcon/ProfileIcon.tsx";
 
 function PathwayLibrary() {
   const auth = useAuth();

@@ -1,18 +1,18 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
-import { whiteButtonGrayBorder, forestGreenButton } from "../../muiTheme";
-import { TrainingID } from "../../types/TrainingType";
-import { VolunteerTraining } from "../../types/UserType";
-import { updateVolunteerTraining } from "../../backend/FirestoreCalls";
-import styles from "./TrainingPage.module.css";
+import { whiteButtonGrayBorder, forestGreenButton } from "../../muiTheme.ts";
+import { TrainingID } from "../../types/TrainingType.ts";
+import { VolunteerTraining } from "../../types/UserType.ts";
+import { updateVolunteerTraining } from "../../backend/FirestoreCalls.ts";
+import styles from "./VolunteerTrainingPage.module.css";
 import VolunteerNavigationBar from "../../components/VolunteerNavigationBar/VolunteerNavigationBar.tsx";
-import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
+import ProfileIcon from "../../components/ProfileIcon/ProfileIcon.tsx";
 import ResourceComponent from "../../components/ResourceComponent/ResourceComponent.tsx";
 import Loading from "../../components/LoadingScreen/Loading.tsx";
 import hamburger from "../../assets/hamburger.svg";
 
-function TrainingPage() {
+function VolunteerTrainingPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const [stepIndex, setStepIndex] = useState(0);
@@ -191,4 +191,4 @@ function TrainingPage() {
   );
 }
 
-export default TrainingPage;
+export default VolunteerTrainingPage;
