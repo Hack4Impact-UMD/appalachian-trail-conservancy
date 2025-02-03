@@ -82,6 +82,34 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
           });
         })
         .catch(() => {});
+    } else {
+      onIdTokenChanged(auth, (newUser) => {
+        newUser?.getIdToken();
+        setUser(newUser);
+        setLoading(true);
+        console.log("newUser: ", newUser);
+        if (newUser != null) {
+          newUser
+            .getIdTokenResult()
+            .then((newToken) => {
+              setToken(newToken);
+              getUserWithAuth(newUser.uid)
+                .then((userData) => {
+                  const { id, firstName, lastName } = userData;
+                  setID(id);
+                  setFirstName(firstName);
+                  setLastName(lastName);
+                  console.log("userData: ", userData);
+                })
+                .catch((error) => {
+                  // Failed to get User information
+                  console.log(error);
+                });
+            })
+            .catch(() => {});
+        }
+        setLoading(false);
+      });
     }
   }, []);
 

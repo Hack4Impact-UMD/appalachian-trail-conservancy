@@ -1,8 +1,15 @@
 import { useEffect, useState } from "react";
 import styles from "./AdminTrainingDetails.module.css";
-import { Button, InputAdornment, OutlinedInput } from "@mui/material";
+import {
+  Button,
+  InputAdornment,
+  OutlinedInput,
+  Snackbar,
+  Alert,
+} from "@mui/material";
 import {
   DataGrid,
+  GridRowId,
   GridColumnMenuProps,
   GridColumnMenuContainer,
   GridFilterMenuItem,
@@ -46,6 +53,8 @@ function AdminTrainingDetails() {
   const [filteredVolunteers, setFilteredVolunteers] = useState<VolunteerID[]>(
     []
   );
+  const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
+  const [openSelectSnackbar, setOpenSelectSnackbar] = useState<boolean>(false);
   const [showMore, setShowMore] = useState(false);
   const [pathwayNames, setPathwayNames] = useState<
     { name: string; id: string }[]
@@ -92,7 +101,7 @@ function AdminTrainingDetails() {
   ];
 
   // map the filtered volunteers to rows for DataGrid
-  const rows = filteredVolunteers.flatMap((volunteer) => {
+  const trainingRows = filteredVolunteers.flatMap((volunteer) => {
     return volunteer.trainingInformation
       .filter(
         (volunteerTraining) =>
@@ -239,17 +248,29 @@ function AdminTrainingDetails() {
   }, [searchQuery]);
 
   const exportTrainingData = () => {
+    // Reset the snackbar
+    setOpenSelectSnackbar(false);
+
+    // Check if any row is selected
+    if (selectionModel.length === 0) {
+      setOpenSelectSnackbar(true);
+      return;
+    }
+
     const header = columns.map((column) => column.headerName);
-    const rowData = rows.map((row) => {
-      return [
-        row.volunteerName,
-        row.email,
-        row.dateCompleted,
-        row.timeCompleted,
-        row.quizScore,
-        row.passFailStatus,
-        row.status,
-      ];
+    const rowData = selectionModel.map((row) => {
+      const training = trainingRows.find((training) => training.id === row);
+      if (training) {
+        return [
+          training.volunteerName,
+          training.email,
+          training.dateCompleted,
+          training.timeCompleted,
+          training.quizScore,
+          training.passFailStatus,
+          training.status,
+        ];
+      }
     });
     exportTableToCSV([header, ...rowData]);
   };
@@ -357,7 +378,7 @@ function AdminTrainingDetails() {
                   <>
                     <div className={styles.innerGrid}>
                       <DataGrid
-                        rows={rows}
+                        rows={trainingRows}
                         columns={columns}
                         rowHeight={40}
                         checkboxSelection
@@ -370,6 +391,10 @@ function AdminTrainingDetails() {
                         onRowClick={(row) => {
                           navigate(`/management/volunteer/${row.id}`);
                         }}
+                        selectionModel={selectionModel} // Controlled selection model
+                        onSelectionModelChange={(newSelection) =>
+                          setSelectionModel(newSelection)
+                        }
                       />
                     </div>
                   </>
@@ -396,6 +421,19 @@ function AdminTrainingDetails() {
               </>
             )}
           </div>
+          {/* No row selected alert */}
+          <Snackbar
+            open={openSelectSnackbar}
+            autoHideDuration={6000}
+            onClose={() => setOpenSelectSnackbar(false)}
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }} // Position within the right section
+          >
+            <Alert
+              onClose={() => setOpenSelectSnackbar(false)}
+              severity="warning">
+              Please select rows to export.
+            </Alert>
+          </Snackbar>
         </div>
         <Footer />
       </div>

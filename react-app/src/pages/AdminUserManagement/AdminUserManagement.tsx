@@ -492,7 +492,7 @@ function AdminUserManagement() {
                     anchorOrigin={{ vertical: "bottom", horizontal: "right" }} // Position within the right section
                   >
                     <Alert onClose={handleCloseSnackbar} severity="warning">
-                      Please select which rows to export.
+                      Please select rows to export.
                     </Alert>
                   </Snackbar>
 

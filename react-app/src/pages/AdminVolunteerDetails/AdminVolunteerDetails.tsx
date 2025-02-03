@@ -7,6 +7,8 @@ import {
   FormControl,
   Select,
   MenuItem,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import {
   VolunteerID,
@@ -15,6 +17,7 @@ import {
 } from "../../types/UserType.ts";
 import {
   DataGrid,
+  GridRowId,
   GridColumnMenuProps,
   GridColumnMenuContainer,
   GridFilterMenuItem,
@@ -160,7 +163,7 @@ function AdminVolunteerDetails() {
     setFilteredPathways(filtered);
   };
 
-  const rows = filteredTrainings.map((currTraining) => {
+  const trainingRows = filteredTrainings.map((currTraining) => {
     const passingScore = currTraining.training.quiz.passingScore;
 
     return {
@@ -210,6 +213,9 @@ function AdminVolunteerDetails() {
           : "N/A", // Handle score
     };
   });
+
+  const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
+  const [openSelectSnackbar, setOpenSelectSnackbar] = useState<boolean>(false);
 
   const CustomColumnMenu = (props: GridColumnMenuProps) => {
     const { hideMenu, currentColumn, open } = props;
@@ -344,6 +350,11 @@ function AdminVolunteerDetails() {
     };
   }, []);
 
+  useEffect(() => {
+    // Clear the selection whenever the table (alignment) changes
+    setSelectionModel([]);
+  }, [alignment]);
+
   //delete user popup
   const [openDeleteUserPopup, setOpenDeleteUserPopup] =
     useState<boolean>(false);
@@ -353,30 +364,54 @@ function AdminVolunteerDetails() {
   };
 
   const exportTrainingData = () => {
+    // Reset the snackbar
+    setOpenSelectSnackbar(false);
+
+    // Check if any row is selected
+    if (selectionModel.length === 0) {
+      setOpenSelectSnackbar(true);
+      return;
+    }
+
     const header = columns.map((column) => column.headerName);
-    const rowData = rows.map((row) => {
-      return [
-        row.trainingName,
-        row.dateCompleted,
-        row.timeCompleted,
-        row.quizScore,
-        row.passFailStatus,
-        row.status,
-      ];
+    const rowData = selectionModel.map((row) => {
+      const training = trainingRows.find((training) => training.id === row);
+      if (training) {
+        return [
+          training.trainingName,
+          training.dateCompleted,
+          training.timeCompleted,
+          training.quizScore,
+          training.passFailStatus,
+          training.status,
+        ];
+      }
     });
     exportTableToCSV([header, ...rowData]);
   };
 
   const exportPathwayData = () => {
+    // Reset the snackbar
+    setOpenSelectSnackbar(false);
+
+    // Check if any row is selected
+    if (selectionModel.length === 0) {
+      setOpenSelectSnackbar(true);
+      return;
+    }
+
     const header = pathwayColumns.map((column) => column.headerName);
-    const rowData = pathwayRows.map((row) => {
-      return [
-        row.pathwayName,
-        row.progress,
-        row.dateCompleted,
-        row.trainingsCompleted,
-        row.score,
-      ];
+    const rowData = selectionModel.map((row) => {
+      const pathway = pathwayRows.find((pathway) => pathway.id === row);
+      if (pathway) {
+        return [
+          pathway.pathwayName,
+          pathway.progress,
+          pathway.dateCompleted,
+          pathway.trainingsCompleted,
+          pathway.score,
+        ];
+      }
     });
     exportTableToCSV([header, ...rowData]);
   };
@@ -509,7 +544,7 @@ function AdminVolunteerDetails() {
                     <>
                       <div className={styles.innerGrid}>
                         <DataGrid
-                          rows={rows}
+                          rows={trainingRows}
                           columns={columns}
                           rowHeight={40}
                           checkboxSelection
@@ -522,6 +557,10 @@ function AdminVolunteerDetails() {
                           onRowClick={(row) => {
                             navigate(`/management/training/${row.id}`);
                           }}
+                          selectionModel={selectionModel} // Controlled selection model
+                          onSelectionModelChange={(newSelection) =>
+                            setSelectionModel(newSelection)
+                          }
                         />
                       </div>
                     </>
@@ -543,6 +582,10 @@ function AdminVolunteerDetails() {
                           onRowClick={(row) => {
                             navigate(`/management/pathway/${row.id}`);
                           }}
+                          selectionModel={selectionModel} // Controlled selection model
+                          onSelectionModelChange={(newSelection) =>
+                            setSelectionModel(newSelection)
+                          }
                         />
                       </div>
                     </>
@@ -591,6 +634,19 @@ function AdminVolunteerDetails() {
               </>
             )}
           </div>
+          {/* No row selected alert */}
+          <Snackbar
+            open={openSelectSnackbar}
+            autoHideDuration={6000}
+            onClose={() => setOpenSelectSnackbar(false)}
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }} // Position within the right section
+          >
+            <Alert
+              onClose={() => setOpenSelectSnackbar(false)}
+              severity="warning">
+              Please select rows to export.
+            </Alert>
+          </Snackbar>
         </div>
         <Footer />
       </div>
