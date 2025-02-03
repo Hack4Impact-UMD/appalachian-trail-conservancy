@@ -31,7 +31,13 @@ import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Hamburger from "../../assets/hamburger.svg";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import { PathwayID, Quiz, Status, Question } from "../../types/PathwayType";
+import {
+  Pathway,
+  PathwayID,
+  Quiz,
+  Status,
+  Question,
+} from "../../types/PathwayType";
 import { updatePathway } from "../../backend/FirestoreCalls";
 
 function PathwayQuizEditorPage() {
@@ -45,7 +51,7 @@ function PathwayQuizEditorPage() {
   const [pathway, setPathway] = useState<PathwayID | undefined>(
     location.state?.pathway as PathwayID | undefined
   ); // Access pathway data and id
-  const trainingId = pathway?.id || "";
+  const pathwayId = pathway?.id || "";
   const status = pathway?.status || ("DRAFT" as Status);
 
   const [questions, setQuestions] = useState<Question[]>([
@@ -283,17 +289,22 @@ function PathwayQuizEditorPage() {
           : "PUBLISHED";
     }
 
+    const { id, ...restOfPathwayData } = pathway as PathwayID;
     const updatedPathway = {
-      ...pathway,
+      ...restOfPathwayData,
       quiz: quizData,
       status: newStatus,
-    } as PathwayID;
+    } as Pathway;
 
     // Update the pathway in the database
-    updatePathway(updatedPathway, trainingId)
+    updatePathway(updatedPathway, pathwayId)
       .then(() => {
+        const updatedPathwayId: PathwayID = {
+          ...updatedPathway,
+          id: pathwayId,
+        };
         setLoading(false);
-        setPathway(updatedPathway);
+        setPathway(updatedPathwayId);
         setSnackbarMessage("Pathway updated successfully.");
         setSnackbar(true);
         if (changeStatus) {

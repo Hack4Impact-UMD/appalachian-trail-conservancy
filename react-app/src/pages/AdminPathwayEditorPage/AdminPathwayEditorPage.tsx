@@ -296,8 +296,9 @@ const AdminPathwayEditorPage: React.FC = () => {
 
       if (pathwayId) {
         // Update existing pathway
+        const { id, ...restOfPathwayData } = pathwayData as PathwayID;
         const updatedPathway = {
-          ...pathwayData,
+          ...restOfPathwayData,
           name: pathwayName,
           shortBlurb: blurb,
           description: description,
@@ -365,8 +366,9 @@ const AdminPathwayEditorPage: React.FC = () => {
 
       if (pathwayId) {
         // Update existing pathway
+        const { id, ...restOfPathwayData } = pathwayData as PathwayID;
         const updatedPathway = {
-          ...pathwayData,
+          ...restOfPathwayData,
           name: pathwayName,
           shortBlurb: blurb,
           description: description,
