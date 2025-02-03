@@ -22,7 +22,7 @@ function NotFoundPage() {
         <p>The page you are looking for does not exist</p>
         <Link to="/">
           <Button sx={buttonStyle} variant="contained">
-            Go back to dashboard
+            back to dashboard
           </Button>
         </Link>
       </div>

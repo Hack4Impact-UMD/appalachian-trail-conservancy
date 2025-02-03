@@ -16,6 +16,7 @@
 /* center content */
 .content {
   text-align: center;
+  color: var(--blue-gray);
 }
 
 /* 404 */
