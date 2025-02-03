@@ -106,7 +106,9 @@ function getMostRecentCompletion(
   );
 
   // Find the most recent date
-  const allDates = trainingDates.concat(pathwayDates);
+  const allDates = trainingDates
+    .concat(pathwayDates)
+    .filter((date) => !isNaN(date));
   const mostRecentDate = allDates.reduce((a, b) => (a > b ? a : b), 0);
   return DateTime.fromMillis(mostRecentDate).toLocaleString();
 }

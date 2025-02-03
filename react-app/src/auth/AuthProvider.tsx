@@ -44,7 +44,6 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
     let email = window.localStorage.getItem("emailForSignIn");
 
     if (isSignInWithEmailLink(auth, window.location.href)) {
-      console.log("Sign in with email link: ", email);
       if (!email) {
         // User opened the link on a different device. To prevent session fixation
         // attacks, ask the user to provide the associated email again. For example:
@@ -57,7 +56,6 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
             newUser?.getIdToken();
             setUser(newUser);
             setLoading(true);
-            console.log("newUser: ", newUser);
             if (newUser != null) {
               newUser
                 .getIdTokenResult()
@@ -69,7 +67,6 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
                       setID(id);
                       setFirstName(firstName);
                       setLastName(lastName);
-                      console.log("userData: ", userData);
                     })
                     .catch((error) => {
                       // Failed to get User information
@@ -87,7 +84,6 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
         newUser?.getIdToken();
         setUser(newUser);
         setLoading(true);
-        console.log("newUser: ", newUser);
         if (newUser != null) {
           newUser
             .getIdTokenResult()
@@ -99,7 +95,6 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
                   setID(id);
                   setFirstName(firstName);
                   setLastName(lastName);
-                  console.log("userData: ", userData);
                 })
                 .catch((error) => {
                   // Failed to get User information

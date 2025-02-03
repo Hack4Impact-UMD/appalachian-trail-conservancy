@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import { AuthProvider, useAuth } from "../AuthProvider";
+import { useAuth } from "../AuthProvider";
 import styles from "./RequireAuth.module.css";
 import Loading from "../../components/LoadingScreen/Loading";
 
