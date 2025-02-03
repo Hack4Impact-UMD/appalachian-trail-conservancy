@@ -32,7 +32,13 @@ import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Hamburger from "../../assets/hamburger.svg";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { updateTraining } from "../../backend/FirestoreCalls";
-import { Quiz, TrainingID, Status, Question } from "../../types/TrainingType";
+import {
+  Quiz,
+  Training,
+  TrainingID,
+  Status,
+  Question,
+} from "../../types/TrainingType";
 
 function TrainingQuizEditorPage() {
   const navigate = useNavigate();
@@ -283,17 +289,22 @@ function TrainingQuizEditorPage() {
           : "PUBLISHED";
     }
 
+    const { id, ...restOfTrainingData } = training as TrainingID;
     const updatedTraining = {
-      ...training,
+      ...restOfTrainingData,
       quiz: quizData,
       status: newStatus,
-    } as TrainingID;
+    } as Training;
 
     // Update the training in the database
     updateTraining(updatedTraining, trainingId)
       .then(() => {
+        const updatedTrainingId: TrainingID = {
+          ...updatedTraining,
+          id: trainingId,
+        };
         setLoading(false);
-        setTraining(updatedTraining);
+        setTraining(updatedTrainingId);
         setSnackbarMessage("Training updated successfully.");
         setSnackbar(true);
         if (changeStatus) {

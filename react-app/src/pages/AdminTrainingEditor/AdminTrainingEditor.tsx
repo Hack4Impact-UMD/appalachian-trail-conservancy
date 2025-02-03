@@ -260,8 +260,9 @@ const AdminTrainingEditor: React.FC = () => {
 
       if (trainingId) {
         // Update existing training
+        const { id, ...restOfTrainingData } = trainingData as TrainingID;
         const updatedTraining = {
-          ...trainingData,
+          ...restOfTrainingData,
           name: trainingName,
           shortBlurb: blurb,
           description: description,
@@ -347,8 +348,9 @@ const AdminTrainingEditor: React.FC = () => {
       }
 
       if (trainingId) {
+        const { id, ...restOfTrainingData } = trainingData as TrainingID;
         const updatedTraining = {
-          ...trainingData,
+          ...restOfTrainingData,
           name: trainingName,
           shortBlurb: blurb,
           description: description,
