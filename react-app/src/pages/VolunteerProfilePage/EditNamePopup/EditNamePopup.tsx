@@ -11,7 +11,7 @@ import {
   grayBorderTextField,
 } from "../../../muiTheme";
 import { Volunteer } from "../../../types/UserType";
-import { updateVolunteer } from "../../../backend/FirestoreCalls";
+import { updateVolunteer } from "../../../backend/VolunteerFirestoreCalls";
 
 interface modalPropsType {
   open: boolean;

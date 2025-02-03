@@ -1,12 +1,12 @@
 import {
   addTraining,
   addPathway,
-  getAllTrainings,
-  getAllPathways,
   updatePathway,
+} from "../backend/AdminFirestoreCalls";
+import {
   addVolunteerTraining,
   addVolunteerPathway,
-} from "../backend/FirestoreCalls";
+} from "../backend/VolunteerFirestoreCalls";
 import { type Training, Resource, Status } from "../types/TrainingType";
 import { type Pathway } from "../types/PathwayType";
 import { type User } from "../types/UserType";

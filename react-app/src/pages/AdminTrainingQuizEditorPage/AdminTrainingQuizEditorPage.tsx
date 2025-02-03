@@ -31,7 +31,7 @@ import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Hamburger from "../../assets/hamburger.svg";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import { updateTraining } from "../../backend/FirestoreCalls";
+import { updateTraining } from "../../backend/AdminFirestoreCalls";
 import {
   Quiz,
   Training,

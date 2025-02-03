@@ -3,7 +3,7 @@ import { Button } from "@mui/material";
 import { forestGreenButton } from "../../muiTheme";
 import { useLocation, Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthProvider";
-import { validatePathwayQuiz } from "../../backend/FirestoreCalls";
+import { validatePathwayQuiz } from "../../backend/VolunteerFirestoreCalls";
 import { Pathway } from "../../types/PathwayType";
 import { VolunteerPathway } from "../../types/UserType";
 import styles from "./VolunteerPathwayQuizPage.module.css";

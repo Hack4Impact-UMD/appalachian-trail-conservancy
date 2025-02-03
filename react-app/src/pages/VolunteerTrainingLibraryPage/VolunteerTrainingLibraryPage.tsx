@@ -15,11 +15,8 @@ import {
   whiteSelectGrayBorder,
   selectOptionStyle,
 } from "../../muiTheme.ts";
-import {
-  getAllPublishedTrainings,
-  getAllTrainings,
-  getVolunteer,
-} from "../../backend/FirestoreCalls.ts";
+import { getAllTrainings, getVolunteer } from "../../backend/FirestoreCalls.ts";
+import { getAllPublishedTrainings } from "../../backend/VolunteerFirestoreCalls.ts";
 import { TrainingID } from "../../types/TrainingType.ts";
 import { VolunteerTraining } from "../../types/UserType.ts";
 import { useAuth } from "../../auth/AuthProvider.tsx";

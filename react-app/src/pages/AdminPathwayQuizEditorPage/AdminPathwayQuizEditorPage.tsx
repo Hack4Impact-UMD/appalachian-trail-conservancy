@@ -38,7 +38,7 @@ import {
   Status,
   Question,
 } from "../../types/PathwayType";
-import { updatePathway } from "../../backend/FirestoreCalls";
+import { updatePathway } from "../../backend/AdminFirestoreCalls";
 
 function PathwayQuizEditorPage() {
   const navigate = useNavigate();

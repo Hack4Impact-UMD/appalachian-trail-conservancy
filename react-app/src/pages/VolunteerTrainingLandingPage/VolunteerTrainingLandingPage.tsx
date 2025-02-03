@@ -7,8 +7,8 @@ import {
   getVolunteer,
   getTraining,
   getPathway,
-  addVolunteerTraining,
 } from "../../backend/FirestoreCalls";
+import { addVolunteerTraining } from "../../backend/VolunteerFirestoreCalls";
 import { Button } from "@mui/material";
 import { useAuth } from "../../auth/AuthProvider";
 import styles from "./VolunteerTrainingLandingPage.module.css";

@@ -44,11 +44,8 @@ import { LuUpload } from "react-icons/lu";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { Pathway, PathwayID, Status } from "../../types/PathwayType";
 import { TrainingID } from "../../types/TrainingType";
-import {
-  addPathway,
-  updatePathway,
-  getAllPublishedTrainings,
-} from "../../backend/FirestoreCalls";
+import { getAllPublishedTrainings } from "../../backend/VolunteerFirestoreCalls";
+import { addPathway, updatePathway } from "../../backend/AdminFirestoreCalls";
 
 import Quill from "quill";
 import "quill/dist/quill.snow.css";

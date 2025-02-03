@@ -4,7 +4,7 @@ import { Button } from "@mui/material";
 import { whiteButtonGrayBorder, forestGreenButton } from "../../muiTheme.ts";
 import { TrainingID } from "../../types/TrainingType.ts";
 import { VolunteerTraining } from "../../types/UserType.ts";
-import { updateVolunteerTraining } from "../../backend/FirestoreCalls.ts";
+import { updateVolunteerTraining } from "../../backend/VolunteerFirestoreCalls.ts";
 import styles from "./VolunteerTrainingPage.module.css";
 import VolunteerNavigationBar from "../../components/VolunteerNavigationBar/VolunteerNavigationBar.tsx";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon.tsx";

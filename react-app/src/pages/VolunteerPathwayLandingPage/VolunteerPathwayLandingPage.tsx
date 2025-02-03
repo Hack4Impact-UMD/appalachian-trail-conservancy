@@ -16,8 +16,8 @@ import {
   getPathway,
   getTraining,
   getVolunteer,
-  addVolunteerPathway,
 } from "../../backend/FirestoreCalls.ts";
+import { addVolunteerPathway } from "../../backend/VolunteerFirestoreCalls.ts";
 
 function VolunteerPathwayLandingPage() {
   const auth = useAuth();

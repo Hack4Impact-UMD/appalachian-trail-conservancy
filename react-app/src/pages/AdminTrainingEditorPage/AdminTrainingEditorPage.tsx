@@ -19,7 +19,7 @@ import {
   deleteObject,
 } from "firebase/storage";
 import { storage } from "../../config/firebase";
-import { addTraining, updateTraining } from "../../backend/FirestoreCalls";
+import { addTraining, updateTraining } from "../../backend/AdminFirestoreCalls";
 import {
   TrainingID,
   Training,

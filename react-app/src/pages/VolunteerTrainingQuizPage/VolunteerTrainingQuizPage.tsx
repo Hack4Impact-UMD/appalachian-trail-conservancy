@@ -3,7 +3,7 @@ import { Button } from "@mui/material";
 import { forestGreenButton } from "../../muiTheme";
 import { useLocation, Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthProvider";
-import { validateTrainingQuiz } from "../../backend/FirestoreCalls";
+import { validateTrainingQuiz } from "../../backend/VolunteerFirestoreCalls";
 import { Training } from "../../types/TrainingType";
 import { VolunteerTraining } from "../../types/UserType";
 import styles from "./VolunteerTrainingQuizPage.module.css";

@@ -6,7 +6,8 @@ import { whiteButtonGrayBorder, hazardRedButton } from "../../../muiTheme";
 import { useNavigate } from "react-router";
 import Modal from "../../../components/ModalWrapper/Modal";
 import Loading from "../../../components/LoadingScreen/Loading";
-import { getTraining, deleteTraining } from "../../../backend/FirestoreCalls";
+import { getTraining } from "../../../backend/FirestoreCalls";
+import { deleteTraining } from "../../../backend/AdminFirestoreCalls";
 import { ref, deleteObject } from "firebase/storage";
 import { storage } from "../../../config/firebase";
 
