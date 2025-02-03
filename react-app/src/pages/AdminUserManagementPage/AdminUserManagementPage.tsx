@@ -12,10 +12,10 @@ import {
 } from "@mui/material";
 import Loading from "../../components/LoadingScreen/Loading.tsx";
 import {
-  getVolunteers,
   getAllTrainings,
   getAllPathways,
 } from "../../backend/FirestoreCalls.ts";
+import { getVolunteers } from "../../backend/AdminFirestoreCalls.ts";
 import {
   managementVolunteerType,
   managementTrainingType,

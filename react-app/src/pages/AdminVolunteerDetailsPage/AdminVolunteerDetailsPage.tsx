@@ -47,7 +47,7 @@ import {
   getTraining,
   getVolunteer,
 } from "../../backend/FirestoreCalls.ts";
-import { exportTableToCSV } from "../../backend/FirestoreCalls.ts";
+import { exportTableToCSV } from "../../backend/AdminFirestoreCalls.ts";
 import { TrainingID } from "../../types/TrainingType.ts";
 import { PathwayID } from "../../types/PathwayType.ts";
 import DeleteUserPopup from "./AdminDeleteUserPopup/AdminDeleteUserPopup.tsx";
@@ -428,7 +428,7 @@ function AdminVolunteerDetailsPage() {
       <DeleteUserPopup
         open={openDeleteUserPopup}
         onClose={setOpenDeleteUserPopup}
-        volunteerId={volunteerId || ""}
+        volunteerAuthId={volunteer.auth_id || ""}
       />
 
       <div

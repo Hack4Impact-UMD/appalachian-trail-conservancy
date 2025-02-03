@@ -11,7 +11,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { EmailType, RegistrationCodeType } from "../types/AssetsType";
-import { Admin } from "../types/UserType";
+import { Admin, VolunteerID } from "../types/UserType";
 
 export function getAdmin(id: string): Promise<Admin> {
   return new Promise((resolve, reject) => {
@@ -168,6 +168,71 @@ export function updateRegistrationCode(
       })
       .catch((e) => {
         reject(e);
+      });
+  });
+}
+
+export function exportTableToCSV(data: any[]): void {
+  if (!data || data.length === 0) {
+    console.error("No data available to export.");
+    return;
+  }
+
+  const headers: string[] = Object.keys(data[0]);
+
+  // Create CSV content
+  const csvRows = [
+    headers.join(","),
+    ...data.map((row) =>
+      headers
+        .map((header) => {
+          const value = row[header];
+          return typeof value === "string"
+            ? `"${value.replace(/"/g, '""')}"`
+            : value === null || value === undefined
+            ? ""
+            : value;
+        })
+        .join(",")
+    ),
+  ];
+
+  const csvContent = csvRows.slice(1).join("\n");
+
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "export.csv";
+  link.style.display = "none";
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  URL.revokeObjectURL(url);
+}
+
+export function getVolunteers(): Promise<VolunteerID[]> {
+  const collectionName = "Users";
+  const collectionRef = collection(db, collectionName);
+
+  return new Promise((resolve, reject) => {
+    getDocs(collectionRef)
+      .then((userSnapshot) => {
+        const allVolunteers: VolunteerID[] = [];
+        const users = userSnapshot.docs.map((doc) => {
+          const user = doc.data();
+          if (user.type === "VOLUNTEER") {
+            const newVolunteer = { ...user, id: doc.id } as VolunteerID;
+            allVolunteers.push(newVolunteer);
+          }
+        });
+        resolve(allVolunteers);
+      })
+      .catch((error) => {
+        reject(error);
       });
   });
 }

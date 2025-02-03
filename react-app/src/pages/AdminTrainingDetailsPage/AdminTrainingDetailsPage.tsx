@@ -31,12 +31,11 @@ import Footer from "../../components/Footer/Footer.tsx";
 import { DateTime } from "luxon";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { TrainingID } from "../../types/TrainingType.ts";
+import { getPathway, getTraining } from "../../backend/FirestoreCalls.ts";
 import {
   exportTableToCSV,
-  getPathway,
-  getTraining,
   getVolunteers,
-} from "../../backend/FirestoreCalls.ts";
+} from "../../backend/AdminFirestoreCalls.ts";
 import { VolunteerID } from "../../types/UserType.ts";
 import Loading from "../../components/LoadingScreen/Loading.tsx";
 

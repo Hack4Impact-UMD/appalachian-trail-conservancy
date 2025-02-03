@@ -2,7 +2,7 @@ import { PathwayID } from "../../types/PathwayType";
 import { TrainingID } from "../../types/TrainingType";
 import { VolunteerID } from "../../types/UserType";
 import { VolunteerTraining, VolunteerPathway } from "../../types/UserType";
-import { exportTableToCSV } from "../../backend/FirestoreCalls";
+import { exportTableToCSV } from "../../backend/AdminFirestoreCalls";
 import { GridRowId } from "@mui/x-data-grid";
 import { DateTime } from "luxon";
 

@@ -6,18 +6,18 @@ import { whiteButtonGrayBorder, hazardRedButton } from "../../../muiTheme";
 import { useNavigate } from "react-router";
 import Modal from "../../../components/ModalWrapper/Modal";
 import Loading from "../../../components/LoadingScreen/Loading";
-import { deleteUser } from "../../../backend/FirestoreCalls";
+import { deleteUser } from "../../../backend/AuthFunctions";
 
 interface modalPropsType {
   open: boolean;
   onClose: any;
-  volunteerId: string;
+  volunteerAuthId: string;
 }
 
 const DeleteUserPopup = ({
   open,
   onClose,
-  volunteerId,
+  volunteerAuthId,
 }: modalPropsType): React.ReactElement => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
@@ -28,7 +28,7 @@ const DeleteUserPopup = ({
     try {
       setCanClose(false);
       setLoading(true);
-      await deleteUser(volunteerId);
+      await deleteUser(volunteerAuthId);
       navigate("/management", {
         state: { fromApp: true, showSnackbar: true }, //use state to pass that it should show snackbar
       });

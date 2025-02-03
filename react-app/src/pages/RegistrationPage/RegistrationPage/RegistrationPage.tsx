@@ -69,7 +69,6 @@ function RegistrationPage() {
 
   const handleConfirm = (event: any) => {
     event.preventDefault();
-    setShowLoading(true);
 
     // Confirm button validates that inputs arent empty
 
@@ -79,6 +78,7 @@ function RegistrationPage() {
       setInvalidEmail(true);
       setEmailsMatch(false);
     } else {
+      setShowLoading(true);
       createVolunteerUser(email, firstName, lastName, joinCode)
         .then(() => {
           navigate("/registration-confirmation", {
@@ -90,9 +90,11 @@ function RegistrationPage() {
             "Error creating account. Account may already exist or join code may be incorrect."
           );
           setSnackbar(true);
+        })
+        .finally(() => {
+          setShowLoading(false);
         });
     }
-    setShowLoading(false);
   };
 
   return (
@@ -146,8 +148,7 @@ function RegistrationPage() {
                   tooltip: {
                     sx: { ...whiteTooltip },
                   },
-                }}
-              >
+                }}>
                 <InfoOutlinedIcon />
               </Tooltip>
             </div>
@@ -200,8 +201,7 @@ function RegistrationPage() {
                   tooltip: {
                     sx: { ...whiteTooltip },
                   },
-                }}
-              >
+                }}>
                 <InfoOutlinedIcon />
               </Tooltip>
             </div>
@@ -229,9 +229,8 @@ function RegistrationPage() {
                   confirmEmail !== "" &&
                   email === confirmEmail &&
                   joinCode !== ""
-                )
-              }
-            >
+                ) || showLoading
+              }>
               {showLoading ? <Loading color="white" /> : "Confirm"}
             </Button>
           </div>

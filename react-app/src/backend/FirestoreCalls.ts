@@ -23,30 +23,6 @@ import {
 import { Training, TrainingID, Quiz } from "../types/TrainingType";
 import { Pathway, PathwayID } from "../types/PathwayType";
 
-export function getVolunteers(): Promise<VolunteerID[]> {
-  const collectionName = "Users";
-  const collectionRef = collection(db, collectionName);
-
-  return new Promise((resolve, reject) => {
-    getDocs(collectionRef)
-      .then((userSnapshot) => {
-        const allVolunteers: VolunteerID[] = [];
-        const users = userSnapshot.docs.map((doc) => {
-          const user = doc.data();
-          if (user.type === "VOLUNTEER") {
-            const newVolunteer = { ...user, id: doc.id } as VolunteerID;
-            allVolunteers.push(newVolunteer);
-          }
-        });
-        // .filter((user) => user.type === "VOLUNTEER"); // Filter for VOLUNTEER users only
-        resolve(allVolunteers);
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
-}
-
 export function getUserWithAuth(auth_id: string): Promise<Admin | VolunteerID> {
   return new Promise((resolve, reject) => {
     const userRef = query(
@@ -745,48 +721,6 @@ export function addVolunteerPathway(
   });
 }
 
-export function exportTableToCSV(data: any[]): void {
-  if (!data || data.length === 0) {
-    console.error("No data available to export.");
-    return;
-  }
-
-  const headers: string[] = Object.keys(data[0]);
-
-  // Create CSV content
-  const csvRows = [
-    headers.join(","),
-    ...data.map((row) =>
-      headers
-        .map((header) => {
-          const value = row[header];
-          return typeof value === "string"
-            ? `"${value.replace(/"/g, '""')}"`
-            : value === null || value === undefined
-            ? ""
-            : value;
-        })
-        .join(",")
-    ),
-  ];
-
-  const csvContent = csvRows.slice(1).join("\n");
-
-  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = "export.csv";
-  link.style.display = "none";
-
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-
-  URL.revokeObjectURL(url);
-}
-
 export function updateVolunteerPathway(
   volunteerId: string,
   pathway: VolunteerPathway
@@ -849,18 +783,6 @@ export function updateVolunteerPathway(
       .catch((error) => {
         reject("Error fetching volunteer");
         console.error("Error fetching volunteer:", error);
-      });
-  });
-}
-
-export function deleteUser(id: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    deleteDoc(doc(db, "Users", id))
-      .then(() => {
-        resolve();
-      })
-      .catch((e) => {
-        reject(e);
       });
   });
 }
