@@ -745,6 +745,48 @@ export function addVolunteerPathway(
   });
 }
 
+export function exportTableToCSV(data: any[]): void {
+  if (!data || data.length === 0) {
+    console.error("No data available to export.");
+    return;
+  }
+
+  const headers: string[] = Object.keys(data[0]);
+
+  // Create CSV content
+  const csvRows = [
+    headers.join(","),
+    ...data.map((row) =>
+      headers
+        .map((header) => {
+          const value = row[header];
+          return typeof value === "string"
+            ? `"${value.replace(/"/g, '""')}"`
+            : value === null || value === undefined
+            ? ""
+            : value;
+        })
+        .join(",")
+    ),
+  ];
+
+  const csvContent = csvRows.slice(1).join("\n");
+
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "export.csv";
+  link.style.display = "none";
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  URL.revokeObjectURL(url);
+}
+
 export function updateVolunteerPathway(
   volunteerId: string,
   pathway: VolunteerPathway

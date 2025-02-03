@@ -1,8 +1,15 @@
 import { useEffect, useState } from "react";
 import styles from "./AdminTrainingDetails.module.css";
-import { Button, InputAdornment, OutlinedInput } from "@mui/material";
+import {
+  Button,
+  InputAdornment,
+  OutlinedInput,
+  Snackbar,
+  Alert,
+} from "@mui/material";
 import {
   DataGrid,
+  GridRowId,
   GridColumnMenuProps,
   GridColumnMenuContainer,
   GridFilterMenuItem,
@@ -25,6 +32,7 @@ import { DateTime } from "luxon";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { TrainingID } from "../../types/TrainingType.ts";
 import {
+  exportTableToCSV,
   getPathway,
   getTraining,
   getVolunteers,
@@ -45,6 +53,8 @@ function AdminTrainingDetails() {
   const [filteredVolunteers, setFilteredVolunteers] = useState<VolunteerID[]>(
     []
   );
+  const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
+  const [openSelectSnackbar, setOpenSelectSnackbar] = useState<boolean>(false);
   const [showMore, setShowMore] = useState(false);
   const [pathwayNames, setPathwayNames] = useState<
     { name: string; id: string }[]
@@ -68,19 +78,15 @@ function AdminTrainingDetails() {
 
   //formatting date/time with iso
   const formatDate = (isoDate: string) => {
-    if (!isoDate) return "Not Available";
+    if (!isoDate) return "N/A";
     const date = DateTime.fromISO(isoDate);
-    return date.isValid
-      ? date.toLocaleString(DateTime.DATE_SHORT)
-      : "Not Available";
+    return date.isValid ? date.toLocaleString(DateTime.DATE_SHORT) : "N/A";
   };
 
   const formatTime = (isoDate: string) => {
-    if (!isoDate) return "Not Available";
+    if (!isoDate) return "N/A";
     const date = DateTime.fromISO(isoDate);
-    return date.isValid
-      ? date.toLocaleString(DateTime.TIME_SIMPLE)
-      : "Not Available";
+    return date.isValid ? date.toLocaleString(DateTime.TIME_SIMPLE) : "N/A";
   };
 
   // DataGrid columns
@@ -95,7 +101,7 @@ function AdminTrainingDetails() {
   ];
 
   // map the filtered volunteers to rows for DataGrid
-  const rows = filteredVolunteers.flatMap((volunteer) => {
+  const trainingRows = filteredVolunteers.flatMap((volunteer) => {
     return volunteer.trainingInformation
       .filter(
         (volunteerTraining) =>
@@ -107,7 +113,16 @@ function AdminTrainingDetails() {
       )
       .map((volunteerTraining) => {
         const passingScore = training.quiz.passingScore;
-        const quizScoreFormatted = `${volunteerTraining.quizScoreRecieved} / ${training.quiz.numQuestions}`;
+        const quizScore =
+          volunteerTraining.quizScoreRecieved === undefined
+            ? "N/A"
+            : `${volunteerTraining.quizScoreRecieved} / ${training.quiz.numQuestions}`;
+        const passFailStatus =
+          volunteerTraining.quizScoreRecieved === undefined
+            ? "N/A"
+            : volunteerTraining.quizScoreRecieved >= passingScore
+            ? "Passed"
+            : "Failed";
 
         return {
           id: volunteer.id,
@@ -115,13 +130,8 @@ function AdminTrainingDetails() {
           email: volunteer.email, // Added email field
           dateCompleted: formatDate(volunteerTraining.dateCompleted),
           timeCompleted: formatTime(volunteerTraining.dateCompleted),
-          quizScore: quizScoreFormatted || "Not Available",
-          passFailStatus:
-            volunteerTraining.quizScoreRecieved === undefined
-              ? "N/A"
-              : volunteerTraining.quizScoreRecieved >= passingScore
-              ? "Passed"
-              : "Failed",
+          quizScore: quizScore,
+          passFailStatus: passFailStatus,
           status: volunteerTraining.progress,
         };
       });
@@ -237,6 +247,34 @@ function AdminTrainingDetails() {
     filterVolunteers(volunteers);
   }, [searchQuery]);
 
+  const exportTrainingData = () => {
+    // Reset the snackbar
+    setOpenSelectSnackbar(false);
+
+    // Check if any row is selected
+    if (selectionModel.length === 0) {
+      setOpenSelectSnackbar(true);
+      return;
+    }
+
+    const header = columns.map((column) => column.headerName);
+    const rowData = selectionModel.map((row) => {
+      const training = trainingRows.find((training) => training.id === row);
+      if (training) {
+        return [
+          training.volunteerName,
+          training.email,
+          training.dateCompleted,
+          training.timeCompleted,
+          training.quizScore,
+          training.passFailStatus,
+          training.status,
+        ];
+      }
+    });
+    exportTableToCSV([header, ...rowData]);
+  };
+
   return (
     <>
       <AdminNavigationBar
@@ -330,7 +368,8 @@ function AdminTrainingDetails() {
                       paddingRight: "20px",
                       fontWeight: "bold",
                       width: "375px",
-                    }}>
+                    }}
+                    onClick={exportTrainingData}>
                     Export
                   </Button>
                 </div>
@@ -339,7 +378,7 @@ function AdminTrainingDetails() {
                   <>
                     <div className={styles.innerGrid}>
                       <DataGrid
-                        rows={rows}
+                        rows={trainingRows}
                         columns={columns}
                         rowHeight={40}
                         checkboxSelection
@@ -352,6 +391,10 @@ function AdminTrainingDetails() {
                         onRowClick={(row) => {
                           navigate(`/management/volunteer/${row.id}`);
                         }}
+                        selectionModel={selectionModel} // Controlled selection model
+                        onSelectionModelChange={(newSelection) =>
+                          setSelectionModel(newSelection)
+                        }
                       />
                     </div>
                   </>
@@ -378,6 +421,19 @@ function AdminTrainingDetails() {
               </>
             )}
           </div>
+          {/* No row selected alert */}
+          <Snackbar
+            open={openSelectSnackbar}
+            autoHideDuration={6000}
+            onClose={() => setOpenSelectSnackbar(false)}
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }} // Position within the right section
+          >
+            <Alert
+              onClose={() => setOpenSelectSnackbar(false)}
+              severity="warning">
+              Please select rows to export.
+            </Alert>
+          </Snackbar>
         </div>
         <Footer />
       </div>

@@ -104,6 +104,9 @@ export const whiteButtonOceanGreenBorder = {
   ...baseStyles,
   color: "var(--ocean-green)",
   backgroundColor: "white",
+  paddingLeft: "20px",
+  paddingRight: "20px",
+  fontWeight: "bold",
   border: "2px solid var(--ocean-green)",
   "&:hover": {
     color: "white",

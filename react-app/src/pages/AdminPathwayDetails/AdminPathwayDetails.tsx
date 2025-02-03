@@ -1,8 +1,15 @@
 import { useEffect, useState } from "react";
 import styles from "./AdminPathwayDetails.module.css";
-import { Button, InputAdornment, OutlinedInput } from "@mui/material";
+import {
+  Button,
+  InputAdornment,
+  OutlinedInput,
+  Snackbar,
+  Alert,
+} from "@mui/material";
 import {
   DataGrid,
+  GridRowId,
   GridColumnMenuProps,
   GridColumnMenuContainer,
   GridFilterMenuItem,
@@ -25,6 +32,7 @@ import { DateTime } from "luxon";
 import { PathwayID } from "../../types/PathwayType.ts";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
+  exportTableToCSV,
   getPathway,
   getTraining,
   getVolunteers,
@@ -64,22 +72,20 @@ function AdminPathwayDetails() {
     },
     status: "DRAFT",
   });
+  const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
+  const [openSelectSnackbar, setOpenSelectSnackbar] = useState<boolean>(false);
 
   //formatting date/time with iso
   const formatDate = (isoDate: string) => {
-    if (!isoDate) return "Not Available";
+    if (!isoDate) return "N/A";
     const date = DateTime.fromISO(isoDate);
-    return date.isValid
-      ? date.toLocaleString(DateTime.DATE_SHORT)
-      : "Not Available";
+    return date.isValid ? date.toLocaleString(DateTime.DATE_SHORT) : "N/A";
   };
 
   const formatTime = (isoDate: string) => {
-    if (!isoDate) return "Not Available";
+    if (!isoDate) return "N/A";
     const date = DateTime.fromISO(isoDate);
-    return date.isValid
-      ? date.toLocaleString(DateTime.TIME_SIMPLE)
-      : "Not Available";
+    return date.isValid ? date.toLocaleString(DateTime.TIME_SIMPLE) : "N/A";
   };
 
   // DataGrid columns
@@ -94,7 +100,7 @@ function AdminPathwayDetails() {
   ];
 
   // map the filtered volunteers to rows for DataGrid
-  const rows = filteredVolunteers.flatMap((volunteer) => {
+  const pathwayRows = filteredVolunteers.flatMap((volunteer) => {
     return volunteer.pathwayInformation
       .filter(
         (volunteerPathway) =>
@@ -104,7 +110,16 @@ function AdminPathwayDetails() {
       .filter((volunteerPathway) => volunteerPathway.pathwayID === pathway.id)
       .map((volunteerPathway) => {
         const passingScore = pathway.quiz.passingScore;
-        const quizScoreFormatted = `${volunteerPathway.quizScoreRecieved} / ${pathway.quiz.numQuestions}`;
+        const quizScore =
+          volunteerPathway.quizScoreRecieved === undefined
+            ? "N/A"
+            : `${volunteerPathway.quizScoreRecieved} / ${pathway.quiz.numQuestions}`;
+        const passFailStatus =
+          volunteerPathway.quizScoreRecieved === undefined
+            ? "N/A"
+            : volunteerPathway.quizScoreRecieved >= passingScore
+            ? "Passed"
+            : "Failed";
 
         return {
           id: volunteer.id,
@@ -112,13 +127,8 @@ function AdminPathwayDetails() {
           email: volunteer.email, // Added email field
           dateCompleted: formatDate(volunteerPathway.dateCompleted),
           timeCompleted: formatTime(volunteerPathway.dateCompleted),
-          quizScore: quizScoreFormatted || "Not Available",
-          passFailStatus:
-            volunteerPathway.quizScoreRecieved === undefined
-              ? "N/A"
-              : volunteerPathway.quizScoreRecieved >= passingScore
-              ? "Passed"
-              : "Failed",
+          quizScore: quizScore,
+          passFailStatus: passFailStatus,
           status: volunteerPathway.progress,
         };
       });
@@ -236,6 +246,34 @@ function AdminPathwayDetails() {
     filterVolunteers(volunteers);
   }, [searchQuery]);
 
+  const exportPathwayData = () => {
+    // Reset the snackbar
+    setOpenSelectSnackbar(false);
+
+    // Check if any row is selected
+    if (selectionModel.length === 0) {
+      setOpenSelectSnackbar(true);
+      return;
+    }
+
+    const header = columns.map((column) => column.headerName);
+    const rowData = selectionModel.map((row) => {
+      const pathway = pathwayRows.find((pathway) => pathway.id === row);
+      if (pathway) {
+        return [
+          pathway.volunteerName,
+          pathway.email,
+          pathway.dateCompleted,
+          pathway.timeCompleted,
+          pathway.quizScore,
+          pathway.passFailStatus,
+          pathway.status,
+        ];
+      }
+    });
+    exportTableToCSV([header, ...rowData]);
+  };
+
   return (
     <>
       <AdminNavigationBar
@@ -325,7 +363,8 @@ function AdminPathwayDetails() {
                       paddingRight: "20px",
                       fontWeight: "bold",
                       width: "375px",
-                    }}>
+                    }}
+                    onClick={exportPathwayData}>
                     Export
                   </Button>
                 </div>
@@ -334,7 +373,7 @@ function AdminPathwayDetails() {
                   <>
                     <div className={styles.innerGrid}>
                       <DataGrid
-                        rows={rows}
+                        rows={pathwayRows}
                         columns={columns}
                         rowHeight={40}
                         checkboxSelection
@@ -347,6 +386,10 @@ function AdminPathwayDetails() {
                         onRowClick={(row) => {
                           navigate(`/management/volunteer/${row.id}`);
                         }}
+                        selectionModel={selectionModel} // Controlled selection model
+                        onSelectionModelChange={(newSelection) =>
+                          setSelectionModel(newSelection)
+                        }
                       />
                     </div>
                   </>
@@ -373,6 +416,19 @@ function AdminPathwayDetails() {
               </>
             )}
           </div>
+          {/* No row selected alert */}
+          <Snackbar
+            open={openSelectSnackbar}
+            autoHideDuration={6000}
+            onClose={() => setOpenSelectSnackbar(false)}
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }} // Position within the right section
+          >
+            <Alert
+              onClose={() => setOpenSelectSnackbar(false)}
+              severity="warning">
+              Please select rows to export.
+            </Alert>
+          </Snackbar>
         </div>
         <Footer />
       </div>
