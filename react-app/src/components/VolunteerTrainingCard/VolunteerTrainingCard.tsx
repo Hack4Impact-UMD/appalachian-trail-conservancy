@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import styles from "./TrainingCard.module.css";
+import styles from "./VolunteerTrainingCard.module.css";
 import PathwayTrainingPopup from "../PathwayTrainingPopup/PathwayTrainingPopup";
 import { TrainingID } from "../../types/TrainingType";
 import { VolunteerTraining } from "../../types/UserType";
@@ -14,7 +14,7 @@ interface TrainingCardProps {
   setPopupOpen?: any;
 }
 
-const TrainingCard: React.FC<TrainingCardProps> = ({
+const VolunteerTrainingCard: React.FC<TrainingCardProps> = ({
   training,
   volunteerTraining,
   preview,
@@ -104,4 +104,4 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
   );
 };
 
-export default TrainingCard;
+export default VolunteerTrainingCard;

@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./PathwayQuizResultPage.module.css";
 import QuizResultCard from "../../components/QuizResultCard/QuizResultCard";
 import Badge from "../../components/BadgeCard/BadgeCard";
-import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import VolunteerNavigationBar from "../../components/VolunteerNavigationBar/VolunteerNavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import { Pathway } from "../../types/PathwayType";
 import { VolunteerPathway } from "../../types/UserType";
@@ -92,7 +92,10 @@ const PathwayQuizResultPage = () => {
 
   return (
     <>
-      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <VolunteerNavigationBar
+        open={navigationBarOpen}
+        setOpen={setNavigationBarOpen}
+      />
       <div
         className={`${styles.split} ${styles.right}`}
         style={{

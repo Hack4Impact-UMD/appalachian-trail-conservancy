@@ -14,14 +14,17 @@ import trainingsActive from "../../assets/trainingsWhite.svg";
 import profileActive from "../../assets/gearWhite.svg";
 import profileInactive from "../../assets/gearGray.svg";
 import LogoutPopup from "../LogoutPopup/LogoutPopup";
-import styles from "./NavigationBar.module.css";
+import styles from "./VolunteerNavigationBar.module.css";
 
 interface NavigationBarProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
+const VolunteerNavigationBar: React.FC<NavigationBarProps> = ({
+  open,
+  setOpen,
+}) => {
   const [openLogoutPopup, setOpenLogoutPopup] = useState<boolean>(false);
 
   const handleLogOut = (): void => {
@@ -213,4 +216,4 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ open, setOpen }) => {
   );
 };
 
-export default NavigationBar;
+export default VolunteerNavigationBar;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import styles from "./AdminTrainingEditor.module.css";
+import styles from "./AdminTrainingEditorPage.module.css";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   OutlinedInput,
@@ -31,7 +31,7 @@ import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigat
 import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import AdminDeleteTrainingDraftPopup from "./AdminDeleteTrainingDraftPopup/AdminDeleteTrainingDraftPopup";
-import TrainingCard from "../../components/TrainingCard/TrainingCard";
+import VolunteerTrainingCard from "../../components/VolunteerTrainingCard/VolunteerTrainingCard";
 import Certificate from "../../components/CertificateCard/CertificateCard";
 import { LuUpload } from "react-icons/lu";
 import { IoCloseOutline } from "react-icons/io5";
@@ -52,7 +52,7 @@ import {
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 
-const AdminTrainingEditor: React.FC = () => {
+const AdminTrainingEditorPage: React.FC = () => {
   const location = useLocation();
   const trainingData = location.state?.training as TrainingID | undefined;
   const navigate = useNavigate();
@@ -716,7 +716,7 @@ const AdminTrainingEditor: React.FC = () => {
                 </div>
                 {(coverImage || uploadedImage) && (
                   <div className={styles.previewSection}>
-                    <TrainingCard
+                    <VolunteerTrainingCard
                       training={{
                         id: trainingId!,
                         name: trainingName,
@@ -915,4 +915,4 @@ const AdminTrainingEditor: React.FC = () => {
   );
 };
 
-export default AdminTrainingEditor;
+export default AdminTrainingEditorPage;

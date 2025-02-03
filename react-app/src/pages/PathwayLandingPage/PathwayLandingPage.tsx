@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import VolunteerNavigationBar from "../../components/VolunteerNavigationBar/VolunteerNavigationBar.tsx";
 import PathwayTile from "./PathwayTile/PathwayTile";
 import TitleInfo from "./TileInfo/TitleInfo";
 import styles from "./PathwayLandingPage.module.css";
@@ -274,7 +274,7 @@ function PathwayLandingPage() {
   return (
     <>
       <div className={popupOpen ? styles.popupOpen : ""}>
-        <NavigationBar open={open} setOpen={setOpen} />
+        <VolunteerNavigationBar open={open} setOpen={setOpen} />
       </div>
 
       <div

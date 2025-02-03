@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import styles from "./AdminPathwayDetails.module.css";
+import styles from "./AdminTrainingDetailsPage.module.css";
 import {
   Button,
   InputAdornment,
@@ -29,8 +29,8 @@ import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigat
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon.tsx";
 import Footer from "../../components/Footer/Footer.tsx";
 import { DateTime } from "luxon";
-import { PathwayID } from "../../types/PathwayType.ts";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { TrainingID } from "../../types/TrainingType.ts";
 import {
   exportTableToCSV,
   getPathway,
@@ -40,9 +40,9 @@ import {
 import { VolunteerID } from "../../types/UserType.ts";
 import Loading from "../../components/LoadingScreen/Loading.tsx";
 
-function AdminPathwayDetails() {
+function AdminTrainingDetailsPage() {
   const navigate = useNavigate();
-  const pathwayId = useParams().id;
+  const trainingId = useParams().id;
   const location = useLocation();
   const [loading, setLoading] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -53,27 +53,28 @@ function AdminPathwayDetails() {
   const [filteredVolunteers, setFilteredVolunteers] = useState<VolunteerID[]>(
     []
   );
+  const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
+  const [openSelectSnackbar, setOpenSelectSnackbar] = useState<boolean>(false);
   const [showMore, setShowMore] = useState(false);
-  const [trainingNames, setTrainingNames] = useState<
+  const [pathwayNames, setPathwayNames] = useState<
     { name: string; id: string }[]
   >([]);
   const [volunteers, setVolunteers] = useState<VolunteerID[]>([]);
-  const [pathway, setPathway] = useState<PathwayID>({
+  const [training, setTraining] = useState<TrainingID>({
     name: "",
     id: "",
     shortBlurb: "",
     description: "",
     coverImage: "",
-    trainingIDs: [],
+    resources: [],
     quiz: {
       questions: [],
       numQuestions: 0,
       passingScore: 0,
     },
+    associatedPathways: [],
     status: "DRAFT",
   });
-  const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
-  const [openSelectSnackbar, setOpenSelectSnackbar] = useState<boolean>(false);
 
   //formatting date/time with iso
   const formatDate = (isoDate: string) => {
@@ -100,24 +101,26 @@ function AdminPathwayDetails() {
   ];
 
   // map the filtered volunteers to rows for DataGrid
-  const pathwayRows = filteredVolunteers.flatMap((volunteer) => {
-    return volunteer.pathwayInformation
+  const trainingRows = filteredVolunteers.flatMap((volunteer) => {
+    return volunteer.trainingInformation
       .filter(
-        (volunteerPathway) =>
-          volunteerPathway.progress === "INPROGRESS" ||
-          volunteerPathway.progress === "COMPLETED"
+        (volunteerTraining) =>
+          volunteerTraining.progress === "INPROGRESS" ||
+          volunteerTraining.progress === "COMPLETED"
       )
-      .filter((volunteerPathway) => volunteerPathway.pathwayID === pathway.id)
-      .map((volunteerPathway) => {
-        const passingScore = pathway.quiz.passingScore;
+      .filter(
+        (volunteerTraining) => volunteerTraining.trainingID === training.id
+      )
+      .map((volunteerTraining) => {
+        const passingScore = training.quiz.passingScore;
         const quizScore =
-          volunteerPathway.quizScoreRecieved === undefined
+          volunteerTraining.quizScoreRecieved === undefined
             ? "N/A"
-            : `${volunteerPathway.quizScoreRecieved} / ${pathway.quiz.numQuestions}`;
+            : `${volunteerTraining.quizScoreRecieved} / ${training.quiz.numQuestions}`;
         const passFailStatus =
-          volunteerPathway.quizScoreRecieved === undefined
+          volunteerTraining.quizScoreRecieved === undefined
             ? "N/A"
-            : volunteerPathway.quizScoreRecieved >= passingScore
+            : volunteerTraining.quizScoreRecieved >= passingScore
             ? "Passed"
             : "Failed";
 
@@ -125,11 +128,11 @@ function AdminPathwayDetails() {
           id: volunteer.id,
           volunteerName: `${volunteer.firstName} ${volunteer.lastName}`,
           email: volunteer.email, // Added email field
-          dateCompleted: formatDate(volunteerPathway.dateCompleted),
-          timeCompleted: formatTime(volunteerPathway.dateCompleted),
+          dateCompleted: formatDate(volunteerTraining.dateCompleted),
+          timeCompleted: formatTime(volunteerTraining.dateCompleted),
           quizScore: quizScore,
           passFailStatus: passFailStatus,
-          status: volunteerPathway.progress,
+          status: volunteerTraining.progress,
         };
       });
   });
@@ -145,11 +148,11 @@ function AdminPathwayDetails() {
           return (
             (fullName.includes(searchQuery.toLowerCase()) ||
               email.includes(searchQuery.toLowerCase())) && // Name or Email match
-            volunteer.pathwayInformation.some(
-              (volunteerPathway) =>
-                volunteerPathway.pathwayID === pathway.id &&
-                (volunteerPathway.progress === "INPROGRESS" ||
-                  volunteerPathway.progress === "COMPLETED")
+            volunteer.trainingInformation.some(
+              (volunteerTraining) =>
+                volunteerTraining.trainingID === training.id &&
+                (volunteerTraining.progress === "INPROGRESS" ||
+                  volunteerTraining.progress === "COMPLETED")
             )
           );
         })
@@ -158,27 +161,25 @@ function AdminPathwayDetails() {
     setFilteredVolunteers(filtered);
   };
 
-  //get associated trainings
-  const fetchTrainings = async (associatedTrainings: string[]) => {
+  //get associated pathways
+  const fetchPathways = async (associatedPathways: string[]) => {
     try {
-      const trainingPromises = associatedTrainings.map((trainingID) =>
-        getTraining(trainingID)
+      const pathwayPromises = associatedPathways.map((pathwayID) =>
+        getPathway(pathwayID)
       );
-      const trainings = await Promise.all(trainingPromises);
-      let associatedTrainingNames: { name: string; id: string }[] = [];
-      trainings.forEach((training) =>
-        associatedTrainingNames.push({ name: training.name, id: training.id })
+      const pathways = await Promise.all(pathwayPromises);
+      let associatedPathwayNames: { name: string; id: string }[] = [];
+      pathways.forEach((pathway) =>
+        associatedPathwayNames.push({ name: pathway.name, id: pathway.id })
       );
-      setTrainingNames(associatedTrainingNames);
+      setPathwayNames(associatedPathwayNames);
     } catch (error) {
       console.log("Failed to get pathways");
     }
   };
 
   //get pathways to display
-  const displayedTrainings = showMore
-    ? trainingNames
-    : trainingNames.slice(0, 4);
+  const displayedPathways = showMore ? pathwayNames : pathwayNames.slice(0, 4);
 
   // Debounced search
   const updateQuery = (e: {
@@ -216,16 +217,16 @@ function AdminPathwayDetails() {
   }, []);
 
   useEffect(() => {
-    if (pathwayId !== undefined && !location.state?.pathwayID) {
+    if (trainingId !== undefined && !location.state?.trainingID) {
       setLoading(true);
-      getPathway(pathwayId)
-        .then((pathwayData) => {
-          setPathway(pathwayData);
+      getTraining(trainingId)
+        .then((trainingData) => {
+          setTraining(trainingData);
           getVolunteers().then(async (volunteerData) => {
             setVolunteers(volunteerData);
             filterVolunteers(volunteerData);
           });
-          fetchTrainings(pathwayData.trainingIDs);
+          fetchPathways(trainingData.associatedPathways);
         })
         .catch(() => {
           console.log("Failed to get training");
@@ -235,18 +236,18 @@ function AdminPathwayDetails() {
         });
     } else {
       setLoading(true);
-      if (location.state.pathwayID) {
-        setPathway(location.state.pathwayID);
+      if (location.state.trainingID) {
+        setTraining(location.state.trainingID);
       }
       setLoading(false);
     }
-  }, [pathwayId, location.state]);
+  }, [trainingId, location.state]);
 
   useEffect(() => {
     filterVolunteers(volunteers);
   }, [searchQuery]);
 
-  const exportPathwayData = () => {
+  const exportTrainingData = () => {
     // Reset the snackbar
     setOpenSelectSnackbar(false);
 
@@ -258,16 +259,16 @@ function AdminPathwayDetails() {
 
     const header = columns.map((column) => column.headerName);
     const rowData = selectionModel.map((row) => {
-      const pathway = pathwayRows.find((pathway) => pathway.id === row);
-      if (pathway) {
+      const training = trainingRows.find((training) => training.id === row);
+      if (training) {
         return [
-          pathway.volunteerName,
-          pathway.email,
-          pathway.dateCompleted,
-          pathway.timeCompleted,
-          pathway.quizScore,
-          pathway.passFailStatus,
-          pathway.status,
+          training.volunteerName,
+          training.email,
+          training.dateCompleted,
+          training.timeCompleted,
+          training.quizScore,
+          training.passFailStatus,
+          training.status,
         ];
       }
     });
@@ -298,7 +299,7 @@ function AdminPathwayDetails() {
         <div className={styles.outerContainer}>
           <div className={styles.content}>
             <div className={styles.header}>
-              <h1 className={styles.nameHeading}>Pathway Details</h1>
+              <h1 className={styles.nameHeading}>Training Details</h1>
               <div className={styles.profileIcon}>
                 <ProfileIcon />
               </div>
@@ -310,31 +311,35 @@ function AdminPathwayDetails() {
               <>
                 <div className={styles.volunteerInfo}>
                   <div>
-                    <h2 className={styles.text}>{pathway.name}</h2>
+                    <h2 className={styles.text}>{training.name}</h2>
                   </div>
                   <br></br>
                   <div>
-                    <b className={styles.text}>Included Trainings: </b>
-                    <div className={styles.relatedTrainings}>
-                      {displayedTrainings.map((training, idx) => (
-                        <div
-                          className={`${styles.marker} ${styles.pathwayMarker}`}
-                          onClick={() => {
-                            navigate(`/management/training/${training.id}`);
-                          }}
-                          key={idx}>
-                          {training.name}
-                        </div>
-                      ))}
+                    <b className={styles.text}>Part of Pathways: </b>
+                    {displayedPathways.length === 0 ? (
+                      <p>This training is not a part of any pathway.</p>
+                    ) : (
+                      <div className={styles.relatedPathways}>
+                        {displayedPathways.map((pathway, idx) => (
+                          <div
+                            className={`${styles.marker} ${styles.pathwayMarker}`}
+                            onClick={() => {
+                              navigate(`/management/pathway/${pathway.id}`);
+                            }}
+                            key={idx}>
+                            {pathway.name}
+                          </div>
+                        ))}
 
-                      {trainingNames.length > 4 && (
-                        <button
-                          onClick={() => setShowMore(!showMore)}
-                          className={styles.toggleButton}>
-                          {showMore ? "SEE LESS" : "SEE MORE"}
-                        </button>
-                      )}
-                    </div>
+                        {pathwayNames.length > 4 && (
+                          <button
+                            onClick={() => setShowMore(!showMore)}
+                            className={styles.toggleButton}>
+                            {showMore ? "SEE LESS" : "SEE MORE"}
+                          </button>
+                        )}
+                      </div>
+                    )}
                   </div>
                   <br></br>
                   <div>
@@ -364,7 +369,7 @@ function AdminPathwayDetails() {
                       fontWeight: "bold",
                       width: "375px",
                     }}
-                    onClick={exportPathwayData}>
+                    onClick={exportTrainingData}>
                     Export
                   </Button>
                 </div>
@@ -373,7 +378,7 @@ function AdminPathwayDetails() {
                   <>
                     <div className={styles.innerGrid}>
                       <DataGrid
-                        rows={pathwayRows}
+                        rows={trainingRows}
                         columns={columns}
                         rowHeight={40}
                         checkboxSelection
@@ -406,7 +411,7 @@ function AdminPathwayDetails() {
                     onClick={() =>
                       navigate("/management", {
                         state: {
-                          fromPage: "pathway",
+                          fromPage: "training",
                         },
                       })
                     }>
@@ -436,4 +441,4 @@ function AdminPathwayDetails() {
   );
 }
 
-export default AdminPathwayDetails;
+export default AdminTrainingDetailsPage;

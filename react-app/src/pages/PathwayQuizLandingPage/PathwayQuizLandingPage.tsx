@@ -2,7 +2,7 @@ import { useLocation, Navigate, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { PathwayID } from "../../types/PathwayType";
 import { type VolunteerPathway } from "../../types/UserType";
-import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import VolunteerNavigationBar from "../../components/VolunteerNavigationBar/VolunteerNavigationBar.tsx";
 import styles from "./PathwayQuizLandingPage.module.css";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Loading from "../../components/LoadingScreen/Loading.tsx";
@@ -81,7 +81,10 @@ function PathwayQuizLandingPage() {
 
   return (
     <>
-      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <VolunteerNavigationBar
+        open={navigationBarOpen}
+        setOpen={setNavigationBarOpen}
+      />
       <div
         className={`${styles.split} ${styles.right}`}
         style={{

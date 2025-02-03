@@ -7,7 +7,7 @@ import { validatePathwayQuiz } from "../../backend/FirestoreCalls";
 import { Pathway } from "../../types/PathwayType";
 import { VolunteerPathway } from "../../types/UserType";
 import styles from "./PathwayQuizPage.module.css";
-import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import VolunteerNavigationBar from "../../components/VolunteerNavigationBar/VolunteerNavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import QuizCard from "../../components/QuizCard/QuizCard";
 import Loading from "../../components/LoadingScreen/Loading";
@@ -148,7 +148,10 @@ function PathwayQuizPage() {
 
   return (
     <>
-      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <VolunteerNavigationBar
+        open={navigationBarOpen}
+        setOpen={setNavigationBarOpen}
+      />
       <div
         className={`${styles.split} ${styles.right}`}
         style={{

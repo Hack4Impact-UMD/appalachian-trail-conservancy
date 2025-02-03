@@ -25,10 +25,10 @@ import { useAuth } from "../../auth/AuthProvider.tsx";
 import styles from "./PathwayLibraryPage.module.css";
 import Loading from "../../components/LoadingScreen/Loading.tsx";
 import debounce from "lodash.debounce";
-import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import VolunteerNavigationBar from "../../components/VolunteerNavigationBar/VolunteerNavigationBar.tsx";
 import hamburger from "../../assets/hamburger.svg";
 import Footer from "../../components/Footer/Footer";
-import PathwayCard from "../../components/PathwayCard/PathwayCard";
+import VolunteerPathwayCard from "../../components/VolunteerPathwayCard/VolunteerPathwayCard.tsx";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 
 function PathwayLibrary() {
@@ -169,7 +169,7 @@ function PathwayLibrary() {
   return (
     <>
       <div className={popupOpen ? styles.popupOpen : ""}>
-        <NavigationBar open={open} setOpen={setOpen} />
+        <VolunteerNavigationBar open={open} setOpen={setOpen} />
       </div>
       <div
         className={`${styles.split} ${styles.right}`}
@@ -279,7 +279,7 @@ function PathwayLibrary() {
                   <div className={styles.cardsContainer}>
                     {filteredPathways.map((pathway, index) => (
                       <div className={styles.card} key={index}>
-                        <PathwayCard
+                        <VolunteerPathwayCard
                           pathway={pathway.genericPathway}
                           volunteerPathway={pathway.volunteerPathway}
                           preview={false}

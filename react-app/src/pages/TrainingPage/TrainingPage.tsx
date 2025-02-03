@@ -6,9 +6,9 @@ import { TrainingID } from "../../types/TrainingType";
 import { VolunteerTraining } from "../../types/UserType";
 import { updateVolunteerTraining } from "../../backend/FirestoreCalls";
 import styles from "./TrainingPage.module.css";
-import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import VolunteerNavigationBar from "../../components/VolunteerNavigationBar/VolunteerNavigationBar.tsx";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
-import ResourceComponent from "../../components/ResourceComponent/ResourceComponent";
+import ResourceComponent from "../../components/ResourceComponent/ResourceComponent.tsx";
 import Loading from "../../components/LoadingScreen/Loading.tsx";
 import hamburger from "../../assets/hamburger.svg";
 
@@ -125,7 +125,10 @@ function TrainingPage() {
 
   return (
     <>
-      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <VolunteerNavigationBar
+        open={navigationBarOpen}
+        setOpen={setNavigationBarOpen}
+      />
       <div
         className={`${styles.split} ${styles.right}`}
         style={{

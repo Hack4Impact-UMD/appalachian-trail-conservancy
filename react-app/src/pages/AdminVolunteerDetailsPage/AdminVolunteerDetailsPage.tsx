@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import styles from "./AdminVolunteerDetails.module.css";
+import styles from "./AdminVolunteerDetailsPage.module.css";
 import {
   Button,
   InputAdornment,
@@ -53,7 +53,7 @@ import { PathwayID } from "../../types/PathwayType.ts";
 import DeleteUserPopup from "./AdminDeleteUserPopup/AdminDeleteUserPopup.tsx";
 import Loading from "../../components/LoadingScreen/Loading.tsx";
 
-function AdminVolunteerDetails() {
+function AdminVolunteerDetailsPage() {
   const navigate = useNavigate();
 
   const handleAlignment = (
@@ -654,4 +654,4 @@ function AdminVolunteerDetails() {
   );
 }
 
-export default AdminVolunteerDetails;
+export default AdminVolunteerDetailsPage;

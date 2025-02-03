@@ -15,8 +15,8 @@ import { TrainingID } from "../../types/TrainingType";
 import { VolunteerTraining, VolunteerPathway } from "../../types/UserType";
 import { PathwayID } from "../../types/PathwayType";
 import { DateTime } from "luxon";
-import styles from "./AchievementsPage.module.css";
-import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import styles from "./VolunteerAchievementsPage.module.css";
+import VolunteerNavigationBar from "../../components/VolunteerNavigationBar/VolunteerNavigationBar";
 import hamburger from "../../assets/hamburger.svg";
 
 import Footer from "../../components/Footer/Footer";
@@ -27,7 +27,7 @@ import Badge from "../../components/BadgeCard/BadgeCard";
 import { useNavigate, useLocation } from "react-router-dom";
 import Loading from "../../components/LoadingScreen/Loading";
 
-function AchievementsPage() {
+function VolunteerAchievementsPage() {
   const auth = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -206,7 +206,10 @@ function AchievementsPage() {
 
   return (
     <>
-      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <VolunteerNavigationBar
+        open={navigationBarOpen}
+        setOpen={setNavigationBarOpen}
+      />
       <div
         className={`${styles.split} ${styles.right}`}
         style={{
@@ -369,4 +372,4 @@ function AchievementsPage() {
   );
 }
 
-export default AchievementsPage;
+export default VolunteerAchievementsPage;

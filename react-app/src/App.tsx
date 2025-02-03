@@ -10,7 +10,7 @@ import NotFoundPage from "./pages/NotFoundPage/NotFoundPage.tsx";
 import TrainingLibrary from "./pages/TrainingLibraryPage/TrainingLibraryPage.tsx";
 import VolunteerLoginPage from "./pages/LoginPage/VolunteerLoginPage/VolunteerLoginPage.tsx";
 import AdminLoginPage from "./pages/LoginPage/AdminLoginPage/AdminLoginPage.tsx";
-import AchievementsPage from "./pages/AchievementsPage/AchievementsPage.tsx";
+import VolunteerAchievementsPage from "./pages/VolunteerAchievementsPage/VolunteerAchievementsPage.tsx";
 import TrainingPage from "./pages/TrainingPage/TrainingPage.tsx";
 import TrainingLandingPage from "./pages/TrainingLandingPage/TrainingLandingPage.tsx";
 import PathwayLandingPage from "./pages/PathwayLandingPage/PathwayLandingPage.tsx";
@@ -25,7 +25,7 @@ import PathwayLibrary from "./pages/PathwayLibraryPage/PathwayLibraryPage.tsx";
 import PathwayQuizLandingPage from "./pages/PathwayQuizLandingPage/PathwayQuizLandingPage.tsx";
 import PathwayQuizPage from "./pages/PathwayQuizPage/PathwayQuizPage.tsx";
 import PathwayQuizResultPage from "./pages/PathwayQuizResultPage/PathwayQuizResultPage.tsx";
-import AdminTrainingEditor from "./pages/AdminTrainingEditor/AdminTrainingEditor.tsx";
+import AdminTrainingEditorPage from "./pages/AdminTrainingEditorPage/AdminTrainingEditorPage.tsx";
 import AdminPathwayEditorPage from "./pages/AdminPathwayEditorPage/AdminPathwayEditorPage.tsx";
 import RegistrationPage from "./pages/RegistrationPage/RegistrationPage/RegistrationPage.tsx";
 import RegistrationConfirmationPage from "./pages/RegistrationPage/RegistrationConfirmationPage/RegistrationConfirmationPage.tsx";
@@ -35,12 +35,12 @@ import AdminDashboard from "./pages/AdminDashboardPage/AdminDashboardPage.tsx";
 import AdminTrainingLibrary from "./pages/AdminTrainingLibraryPage/AdminTrainingLibraryPage.tsx";
 import AdminPathwayLibrary from "./pages/AdminPathwayLibraryPage/AdminPathwayLibraryPage.tsx";
 import AdminRegistrationManagementPage from "./pages/AdminRegistrationManagementPage/AdminRegistrationManagementPage.tsx";
-import AdminUserManagement from "./pages/AdminUserManagement/AdminUserManagement.tsx";
+import AdminUserManagementPage from "./pages/AdminUserManagementPage/AdminUserManagementPage.tsx";
 import VolunteerProfilePage from "./pages/VolunteerProfilePage/VolunteerProfilePage.tsx";
 import AdminProfilePage from "./pages/AdminProfilePage/AdminProfilePage.tsx";
-import AdminVolunteerDetails from "./pages/AdminVolunteerDetails/AdminVolunteerDetails.tsx";
-import AdminPathwayDetails from "./pages/AdminPathwayDetails/AdminPathwayDetails.tsx";
-import AdminTrainingDetails from "./pages/AdminTrainingDetails/AdminTrainingDetails.tsx";
+import AdminVolunteerDetailsPage from "./pages/AdminVolunteerDetailsPage/AdminVolunteerDetailsPage.tsx";
+import AdminPathwayDetailsPage from "./pages/AdminPathwayDetailsPage/AdminPathwayDetailsPage.tsx";
+import AdminTrainingDetailsPage from "./pages/AdminTrainingDetailsPage/AdminTrainingDetailsPage.tsx";
 
 interface RoleBasedRouteProps {
   adminComponent: JSX.Element;
@@ -137,7 +137,7 @@ function App() {
               path="/trainings/editor"
               element={
                 <RequireAdminAuth>
-                  <AdminTrainingEditor />
+                  <AdminTrainingEditorPage />
                 </RequireAdminAuth>
               }
             />
@@ -210,7 +210,7 @@ function App() {
               path="/achievements"
               element={
                 <RequireVolunteerAuth>
-                  <AchievementsPage />
+                  <VolunteerAchievementsPage />
                 </RequireVolunteerAuth>
               }
             />
@@ -218,7 +218,7 @@ function App() {
               path="/management"
               element={
                 <RequireAdminAuth>
-                  <AdminUserManagement />
+                  <AdminUserManagementPage />
                 </RequireAdminAuth>
               }
             />
@@ -226,7 +226,7 @@ function App() {
               path="/management/volunteer/:id"
               element={
                 <RequireAdminAuth>
-                  <AdminVolunteerDetails />
+                  <AdminVolunteerDetailsPage />
                 </RequireAdminAuth>
               }
             />
@@ -234,7 +234,7 @@ function App() {
               path="/management/pathway/:id"
               element={
                 <RequireAdminAuth>
-                  <AdminPathwayDetails />
+                  <AdminPathwayDetailsPage />
                 </RequireAdminAuth>
               }
             />
@@ -242,7 +242,7 @@ function App() {
               path="/management/training/:id"
               element={
                 <RequireAdminAuth>
-                  <AdminTrainingDetails />
+                  <AdminTrainingDetailsPage />
                 </RequireAdminAuth>
               }
             />

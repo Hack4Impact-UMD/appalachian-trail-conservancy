@@ -11,12 +11,12 @@ import { PathwayID } from "../../types/PathwayType";
 import { VolunteerPathway, VolunteerTraining } from "../../types/UserType";
 import { Button } from "@mui/material";
 import { forestGreenButtonPadding } from "../../muiTheme";
-import TrainingCard from "../../components/TrainingCard/TrainingCard";
-import PathwayCard from "../../components/PathwayCard/PathwayCard";
+import VolunteerTrainingCard from "../../components/VolunteerTrainingCard/VolunteerTrainingCard";
+import VolunteerPathwayCard from "../../components/VolunteerPathwayCard/VolunteerPathwayCard";
 import styles from "./DashboardPage.module.css";
 import Certificate from "../../components/CertificateCard/CertificateCard";
 import Badge from "../../components/BadgeCard/BadgeCard";
-import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import VolunteerNavigationBar from "../../components/VolunteerNavigationBar/VolunteerNavigationBar";
 import Loading from "../../components/LoadingScreen/Loading";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Footer from "../../components/Footer/Footer";
@@ -357,7 +357,7 @@ function Dashboard() {
   return (
     <>
       <div className={popupOpen ? styles.popupOpen : ""}>
-        <NavigationBar
+        <VolunteerNavigationBar
           open={navigationBarOpen}
           setOpen={setNavigationBarOpen}
         />
@@ -423,7 +423,7 @@ function Dashboard() {
                       {displayPathwayItems("card", pathwaysInProgress).map(
                         (pathway, index) => (
                           <div className={styles.card} key={index}>
-                            <PathwayCard
+                            <VolunteerPathwayCard
                               pathway={pathway.genericPathway}
                               volunteerPathway={pathway.volunteerPathway}
                               preview={false}
@@ -449,7 +449,7 @@ function Dashboard() {
                       {displayTrainingItems("card", trainingsInProgress).map(
                         (training, index) => (
                           <div className={styles.card} key={index}>
-                            <TrainingCard
+                            <VolunteerTrainingCard
                               training={training.genericTraining}
                               volunteerTraining={training.volunteerTraining}
                               preview={false}
@@ -543,7 +543,7 @@ function Dashboard() {
                         {displayTrainingCard(recommendedTrainings).map(
                           (training, index) => (
                             <div className={styles.card} key={index}>
-                              <TrainingCard
+                              <VolunteerTrainingCard
                                 training={training}
                                 preview={false}
                                 setPopupOpen={setPopupOpen}
@@ -569,7 +569,7 @@ function Dashboard() {
                         {displayPathwayCard(recommendedPathways).map(
                           (pathway, index) => (
                             <div className={styles.card} key={index}>
-                              <PathwayCard
+                              <VolunteerPathwayCard
                                 pathway={pathway}
                                 preview={false}
                                 setPopupOpen={setPopupOpen}

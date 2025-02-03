@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./QuizResultPage.module.css";
 import QuizResultCard from "../../components/QuizResultCard/QuizResultCard";
 import Certificate from "../../components/CertificateCard/CertificateCard";
-import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import VolunteerNavigationBar from "../../components/VolunteerNavigationBar/VolunteerNavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import { Training } from "../../types/TrainingType";
 import { VolunteerTraining } from "../../types/UserType";
@@ -93,7 +93,10 @@ const QuizResultPage = () => {
 
   return (
     <>
-      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <VolunteerNavigationBar
+        open={navigationBarOpen}
+        setOpen={setNavigationBarOpen}
+      />
       <div
         className={`${styles.split} ${styles.right}`}
         style={{

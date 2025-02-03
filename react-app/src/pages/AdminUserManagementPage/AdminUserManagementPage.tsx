@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import styles from "./AdminUserManagement.module.css";
+import styles from "./AdminUserManagementPage.module.css";
 import {
   Button,
   InputAdornment,
@@ -15,7 +15,7 @@ import {
   getVolunteers,
   getAllTrainings,
   getAllPathways,
-} from "../../backend/FirestoreCalls";
+} from "../../backend/FirestoreCalls.ts";
 import {
   managementVolunteerType,
   managementTrainingType,
@@ -48,15 +48,15 @@ import {
   DataGridStyles,
   whiteSelectGrayBorder,
   selectOptionStyle,
-} from "../../muiTheme";
+} from "../../muiTheme.ts";
 import debounce from "lodash.debounce";
 import hamburger from "../../assets/hamburger.svg";
-import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar";
-import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
-import Footer from "../../components/Footer/Footer";
+import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar.tsx";
+import ProfileIcon from "../../components/ProfileIcon/ProfileIcon.tsx";
+import Footer from "../../components/Footer/Footer.tsx";
 import { useLocation, useNavigate } from "react-router-dom";
 
-function AdminUserManagement() {
+function AdminUserManagementPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const [loading, setLoading] = useState<boolean>(true);
@@ -518,4 +518,4 @@ function AdminUserManagement() {
   );
 }
 
-export default AdminUserManagement;
+export default AdminUserManagementPage;

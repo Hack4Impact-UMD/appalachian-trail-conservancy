@@ -8,7 +8,7 @@ import { Training } from "../../types/TrainingType";
 import { type VolunteerTraining } from "../../types/UserType";
 import { useAuth } from "../../auth/AuthProvider";
 import styles from "./QuizLandingPage.module.css";
-import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import VolunteerNavigationBar from "../../components/VolunteerNavigationBar/VolunteerNavigationBar.tsx";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Loading from "../../components/LoadingScreen/Loading.tsx";
 import hamburger from "../../assets/hamburger.svg";
@@ -85,7 +85,10 @@ function QuizLandingPage() {
 
   return (
     <>
-      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <VolunteerNavigationBar
+        open={navigationBarOpen}
+        setOpen={setNavigationBarOpen}
+      />
 
       <div
         className={`${styles.split} ${styles.right}`}

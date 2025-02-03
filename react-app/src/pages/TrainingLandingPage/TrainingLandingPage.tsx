@@ -12,7 +12,7 @@ import {
 import { Button } from "@mui/material";
 import { useAuth } from "../../auth/AuthProvider";
 import styles from "./TrainingLandingPage.module.css";
-import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import VolunteerNavigationBar from "../../components/VolunteerNavigationBar/VolunteerNavigationBar";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import CompletedIcon from "../../assets/completedCheck.svg";
 import Loading from "../../components/LoadingScreen/Loading";
@@ -331,7 +331,10 @@ function TrainingLandingPage() {
 
   return (
     <>
-      <NavigationBar open={navigationBarOpen} setOpen={setNavigationBarOpen} />
+      <VolunteerNavigationBar
+        open={navigationBarOpen}
+        setOpen={setNavigationBarOpen}
+      />
 
       <div
         className={`${styles.split} ${styles.right}`}

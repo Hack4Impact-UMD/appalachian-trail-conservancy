@@ -26,10 +26,10 @@ import { useAuth } from "../../auth/AuthProvider.tsx";
 import styles from "./TrainingLibraryPage.module.css";
 import Loading from "../../components/LoadingScreen/Loading.tsx";
 import debounce from "lodash.debounce";
-import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import VolunteerNavigationBar from "../../components/VolunteerNavigationBar/VolunteerNavigationBar.tsx";
 import hamburger from "../../assets/hamburger.svg";
 import Footer from "../../components/Footer/Footer";
-import TrainingCard from "../../components/TrainingCard/TrainingCard";
+import VolunteerTrainingCard from "../../components/VolunteerTrainingCard/VolunteerTrainingCard.tsx";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 
 function TrainingLibrary() {
@@ -228,7 +228,7 @@ function TrainingLibrary() {
   return (
     <>
       <div className={popupOpen ? styles.popupOpen : ""}>
-        <NavigationBar open={open} setOpen={setOpen} />
+        <VolunteerNavigationBar open={open} setOpen={setOpen} />
       </div>
 
       <div
@@ -339,7 +339,7 @@ function TrainingLibrary() {
                   <div className={styles.cardsContainer}>
                     {filteredTrainings.map((training, index) => (
                       <div className={styles.card} key={index}>
-                        <TrainingCard
+                        <VolunteerTrainingCard
                           training={training.genericTraining}
                           volunteerTraining={training.volunteerTraining}
                           preview={false}

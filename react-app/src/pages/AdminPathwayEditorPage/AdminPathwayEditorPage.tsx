@@ -36,7 +36,7 @@ import hamburger from "../../assets/hamburger.svg";
 import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar";
 import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
-import PathwayCard from "../../components/PathwayCard/PathwayCard";
+import VolunteerPathwayCard from "../../components/VolunteerPathwayCard/VolunteerPathwayCard";
 import Badge from "../../components/BadgeCard/BadgeCard";
 import AdminDeletePathwayDraftPopup from "./AdminDeletePathwayDraftPopup/AdminDeletePathwayDraftPopup";
 import { IoCloseOutline } from "react-icons/io5";
@@ -738,7 +738,7 @@ const AdminPathwayEditorPage: React.FC = () => {
                 </div>
                 {(coverImage || uploadedImage) && (
                   <div className={styles.previewSection}>
-                    <PathwayCard
+                    <VolunteerPathwayCard
                       pathway={{
                         id: pathwayId!,
                         name: pathwayName,

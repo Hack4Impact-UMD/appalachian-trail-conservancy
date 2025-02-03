@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styles from "./PathwayCard.module.css";
+import styles from "./VolunteerPathwayCard.module.css";
 import LinearProgressWithLabel from "../LinearProgressWithLabel/LinearProgressWithLabel";
 import pathwayCard from "../../assets/pathwayCard.svg";
 import { useNavigate } from "react-router-dom";
@@ -16,7 +16,7 @@ interface PathwayCardProps {
   setPopupOpen?: any;
 }
 
-const PathwayCard: React.FC<PathwayCardProps> = ({
+const VolunteerPathwayCard: React.FC<PathwayCardProps> = ({
   pathway,
   volunteerPathway,
   preview,
@@ -110,4 +110,4 @@ const PathwayCard: React.FC<PathwayCardProps> = ({
   );
 };
 
-export default PathwayCard;
+export default VolunteerPathwayCard;
