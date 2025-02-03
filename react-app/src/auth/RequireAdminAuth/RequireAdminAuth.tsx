@@ -1,6 +1,6 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import { AuthProvider, useAuth } from "../AuthProvider";
+import { useAuth } from "../AuthProvider";
 import styles from "./RequireAdminAuth.module.css";
 import Loading from "../../components/LoadingScreen/Loading";
 
