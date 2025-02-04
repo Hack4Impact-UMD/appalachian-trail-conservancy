@@ -13,8 +13,8 @@ import {
 import { db } from "../config/firebase";
 import { EmailType, RegistrationCodeType } from "../types/AssetsType";
 import { Admin, VolunteerID } from "../types/UserType";
-import { Training, TrainingID, Quiz } from "../types/TrainingType";
-import { Pathway, PathwayID } from "../types/PathwayType";
+import { Training } from "../types/TrainingType";
+import { Pathway } from "../types/PathwayType";
 
 export function getAdmin(id: string): Promise<Admin> {
   return new Promise((resolve, reject) => {
