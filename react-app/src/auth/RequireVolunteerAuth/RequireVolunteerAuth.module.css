@@ -7,6 +7,46 @@
   justify-content: center;
 }
 
-.errorMessage {
+.logoImg {
+  width: 240px;
+  height: 240px;
+  margin: auto;
+}
+
+/* center content */
+.content {
   text-align: center;
+  color: var(--blue-gray);
+}
+
+/* permission denied */
+.content h2 {
+  font-size: 3rem;
+  margin: 1%;
+  margin-top: 2rem;
+}
+
+/* message */
+.content p {
+  font-size: 1.25rem;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+@media screen and (max-height: 750px) {
+  .logoImg {
+    width: 150px;
+    height: 150px;
+  }
+
+  .content h1 {
+    font-size: 4rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
 }

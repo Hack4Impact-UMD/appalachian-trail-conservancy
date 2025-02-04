@@ -12,7 +12,7 @@ const Badge: React.FC<BadgeProps> = ({ image, title, date }) => {
   // Parse input date
   const parsedDate = DateTime.fromISO(date);
   const formattedDate = parsedDate.toFormat("MMMM dd, yyyy").toUpperCase();
-  
+
   return (
     <div className={styles.badgeCard}>
       <div className={styles.badgeImageWrapper}>

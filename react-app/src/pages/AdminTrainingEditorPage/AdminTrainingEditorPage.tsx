@@ -1,143 +1,94 @@
-import React, { useState, useRef, useEffect } from "react";
-import styles from "./AdminPathwayEditorPage.module.css";
+import React, { useState, useEffect, useRef } from "react";
+import styles from "./AdminTrainingEditorPage.module.css";
 import { useNavigate, useLocation } from "react-router-dom";
-import { storage } from "../../config/firebase";
+import {
+  OutlinedInput,
+  Button,
+  MenuItem,
+  Select,
+  FormControl,
+  Typography,
+  Tooltip,
+  Snackbar,
+  Alert,
+} from "@mui/material";
 import {
   ref,
   uploadBytes,
   getDownloadURL,
   deleteObject,
 } from "firebase/storage";
+import { storage } from "../../config/firebase";
+import { addTraining, updateTraining } from "../../backend/AdminFirestoreCalls";
 import {
-  TextField,
-  OutlinedInput,
-  Button,
-  Typography,
-  Tooltip,
-  Autocomplete,
-  Snackbar,
-  Alert,
-} from "@mui/material";
-import {
-  grayButton,
-  forestGreenButton,
-  styledRectButton,
-  whiteTooltip,
-  autocompleteText,
-  whiteSelectGrayBorder,
-  whiteButtonGrayBorder,
-  whiteButtonRedBorder,
-  inputHeaderText,
-  inputHelperText,
-  grayBorderTextField,
-} from "../../muiTheme";
-import AddIcon from "@mui/icons-material/Add";
+  TrainingID,
+  Training,
+  TrainingResource,
+  Status,
+} from "../../types/TrainingType";
 import hamburger from "../../assets/hamburger.svg";
 import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar";
 import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
-import VolunteerPathwayCard from "../../components/VolunteerPathwayCard/VolunteerPathwayCard";
-import Badge from "../../components/BadgeCard/BadgeCard";
-import AdminDeletePathwayDraftPopup from "./AdminDeletePathwayDraftPopup/AdminDeletePathwayDraftPopup";
-import { IoCloseOutline } from "react-icons/io5";
+import AdminDeleteTrainingDraftPopup from "./AdminDeleteTrainingDraftPopup/AdminDeleteTrainingDraftPopup";
+import VolunteerTrainingCard from "../../components/VolunteerTrainingCard/VolunteerTrainingCard";
+import Certificate from "../../components/CertificateCard/CertificateCard";
 import { LuUpload } from "react-icons/lu";
+import { IoCloseOutline } from "react-icons/io5";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import { Pathway, PathwayID, Status } from "../../types/PathwayType";
-import { TrainingID } from "../../types/TrainingType";
-import { getAllPublishedTrainings } from "../../backend/VolunteerFirestoreCalls";
-import { addPathway, updatePathway } from "../../backend/AdminFirestoreCalls";
-
+import {
+  grayButton,
+  styledRectButton,
+  forestGreenButton,
+  whiteButtonGrayBorder,
+  whiteSelectGrayBorder,
+  selectOptionStyle,
+  inputHeaderText,
+  inputHelperText,
+  grayBorderTextField,
+  whiteButtonRedBorder,
+  whiteTooltip,
+} from "../../muiTheme";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 
-const AdminPathwayEditorPage: React.FC = () => {
-  const navigate = useNavigate();
+const AdminTrainingEditorPage: React.FC = () => {
   const location = useLocation();
-  const pathwayData = location.state?.pathway as PathwayID | undefined;
-  const [pathwayId, setPathwayId] = useState<string | undefined>(
-    pathwayData?.id
+  const trainingData = location.state?.training as TrainingID | undefined;
+  const navigate = useNavigate();
+  const [trainingId, setTrainingId] = useState<string | undefined>(
+    trainingData?.id
   );
-  const status = pathwayData?.status || ("DRAFT" as Status);
-  const [pathwayName, setPathwayName] = useState<string>(
-    pathwayData?.name || ""
+  const status = trainingData?.status || ("DRAFT" as Status);
+  const [trainingName, setTrainingName] = useState<string>(
+    trainingData?.name || ""
   );
-  const [blurb, setBlurb] = useState<string>(pathwayData?.shortBlurb || "");
+  const [blurb, setBlurb] = useState<string>(trainingData?.shortBlurb || "");
   const [description, setDescription] = useState<string>(
-    pathwayData?.description || ""
+    trainingData?.description || ""
   );
   const [descriptionPlain, setDescriptionPlain] = useState<string>(
-    pathwayData?.description.replace(/<[^>]*>/g, "") || ""
+    trainingData?.description.replace(/<[^>]*>/g, "") || ""
+  );
+  const [resourceTitle, setResourceTitle] = useState<string>(
+    trainingData?.resources[0]?.title || ""
+  );
+  const [resourceLink, setResourceLink] = useState<string>(
+    trainingData?.resources[0]?.link || ""
+  );
+  const [resourceType, setResourceType] = useState<string>(
+    trainingData?.resources[0]?.type || ""
   );
   const [coverImage, setCoverImage] = useState<string>(
-    pathwayData?.coverImage || ""
+    trainingData?.coverImage || ""
   );
+
   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
-
-  const blankTraining: TrainingID = {
-    name: "",
-    id: "",
-    shortBlurb: "",
-    description: "",
-    coverImage: "",
-    resources: [],
-    quiz: {
-      questions: [],
-      numQuestions: 0,
-      passingScore: 0,
-    },
-    associatedPathways: [],
-    status: "PUBLISHED",
-  };
-
-  const [selectedTrainings, setSelectedTrainings] = useState<TrainingID[]>([
-    blankTraining,
-  ]);
-  const [trainingOptions, setTrainingOptions] = useState<TrainingID[]>([]);
-  const [errorTrainings, setErrorTrainings] = useState<number[]>([]);
 
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
   );
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
-
-  const handleAddSearchBar = () => {
-    setSelectedTrainings([...selectedTrainings, blankTraining]);
-  };
-
-  const handleTrainingSelection = (
-    selectedTraining: TrainingID | null,
-    index: number
-  ) => {
-    const newTrainings = [...selectedTrainings];
-    newTrainings[index] = selectedTraining ?? blankTraining;
-    setSelectedTrainings(newTrainings);
-  };
-
-  const handleDeleteSearchBar = (index: number) => {
-    if (index > 0) {
-      const newTrainings = selectedTrainings.filter((_, i) => i !== index);
-      setSelectedTrainings(newTrainings);
-
-      // update list of questions with errors
-      if (errorTrainings.length !== 0) {
-        const newErrorTrainings = errorTrainings
-          .filter((errorIndex) => errorIndex !== index)
-          .map((errorIndex) =>
-            errorIndex > index ? errorIndex - 1 : errorIndex
-          );
-        setErrorTrainings(newErrorTrainings);
-      }
-    }
-  };
-
-  const [errors, setErrors] = useState({
-    pathwayName: "",
-    blurb: "",
-    description: "",
-    coverImage: "",
-    trainingIds: "",
-  });
-
   const [openDeleteDraftPopup, setOpenDeleteDraftPopup] =
     useState<boolean>(false);
 
@@ -145,13 +96,24 @@ const AdminPathwayEditorPage: React.FC = () => {
   const [snackbar, setSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
 
+  const [errors, setErrors] = useState({
+    trainingName: "",
+    blurb: "",
+    description: "",
+    coverImage: "",
+    resourceTitle: "",
+    resourceLink: "",
+    resourceType: "",
+  });
+
   const descriptionContainerRef = useRef<HTMLDivElement>(null);
   const quillDescriptionRef = useRef<Quill | null>(null);
 
   const characterLimits = {
-    pathwayName: 50,
+    trainingName: 70,
     blurb: 255,
     description: 1400,
+    resourceTitle: 50,
   };
 
   const changeUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -185,9 +147,9 @@ const AdminPathwayEditorPage: React.FC = () => {
         const downloadURL = await getDownloadURL(storageRef);
         setCoverImage(downloadURL);
 
-        if (pathwayData?.coverImage) {
+        if (trainingData?.coverImage) {
           // Delete previous image from firebase storage
-          const oldFileRef = ref(storage, pathwayData?.coverImage);
+          const oldFileRef = ref(storage, trainingData?.coverImage);
           await deleteObject(oldFileRef);
         }
 
@@ -196,28 +158,31 @@ const AdminPathwayEditorPage: React.FC = () => {
         return [false, ""];
       }
     } else {
-      if (coverImage == "" && pathwayData?.coverImage) {
+      if (coverImage == "" && trainingData?.coverImage) {
         // Delete previous image from firebase storage
-        const oldFileRef = ref(storage, pathwayData?.coverImage);
+        const oldFileRef = ref(storage, trainingData?.coverImage);
         await deleteObject(oldFileRef);
       }
     }
     return [true, coverImage];
   };
 
+  // make sure all fields are good before moving on
   const validateFields = (saveAsIs: boolean) => {
     const newErrors = {
-      pathwayName: "",
+      trainingName: "",
       blurb: "",
       description: "",
       coverImage: "",
-      trainingIds: "",
+      resourceTitle: "",
+      resourceLink: "",
+      resourceType: "",
     };
     let isValid = true;
 
     // Check for required fields
-    if (!pathwayName || pathwayName.trim() == "") {
-      newErrors.pathwayName = "Pathway name is required.";
+    if (!trainingName || trainingName.trim() == "") {
+      newErrors.trainingName = "Training name is required.";
       isValid = false;
     }
 
@@ -242,26 +207,26 @@ const AdminPathwayEditorPage: React.FC = () => {
       isValid = false;
     }
 
-    let newErrorTrainings = [];
-    if (!selectedTrainings || selectedTrainings.length === 0) {
-      newErrors.trainingIds = "At least one associated training is required.";
+    if (!resourceTitle || resourceTitle.trim() == "") {
+      newErrors.resourceTitle = "Resource Title is required.";
       isValid = false;
-    } else {
-      newErrorTrainings = selectedTrainings.reduce(
-        (indexes, training, index) => {
-          if (!training.name) {
-            indexes.push(index);
-          }
-          return indexes;
-        },
-        [] as number[]
-      );
+    }
 
-      if (newErrorTrainings.length > 0) {
-        setErrorTrainings(newErrorTrainings);
-        newErrors.trainingIds = "All associated trainings must be selected.";
-        isValid = false;
-      }
+    if (!resourceLink || resourceLink.trim() == "") {
+      newErrors.resourceLink = "Resource Link is required.";
+      isValid = false;
+    }
+
+    if (!resourceType) {
+      newErrors.resourceType = "Resource Type is required.";
+      isValid = false;
+    }
+
+    // Validate Resource Link if type is video
+    const youtubeRegex = /^https:\/\/www\.youtube\.com\/embed\/[\w-]+(\?.*)?$/;
+    if (resourceType === "VIDEO" && !youtubeRegex.test(resourceLink)) {
+      newErrors.resourceLink = "Please provide a valid embedded YouTube link.";
+      isValid = false;
     }
 
     setErrors(newErrors);
@@ -273,11 +238,13 @@ const AdminPathwayEditorPage: React.FC = () => {
     // Validate fields only if in edit mode
     if (validateFields(true)) {
       let blankErrors = {
-        pathwayName: "",
+        trainingName: "",
         blurb: "",
         description: "",
         coverImage: "",
-        trainingIds: "",
+        resourceTitle: "",
+        resourceLink: "",
+        resourceType: "",
       };
       setErrors(blankErrors);
 
@@ -291,48 +258,65 @@ const AdminPathwayEditorPage: React.FC = () => {
         return;
       }
 
-      if (pathwayId) {
-        // Update existing pathway
-        const { id, ...restOfPathwayData } = pathwayData as PathwayID;
-        const updatedPathway = {
-          ...restOfPathwayData,
-          name: pathwayName,
+      if (trainingId) {
+        // Update existing training
+        const { id, ...restOfTrainingData } = trainingData as TrainingID;
+        const updatedTraining = {
+          ...restOfTrainingData,
+          name: trainingName,
           shortBlurb: blurb,
           description: description,
           coverImage: imageUpload[1],
-          trainingIDs: selectedTrainings.map((training) => training.id),
+          resources: [
+            {
+              title: resourceTitle,
+              link: resourceLink,
+              type: resourceType,
+            } as TrainingResource,
+          ],
           status: status,
-        } as Pathway;
-
-        await updatePathway(updatedPathway, pathwayId);
+        } as Training;
+        await updateTraining(updatedTraining, trainingId);
         setLoading(false);
-        setSnackbarMessage("Pathway updated successfully.");
+        setSnackbarMessage("Training updated successfully.");
       } else {
         // Save as new draft
-        const updatedPathway = {
-          name: pathwayName,
+        const updatedTraining = {
+          name: trainingName,
           shortBlurb: blurb,
           description: description,
           coverImage: imageUpload[1],
-          trainingIDs: selectedTrainings.map((training) => training.id),
+          resources: [
+            {
+              title: resourceTitle,
+              link: resourceLink,
+              type: resourceType,
+            } as TrainingResource,
+          ],
           quiz: {
             questions: [],
             numQuestions: 0,
             passingScore: 0,
           },
+          associatedPathways: [],
           status: status,
-        } as Pathway;
-
-        const newPathwayId = (await addPathway(updatedPathway)) as
+        } as Training;
+        const newTrainingId = (await addTraining(updatedTraining)) as
           | string
           | undefined;
-        setPathwayId(newPathwayId);
+        setTrainingId(newTrainingId);
         setLoading(false);
         setSnackbarMessage("Draft saved successfully.");
       }
       setSnackbar(true);
     } else {
-      setSnackbarMessage("Please complete all required fields.");
+      if (
+        errors.resourceLink == "Please provide a valid embedded YouTube link."
+      ) {
+        setSnackbarMessage("Please provide a valid embedded YouTube link.");
+      } else {
+        setSnackbarMessage("Please complete all required fields.");
+      }
       setLoading(false);
       setSnackbar(true);
       return;
@@ -343,11 +327,13 @@ const AdminPathwayEditorPage: React.FC = () => {
     setLoading(true);
     if (validateFields(false)) {
       let blankErrors = {
-        pathwayName: "",
+        trainingName: "",
         blurb: "",
         description: "",
         coverImage: "",
-        trainingIds: "",
+        resourceTitle: "",
+        resourceLink: "",
+        resourceType: "",
       };
       setErrors(blankErrors);
 
@@ -361,63 +347,81 @@ const AdminPathwayEditorPage: React.FC = () => {
         return;
       }
 
-      if (pathwayId) {
-        // Update existing pathway
-        const { id, ...restOfPathwayData } = pathwayData as PathwayID;
-        const updatedPathway = {
-          ...restOfPathwayData,
-          name: pathwayName,
+      if (trainingId) {
+        const { id, ...restOfTrainingData } = trainingData as TrainingID;
+        const updatedTraining = {
+          ...restOfTrainingData,
+          name: trainingName,
           shortBlurb: blurb,
           description: description,
           coverImage: imageUpload[1],
-          trainingIDs: selectedTrainings.map((training) => training.id),
+          resources: [
+            {
+              title: resourceTitle,
+              link: resourceLink,
+              type: resourceType,
+            } as TrainingResource,
+          ],
           status: status,
-        } as Pathway;
+        } as Training;
 
-        await updatePathway(updatedPathway, pathwayId);
-        const updatedPathwayId: PathwayID = {
-          ...updatedPathway,
-          id: pathwayId,
-        };
+        await updateTraining(updatedTraining, trainingId);
         setLoading(false);
-        setSnackbarMessage("Pathway updated successfully.");
+        setSnackbarMessage("Training updated successfully.");
         setSnackbar(true);
 
-        // Navigate to the quiz editor with the pathway as state
-        navigate("/pathways/editor/quiz", {
-          state: { pathway: updatedPathwayId },
+        // Navigate to the quiz editor with the training as state
+        const updatedTrainingId: TrainingID = {
+          ...updatedTraining,
+          id: trainingId,
+        };
+        navigate("/trainings/editor/quiz", {
+          state: { training: updatedTrainingId },
         });
       } else {
-        const updatedPathway = {
-          name: pathwayName,
+        const updatedTraining = {
+          name: trainingName,
           shortBlurb: blurb,
           description: description,
           coverImage: imageUpload[1],
-          trainingIDs: selectedTrainings.map((training) => training.id),
+          resources: [
+            {
+              title: resourceTitle,
+              link: resourceLink,
+              type: resourceType,
+            } as TrainingResource,
+          ],
           quiz: {
             questions: [],
             numQuestions: 0,
             passingScore: 0,
           },
+          associatedPathways: [],
           status: status,
-        } as Pathway;
-        const newPathwayId = await addPathway(updatedPathway);
-        const updatedPathwayId: PathwayID = {
-          ...updatedPathway,
-          id: newPathwayId,
+        } as Training;
+        const newTrainingId = await addTraining(updatedTraining);
+        const updatedTrainingId: TrainingID = {
+          ...updatedTraining,
+          id: newTrainingId,
         };
-        setPathwayId(newPathwayId);
+        setTrainingId(newTrainingId);
         setLoading(false);
         setSnackbarMessage("Draft saved successfully.");
         setSnackbar(true);
 
-        // Navigate to the quiz editor with the new pathway as state
-        navigate("/pathways/editor/quiz", {
-          state: { pathway: updatedPathwayId },
+        // Navigate to the quiz editor with the new training as state
+        navigate("/trainings/editor/quiz", {
+          state: { training: updatedTrainingId },
         });
       }
     } else {
-      setSnackbarMessage("Please complete all required fields.");
+      if (
+        errors.resourceLink == "Please provide a valid embedded YouTube link."
+      ) {
+        setSnackbarMessage("Please provide a valid embedded YouTube link.");
+      } else {
+        setSnackbarMessage("Please complete all required fields.");
+      }
       setLoading(false);
       setSnackbar(true);
     }
@@ -494,26 +498,6 @@ const AdminPathwayEditorPage: React.FC = () => {
     }
   }, []);
 
-  useEffect(() => {
-    setLoading(true);
-    getAllPublishedTrainings().then((trainings) => {
-      // Sort trainings in alphabetical order by name
-      const sortedTrainings = trainings.sort((a, b) =>
-        a.name.localeCompare(b.name)
-      );
-
-      if (pathwayData?.trainingIDs) {
-        // set selected trainings
-        const selected = sortedTrainings.filter((training) =>
-          pathwayData?.trainingIDs.includes(training.id)
-        );
-        setSelectedTrainings(selected);
-      }
-      setTrainingOptions(sortedTrainings);
-      setLoading(false);
-    });
-  }, [pathwayData]);
-
   return (
     <>
       <div className={openDeleteDraftPopup ? styles.popupOpen : ""}>
@@ -540,10 +524,9 @@ const AdminPathwayEditorPage: React.FC = () => {
 
         <div className={styles.container}>
           <div className={styles.content}>
-            {/* Heading */}
             <div className={styles.header}>
               <div className={styles.headerTitle}>
-                <h1 className={styles.nameHeading}>Pathway Editor</h1>
+                <h1 className={styles.headerText}>Training Editor</h1>
                 <div>{renderMarker()}</div>
               </div>
               <div className={styles.profileIcon}>
@@ -551,7 +534,6 @@ const AdminPathwayEditorPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Input Boxes */}
             <form className={styles.formContent} noValidate>
               <div className={styles.topButtonContainer}>
                 <Button
@@ -579,42 +561,41 @@ const AdminPathwayEditorPage: React.FC = () => {
                 )}
               </div>
 
-              {/* Pathway Name */}
+              {/* Training Name */}
               <div className={styles.inputBoxHeader}>
                 <Typography
                   variant="body2"
                   sx={{ ...inputHeaderText, marginTop: "2rem" }}>
-                  PATHWAY NAME
+                  TRAINING NAME
                 </Typography>
 
                 <Typography variant="body2" sx={inputHelperText}>
                   {Math.max(
-                    characterLimits.pathwayName - pathwayName.length,
+                    characterLimits.trainingName - trainingName.length,
                     0
                   )}{" "}
                   Characters Remaining
                 </Typography>
               </div>
-
               <OutlinedInput
-                value={pathwayName}
+                value={trainingName}
                 onChange={(e) => {
                   const newValue = e.target.value;
-                  if (newValue.length <= characterLimits.pathwayName) {
-                    setPathwayName(newValue);
+                  if (newValue.length <= characterLimits.trainingName) {
+                    setTrainingName(newValue);
                   }
                 }}
-                error={Boolean(errors.pathwayName)}
+                error={Boolean(errors.trainingName)}
                 sx={{
                   ...grayBorderTextField,
                   width: "100%",
-                  border: errors.pathwayName
+                  border: errors.trainingName
                     ? "2px solid var(--hazard-red)"
                     : "2px solid var(--blue-gray)",
                 }}
               />
 
-              {/* Pathway Blurb */}
+              {/* Training Blurb */}
               <div className={styles.inputBoxHeader}>
                 <Typography
                   variant="body2"
@@ -653,7 +634,7 @@ const AdminPathwayEditorPage: React.FC = () => {
                 rows={3}
               />
 
-              {/* Pathway Description */}
+              {/* Training Description */}
               <div className={styles.inputBoxHeader}>
                 <Typography
                   variant="body2"
@@ -681,14 +662,14 @@ const AdminPathwayEditorPage: React.FC = () => {
                   }}></div>
               </div>
 
-              {/* Pathway Image */}
+              {/* Training Image */}
               <div className={styles.uploadSection}>
                 <div className={styles.uploadResourceHeader}>
                   <Typography variant="body2" sx={inputHeaderText}>
                     UPLOAD IMAGE (JPG, JPEG, PNG)
                   </Typography>
                   <Tooltip
-                    title="Image will be used on the pathway badge. Uploaded images must be less than 20MB."
+                    title="Image will be used on the training card and certificate. Uploaded images must be less than 20MB."
                     placement="right"
                     componentsProps={{
                       tooltip: {
@@ -735,143 +716,161 @@ const AdminPathwayEditorPage: React.FC = () => {
                 </div>
                 {(coverImage || uploadedImage) && (
                   <div className={styles.previewSection}>
-                    <VolunteerPathwayCard
-                      pathway={{
-                        id: pathwayId!,
-                        name: pathwayName,
+                    <VolunteerTrainingCard
+                      training={{
+                        id: trainingId!,
+                        name: trainingName,
                         shortBlurb: blurb,
                         description: description,
                         coverImage: uploadedImage
                           ? URL.createObjectURL(uploadedImage)
                           : coverImage,
-                        trainingIDs: selectedTrainings.map(
-                          (training) => training.id
-                        ),
+                        resources: [
+                          {
+                            title: resourceTitle,
+                            link: resourceLink,
+                            type: resourceType,
+                          } as TrainingResource,
+                        ],
                         quiz: {
                           questions: [],
                           numQuestions: 0,
                           passingScore: 0,
                         },
+                        associatedPathways: [],
                         status: status,
                       }}
                       preview={true}
                     />
-                    <Badge
+                    <Certificate
                       image={
                         uploadedImage
                           ? URL.createObjectURL(uploadedImage)
                           : coverImage
                       }
-                      title={pathwayName}
+                      title={trainingName}
                       date={new Date(Date.now()).toISOString()}
                     />
                   </div>
                 )}
               </div>
 
-              {/* Training Selection */}
-              <div className={styles.trainingSelection}>
-                <div className={styles.trainingSelectionHeader}>
-                  <Typography variant="body2" sx={{ ...inputHeaderText }}>
-                    TRAINING SELECT
-                  </Typography>
-                  <Tooltip
-                    title="The trainings and order of trainings cannot be modified for published and archived pathways."
-                    placement="right"
-                    componentsProps={{
-                      tooltip: {
-                        sx: { ...whiteTooltip, fontSize: "0.75rem" },
-                      },
-                    }}>
-                    <span className={styles.iconCenter}>
-                      <InfoOutlinedIcon />
-                    </span>
-                  </Tooltip>
-                </div>
+              {/* Resource Title */}
+              <div className={styles.inputBoxHeader}>
+                <Typography
+                  variant="body2"
+                  sx={{ ...inputHeaderText, marginTop: "2rem" }}>
+                  RESOURCE TITLE
+                </Typography>
 
-                {selectedTrainings.map((training, trainingIndex) => (
-                  <div
-                    key={trainingIndex}
-                    className={styles.searchBarContainer}>
-                    <p className={styles.searchBarNumber}>
-                      {trainingIndex + 1}
-                    </p>
-                    <Autocomplete
-                      sx={{
-                        ...whiteSelectGrayBorder,
-                        width: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                        border: errorTrainings.includes(trainingIndex)
-                          ? "2px solid var(--hazard-red)"
-                          : "2px solid var(--blue-gray)",
-                      }}
-                      slotProps={{
-                        // style options
-                        paper: {
-                          sx: {
-                            "& .MuiAutocomplete-listbox": {
-                              "& .MuiAutocomplete-option": {
-                                color: "var(--blue-gray)",
-                              },
-                            },
-                          },
-                        },
-                      }}
-                      disablePortal
-                      value={training}
-                      getOptionLabel={(option) => option.name}
-                      options={trainingOptions}
-                      getOptionDisabled={(option) =>
-                        selectedTrainings.some(
-                          (selectedTrainings) => selectedTrainings === option
-                        )
+                <Typography variant="body2" sx={inputHelperText}>
+                  {Math.max(
+                    characterLimits.resourceTitle - resourceTitle.length,
+                    0
+                  )}{" "}
+                  Characters Remaining
+                </Typography>
+              </div>
+              <OutlinedInput
+                value={resourceTitle}
+                onChange={(e) => {
+                  const newValue = e.target.value;
+                  if (newValue.length <= characterLimits.resourceTitle) {
+                    setResourceTitle(newValue);
+                  }
+                }}
+                error={Boolean(errors.resourceTitle)}
+                sx={{
+                  ...grayBorderTextField,
+                  width: "100%",
+                  border: errors.resourceTitle
+                    ? "2px solid var(--hazard-red)"
+                    : "2px solid var(--blue-gray)",
+                }}
+              />
+
+              {/* Resource Link and Tooltip */}
+              <div
+                className={styles.uploadResourceHeader}
+                style={{
+                  marginTop: "2rem",
+                }}>
+                <Typography variant="body2" sx={inputHeaderText}>
+                  RESOURCE LINK
+                </Typography>
+
+                <Tooltip
+                  title="Link to PDF or Embedded YouTube Video. To get the embed link, click on the 'share' button on the YouTube video and then click on 'Embed'. Grab the link from the code which is everything inside the src attribute."
+                  placement="right"
+                  componentsProps={{
+                    tooltip: {
+                      sx: { ...whiteTooltip, fontSize: "0.75rem" },
+                    },
+                  }}>
+                  <span className={styles.iconCenter}>
+                    <InfoOutlinedIcon />
+                  </span>
+                </Tooltip>
+              </div>
+              <div className={styles.resourceContainer}>
+                <OutlinedInput
+                  value={resourceLink}
+                  onChange={(e) => setResourceLink(e.target.value)}
+                  error={Boolean(errors.resourceLink)}
+                  sx={{
+                    ...grayBorderTextField,
+                    flexGrow: 1,
+                    width: "100%",
+                    border: errors.resourceLink
+                      ? "2px solid var(--hazard-red)"
+                      : "2px solid var(--blue-gray)",
+                  }}
+                />
+
+                <FormControl
+                  margin="normal"
+                  sx={{ marginTop: "0px", marginBottom: "0" }}
+                  className={styles.resourceTypeField}
+                  error={Boolean(errors.resourceType)}>
+                  <Select
+                    className={styles.dropdownMenu}
+                    sx={{
+                      ...whiteSelectGrayBorder,
+                      fontSize: "1.1rem",
+                      borderRadius: "10px",
+                      height: "3rem",
+                      border: errors.resourceType
+                        ? "2px solid var(--hazard-red)"
+                        : "2px solid var(--blue-gray)",
+                    }}
+                    value={resourceType}
+                    onChange={(e) =>
+                      setResourceType(
+                        e.target.value === "VIDEO" ? "VIDEO" : "PDF"
+                      )
+                    }
+                    displayEmpty
+                    label="Resource Type"
+                    renderValue={(selected) => {
+                      if (selected === "") {
+                        return <em>Resource Type</em>;
                       }
-                      onChange={(event, selected) => {
-                        handleTrainingSelection(selected, trainingIndex);
-                      }}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          variant="outlined"
-                          placeholder="SEARCH"
-                          InputLabelProps={{
-                            shrink: false,
-                          }}
-                          sx={autocompleteText}
-                        />
-                      )}
-                      readOnly={status !== "DRAFT"}
-                    />
-                    {trainingIndex > 0 && status === "DRAFT" ? (
-                      <div
-                        className={`${styles.closeIcon} ${styles.leftMargin}`}>
-                        <IoCloseOutline
-                          onClick={() => handleDeleteSearchBar(trainingIndex)}
-                        />
-                      </div>
-                    ) : (
-                      <div
-                        className={`${styles.closeIcon} ${styles.leftMargin}`}
-                        style={{ visibility: "hidden" }}>
-                        <IoCloseOutline />
-                      </div>
-                    )}
-                  </div>
-                ))}
-
-                {/* Add Training Button */}
-                {status === "DRAFT" && (
-                  <div
-                    className={styles.addTrainingContainer}
-                    onClick={handleAddSearchBar}>
-                    <AddIcon fontSize="medium" />
-                    <h3>ADD TRAINING</h3>
-                  </div>
-                )}
+                      return selected === "VIDEO" ? "Video" : "PDF";
+                    }}>
+                    <MenuItem value="" disabled sx={{ display: "none" }}>
+                      Resource Type
+                    </MenuItem>
+                    <MenuItem value="PDF" sx={selectOptionStyle}>
+                      PDF
+                    </MenuItem>
+                    <MenuItem value="VIDEO" sx={selectOptionStyle}>
+                      Video
+                    </MenuItem>
+                  </Select>
+                </FormControl>
               </div>
 
-              {/* Button Group */}
+              {/* Button group */}
               <div className={styles.nextButton}>
                 <Button
                   variant="contained"
@@ -903,10 +902,10 @@ const AdminPathwayEditorPage: React.FC = () => {
               {snackbarMessage}
             </Alert>
           </Snackbar>
-          <AdminDeletePathwayDraftPopup
+          <AdminDeleteTrainingDraftPopup
             open={openDeleteDraftPopup}
             onClose={setOpenDeleteDraftPopup}
-            pathwayId={pathwayId}
+            trainingId={trainingId}
             coverImage={coverImage}
           />
         </div>
@@ -916,4 +915,4 @@ const AdminPathwayEditorPage: React.FC = () => {
   );
 };
 
-export default AdminPathwayEditorPage;
+export default AdminTrainingEditorPage;

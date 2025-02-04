@@ -1,4 +1,4 @@
-import styles from "./AdminDeletePathwayDraftPopup.module.css";
+import styles from "./AdminDeleteTrainingDraftPopup.module.css";
 import { useState } from "react";
 import { Button, Snackbar, Alert } from "@mui/material";
 import { IoCloseOutline } from "react-icons/io5";
@@ -6,22 +6,22 @@ import { whiteButtonGrayBorder, hazardRedButton } from "../../../muiTheme";
 import { useNavigate } from "react-router";
 import Modal from "../../../components/ModalWrapper/Modal";
 import Loading from "../../../components/LoadingScreen/Loading";
-import { getPathway } from "../../../backend/FirestoreCalls";
-import { deletePathway } from "../../../backend/AdminFirestoreCalls";
+import { getTraining } from "../../../backend/FirestoreCalls";
+import { deleteTraining } from "../../../backend/AdminFirestoreCalls";
 import { ref, deleteObject } from "firebase/storage";
 import { storage } from "../../../config/firebase";
 
 interface modalPropsType {
   open: boolean;
   onClose: any;
-  pathwayId: string | undefined;
+  trainingId: string | undefined;
   coverImage: string;
 }
 
-const AdminDeletePathwayDraftPopup = ({
+const AdminDeleteTrainingDraftPopup = ({
   open,
   onClose,
-  pathwayId,
+  trainingId,
   coverImage,
 }: modalPropsType): React.ReactElement => {
   const navigate = useNavigate();
@@ -35,29 +35,30 @@ const AdminDeletePathwayDraftPopup = ({
       setCanClose(false);
       setLoading(true);
 
-      if (!pathwayId) {
-        // unsaved draft; navigate to pathway library
-        navigate("/pathways", {
+      if (!trainingId) {
+        // unsaved draft; navigate to training library
+        navigate("/trainings", {
           state: { fromDelete: true, showSnackbar: true }, //use state to pass that it should show snackbar
         });
       } else {
-        // ensure pathway is draft before deleting
-        const pathway = await getPathway(pathwayId);
-        if (pathway.status !== "DRAFT") {
+        // ensure training is draft before deleting
+        const training = await getTraining(trainingId);
+        if (training.status !== "DRAFT") {
           setLoading(false);
           setCanClose(true);
-          setSnackbarMessage("Pathway cannot be deleted.");
+          setSnackbarMessage("Training cannot be deleted.");
           setSnackbar(true);
         } else {
-          await deletePathway(pathwayId);
+          await deleteTraining(trainingId);
           // delete cover image from firebase storage
           if (coverImage !== "") {
             const oldFileRef = ref(storage, coverImage);
             await deleteObject(oldFileRef);
           }
+
           setLoading(false);
           setCanClose(true);
-          navigate("/pathways", {
+          navigate("/trainings", {
             state: { fromDelete: true, showSnackbar: true }, //use state to pass that it should show snackbar
           });
         }
@@ -136,4 +137,4 @@ const AdminDeletePathwayDraftPopup = ({
   );
 };
 
-export default AdminDeletePathwayDraftPopup;
+export default AdminDeleteTrainingDraftPopup;

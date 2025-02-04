@@ -7,7 +7,7 @@ import { Tooltip, Alert, Snackbar, TextField, IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { getVolunteer } from "../../backend/FirestoreCalls";
 import { Volunteer } from "../../types/UserType";
-import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import VolunteerNavigationBar from "../../components/VolunteerNavigationBar/VolunteerNavigationBar";
 import Loading from "../../components/LoadingScreen/Loading";
 import SettingsProfileIcon from "../../components/SettingsProfileIcon/SettingsProfileIcon";
 import Footer from "../../components/Footer/Footer";
@@ -73,7 +73,7 @@ function VolunteerProfilePage() {
         className={
           openEditNamePopup || openEditEmailPopup ? styles.popupOpen : ""
         }>
-        <NavigationBar
+        <VolunteerNavigationBar
           open={navigationBarOpen}
           setOpen={setNavigationBarOpen}
         />
