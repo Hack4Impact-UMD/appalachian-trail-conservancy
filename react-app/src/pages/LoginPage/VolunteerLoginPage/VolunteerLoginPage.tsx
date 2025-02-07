@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { OutlinedInput, Button } from "@mui/material";
 import {
   forestGreenButton,
@@ -8,10 +8,14 @@ import {
 import { Link, Navigate } from "react-router-dom";
 import { sendSignInLink } from "../../../backend/AuthFunctions";
 import { useAuth } from "../../../auth/AuthProvider";
+import Loading from "../../../components/LoadingScreen/Loading";
 import styles from "./VolunteerLoginPage.module.css";
 import primaryLogo from "../../../assets/atc-primary-logo.png";
 import loginBanner from "../../../assets/login-banner.jpeg";
 import greenCheck from "../../../assets/greenCircleCheck.svg";
+import { isSignInWithEmailLink, signInWithEmailLink } from "firebase/auth";
+import { getAuth } from "firebase/auth";
+import app from "../../../config/firebase";
 
 function VolunteerLoginPage() {
   const { user } = useAuth();
@@ -19,6 +23,19 @@ function VolunteerLoginPage() {
   const [email, setEmail] = useState<string>("");
   const [viewConfirmation, setViewConfirmation] = useState<boolean>(false);
   const [displayText, setDisplayText] = useState<string>("");
+  const [showLoading, setShowLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    const auth = getAuth(app);
+    if (isSignInWithEmailLink(auth, window.location.href)) {
+      const email = prompt("Please enter your email.");
+      signInWithEmailLink(auth, email ?? "", window.location.href)
+        .then(() => {
+          window.localStorage.removeItem("emailForSignIn");
+        })
+        .catch(() => {});
+    }
+  }, []);
 
   // If user is logged in, navigate to Dashboard
   if (user) {
@@ -27,12 +44,12 @@ function VolunteerLoginPage() {
 
   const handleSendLink = async (event: any) => {
     event.preventDefault();
-
     const pattern: RegExp = /^[^@]+@[^@]+\.[^@]+$/;
 
     if (!pattern.test(email)) {
       setFailureMessage("*Not a valid email");
     } else {
+      setShowLoading(true);
       sendSignInLink(email)
         .then(() => {
           setDisplayText(email);
@@ -42,6 +59,9 @@ function VolunteerLoginPage() {
         .catch((e) => {
           console.error(e);
           setFailureMessage("Failed to send email.");
+        })
+        .finally(() => {
+          setShowLoading(false);
         });
     }
   };
@@ -71,9 +91,12 @@ function VolunteerLoginPage() {
           type="submit"
           sx={{ ...styledRectButton, ...forestGreenButton }}
           variant="contained"
-          onClick={(e) => handleSendLink(e)}
+          onClick={(e) => {
+            handleSendLink(e);
+          }}
+          disabled={showLoading}
         >
-          Send Link
+          {showLoading ? <Loading color="white" /> : "Send Link"}
         </Button>
 
         {/* error message */}
