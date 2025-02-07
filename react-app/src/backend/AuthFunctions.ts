@@ -5,7 +5,6 @@ import {
   EmailAuthProvider,
   signOut,
   signInWithEmailAndPassword,
-  sendSignInLinkToEmail,
   sendPasswordResetEmail,
   type AuthError,
   type User,
@@ -201,21 +200,23 @@ export function authenticateUserEmailAndPassword(
  AuthContext provider handles authentication of the token sent in the email link
 */
 export function sendSignInLink(email: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const actionCodeSettings = {
+  return new Promise(async (resolve, reject) => {
+    const sendSignInEmailLink = httpsCallable(functions, "sendSignInEmailLink");
+
+    sendSignInEmailLink({
       url: window.location.href,
       handleCodeInApp: true,
-    };
-
-    const auth = getAuth(app);
-    sendSignInLinkToEmail(auth, email, actionCodeSettings)
-      .then(() => {
+      email,
+    })
+      .then((res) => {
         // Add email to local storage, email is removed from
         // local storage when volunteer is signed in
         window.localStorage.setItem("emailForSignIn", email);
+        console.log(res);
         resolve();
       })
       .catch((error: any) => {
+        console.log("error");
         reject(error);
       });
   });
