@@ -52,6 +52,10 @@ import { TrainingID } from "../../types/TrainingType.ts";
 import { PathwayID } from "../../types/PathwayType.ts";
 import DeleteUserPopup from "./AdminDeleteUserPopup/AdminDeleteUserPopup.tsx";
 import Loading from "../../components/LoadingScreen/Loading.tsx";
+import {
+  quizScoreComparator,
+  passFailComparator,
+} from "../AdminUserManagementPage/helpers.ts";
 
 function AdminVolunteerDetailsPage() {
   const navigate = useNavigate();
@@ -125,9 +129,19 @@ function AdminVolunteerDetailsPage() {
   const columns = [
     { field: "trainingName", headerName: "TRAINING", width: 250 },
     { field: "dateCompleted", headerName: "DATE", width: 180 },
-    { field: "timeCompleted", headerName: "TIME", width: 180 },
-    { field: "quizScore", headerName: "SCORE", width: 150 },
-    { field: "passFailStatus", headerName: "P/F", width: 120 },
+    { field: "timeCompleted", headerName: "TIME", width: 180, sortable: false },
+    {
+      field: "quizScore",
+      headerName: "SCORE",
+      width: 150,
+      sortComparator: quizScoreComparator,
+    },
+    {
+      field: "passFailStatus",
+      headerName: "P/F",
+      width: 120,
+      sortComparator: passFailComparator,
+    },
     { field: "status", headerName: "STATUS", width: 130 },
   ];
 
@@ -187,30 +201,50 @@ function AdminVolunteerDetailsPage() {
 
   const pathwayColumns = [
     { field: "pathwayName", headerName: "NAME", width: 250 },
-    { field: "progress", headerName: "PROGRESS", width: 180 },
     { field: "dateCompleted", headerName: "DATE", width: 180 },
+    { field: "timeCompleted", headerName: "TIME", width: 180, sortable: false },
     {
       field: "trainingsCompleted",
       headerName: "TRAININGS COMPLETED",
       width: 250,
     },
-    { field: "score", headerName: "SCORE", width: 130 },
+    {
+      field: "score",
+      headerName: "SCORE",
+      width: 130,
+      sortComparator: quizScoreComparator,
+    },
+    {
+      field: "passFailStatus",
+      headerName: "P/F",
+      width: 120,
+      sortComparator: passFailComparator,
+    },
+    { field: "progress", headerName: "STATUS", width: 180 },
   ];
 
   const pathwayRows = filteredPathways.map((currPathway) => {
+    const passingScore = currPathway.pathway.quiz.passingScore;
     return {
       id: currPathway.pathway.id,
       pathwayName: currPathway.pathway.name,
-      progress: currPathway.volunteerPathway.progress,
       dateCompleted: formatDate(currPathway.volunteerPathway.dateCompleted), // Format the date using Luxon
+      timeCompleted: formatTime(currPathway.volunteerPathway.dateCompleted),
       trainingsCompleted: formatTrainingsCompleted(
         currPathway.volunteerPathway.numTrainingsCompleted,
         currPathway.volunteerPathway.numTotalTrainings
       ),
       score:
-        currPathway.volunteerPathway.quizScoreRecieved !== undefined
-          ? currPathway.volunteerPathway.quizScoreRecieved
-          : "N/A", // Handle score
+        currPathway.volunteerPathway.quizScoreRecieved == undefined
+          ? "N/A"
+          : `${currPathway.volunteerPathway.quizScoreRecieved} / ${currPathway.pathway.quiz.numQuestions}`,
+      passFailStatus:
+        currPathway.volunteerPathway.quizScoreRecieved == undefined
+          ? "N/A"
+          : currPathway.volunteerPathway.quizScoreRecieved >= passingScore
+          ? "Passed"
+          : "Failed",
+      progress: currPathway.volunteerPathway.progress,
     };
   });
 
@@ -406,10 +440,11 @@ function AdminVolunteerDetailsPage() {
       if (pathway) {
         return [
           pathway.pathwayName,
-          pathway.progress,
+
           pathway.dateCompleted,
           pathway.trainingsCompleted,
           pathway.score,
+          pathway.progress,
         ];
       }
     });

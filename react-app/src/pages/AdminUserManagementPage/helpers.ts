@@ -3,7 +3,7 @@ import { TrainingID } from "../../types/TrainingType";
 import { VolunteerID } from "../../types/UserType";
 import { VolunteerTraining, VolunteerPathway } from "../../types/UserType";
 import { exportTableToCSV } from "../../backend/AdminFirestoreCalls";
-import { GridRowId } from "@mui/x-data-grid";
+import { GridRowId, GridComparatorFn } from "@mui/x-data-grid";
 import { DateTime } from "luxon";
 
 // Types for the data tables
@@ -27,34 +27,86 @@ export interface managementPathwayType extends PathwayID {
   averageScore: number | string;
 }
 
+export const avgScoreComparator: GridComparatorFn<number> = (
+  a: string | number,
+  b: string | number
+) => {
+  if (typeof a === "number" && typeof b === "number") return a - b;
+  if (typeof a === "number" && b == "N/A") {
+    return 1;
+  }
+  if (typeof b === "number" && a == "N/A") {
+    return -1;
+  }
+  return 0;
+};
+
+export const quizScoreComparator: GridComparatorFn<string> = (
+  a: string,
+  b: string
+) => {
+  if (a != "N/A" && b != "N/A") {
+    const aSplit = a.split("/");
+    const bSplit = b.split("/");
+    const aScore = Number(aSplit[0]) / Number(aSplit[1]);
+    const bScore = Number(bSplit[0]) / Number(bSplit[1]);
+    const diff = aScore - bScore;
+    if (diff !== 0) return diff;
+    return aSplit[0] > bSplit[0] ? 1 : -1;
+  }
+  if (a != "N/A" && b == "N/A") {
+    return 1;
+  }
+  if (b != "N/A" && a == "N/A") {
+    return -1;
+  }
+  return 0;
+};
+
+export const passFailComparator: GridComparatorFn<string> = (
+  a: string,
+  b: string
+) => {
+  if (a != "N/A" && b != "N/A") {
+    return a.localeCompare(b);
+  }
+  if (a != "N/A" && b == "N/A") {
+    return 1;
+  }
+  if (b != "N/A" && a == "N/A") {
+    return -1;
+  }
+  return 0;
+};
+
 // Columns for the data table
 export const usersColumns = [
-  { field: "firstName", headerName: "First Name", width: 150 },
-  { field: "lastName", headerName: "Last Name", width: 150 },
-  { field: "email", headerName: "Email", width: 200 },
+  { field: "firstName", headerName: "FIRST NAME", width: 165 },
+  { field: "lastName", headerName: "LAST NAME", width: 160 },
+  { field: "email", headerName: "EMAIL", width: 200 },
   {
     field: "numEnrolledTrainings",
-    headerName: "Trainings Enrolled",
+    headerName: "TRAININGS ENROLLED",
     width: 200,
   },
   {
     field: "numCompletedTrainings",
-    headerName: "Trainings Completed",
+    headerName: "TRAININGS COMPLETED",
     width: 200,
   },
   {
     field: "numEnrolledPathways",
-    headerName: "Pathways Enrolled",
+    headerName: "PATHWAYS ENROLLED",
     width: 200,
   },
   {
     field: "numCompletedPathways",
-    headerName: "Pathways Completed",
+    headerName: "PATHWAYS COMPLETED",
     width: 200,
   },
   {
     field: "mostRecentCompletion",
-    headerName: "Most Recent Completion",
+    headerName: "MOST RECENT COMPLETION",
     width: 200,
   },
 ];
@@ -62,31 +114,37 @@ export const usersColumns = [
 export const trainingsColumns = [
   {
     field: "name",
-    headerName: "Training Name",
+    headerName: "TRAINING NAME",
     width: 350,
   },
   {
     field: "numCompletions",
-    headerName: "Completions",
+    headerName: "COMPLETIONS",
     width: 200,
   },
   {
     field: "numInProgress",
-    headerName: "In Progress",
+    headerName: "IN PROGRESS",
     width: 200,
   },
   {
     field: "averageScore",
-    headerName: "Average Score(%)",
+    headerName: "AVERAGE SCORE(%)",
     width: 200,
+    sortComparator: avgScoreComparator,
   },
 ];
 
 export const pathwaysColumns = [
-  { field: "name", headerName: "Pathway Name", width: 350 },
-  { field: "numCompletions", headerName: "Completions", width: 200 },
-  { field: "numInProgress", headerName: "In Progress", width: 200 },
-  { field: "averageScore", headerName: "Average Score(%)", width: 200 },
+  { field: "name", headerName: "PATHWAY NAME", width: 350 },
+  { field: "numCompletions", headerName: "COMPLETIONS", width: 200 },
+  { field: "numInProgress", headerName: "IN PROGRESS", width: 200 },
+  {
+    field: "averageScore",
+    headerName: "AVERAGE SCORE(%)",
+    width: 200,
+    sortComparator: avgScoreComparator,
+  },
 ];
 
 function getMostRecentCompletion(
@@ -148,6 +206,7 @@ export function parseTrainingData(
       numCompletions: number;
       numInProgress: number;
       averageScore: number;
+      numTakenQuiz: number;
     }
   >();
 
@@ -159,6 +218,7 @@ export function parseTrainingData(
       numCompletions: 0,
       numInProgress: 0,
       averageScore: 0,
+      numTakenQuiz: 0,
     });
   });
 
@@ -169,9 +229,13 @@ export function parseTrainingData(
       if (trainingData) {
         if (volunteerTraining.progress === "COMPLETED") {
           trainingData.numCompletions += 1;
-          trainingData.averageScore += volunteerTraining.quizScoreRecieved ?? 0;
         } else {
           trainingData.numInProgress += 1;
+        }
+
+        if (volunteerTraining.quizScoreRecieved !== undefined) {
+          trainingData.averageScore += volunteerTraining.quizScoreRecieved;
+          trainingData.numTakenQuiz += 1;
         }
       }
     });
@@ -186,12 +250,12 @@ export function parseTrainingData(
         numCompletions: trainingData.numCompletions,
         numInProgress: trainingData.numInProgress,
         averageScore:
-          trainingData.numCompletions === 0
-            ? "NA"
+          trainingData.numTakenQuiz === 0
+            ? "N/A"
             : Number(
                 (
                   (trainingData.averageScore /
-                    (trainingData.numCompletions *
+                    (trainingData.numTakenQuiz *
                       training.quiz.questions.length)) *
                   100
                 ).toFixed(2)
@@ -215,6 +279,7 @@ export function parsePathwayData(
       numCompletions: number;
       numInProgress: number;
       averageScore: number;
+      numTakenQuiz: number;
     }
   >();
 
@@ -226,6 +291,7 @@ export function parsePathwayData(
       numCompletions: 0,
       numInProgress: 0,
       averageScore: 0,
+      numTakenQuiz: 0,
     });
   });
 
@@ -236,9 +302,13 @@ export function parsePathwayData(
       if (pathwayData) {
         if (volunteerPathway.progress === "COMPLETED") {
           pathwayData.numCompletions += 1;
-          pathwayData.averageScore += volunteerPathway.quizScoreRecieved ?? 0;
         } else {
           pathwayData.numInProgress += 1;
+        }
+
+        if (volunteerPathway.quizScoreRecieved !== undefined) {
+          pathwayData.averageScore += volunteerPathway.quizScoreRecieved;
+          pathwayData.numTakenQuiz += 1;
         }
       }
     });
@@ -253,12 +323,12 @@ export function parsePathwayData(
         numCompletions: pathwayData.numCompletions,
         numInProgress: pathwayData.numInProgress,
         averageScore:
-          pathwayData.numCompletions === 0
-            ? "NA"
+          pathwayData.numTakenQuiz === 0
+            ? "N/A"
             : Number(
                 (
                   (pathwayData.averageScore /
-                    (pathwayData.numCompletions *
+                    (pathwayData.numTakenQuiz *
                       pathway.quiz.questions.length)) *
                   100
                 ).toFixed(2)
