@@ -187,7 +187,7 @@ export function parseTrainingData(
         numInProgress: trainingData.numInProgress,
         averageScore:
           trainingData.numCompletions === 0
-            ? "NA"
+            ? "N/A"
             : Number(
                 (
                   (trainingData.averageScore /
@@ -254,7 +254,7 @@ export function parsePathwayData(
         numInProgress: pathwayData.numInProgress,
         averageScore:
           pathwayData.numCompletions === 0
-            ? "NA"
+            ? "N/A"
             : Number(
                 (
                   (pathwayData.averageScore /
