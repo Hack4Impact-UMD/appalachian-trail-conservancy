@@ -81,8 +81,8 @@ export const passFailComparator: GridComparatorFn<string> = (
 
 // Columns for the data table
 export const usersColumns = [
-  { field: "firstName", headerName: "FIRST NAME", width: 150 },
-  { field: "lastName", headerName: "LAST NAME", width: 150 },
+  { field: "firstName", headerName: "FIRST NAME", width: 165 },
+  { field: "lastName", headerName: "LAST NAME", width: 160 },
   { field: "email", headerName: "EMAIL", width: 200 },
   {
     field: "numEnrolledTrainings",
@@ -206,6 +206,7 @@ export function parseTrainingData(
       numCompletions: number;
       numInProgress: number;
       averageScore: number;
+      numTakenQuiz: number;
     }
   >();
 
@@ -217,6 +218,7 @@ export function parseTrainingData(
       numCompletions: 0,
       numInProgress: 0,
       averageScore: 0,
+      numTakenQuiz: 0,
     });
   });
 
@@ -227,9 +229,13 @@ export function parseTrainingData(
       if (trainingData) {
         if (volunteerTraining.progress === "COMPLETED") {
           trainingData.numCompletions += 1;
-          trainingData.averageScore += volunteerTraining.quizScoreRecieved ?? 0;
         } else {
           trainingData.numInProgress += 1;
+        }
+
+        if (volunteerTraining.quizScoreRecieved !== undefined) {
+          trainingData.averageScore += volunteerTraining.quizScoreRecieved;
+          trainingData.numTakenQuiz += 1;
         }
       }
     });
@@ -244,12 +250,12 @@ export function parseTrainingData(
         numCompletions: trainingData.numCompletions,
         numInProgress: trainingData.numInProgress,
         averageScore:
-          trainingData.numCompletions === 0
+          trainingData.numTakenQuiz === 0
             ? "N/A"
             : Number(
                 (
                   (trainingData.averageScore /
-                    (trainingData.numCompletions *
+                    (trainingData.numTakenQuiz *
                       training.quiz.questions.length)) *
                   100
                 ).toFixed(2)
@@ -273,6 +279,7 @@ export function parsePathwayData(
       numCompletions: number;
       numInProgress: number;
       averageScore: number;
+      numTakenQuiz: number;
     }
   >();
 
@@ -284,6 +291,7 @@ export function parsePathwayData(
       numCompletions: 0,
       numInProgress: 0,
       averageScore: 0,
+      numTakenQuiz: 0,
     });
   });
 
@@ -294,9 +302,13 @@ export function parsePathwayData(
       if (pathwayData) {
         if (volunteerPathway.progress === "COMPLETED") {
           pathwayData.numCompletions += 1;
-          pathwayData.averageScore += volunteerPathway.quizScoreRecieved ?? 0;
         } else {
           pathwayData.numInProgress += 1;
+        }
+
+        if (volunteerPathway.quizScoreRecieved !== undefined) {
+          pathwayData.averageScore += volunteerPathway.quizScoreRecieved;
+          pathwayData.numTakenQuiz += 1;
         }
       }
     });
@@ -311,12 +323,12 @@ export function parsePathwayData(
         numCompletions: pathwayData.numCompletions,
         numInProgress: pathwayData.numInProgress,
         averageScore:
-          pathwayData.numCompletions === 0
+          pathwayData.numTakenQuiz === 0
             ? "N/A"
             : Number(
                 (
                   (pathwayData.averageScore /
-                    (pathwayData.numCompletions *
+                    (pathwayData.numTakenQuiz *
                       pathway.quiz.questions.length)) *
                   100
                 ).toFixed(2)
