@@ -38,6 +38,10 @@ import {
 } from "../../backend/AdminFirestoreCalls.ts";
 import { VolunteerID } from "../../types/UserType.ts";
 import Loading from "../../components/LoadingScreen/Loading.tsx";
+import {
+  quizScoreComparator,
+  passFailComparator,
+} from "../AdminUserManagementPage/helpers.ts";
 
 function AdminTrainingDetailsPage() {
   const navigate = useNavigate();
@@ -93,9 +97,19 @@ function AdminTrainingDetailsPage() {
     { field: "volunteerName", headerName: "NAME", width: 200 },
     { field: "email", headerName: "EMAIL", width: 200 },
     { field: "dateCompleted", headerName: "DATE", width: 200 },
-    { field: "timeCompleted", headerName: "TIME", width: 150 },
-    { field: "quizScore", headerName: "SCORE", width: 150 },
-    { field: "passFailStatus", headerName: "P/F", width: 100 },
+    { field: "timeCompleted", headerName: "TIME", width: 150, sortable: false },
+    {
+      field: "quizScore",
+      headerName: "SCORE",
+      width: 150,
+      sortComparator: quizScoreComparator,
+    },
+    {
+      field: "passFailStatus",
+      headerName: "P/F",
+      width: 100,
+      sortComparator: passFailComparator,
+    },
     { field: "status", headerName: "STATUS", width: 130 },
   ];
 
