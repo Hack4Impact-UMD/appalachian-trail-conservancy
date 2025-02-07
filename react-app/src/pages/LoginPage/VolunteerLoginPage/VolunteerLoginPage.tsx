@@ -39,7 +39,8 @@ function VolunteerLoginPage() {
           setViewConfirmation(true);
           setFailureMessage("");
         })
-        .catch(() => {
+        .catch((e) => {
+          console.error(e);
           setFailureMessage("Failed to send email.");
         });
     }
@@ -51,7 +52,8 @@ function VolunteerLoginPage() {
         className={styles.centered}
         onSubmit={(event) => {
           handleSendLink(event);
-        }}>
+        }}
+      >
         {/* email field */}
         <div className={styles.alignLeft}>
           <h3 className={styles.label}>Email</h3>
@@ -69,7 +71,8 @@ function VolunteerLoginPage() {
           type="submit"
           sx={{ ...styledRectButton, ...forestGreenButton }}
           variant="contained"
-          onClick={(e) => handleSendLink(e)}>
+          onClick={(e) => handleSendLink(e)}
+        >
           Send Link
         </Button>
 
@@ -77,7 +80,8 @@ function VolunteerLoginPage() {
         <p
           className={
             failureMessage ? styles.showFailureMessage : styles.errorContainer
-          }>
+          }
+        >
           {failureMessage}
         </p>
         {/* switch to admin link */}

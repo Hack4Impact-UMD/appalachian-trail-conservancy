@@ -147,7 +147,6 @@ exports.createVolunteerUser = onCall(
                                   .replace("FIRSTNAME", data.firstName)
                                   .replace("LASTNAME", data.lastName),
                               };
-                              console.log("pls send");
                               //send email to Volunteer
                               await transporter
                                 .sendMail({
@@ -993,6 +992,106 @@ exports.validatePathwayQuizResults = onCall(
           "invalid-parameters",
           "Function was called with invalid parameters."
         );
+      }
+    });
+  }
+);
+
+/**
+ * This function send a sign in email link to a Volunteer User
+ *
+ * it will query firestore to check to see if the email exists in the database,
+ * if so, it will send an email to the user with a link to sign in
+ * in both cases the function will simply resolve with nothing
+ *
+ * Arguments: url, handleCodeInApp, email
+ *
+ */
+exports.sendSignInEmailLink = onCall(
+  { region: "us-east4", cors: true },
+  async ({ data }) => {
+    return new Promise(async (resolve, reject) => {
+      const { url, handleCodeInApp, email } = data;
+
+      const actionCodeSettings = {
+        url: url,
+        handleCodeInApp: handleCodeInApp,
+      };
+
+      try {
+        const querySnapshot = await db
+          .collection("Users")
+          .where("email", "==", email)
+          .get();
+
+        if (querySnapshot.docs.length > 0) {
+          admin
+            .auth()
+            .generateSignInWithEmailLink(email, actionCodeSettings)
+            .then(async (link) => {
+              const currentDate = new Date().toLocaleString("en-US", {
+                timeZone: "America/New_York",
+                dateStyle: "short",
+                timeStyle: "short",
+              });
+
+              const baseLoginEmail = {
+                subject: `Sign in to Appalachian Trail Learning Pathways requested at ${currentDate}`,
+                body: `
+                <p>Hello,</p>
+                <p>We received a request to sign in to Appalachian Trail Learning Pathways using this email address.<br>
+                If you want to sign in with your ${email} account, click this link:</p>
+                <p><a href='${link}'>Sign in to Appalachian Trail Learning Pathways</a></p>
+                <p>If you did not request this link, you can safely ignore this email.</p>
+                <p>Thanks,</p>
+                <p>Your Appalachian Trail Learning Pathways team</p>
+                `,
+              };
+
+              await transporter
+                .sendMail({
+                  from: '"ATC" <h4iatctest2@gmail.com>',
+                  to: email,
+                  subject: baseLoginEmail.subject,
+                  html: baseLoginEmail.body,
+                })
+                .then(() => {
+                  resolve({
+                    reason: "Success",
+                    text: "Success",
+                  });
+                })
+                .catch((error) => {
+                  console.log(error);
+                  reject({
+                    reason: "Login Email Not Sent",
+                    text: "Login email failed to be sent.",
+                  });
+                  throw new functions.https.HttpsError(
+                    "Unknown",
+                    "Unable to send Login email to user."
+                  );
+                });
+            })
+            .catch(() => {
+              reject({
+                reason: "email-send-failed",
+                text: "Failed to send email to user.",
+              });
+              throw new functions.https.HttpsError(
+                "unknown",
+                "Failed to send email to user."
+              );
+            });
+        } else {
+          resolve({ success: false, reason: "user-not-found" });
+        }
+      } catch (error) {
+        reject({
+          reason: "email-send-failed",
+          text: "Failed to send email to user.",
+        });
+        throw new functions.https.HttpsError("unknown", error.message);
       }
     });
   }
