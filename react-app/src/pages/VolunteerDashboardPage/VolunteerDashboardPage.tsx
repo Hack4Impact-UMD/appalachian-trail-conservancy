@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../auth/AuthProvider";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   getVolunteer,
   getAllTrainings,
@@ -43,16 +43,8 @@ function Dashboard() {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [popupOpen, setPopupOpen] = useState<boolean>(false);
 
-  const [searchParams, setSearchParams] = useSearchParams();
-
   // Update screen width on resize
   useEffect(() => {
-    searchParams.delete("apiKey");
-    searchParams.delete("oobCode");
-    searchParams.delete("mode");
-    searchParams.delete("lang");
-    setSearchParams(searchParams);
-
     const handleResize = () => {
       setScreenWidth(window.innerWidth);
     };
