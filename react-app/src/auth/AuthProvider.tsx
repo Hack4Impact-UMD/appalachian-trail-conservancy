@@ -39,6 +39,8 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
   const [id, setID] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
 
+  const queryParams = new URLSearchParams(location.search);
+
   useEffect(() => {
     const auth = getAuth(app);
     const email = window.localStorage.getItem("emailForSignIn");
@@ -47,6 +49,7 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
       signInWithEmailLink(auth, email ?? "", window.location.href)
         .then(() => {
           window.localStorage.removeItem("emailForSignIn");
+          queryParams.delete("apiKey");
         })
         .catch(() => {});
     }

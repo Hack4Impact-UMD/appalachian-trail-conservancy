@@ -212,7 +212,6 @@ export function sendSignInLink(email: string): Promise<void> {
         // Add email to local storage, email is removed from
         // local storage when volunteer is signed in
         window.localStorage.setItem("emailForSignIn", email);
-        console.log(res);
         resolve();
       })
       .catch((error: any) => {

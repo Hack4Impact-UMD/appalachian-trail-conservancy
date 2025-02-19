@@ -1,6 +1,6 @@
 import "./index.css";
 import React from "react";
-import { HashRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, HashRouter, Route, Routes } from "react-router-dom";
 import { ThemeProvider } from "@mui/material";
 import { AuthProvider, useAuth } from "./auth/AuthProvider.tsx";
 import RequireAuth from "./auth/RequireAuth/RequireAuth.tsx";
@@ -63,8 +63,8 @@ const RoleBasedRoute: React.FC<RoleBasedRouteProps> = ({
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <AuthProvider>
-        <HashRouter>
+      <BrowserRouter>
+        <AuthProvider>
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/login/volunteer" element={<VolunteerLoginPage />} />
@@ -280,8 +280,8 @@ function App() {
               }
             />
           </Routes>
-        </HashRouter>
-      </AuthProvider>
+        </AuthProvider>
+      </BrowserRouter>
     </ThemeProvider>
   );
 }
