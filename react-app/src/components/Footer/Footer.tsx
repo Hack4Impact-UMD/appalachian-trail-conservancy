@@ -2,7 +2,7 @@ import styles from "./Footer.module.css";
 import { useState, useEffect } from "react";
 import { FaFacebookF, FaTiktok, FaYoutube } from "react-icons/fa";
 import { FaInstagram, FaXTwitter } from "react-icons/fa6";
-import atcCircularLogo from "../../assets/atc-logo-circular-white.png";
+import atcCircularLogo from "../../assets/ATC_Logo_Primary_Knockout_RGB_HiRes.png";
 
 function Footer() {
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
@@ -22,6 +22,14 @@ function Footer() {
     <div className={styles.footerContainer}>
       {screenWidth > 450 ? (
         <div className={styles.content}>
+          {/* <div style={{ display: "flex", flexDirection: "column" }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignContent: "center",
+                justifyContent: "space-evenly",
+              }}> */}
           <img className={styles.ATClogo} src={atcCircularLogo} />
           <div className={styles.informationContainer}>
             {/* everything in informationContainer is organized by columns */}
@@ -100,6 +108,8 @@ function Footer() {
                 </a>
               </div>
             </div>
+            {/* </div> */}
+            {/* </div> */}
             <div className={styles.statement}>
               These trainings are presented by the Appalachian Trail Conservancy
               for A.T. partners and volunteers.
