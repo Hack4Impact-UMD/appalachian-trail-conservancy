@@ -1,8 +1,6 @@
 .footerContainer {
   height: 100px;
-  /* background-color:  #c7eafb; */
-  /* background-color: #84c98b; */
-  background-color: #1b4539;
+  background-color: var(--footer-color);
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -20,10 +18,23 @@
   gap: 5%;
 }
 
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.topRow {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: space-evenly;
+}
+
 .informationContainer {
   flex-grow: 0.4;
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 
 .informationInnerContainer {
@@ -37,7 +48,6 @@
   display: flex;
   align-self: center;
   justify-content: center;
-  /* width: 100px; */
 }
 
 .textDiv {
@@ -46,6 +56,7 @@
   gap: 1rem;
   color: white;
   font-size: 1rem;
+  text-align: center;
 }
 
 .hoverUnderline a {
@@ -111,9 +122,39 @@
   .footerContainer {
     height: 200px;
   }
+
+  .ATClogo {
+    height: 60px;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .footerContainer {
+    height: 200px;
+  }
+
+  .topRow {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .ATClogo {
+    height: 60px;
+  }
+
+  .informationInnerContainer {
+    width: 400px;
+    margin-bottom: 0.5rem;
+  }
 }
 
 @media screen and (max-width: 450px) {
+  .footerContainer {
+    height: 300px;
+    padding: 6%;
+  }
+
   .content {
     display: flex;
     flex-direction: column;
@@ -123,22 +164,27 @@
 
   .topContainer {
     display: flex;
-    flex-direction: row;
-    gap: 5%;
+    flex-direction: column;
+    gap: 1rem;
     justify-content: center;
   }
 
   .ATClogo {
     height: 50px;
-    width: 50px;
+    margin-bottom: 1rem;
+  }
+
+  .textDiv {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    color: white;
+    font-size: 1rem;
   }
 
   .iconsDiv {
     margin-top: 1rem;
     color: white;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
     width: 70%;
     align-self: center;
   }
