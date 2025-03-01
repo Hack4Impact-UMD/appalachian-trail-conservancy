@@ -30,5 +30,5 @@ const analytics = getAnalytics(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
 export const functions = getFunctions(app, "us-east4");
-// connectFunctionsEmulator(functions, "127.0.0.1", 5001);
+connectFunctionsEmulator(functions, "127.0.0.1", 5001);
 export default app;
