@@ -11,7 +11,7 @@ import { db } from "../config/firebase";
 import { Volunteer, VolunteerID, User, Admin } from "../types/UserType";
 import { Training, TrainingID, Quiz } from "../types/TrainingType";
 import { Pathway, PathwayID } from "../types/PathwayType";
-import { ReauthKeyType } from "/Users/akashpatil/Documents/hack4impact/atc/appalachian-trail-conservancy/react-app/src/types/AssetsType";
+import { ReauthKeyType } from "../types/AssetsType";
 
 export function getUserWithAuth(auth_id: string): Promise<Admin | VolunteerID> {
   return new Promise((resolve, reject) => {
