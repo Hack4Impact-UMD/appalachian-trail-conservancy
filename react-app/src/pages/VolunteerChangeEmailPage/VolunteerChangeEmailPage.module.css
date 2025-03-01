@@ -1,0 +1,115 @@
+.pageContainer {
+  overflow: hidden;
+  min-height: 100vh;
+}
+
+.top {
+  margin: 1.5% auto;
+  width: 10%;
+  min-width: 100px;
+}
+
+.logo {
+  width: 100%;
+  height: 100%;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+/* form container */
+.bottom {
+  display: flex;
+  width: 100%;
+  height: 70%;
+  overflow: visible;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+/* container to center all input fields */
+.centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* heading text */
+.heading {
+  font-size: 2.5rem;
+  color: var(--blue-gray);
+  margin: 0;
+  text-align: center;
+}
+
+.welcomeSubtext {
+  color: var(--forest-green);
+}
+
+/* for input field label containers */
+.alignLeft {
+  width: 100%;
+  text-align: left;
+}
+
+/* for input text labels */
+.label {
+  margin: 1.5rem 0 0.25rem 0;
+  color: var(--blue-gray);
+}
+
+/* email label and icon container */
+.emailContainer {
+  display: flex;
+  gap: 1%;
+  align-items: center;
+  margin: 1.5rem 0 0.25rem 0;
+}
+
+.emailLabelContainer {
+  margin: 0;
+}
+
+.invalidEmailMessage {
+  height: 1.5rem;
+}
+
+/* join code label and icon container */
+.joinCodeContainer {
+  display: flex;
+  gap: 1%;
+  align-items: center;
+  margin: 0 0 0.25rem 0;
+}
+
+.joinCodeLabel {
+  margin: 0;
+}
+
+.error {
+  margin-top: 1rem;
+  padding: 0;
+  font-size: 0.8rem;
+  color: var(--hazard-red);
+}
+
+.confirmButton {
+  margin-top: 5%;
+}
+
+/* mobile */
+@media screen and (max-width: 850px) {
+  .left {
+    width: 0%;
+  }
+  .right {
+    width: 100%;
+    min-width: 0%;
+  }
+}
+
+@media screen and (max-height: 750px) {
+  .split {
+    flex-direction: row;
+    height: 100%;
+  }
+}

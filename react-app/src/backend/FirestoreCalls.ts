@@ -10,6 +10,7 @@ import { db } from "../config/firebase";
 import { Volunteer, VolunteerID, User, Admin } from "../types/UserType";
 import { Training, TrainingID, Quiz } from "../types/TrainingType";
 import { Pathway, PathwayID } from "../types/PathwayType";
+import { ReauthKeyType } from "/Users/akashpatil/Documents/hack4impact/atc/appalachian-trail-conservancy/react-app/src/types/AssetsType";
 
 export function getUserWithAuth(auth_id: string): Promise<Admin | VolunteerID> {
   return new Promise((resolve, reject) => {
@@ -154,6 +155,30 @@ export function getAllPublishedPathways(): Promise<PathwayID[]> {
           return { ...pathway, id: doc.id };
         });
         resolve(allPathways);
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+}
+
+export function getReauthKey(email: string): Promise<ReauthKeyType> {
+  return new Promise((resolve, reject) => {
+    const assetsRef = collection(db, "Assets");
+    const reAuthkeyQuery = query(
+      assetsRef,
+      where("type", "==", "REAUTHKEY"),
+      where("email", "==", email)
+    );
+
+    getDocs(reAuthkeyQuery)
+      .then((reAuthkeySnapshot) => {
+        if (reAuthkeySnapshot.size > 0) {
+          const reauthkey = reAuthkeySnapshot.docs[0].data() as ReauthKeyType;
+          resolve(reauthkey);
+        } else {
+          reject(new Error("Reauth key does not exist"));
+        }
       })
       .catch((e) => {
         reject(e);

@@ -1146,6 +1146,9 @@ exports.sendChangeEmailLink = onCall(
                   handleCodeInApp: handleCodeInApp,
                 };
 
+                // create link
+                const emailChangeLink = "";
+
                 const baseChangeEmail = {
                   subject: `Change email to Appalachian Trail Learning Pathways requested at ${currentDate}`,
                   body: `
