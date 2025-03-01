@@ -51,7 +51,7 @@
 /* check email text */
 .emailConfirmationText {
   font-size: 1.1rem;
-  color: --var(--blue-gray);
+  color: var(--blue-gray);
   font-weight: bold;
   margin-top: 1.12rem;
   margin-bottom: 0.3rem;

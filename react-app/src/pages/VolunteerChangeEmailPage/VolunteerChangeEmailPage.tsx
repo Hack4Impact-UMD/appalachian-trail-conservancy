@@ -14,12 +14,12 @@ import {
   styledRectButton,
 } from "../../../src/muiTheme.ts";
 import Loading from "../../components/LoadingScreen/Loading.tsx";
+import primaryLogo from "../../assets/atc-primary-logo.png";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthProvider.tsx";
 import { getReauthKey } from "../../backend/FirestoreCalls.ts";
 import { updateUserEmail } from "../../backend/AuthFunctions.ts";
 import { logOut } from "../../backend/AuthFunctions.ts";
-import primaryLogo from "../../assets/atc-primary-logo.png";
 
 const VolunteerChangeEmailPage = () => {
   const auth = useAuth();
@@ -32,6 +32,7 @@ const VolunteerChangeEmailPage = () => {
   const [invalidEmailMessage, setInvalidEmailMessage] = useState<string>("");
   const [snackbar, setSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [updateEmailLoading, setUpdateEmailLoading] = useState(false);
 
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -80,6 +81,7 @@ const VolunteerChangeEmailPage = () => {
     }
 
     setLoading(true);
+    setUpdateEmailLoading(true);
     // Replace with your email change function
     const prevEmail = auth.user.email ?? "";
     await updateUserEmail(prevEmail, email)
@@ -90,11 +92,18 @@ const VolunteerChangeEmailPage = () => {
           })
           .catch((error) => {
             console.log(error);
+            setSnackbarMessage("Error logging out");
+            setSnackbar(true);
+            setLoading(false);
+            setUpdateEmailLoading(false);
           });
       })
       .catch((e) => {
         console.error(e);
         setSnackbarMessage("Failed to update email. Try again later.");
+        setSnackbar(true);
+        setLoading(false);
+        setUpdateEmailLoading(false);
       });
   };
 
@@ -102,7 +111,20 @@ const VolunteerChangeEmailPage = () => {
     <div className={styles.pageContainer}>
       <div className={styles.centered}>
         {loading ? (
-          <Loading />
+          <div className={styles.loadingContainer}>
+            {updateEmailLoading ? (
+              <>
+                <Loading />
+                <div className={styles.updateText}>
+                  Updating email, you will be logged out shortly...
+                </div>
+              </>
+            ) : (
+              <div className={styles.emptySpace}>
+                <Loading />
+              </div>
+            )}
+          </div>
         ) : (
           <>
             {/* logo image */}
@@ -111,19 +133,13 @@ const VolunteerChangeEmailPage = () => {
             </div>
 
             {/* form input */}
-            <h1 className={styles.heading}>
-              Change Email
-              <br />
-              <span className={styles.welcomeSubtext}>
-                Update your email address
-              </span>
-            </h1>
+            <h1 className={styles.heading}>Change Email</h1>
 
             <form onSubmit={handleSubmit}>
               <FormControl>
                 {/* email field */}
                 <div>
-                  <h3>New Email</h3>
+                  <div className={styles.subHeader}>New Email</div>
                 </div>
                 <TextField
                   sx={{
@@ -132,6 +148,7 @@ const VolunteerChangeEmailPage = () => {
                       ? "2px solid var(--hazard-red)"
                       : "2px solid var(--blue-gray)",
                   }}
+                  className={styles.buttonTextField}
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value);
@@ -141,7 +158,7 @@ const VolunteerChangeEmailPage = () => {
 
                 {/* confirm email field */}
                 <div>
-                  <h3>Confirm New Email</h3>
+                  <div className={styles.subHeader}>Confirm New Email</div>
                 </div>
                 <TextField
                   sx={{
@@ -149,7 +166,9 @@ const VolunteerChangeEmailPage = () => {
                     border: !emailsMatch
                       ? "2px solid var(--hazard-red)"
                       : "2px solid var(--blue-gray)",
+                    marginBottom: invalidEmailMessage == "" ? "0.75rem" : "0",
                   }}
+                  className={styles.buttonTextField}
                   value={confirmEmail}
                   onChange={(e) => {
                     setConfirmEmail(e.target.value);
@@ -169,7 +188,12 @@ const VolunteerChangeEmailPage = () => {
               <div>
                 <Button
                   type="submit"
-                  sx={{ ...styledRectButton, ...forestGreenButton }}
+                  sx={{
+                    ...styledRectButton,
+                    ...forestGreenButton,
+                    marginBottom: "1rem",
+                  }}
+                  className={styles.buttonTextField}
                   variant="contained"
                   disabled={
                     !(
@@ -177,25 +201,22 @@ const VolunteerChangeEmailPage = () => {
                       confirmEmail !== "" &&
                       email === confirmEmail
                     ) || loading
-                  }
-                >
-                  {loading ? <Loading color="white" /> : "Update Email"}
+                  }>
+                  {loading ? <Loading color="white" /> : "Confirm"}
                 </Button>
               </div>
             </form>
-
-            <Snackbar
-              open={snackbar}
-              autoHideDuration={6000}
-              onClose={() => setSnackbar(false)}
-              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-            >
-              <Alert onClose={() => setSnackbar(false)} severity="success">
-                {snackbarMessage}
-              </Alert>
-            </Snackbar>
           </>
         )}
+        <Snackbar
+          open={snackbar}
+          autoHideDuration={6000}
+          onClose={() => setSnackbar(false)}
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}>
+          <Alert onClose={() => setSnackbar(false)} severity="error">
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
       </div>
     </div>
   );

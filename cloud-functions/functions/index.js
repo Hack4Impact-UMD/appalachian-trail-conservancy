@@ -1041,7 +1041,30 @@ exports.sendSignInEmailLink = onCall(
                 <p>Hello,</p>
                 <p>We received a request to sign in to Appalachian Trail Learning Pathways using this email address.<br>
                 If you want to sign in with your ${email} account, click this link:</p>
-                <p><a href='${link}'>Sign in to Appalachian Trail Learning Pathways</a></p>
+                <button
+                  style="
+                      background-color:#0a7650;
+                      border:2px solid #0a7650;
+                      white-space:nowrap;
+                      border-radius:15px;
+                      box-shadow:none;
+                      height:44px;
+                      text-decoration:none;
+                    "
+                >
+                  <a
+                    href="${link}"
+                    style="
+                        color:white;
+                        text-decoration:none;
+                      "
+                  >
+                    Sign in to Appalachian Trail Learning Pathways
+                  </a>
+                </button>
+
+                <p>Alternatively, you can paste the following link into your browser:</p>
+                <p>${link}</p>
                 <p>If you did not request this link, you can safely ignore this email.</p>
                 <p>Thanks,</p>
                 <p>Your Appalachian Trail Learning Pathways team</p>
@@ -1161,12 +1184,36 @@ exports.sendChangeEmailLink = onCall(
                     const emailChangeLink = `${url}changeemail?reauthkey=${randomString}`;
 
                     const baseChangeEmail = {
-                      subject: `Change email to Appalachian Trail Learning Pathways requested at ${currentDate}`,
+                      subject: `Requested Email Change to Appalachian Trail Learning Pathways at ${currentDate}`,
                       body: `
                       <p>Hello,</p>
                       <p>We received a request to change the email address for your Appalachian Trail Learning Pathways account.<br>
                       If you want to change your email, click this link:</p>
-                      <p><a href=${emailChangeLink}>${emailChangeLink}</a></p>
+                      <button
+                        style="
+                            background-color:#0a7650;
+                            border:2px solid #0a7650;
+                            white-space:nowrap;
+                            border-radius:15px;
+                            box-shadow:none;
+                            height:44px;
+                            width:150px;
+                            text-decoration:none;
+                          "
+                      >
+                        <a
+                          href="${emailChangeLink}"
+                          style="
+                              color:white;
+                              text-decoration:none;
+                            "
+                        >
+                          Change Email
+                        </a>
+                      </button>
+                      
+                      <p>Alternatively, you can paste the following link into your browser:</p>
+                      <p>${emailChangeLink}</p>
                       <p>If you did not request this change, you can safely ignore this email.</p>
                       <p>Thanks,</p>
                       <p>Your Appalachian Trail Learning Pathways team</p>
