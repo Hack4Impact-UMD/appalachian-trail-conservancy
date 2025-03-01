@@ -14,6 +14,7 @@ export interface RegistrationCodeType extends AssetsType {
 
 export interface ReauthKeyType extends AssetsType {
   key: string;
+  email: string;
 }
 
 export type AssetsDocumentType = "EMAIL" | "REGISTRATIONCODE" | "REAUTHKEY";

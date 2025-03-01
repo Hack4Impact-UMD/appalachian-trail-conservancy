@@ -1120,60 +1120,107 @@ exports.sendChangeEmailLink = onCall(
         .where("email", "==", email)
         .where("type", "==", "VOLUNTEER")
         .get()
-        .then((querySnapshot) => {
+        .then(async (querySnapshot) => {
           // check to see if Volunteer is within firestore
           if (querySnapshot.docs.length > 0) {
-            const randomString = crypto.randomBytes(32).toString("hex");
+            // delete any previosu reauth keys
+            await db
+              .collection("Assets")
+              .where("email", "==", email)
+              .where("type", "==", "REAUTHKEY")
+              .get()
+              .then(async (querySnapshot) => {
+                if (querySnapshot.docs.length > 0) {
+                  await Promise.all(
+                    querySnapshot.docs.map((doc) => doc.ref.delete())
+                  );
+                }
+                const randomString = crypto.randomBytes(32).toString("hex");
 
-            const todayDate = new Date(Date.now()).toISOString();
+                const todayDate = new Date(Date.now()).toISOString();
 
-            const reauthAsset = {
-              type: "REAUTHKEY",
-              dateUpdated: todayDate,
-              key: randomString,
-            };
-
-            // add reauth key to firestore
-            addDoc(collection(db, "Assets"), reauthAsset)
-              .then(() => {
-                const currentDate = new Date().toLocaleString("en-US", {
-                  timeZone: "America/New_York",
-                  dateStyle: "short",
-                  timeStyle: "short",
-                });
-                const actionCodeSettings = {
-                  url: url,
-                  handleCodeInApp: handleCodeInApp,
+                const reauthAsset = {
+                  type: "REAUTHKEY",
+                  dateUpdated: todayDate,
+                  key: randomString,
+                  email: email,
                 };
 
-                // create link
-                const emailChangeLink = "";
+                // add reauth key to firestore
+                await db
+                  .collection("Assets")
+                  .add(reauthAsset)
+                  .then(async () => {
+                    const currentDate = new Date().toLocaleString("en-US", {
+                      timeZone: "America/New_York",
+                      dateStyle: "short",
+                      timeStyle: "short",
+                    });
 
-                const baseChangeEmail = {
-                  subject: `Change email to Appalachian Trail Learning Pathways requested at ${currentDate}`,
-                  body: `
-                    <p>Hello,</p>
-                    <p>We received a request to change the email address for your Appalachian Trail Learning Pathways account.<br>
-                    If you want to change your email, click this link:</p>
-                    <p><a href='${url}?reauthkey=${randomString}'>${url}?reauthkey=${randomString}</a></p>
-                    <p>If you did not request this change, you can safely ignore this email.</p>
-                    <p>Thanks,</p>
-                    <p>Your Appalachian Trail Learning Pathways team</p>
-                    `,
-                };
+                    // create link
+                    const emailChangeLink = `${url}changeemail?reauthkey=${randomString}`;
+
+                    const baseChangeEmail = {
+                      subject: `Change email to Appalachian Trail Learning Pathways requested at ${currentDate}`,
+                      body: `
+                      <p>Hello,</p>
+                      <p>We received a request to change the email address for your Appalachian Trail Learning Pathways account.<br>
+                      If you want to change your email, click this link:</p>
+                      <p><a href=${emailChangeLink}>${emailChangeLink}</a></p>
+                      <p>If you did not request this change, you can safely ignore this email.</p>
+                      <p>Thanks,</p>
+                      <p>Your Appalachian Trail Learning Pathways team</p>
+                      `,
+                    };
+
+                    await transporter
+                      .sendMail({
+                        from: '"ATC" <h4iatctest2@gmail.com>',
+                        to: email,
+                        subject: baseChangeEmail.subject,
+                        html: baseChangeEmail.body,
+                      })
+                      .then(() => {
+                        resolve({
+                          reason: "Success",
+                          text: "Success",
+                        });
+                      })
+                      .catch((error) => {
+                        console.log(error);
+                        reject({
+                          reason: "Login Email Not Sent",
+                          text: "Login email failed to be sent.",
+                        });
+                        throw new functions.https.HttpsError(
+                          "Unknown",
+                          "Unable to send Login email to user."
+                        );
+                      });
+                  })
+                  .catch((error) => {
+                    // Failed to add reauth key to database
+                    reject(error);
+                  });
               })
               .catch((error) => {
-                // Failed to add reauth key to database
-                reject(e);
+                reject({
+                  reason: "Database Deletion Failed",
+                  text: "Failed to delete previous reauth key from the database.",
+                });
+                throw new functions.https.HttpsError(
+                  "Unknown",
+                  "Failed to delete previous reauth key from the database."
+                );
               });
           } else {
             // Volunteer is not in the database
-            reject();
+            reject(error);
           }
         })
         .catch((error) => {
           // Failed to query firestore for volunteer
-          reject();
+          reject(error);
         });
     });
   }

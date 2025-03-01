@@ -5,6 +5,7 @@ import {
   getDocs,
   query,
   where,
+  deleteDoc,
 } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { Volunteer, VolunteerID, User, Admin } from "../types/UserType";
@@ -175,7 +176,14 @@ export function getReauthKey(email: string): Promise<ReauthKeyType> {
       .then((reAuthkeySnapshot) => {
         if (reAuthkeySnapshot.size > 0) {
           const reauthkey = reAuthkeySnapshot.docs[0].data() as ReauthKeyType;
-          resolve(reauthkey);
+          deleteDoc(reAuthkeySnapshot.docs[0].ref)
+            .then(() => {
+              resolve(reauthkey);
+            })
+            .catch((e) => {
+              console.error(e);
+              reject(new Error("Failed to delete reauth key"));
+            });
         } else {
           reject(new Error("Reauth key does not exist"));
         }

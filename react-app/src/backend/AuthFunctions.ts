@@ -230,7 +230,7 @@ export function sendChangeEmailLink(email: string): Promise<void> {
     const sendChangeEmailLink = httpsCallable(functions, "sendChangeEmailLink");
 
     sendChangeEmailLink({
-      url: window.location.href,
+      url: window.location.href.replace("profile", ""),
       handleCodeInApp: true,
       email,
     })
