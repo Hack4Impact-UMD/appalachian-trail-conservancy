@@ -221,6 +221,29 @@ export function sendSignInLink(email: string): Promise<void> {
   });
 }
 
+/*
+ Used to send change email link to Volunteers
+ This is only called from the Volunteer profile page
+*/
+export function sendChangeEmailLink(email: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const sendChangeEmailLink = httpsCallable(functions, "sendChangeEmailLink");
+
+    sendChangeEmailLink({
+      url: window.location.href,
+      handleCodeInApp: true,
+      email,
+    })
+      .then(() => {
+        resolve();
+      })
+      .catch((error: any) => {
+        console.log("error");
+        reject(error);
+      });
+  });
+}
+
 export function logOut(): Promise<void> {
   return new Promise((resolve, reject) => {
     const auth = getAuth(app);
