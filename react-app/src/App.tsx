@@ -27,6 +27,7 @@ import VolunteerPathwayQuizLandingPage from "./pages/VolunteerPathwayQuizLanding
 import VolunteerPathwayQuizPage from "./pages/VolunteerPathwayQuizPage/VolunteerPathwayQuizPage.tsx";
 import VolunteerPathwayQuizResultPage from "./pages/VolunteerPathwayQuizResultPage/VolunteerPathwayQuizResultPage.tsx";
 import VolunteerProfilePage from "./pages/VolunteerProfilePage/VolunteerProfilePage.tsx";
+import VolunteerChangeEmailPage from "./pages/VolunteerChangeEmailPage/VolunteerChangeEmailPage.tsx";
 import AdminLoginPage from "./pages/LoginPage/AdminLoginPage/AdminLoginPage.tsx";
 import AdminTrainingEditorPage from "./pages/AdminTrainingEditorPage/AdminTrainingEditorPage.tsx";
 import AdminPathwayEditorPage from "./pages/AdminPathwayEditorPage/AdminPathwayEditorPage.tsx";
@@ -211,6 +212,14 @@ function App() {
               element={
                 <RequireVolunteerAuth>
                   <VolunteerAchievementsPage />
+                </RequireVolunteerAuth>
+              }
+            />
+            <Route
+              path="/changeemail"
+              element={
+                <RequireVolunteerAuth>
+                  <VolunteerChangeEmailPage />
                 </RequireVolunteerAuth>
               }
             />

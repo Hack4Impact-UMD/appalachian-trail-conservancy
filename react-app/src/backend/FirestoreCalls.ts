@@ -5,11 +5,13 @@ import {
   getDocs,
   query,
   where,
+  deleteDoc,
 } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { Volunteer, VolunteerID, User, Admin } from "../types/UserType";
 import { Training, TrainingID, Quiz } from "../types/TrainingType";
 import { Pathway, PathwayID } from "../types/PathwayType";
+import { ReauthKeyType } from "../types/AssetsType";
 
 export function getUserWithAuth(auth_id: string): Promise<Admin | VolunteerID> {
   return new Promise((resolve, reject) => {
@@ -154,6 +156,37 @@ export function getAllPublishedPathways(): Promise<PathwayID[]> {
           return { ...pathway, id: doc.id };
         });
         resolve(allPathways);
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+}
+
+export function getReauthKey(email: string): Promise<ReauthKeyType> {
+  return new Promise((resolve, reject) => {
+    const assetsRef = collection(db, "Assets");
+    const reAuthkeyQuery = query(
+      assetsRef,
+      where("type", "==", "REAUTHKEY"),
+      where("email", "==", email)
+    );
+
+    getDocs(reAuthkeyQuery)
+      .then((reAuthkeySnapshot) => {
+        if (reAuthkeySnapshot.size > 0) {
+          const reauthkey = reAuthkeySnapshot.docs[0].data() as ReauthKeyType;
+          deleteDoc(reAuthkeySnapshot.docs[0].ref)
+            .then(() => {
+              resolve(reauthkey);
+            })
+            .catch((e) => {
+              console.error(e);
+              reject(new Error("Failed to delete reauth key"));
+            });
+        } else {
+          reject(new Error("Reauth key does not exist"));
+        }
       })
       .catch((e) => {
         reject(e);

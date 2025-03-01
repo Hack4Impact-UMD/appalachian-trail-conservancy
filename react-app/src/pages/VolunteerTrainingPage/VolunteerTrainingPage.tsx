@@ -107,12 +107,10 @@ function VolunteerTrainingPage() {
     }
   };
 
-  // TODO: Only resources after the first should show a back button
   const handleBackButton = () => {
     if (stepIndex > 0) {
       setStepIndex(stepIndex - 1);
     } else {
-      //TODO: Quiz
       navigate(`/trainings/${training.id}`, {
         state: {
           training: training,
