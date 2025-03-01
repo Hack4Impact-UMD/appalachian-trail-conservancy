@@ -1,6 +1,6 @@
 export interface AssetsType {
-  type: AssetsDocumentType; // EMAIL || REGISTRATIONCODE
-  dateUpdated: string; // YYYY-MM-DD
+  type: AssetsDocumentType; // EMAIL || REGISTRATIONCODE || REAUTHKEY
+  dateUpdated: string; // ISO
 }
 
 export interface EmailType extends AssetsType {
@@ -12,4 +12,8 @@ export interface RegistrationCodeType extends AssetsType {
   code: string;
 }
 
-export type AssetsDocumentType = "EMAIL" | "REGISTRATIONCODE";
+export interface ReauthKeyType extends AssetsType {
+  key: string;
+}
+
+export type AssetsDocumentType = "EMAIL" | "REGISTRATIONCODE" | "REAUTHKEY";

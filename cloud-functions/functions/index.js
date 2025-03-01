@@ -998,7 +998,7 @@ exports.validatePathwayQuizResults = onCall(
 );
 
 /**
- * This function send a sign in email link to a Volunteer User
+ * This function emails a sign in email link to a Volunteer User
  *
  * it will query firestore to check to see if the email exists in the database,
  * if so, it will send an email to the user with a link to sign in
@@ -1093,6 +1093,85 @@ exports.sendSignInEmailLink = onCall(
         });
         throw new functions.https.HttpsError("unknown", error.message);
       }
+    });
+  }
+);
+
+/**
+ * This function emails a change email link to a Volunteer User
+ *
+ * it will query firestore to check to see if the email exists in the database,
+ * if so, it will generate some random string then store that in the assets
+ * collecton in firestore, then send an email to the user with a link consisting
+ * of the random string as a query parameter then passes it to the
+ * generateSignInWithEmailLink function to send to the Volunteer
+ *
+ * Arguments: url, handleCodeInApp, email
+ *
+ */
+exports.sendChangeEmailLink = onCall(
+  { region: "us-east4", cors: true },
+  async ({ data }) => {
+    return new Promise(async (resolve, reject) => {
+      const { url, handleCodeInApp, email } = data;
+
+      await db
+        .collection("Users")
+        .where("email", "==", email)
+        .where("type", "==", "VOLUNTEER")
+        .get()
+        .then((querySnapshot) => {
+          // check to see if Volunteer is within firestore
+          if (querySnapshot.docs.length > 0) {
+            const randomString = crypto.randomBytes(32).toString("hex");
+
+            const todayDate = new Date(Date.now()).toISOString();
+
+            const reauthAsset = {
+              type: "REAUTHKEY",
+              dateUpdated: todayDate,
+              key: randomString,
+            };
+
+            // add reauth key to firestore
+            addDoc(collection(db, "Assets"), reauthAsset)
+              .then(() => {
+                const currentDate = new Date().toLocaleString("en-US", {
+                  timeZone: "America/New_York",
+                  dateStyle: "short",
+                  timeStyle: "short",
+                });
+                const actionCodeSettings = {
+                  url: url,
+                  handleCodeInApp: handleCodeInApp,
+                };
+
+                const baseChangeEmail = {
+                  subject: `Change email to Appalachian Trail Learning Pathways requested at ${currentDate}`,
+                  body: `
+                    <p>Hello,</p>
+                    <p>We received a request to change the email address for your Appalachian Trail Learning Pathways account.<br>
+                    If you want to change your email, click this link:</p>
+                    <p><a href='${url}?reauthkey=${randomString}'>${url}?reauthkey=${randomString}</a></p>
+                    <p>If you did not request this change, you can safely ignore this email.</p>
+                    <p>Thanks,</p>
+                    <p>Your Appalachian Trail Learning Pathways team</p>
+                    `,
+                };
+              })
+              .catch((error) => {
+                // Failed to add reauth key to database
+                reject(e);
+              });
+          } else {
+            // Volunteer is not in the database
+            reject();
+          }
+        })
+        .catch((error) => {
+          // Failed to query firestore for volunteer
+          reject();
+        });
     });
   }
 );
