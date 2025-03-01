@@ -39,10 +39,12 @@ Once logged in to the Firebase Console, you can view our stored data by clicking
 
 We currently have 3 collections that correspond to our project Types:
 
+- Assets (Registration email and code)
 - Trainings
 - Pathways
 - Users (Volunteer and Admin accounts)
-  <img width="2064" alt="ATC Types" src="https://github.com/Hack4Impact-UMD/y-knot/assets/67646012/54581e4b-e962-4a81-8c1c-622e2ea13517">
+  <img width="2000" alt="ATC Types" src="https://github.com/user-attachments/assets/fd5a9696-c125-444a-acb2-99ba1ae29fb6" />
+
 
 # Running the Repo Locally
 

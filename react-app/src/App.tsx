@@ -63,8 +63,8 @@ const RoleBasedRoute: React.FC<RoleBasedRouteProps> = ({
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <AuthProvider>
-        <HashRouter>
+      <HashRouter>
+        <AuthProvider>
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/login/volunteer" element={<VolunteerLoginPage />} />
@@ -280,8 +280,8 @@ function App() {
               }
             />
           </Routes>
-        </HashRouter>
-      </AuthProvider>
+        </AuthProvider>
+      </HashRouter>
     </ThemeProvider>
   );
 }

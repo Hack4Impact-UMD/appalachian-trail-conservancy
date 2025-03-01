@@ -47,6 +47,9 @@ export const AuthProvider = ({ children }: Props): React.ReactElement => {
       signInWithEmailLink(auth, email ?? "", window.location.href)
         .then(() => {
           window.localStorage.removeItem("emailForSignIn");
+          let url = window.location.href;
+          url = url.split("?")[0];
+          window.history.replaceState({}, document.title, url);
         })
         .catch(() => {});
     }

@@ -389,7 +389,7 @@ function VolunteerTrainingLandingPage() {
                           : ""
                       }`}>
                       <p className={styles.trainingNumber}>
-                        {volunteerTraining.numTotalResources + 1}
+                        {training.resources.length + 1}
                       </p>
                       <p className={styles.trainingTitle}>Quiz</p>
                     </div>

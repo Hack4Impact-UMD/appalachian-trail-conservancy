@@ -19,6 +19,7 @@ import app from "../../../config/firebase";
 
 function VolunteerLoginPage() {
   const { user } = useAuth();
+  const [loading, setLoading] = useState<boolean>(true);
   const [failureMessage, setFailureMessage] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [viewConfirmation, setViewConfirmation] = useState<boolean>(false);
@@ -28,12 +29,21 @@ function VolunteerLoginPage() {
   useEffect(() => {
     const auth = getAuth(app);
     if (isSignInWithEmailLink(auth, window.location.href)) {
-      const email = prompt("Please enter your email.");
+      let email = window.localStorage.getItem("emailForSignIn");
+      if (email === null) {
+        email = prompt("Please provide your email.");
+      }
+
       signInWithEmailLink(auth, email ?? "", window.location.href)
         .then(() => {
           window.localStorage.removeItem("emailForSignIn");
+          let url = window.location.href;
+          url = url.split("?")[0];
+          window.history.replaceState({}, document.title, url);
         })
         .catch(() => {});
+    } else {
+      setLoading(false);
     }
   }, []);
 
@@ -140,10 +150,18 @@ function VolunteerLoginPage() {
             <div className={styles.rightImgContainer}>
               <img src={primaryLogo} alt="ATC Logo" />
             </div>
-            <h1 className={styles.heading}>Welcome!</h1>
+            {loading ? (
+              <div className={styles.loadingContainer}>
+                <Loading />
+              </div>
+            ) : (
+              <>
+                <h1 className={styles.heading}>Welcome!</h1>
 
-            {/* display check message if valid email is submitted */}
-            {viewConfirmation ? sentEmail : beforeEmail}
+                {/* display check message if valid email is submitted */}
+                {viewConfirmation ? sentEmail : beforeEmail}
+              </>
+            )}
           </div>
         </div>
       </div>

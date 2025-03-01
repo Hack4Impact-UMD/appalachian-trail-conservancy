@@ -53,6 +53,11 @@
   text-align: left;
 }
 
+/* loading spinner */
+.loadingContainer {
+  margin-top: 1rem;
+}
+
 /* for input text boxes */
 .label {
   margin-bottom: 0.75rem;
