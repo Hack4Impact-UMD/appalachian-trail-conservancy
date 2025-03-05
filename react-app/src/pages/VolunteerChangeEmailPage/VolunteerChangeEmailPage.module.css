@@ -1,0 +1,77 @@
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+/* container to center all input fields */
+.centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: auto;
+  width: 400px;
+  background-color: white;
+  border: 2px solid var(--ocean-green);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.loadingContainer {
+  margin: 11rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2.75rem;
+}
+
+.updateText {
+  color: var(--blue-gray);
+  text-align: center;
+}
+
+.emptySpace {
+  margin: 2rem;
+}
+
+.top {
+  margin: 1.5% auto;
+  width: 10%;
+  min-width: 100px;
+}
+
+.logo {
+  width: 100%;
+  height: 100%;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+/* heading text */
+.heading {
+  font-size: 2.5rem;
+  color: var(--blue-gray);
+  margin: 0.5rem 0;
+  text-align: center;
+}
+
+.subHeader {
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
+  color: var(--blue-gray);
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+@media screen and (max-width: 450px) {
+  .centered {
+    width: 300px;
+  }
+
+  .buttonTextField {
+    width: 300px !important;
+  }
+}
