@@ -162,7 +162,6 @@ exports.createVolunteerUser = onCall(
                                   });
                                 })
                                 .catch((error) => {
-                                  console.log(error);
                                   reject({
                                     reason: "Intro Email Not Sent",
                                     text: "User has been created, but the introduction email failed to be sent to them.",
@@ -1085,14 +1084,13 @@ exports.sendSignInEmailLink = onCall(
                   });
                 })
                 .catch((error) => {
-                  console.log(error);
                   reject({
-                    reason: "Login Email Not Sent",
-                    text: "Login email failed to be sent.",
+                    reason: "Transporter failed to send email",
+                    text: "Failed to send email to user.",
                   });
                   throw new functions.https.HttpsError(
-                    "Unknown",
-                    "Unable to send Login email to user."
+                    "Transporter failed to send email",
+                    "Failed to send email to user."
                   );
                 });
             })
@@ -1107,6 +1105,7 @@ exports.sendSignInEmailLink = onCall(
               );
             });
         } else {
+          // allow resolve on user not found
           resolve({ success: false, reason: "user-not-found" });
         }
       } catch (error) {
@@ -1114,7 +1113,10 @@ exports.sendSignInEmailLink = onCall(
           reason: "email-send-failed",
           text: "Failed to send email to user.",
         });
-        throw new functions.https.HttpsError("unknown", error.message);
+        throw new functions.https.HttpsError(
+          "unknown",
+          "Failed to send email to user."
+        );
       }
     });
   }
@@ -1234,40 +1236,61 @@ exports.sendChangeEmailLink = onCall(
                         });
                       })
                       .catch((error) => {
-                        console.log(error);
                         reject({
-                          reason: "Login Email Not Sent",
-                          text: "Login email failed to be sent.",
+                          reason: "Transporter failed to send email",
+                          text: "Failed to send change email.",
                         });
                         throw new functions.https.HttpsError(
                           "Unknown",
-                          "Unable to send Login email to user."
+                          "Failed to send change email."
                         );
                       });
                   })
                   .catch((error) => {
                     // Failed to add reauth key to database
-                    reject(error);
+                    reject({
+                      reason: "Failed reauth key insertion",
+                      text: "Failed to send change email.",
+                    });
+                    throw new functions.https.HttpsError(
+                      "database-error",
+                      "Failed to send change email."
+                    );
                   });
               })
               .catch((error) => {
+                // Failed to delete previous reauth keys
                 reject({
                   reason: "Database Deletion Failed",
                   text: "Failed to delete previous reauth key from the database.",
                 });
                 throw new functions.https.HttpsError(
-                  "Unknown",
+                  "database-error",
                   "Failed to delete previous reauth key from the database."
                 );
               });
           } else {
             // Volunteer is not in the database
-            reject(error);
+            reject({
+              reason: "unknown",
+              text: "Failed to send change email.",
+            });
+            throw new functions.https.HttpsError(
+              "unknown",
+              "Failed to send change email."
+            );
           }
         })
         .catch((error) => {
           // Failed to query firestore for volunteer
-          reject(error);
+          reject({
+            reason: "Database Query Failed",
+            text: "Failed to query the database.",
+          });
+          throw new functions.https.HttpsError(
+            "Unknown",
+            "Failed to delete previous reauth key from the database."
+          );
         });
     });
   }
