@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import VolunteerNavigationBar from "../../components/VolunteerNavigationBar/VolunteerNavigationBar.tsx";
 import PathwayTile from "./PathwayTile/PathwayTile.tsx";
 import TitleInfo from "./TileInfo/TitleInfo.tsx";
@@ -23,6 +24,8 @@ function VolunteerPathwayLandingPage() {
   const auth = useAuth();
   const pathwayId = useParams().id;
   const location = useLocation();
+  const navigate = useNavigate();
+
   const [loading, setLoading] = useState<boolean>(true);
   const [open, setOpen] = useState(!(window.innerWidth < 1200));
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
@@ -69,6 +72,11 @@ function VolunteerPathwayLandingPage() {
         if (pathwayId !== undefined && !auth.loading && auth.id) {
           getPathway(pathwayId)
             .then(async (pathwayData) => {
+              // if pathway is not published, redirect to home
+              if (pathwayData.status !== "PUBLISHED") {
+                navigate("/");
+              }
+
               setPathway(pathwayData);
               const trainingPromises = pathwayData.trainingIDs.map(getTraining);
               const fetchedTrainings = await Promise.all(trainingPromises);
@@ -282,7 +290,8 @@ function VolunteerPathwayLandingPage() {
         style={{
           // Only apply left shift when screen width is greater than 1200px
           left: open && screenWidth > 1200 ? "250px" : "0",
-        }}>
+        }}
+      >
         {!open && (
           <img
             src={hamburger}
@@ -320,7 +329,8 @@ function VolunteerPathwayLandingPage() {
             onClose={() => setSnackbar(false)}
             severity={
               snackbarMessage.includes("successfully") ? "success" : "error"
-            }>
+            }
+          >
             {snackbarMessage}
           </Alert>
         </Snackbar>

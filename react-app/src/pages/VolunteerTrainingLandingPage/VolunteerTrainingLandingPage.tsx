@@ -99,11 +99,15 @@ function VolunteerTrainingLandingPage() {
       !location.state?.volunteerTraining
     ) {
       setLoading(true);
-
       // fetch data if trainingId is available and if auth is finished loading
       if (trainingId !== undefined && !auth.loading && auth.id) {
         getTraining(trainingId)
           .then((trainingData) => {
+            // if training is not published, redirect to home
+            if (trainingData.status !== "PUBLISHED") {
+              navigate("/");
+            }
+
             setTraining(trainingData);
             // since no state is passed from navigation, get current user data
             getVolunteer(auth.id.toString())
@@ -180,7 +184,8 @@ function VolunteerTrainingLandingPage() {
                 (index + 1 <= volunteerTraining.numCompletedResources
                   ? styles.opacityContainer
                   : "")
-              }`}>
+              }`}
+            >
               <p className={styles.trainingNumber}>{index + 1}</p>
               <p className={styles.trainingTitle}>{resource.title}</p>
               <p className={styles.trainingType}>{resource.type}</p>
@@ -198,7 +203,8 @@ function VolunteerTrainingLandingPage() {
                 (volunteerTraining.trainingID !== "" &&
                   volunteerTraining.progress === "INPROGRESS" && (
                     <div
-                      className={`${styles.marker} ${styles.progressMarker}`}>
+                      className={`${styles.marker} ${styles.progressMarker}`}
+                    >
                       IN PROGRESS
                     </div>
                   ))}
@@ -286,7 +292,8 @@ function VolunteerTrainingLandingPage() {
                   error
                 );
               });
-          }}>
+          }}
+        >
           Start
         </Button>
       );
@@ -304,7 +311,8 @@ function VolunteerTrainingLandingPage() {
                 fromApp: true,
               },
             })
-          }>
+          }
+        >
           Restart
         </Button>
       );
@@ -322,7 +330,8 @@ function VolunteerTrainingLandingPage() {
                 fromApp: true,
               },
             })
-          }>
+          }
+        >
           Resume
         </Button>
       );
@@ -340,7 +349,8 @@ function VolunteerTrainingLandingPage() {
         className={`${styles.split} ${styles.right}`}
         style={{
           left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-        }}>
+        }}
+      >
         {loading ? (
           <Loading />
         ) : (
@@ -387,7 +397,8 @@ function VolunteerTrainingLandingPage() {
                         volunteerTraining.progress === "COMPLETED"
                           ? styles.opacityContainer
                           : ""
-                      }`}>
+                      }`}
+                    >
                       <p className={styles.trainingNumber}>
                         {training.resources.length + 1}
                       </p>
@@ -421,7 +432,8 @@ function VolunteerTrainingLandingPage() {
                           onClick={() => {
                             navigate(`/pathways/${pathway.id}`);
                           }}
-                          key={idx}>
+                          key={idx}
+                        >
                           {pathway.name}
                         </div>
                       ))}
@@ -441,12 +453,14 @@ function VolunteerTrainingLandingPage() {
               navigationBarOpen && screenWidth > 1200
                 ? "calc(100% - 250px)"
                 : "100%",
-          }}>
+          }}
+        >
           <div className={styles.footerButtons}>
             <Button
               sx={{ ...whiteButtonGrayBorder }}
               variant="contained"
-              onClick={() => navigate(-1)}>
+              onClick={() => navigate(-1)}
+            >
               Back
             </Button>
             {renderButton()}
