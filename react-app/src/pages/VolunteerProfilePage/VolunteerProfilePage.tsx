@@ -54,7 +54,6 @@ function VolunteerProfilePage() {
           setVolunteer(volunteer);
         })
         .catch((e) => {
-          //TODO: Handle error
           console.error(e);
         })
         .finally(() => {

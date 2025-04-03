@@ -56,7 +56,6 @@ function AdminProfilePage() {
           setAdmin(admin);
         })
         .catch((e) => {
-          //TODO: Handle error
           console.error(e);
         })
         .finally(() => {
