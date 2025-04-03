@@ -162,7 +162,6 @@ exports.createVolunteerUser = onCall(
                                   });
                                 })
                                 .catch((error) => {
-                                  console.log(error);
                                   reject({
                                     reason: "Intro Email Not Sent",
                                     text: "User has been created, but the introduction email failed to be sent to them.",
@@ -998,7 +997,7 @@ exports.validatePathwayQuizResults = onCall(
 );
 
 /**
- * This function send a sign in email link to a Volunteer User
+ * This function emails a sign in email link to a Volunteer User
  *
  * it will query firestore to check to see if the email exists in the database,
  * if so, it will send an email to the user with a link to sign in
@@ -1041,7 +1040,30 @@ exports.sendSignInEmailLink = onCall(
                 <p>Hello,</p>
                 <p>We received a request to sign in to Appalachian Trail Learning Pathways using this email address.<br>
                 If you want to sign in with your ${email} account, click this link:</p>
-                <p><a href='${link}'>Sign in to Appalachian Trail Learning Pathways</a></p>
+                <button
+                  style="
+                      background-color:#0a7650;
+                      border:2px solid #0a7650;
+                      white-space:nowrap;
+                      border-radius:15px;
+                      box-shadow:none;
+                      height:44px;
+                      text-decoration:none;
+                    "
+                >
+                  <a
+                    href="${link}"
+                    style="
+                        color:white;
+                        text-decoration:none;
+                      "
+                  >
+                    Sign in to Appalachian Trail Learning Pathways
+                  </a>
+                </button>
+
+                <p>Alternatively, you can paste the following link into your browser:</p>
+                <p>${link}</p>
                 <p>If you did not request this link, you can safely ignore this email.</p>
                 <p>Thanks,</p>
                 <p>Your Appalachian Trail Learning Pathways team</p>
@@ -1062,14 +1084,13 @@ exports.sendSignInEmailLink = onCall(
                   });
                 })
                 .catch((error) => {
-                  console.log(error);
                   reject({
-                    reason: "Login Email Not Sent",
-                    text: "Login email failed to be sent.",
+                    reason: "Transporter failed to send email",
+                    text: "Failed to send email to user.",
                   });
                   throw new functions.https.HttpsError(
-                    "Unknown",
-                    "Unable to send Login email to user."
+                    "Transporter failed to send email",
+                    "Failed to send email to user."
                   );
                 });
             })
@@ -1084,6 +1105,7 @@ exports.sendSignInEmailLink = onCall(
               );
             });
         } else {
+          // allow resolve on user not found
           resolve({ success: false, reason: "user-not-found" });
         }
       } catch (error) {
@@ -1091,8 +1113,185 @@ exports.sendSignInEmailLink = onCall(
           reason: "email-send-failed",
           text: "Failed to send email to user.",
         });
-        throw new functions.https.HttpsError("unknown", error.message);
+        throw new functions.https.HttpsError(
+          "unknown",
+          "Failed to send email to user."
+        );
       }
+    });
+  }
+);
+
+/**
+ * This function emails a change email link to a Volunteer User
+ *
+ * it will query firestore to check to see if the email exists in the database,
+ * if so, it will generate some random string then store that in the assets
+ * collecton in firestore, then send an email to the user with a link consisting
+ * of the random string as a query parameter then passes it to the
+ * generateSignInWithEmailLink function to send to the Volunteer
+ *
+ * Arguments: url, handleCodeInApp, email
+ *
+ */
+exports.sendChangeEmailLink = onCall(
+  { region: "us-east4", cors: true },
+  async ({ data }) => {
+    return new Promise(async (resolve, reject) => {
+      const { url, handleCodeInApp, email } = data;
+
+      await db
+        .collection("Users")
+        .where("email", "==", email)
+        .where("type", "==", "VOLUNTEER")
+        .get()
+        .then(async (querySnapshot) => {
+          // check to see if Volunteer is within firestore
+          if (querySnapshot.docs.length > 0) {
+            // delete any previosu reauth keys
+            await db
+              .collection("Assets")
+              .where("email", "==", email)
+              .where("type", "==", "REAUTHKEY")
+              .get()
+              .then(async (querySnapshot) => {
+                if (querySnapshot.docs.length > 0) {
+                  await Promise.all(
+                    querySnapshot.docs.map((doc) => doc.ref.delete())
+                  );
+                }
+                const randomString = crypto.randomBytes(32).toString("hex");
+
+                const todayDate = new Date(Date.now()).toISOString();
+
+                const reauthAsset = {
+                  type: "REAUTHKEY",
+                  dateUpdated: todayDate,
+                  key: randomString,
+                  email: email,
+                };
+
+                // add reauth key to firestore
+                await db
+                  .collection("Assets")
+                  .add(reauthAsset)
+                  .then(async () => {
+                    const currentDate = new Date().toLocaleString("en-US", {
+                      timeZone: "America/New_York",
+                      dateStyle: "short",
+                      timeStyle: "short",
+                    });
+
+                    // create link
+                    const emailChangeLink = `${url}changeemail?reauthkey=${randomString}`;
+
+                    const baseChangeEmail = {
+                      subject: `Requested Email Change to Appalachian Trail Learning Pathways at ${currentDate}`,
+                      body: `
+                      <p>Hello,</p>
+                      <p>We received a request to change the email address for your Appalachian Trail Learning Pathways account.<br>
+                      If you want to change your email, click this link:</p>
+                      <button
+                        style="
+                            background-color:#0a7650;
+                            border:2px solid #0a7650;
+                            white-space:nowrap;
+                            border-radius:15px;
+                            box-shadow:none;
+                            height:44px;
+                            width:150px;
+                            text-decoration:none;
+                          "
+                      >
+                        <a
+                          href="${emailChangeLink}"
+                          style="
+                              color:white;
+                              text-decoration:none;
+                            "
+                        >
+                          Change Email
+                        </a>
+                      </button>
+                      
+                      <p>Alternatively, you can paste the following link into your browser:</p>
+                      <p>${emailChangeLink}</p>
+                      <p>If you did not request this change, you can safely ignore this email.</p>
+                      <p>Thanks,</p>
+                      <p>Your Appalachian Trail Learning Pathways team</p>
+                      `,
+                    };
+
+                    await transporter
+                      .sendMail({
+                        from: '"ATC" <h4iatctest2@gmail.com>',
+                        to: email,
+                        subject: baseChangeEmail.subject,
+                        html: baseChangeEmail.body,
+                      })
+                      .then(() => {
+                        resolve({
+                          reason: "Success",
+                          text: "Success",
+                        });
+                      })
+                      .catch((error) => {
+                        reject({
+                          reason: "Transporter failed to send email",
+                          text: "Failed to send change email.",
+                        });
+                        throw new functions.https.HttpsError(
+                          "Unknown",
+                          "Failed to send change email."
+                        );
+                      });
+                  })
+                  .catch((error) => {
+                    // Failed to add reauth key to database
+                    reject({
+                      reason: "Failed reauth key insertion",
+                      text: "Failed to send change email.",
+                    });
+                    throw new functions.https.HttpsError(
+                      "database-error",
+                      "Failed to send change email."
+                    );
+                  });
+              })
+              .catch((error) => {
+                // Failed to delete previous reauth keys
+                reject({
+                  reason: "Database Deletion Failed",
+                  text: "Failed to delete previous reauth key from the database.",
+                });
+                throw new functions.https.HttpsError(
+                  "database-error",
+                  "Failed to delete previous reauth key from the database."
+                );
+              });
+          } else {
+            // Volunteer is not in the database
+            reject({
+              reason: "unknown",
+              text: "Failed to send change email.",
+            });
+            throw new functions.https.HttpsError(
+              "unknown",
+              "Failed to send change email."
+            );
+          }
+        })
+        .catch((error) => {
+          // Failed to query firestore for volunteer
+          reject({
+            reason: "Database Query Failed",
+            text: "Failed to query the database.",
+          });
+          throw new functions.https.HttpsError(
+            "Unknown",
+            "Failed to delete previous reauth key from the database."
+          );
+        });
     });
   }
 );

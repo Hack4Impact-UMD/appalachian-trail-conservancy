@@ -3,8 +3,8 @@ import { useAuth } from "../../auth/AuthProvider";
 import { Link, useNavigate } from "react-router-dom";
 import {
   getVolunteer,
-  getAllTrainings,
-  getAllPathways,
+  getAllPublishedTrainings,
+  getAllPublishedPathways,
 } from "../../backend/FirestoreCalls";
 import { TrainingID } from "../../types/TrainingType";
 import { PathwayID } from "../../types/PathwayType";
@@ -267,7 +267,7 @@ function Dashboard() {
           const volunteerPathways = volunteer.pathwayInformation;
 
           // get all trainings from firebase
-          getAllTrainings()
+          getAllPublishedTrainings()
             .then((genericTrainings) => {
               [trainingsIP, trainingsC] = correlateTrainings(
                 genericTrainings,
@@ -283,7 +283,7 @@ function Dashboard() {
             });
 
           // get all pathways from firebase
-          getAllPathways()
+          getAllPublishedPathways()
             .then((genericPathways) => {
               [pathwaysIP, pathwaysC] = correlatePathways(
                 genericPathways,
@@ -299,7 +299,7 @@ function Dashboard() {
             });
 
           // Fetch all trainings and pathways
-          Promise.all([getAllTrainings(), getAllPathways()])
+          Promise.all([getAllPublishedTrainings(), getAllPublishedPathways()])
             .then(([allTrainings, allPathways]) => {
               // Filter out trainings that user has completed or in progress
               const userCompletedTrainings = trainingsC.map(

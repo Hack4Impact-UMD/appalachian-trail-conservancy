@@ -199,7 +199,6 @@ function VolunteerProfilePage() {
           open={openEditEmailPopup}
           onClose={setEditEmailPopup}
           volunteer={volunteer}
-          setVolunteer={setVolunteer}
           setSnackbar={setSnackbar}
           setSnackbarMessage={setSnackbarMessage}
         />

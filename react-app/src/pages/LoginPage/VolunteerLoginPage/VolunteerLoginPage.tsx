@@ -5,7 +5,7 @@ import {
   grayBorderTextField,
   styledRectButton,
 } from "../../../muiTheme";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { sendSignInLink } from "../../../backend/AuthFunctions";
 import { useAuth } from "../../../auth/AuthProvider";
 import Loading from "../../../components/LoadingScreen/Loading";
@@ -26,6 +26,8 @@ function VolunteerLoginPage() {
   const [displayText, setDisplayText] = useState<string>("");
   const [showLoading, setShowLoading] = useState<boolean>(false);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const auth = getAuth(app);
     if (isSignInWithEmailLink(auth, window.location.href)) {
@@ -34,14 +36,17 @@ function VolunteerLoginPage() {
         email = prompt("Please provide your email.");
       }
 
-      signInWithEmailLink(auth, email ?? "", window.location.href)
+      const signInLink = window.location.href;
+      let url = signInLink.split("?")[0];
+      window.history.replaceState({}, document.title, url);
+      signInWithEmailLink(auth, email ?? "", signInLink)
         .then(() => {
           window.localStorage.removeItem("emailForSignIn");
-          let url = window.location.href;
-          url = url.split("?")[0];
-          window.history.replaceState({}, document.title, url);
+          navigate("/");
         })
-        .catch(() => {});
+        .catch(() => {
+          setLoading(false);
+        });
     } else {
       setLoading(false);
     }
