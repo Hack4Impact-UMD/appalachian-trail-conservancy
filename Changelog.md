@@ -1,5 +1,38 @@
 # Changelog
 
+## Spring 2025 Hack4Impact-UMD 
+
+### Profile Page:
+- Added functionality to change volunteer email
+
+### Training & Pathway Editors:
+- Added functionality to editor pages and populate fields
+
+## Fall 2024 Hack4Impact-UMD 
+- Built UI for Admin view using TypeScript and React
+- Add responsiveness to all pages
+
+### Volunteer Portal:
+- Created pathway landing page and tile responsiveness
+- Created pathway quiz pages
+
+### Registration Page:
+- Created page for users to register for app using join code
+
+### Admin Dashboard, Training & Pathway Library
+- Created an pages to searcg abd view drafted, published, and archived trainings and pathways
+
+### Training & Pathway Editors:
+- Created pages to create and edit trainings and pathways
+- Added quiz builder for trainings and pathways
+- Added resource/training linking and selection 
+
+### User Management
+- Created pages to view user, training, and pathway information in table format
+- Add functionality to export selected and filtered data
+
+
+
 ## Spring 2024 Hack4Impact-UMD 
 - Built UI for Volunteer view using TypeScript and React
 - Set up Firebase for database, authentication, and hosting
@@ -37,7 +70,6 @@
 
 ### Footer:
 - Created footer with links to main ATC website
-
 
 
 
