@@ -8,8 +8,8 @@ import {
 } from "../../muiTheme";
 import {
   getVolunteer,
-  getAllPublishedTrainings,
-  getAllPublishedPathways,
+  getAllPathways,
+  getAllTrainings,
 } from "../../backend/FirestoreCalls";
 import { TrainingID } from "../../types/TrainingType";
 import { VolunteerTraining, VolunteerPathway } from "../../types/UserType";
@@ -60,7 +60,7 @@ function VolunteerAchievementsPage() {
   }, []);
 
   useEffect(() => {
-    getAllPublishedTrainings().then((genericTrainings) => {
+    getAllTrainings().then((genericTrainings) => {
       if (!auth.loading && auth.id) {
         setLoading(true);
         getVolunteer(auth.id.toString()).then((volunteer) => {
@@ -94,7 +94,7 @@ function VolunteerAchievementsPage() {
         });
       }
     });
-    getAllPublishedPathways().then((genericPathways) => {
+    getAllPathways().then((genericPathways) => {
       if (!auth.loading && auth.id) {
         setLoading(true);
         getVolunteer(auth.id.toString()).then((volunteer) => {
