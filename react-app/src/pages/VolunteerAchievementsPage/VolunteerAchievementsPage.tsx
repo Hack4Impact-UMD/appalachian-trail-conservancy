@@ -8,8 +8,8 @@ import {
 } from "../../muiTheme";
 import {
   getVolunteer,
-  getAllTrainings,
   getAllPathways,
+  getAllTrainings,
 } from "../../backend/FirestoreCalls";
 import { TrainingID } from "../../types/TrainingType";
 import { VolunteerTraining, VolunteerPathway } from "../../types/UserType";
@@ -215,7 +215,8 @@ function VolunteerAchievementsPage() {
         style={{
           // Only apply left shift when screen width is greater than 1200px
           left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-        }}>
+        }}
+      >
         {!navigationBarOpen && (
           <img
             src={hamburger}
@@ -247,7 +248,8 @@ function VolunteerAchievementsPage() {
                       ? forestGreenButtonPadding
                       : whiteButtonGrayBorder
                   }
-                  variant="contained">
+                  variant="contained"
+                >
                   Pathway Badges
                 </Button>
                 <Button
@@ -262,7 +264,8 @@ function VolunteerAchievementsPage() {
                       ? forestGreenButtonPadding
                       : whiteButtonGrayBorder
                   }
-                  variant="contained">
+                  variant="contained"
+                >
                   Training Certificates
                 </Button>
               </div>
@@ -274,7 +277,8 @@ function VolunteerAchievementsPage() {
                   sx={{
                     ...whiteSelectGrayBorder,
                     width: "100%",
-                  }}>
+                  }}
+                >
                   <MenuItem value={"newest"} sx={selectOptionStyle}>
                     SORT: NEWEST
                   </MenuItem>
@@ -286,7 +290,8 @@ function VolunteerAchievementsPage() {
                   </MenuItem>
                   <MenuItem
                     value={"reverseAlphabetically"}
-                    sx={selectOptionStyle}>
+                    sx={selectOptionStyle}
+                  >
                     SORT: Z-A
                   </MenuItem>
                 </Select>
@@ -308,7 +313,8 @@ function VolunteerAchievementsPage() {
                                 navigate("/pathways");
                               }}
                               sx={forestGreenButtonPadding}
-                              variant="contained">
+                              variant="contained"
+                            >
                               Go to Pathways Library
                             </Button>
                           </div>
@@ -340,7 +346,8 @@ function VolunteerAchievementsPage() {
                                 navigate("/trainings");
                               }}
                               sx={forestGreenButtonPadding}
-                              variant="contained">
+                              variant="contained"
+                            >
                               Go to Trainings Library
                             </Button>
                           </div>

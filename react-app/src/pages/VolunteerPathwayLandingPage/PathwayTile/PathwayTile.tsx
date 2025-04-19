@@ -280,32 +280,16 @@ const PathwayTile: React.FC<PathwayTileProps> = ({
           if (image.includes("End") || image.includes("Trophy")) {
             handleQuizClick();
           }
-        }}>
+        }}
+      >
         <Tooltip
           title={
             image.includes("End") || image.includes("Trophy")
               ? "Quiz"
               : trainingID?.name
           }
-          arrow={false}
-          onMouseMove={(e) => setPosition({ x: e.pageX, y: e.pageY })}
-          PopperProps={{
-            anchorEl: {
-              clientHeight: 0,
-              clientWidth: 0,
-              getBoundingClientRect: () => ({
-                top: position.y,
-                left: position.x,
-                right: position.x,
-                bottom: position.y,
-                width: 0,
-                height: 0,
-                x: position.x,
-                y: position.y,
-                toJSON: () => {},
-              }),
-            },
-          }}
+          arrow={true}
+          placement="top"
           componentsProps={{
             tooltip: {
               sx: {
@@ -316,7 +300,13 @@ const PathwayTile: React.FC<PathwayTileProps> = ({
                 },
               },
             },
-          }}>
+            arrow: {
+              sx: {
+                color: grayTooltip.bgcolor,
+              },
+            },
+          }}
+        >
           <img
             src={image}
             className={`${styles.tileImage} ${
@@ -324,7 +314,6 @@ const PathwayTile: React.FC<PathwayTileProps> = ({
             }`}
           />
         </Tooltip>
-
         <div className={styles.trainingNumber}>
           {trainingID != null && tileNum >= trainingsCompleted
             ? tileNum + 1
