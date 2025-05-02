@@ -22,7 +22,7 @@ function VolunteerLoginPage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [failureMessage, setFailureMessage] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-  const [viewConfirmation, setViewConfirmation] = useState<boolean>(true);
+  const [viewConfirmation, setViewConfirmation] = useState<boolean>(false);
   const [displayText, setDisplayText] = useState<string>("");
   const [showLoading, setShowLoading] = useState<boolean>(false);
 
