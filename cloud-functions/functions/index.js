@@ -8,35 +8,6 @@ const db = admin.firestore();
 const dotenv = require("dotenv");
 require("dotenv").config();
 const nodemailer = require("nodemailer");
-const { google } = require("googleapis");
-const OAuth2 = google.auth.OAuth2;
-
-// const oauth2Client = new OAuth2(
-//   process.env.CLIENT_ID,
-//   process.env.CLIENT_SECRET,
-//   "https://developers.google.com/oauthplayground"
-// );
-
-// oauth2Client.setCredentials({
-//   refresh_token: process.env.REFRESH_TOKEN,
-// });
-
-// const accessToken = oauth2Client.getAccessToken();
-
-// const transporter = nodemailer.createTransport({
-//   service: "gmail",
-//   auth: {
-//     type: "OAuth2",
-//     user: process.env.EMAIL,
-//     accessToken: accessToken,
-//     clientId: process.env.CLIENT_ID,
-//     clientSecret: process.env.CLIENT_SECRET,
-//     refreshToken: process.env.REFRESH_TOKEN,
-//   },
-//   tls: {
-//     rejectUnauthorized: false,
-//   },
-// });
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
@@ -1086,7 +1057,7 @@ exports.sendSignInEmailLink = onCall(
                 .catch((error) => {
                   reject({
                     reason: "Transporter failed to send email",
-                    text: "Failed to send email to user.",
+                    text: error,
                   });
                   throw new functions.https.HttpsError(
                     "Transporter failed to send email",

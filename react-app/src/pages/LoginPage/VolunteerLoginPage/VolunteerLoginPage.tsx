@@ -140,6 +140,9 @@ function VolunteerLoginPage() {
           <span className={styles.greenText}>{displayText}</span>.
         </p>
         <p>Please use the link to access your dashboard.</p>
+        <p className={styles.checkSpamMessage}>
+          If you don't see our email, please check your spam folder.
+        </p>
       </div>
     </div>
   );
