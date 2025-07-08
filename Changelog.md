@@ -1,6 +1,14 @@
 # Changelog
 
-## Spring 2025 Hack4Impact-UMD 
+## Summer 2025 Hack4Impact-UMD
+
+### Handoff:
+- Worked with ATC to fully complete the handoff. Cleaned Firestore and set up custom domain.
+
+## Spring 2025 Hack4Impact-UMD
+
+### ATC NodeMailer:
+- Emails from the application are now sent from [apptraillearn@gmail.com](apptraillearn@gmail.com)
 
 ### Profile Page:
 - Added functionality to change volunteer email
@@ -20,7 +28,7 @@
 - Created page for users to register for app using join code
 
 ### Admin Dashboard, Training & Pathway Library
-- Created an pages to searcg abd view drafted, published, and archived trainings and pathways
+- Created pages to search and view drafted, published, and archived trainings and pathways
 
 ### Training & Pathway Editors:
 - Created pages to create and edit trainings and pathways
