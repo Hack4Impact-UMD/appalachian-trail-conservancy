@@ -17,7 +17,7 @@ Our project aims to help the Appalachian Trail Conservancy streamline and gamify
 
 ## Hosting
 
-We are currently using Firebase Hosting. You can view a dev deployment of the application at [https://atc-training-aa43c.web.app/](https://atc-training-aa43c.web.app/)
+We are currently using Firebase Hosting. You can view the live deployment of the application at [https://learn.appalachiantrail.org](https://learn.appalachiantrail.org)
 
 # Tech Stack
 
@@ -31,7 +31,7 @@ We are currently using Firebase Hosting. You can view a dev deployment of the ap
 
 **Backend:** [Firebase](https://firebase.google.com/)
 
-- Authentication, Database, and Hosting
+- Authentication, Database, Image Store, and Hosting
 
 Contact Akash or Sophie to gain access to our Firebase Console.
 
