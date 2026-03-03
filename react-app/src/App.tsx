@@ -280,14 +280,6 @@ function App() {
                 </RequireAuth>
               }
             />
-            <Route
-              path="/testfunctions"
-              element={
-                <RequireAuth>
-                  <button onClick={async () => {}}>TEST</button>
-                </RequireAuth>
-              }
-            />
           </Routes>
         </AuthProvider>
       </HashRouter>

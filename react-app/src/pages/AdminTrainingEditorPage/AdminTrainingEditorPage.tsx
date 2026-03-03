@@ -57,36 +57,36 @@ const AdminTrainingEditorPage: React.FC = () => {
   const trainingData = location.state?.training as TrainingID | undefined;
   const navigate = useNavigate();
   const [trainingId, setTrainingId] = useState<string | undefined>(
-    trainingData?.id
+    trainingData?.id,
   );
   const status = trainingData?.status || ("DRAFT" as Status);
   const [trainingName, setTrainingName] = useState<string>(
-    trainingData?.name || ""
+    trainingData?.name || "",
   );
   const [blurb, setBlurb] = useState<string>(trainingData?.shortBlurb || "");
   const [description, setDescription] = useState<string>(
-    trainingData?.description || ""
+    trainingData?.description || "",
   );
   const [descriptionPlain, setDescriptionPlain] = useState<string>(
-    trainingData?.description.replace(/<[^>]*>/g, "") || ""
+    trainingData?.description.replace(/<[^>]*>/g, "") || "",
   );
   const [resourceTitle, setResourceTitle] = useState<string>(
-    trainingData?.resources[0]?.title || ""
+    trainingData?.resources[0]?.title || "",
   );
   const [resourceLink, setResourceLink] = useState<string>(
-    trainingData?.resources[0]?.link || ""
+    trainingData?.resources[0]?.link || "",
   );
   const [resourceType, setResourceType] = useState<string>(
-    trainingData?.resources[0]?.type || ""
+    trainingData?.resources[0]?.type || "",
   );
   const [coverImage, setCoverImage] = useState<string>(
-    trainingData?.coverImage || ""
+    trainingData?.coverImage || "",
   );
 
   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
 
   const [navigationBarOpen, setNavigationBarOpen] = useState(
-    !(window.innerWidth < 1200)
+    !(window.innerWidth < 1200),
   );
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
   const [openDeleteDraftPopup, setOpenDeleteDraftPopup] =
@@ -224,8 +224,14 @@ const AdminTrainingEditorPage: React.FC = () => {
 
     // Validate Resource Link if type is video
     const youtubeRegex = /^https:\/\/www\.youtube\.com\/embed\/[\w-]+(\?.*)?$/;
-    if (resourceType === "VIDEO" && !youtubeRegex.test(resourceLink)) {
-      newErrors.resourceLink = "Please provide a valid embedded YouTube link.";
+    const npsRegex = /^https:\/\/www\.nps\.gov\/media\/video\/embed\.htm\?.+$/;
+    if (
+      resourceType === "VIDEO" &&
+      !youtubeRegex.test(resourceLink) &&
+      !npsRegex.test(resourceLink)
+    ) {
+      newErrors.resourceLink =
+        "Please provide a valid embedded YouTube or NPS link.";
       isValid = false;
     }
 
@@ -311,9 +317,12 @@ const AdminTrainingEditorPage: React.FC = () => {
       setSnackbar(true);
     } else {
       if (
-        errors.resourceLink == "Please provide a valid embedded YouTube link."
+        errors.resourceLink ==
+        "Please provide a valid embedded YouTube or NPS link."
       ) {
-        setSnackbarMessage("Please provide a valid embedded YouTube link.");
+        setSnackbarMessage(
+          "Please provide a valid embedded YouTube or NPS link.",
+        );
       } else {
         setSnackbarMessage("Please complete all required fields.");
       }
@@ -416,9 +425,12 @@ const AdminTrainingEditorPage: React.FC = () => {
       }
     } else {
       if (
-        errors.resourceLink == "Please provide a valid embedded YouTube link."
+        errors.resourceLink ==
+        "Please provide a valid embedded YouTube or NPS link."
       ) {
-        setSnackbarMessage("Please provide a valid embedded YouTube link.");
+        setSnackbarMessage(
+          "Please provide a valid embedded YouTube or NPS link.",
+        );
       } else {
         setSnackbarMessage("Please complete all required fields.");
       }
@@ -485,7 +497,7 @@ const AdminTrainingEditorPage: React.FC = () => {
         ) {
           quillDescriptionRef.current!.deleteText(
             characterLimits.description,
-            quillDescriptionRef.current!.getLength()
+            quillDescriptionRef.current!.getLength(),
           );
         }
 
@@ -572,7 +584,7 @@ const AdminTrainingEditorPage: React.FC = () => {
                 <Typography variant="body2" sx={inputHelperText}>
                   {Math.max(
                     characterLimits.trainingName - trainingName.length,
-                    0
+                    0,
                   )}{" "}
                   Characters Remaining
                 </Typography>
@@ -645,7 +657,7 @@ const AdminTrainingEditorPage: React.FC = () => {
                 <Typography variant="body2" sx={inputHelperText}>
                   {Math.max(
                     characterLimits.description - descriptionPlain.length,
-                    0
+                    0,
                   )}{" "}
                   Characters Remaining
                 </Typography>
@@ -766,7 +778,7 @@ const AdminTrainingEditorPage: React.FC = () => {
                 <Typography variant="body2" sx={inputHelperText}>
                   {Math.max(
                     characterLimits.resourceTitle - resourceTitle.length,
-                    0
+                    0,
                   )}{" "}
                   Characters Remaining
                 </Typography>
@@ -800,7 +812,7 @@ const AdminTrainingEditorPage: React.FC = () => {
                 </Typography>
 
                 <Tooltip
-                  title="Link to PDF or Embedded YouTube Video. To get the embed link, click on the 'share' button on the YouTube video and then click on 'Embed'. Grab the link from the code which is everything inside the src attribute."
+                  title="Link to PDF or Embedded YouTube or NPS Video. To get the YouTube embed link, click on the 'share' button on video and then click on 'Embed'. Grab the link from the code which is everything inside the src attribute."
                   placement="right"
                   componentsProps={{
                     tooltip: {
@@ -846,7 +858,7 @@ const AdminTrainingEditorPage: React.FC = () => {
                     value={resourceType}
                     onChange={(e) =>
                       setResourceType(
-                        e.target.value === "VIDEO" ? "VIDEO" : "PDF"
+                        e.target.value === "VIDEO" ? "VIDEO" : "PDF",
                       )
                     }
                     displayEmpty
