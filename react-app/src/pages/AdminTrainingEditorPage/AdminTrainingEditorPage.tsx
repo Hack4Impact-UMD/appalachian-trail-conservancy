@@ -57,36 +57,36 @@ const AdminTrainingEditorPage: React.FC = () => {
   const trainingData = location.state?.training as TrainingID | undefined;
   const navigate = useNavigate();
   const [trainingId, setTrainingId] = useState<string | undefined>(
-    trainingData?.id,
+    trainingData?.id
   );
   const status = trainingData?.status || ("DRAFT" as Status);
   const [trainingName, setTrainingName] = useState<string>(
-    trainingData?.name || "",
+    trainingData?.name || ""
   );
   const [blurb, setBlurb] = useState<string>(trainingData?.shortBlurb || "");
   const [description, setDescription] = useState<string>(
-    trainingData?.description || "",
+    trainingData?.description || ""
   );
   const [descriptionPlain, setDescriptionPlain] = useState<string>(
-    trainingData?.description.replace(/<[^>]*>/g, "") || "",
+    trainingData?.description.replace(/<[^>]*>/g, "") || ""
   );
   const [resourceTitle, setResourceTitle] = useState<string>(
-    trainingData?.resources[0]?.title || "",
+    trainingData?.resources[0]?.title || ""
   );
   const [resourceLink, setResourceLink] = useState<string>(
-    trainingData?.resources[0]?.link || "",
+    trainingData?.resources[0]?.link || ""
   );
   const [resourceType, setResourceType] = useState<string>(
-    trainingData?.resources[0]?.type || "",
+    trainingData?.resources[0]?.type || ""
   );
   const [coverImage, setCoverImage] = useState<string>(
-    trainingData?.coverImage || "",
+    trainingData?.coverImage || ""
   );
 
   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
 
   const [navigationBarOpen, setNavigationBarOpen] = useState(
-    !(window.innerWidth < 1200),
+    !(window.innerWidth < 1200)
   );
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
   const [openDeleteDraftPopup, setOpenDeleteDraftPopup] =
@@ -321,7 +321,7 @@ const AdminTrainingEditorPage: React.FC = () => {
         "Please provide a valid embedded YouTube or NPS link."
       ) {
         setSnackbarMessage(
-          "Please provide a valid embedded YouTube or NPS link.",
+          "Please provide a valid embedded YouTube or NPS link."
         );
       } else {
         setSnackbarMessage("Please complete all required fields.");
@@ -429,7 +429,7 @@ const AdminTrainingEditorPage: React.FC = () => {
         "Please provide a valid embedded YouTube or NPS link."
       ) {
         setSnackbarMessage(
-          "Please provide a valid embedded YouTube or NPS link.",
+          "Please provide a valid embedded YouTube or NPS link."
         );
       } else {
         setSnackbarMessage("Please complete all required fields.");
@@ -497,7 +497,7 @@ const AdminTrainingEditorPage: React.FC = () => {
         ) {
           quillDescriptionRef.current!.deleteText(
             characterLimits.description,
-            quillDescriptionRef.current!.getLength(),
+            quillDescriptionRef.current!.getLength()
           );
         }
 
@@ -584,7 +584,7 @@ const AdminTrainingEditorPage: React.FC = () => {
                 <Typography variant="body2" sx={inputHelperText}>
                   {Math.max(
                     characterLimits.trainingName - trainingName.length,
-                    0,
+                    0
                   )}{" "}
                   Characters Remaining
                 </Typography>
@@ -657,7 +657,7 @@ const AdminTrainingEditorPage: React.FC = () => {
                 <Typography variant="body2" sx={inputHelperText}>
                   {Math.max(
                     characterLimits.description - descriptionPlain.length,
-                    0,
+                    0
                   )}{" "}
                   Characters Remaining
                 </Typography>
@@ -778,7 +778,7 @@ const AdminTrainingEditorPage: React.FC = () => {
                 <Typography variant="body2" sx={inputHelperText}>
                   {Math.max(
                     characterLimits.resourceTitle - resourceTitle.length,
-                    0,
+                    0
                   )}{" "}
                   Characters Remaining
                 </Typography>
@@ -870,7 +870,7 @@ const AdminTrainingEditorPage: React.FC = () => {
                     value={resourceType}
                     onChange={(e) =>
                       setResourceType(
-                        e.target.value === "VIDEO" ? "VIDEO" : "PDF",
+                        e.target.value === "VIDEO" ? "VIDEO" : "PDF"
                       )
                     }
                     displayEmpty
