@@ -4,16 +4,18 @@
 
 For inquiries about the project, contact
 
-| Name        | Email                  |
-| ----------- | ---------------------- |
-| Sophie Tsai | sophietsai31@gmail.com |
-| Akash Patil | akashspxp@gmail.com    |
+| Name          | Role            |  Email                  |
+| ------------- | --------------- | ----------------------- |
+| Sophie Tsai   | Tech Lead       | sophietsai31@gmail.com  |
+| Akash Patil   | Tech Lead       | akashspxp@gmail.com     |
+| Megan Yu      | Product Manager | myu55@terpmail.umd.edu  |
+| Tarun Kommuri | Product Manager | kommuri.tarun@gmail.com |
 
 # Project Info
 
 [Appalachian Trail Conservancy](https://appalachiantrail.org/) is the leading organization in charge of protecting, managing, and advocating for the entire 2,000+ mile Appalachian Trail and its surrounding lands.
 
-Our project aims to help the Appalachian Trail Conservancy streamline and gamify training processes for their staff and volunteers.
+Our project aims to help the Appalachian Trail Conservancy streamline and gamify training processes for their staff and volunteers. Learn more about the project and team [here](https://umd.hack4impact.org/ourwork/atc).
 
 ## Hosting
 
