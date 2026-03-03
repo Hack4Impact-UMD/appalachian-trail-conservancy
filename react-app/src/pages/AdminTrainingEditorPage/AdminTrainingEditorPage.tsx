@@ -812,7 +812,19 @@ const AdminTrainingEditorPage: React.FC = () => {
                 </Typography>
 
                 <Tooltip
-                  title="Link to PDF or Embedded YouTube or NPS Video. To get the YouTube embed link, click on the 'share' button on video and then click on 'Embed'. Grab the link from the code which is everything inside the src attribute."
+                  title={
+                    <span style={{ whiteSpace: "pre-line" }}>
+                      <b>{"Link to PDF or Embedded YouTube/NPS Video.\n\n"}</b>
+                      {
+                        "To get the YouTube embed link, click on the 'share' button on the video and then click on 'Embed'. Grab the link from the code inside the src attribute. \ne.g., "
+                      }
+                      <span style={{ color: "var(--forest-green)" }}>
+                        {
+                          "https://www.youtube.com/embed/loY-tnX9cmo?si=teOcojOmH83P0VHM"
+                        }
+                      </span>
+                    </span>
+                  }
                   placement="right"
                   componentsProps={{
                     tooltip: {
