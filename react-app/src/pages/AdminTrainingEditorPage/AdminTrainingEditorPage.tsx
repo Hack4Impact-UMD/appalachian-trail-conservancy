@@ -189,7 +189,7 @@ const AdminTrainingEditorPage: React.FC = () => {
     // Other fields can be saved empty in draft mode
     if (saveAsIs && status === "DRAFT") {
       setErrors(newErrors);
-      return isValid;
+      return { isValid, errors: newErrors };
     }
 
     if (!blurb || blurb.trim() == "") {
@@ -236,13 +236,14 @@ const AdminTrainingEditorPage: React.FC = () => {
     }
 
     setErrors(newErrors);
-    return isValid;
+    return { isValid, errors: newErrors };
   };
 
   const handleSaveClick = async () => {
     setLoading(true);
     // Validate fields only if in edit mode
-    if (validateFields(true)) {
+    const { isValid: saveIsValid, errors: savedErrors } = validateFields(true);
+    if (saveIsValid) {
       let blankErrors = {
         trainingName: "",
         blurb: "",
@@ -317,7 +318,7 @@ const AdminTrainingEditorPage: React.FC = () => {
       setSnackbar(true);
     } else {
       if (
-        errors.resourceLink ==
+        savedErrors.resourceLink ==
         "Please provide a valid embedded YouTube or NPS link."
       ) {
         setSnackbarMessage(
@@ -334,7 +335,8 @@ const AdminTrainingEditorPage: React.FC = () => {
 
   const handleNextClick = async () => {
     setLoading(true);
-    if (validateFields(false)) {
+    const { isValid: nextIsValid, errors: nextErrors } = validateFields(false);
+    if (nextIsValid) {
       let blankErrors = {
         trainingName: "",
         blurb: "",
@@ -425,7 +427,7 @@ const AdminTrainingEditorPage: React.FC = () => {
       }
     } else {
       if (
-        errors.resourceLink ==
+        nextErrors.resourceLink ==
         "Please provide a valid embedded YouTube or NPS link."
       ) {
         setSnackbarMessage(
