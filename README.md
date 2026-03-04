@@ -4,16 +4,18 @@
 
 For inquiries about the project, contact
 
-| Name        | Email                  |
-| ----------- | ---------------------- |
-| Sophie Tsai | sophietsai31@gmail.com |
-| Akash Patil | akashspxp@gmail.com    |
+| Name          | Role            | Email                   |
+| ------------- | --------------- | ----------------------- |
+| Sophie Tsai   | Tech Lead       | sophietsai31@gmail.com  |
+| Akash Patil   | Tech Lead       | akashspxp@gmail.com     |
+| Megan Yu      | Product Manager | myu55@terpmail.umd.edu  |
+| Tarun Kommuri | Product Manager | kommuri.tarun@gmail.com |
 
 # Project Info
 
 [Appalachian Trail Conservancy](https://appalachiantrail.org/) is the leading organization in charge of protecting, managing, and advocating for the entire 2,000+ mile Appalachian Trail and its surrounding lands.
 
-Our project aims to help the Appalachian Trail Conservancy streamline and gamify training processes for their staff and volunteers.
+Our project aims to help the Appalachian Trail Conservancy streamline and gamify training processes for their staff and volunteers. [Learn more about the project and team](https://umd.hack4impact.org/ourwork/atc).
 
 ## Hosting
 
@@ -45,12 +47,11 @@ We currently have 3 collections that correspond to our project Types:
 - Users (Volunteer and Admin accounts)
   <img width="2000" alt="ATC Types" src="https://github.com/user-attachments/assets/fd5a9696-c125-444a-acb2-99ba1ae29fb6" />
 
-
 # Running the Repo Locally
 
 1. Clone the repo and cd into it
-2. Run `npm install` in the react-app directory
-3. Run `npm run dev` in the react-app directory
+2. Run `npm install` in the `react-app` directory
+3. Run `npm run dev` in the `react-app` directory
 4. Navigate to http://localhost:5173/ in your browser
 
 ---

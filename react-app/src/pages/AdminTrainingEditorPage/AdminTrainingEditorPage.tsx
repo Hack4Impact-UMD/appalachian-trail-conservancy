@@ -189,7 +189,7 @@ const AdminTrainingEditorPage: React.FC = () => {
     // Other fields can be saved empty in draft mode
     if (saveAsIs && status === "DRAFT") {
       setErrors(newErrors);
-      return isValid;
+      return { isValid, errors: newErrors };
     }
 
     if (!blurb || blurb.trim() == "") {
@@ -224,19 +224,26 @@ const AdminTrainingEditorPage: React.FC = () => {
 
     // Validate Resource Link if type is video
     const youtubeRegex = /^https:\/\/www\.youtube\.com\/embed\/[\w-]+(\?.*)?$/;
-    if (resourceType === "VIDEO" && !youtubeRegex.test(resourceLink)) {
-      newErrors.resourceLink = "Please provide a valid embedded YouTube link.";
+    const npsRegex = /^https:\/\/www\.nps\.gov\/media\/video\/embed\.htm\?.+$/;
+    if (
+      resourceType === "VIDEO" &&
+      !youtubeRegex.test(resourceLink) &&
+      !npsRegex.test(resourceLink)
+    ) {
+      newErrors.resourceLink =
+        "Please provide a valid embedded YouTube or NPS link.";
       isValid = false;
     }
 
     setErrors(newErrors);
-    return isValid;
+    return { isValid, errors: newErrors };
   };
 
   const handleSaveClick = async () => {
     setLoading(true);
     // Validate fields only if in edit mode
-    if (validateFields(true)) {
+    const { isValid: saveIsValid, errors: savedErrors } = validateFields(true);
+    if (saveIsValid) {
       let blankErrors = {
         trainingName: "",
         blurb: "",
@@ -311,9 +318,12 @@ const AdminTrainingEditorPage: React.FC = () => {
       setSnackbar(true);
     } else {
       if (
-        errors.resourceLink == "Please provide a valid embedded YouTube link."
+        savedErrors.resourceLink ==
+        "Please provide a valid embedded YouTube or NPS link."
       ) {
-        setSnackbarMessage("Please provide a valid embedded YouTube link.");
+        setSnackbarMessage(
+          "Please provide a valid embedded YouTube or NPS link."
+        );
       } else {
         setSnackbarMessage("Please complete all required fields.");
       }
@@ -325,7 +335,8 @@ const AdminTrainingEditorPage: React.FC = () => {
 
   const handleNextClick = async () => {
     setLoading(true);
-    if (validateFields(false)) {
+    const { isValid: nextIsValid, errors: nextErrors } = validateFields(false);
+    if (nextIsValid) {
       let blankErrors = {
         trainingName: "",
         blurb: "",
@@ -416,9 +427,12 @@ const AdminTrainingEditorPage: React.FC = () => {
       }
     } else {
       if (
-        errors.resourceLink == "Please provide a valid embedded YouTube link."
+        nextErrors.resourceLink ==
+        "Please provide a valid embedded YouTube or NPS link."
       ) {
-        setSnackbarMessage("Please provide a valid embedded YouTube link.");
+        setSnackbarMessage(
+          "Please provide a valid embedded YouTube or NPS link."
+        );
       } else {
         setSnackbarMessage("Please complete all required fields.");
       }
@@ -800,7 +814,19 @@ const AdminTrainingEditorPage: React.FC = () => {
                 </Typography>
 
                 <Tooltip
-                  title="Link to PDF or Embedded YouTube Video. To get the embed link, click on the 'share' button on the YouTube video and then click on 'Embed'. Grab the link from the code which is everything inside the src attribute."
+                  title={
+                    <span style={{ whiteSpace: "pre-line" }}>
+                      <b>{"Link to PDF or Embedded YouTube/NPS Video.\n\n"}</b>
+                      {
+                        "To get the YouTube embed link, click on the 'share' button on the video and then click on 'Embed'. Grab the link from the code inside the src attribute. \ne.g., "
+                      }
+                      <span style={{ color: "var(--forest-green)" }}>
+                        {
+                          "https://www.youtube.com/embed/loY-tnX9cmo?si=teOcojOmH83P0VHM"
+                        }
+                      </span>
+                    </span>
+                  }
                   placement="right"
                   componentsProps={{
                     tooltip: {
