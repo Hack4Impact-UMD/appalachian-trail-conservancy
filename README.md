@@ -50,9 +50,20 @@ We currently have 3 collections that correspond to our project Types:
 # Running the Repo Locally
 
 1. Clone the repo and cd into it
-2. Run `npm install` in the `react-app` directory
-3. Run `npm run dev` in the `react-app` directory
-4. Navigate to http://localhost:5173/ in your browser
+2. Run `npm install` in the `cloud-functions/functions` directory
+3. Run `npm install` in the `react-app` directory
+4. Run `npm run dev` in the `react-app` directory (starts Firebase emulators, seeds test data, and runs Vite)
+5. Navigate to http://localhost:5173/ in your browser
+
+If you want emulator startup without importing/exporting snapshot files, run `npm run dev` in `react-app`.
+
+If you only want the frontend dev server without emulator orchestration, run `npm run dev:web` in `react-app`.
+
+### Seeded Test Accounts
+
+- Admin email: `admin+emulator@atc.local`
+- Admin password: `LocalPass123!`
+- Volunteer email: `h4iatctest@gmail.com`
 
 ---
 

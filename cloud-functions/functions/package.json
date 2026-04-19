@@ -4,6 +4,10 @@
   "scripts": {
     "lint": "eslint .",
     "serve": "firebase emulators:start --only functions",
+    "emulators:start": "firebase emulators:start",
+    "emulators:start:import": "firebase emulators:start --import=../emulator-data --export-on-exit=../emulator-data",
+    "emulators:export": "firebase emulators:export ../emulator-data",
+    "seed:emulator": "node scripts/seed-emulator.js",
     "shell": "firebase functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
