@@ -974,17 +974,19 @@ exports.validatePathwayQuizResults = onCall(
  * if so, it will send an email to the user with a link to sign in
  * in both cases the function will simply resolve with nothing
  *
- * Arguments: url, email
+ * Arguments: url, handleCodeInApp, email
  *
  */
 exports.sendSignInEmailLink = onCall(
   { region: "us-east4", cors: true },
   async ({ data }) => {
     return new Promise(async (resolve, reject) => {
-      const { url, email } = data;
+      const { url, handleCodeInApp, email } = data;
 
       const actionCodeSettings = {
         url: url,
+        handleCodeInApp: handleCodeInApp,
+        linkDomain: "https://learn.appalachiantrail.org/",
       };
 
       try {
@@ -1101,14 +1103,14 @@ exports.sendSignInEmailLink = onCall(
  * of the random string as a query parameter then passes it to the
  * generateSignInWithEmailLink function to send to the Volunteer
  *
- * Arguments: url, email
+ * Arguments: url, handleCodeInApp, email
  *
  */
 exports.sendChangeEmailLink = onCall(
   { region: "us-east4", cors: true },
   async ({ data }) => {
     return new Promise(async (resolve, reject) => {
-      const { url, email } = data;
+      const { url, handleCodeInApp, email } = data;
 
       await db
         .collection("Users")
