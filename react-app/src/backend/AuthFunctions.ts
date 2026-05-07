@@ -205,6 +205,7 @@ export function sendSignInLink(email: string): Promise<void> {
 
     sendSignInEmailLink({
       url: window.location.href,
+      handleCodeInApp: true,
       email,
     })
       .then((res) => {
@@ -230,6 +231,7 @@ export function sendChangeEmailLink(email: string): Promise<void> {
 
     sendChangeEmailLink({
       url: window.location.href.replace("profile", ""),
+      handleCodeInApp: true,
       email,
     })
       .then(() => {
