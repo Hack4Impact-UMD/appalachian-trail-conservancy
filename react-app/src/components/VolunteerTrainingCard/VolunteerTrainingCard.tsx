@@ -69,7 +69,7 @@ const VolunteerTrainingCard: React.FC<TrainingCardProps> = ({
         </div>
         <div className={styles.trainingContent}>
           <div className={styles.trainingTitleWrapper}>
-            {training.name.length > 35 ? (
+            {training.name.length > 30 ? (
               <Tooltip
                 title={training.name}
                 arrow={false}
@@ -80,7 +80,7 @@ const VolunteerTrainingCard: React.FC<TrainingCardProps> = ({
                   },
                 }}>
                 <div className={styles.trainingTitle}>
-                  {training.name.substring(0, 36)}...
+                  {training.name.substring(0, 31)}...
                 </div>
               </Tooltip>
             ) : (
