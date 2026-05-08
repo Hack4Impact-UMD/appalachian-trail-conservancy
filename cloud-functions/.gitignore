@@ -10,6 +10,9 @@ firebase-debug.*.log*
 # Firebase cache
 .firebase/
 
+# Firebase emulator data (generated locally, not needed in repo)
+emulator-data/
+
 # Firebase config
 
 # Uncomment this if you'd like others to create their own Firebase project.

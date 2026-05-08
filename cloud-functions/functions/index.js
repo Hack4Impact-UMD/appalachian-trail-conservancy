@@ -986,6 +986,7 @@ exports.sendSignInEmailLink = onCall(
       const actionCodeSettings = {
         url: url,
         handleCodeInApp: handleCodeInApp,
+        linkDomain: "https://learn.appalachiantrail.org/",
       };
 
       try {

@@ -1,4 +1,10 @@
 {
+  "scripts": {
+    "emulators:start": "npm --prefix functions run emulators:start",
+    "emulators:start:import": "npm --prefix functions run emulators:start:import",
+    "emulators:export": "npm --prefix functions run emulators:export",
+    "seed:emulator": "npm --prefix functions run seed:emulator"
+  },
   "dependencies": {
     "@firebase/auth": "^1.8.2"
   }

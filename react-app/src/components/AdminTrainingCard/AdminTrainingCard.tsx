@@ -55,7 +55,7 @@ const AdminTrainingCard: React.FC<AdminTrainingCardProps> = ({ training }) => {
         </div>
         <div className={styles.trainingContent}>
           <div className={styles.trainingTitleWrapper}>
-            {training.name.length > 35 ? (
+            {training.name.length > 30 ? (
               <Tooltip
                 title={training.name}
                 arrow={false}
@@ -66,7 +66,7 @@ const AdminTrainingCard: React.FC<AdminTrainingCardProps> = ({ training }) => {
                   },
                 }}>
                 <div className={styles.trainingTitle}>
-                  {training.name.substring(0, 36)}...
+                  {training.name.substring(0, 31)}...
                 </div>
               </Tooltip>
             ) : (

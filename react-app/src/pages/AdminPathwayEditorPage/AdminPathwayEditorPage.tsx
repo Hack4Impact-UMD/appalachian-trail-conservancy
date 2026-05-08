@@ -497,15 +497,18 @@ const AdminPathwayEditorPage: React.FC = () => {
     setLoading(true);
     getAllPublishedTrainings().then((trainings) => {
       // Sort trainings in alphabetical order by name
-      const sortedTrainings = trainings.sort((a, b) =>
+      const sortedTrainings = [...trainings].sort((a, b) =>
         a.name.localeCompare(b.name)
       );
 
       if (pathwayData?.trainingIDs) {
         // set selected trainings
-        const selected = sortedTrainings.filter((training) =>
-          pathwayData?.trainingIDs.includes(training.id)
+        const trainingById = Object.fromEntries(
+          trainings.map((t) => [t.id, t])
         );
+        const selected = pathwayData.trainingIDs
+          .map((id: string) => trainingById[id])
+          .filter(Boolean);
         setSelectedTrainings(selected);
       }
       setTrainingOptions(sortedTrainings);
