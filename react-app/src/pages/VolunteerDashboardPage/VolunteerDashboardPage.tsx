@@ -367,8 +367,7 @@ function Dashboard() {
         style={{
           // Only apply left shift when screen width is greater than 1200px
           left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-        }}
-      >
+        }}>
         {!navigationBarOpen && (
           <img
             src={hamburger}
@@ -403,8 +402,7 @@ function Dashboard() {
                         <Link to="/trainings">
                           <Button
                             sx={forestGreenButtonPadding}
-                            variant="contained"
-                          >
+                            variant="contained">
                             GO TO TRAINING LIBRARY
                           </Button>
                         </Link>
@@ -477,8 +475,7 @@ function Dashboard() {
                               cardType: "badge",
                             },
                           });
-                        }}
-                      >
+                        }}>
                         VIEW ALL
                       </div>
                     </div>
@@ -498,21 +495,20 @@ function Dashboard() {
                   </div>
                 )}
 
-                {/* display certifications if there exist trainings completed */}
+                {/* display certificates if there exist trainings completed */}
                 {trainingsCompleted.length > 0 && (
                   <div>
                     <div className={styles.subHeader}>
-                      <h2>Recent Certifications</h2>
+                      <h2>Recent Trainings Completed</h2>
                       <div
                         className={styles.viewAllLink}
                         onClick={() => {
                           navigate(`/achievements`, {
                             state: {
-                              cardType: "certification",
+                              cardType: "certificate",
                             },
                           });
-                        }}
-                      >
+                        }}>
                         VIEW ALL
                       </div>
                     </div>
