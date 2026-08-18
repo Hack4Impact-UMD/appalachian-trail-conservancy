@@ -367,8 +367,7 @@ function Dashboard() {
         style={{
           // Only apply left shift when screen width is greater than 1200px
           left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-        }}
-      >
+        }}>
         {!navigationBarOpen && (
           <img
             src={hamburger}
@@ -403,8 +402,7 @@ function Dashboard() {
                         <Link to="/trainings">
                           <Button
                             sx={forestGreenButtonPadding}
-                            variant="contained"
-                          >
+                            variant="contained">
                             GO TO TRAINING LIBRARY
                           </Button>
                         </Link>
@@ -477,8 +475,7 @@ function Dashboard() {
                               cardType: "badge",
                             },
                           });
-                        }}
-                      >
+                        }}>
                         VIEW ALL
                       </div>
                     </div>
@@ -511,8 +508,7 @@ function Dashboard() {
                               cardType: "certification",
                             },
                           });
-                        }}
-                      >
+                        }}>
                         VIEW ALL
                       </div>
                     </div>
@@ -533,12 +529,12 @@ function Dashboard() {
                   </div>
                 )}
 
-                {/* Render Recommended Trainings */}
+                {/* Render Discover Trainings */}
                 {recommendedTrainings.length > 0 &&
                   trainingsInProgress.length === 0 && (
                     <div>
                       <div className={styles.subHeader}>
-                        <h2>Recommended Trainings</h2>
+                        <h2>Discover Trainings</h2>
                         <Link className={styles.viewAllLink} to="/trainings">
                           VIEW ALL
                         </Link>
@@ -559,12 +555,12 @@ function Dashboard() {
                     </div>
                   )}
 
-                {/* Render Recommended Pathways */}
+                {/* Render Discover Pathways */}
                 {recommendedPathways.length > 0 &&
                   pathwaysInProgress.length === 0 && (
                     <div>
                       <div className={styles.subHeader}>
-                        <h2>Recommended Pathways</h2>
+                        <h2>Discover Pathways</h2>
                         <Link className={styles.viewAllLink} to="/pathways">
                           VIEW ALL
                         </Link>
