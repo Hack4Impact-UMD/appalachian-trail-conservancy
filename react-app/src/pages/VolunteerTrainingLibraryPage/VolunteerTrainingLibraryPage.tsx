@@ -152,13 +152,13 @@ function TrainingLibrary() {
     }
 
     // sort alphabetically by training name
-    filtered.sort((a, b) => {
+    const sorted = [...filtered].sort((a, b) => {
       const trainingA = a.genericTraining.name.toLowerCase();
       const trainingB = b.genericTraining.name.toLowerCase();
       return trainingA.localeCompare(trainingB);
     });
 
-    setFilteredTrainings(filtered);
+    setFilteredTrainings(sorted);
   };
 
   useEffect(() => {

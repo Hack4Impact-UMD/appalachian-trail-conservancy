@@ -90,12 +90,11 @@ function AdminTrainingLibrary() {
     }
 
     // sort alphabetically by training name
-    filtered.sort((a, b) => {
+    const sorted = [...filtered].sort((a, b) => {
       return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
     });
 
-    setFilteredTrainings(filtered);
-  };
+    setFilteredTrainings(sorted);
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
 
   // Update screen width on resize

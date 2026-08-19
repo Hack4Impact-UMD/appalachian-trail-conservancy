@@ -106,12 +106,11 @@ function AdminPathwayLibrary() {
     }
 
     // sort alphabetically by pathway name
-    filtered.sort((a, b) => {
+    const sorted = [...filtered].sort((a, b) => {
       return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
     });
 
-    setFilteredPathways(filtered);
-  };
+    setFilteredPathways(sorted);
 
   useEffect(() => {
     filterPathways(correlatedPathways);
