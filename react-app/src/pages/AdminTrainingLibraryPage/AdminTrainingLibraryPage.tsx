@@ -95,6 +95,8 @@ function AdminTrainingLibrary() {
     });
 
     setFilteredTrainings(sorted);
+  };
+
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
 
   // Update screen width on resize

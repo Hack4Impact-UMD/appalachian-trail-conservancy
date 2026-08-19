@@ -101,6 +101,7 @@ function PathwayLibrary() {
     });
 
     setFilteredPathways(sorted);
+  };
 
   useEffect(() => {
     setLoading(true);

@@ -111,6 +111,7 @@ function AdminPathwayLibrary() {
     });
 
     setFilteredPathways(sorted);
+  };
 
   useEffect(() => {
     filterPathways(correlatedPathways);
