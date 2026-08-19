@@ -129,7 +129,7 @@ function VolunteerTrainingQuizLandingPage() {
                   <h2>Instructions</h2>
                 </div>
                 <p className={styles.instructions}>
-                  Certification for taking this Training involves passing this
+                  The certificate for taking this Training involves passing this
                   quiz. Select the correct answer for each question. To pass,
                   answer at least {training.quiz.passingScore} out of{" "}
                   {training.quiz.numQuestions} questions correctly. For Learning

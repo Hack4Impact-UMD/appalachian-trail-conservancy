@@ -16,7 +16,7 @@ const TitleInfo: React.FC<TitleInfoProps> = ({
   description,
   volunteerPathway,
 }) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(true);
 
   const renderMarker = () => {
     if (volunteerPathway?.pathwayID === "") {
