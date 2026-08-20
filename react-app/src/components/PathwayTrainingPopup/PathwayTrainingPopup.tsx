@@ -12,6 +12,7 @@ interface modalPropsType {
   onClose: any;
   record: TrainingID | PathwayID;
   volunteerRecord?: VolunteerTraining | VolunteerPathway;
+  pathway?: PathwayID;
   mode: "training" | "pathway";
 }
 
@@ -20,6 +21,7 @@ const PathwayTrainingPopup = ({
   onClose,
   record,
   volunteerRecord,
+  pathway,
   mode,
 }: modalPropsType): React.ReactElement => {
   const navigate = useNavigate();
@@ -28,8 +30,7 @@ const PathwayTrainingPopup = ({
       className={styles.modalContainer}
       onClick={(e) => {
         e.stopPropagation();
-      }}
-    >
+      }}>
       {open ? (
         <>
           <div className={styles.background} onClick={() => onClose()} />
@@ -51,11 +52,11 @@ const PathwayTrainingPopup = ({
                           state: {
                             training: record,
                             volunteerTraining: volunteerRecord,
+                            pathway: pathway,
                           },
                         }
                       )
-                    }
-                  >
+                    }>
                     Learn More
                   </Button>
                 </div>
