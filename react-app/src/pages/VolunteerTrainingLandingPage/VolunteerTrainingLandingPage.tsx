@@ -281,6 +281,24 @@ function VolunteerTrainingLandingPage() {
             numTrainingsCompleted: 0, // Initialize with 0, as the user is just starting the first training in the pathway
             numTotalTrainings: pathway.trainingIDs.length, // Initialize with number of trainings in pathway
           };
+
+          // Check other trainings in the pathway
+          for (let i = 1; i < pathway.trainingIDs.length; i++) {
+            const trainingID = pathway.trainingIDs[i];
+            const volunteerTraining = volunteerData.trainingInformation.find(
+              (training) => training.trainingID === trainingID
+            );
+
+            // If the volunteer has started/completed the training, update newVolunteerPathway accordingly
+            if (volunteerTraining) {
+              if (volunteerTraining.progress === "COMPLETED") {
+                newVolunteerPathway.trainingsCompleted.push(trainingID);
+              } else {
+                newVolunteerPathway.trainingsInProgress.push(trainingID);
+              }
+            }
+          }
+
           // Add the pathway to the user's pathwayInformation list
           return addVolunteerPathway(
             auth.id.toString(),
