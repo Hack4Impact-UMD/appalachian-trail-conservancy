@@ -72,8 +72,11 @@ const VolunteerChangeEmailPage = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    // Check if email is valid
-    if (!validateEmail(email)) {
+    const prevEmail = auth.user.email?.toLowerCase() ?? "";
+    const newEmail = email.trim().toLowerCase();
+
+    // Fail if emails are not valid or equal
+    if (!validateEmail(newEmail) || newEmail !== confirmEmail) {
       setInvalidEmailMessage("Invalid email");
       setInvalidEmail(true);
       setEmailsMatch(false);
@@ -82,9 +85,8 @@ const VolunteerChangeEmailPage = () => {
 
     setLoading(true);
     setUpdateEmailLoading(true);
-    // Replace with your email change function
-    const prevEmail = auth.user.email ?? "";
-    await updateUserEmail(prevEmail, email)
+
+    await updateUserEmail(prevEmail, newEmail)
       .then(async () => {
         await logOut()
           .then(() => {

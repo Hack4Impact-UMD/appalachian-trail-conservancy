@@ -60,14 +60,15 @@ function VolunteerLoginPage() {
   const handleSendLink = async (event: any) => {
     event.preventDefault();
     const pattern: RegExp = /^[^@]+@[^@]+\.[^@]+$/;
+    const normalizedEmail = email.trim().toLowerCase();
 
-    if (!pattern.test(email)) {
+    if (!pattern.test(normalizedEmail)) {
       setFailureMessage("*Not a valid email");
     } else {
       setShowLoading(true);
-      sendSignInLink(email)
+      sendSignInLink(normalizedEmail)
         .then(() => {
-          setDisplayText(email);
+          setDisplayText(normalizedEmail);
           setViewConfirmation(true);
           setFailureMessage("");
         })
@@ -87,8 +88,7 @@ function VolunteerLoginPage() {
         className={styles.centered}
         onSubmit={(event) => {
           handleSendLink(event);
-        }}
-      >
+        }}>
         {/* email field */}
         <div className={styles.alignLeft}>
           <h3 className={styles.label}>Email</h3>
@@ -109,8 +109,7 @@ function VolunteerLoginPage() {
           onClick={(e) => {
             handleSendLink(e);
           }}
-          disabled={showLoading}
-        >
+          disabled={showLoading}>
           {showLoading ? <Loading color="white" /> : "Send Link"}
         </Button>
 
@@ -118,8 +117,7 @@ function VolunteerLoginPage() {
         <p
           className={
             failureMessage ? styles.showFailureMessage : styles.errorContainer
-          }
-        >
+          }>
           {failureMessage}
         </p>
         {/* switch to admin link */}

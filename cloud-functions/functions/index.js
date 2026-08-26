@@ -47,6 +47,7 @@ exports.createVolunteerUser = onCall(
   async ({ auth, data }) => {
     return new Promise(async (resolve, reject) => {
       const authorization = admin.auth();
+      const email = data?.email?.trim().toLowerCase();
       // pull registration code from firestore
       let registrationCode;
       await db
@@ -70,7 +71,7 @@ exports.createVolunteerUser = onCall(
       if (data?.code === registrationCode.code) {
         await authorization
           .createUser({
-            email: data.email,
+            email,
           })
           .then(async (userRecord) => {
             await authorization
@@ -80,7 +81,7 @@ exports.createVolunteerUser = onCall(
               .then(async () => {
                 const collectionObject = {
                   auth_id: userRecord.uid,
-                  email: data.email,
+                  email,
                   firstName: data.firstName,
                   lastName: data.lastName,
                   type: "VOLUNTEER",
@@ -122,7 +123,7 @@ exports.createVolunteerUser = onCall(
                               await transporter
                                 .sendMail({
                                   from: '"ATC" <h4iatctest2@gmail.com>',
-                                  to: data.email,
+                                  to: email,
                                   subject: email.subject,
                                   html: email.body,
                                 })
@@ -232,10 +233,11 @@ exports.createAdminUser = onCall(
     return new Promise(async (resolve, reject) => {
       if (auth && auth.token && auth.token.role == "ADMIN") {
         const authorization = admin.auth();
+        const email = data?.email?.trim().toLowerCase();
         const pass = crypto.randomBytes(32).toString("hex");
         await authorization
           .createUser({
-            email: data.email,
+            email,
             password: pass,
           })
           .then(async (userRecord) => {
@@ -246,7 +248,7 @@ exports.createAdminUser = onCall(
               .then(async () => {
                 const collectionObject = {
                   auth_id: userRecord.uid,
-                  email: data.email,
+                  email,
                   firstName: data.firstName,
                   lastName: data.lastName,
                   type: "ADMIN",
@@ -418,6 +420,7 @@ exports.updateUserEmail = onCall(
   async ({ auth, data }) => {
     return new Promise(async (resolve, reject) => {
       const authorization = admin.auth();
+      const newEmail = data?.newEmail?.trim().toLowerCase();
       if (
         data.email != null &&
         data.newEmail != null &&
@@ -427,7 +430,7 @@ exports.updateUserEmail = onCall(
       ) {
         await authorization
           .updateUser(auth.uid, {
-            email: data.newEmail,
+            email: newEmail,
           })
           .then(async () => {
             await db
@@ -447,7 +450,7 @@ exports.updateUserEmail = onCall(
                 } else {
                   const promises = [];
                   querySnapshot.forEach((doc) => {
-                    promises.push(doc.ref.update({ email: data.newEmail }));
+                    promises.push(doc.ref.update({ email: newEmail }));
                   });
                   await Promise.all(promises)
                     .then(() => {
