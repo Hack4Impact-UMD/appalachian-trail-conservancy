@@ -3,6 +3,7 @@ import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { whiteButtonGrayBorder, forestGreenButton } from "../../muiTheme";
 import { TrainingID, TrainingResource } from "../../types/TrainingType";
 import { VolunteerTraining, VolunteerPathway } from "../../types/UserType";
+import { PathwayID } from "../../types/PathwayType";
 import {
   getVolunteer,
   getTraining,
@@ -261,7 +262,7 @@ function VolunteerTrainingLandingPage() {
       .then((volunteerData) => {
         // Check if user opened the training from a pathway, if the training is the first in the pathway,
         // and if the pathway already exists for the user
-        const pathway = location.state?.sourcePathway;
+        const pathway: PathwayID | undefined = location.state?.sourcePathway;
         const isFirstTrainingInPathway =
           pathway?.trainingIDs?.[0] === training.id;
         const pathwayExistsInVolunteer = pathway
