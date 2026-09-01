@@ -151,7 +151,14 @@ function TrainingLibrary() {
       );
     }
 
-    setFilteredTrainings(filtered);
+    // sort alphabetically by training name
+    const sorted = [...filtered].sort((a, b) => {
+      const trainingA = a.genericTraining.name.toLowerCase();
+      const trainingB = b.genericTraining.name.toLowerCase();
+      return trainingA.localeCompare(trainingB);
+    });
+
+    setFilteredTrainings(sorted);
   };
 
   useEffect(() => {

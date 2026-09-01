@@ -170,7 +170,7 @@ const VolunteerTrainingQuizResultPage = () => {
               {training?.quiz?.questions.map((question, index) => (
                 <QuizResultCard
                   key={index}
-                  currentQuestion={index}
+                  currentQuestion={index + 1}
                   question={question.question}
                   answerOptions={question.choices}
                   selectedAnswer={selectedAnswers[index]}

@@ -101,30 +101,6 @@ const VolunteerNavigationBar: React.FC<NavigationBarProps> = ({
 
                 <div className={styles.tabContainer}>
                   <NavLink
-                    to="/trainings"
-                    className={({ isActive }) =>
-                      isActive
-                        ? `${styles.tab} ${styles.tabActive}`
-                        : `${styles.tab} ${styles.tabInActive}`
-                    }>
-                    <div>
-                      <img
-                        className={styles.iconActive}
-                        src={trainingsActive}
-                        alt="trainings icon"
-                      />
-                      <img
-                        className={styles.iconInactive}
-                        src={trainingsInactive}
-                        alt="trainings icon"
-                      />
-                    </div>
-                    Trainings
-                  </NavLink>
-                </div>
-
-                <div className={styles.tabContainer}>
-                  <NavLink
                     to="/pathways"
                     className={({ isActive }) =>
                       isActive
@@ -144,6 +120,30 @@ const VolunteerNavigationBar: React.FC<NavigationBarProps> = ({
                       />
                     </div>
                     Pathways
+                  </NavLink>
+                </div>
+
+                <div className={styles.tabContainer}>
+                  <NavLink
+                    to="/trainings"
+                    className={({ isActive }) =>
+                      isActive
+                        ? `${styles.tab} ${styles.tabActive}`
+                        : `${styles.tab} ${styles.tabInActive}`
+                    }>
+                    <div>
+                      <img
+                        className={styles.iconActive}
+                        src={trainingsActive}
+                        alt="trainings icon"
+                      />
+                      <img
+                        className={styles.iconInactive}
+                        src={trainingsInactive}
+                        alt="trainings icon"
+                      />
+                    </div>
+                    Trainings
                   </NavLink>
                 </div>
 

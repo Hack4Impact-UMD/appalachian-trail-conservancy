@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../auth/AuthProvider";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   getVolunteer,
   getAllPublishedTrainings,
@@ -34,7 +34,6 @@ interface CorrelatedPathway {
 
 function Dashboard() {
   const auth = useAuth();
-  const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(true);
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
@@ -467,17 +466,12 @@ function Dashboard() {
                   <div>
                     <div className={styles.subHeader}>
                       <h2>Recent Badges</h2>
-                      <div
+                      <Link
                         className={styles.viewAllLink}
-                        onClick={() => {
-                          navigate(`/achievements`, {
-                            state: {
-                              cardType: "badge",
-                            },
-                          });
-                        }}>
+                        to="/achievements"
+                        state={{ cardType: "badge" }}>
                         VIEW ALL
-                      </div>
+                      </Link>
                     </div>
                     <div className={styles.cardsContainer}>
                       {displayPathwayItems("badge", pathwaysCompleted).map(
@@ -495,22 +489,17 @@ function Dashboard() {
                   </div>
                 )}
 
-                {/* display certifications if there exist trainings completed */}
+                {/* display certificates if there exist trainings completed */}
                 {trainingsCompleted.length > 0 && (
                   <div>
                     <div className={styles.subHeader}>
-                      <h2>Recent Certifications</h2>
-                      <div
+                      <h2>Recent Trainings Completed</h2>
+                      <Link
                         className={styles.viewAllLink}
-                        onClick={() => {
-                          navigate(`/achievements`, {
-                            state: {
-                              cardType: "certification",
-                            },
-                          });
-                        }}>
+                        to="/achievements"
+                        state={{ cardType: "certificate" }}>
                         VIEW ALL
-                      </div>
+                      </Link>
                     </div>
                     <div className={styles.cardsContainer}>
                       {displayTrainingItems(
