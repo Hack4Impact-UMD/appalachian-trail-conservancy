@@ -93,7 +93,14 @@ function PathwayLibrary() {
       );
     }
 
-    setFilteredPathways(filtered);
+    // sort alphabetically by pathway name
+    const sorted = [...filtered].sort((a, b) => {
+      const pathwayA = a.genericPathway.name.toLowerCase();
+      const pathwayB = b.genericPathway.name.toLowerCase();
+      return pathwayA.localeCompare(pathwayB);
+    });
+
+    setFilteredPathways(sorted);
   };
 
   useEffect(() => {

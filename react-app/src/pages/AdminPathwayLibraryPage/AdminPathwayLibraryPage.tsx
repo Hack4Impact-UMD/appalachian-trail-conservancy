@@ -105,7 +105,12 @@ function AdminPathwayLibrary() {
       filtered = filtered.filter((pathway) => pathway.status == "ARCHIVED");
     }
 
-    setFilteredPathways(filtered);
+    // sort alphabetically by pathway name
+    const sorted = [...filtered].sort((a, b) => {
+      return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+    });
+
+    setFilteredPathways(sorted);
   };
 
   useEffect(() => {

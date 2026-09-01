@@ -89,8 +89,14 @@ function AdminTrainingLibrary() {
       );
     }
 
-    setFilteredTrainings(filtered);
+    // sort alphabetically by training name
+    const sorted = [...filtered].sort((a, b) => {
+      return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+    });
+
+    setFilteredTrainings(sorted);
   };
+
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
 
   // Update screen width on resize
