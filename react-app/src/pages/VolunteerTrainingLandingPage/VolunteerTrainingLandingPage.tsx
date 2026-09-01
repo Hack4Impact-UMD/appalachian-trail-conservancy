@@ -261,7 +261,7 @@ function VolunteerTrainingLandingPage() {
       .then((volunteerData) => {
         // Check if user opened the training from a pathway, if the training is the first in the pathway,
         // and if the pathway already exists for the user
-        const pathway = location.state?.pathway;
+        const pathway = location.state?.originPathway;
         const isFirstTrainingInPathway =
           pathway?.trainingIDs?.[0] === training.id;
         const pathwayExistsInVolunteer = pathway

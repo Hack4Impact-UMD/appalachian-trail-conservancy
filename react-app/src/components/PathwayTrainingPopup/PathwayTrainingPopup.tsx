@@ -12,7 +12,7 @@ interface modalPropsType {
   onClose: any;
   record: TrainingID | PathwayID;
   volunteerRecord?: VolunteerTraining | VolunteerPathway;
-  pathway?: PathwayID;
+  originPathway?: PathwayID;
   mode: "training" | "pathway";
 }
 
@@ -21,7 +21,7 @@ const PathwayTrainingPopup = ({
   onClose,
   record,
   volunteerRecord,
-  pathway,
+  originPathway,
   mode,
 }: modalPropsType): React.ReactElement => {
   const navigate = useNavigate();
@@ -52,7 +52,7 @@ const PathwayTrainingPopup = ({
                           state: {
                             training: record,
                             volunteerTraining: volunteerRecord,
-                            pathway: pathway,
+                            originPathway: originPathway,
                           },
                         }
                       )
