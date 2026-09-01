@@ -327,7 +327,7 @@ const trainingDocs = [
           },
         ],
       },
-      associatedPathways: [pathwayId, advancedPathwayId],
+      associatedPathways: [advancedPathwayId],
       status: "PUBLISHED",
     },
   },

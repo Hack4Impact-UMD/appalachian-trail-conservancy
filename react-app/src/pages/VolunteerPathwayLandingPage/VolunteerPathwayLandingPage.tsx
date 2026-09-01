@@ -171,6 +171,9 @@ function VolunteerPathwayLandingPage() {
                       newVolunteerPathway.trainingsInProgress.push(trainingID);
                       consecutiveCompletion = false;
                     }
+                  } else {
+                    // If the volunteer hasn't started this training, completion is no longer consecutive
+                    consecutiveCompletion = false;
                   }
                 }
 
@@ -290,8 +293,7 @@ function VolunteerPathwayLandingPage() {
         style={{
           // Only apply left shift when screen width is greater than 1200px
           left: open && screenWidth > 1200 ? "250px" : "0",
-        }}
-      >
+        }}>
         {!open && (
           <img
             src={hamburger}
@@ -329,8 +331,7 @@ function VolunteerPathwayLandingPage() {
             onClose={() => setSnackbar(false)}
             severity={
               snackbarMessage.includes("successfully") ? "success" : "error"
-            }
-          >
+            }>
             {snackbarMessage}
           </Alert>
         </Snackbar>
