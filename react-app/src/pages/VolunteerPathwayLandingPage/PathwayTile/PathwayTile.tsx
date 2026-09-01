@@ -324,7 +324,7 @@ const PathwayTile: React.FC<PathwayTileProps> = ({
             }}
             record={trainingID}
             volunteerRecord={volunteerTrainingRecord}
-            originPathway={pathwayID}
+            sourcePathway={pathwayID}
             mode={"training"}
           />
         ) : (
@@ -335,7 +335,7 @@ const PathwayTile: React.FC<PathwayTileProps> = ({
               setPopupOpen(false);
             }}
             record={trainingID}
-            originPathway={pathwayID}
+            sourcePathway={pathwayID}
             mode={"training"}
           />
         )
