@@ -17,7 +17,6 @@ import {
 } from "../../muiTheme.ts";
 import {
   getAllPublishedTrainings,
-  getAllTrainings,
   getVolunteer,
 } from "../../backend/FirestoreCalls.ts";
 import { TrainingID } from "../../types/TrainingType.ts";
@@ -236,8 +235,7 @@ function TrainingLibrary() {
         style={{
           // Only apply left shift when screen width is greater than 1200px
           left: open && screenWidth > 1200 ? "250px" : "0",
-        }}
-      >
+        }}>
         {!open && (
           <img
             src={hamburger}
@@ -277,8 +275,7 @@ function TrainingLibrary() {
                     sx={whiteSelectGrayBorder}
                     value={filterType}
                     onChange={(e) => setFilterType(e.target.value)}
-                    label="Filter"
-                  >
+                    label="Filter">
                     <MenuItem value="all" sx={selectOptionStyle}>
                       ALL
                     </MenuItem>
@@ -301,8 +298,7 @@ function TrainingLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("all")}
-                >
+                  onClick={() => setFilterType("all")}>
                   All
                 </Button>
                 <Button
@@ -312,8 +308,7 @@ function TrainingLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("inProgress")}
-                >
+                  onClick={() => setFilterType("inProgress")}>
                   In Progress
                 </Button>
                 <Button
@@ -323,8 +318,7 @@ function TrainingLibrary() {
                       : whiteButtonGrayBorder
                   }
                   variant="contained"
-                  onClick={() => setFilterType("completed")}
-                >
+                  onClick={() => setFilterType("completed")}>
                   Completed
                 </Button>
               </div>

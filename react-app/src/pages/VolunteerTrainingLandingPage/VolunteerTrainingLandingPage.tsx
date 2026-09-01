@@ -201,7 +201,7 @@ function VolunteerTrainingLandingPage() {
                 )) ||
                 (volunteerTraining.trainingID !== "" &&
                   volunteerTraining.progress === "INPROGRESS" && (
-                    <div className={`${styles.marker}`}>IN PROGRESS</div>
+                    <div className={styles.marker}>IN PROGRESS</div>
                   ))}
             </div>
           </div>
