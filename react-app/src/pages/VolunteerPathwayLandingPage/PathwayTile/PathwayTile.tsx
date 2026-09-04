@@ -216,10 +216,6 @@ const PathwayTile: React.FC<PathwayTileProps> = ({
   const [openTrainingPopup, setOpenTrainingPopup] = useState<boolean>(false);
   const [volunteerTrainingRecord, setVolunteerTrainingRecord] =
     useState<VolunteerTraining>();
-  const [position, setPosition] = useState<{ x: number; y: number }>({
-    x: 0,
-    y: 0,
-  });
   const imgWidth = 300;
   const navigate = useNavigate();
   const auth = useAuth();
@@ -280,8 +276,7 @@ const PathwayTile: React.FC<PathwayTileProps> = ({
           if (image.includes("End") || image.includes("Trophy")) {
             handleQuizClick();
           }
-        }}
-      >
+        }}>
         <Tooltip
           title={
             image.includes("End") || image.includes("Trophy")
@@ -305,8 +300,7 @@ const PathwayTile: React.FC<PathwayTileProps> = ({
                 color: grayTooltip.bgcolor,
               },
             },
-          }}
-        >
+          }}>
           <img
             src={image}
             className={`${styles.tileImage} ${
@@ -330,6 +324,7 @@ const PathwayTile: React.FC<PathwayTileProps> = ({
             }}
             record={trainingID}
             volunteerRecord={volunteerTrainingRecord}
+            sourcePathway={pathwayID}
             mode={"training"}
           />
         ) : (
@@ -340,6 +335,7 @@ const PathwayTile: React.FC<PathwayTileProps> = ({
               setPopupOpen(false);
             }}
             record={trainingID}
+            sourcePathway={pathwayID}
             mode={"training"}
           />
         )

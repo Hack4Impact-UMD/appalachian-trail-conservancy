@@ -2,13 +2,17 @@ import { useState, useEffect } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { whiteButtonGrayBorder, forestGreenButton } from "../../muiTheme";
 import { TrainingID, TrainingResource } from "../../types/TrainingType";
-import { VolunteerTraining } from "../../types/UserType";
+import { VolunteerTraining, VolunteerPathway } from "../../types/UserType";
+import { PathwayID } from "../../types/PathwayType";
 import {
   getVolunteer,
   getTraining,
   getPathway,
 } from "../../backend/FirestoreCalls";
-import { addVolunteerTraining } from "../../backend/VolunteerFirestoreCalls";
+import {
+  addVolunteerTraining,
+  addVolunteerPathway,
+} from "../../backend/VolunteerFirestoreCalls";
 import { Button } from "@mui/material";
 import { useAuth } from "../../auth/AuthProvider";
 import styles from "./VolunteerTrainingLandingPage.module.css";
@@ -245,6 +249,92 @@ function VolunteerTrainingLandingPage() {
       );
   };
 
+  const handleStartTraining = () => {
+    // Call addVolunteerTraining and wait for the result
+    addVolunteerTraining(auth.id.toString(), training)
+      .then(() => {
+        // Retrieve the volunteer data after adding the training
+        return getVolunteer(auth.id.toString());
+      })
+      .then((volunteerData) => {
+        // Check if user opened the training from a pathway, if the training is the first in the pathway,
+        // and if the pathway already exists for the user
+        const pathway: PathwayID | undefined = location.state?.sourcePathway;
+        const isFirstTrainingInPathway =
+          pathway?.trainingIDs?.[0] === training.id;
+        const pathwayExistsInVolunteer = pathway
+          ? volunteerData.pathwayInformation.some(
+              (pathwayInformation) =>
+                pathwayInformation.pathwayID === pathway.id
+            )
+          : false;
+        if (pathway && isFirstTrainingInPathway && !pathwayExistsInVolunteer) {
+          // Initialize pathway to add it as in progress to the user's pathwayInformation list
+          const newVolunteerPathway: VolunteerPathway = {
+            pathwayID: pathway.id,
+            progress: "INPROGRESS", // Assuming initial progress is "INPROGRESS"
+            dateCompleted: "",
+            trainingsCompleted: [],
+            trainingsInProgress: [training.id], // Initialize with the current training (first training in the pathway)
+            numTrainingsCompleted: 0, // Initialize with 0, as the user is just starting the first training in the pathway
+            numTotalTrainings: pathway.trainingIDs.length, // Initialize with number of trainings in pathway
+          };
+
+          // Check other trainings in the pathway
+          for (let i = 1; i < pathway.trainingIDs.length; i++) {
+            const trainingID = pathway.trainingIDs[i];
+            const volunteerTraining = volunteerData.trainingInformation.find(
+              (training) => training.trainingID === trainingID
+            );
+
+            // If the volunteer has started/completed the training, update newVolunteerPathway accordingly
+            if (volunteerTraining) {
+              if (volunteerTraining.progress === "COMPLETED") {
+                newVolunteerPathway.trainingsCompleted.push(trainingID);
+              } else {
+                newVolunteerPathway.trainingsInProgress.push(trainingID);
+              }
+            }
+          }
+
+          // Add the pathway to the user's pathwayInformation list
+          return addVolunteerPathway(
+            auth.id.toString(),
+            newVolunteerPathway
+          ).then(() => volunteerData);
+        }
+        return volunteerData;
+      })
+      .then((volunteerData) => {
+        // Extract the relevant volunteerTraining information
+        const updatedVolunteerTraining = volunteerData.trainingInformation.find(
+          (trainingInfo) => trainingInfo.trainingID === training.id
+        );
+
+        // If updatedVolunteerTraining is found, use it to set volunteerTraining
+        if (updatedVolunteerTraining) {
+          setVolunteerTraining(updatedVolunteerTraining);
+          // Navigate to the training resources page after successful addition
+          navigate(`/trainings/resources`, {
+            state: {
+              training: training,
+              volunteerTraining: updatedVolunteerTraining,
+              volunteerId: auth.id.toString(),
+              fromApp: true,
+            },
+          });
+        } else {
+          throw new Error("Couldn't find updatedVolunteerTraining");
+        }
+      })
+      .catch((error) => {
+        console.error(
+          "Error adding volunteer training, retrieving volunteer data, or adding to volunteer pathway:",
+          error
+        );
+      });
+  };
+
   const renderButton = () => {
     if (volunteerTraining.trainingID === "") {
       return (
@@ -252,41 +342,7 @@ function VolunteerTrainingLandingPage() {
           sx={{ ...forestGreenButton }}
           variant="contained"
           onClick={() => {
-            // Call addVolunteerTraining and wait for the result
-            addVolunteerTraining(auth.id.toString(), training)
-              .then(() => {
-                // Retrieve the volunteer data after adding the training
-                return getVolunteer(auth.id.toString());
-              })
-              .then((volunteerData) => {
-                // Extract the relevant volunteerTraining information
-                const updatedVolunteerTraining =
-                  volunteerData.trainingInformation.find(
-                    (trainingInfo) => trainingInfo.trainingID === training.id
-                  );
-
-                // If updatedVolunteerTraining is found, use it to set volunteerTraining
-                if (updatedVolunteerTraining) {
-                  setVolunteerTraining(updatedVolunteerTraining);
-                  // Navigate to the training resources page after successful addition
-                  navigate(`/trainings/resources`, {
-                    state: {
-                      training: training,
-                      volunteerTraining: updatedVolunteerTraining,
-                      volunteerId: auth.id.toString(),
-                      fromApp: true,
-                    },
-                  });
-                } else {
-                  throw new Error("Couldn't find updatedVolunteerTraining");
-                }
-              })
-              .catch((error) => {
-                console.error(
-                  "Error adding volunteer training or retrieving volunteer data:",
-                  error
-                );
-              });
+            handleStartTraining();
           }}>
           Start
         </Button>

@@ -237,10 +237,11 @@ export function addVolunteerPathway(
             volunteer.pathwayInformation.push(pathway);
 
             // Add new pathway to volunteer's pathway information
-            updateDoc(volunteerRef, {
+            return updateDoc(volunteerRef, {
               pathwayInformation: volunteer.pathwayInformation,
-            });
-            resolve();
+            })
+              .then(() => resolve())
+              .catch(reject);
           } else {
             reject(new Error("Pathway already exists in Volunteer"));
           }
