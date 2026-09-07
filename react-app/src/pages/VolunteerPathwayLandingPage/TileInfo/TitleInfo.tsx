@@ -21,7 +21,13 @@ const TitleInfo: React.FC<TitleInfoProps> = ({
   const renderMarker = () => {
     if (volunteerPathway?.pathwayID === "") {
       // Pathway not started
-      return <></>;
+      return (
+        <>
+          <div className={`${styles.marker} ${styles.pathwayMarker}`}>
+            PATHWAY
+          </div>
+        </>
+      );
     } else if (
       volunteerPathway.pathwayID !== "" &&
       volunteerPathway.numTrainingsCompleted ===

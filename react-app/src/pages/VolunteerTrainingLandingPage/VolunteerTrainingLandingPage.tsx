@@ -217,7 +217,13 @@ function VolunteerTrainingLandingPage() {
   const renderMarker = () => {
     if (volunteerTraining.trainingID === "") {
       // Training not started
-      return <></>;
+      return (
+        <>
+          <div className={`${styles.marker} ${styles.trainingMarker}`}>
+            TRAINING
+          </div>
+        </>
+      );
     } else if (
       volunteerTraining.trainingID !== "" &&
       volunteerTraining.numCompletedResources ===
