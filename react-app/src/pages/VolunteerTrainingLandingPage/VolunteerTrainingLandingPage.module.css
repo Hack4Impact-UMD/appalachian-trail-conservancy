@@ -1,3 +1,8 @@
+.popupOpen {
+  position: absolute;
+  z-index: -1;
+}
+
 /* split screen in two */
 .split {
   height: 100%;
@@ -49,13 +54,25 @@
   margin-bottom: 2rem;
 }
 
+.nameShareContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+}
+
 .nameHeading {
   color: var(--forest-green);
   font-size: 3rem;
   margin: 0;
-  max-width: 90%;
   white-space: normal;
   word-break: break-word;
+}
+
+.shareIcon {
+  font-size: 1.75rem;
+  color: var(--blue-gray);
+  cursor: pointer;
 }
 
 .container {
@@ -272,6 +289,10 @@
 
   .nameHeading {
     font-size: 2rem;
+  }
+
+  .nameShareContainer {
+    flex-direction: column;
   }
 
   .footerButtons {

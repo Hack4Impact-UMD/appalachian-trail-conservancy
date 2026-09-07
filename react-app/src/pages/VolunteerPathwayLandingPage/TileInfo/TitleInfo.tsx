@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import ProfileIcon from "../../../components/ProfileIcon/ProfileIcon";
 import styles from "./TitleInfo.module.css";
+import Tooltip from "@mui/material/Tooltip/Tooltip";
 import { FaChevronUp } from "react-icons/fa6";
 import { FaChevronDown } from "react-icons/fa6";
+import { IoShareSocialOutline } from "react-icons/io5";
 import { VolunteerPathway } from "../../../types/UserType.ts";
+import { grayTooltip } from "../../../muiTheme.ts";
 
 interface TitleInfoProps {
   title: string;
@@ -17,6 +20,7 @@ const TitleInfo: React.FC<TitleInfoProps> = ({
   volunteerPathway,
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(true);
+  const [openLinkSharePopup, setLinkSharePopup] = useState<boolean>(false);
 
   const renderMarker = () => {
     if (volunteerPathway?.pathwayID === "") {
@@ -59,7 +63,23 @@ const TitleInfo: React.FC<TitleInfoProps> = ({
       {/* Profile Icon and Title */}
       <div className={styles.header}>
         <div className={styles.title}>
-          <h1 className={styles.nameHeading}>{title}</h1>
+          <div className={styles.nameShareContainer}>
+            <h1 className={styles.nameHeading}>{title}</h1>
+            <Tooltip
+              title={"Share link"}
+              componentsProps={{
+                tooltip: {
+                  sx: { ...grayTooltip, fontSize: "0.75rem" },
+                },
+              }}>
+              <span>
+                <IoShareSocialOutline
+                  className={styles.shareIcon}
+                  onClick={() => setLinkSharePopup(true)}
+                />
+              </span>
+            </Tooltip>
+          </div>
           <div
             onClick={() => setIsOpen(!isOpen)}
             className={styles.arrowButton}>
