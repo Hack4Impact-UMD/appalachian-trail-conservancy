@@ -518,12 +518,12 @@ function Dashboard() {
                   </div>
                 )}
 
-                {/* Render Recommended Trainings */}
+                {/* Render Discover Trainings */}
                 {recommendedTrainings.length > 0 &&
                   trainingsInProgress.length === 0 && (
                     <div>
                       <div className={styles.subHeader}>
-                        <h2>Recommended Trainings</h2>
+                        <h2>Discover Trainings</h2>
                         <Link className={styles.viewAllLink} to="/trainings">
                           VIEW ALL
                         </Link>
@@ -544,12 +544,12 @@ function Dashboard() {
                     </div>
                   )}
 
-                {/* Render Recommended Pathways */}
+                {/* Render Discover Pathways */}
                 {recommendedPathways.length > 0 &&
                   pathwaysInProgress.length === 0 && (
                     <div>
                       <div className={styles.subHeader}>
-                        <h2>Recommended Pathways</h2>
+                        <h2>Discover Pathways</h2>
                         <Link className={styles.viewAllLink} to="/pathways">
                           VIEW ALL
                         </Link>

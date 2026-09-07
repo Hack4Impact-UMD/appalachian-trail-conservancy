@@ -145,22 +145,20 @@
 .trainingNumber {
   width: 40px;
   color: var(--forest-green);
-  font-size: 150%;
+  font-size: 1.5rem;
   font-weight: bold;
 }
 
 .trainingTitle {
-  margin-right: 3%;
-  margin: 3%;
+  margin: 1rem;
   font-size: 1.1rem;
   font-weight: bold;
 }
 
 .trainingType {
+  margin-left: 1.5rem;
   display: inline-block;
-  background-color: var(--sky-blue);
-  padding: 8px 15px;
-  border-radius: 20px;
+  color: var(--ocean-green);
   font-size: 0.9em;
   font-weight: bold;
   text-align: center;
