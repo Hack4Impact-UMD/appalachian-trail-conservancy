@@ -5,6 +5,7 @@ import PathwayTile from "./PathwayTile/PathwayTile.tsx";
 import TitleInfo from "./TileInfo/TitleInfo.tsx";
 import styles from "./VolunteerPathwayLandingPage.module.css";
 import hamburger from "../../assets/hamburger.svg";
+import LinkSharePopup from "../../components/LinkSharePopup/LinkSharePopup.tsx";
 import Footer from "../../components/Footer/Footer.tsx";
 import Loading from "../../components/LoadingScreen/Loading.tsx";
 import { useParams, useLocation } from "react-router-dom";
@@ -37,6 +38,7 @@ function VolunteerPathwayLandingPage() {
   const [snackbar, setSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [popupOpen, setPopupOpen] = useState<boolean>(false);
+  const [openLinkSharePopup, setLinkSharePopup] = useState<boolean>(false);
 
   const [pathway, setPathway] = useState<PathwayID>({
     name: "",
@@ -284,7 +286,7 @@ function VolunteerPathwayLandingPage() {
 
   return (
     <>
-      <div className={popupOpen ? styles.popupOpen : ""}>
+      <div className={popupOpen || openLinkSharePopup ? styles.popupOpen : ""}>
         <VolunteerNavigationBar open={open} setOpen={setOpen} />
       </div>
 
@@ -309,6 +311,7 @@ function VolunteerPathwayLandingPage() {
               title={pathway.name}
               description={pathway.description}
               volunteerPathway={volunteerPathway}
+              setLinkSharePopup={setLinkSharePopup}
             />
 
             {/* Pathway Tiles Section */}
@@ -321,6 +324,13 @@ function VolunteerPathwayLandingPage() {
             )}
           </div>
         </div>
+
+        <LinkSharePopup
+          open={openLinkSharePopup}
+          onClose={setLinkSharePopup}
+          shareLink={window.location.href}
+        />
+
         <Snackbar
           open={snackbar}
           autoHideDuration={6000}

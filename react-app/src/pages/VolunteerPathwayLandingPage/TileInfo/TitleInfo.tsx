@@ -12,15 +12,16 @@ interface TitleInfoProps {
   title: string;
   description: string;
   volunteerPathway: VolunteerPathway;
+  setLinkSharePopup: any;
 }
 
 const TitleInfo: React.FC<TitleInfoProps> = ({
   title,
   description,
   volunteerPathway,
+  setLinkSharePopup,
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(true);
-  const [openLinkSharePopup, setLinkSharePopup] = useState<boolean>(false);
 
   const renderMarker = () => {
     if (volunteerPathway?.pathwayID === "") {
