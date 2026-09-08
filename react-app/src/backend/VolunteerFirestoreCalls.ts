@@ -1,12 +1,4 @@
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  updateDoc,
-  query,
-  where,
-} from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { httpsCallable } from "firebase/functions";
 import { db, functions } from "../config/firebase";
 import {
@@ -14,7 +6,7 @@ import {
   VolunteerTraining,
   VolunteerPathway,
 } from "../types/UserType";
-import { Training, TrainingID } from "../types/TrainingType";
+import { TrainingID } from "../types/TrainingType";
 
 export function updateVolunteer(
   volunteer: Volunteer,
@@ -245,10 +237,11 @@ export function addVolunteerPathway(
             volunteer.pathwayInformation.push(pathway);
 
             // Add new pathway to volunteer's pathway information
-            updateDoc(volunteerRef, {
+            return updateDoc(volunteerRef, {
               pathwayInformation: volunteer.pathwayInformation,
-            });
-            resolve();
+            })
+              .then(() => resolve())
+              .catch(reject);
           } else {
             reject(new Error("Pathway already exists in Volunteer"));
           }
