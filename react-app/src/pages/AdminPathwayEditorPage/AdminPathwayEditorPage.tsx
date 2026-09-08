@@ -528,8 +528,7 @@ const AdminPathwayEditorPage: React.FC = () => {
         className={`${styles.split} ${styles.right}`}
         style={{
           left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-        }}
-      >
+        }}>
         {/* Hamburger Menu */}
         {!navigationBarOpen && (
           <img
@@ -561,8 +560,7 @@ const AdminPathwayEditorPage: React.FC = () => {
                   sx={whiteButtonGrayBorder}
                   variant="contained"
                   onClick={handleSaveClick}
-                  disabled={loading}
-                >
+                  disabled={loading}>
                   {status == "DRAFT" ? "Save as Draft" : "Save"}
                 </Button>
 
@@ -575,8 +573,7 @@ const AdminPathwayEditorPage: React.FC = () => {
                     onClick={() => {
                       setOpenDeleteDraftPopup(true);
                     }}
-                    disabled={loading}
-                  >
+                    disabled={loading}>
                     DELETE
                   </Button>
                 ) : (
@@ -588,8 +585,7 @@ const AdminPathwayEditorPage: React.FC = () => {
               <div className={styles.inputBoxHeader}>
                 <Typography
                   variant="body2"
-                  sx={{ ...inputHeaderText, marginTop: "2rem" }}
-                >
+                  sx={{ ...inputHeaderText, marginTop: "2rem" }}>
                   PATHWAY NAME
                 </Typography>
 
@@ -624,8 +620,7 @@ const AdminPathwayEditorPage: React.FC = () => {
               <div className={styles.inputBoxHeader}>
                 <Typography
                   variant="body2"
-                  sx={{ ...inputHeaderText, marginTop: "2rem" }}
-                >
+                  sx={{ ...inputHeaderText, marginTop: "2rem" }}>
                   BLURB
                 </Typography>
 
@@ -664,8 +659,7 @@ const AdminPathwayEditorPage: React.FC = () => {
               <div className={styles.inputBoxHeader}>
                 <Typography
                   variant="body2"
-                  sx={{ ...inputHeaderText, marginTop: "2rem" }}
-                >
+                  sx={{ ...inputHeaderText, marginTop: "2rem" }}>
                   DESCRIPTION
                 </Typography>
 
@@ -680,15 +674,13 @@ const AdminPathwayEditorPage: React.FC = () => {
               <div
                 className={`${
                   errors.description ? styles.inputError : styles.quillContainer
-                }`}
-              >
+                }`}>
                 <div
                   ref={descriptionContainerRef}
                   id={styles.quillEditor}
                   style={{
                     height: "100px",
-                  }}
-                ></div>
+                  }}></div>
               </div>
 
               {/* Pathway Image */}
@@ -704,8 +696,7 @@ const AdminPathwayEditorPage: React.FC = () => {
                       tooltip: {
                         sx: { ...whiteTooltip, fontSize: "0.75rem" },
                       },
-                    }}
-                  >
+                    }}>
                     <span className={styles.iconCenter}>
                       <InfoOutlinedIcon />
                     </span>
@@ -721,8 +712,7 @@ const AdminPathwayEditorPage: React.FC = () => {
                       border: errors.coverImage
                         ? "2px solid var(--hazard-red)"
                         : "2px solid var(--lighter-grey)",
-                    }}
-                  >
+                    }}>
                     <LuUpload style={{ fontSize: "50px" }} />
                     <input
                       type="file"
@@ -794,8 +784,7 @@ const AdminPathwayEditorPage: React.FC = () => {
                       tooltip: {
                         sx: { ...whiteTooltip, fontSize: "0.75rem" },
                       },
-                    }}
-                  >
+                    }}>
                     <span className={styles.iconCenter}>
                       <InfoOutlinedIcon />
                     </span>
@@ -805,8 +794,7 @@ const AdminPathwayEditorPage: React.FC = () => {
                 {selectedTrainings.map((training, trainingIndex) => (
                   <div
                     key={trainingIndex}
-                    className={styles.searchBarContainer}
-                  >
+                    className={styles.searchBarContainer}>
                     <p className={styles.searchBarNumber}>
                       {trainingIndex + 1}
                     </p>
@@ -827,6 +815,9 @@ const AdminPathwayEditorPage: React.FC = () => {
                             "& .MuiAutocomplete-listbox": {
                               "& .MuiAutocomplete-option": {
                                 color: "var(--blue-gray)",
+                                '&[aria-selected="true"]': {
+                                  backgroundColor: "var(--ocean-green-25)",
+                                },
                               },
                             },
                           },
@@ -859,8 +850,7 @@ const AdminPathwayEditorPage: React.FC = () => {
                     />
                     {trainingIndex > 0 && status === "DRAFT" ? (
                       <div
-                        className={`${styles.closeIcon} ${styles.leftMargin}`}
-                      >
+                        className={`${styles.closeIcon} ${styles.leftMargin}`}>
                         <IoCloseOutline
                           onClick={() => handleDeleteSearchBar(trainingIndex)}
                         />
@@ -868,8 +858,7 @@ const AdminPathwayEditorPage: React.FC = () => {
                     ) : (
                       <div
                         className={`${styles.closeIcon} ${styles.leftMargin}`}
-                        style={{ visibility: "hidden" }}
-                      >
+                        style={{ visibility: "hidden" }}>
                         <IoCloseOutline />
                       </div>
                     )}
@@ -880,8 +869,7 @@ const AdminPathwayEditorPage: React.FC = () => {
                 {status === "DRAFT" && (
                   <div
                     className={styles.addTrainingContainer}
-                    onClick={handleAddSearchBar}
-                  >
+                    onClick={handleAddSearchBar}>
                     <AddIcon fontSize="medium" />
                     <h3>ADD TRAINING</h3>
                   </div>
@@ -899,8 +887,7 @@ const AdminPathwayEditorPage: React.FC = () => {
                     width: "fit-content",
                   }}
                   onClick={handleNextClick}
-                  disabled={loading}
-                >
+                  disabled={loading}>
                   {status == "DRAFT" ? "Next: Create Quiz" : "Next: Edit Quiz"}
                 </Button>
               </div>
@@ -917,8 +904,7 @@ const AdminPathwayEditorPage: React.FC = () => {
               onClose={handleCloseSnackbar}
               severity={
                 snackbarMessage.includes("successfully") ? "success" : "error"
-              }
-            >
+              }>
               {snackbarMessage}
             </Alert>
           </Snackbar>

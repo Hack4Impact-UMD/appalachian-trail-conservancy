@@ -67,6 +67,7 @@
 
 .emailLabelContainer {
   margin: 0;
+  color: var(--blue-gray);
 }
 
 .invalidEmailMessage {
@@ -83,6 +84,7 @@
 
 .joinCodeLabel {
   margin: 0;
+  color: var(--blue-gray);
 }
 
 .error {

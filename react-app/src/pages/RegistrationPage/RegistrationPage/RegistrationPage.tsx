@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import {
+  Autocomplete,
   FormControl,
   Button,
   OutlinedInput,
@@ -10,9 +11,12 @@ import {
   Snackbar,
 } from "@mui/material";
 import {
+  autocompleteText,
+  autocompleteOptionStyle,
   forestGreenButton,
   grayBorderTextField,
   styledRectButton,
+  whiteSelectGrayBorder,
   whiteTooltip,
 } from "../../../muiTheme.ts";
 import { Navigate } from "react-router";
@@ -42,6 +46,10 @@ function RegistrationPage() {
   const [email, setEmail] = useState<string>("");
   const [confirmEmail, setConfirmEmail] = useState<string>("");
   const [joinCode, setJoinCode] = useState<string>("");
+  const [affiliation, setAffiliation] = useState<string | null>("");
+
+  //TODO: Retrieve affiliation options
+  const affiliationOptions: string[] = [];
 
   useEffect(() => {
     if (email !== "" && confirmEmail !== "") {
@@ -69,8 +77,6 @@ function RegistrationPage() {
 
   const handleConfirm = (event: any) => {
     event.preventDefault();
-
-    // Confirm button validates that inputs arent empty
 
     // Check if email is valid
     if (!validateEmail(email)) {
@@ -212,6 +218,43 @@ function RegistrationPage() {
                 setJoinCode(event.target.value);
               }}
             />
+
+            {/* affiliation field */}
+            <div className={styles.alignLeft}>
+              <h3 className={styles.label}>Affiliation</h3>
+            </div>
+            <Autocomplete
+              sx={{
+                ...whiteSelectGrayBorder,
+                width: "350",
+                display: "flex",
+                alignItems: "center",
+                border: "2px solid var(--blue-gray)",
+                borderRadius: "10px",
+              }}
+              slotProps={{
+                // style options
+                paper: {
+                  sx: { ...autocompleteOptionStyle },
+                },
+              }}
+              disablePortal
+              value={affiliation}
+              options={affiliationOptions}
+              onChange={(event, selected) => {
+                setAffiliation(selected);
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="outlined"
+                  InputLabelProps={{
+                    shrink: false,
+                  }}
+                  sx={autocompleteText}
+                />
+              )}
+            />
           </FormControl>
 
           {/* submit button */}
@@ -228,7 +271,8 @@ function RegistrationPage() {
                   email !== "" &&
                   confirmEmail !== "" &&
                   email === confirmEmail &&
-                  joinCode !== ""
+                  joinCode !== "" &&
+                  affiliation
                 ) || showLoading
               }>
               {showLoading ? <Loading color="white" /> : "Confirm"}

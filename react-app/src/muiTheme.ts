@@ -187,6 +187,25 @@ export const selectOptionStyle = {
   },
 };
 
+// autocomplete option style
+export const autocompleteOptionStyle = {
+  "& .MuiAutocomplete-listbox": {
+    "& .MuiAutocomplete-option": {
+      color: "var(--blue-gray)",
+      '&[aria-selected="true"]': {
+        backgroundColor: "var(--ocean-green)",
+        color: "white",
+        "&:hover": {
+          backgroundColor: "var(--forest-green)",
+        },
+        "&.Mui-focused": {
+          backgroundColor: "var(--forest-green)",
+        },
+      },
+    },
+  },
+};
+
 // autocomplete TextField
 export const autocompleteText = {
   "& .MuiOutlinedInput-root": {
