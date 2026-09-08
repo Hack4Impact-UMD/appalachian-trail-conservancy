@@ -100,6 +100,7 @@ function AdminVolunteerDetailsPage() {
     pathwayInformation: [],
     auth_id: "",
     email: "",
+    affiliation: "",
     firstName: "",
     lastName: "",
     type: "VOLUNTEER",
@@ -193,8 +194,8 @@ function AdminVolunteerDetailsPage() {
         currTraining.volunteerTraining.quizScoreRecieved == undefined
           ? "N/A"
           : currTraining.volunteerTraining.quizScoreRecieved >= passingScore
-          ? "Passed"
-          : "Failed",
+            ? "Passed"
+            : "Failed",
       status: currTraining.volunteerTraining.progress,
     };
   });
@@ -242,8 +243,8 @@ function AdminVolunteerDetailsPage() {
         currPathway.volunteerPathway.quizScoreRecieved == undefined
           ? "N/A"
           : currPathway.volunteerPathway.quizScoreRecieved >= passingScore
-          ? "Passed"
-          : "Failed",
+            ? "Passed"
+            : "Failed",
       progress: currPathway.volunteerPathway.progress,
     };
   });
@@ -507,6 +508,12 @@ function AdminVolunteerDetailsPage() {
                     <b>Email: </b>
                     {volunteer.email}
                   </div>
+                  {volunteer.affiliation && (
+                    <div className={styles.text}>
+                      <b>Affiliation: </b>
+                      {volunteer.affiliation}
+                    </div>
+                  )}
                   <br></br>
                   <div className={styles.text}>
                     <b>Training(s) Completed: </b>

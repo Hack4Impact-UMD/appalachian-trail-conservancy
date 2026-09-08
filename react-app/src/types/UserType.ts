@@ -15,6 +15,7 @@ export interface VolunteerID extends Volunteer {
 }
 
 export interface Volunteer extends User {
+  affiliation: string;
   trainingInformation: VolunteerTraining[];
   pathwayInformation: VolunteerPathway[];
 }
