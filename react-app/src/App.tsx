@@ -1,6 +1,13 @@
 import "./index.css";
 import React from "react";
 import { HashRouter, Route, Routes } from "react-router-dom";
+import {
+  collection,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { ThemeProvider } from "@mui/material";
 import { AuthProvider, useAuth } from "./auth/AuthProvider.tsx";
 import RequireAuth from "./auth/RequireAuth/RequireAuth.tsx";
@@ -42,6 +49,7 @@ import AdminProfilePage from "./pages/AdminProfilePage/AdminProfilePage.tsx";
 import AdminVolunteerDetailsPage from "./pages/AdminVolunteerDetailsPage/AdminVolunteerDetailsPage.tsx";
 import AdminPathwayDetailsPage from "./pages/AdminPathwayDetailsPage/AdminPathwayDetailsPage.tsx";
 import AdminTrainingDetailsPage from "./pages/AdminTrainingDetailsPage/AdminTrainingDetailsPage.tsx";
+import { db } from "./config/firebase.ts";
 
 interface RoleBasedRouteProps {
   adminComponent: JSX.Element;
@@ -260,6 +268,44 @@ function App() {
               element={
                 <RequireAdminAuth>
                   <AdminRegistrationManagementPage />
+                </RequireAdminAuth>
+              }
+            />
+
+            {/* TODO: Remove route once emails have been updated  */}
+            <Route
+              path="/test/lowercase-emails"
+              element={
+                <RequireAdminAuth>
+                  <button
+                    onClick={async () => {
+                      const volunteers = await getDocs(
+                        query(
+                          collection(db, "Users"),
+                          where("type", "==", "VOLUNTEER")
+                        )
+                      );
+                      const updates = volunteers.docs
+                        .map((volunteer) => {
+                          const emailAddress = volunteer.data().email;
+                          if (typeof emailAddress !== "string") return null;
+                          const normalizedEmail = emailAddress.trim().toLowerCase();
+                          return normalizedEmail === emailAddress
+                            ? null
+                            : updateDoc(volunteer.ref, {
+                                email: normalizedEmail,
+                              });
+                        })
+                        .filter(
+                          (update): update is Promise<void> => update !== null
+                        );
+                      await Promise.all(updates);
+                      window.alert(
+                        `${updates.length} volunteer emails updated.`
+                      );
+                    }}>
+                    Lowercase Volunteer Emails
+                  </button>
                 </RequireAdminAuth>
               }
             />
