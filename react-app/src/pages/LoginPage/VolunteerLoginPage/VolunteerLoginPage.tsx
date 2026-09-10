@@ -39,7 +39,7 @@ function VolunteerLoginPage() {
       const signInLink = window.location.href;
       let url = signInLink.split("?")[0];
       window.history.replaceState({}, document.title, url);
-      signInWithEmailLink(auth, email ?? "", signInLink)
+      signInWithEmailLink(auth, email?.trim().toLowerCase() ?? "", signInLink)
         .then(() => {
           window.localStorage.removeItem("emailForSignIn");
           navigate("/");

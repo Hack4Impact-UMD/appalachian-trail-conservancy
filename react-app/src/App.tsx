@@ -287,13 +287,13 @@ function App() {
                       );
                       const updates = volunteers.docs
                         .map((volunteer) => {
-                          const email = volunteer.data().email;
-                          if (typeof email !== "string") return null;
-                          const lowercaseEmail = email.toLowerCase();
-                          return lowercaseEmail === email
+                          const emailAddress = volunteer.data().email;
+                          if (typeof emailAddress !== "string") return null;
+                          const normalizedEmail = emailAddress.trim().toLowerCase();
+                          return normalizedEmail === emailAddress
                             ? null
                             : updateDoc(volunteer.ref, {
-                                email: lowercaseEmail,
+                                email: normalizedEmail,
                               });
                         })
                         .filter(

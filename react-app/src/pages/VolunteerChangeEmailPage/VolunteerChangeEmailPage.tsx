@@ -74,9 +74,10 @@ const VolunteerChangeEmailPage = () => {
 
     const prevEmail = auth.user.email?.toLowerCase() ?? "";
     const newEmail = email.trim().toLowerCase();
+    const newConfirmEmail = confirmEmail.trim().toLowerCase();
 
     // Fail if emails are not valid or equal
-    if (!validateEmail(newEmail) || newEmail !== confirmEmail) {
+    if (!validateEmail(newEmail) || newEmail !== newConfirmEmail) {
       setInvalidEmailMessage("Invalid email");
       setInvalidEmail(true);
       setEmailsMatch(false);
