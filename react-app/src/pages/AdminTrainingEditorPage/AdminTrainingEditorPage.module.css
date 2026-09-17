@@ -56,15 +56,26 @@
 .headerTitle {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
 }
 
 .headerText {
   color: var(--blue-gray);
   font-size: 3rem;
   margin: 0;
-  max-width: 90%;
+  max-width: 100%;
   white-space: normal;
+}
+
+.shareIcon {
+  margin-left: 1rem;
+  margin-right: 2rem;
+  font-size: 1.75rem;
+  color: var(--blue-gray);
+  cursor: pointer;
+}
+
+.headerSpace {
+  margin-right: 1.5rem;
 }
 
 .marker {
@@ -200,6 +211,10 @@
   .content {
     width: 600px;
   }
+
+  .headerTitle {
+    max-width: 70%;
+  }
 }
 
 @media screen and (max-width: 750px) {
@@ -221,6 +236,14 @@
 
   .headerTitle {
     flex-direction: column;
+  }
+
+  .shareIcon {
+    margin: 1rem;
+  }
+
+  .headerSpace {
+    margin-top: 1.5rem;
   }
 
   .formContent {

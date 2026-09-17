@@ -23,6 +23,7 @@ import {
   forestGreenButton,
   styledRectButton,
   whiteTooltip,
+  grayTooltip,
   autocompleteText,
   whiteSelectGrayBorder,
   whiteButtonGrayBorder,
@@ -39,7 +40,8 @@ import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import VolunteerPathwayCard from "../../components/VolunteerPathwayCard/VolunteerPathwayCard";
 import Badge from "../../components/BadgeCard/BadgeCard";
 import AdminDeletePathwayDraftPopup from "./AdminDeletePathwayDraftPopup/AdminDeletePathwayDraftPopup";
-import { IoCloseOutline } from "react-icons/io5";
+import LinkSharePopup from "../../components/LinkSharePopup/LinkSharePopup";
+import { IoCloseOutline, IoShareSocialOutline } from "react-icons/io5";
 import { LuUpload } from "react-icons/lu";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { Pathway, PathwayID, Status } from "../../types/PathwayType";
@@ -93,6 +95,7 @@ const AdminPathwayEditorPage: React.FC = () => {
   ]);
   const [trainingOptions, setTrainingOptions] = useState<TrainingID[]>([]);
   const [errorTrainings, setErrorTrainings] = useState<number[]>([]);
+  const [openLinkSharePopup, setLinkSharePopup] = useState(false);
 
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
@@ -518,7 +521,10 @@ const AdminPathwayEditorPage: React.FC = () => {
 
   return (
     <>
-      <div className={openDeleteDraftPopup ? styles.popupOpen : ""}>
+      <div
+        className={
+          openDeleteDraftPopup || openLinkSharePopup ? styles.popupOpen : ""
+        }>
         <AdminNavigationBar
           open={navigationBarOpen}
           setOpen={setNavigationBarOpen}
@@ -528,8 +534,7 @@ const AdminPathwayEditorPage: React.FC = () => {
         className={`${styles.split} ${styles.right}`}
         style={{
           left: navigationBarOpen && screenWidth > 1200 ? "250px" : "0",
-        }}
-      >
+        }}>
         {/* Hamburger Menu */}
         {!navigationBarOpen && (
           <img
@@ -547,6 +552,24 @@ const AdminPathwayEditorPage: React.FC = () => {
             <div className={styles.header}>
               <div className={styles.headerTitle}>
                 <h1 className={styles.nameHeading}>Pathway Editor</h1>
+                {status == "PUBLISHED" ? (
+                  <Tooltip
+                    title={"Share pathway"}
+                    componentsProps={{
+                      tooltip: {
+                        sx: { ...grayTooltip, fontSize: "0.75rem" },
+                      },
+                    }}>
+                    <span>
+                      <IoShareSocialOutline
+                        className={styles.shareIcon}
+                        onClick={() => setLinkSharePopup(true)}
+                      />
+                    </span>
+                  </Tooltip>
+                ) : (
+                  <span className={styles.headerSpace}></span>
+                )}
                 <div>{renderMarker()}</div>
               </div>
               <div className={styles.profileIcon}>
@@ -561,8 +584,7 @@ const AdminPathwayEditorPage: React.FC = () => {
                   sx={whiteButtonGrayBorder}
                   variant="contained"
                   onClick={handleSaveClick}
-                  disabled={loading}
-                >
+                  disabled={loading}>
                   {status == "DRAFT" ? "Save as Draft" : "Save"}
                 </Button>
 
@@ -575,8 +597,7 @@ const AdminPathwayEditorPage: React.FC = () => {
                     onClick={() => {
                       setOpenDeleteDraftPopup(true);
                     }}
-                    disabled={loading}
-                  >
+                    disabled={loading}>
                     DELETE
                   </Button>
                 ) : (
@@ -588,8 +609,7 @@ const AdminPathwayEditorPage: React.FC = () => {
               <div className={styles.inputBoxHeader}>
                 <Typography
                   variant="body2"
-                  sx={{ ...inputHeaderText, marginTop: "2rem" }}
-                >
+                  sx={{ ...inputHeaderText, marginTop: "2rem" }}>
                   PATHWAY NAME
                 </Typography>
 
@@ -624,8 +644,7 @@ const AdminPathwayEditorPage: React.FC = () => {
               <div className={styles.inputBoxHeader}>
                 <Typography
                   variant="body2"
-                  sx={{ ...inputHeaderText, marginTop: "2rem" }}
-                >
+                  sx={{ ...inputHeaderText, marginTop: "2rem" }}>
                   BLURB
                 </Typography>
 
@@ -664,8 +683,7 @@ const AdminPathwayEditorPage: React.FC = () => {
               <div className={styles.inputBoxHeader}>
                 <Typography
                   variant="body2"
-                  sx={{ ...inputHeaderText, marginTop: "2rem" }}
-                >
+                  sx={{ ...inputHeaderText, marginTop: "2rem" }}>
                   DESCRIPTION
                 </Typography>
 
@@ -680,15 +698,13 @@ const AdminPathwayEditorPage: React.FC = () => {
               <div
                 className={`${
                   errors.description ? styles.inputError : styles.quillContainer
-                }`}
-              >
+                }`}>
                 <div
                   ref={descriptionContainerRef}
                   id={styles.quillEditor}
                   style={{
                     height: "100px",
-                  }}
-                ></div>
+                  }}></div>
               </div>
 
               {/* Pathway Image */}
@@ -704,8 +720,7 @@ const AdminPathwayEditorPage: React.FC = () => {
                       tooltip: {
                         sx: { ...whiteTooltip, fontSize: "0.75rem" },
                       },
-                    }}
-                  >
+                    }}>
                     <span className={styles.iconCenter}>
                       <InfoOutlinedIcon />
                     </span>
@@ -721,8 +736,7 @@ const AdminPathwayEditorPage: React.FC = () => {
                       border: errors.coverImage
                         ? "2px solid var(--hazard-red)"
                         : "2px solid var(--lighter-grey)",
-                    }}
-                  >
+                    }}>
                     <LuUpload style={{ fontSize: "50px" }} />
                     <input
                       type="file"
@@ -794,8 +808,7 @@ const AdminPathwayEditorPage: React.FC = () => {
                       tooltip: {
                         sx: { ...whiteTooltip, fontSize: "0.75rem" },
                       },
-                    }}
-                  >
+                    }}>
                     <span className={styles.iconCenter}>
                       <InfoOutlinedIcon />
                     </span>
@@ -805,8 +818,7 @@ const AdminPathwayEditorPage: React.FC = () => {
                 {selectedTrainings.map((training, trainingIndex) => (
                   <div
                     key={trainingIndex}
-                    className={styles.searchBarContainer}
-                  >
+                    className={styles.searchBarContainer}>
                     <p className={styles.searchBarNumber}>
                       {trainingIndex + 1}
                     </p>
@@ -859,8 +871,7 @@ const AdminPathwayEditorPage: React.FC = () => {
                     />
                     {trainingIndex > 0 && status === "DRAFT" ? (
                       <div
-                        className={`${styles.closeIcon} ${styles.leftMargin}`}
-                      >
+                        className={`${styles.closeIcon} ${styles.leftMargin}`}>
                         <IoCloseOutline
                           onClick={() => handleDeleteSearchBar(trainingIndex)}
                         />
@@ -868,8 +879,7 @@ const AdminPathwayEditorPage: React.FC = () => {
                     ) : (
                       <div
                         className={`${styles.closeIcon} ${styles.leftMargin}`}
-                        style={{ visibility: "hidden" }}
-                      >
+                        style={{ visibility: "hidden" }}>
                         <IoCloseOutline />
                       </div>
                     )}
@@ -880,8 +890,7 @@ const AdminPathwayEditorPage: React.FC = () => {
                 {status === "DRAFT" && (
                   <div
                     className={styles.addTrainingContainer}
-                    onClick={handleAddSearchBar}
-                  >
+                    onClick={handleAddSearchBar}>
                     <AddIcon fontSize="medium" />
                     <h3>ADD TRAINING</h3>
                   </div>
@@ -899,8 +908,7 @@ const AdminPathwayEditorPage: React.FC = () => {
                     width: "fit-content",
                   }}
                   onClick={handleNextClick}
-                  disabled={loading}
-                >
+                  disabled={loading}>
                   {status == "DRAFT" ? "Next: Create Quiz" : "Next: Edit Quiz"}
                 </Button>
               </div>
@@ -917,8 +925,7 @@ const AdminPathwayEditorPage: React.FC = () => {
               onClose={handleCloseSnackbar}
               severity={
                 snackbarMessage.includes("successfully") ? "success" : "error"
-              }
-            >
+              }>
               {snackbarMessage}
             </Alert>
           </Snackbar>
@@ -927,6 +934,12 @@ const AdminPathwayEditorPage: React.FC = () => {
             onClose={setOpenDeleteDraftPopup}
             pathwayId={pathwayId}
             coverImage={coverImage}
+          />
+          <LinkSharePopup
+            open={openLinkSharePopup}
+            onClose={setLinkSharePopup}
+            title={"Share Pathway"}
+            shareLink={window.location.origin + "/#/pathways/" + pathwayId}
           />
         </div>
         <Footer />

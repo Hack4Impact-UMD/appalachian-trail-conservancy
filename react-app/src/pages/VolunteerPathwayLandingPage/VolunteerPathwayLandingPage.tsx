@@ -328,6 +328,7 @@ function VolunteerPathwayLandingPage() {
         <LinkSharePopup
           open={openLinkSharePopup}
           onClose={setLinkSharePopup}
+          title={"Share Pathway"}
           shareLink={window.location.href}
         />
 

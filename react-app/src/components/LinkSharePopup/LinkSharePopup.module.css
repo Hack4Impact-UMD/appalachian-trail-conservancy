@@ -35,16 +35,7 @@
 }
 
 .textFields {
-  gap: 10px;
   margin: 1rem;
-}
-
-.buttons {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5%;
-  margin-top: 0.5rem;
 }
 
 @media screen and (max-width: 450px) {

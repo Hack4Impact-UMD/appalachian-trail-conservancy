@@ -1,3 +1,8 @@
+.popupOpen {
+  position: absolute;
+  z-index: -1;
+}
+
 .split {
   height: 100%;
   position: fixed;
@@ -52,7 +57,18 @@
 .headerTitle {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+}
+
+.shareIcon {
+  margin-left: 1rem;
+  margin-right: 2rem;
+  font-size: 1.75rem;
+  color: var(--blue-gray);
+  cursor: pointer;
+}
+
+.headerSpace {
+  margin-right: 1.5rem;
 }
 
 .marker {
@@ -233,6 +249,10 @@
 }
 
 @media screen and (max-width: 1000px) {
+  .headerTitle {
+    max-width: 70%;
+  }
+
   .content {
     width: 600px;
   }
@@ -267,6 +287,14 @@
 
   .headerTitle {
     flex-direction: column;
+  }
+
+  .shareIcon {
+    margin: 1rem;
+  }
+
+  .headerSpace {
+    margin-top: 1.5rem;
   }
 
   .questionBox {

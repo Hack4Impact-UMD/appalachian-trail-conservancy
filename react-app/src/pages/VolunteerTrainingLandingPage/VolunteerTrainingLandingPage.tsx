@@ -538,6 +538,7 @@ function VolunteerTrainingLandingPage() {
         <LinkSharePopup
           open={openLinkSharePopup}
           onClose={setLinkSharePopup}
+          title={"Share Training"}
           shareLink={window.location.href}
         />
       </div>
