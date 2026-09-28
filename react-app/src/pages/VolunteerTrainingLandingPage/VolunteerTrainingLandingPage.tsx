@@ -205,10 +205,7 @@ function VolunteerTrainingLandingPage() {
                 )) ||
                 (volunteerTraining.trainingID !== "" &&
                   volunteerTraining.progress === "INPROGRESS" && (
-                    <div
-                      className={`${styles.marker} ${styles.progressMarker}`}>
-                      IN PROGRESS
-                    </div>
+                    <div className={styles.marker}>IN PROGRESS</div>
                   ))}
             </div>
           </div>
@@ -220,7 +217,13 @@ function VolunteerTrainingLandingPage() {
   const renderMarker = () => {
     if (volunteerTraining.trainingID === "") {
       // Training not started
-      return <></>;
+      return (
+        <>
+          <div className={`${styles.marker} ${styles.trainingMarker}`}>
+            TRAINING
+          </div>
+        </>
+      );
     } else if (
       volunteerTraining.trainingID !== "" &&
       volunteerTraining.numCompletedResources ===
