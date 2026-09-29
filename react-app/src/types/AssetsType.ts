@@ -17,4 +17,12 @@ export interface ReauthKeyType extends AssetsType {
   email: string;
 }
 
-export type AssetsDocumentType = "EMAIL" | "REGISTRATIONCODE" | "REAUTHKEY";
+export interface AffiliationList extends AssetsType {
+  affiliations: string[];
+}
+
+export type AssetsDocumentType =
+  | "EMAIL"
+  | "REGISTRATIONCODE"
+  | "REAUTHKEY"
+  | "AFFILIATIONLIST";
