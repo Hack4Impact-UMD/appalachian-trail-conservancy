@@ -596,7 +596,7 @@ async function getUserDocByAuthId(authId) {
  * Retrieves training information, then checks the volunteers answers against
  * the quiz answers from the Training data. Retrieves and updates the Volunteer's
  * volunteerTraining and volunteerPathway data corresponding to the current Training
- * given that they recieved a higher score or was their first time taking the quiz
+ * given that they received a higher score or was their first time taking the quiz
  */
 exports.validateTrainingQuizResults = onCall(
   { region: "us-east4", cors: true },
@@ -759,16 +759,21 @@ exports.validateTrainingQuizResults = onCall(
                       }
                     }
 
-                    const updateVolunteer = await volunteerDoc.ref.update({
-                      trainingInformation: newVolunteerTraining,
-                      pathwayInformation: volunteerData.pathwayInformation,
-                    }).catch((error) => {
-                      reject({
-                        reason: "database-update-failed",
-                        text: "Unable to update Volunteer in the database.",
+                    const updateVolunteer = await volunteerDoc.ref
+                      .update({
+                        trainingInformation: newVolunteerTraining,
+                        pathwayInformation: volunteerData.pathwayInformation,
+                      })
+                      .catch((error) => {
+                        reject({
+                          reason: "database-update-failed",
+                          text: "Unable to update Volunteer in the database.",
+                        });
+                        throw new functions.https.HttpsError(
+                          "unknown",
+                          `${error}`
+                        );
                       });
-                      throw new functions.https.HttpsError("unknown", `${error}`);
-                    });
                   }
 
                   // Resolve with score and volunteer training info
@@ -822,7 +827,7 @@ exports.validateTrainingQuizResults = onCall(
  * Retrieves pathway information, then checks the volunteers answers against
  * the quiz answers from the Training data. Retrieves and updates the Volunteer's
  * volunteerPathway data corresponding to the current Pathway given that they
- * recieved a higher score or was their first time taking the quiz
+ * received a higher score or was their first time taking the quiz
  */
 exports.validatePathwayQuizResults = onCall(
   { region: "us-east4", cors: true },
@@ -903,15 +908,20 @@ exports.validatePathwayQuizResults = onCall(
                     );
 
                     // Update the Volunteer document in firestore
-                    const updateVolunteer = await volunteerDoc.ref.update({
-                      pathwayInformation: newVolunteerPathway,
-                    }).catch((error) => {
-                      reject({
-                        reason: "database-update-failed",
-                        text: "Unable to update Volunteer in the database.",
+                    const updateVolunteer = await volunteerDoc.ref
+                      .update({
+                        pathwayInformation: newVolunteerPathway,
+                      })
+                      .catch((error) => {
+                        reject({
+                          reason: "database-update-failed",
+                          text: "Unable to update Volunteer in the database.",
+                        });
+                        throw new functions.https.HttpsError(
+                          "unknown",
+                          `${error}`
+                        );
                       });
-                      throw new functions.https.HttpsError("unknown", `${error}`);
-                    });
                   }
 
                   // Resolve with score and volunteer pathway info
