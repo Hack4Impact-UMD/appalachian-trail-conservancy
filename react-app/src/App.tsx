@@ -2,6 +2,10 @@ import "./index.css";
 import React from "react";
 import { HashRouter, Route, Routes } from "react-router-dom";
 import { ThemeProvider } from "@mui/material";
+
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "./config/firebase";
+
 import { AuthProvider, useAuth } from "./auth/AuthProvider.tsx";
 import RequireAuth from "./auth/RequireAuth/RequireAuth.tsx";
 import RequireAdminAuth from "./auth/RequireAdminAuth/RequireAdminAuth.tsx";
@@ -272,6 +276,60 @@ function App() {
                 />
               }
             />
+            <Route
+              path="/testfunctions"
+              element={
+                <RequireAdminAuth>
+                  <button
+                    onClick={async () => {
+                      const affiliations = [
+                        "Allentown Hiking Club (AHC)",
+                        "AMC-Western Massachusetts Chapter (AMC-Western MA)",
+                        "AMC-Connecticut Chapter (AMC-CT)",
+                        "AMC-Delaware Valley Chapter (AMC-DV)",
+                        "Appalachian Mountain Club (AMC)",
+                        "Appalachian Trail Conservancy (ATC)",
+                        "Batona Hiking Club (BHC)",
+                        "Blue Mountain Eagle Climbing Club (BMECC)",
+                        "Carolina Mountain Club (CMC)",
+                        "Cumberland Valley Appalachian Trail Club (CVATC)",
+                        "Dartmouth Outing Club (DOC)",
+                        "Georgia Appalachian Trail Club (GATC)",
+                        "Green Mountain Club (GMC)",
+                        "Keystone Trails Association (KTA)",
+                        "Maine Appalachian Trail Club (MATC)",
+                        "Mountain Club of Maryland (MCM)",
+                        "Mount Rogers Appalachian Trail Club (MRATC)",
+                        "Nantahala Hiking Club (NHC)",
+                        "Natural Bridge Appalachian Trail Club (NBATC)",
+                        "New York-New Jersey Trail Conference (NY-NJTC)",
+                        "Old Dominion Appalachian Trail Club (ODATC)",
+                        "Outdoor Club at Virginia Tech (OCVT)",
+                        "Piedmont Appalachian Trail Hikers (PATH)",
+                        "Potomac Appalachian Trail Club (PATC)",
+                        "Randolph Mountain Club (RMC)",
+                        "Roanoke Appalachian Trail Club (RATC)",
+                        "Smoky Mountains Hiking Club (SMHC)",
+                        "Susquehanna Appalachian Trail Club (SATC)",
+                        "Tennessee Eastman Hiking and Canoeing Club (TEHCC)",
+                        "Tidewater Appalachian Trail Club (TATC)",
+                        "York Hiking Club (YHC)",
+                        "A.T. Community",
+                        "Agency Partner",
+                        "Other",
+                        "Unaffiliated",
+                      ];
+                      await addDoc(collection(db, "Assets"), {
+                        type: "AFFILIATIONLIST",
+                        affiliations,
+                        dateUpdated: new Date().toISOString(),
+                      });
+                      console.log("Affiliation list added to Firestore");
+                    }}></button>
+                </RequireAdminAuth>
+              }
+            />
+
             <Route
               path="/*"
               element={
