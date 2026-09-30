@@ -31,7 +31,6 @@ export function updateVolunteer(
 
 export function validateTrainingQuiz(
   trainingId: string,
-  volunteerId: string,
   volunteerAnswers: string[],
   timeCompleted: string
 ): Promise<any> {
@@ -42,7 +41,6 @@ export function validateTrainingQuiz(
     );
     validateTrainingQuizResults({
       trainingId,
-      volunteerId,
       volunteerAnswers,
       timeCompleted,
     })
@@ -57,7 +55,6 @@ export function validateTrainingQuiz(
 
 export function validatePathwayQuiz(
   pathwayId: string,
-  volunteerId: string,
   volunteerAnswers: string[],
   timeCompleted: string
 ): Promise<any> {
@@ -68,7 +65,6 @@ export function validatePathwayQuiz(
     );
     validatePathwayQuizResults({
       pathwayId,
-      volunteerId,
       volunteerAnswers,
       timeCompleted,
     })

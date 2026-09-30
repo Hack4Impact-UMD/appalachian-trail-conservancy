@@ -118,7 +118,6 @@ function VolunteerPathwayQuizPage() {
 
     validatePathwayQuiz(
       volunteerPathway.pathwayID,
-      volunteerId,
       cleanedSelectedAnswers,
       new Date(Date.now()).toISOString()
     )

@@ -576,21 +576,33 @@ exports.setUserRole = onCall(
   }
 );
 
+async function getUserDocByAuthId(authId) {
+  const querySnapshot = await db
+    .collection("Users")
+    .where("auth_id", "==", authId)
+    .limit(1)
+    .get();
+  if (querySnapshot.empty) {
+    throw new Error("No user found for this auth id");
+  }
+  return querySnapshot.docs[0];
+}
+
 /**
  * This function validates a Volunteer's training quiz answers
  *
- * Arguments: trainingId, volunteerAnswers, volunteerID, timeCompleted
+ * Arguments: trainingId, volunteerAnswers, timeCompleted
  *
  * Retrieves training information, then checks the volunteers answers against
  * the quiz answers from the Training data. Retrieves and updates the Volunteer's
  * volunteerTraining and volunteerPathway data corresponding to the current Training
- * given that they recieved a higher score or was their first time taking the quiz
+ * given that they received a higher score or was their first time taking the quiz
  */
 exports.validateTrainingQuizResults = onCall(
   { region: "us-east4", cors: true },
   async ({ auth, data }) => {
     return new Promise(async (resolve, reject) => {
-      const { trainingId, volunteerAnswers, volunteerId, timeCompleted } = data;
+      const { trainingId, volunteerAnswers, timeCompleted } = data;
       if (
         // Validate auth
         auth &&
@@ -599,7 +611,6 @@ exports.validateTrainingQuizResults = onCall(
         // Validate parameters here
         trainingId &&
         volunteerAnswers &&
-        volunteerId &&
         timeCompleted
       ) {
         await db
@@ -623,19 +634,16 @@ exports.validateTrainingQuizResults = onCall(
                   0
                 );
 
-                // Get Volunteer data
-                const volunteerData = await db
-                  .collection("Users")
-                  .doc(volunteerId)
-                  .get()
-                  .then((volunteerSnapshot) => volunteerSnapshot.data())
-                  .catch((error) => {
+                const volunteerDoc = await getUserDocByAuthId(auth.uid).catch(
+                  (error) => {
                     reject({
                       reason: "database-retrieval-failed",
                       text: "Unable to find volunteer in the database. Make sure they exist.",
                     });
                     throw new functions.https.HttpsError("unknown", `${error}`);
-                  });
+                  }
+                );
+                const volunteerData = volunteerDoc.data();
 
                 let volunteerTrainingInfo =
                   volunteerData.trainingInformation.find(
@@ -750,10 +758,8 @@ exports.validateTrainingQuizResults = onCall(
                         );
                       }
                     }
-                    // Update the Volunteer document in firestore
-                    const updateVolunteer = await db
-                      .collection("Users")
-                      .doc(volunteerId)
+
+                    const updateVolunteer = await volunteerDoc.ref
                       .update({
                         trainingInformation: newVolunteerTraining,
                         pathwayInformation: volunteerData.pathwayInformation,
@@ -816,18 +822,18 @@ exports.validateTrainingQuizResults = onCall(
 /**
  * This function validates a Volunteer's pathway quiz answers
  *
- * Arguments: trainingId, volunteerAnswers, volunteerID, timeCompleted
+ * Arguments: pathwayId, volunteerAnswers, timeCompleted
  *
  * Retrieves pathway information, then checks the volunteers answers against
  * the quiz answers from the Training data. Retrieves and updates the Volunteer's
  * volunteerPathway data corresponding to the current Pathway given that they
- * recieved a higher score or was their first time taking the quiz
+ * received a higher score or was their first time taking the quiz
  */
 exports.validatePathwayQuizResults = onCall(
   { region: "us-east4", cors: true },
   async ({ auth, data }) => {
     return new Promise(async (resolve, reject) => {
-      const { pathwayId, volunteerAnswers, volunteerId, timeCompleted } = data;
+      const { pathwayId, volunteerAnswers, timeCompleted } = data;
       if (
         // Validate auth
         auth &&
@@ -836,7 +842,6 @@ exports.validatePathwayQuizResults = onCall(
         // Validate parameters here
         pathwayId &&
         volunteerAnswers &&
-        volunteerId &&
         timeCompleted
       ) {
         await db
@@ -860,19 +865,16 @@ exports.validatePathwayQuizResults = onCall(
                   0
                 );
 
-                // Get Volunteer data
-                const volunteerData = await db
-                  .collection("Users")
-                  .doc(volunteerId)
-                  .get()
-                  .then((volunteerSnapshot) => volunteerSnapshot.data())
-                  .catch((error) => {
+                const volunteerDoc = await getUserDocByAuthId(auth.uid).catch(
+                  (error) => {
                     reject({
                       reason: "database-retrieval-failed",
                       text: "Unable to find volunteer in the database. Make sure they exist.",
                     });
                     throw new functions.https.HttpsError("unknown", `${error}`);
-                  });
+                  }
+                );
+                const volunteerData = volunteerDoc.data();
 
                 let volunteerPathwayInfo =
                   volunteerData.pathwayInformation.find(
@@ -906,9 +908,7 @@ exports.validatePathwayQuizResults = onCall(
                     );
 
                     // Update the Volunteer document in firestore
-                    const updateVolunteer = await db
-                      .collection("Users")
-                      .doc(volunteerId)
+                    const updateVolunteer = await volunteerDoc.ref
                       .update({
                         pathwayInformation: newVolunteerPathway,
                       })
