@@ -12,7 +12,7 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
-import { IoCloseOutline } from "react-icons/io5";
+import { IoCloseOutline, IoShareSocialOutline } from "react-icons/io5";
 import {
   forestGreenButton,
   grayBorderTextField,
@@ -23,6 +23,7 @@ import {
   grayGreenRadioButton,
   styledRectButton,
   whiteTooltip,
+  grayTooltip,
 } from "../../muiTheme";
 import { Unstable_NumberInput as NumberInput } from "@mui/base/Unstable_NumberInput";
 import AddIcon from "@mui/icons-material/Add";
@@ -30,6 +31,7 @@ import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigat
 import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import Hamburger from "../../assets/hamburger.svg";
+import LinkSharePopup from "../../components/LinkSharePopup/LinkSharePopup";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { updateTraining } from "../../backend/AdminFirestoreCalls";
 import {
@@ -69,6 +71,7 @@ function TrainingQuizEditorPage() {
   const [loading, setLoading] = useState(false);
   const [snackbar, setSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [openLinkSharePopup, setLinkSharePopup] = useState(false);
 
   const renderMarker = () => {
     if (status === "DRAFT") {
@@ -285,8 +288,8 @@ function TrainingQuizEditorPage() {
         status === "DRAFT"
           ? "PUBLISHED"
           : status === "PUBLISHED"
-          ? "ARCHIVED"
-          : "PUBLISHED";
+            ? "ARCHIVED"
+            : "PUBLISHED";
     }
 
     const { id, ...restOfTrainingData } = training as TrainingID;
@@ -325,10 +328,12 @@ function TrainingQuizEditorPage() {
 
   return (
     <>
-      <AdminNavigationBar
-        open={navigationBarOpen}
-        setOpen={setNavigationBarOpen}
-      />
+      <div className={openLinkSharePopup ? styles.popupOpen : ""}>
+        <AdminNavigationBar
+          open={navigationBarOpen}
+          setOpen={setNavigationBarOpen}
+        />
+      </div>
       <div
         className={`${styles.split} ${styles.right}`}
         style={{
@@ -349,6 +354,24 @@ function TrainingQuizEditorPage() {
             <div className={styles.header}>
               <div className={styles.headerTitle}>
                 <h1 className={styles.nameHeading}>Training Editor</h1>
+                {status == "PUBLISHED" ? (
+                  <Tooltip
+                    title={"Share training"}
+                    componentsProps={{
+                      tooltip: {
+                        sx: { ...grayTooltip, fontSize: "0.75rem" },
+                      },
+                    }}>
+                    <span>
+                      <IoShareSocialOutline
+                        className={styles.shareIcon}
+                        onClick={() => setLinkSharePopup(true)}
+                      />
+                    </span>
+                  </Tooltip>
+                ) : (
+                  <span className={styles.headerSpace}></span>
+                )}
                 <div>{renderMarker()}</div>
               </div>
               <div className={styles.profileIcon}>
@@ -579,8 +602,8 @@ function TrainingQuizEditorPage() {
                   {status === "DRAFT"
                     ? "PUBLISH"
                     : status === "PUBLISHED"
-                    ? "ARCHIVE"
-                    : "UNARCHIVE"}
+                      ? "ARCHIVE"
+                      : "UNARCHIVE"}
                 </Button>
               </div>
             </form>
@@ -603,6 +626,12 @@ function TrainingQuizEditorPage() {
             </Alert>
           </Snackbar>
         </div>
+        <LinkSharePopup
+          open={openLinkSharePopup}
+          onClose={setLinkSharePopup}
+          title={"Share Training"}
+          shareLink={window.location.origin + "/#/trainings/" + trainingId}
+        />
 
         <Footer />
       </div>
