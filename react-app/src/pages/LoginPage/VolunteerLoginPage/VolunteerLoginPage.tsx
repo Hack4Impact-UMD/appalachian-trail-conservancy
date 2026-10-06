@@ -87,8 +87,7 @@ function VolunteerLoginPage() {
         className={styles.centered}
         onSubmit={(event) => {
           handleSendLink(event);
-        }}
-      >
+        }}>
         {/* email field */}
         <div className={styles.alignLeft}>
           <h3 className={styles.label}>Email</h3>
@@ -109,8 +108,7 @@ function VolunteerLoginPage() {
           onClick={(e) => {
             handleSendLink(e);
           }}
-          disabled={showLoading}
-        >
+          disabled={showLoading}>
           {showLoading ? <Loading color="white" /> : "Send Link"}
         </Button>
 
@@ -118,14 +116,21 @@ function VolunteerLoginPage() {
         <p
           className={
             failureMessage ? styles.showFailureMessage : styles.errorContainer
-          }
-        >
+          }>
           {failureMessage}
         </p>
-        {/* switch to admin link */}
-        <Link to="/login/admin" className={styles.switch}>
-          Switch to Admin Log In
-        </Link>
+        <div className={styles.linkContainer}>
+          {/* switch to register link */}
+          <Link
+            to="/register"
+            className={`${styles.switch} ${styles.registerLink}`}>
+            Don't have an account? Sign Up
+          </Link>
+          {/* switch to admin link */}
+          <Link to="/login/admin" className={styles.switch}>
+            Switch to Admin Log In
+          </Link>
+        </div>
       </form>
     </div>
   );

@@ -60,6 +60,19 @@
   margin-bottom: 9%;
 }
 
+/* switch to register page */
+.switch {
+  font-size: 0.85rem;
+  font-weight: bold;
+  text-decoration: underline;
+  text-underline-position: under;
+  background-color: white;
+  color: var(--blue-gray);
+  border: none;
+  cursor: pointer;
+  margin: 1.5rem 0 0 0;
+}
+
 /* mobile */
 @media screen and (max-width: 850px) {
   .left {
