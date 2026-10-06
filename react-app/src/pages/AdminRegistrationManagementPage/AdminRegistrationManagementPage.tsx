@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar.tsx";
 import EditRegistrationCode from "./SubComponents/EditRegistrationCode.tsx";
 import EditEmail from "./SubComponents/EditEmail.tsx";
+import EditAffiliationList from "./SubComponents/EditAffiliationList.tsx";
 import { FormControl, MenuItem, Select } from "@mui/material";
 import styles from "./AdminRegistrationManagementPage.module.css";
 import {
@@ -83,6 +84,9 @@ function AdminRegistrationManagementPage() {
                     <PurpleToggleButton value="registration">
                       REGISTRATION CODE
                     </PurpleToggleButton>
+                    <PurpleToggleButton value="affiliationList">
+                      EDIT AFFILIATION LIST
+                    </PurpleToggleButton>
                   </CustomToggleButtonGroup>
                 </div>
                 {/* dropdown container */}
@@ -107,6 +111,8 @@ function AdminRegistrationManagementPage() {
                 <div className={styles.emailRegCodeContainer}>
                   {tab === "user" ? (
                     <EditEmail tab={tab} quillRef={quillRef} />
+                  ) : tab === "affiliationList" ? (
+                    <EditAffiliationList />
                   ) : (
                     <EditRegistrationCode />
                   )}

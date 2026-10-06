@@ -10,6 +10,13 @@
   justify-content: center;
 }
 
+.affiliationsInnerContainer {
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .subHeaderLabel {
   display: flex;
   gap: 0.5%;
@@ -32,8 +39,21 @@
   border-radius: 10px;
 }
 
+/* .innerGrid {
+  height: 533px;
+} */
+
+.addAffiliationContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 20px;
+}
+
 @media screen and (max-width: 750px) {
-  .emailRegCodeInnerContainer {
+  .emailRegCodeInnerContainer,
+  .affiliationsInnerContainer {
     width: 100%;
   }
 }
