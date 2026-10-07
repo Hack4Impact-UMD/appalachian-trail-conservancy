@@ -44,6 +44,9 @@ function LoginPage() {
                 Sign in as admin
               </Button>
             </Link>
+            <Link to="/register" className={styles.switch}>
+              Don't have an account? Sign Up
+            </Link>
           </div>
         </div>
       </div>

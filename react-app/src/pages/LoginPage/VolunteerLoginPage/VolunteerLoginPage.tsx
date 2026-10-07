@@ -120,10 +120,18 @@ function VolunteerLoginPage() {
           }>
           {failureMessage}
         </p>
-        {/* switch to admin link */}
-        <Link to="/login/admin" className={styles.switch}>
-          Switch to Admin Log In
-        </Link>
+        <div className={styles.linkContainer}>
+          {/* switch to register link */}
+          <Link
+            to="/register"
+            className={`${styles.switch} ${styles.registerLink}`}>
+            Don't have an account? Sign Up
+          </Link>
+          {/* switch to admin link */}
+          <Link to="/login/admin" className={styles.switch}>
+            Switch to Admin Log In
+          </Link>
+        </div>
       </form>
     </div>
   );
