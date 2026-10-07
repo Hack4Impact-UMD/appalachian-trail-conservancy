@@ -13,10 +13,13 @@ import {
   addVolunteerTraining,
   addVolunteerPathway,
 } from "../../backend/VolunteerFirestoreCalls";
-import { Button } from "@mui/material";
+import { Button, Tooltip } from "@mui/material";
 import { useAuth } from "../../auth/AuthProvider";
+import { IoShareSocialOutline } from "react-icons/io5";
+import { grayTooltip } from "../../muiTheme";
 import styles from "./VolunteerTrainingLandingPage.module.css";
 import VolunteerNavigationBar from "../../components/VolunteerNavigationBar/VolunteerNavigationBar";
+import LinkSharePopup from "../../components/LinkSharePopup/LinkSharePopup";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import CompletedIcon from "../../assets/completedCheck.svg";
 import Loading from "../../components/LoadingScreen/Loading";
@@ -32,6 +35,7 @@ function VolunteerTrainingLandingPage() {
     !(window.innerWidth < 1200)
   );
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
+  const [openLinkSharePopup, setLinkSharePopup] = useState(false);
 
   const [pathwayNames, setPathwayNames] = useState<
     { name: string; id: string }[]
@@ -394,10 +398,12 @@ function VolunteerTrainingLandingPage() {
 
   return (
     <>
-      <VolunteerNavigationBar
-        open={navigationBarOpen}
-        setOpen={setNavigationBarOpen}
-      />
+      <div className={openLinkSharePopup ? styles.popupOpen : ""}>
+        <VolunteerNavigationBar
+          open={navigationBarOpen}
+          setOpen={setNavigationBarOpen}
+        />
+      </div>
 
       <div
         className={`${styles.split} ${styles.right}`}
@@ -423,7 +429,23 @@ function VolunteerTrainingLandingPage() {
               <div className={styles.content}>
                 {/* HEADER */}
                 <div className={styles.header}>
-                  <h1 className={styles.nameHeading}>{training.name}</h1>
+                  <div className={styles.nameShareContainer}>
+                    <h1 className={styles.nameHeading}>{training.name}</h1>
+                    <Tooltip
+                      title={"Share link"}
+                      componentsProps={{
+                        tooltip: {
+                          sx: { ...grayTooltip, fontSize: "0.75rem" },
+                        },
+                      }}>
+                      <span>
+                        <IoShareSocialOutline
+                          className={styles.shareIcon}
+                          onClick={() => setLinkSharePopup(true)}
+                        />
+                      </span>
+                    </Tooltip>
+                  </div>
                   <div className={styles.profileIcon}>
                     <ProfileIcon />
                   </div>
@@ -515,6 +537,13 @@ function VolunteerTrainingLandingPage() {
             {renderButton()}
           </div>
         </div>
+
+        <LinkSharePopup
+          open={openLinkSharePopup}
+          onClose={setLinkSharePopup}
+          title={"Share Training"}
+          shareLink={window.location.href}
+        />
       </div>
     </>
   );

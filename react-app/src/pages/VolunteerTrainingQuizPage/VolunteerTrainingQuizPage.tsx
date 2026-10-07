@@ -119,7 +119,6 @@ function VolunteerTrainingQuizPage() {
 
     validateTrainingQuiz(
       volunteerTraining.trainingID,
-      volunteerId,
       cleanedSelectedAnswers,
       new Date(Date.now()).toISOString()
     )

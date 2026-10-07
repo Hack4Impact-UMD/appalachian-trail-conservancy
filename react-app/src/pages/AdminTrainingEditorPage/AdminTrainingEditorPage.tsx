@@ -32,9 +32,10 @@ import Footer from "../../components/Footer/Footer";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import AdminDeleteTrainingDraftPopup from "./AdminDeleteTrainingDraftPopup/AdminDeleteTrainingDraftPopup";
 import VolunteerTrainingCard from "../../components/VolunteerTrainingCard/VolunteerTrainingCard";
+import LinkSharePopup from "../../components/LinkSharePopup/LinkSharePopup";
 import Certificate from "../../components/CertificateCard/CertificateCard";
 import { LuUpload } from "react-icons/lu";
-import { IoCloseOutline } from "react-icons/io5";
+import { IoCloseOutline, IoShareSocialOutline } from "react-icons/io5";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import {
   grayButton,
@@ -48,6 +49,7 @@ import {
   grayBorderTextField,
   whiteButtonRedBorder,
   whiteTooltip,
+  grayTooltip,
 } from "../../muiTheme";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
@@ -95,6 +97,7 @@ const AdminTrainingEditorPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [snackbar, setSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [openLinkSharePopup, setLinkSharePopup] = useState(false);
 
   const [errors, setErrors] = useState({
     trainingName: "",
@@ -514,7 +517,10 @@ const AdminTrainingEditorPage: React.FC = () => {
 
   return (
     <>
-      <div className={openDeleteDraftPopup ? styles.popupOpen : ""}>
+      <div
+        className={
+          openDeleteDraftPopup || openLinkSharePopup ? styles.popupOpen : ""
+        }>
         <AdminNavigationBar
           open={navigationBarOpen}
           setOpen={setNavigationBarOpen}
@@ -541,6 +547,24 @@ const AdminTrainingEditorPage: React.FC = () => {
             <div className={styles.header}>
               <div className={styles.headerTitle}>
                 <h1 className={styles.headerText}>Training Editor</h1>
+                {status == "PUBLISHED" ? (
+                  <Tooltip
+                    title={"Share training"}
+                    componentsProps={{
+                      tooltip: {
+                        sx: { ...grayTooltip, fontSize: "0.75rem" },
+                      },
+                    }}>
+                    <span>
+                      <IoShareSocialOutline
+                        className={styles.shareIcon}
+                        onClick={() => setLinkSharePopup(true)}
+                      />
+                    </span>
+                  </Tooltip>
+                ) : (
+                  <span className={styles.headerSpace}></span>
+                )}
                 <div>{renderMarker()}</div>
               </div>
               <div className={styles.profileIcon}>
@@ -933,6 +957,12 @@ const AdminTrainingEditorPage: React.FC = () => {
             onClose={setOpenDeleteDraftPopup}
             trainingId={trainingId}
             coverImage={coverImage}
+          />
+          <LinkSharePopup
+            open={openLinkSharePopup}
+            onClose={setLinkSharePopup}
+            title={"Share Training"}
+            shareLink={window.location.origin + "/#/trainings/" + trainingId}
           />
         </div>
         <Footer />

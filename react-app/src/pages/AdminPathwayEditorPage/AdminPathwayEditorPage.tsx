@@ -23,6 +23,7 @@ import {
   forestGreenButton,
   styledRectButton,
   whiteTooltip,
+  grayTooltip,
   autocompleteText,
   whiteSelectGrayBorder,
   whiteButtonGrayBorder,
@@ -39,7 +40,8 @@ import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 import VolunteerPathwayCard from "../../components/VolunteerPathwayCard/VolunteerPathwayCard";
 import Badge from "../../components/BadgeCard/BadgeCard";
 import AdminDeletePathwayDraftPopup from "./AdminDeletePathwayDraftPopup/AdminDeletePathwayDraftPopup";
-import { IoCloseOutline } from "react-icons/io5";
+import LinkSharePopup from "../../components/LinkSharePopup/LinkSharePopup";
+import { IoCloseOutline, IoShareSocialOutline } from "react-icons/io5";
 import { LuUpload } from "react-icons/lu";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { Pathway, PathwayID, Status } from "../../types/PathwayType";
@@ -93,6 +95,7 @@ const AdminPathwayEditorPage: React.FC = () => {
   ]);
   const [trainingOptions, setTrainingOptions] = useState<TrainingID[]>([]);
   const [errorTrainings, setErrorTrainings] = useState<number[]>([]);
+  const [openLinkSharePopup, setLinkSharePopup] = useState(false);
 
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
@@ -518,7 +521,10 @@ const AdminPathwayEditorPage: React.FC = () => {
 
   return (
     <>
-      <div className={openDeleteDraftPopup ? styles.popupOpen : ""}>
+      <div
+        className={
+          openDeleteDraftPopup || openLinkSharePopup ? styles.popupOpen : ""
+        }>
         <AdminNavigationBar
           open={navigationBarOpen}
           setOpen={setNavigationBarOpen}
@@ -546,6 +552,24 @@ const AdminPathwayEditorPage: React.FC = () => {
             <div className={styles.header}>
               <div className={styles.headerTitle}>
                 <h1 className={styles.nameHeading}>Pathway Editor</h1>
+                {status == "PUBLISHED" ? (
+                  <Tooltip
+                    title={"Share pathway"}
+                    componentsProps={{
+                      tooltip: {
+                        sx: { ...grayTooltip, fontSize: "0.75rem" },
+                      },
+                    }}>
+                    <span>
+                      <IoShareSocialOutline
+                        className={styles.shareIcon}
+                        onClick={() => setLinkSharePopup(true)}
+                      />
+                    </span>
+                  </Tooltip>
+                ) : (
+                  <span className={styles.headerSpace}></span>
+                )}
                 <div>{renderMarker()}</div>
               </div>
               <div className={styles.profileIcon}>
@@ -913,6 +937,12 @@ const AdminPathwayEditorPage: React.FC = () => {
             onClose={setOpenDeleteDraftPopup}
             pathwayId={pathwayId}
             coverImage={coverImage}
+          />
+          <LinkSharePopup
+            open={openLinkSharePopup}
+            onClose={setLinkSharePopup}
+            title={"Share Pathway"}
+            shareLink={window.location.origin + "/#/pathways/" + pathwayId}
           />
         </div>
         <Footer />

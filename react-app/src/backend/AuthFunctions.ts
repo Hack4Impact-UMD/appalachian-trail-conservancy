@@ -108,7 +108,7 @@ export function createAdminUser(
       lastName: newLastName,
     })
       .then(async () => {
-        await sendPasswordResetEmail(auth, newEmail)
+        await sendPasswordResetEmail(auth, newEmail.trim().toLowerCase())
           .then(() => {
             resolve();
           })
@@ -169,7 +169,10 @@ export function updateUserEmail(
       "updateUserEmail"
     );
 
-    updateUserEmailCloudFunction({ email: oldEmail, newEmail: currentEmail })
+    updateUserEmailCloudFunction({
+      email: oldEmail.trim().toLowerCase(),
+      newEmail: currentEmail.trim().toLowerCase(),
+    })
       .then(async (res: any) => {
         resolve();
       })
@@ -208,12 +211,15 @@ export function sendSignInLink(email: string): Promise<void> {
     sendSignInEmailLink({
       url: window.location.href,
       handleCodeInApp: true,
-      email,
+      email: email.trim().toLowerCase(),
     })
       .then((res) => {
         // Add email to local storage, email is removed from
         // local storage when volunteer is signed in
-        window.localStorage.setItem("emailForSignIn", email);
+        window.localStorage.setItem(
+          "emailForSignIn",
+          email.trim().toLowerCase()
+        );
         resolve();
       })
       .catch((error: any) => {
@@ -234,7 +240,7 @@ export function sendChangeEmailLink(email: string): Promise<void> {
     sendChangeEmailLink({
       url: window.location.href.replace("profile", ""),
       handleCodeInApp: true,
-      email,
+      email: email.trim().toLowerCase(),
     })
       .then(() => {
         resolve();
