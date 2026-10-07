@@ -38,7 +38,9 @@ const EditAffiliationPopup = ({
 
   const [loading, setLoading] = useState<boolean>(false);
   const [canClose, setCanClose] = useState<boolean>(true);
-  const [affiliation, setAffiliation] = useState<string | null>("");
+  const [affiliation, setAffiliation] = useState<string | null>(
+    volunteer?.affiliation ?? null
+  );
   const [affiliationOptions, setAffiliationOptions] = useState<string[]>([]);
 
   // Fetch affiliation list
