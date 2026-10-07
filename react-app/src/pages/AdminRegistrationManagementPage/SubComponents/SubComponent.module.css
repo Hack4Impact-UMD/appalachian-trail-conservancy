@@ -3,7 +3,8 @@
   margin-top: 1.5rem;
 }
 
-.emailRegCodeInnerContainer {
+.emailRegCodeInnerContainer,
+.affiliationsInnerContainer {
   width: 90%;
   display: flex;
   flex-direction: column;
@@ -40,7 +41,8 @@
 }
 
 @media screen and (max-width: 750px) {
-  .emailRegCodeInnerContainer {
+  .emailRegCodeInnerContainer,
+  .affiliationsInnerContainer {
     width: 100%;
   }
 }
