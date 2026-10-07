@@ -1,13 +1,6 @@
 import "./index.css";
 import React from "react";
 import { HashRouter, Route, Routes } from "react-router-dom";
-import {
-  collection,
-  getDocs,
-  query,
-  updateDoc,
-  where,
-} from "firebase/firestore";
 import { ThemeProvider } from "@mui/material";
 import { AuthProvider, useAuth } from "./auth/AuthProvider.tsx";
 import RequireAuth from "./auth/RequireAuth/RequireAuth.tsx";
@@ -49,7 +42,6 @@ import AdminProfilePage from "./pages/AdminProfilePage/AdminProfilePage.tsx";
 import AdminVolunteerDetailsPage from "./pages/AdminVolunteerDetailsPage/AdminVolunteerDetailsPage.tsx";
 import AdminPathwayDetailsPage from "./pages/AdminPathwayDetailsPage/AdminPathwayDetailsPage.tsx";
 import AdminTrainingDetailsPage from "./pages/AdminTrainingDetailsPage/AdminTrainingDetailsPage.tsx";
-import { db } from "./config/firebase.ts";
 
 interface RoleBasedRouteProps {
   adminComponent: JSX.Element;
