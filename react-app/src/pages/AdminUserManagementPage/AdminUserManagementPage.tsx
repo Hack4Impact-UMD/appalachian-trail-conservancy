@@ -227,7 +227,8 @@ function AdminUserManagementPage() {
               (user) =>
                 user.firstName.toLowerCase().includes(value.toLowerCase()) ||
                 user.lastName.toLowerCase().includes(value.toLowerCase()) ||
-                user.email.toLowerCase().includes(value.toLowerCase())
+                user.email.toLowerCase().includes(value.toLowerCase()) ||
+                user.affiliation.toLowerCase().includes(value.toLowerCase())
             )
           : usersData
       );
