@@ -102,6 +102,11 @@ function RegistrationPage() {
       setInvalidEmailMessage("Invalid email");
       setInvalidEmail(true);
       setEmailsMatch(false);
+    } else if (affiliation === null || affiliation.trim() === "") {
+      setSnackbarMessage(
+        "Error creating account. Affiliation is required. Please select an affiliation from the dropdown."
+      );
+      setSnackbar(true);
     } else {
       setShowLoading(true);
       createVolunteerUser(email, firstName, lastName, joinCode, affiliation)
