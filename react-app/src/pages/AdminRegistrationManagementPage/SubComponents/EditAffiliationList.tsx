@@ -82,6 +82,8 @@ function EditAffiliationList({
     const affiliation = newAffiliation.trim();
 
     if (!affiliation) {
+      setSnackbarMessage("Cannot add empty affiliation");
+      setSnackbar(true);
       return;
     }
 

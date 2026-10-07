@@ -282,6 +282,29 @@ function App() {
                 <RequireAdminAuth>
                   <button
                     onClick={async () => {
+                      const sortAffiliations = (affiliations: string[]) => {
+                        const specialOptions = ["Other", "Unaffiliated"];
+
+                        return [...affiliations].sort((a, b) => {
+                          const aSpecial = specialOptions.includes(a);
+                          const bSpecial = specialOptions.includes(b);
+
+                          // Put special options after all regular affiliations
+                          if (aSpecial && !bSpecial) return 1;
+                          if (!aSpecial && bSpecial) return -1;
+
+                          // Order special options based on their order in the specialOptions array
+                          if (aSpecial && bSpecial) {
+                            return (
+                              specialOptions.indexOf(a) -
+                              specialOptions.indexOf(b)
+                            );
+                          }
+
+                          return a.localeCompare(b);
+                        });
+                      };
+
                       const affiliations = [
                         "Allentown Hiking Club (AHC)",
                         "AMC-Western Massachusetts Chapter (AMC-Western MA)",
@@ -319,13 +342,18 @@ function App() {
                         "Other",
                         "Unaffiliated",
                       ];
+                      const updatedAffiliations =
+                        sortAffiliations(affiliations);
+
                       await addDoc(collection(db, "Assets"), {
                         type: "AFFILIATIONLIST",
-                        affiliations,
+                        updatedAffiliations,
                         dateUpdated: new Date().toISOString(),
                       });
                       console.log("Affiliation list added to Firestore");
-                    }}></button>
+                    }}>
+                    Create Affiliation List
+                  </button>
                 </RequireAdminAuth>
               }
             />
