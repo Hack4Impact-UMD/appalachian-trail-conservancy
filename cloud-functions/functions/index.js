@@ -83,6 +83,7 @@ exports.createVolunteerUser = onCall(
                   email: data.email,
                   firstName: data.firstName,
                   lastName: data.lastName,
+                  affiliation: data.affiliation,
                   type: "VOLUNTEER",
                   trainingInformation: [],
                   pathwayInformation: [],

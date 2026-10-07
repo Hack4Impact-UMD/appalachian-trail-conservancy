@@ -347,7 +347,7 @@ function App() {
 
                       await addDoc(collection(db, "Assets"), {
                         type: "AFFILIATIONLIST",
-                        updatedAffiliations,
+                        affiliations: updatedAffiliations,
                         dateUpdated: new Date().toISOString(),
                       });
                       console.log("Affiliation list added to Firestore");

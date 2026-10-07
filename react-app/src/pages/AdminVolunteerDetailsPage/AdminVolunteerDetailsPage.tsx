@@ -508,12 +508,10 @@ function AdminVolunteerDetailsPage() {
                     <b>Email: </b>
                     {volunteer.email}
                   </div>
-                  {volunteer.affiliation && (
-                    <div className={styles.text}>
-                      <b>Affiliation: </b>
-                      {volunteer.affiliation}
-                    </div>
-                  )}
+                  <div className={styles.text}>
+                    <b>Affiliation: </b>
+                    {volunteer.affiliation ?? "N/A"}
+                  </div>
                   <br></br>
                   <div className={styles.text}>
                     <b>Training(s) Completed: </b>

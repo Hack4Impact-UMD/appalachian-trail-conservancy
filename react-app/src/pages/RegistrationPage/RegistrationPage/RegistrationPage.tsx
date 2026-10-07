@@ -73,6 +73,10 @@ function RegistrationPage() {
       })
       .catch((e) => {
         console.error("Failed to fetch affiliation list:", e);
+        setSnackbarMessage(
+          "Error retrieving affiliation list. Please try again later."
+        );
+        setSnackbar(true);
       })
       .finally(() => {
         setLoading(false);
@@ -100,7 +104,7 @@ function RegistrationPage() {
       setEmailsMatch(false);
     } else {
       setShowLoading(true);
-      createVolunteerUser(email, firstName, lastName, joinCode)
+      createVolunteerUser(email, firstName, lastName, joinCode, affiliation)
         .then(() => {
           navigate("/registration-confirmation", {
             state: { fromApp: true },
