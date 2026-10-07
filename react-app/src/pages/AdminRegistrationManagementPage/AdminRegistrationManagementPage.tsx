@@ -24,6 +24,7 @@ function AdminRegistrationManagementPage() {
   const [tab, setTab] = useState<string | null>("user");
 
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
+  const [openAffiliationPopup, setOpenAffiliationPopup] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -45,10 +46,12 @@ function AdminRegistrationManagementPage() {
 
   return (
     <>
-      <AdminNavigationBar
-        open={navigationBarOpen}
-        setOpen={setNavigationBarOpen}
-      />
+      <div className={openAffiliationPopup ? styles.popupOpen : ""}>
+        <AdminNavigationBar
+          open={navigationBarOpen}
+          setOpen={setNavigationBarOpen}
+        />
+      </div>
       <div
         className={`${styles.split} ${styles.right}`}
         style={{
@@ -105,16 +108,21 @@ function AdminRegistrationManagementPage() {
                       <MenuItem value="registration" sx={selectOptionStyle}>
                         REGISTRATION CODE
                       </MenuItem>
+                      <MenuItem value="affiliationList" sx={selectOptionStyle}>
+                        EDIT AFFILIATION LIST
+                      </MenuItem>
                     </Select>
                   </FormControl>
                 </div>
                 <div className={styles.emailRegCodeContainer}>
                   {tab === "user" ? (
                     <EditEmail tab={tab} quillRef={quillRef} />
-                  ) : tab === "affiliationList" ? (
-                    <EditAffiliationList />
-                  ) : (
+                  ) : tab === "registration" ? (
                     <EditRegistrationCode />
+                  ) : (
+                    <EditAffiliationList
+                      setAffiliationPopupOpen={setOpenAffiliationPopup}
+                    />
                   )}
                 </div>
               </div>

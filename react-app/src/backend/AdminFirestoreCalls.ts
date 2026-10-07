@@ -11,7 +11,11 @@ import {
   runTransaction,
 } from "firebase/firestore";
 import { db } from "../config/firebase";
-import { EmailType, RegistrationCodeType } from "../types/AssetsType";
+import {
+  EmailType,
+  RegistrationCodeType,
+  AffiliationList,
+} from "../types/AssetsType";
 import { Admin, VolunteerID } from "../types/UserType";
 import { Training } from "../types/TrainingType";
 import { Pathway } from "../types/PathwayType";
@@ -145,7 +149,7 @@ export function updateRegistrationCode(
 ): Promise<void> {
   return new Promise((resolve, reject) => {
     if (registrationCode.code === "" || registrationCode.dateUpdated === "") {
-      reject(new Error("Invalid subject or body"));
+      reject(new Error("Invalid registration code or update date"));
       return;
     }
 
@@ -175,6 +179,47 @@ export function updateRegistrationCode(
   });
 }
 
+export function updateAffiliationList(
+  affiliationList: AffiliationList
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (affiliationList.dateUpdated === "") {
+      reject(new Error("Invalid update date"));
+      return;
+    }
+
+    const assetsRef = collection(db, "Assets");
+    const affiliationQuery = query(
+      assetsRef,
+      where("type", "==", "AFFILIATIONLIST")
+    );
+
+    getDocs(affiliationQuery)
+      .then((affiliationSnapshot) => {
+        const deletePromises = affiliationSnapshot.docs.map((doc) =>
+          deleteDoc(doc.ref)
+        );
+
+        Promise.all(deletePromises)
+          .then(() => {
+            addDoc(collection(db, "Assets"), affiliationList)
+              .then(() => {
+                resolve();
+              })
+              .catch((e) => {
+                reject(e);
+              });
+          })
+          .catch((e) => {
+            reject(e);
+          });
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+}
+
 export function exportTableToCSV(data: any[]): void {
   if (!data || data.length === 0) {
     console.error("No data available to export.");
@@ -193,8 +238,8 @@ export function exportTableToCSV(data: any[]): void {
           return typeof value === "string"
             ? `"${value.replace(/"/g, '""')}"`
             : value === null || value === undefined
-            ? ""
-            : value;
+              ? ""
+              : value;
         })
         .join(",")
     ),

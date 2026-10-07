@@ -39,16 +39,11 @@
   border-radius: 10px;
 }
 
-/* .innerGrid {
-  height: 533px;
-} */
-
 .addAffiliationContainer {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 1rem;
-  margin-top: 20px;
 }
 
 @media screen and (max-width: 750px) {

@@ -541,12 +541,11 @@ export const DataGridStyles = {
   },
 };
 
-// tooltip
-const tooltipStyles = {
-  bgcolor: "white",
-  color: "black",
-  borderRadius: "8px",
-  padding: "10px",
-  boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)",
-  fontSize: ".8rem",
+// list style
+export const listStyles = {
+  height: 400,
+  overflowY: "auto",
+  border: "2px solid var(--blue-gray)",
+  borderRadius: "15px",
+  padding: 0,
 };

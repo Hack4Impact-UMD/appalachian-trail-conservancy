@@ -3,69 +3,46 @@ import styles from "./SubComponent.module.css";
 import Loading from "../../../components/LoadingScreen/Loading.tsx";
 import {
   Typography,
-  TextField,
   OutlinedInput,
   Button,
   IconButton,
   Snackbar,
   Alert,
-  Box,
   List,
   ListItem,
   ListItemText,
 } from "@mui/material";
 import {
-  DataGrid,
-  GridRowId,
-  GridColumnMenuProps,
-  GridColumnMenuContainer,
-  GridFilterMenuItem,
-  SortGridMenuItems,
-} from "@mui/x-data-grid";
-import {
-  DataGridStyles,
+  listStyles,
   forestGreenButton,
-  whiteButtonGrayBorder,
   styledRectButton,
   grayBorderTextField,
   inputHeaderText,
 } from "../../../muiTheme.ts";
 import { getAffiliationList } from "../../../backend/FirestoreCalls.ts";
+import { updateAffiliationList } from "../../../backend/AdminFirestoreCalls.ts";
 import { DateTime } from "luxon";
+import { IoCloseOutline } from "react-icons/io5";
+import { AffiliationList } from "../../../types/AssetsType.ts";
+import DeleteAffiliationPopup from "./DeleteAffiliationPopup/DeleteAffiliationPopup.tsx";
 
-function EditAffiliationList() {
+interface EditAffiliationListProps {
+  setAffiliationPopupOpen: (open: boolean) => void;
+}
+
+function EditAffiliationList({
+  setAffiliationPopupOpen,
+}: EditAffiliationListProps) {
   const [loading, setLoading] = useState<boolean>(true);
 
   const [snackbar, setSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
 
-  // const [copied, setCopied] = useState<boolean>(false);
-  // const [codeText, setCodeText] = useState<string>("XXXXX");
-  // const [editedCode, setEditedCode] = useState<string>("");
-  // const [isEditing, setIsEditing] = useState<boolean>(false);
   const [affiliationList, setAffiliationList] = useState<string[]>([]);
   const [newAffiliation, setNewAffiliation] = useState<string>("");
   const [dateUpdated, setDateUpdated] = useState<string>("");
-
-  // const aList = (): any[] => {
-  //   const map = affiliationList.map((affiliation) => {
-  //     return { affiliation: affiliation };
-  //   });
-  //   return map;
-  // };
-
-  const aList = affiliationList.flatMap((affiliation) => {
-    return {
-      id: affiliationList.indexOf(affiliation),
-      affiliation: affiliation,
-    };
-  });
-
-  // DataGrid columns
-  const columns = [
-    { field: "affiliation", headerName: "Affiliation", width: 500 },
-    // { headerName: "Affiliation", width: 200 },
-  ];
+  const [deletePopupOpen, setDeletePopupOpen] = useState(false);
+  const [affiliationToDelete, setAffiliationToDelete] = useState("");
 
   useEffect(() => {
     getAffiliationList()
@@ -81,29 +58,91 @@ function EditAffiliationList() {
       });
   }, []);
 
-  useEffect(() => {
-    console.log(aList);
-  }, [aList]);
+  const sortAffiliations = (affiliations: string[]) => {
+    const specialOptions = ["Other", "Unaffiliated"];
 
-  // const handleCodeSave = async () => {
-  //   const todayDate = new Date(Date.now()).toISOString();
+    return [...affiliations].sort((a, b) => {
+      const aSpecial = specialOptions.includes(a);
+      const bSpecial = specialOptions.includes(b);
 
-  //   updateRegistrationCode({
-  //     code: editedCode,
-  //     dateUpdated: todayDate,
-  //     type: "REGISTRATIONCODE",
-  //   })
-  //     .then(() => {
-  //       setDateUpdated(todayDate);
-  //       setSnackbarMessage("Registration code updated successfully");
-  //     })
-  //     .catch((e) => {
-  //       setSnackbarMessage("Registration code failed to update");
-  //     })
-  //     .finally(() => {
-  //       setSnackbar(true);
-  //     });
-  // };
+      // Put special options after all regular affiliations
+      if (aSpecial && !bSpecial) return 1;
+      if (!aSpecial && bSpecial) return -1;
+
+      // Order special options based on their order in the specialOptions array
+      if (aSpecial && bSpecial) {
+        return specialOptions.indexOf(a) - specialOptions.indexOf(b);
+      }
+
+      return a.localeCompare(b);
+    });
+  };
+
+  const handleAddAffiliation = () => {
+    const affiliation = newAffiliation.trim();
+
+    if (!affiliation) {
+      return;
+    }
+
+    if (affiliationList.includes(affiliation)) {
+      setSnackbarMessage("Affiliation already exists");
+      setSnackbar(true);
+      return;
+    }
+
+    const updatedAffiliations = sortAffiliations([
+      ...affiliationList,
+      affiliation,
+    ]);
+
+    const updatedList: AffiliationList = {
+      type: "AFFILIATIONLIST",
+      affiliations: updatedAffiliations,
+      dateUpdated: new Date().toISOString(),
+    };
+
+    updateAffiliationList(updatedList)
+      .then(() => {
+        setAffiliationList(updatedList.affiliations);
+        setDateUpdated(updatedList.dateUpdated);
+        setNewAffiliation("");
+        setSnackbarMessage("Affiliation added successfully");
+      })
+      .catch((e) => {
+        console.error(e);
+        setSnackbarMessage("Failed to add affiliation");
+      })
+      .finally(() => {
+        setSnackbar(true);
+      });
+  };
+
+  const handleDeleteAffiliation = async () => {
+    const updatedList: AffiliationList = {
+      type: "AFFILIATIONLIST",
+      affiliations: affiliationList.filter(
+        (affiliation) => affiliation !== affiliationToDelete
+      ),
+      dateUpdated: new Date().toISOString(),
+    };
+
+    updateAffiliationList(updatedList)
+      .then(() => {
+        setAffiliationList(updatedList.affiliations);
+        setDateUpdated(updatedList.dateUpdated);
+        setSnackbarMessage("Affiliation removed successfully");
+        setDeletePopupOpen(false);
+        setAffiliationPopupOpen(false);
+      })
+      .catch((e) => {
+        console.error(e);
+        setSnackbarMessage("Failed to remove affiliation");
+      })
+      .finally(() => {
+        setSnackbar(true);
+      });
+  };
 
   return (
     <>
@@ -114,40 +153,36 @@ function EditAffiliationList() {
       ) : (
         <div className={styles.affiliationsInnerContainer}>
           <Typography variant="body2" className={styles.subHeaderLabel}>
+            ADD AFFILIATION
+          </Typography>
+          <div className={styles.addAffiliationContainer}>
+            <OutlinedInput
+              value={newAffiliation}
+              sx={{
+                ...grayBorderTextField,
+                width: "100%",
+              }}
+              onChange={(e) => setNewAffiliation(e.target.value)}
+            />
+
+            <Button
+              variant="contained"
+              sx={{
+                ...styledRectButton,
+                ...forestGreenButton,
+                marginTop: "0",
+                width: "120px",
+              }}
+              onClick={handleAddAffiliation}>
+              ADD
+            </Button>
+          </div>
+          <Typography variant="body2" className={styles.subHeaderLabel}>
             AFFILIATIONS
           </Typography>
-
-          {/* <div className={styles.contentSection}>
-            <>
-              <div className={styles.innerGrid}>
-                <DataGrid
-                  rows={aList}
-                  columns={columns}
-                  rowHeight={40}
-                  checkboxSelection
-                  pageSize={10}
-                  sx={DataGridStyles}
-                  // components={{
-                  //   ColumnUnsortedIcon: TbArrowsSort,
-                  //   ColumnMenu: CustomColumnMenu,
-                  // }}
-                  // onRowClick={(row) => {
-                  //   navigate(`/management/volunteer/${row.id}`);
-                  // }}
-                  // selectionModel={selectionModel} // Controlled selection model
-                  // onSelectionModelChange={(newSelection) =>
-                  //   setSelectionModel(newSelection)
-                  // }
-                />
-              </div>
-            </>
-          </div> */}
           <List
             sx={{
-              height: 400,
-              overflowY: "auto",
-              border: "2px solid var(--blue-gray)",
-              borderRadius: "15px",
+              ...listStyles,
             }}>
             {affiliationList.map((item) => (
               <ListItem
@@ -161,9 +196,12 @@ function EditAffiliationList() {
                 secondaryAction={
                   <IconButton
                     edge="end"
-                    // onClick={() => removeItem(item)}
-                  >
-                    X
+                    onClick={() => {
+                      setAffiliationToDelete(item);
+                      setDeletePopupOpen(true);
+                      setAffiliationPopupOpen(true);
+                    }}>
+                    <IoCloseOutline />
                   </IconButton>
                 }>
                 <ListItemText primary={item} />
@@ -184,72 +222,6 @@ function EditAffiliationList() {
               .toUpperCase() || "Unknown"}
           </Typography>
 
-          <div className={styles.addAffiliationContainer}>
-            <OutlinedInput
-              value={newAffiliation}
-              sx={{
-                ...grayBorderTextField,
-                // width: "100%",
-              }}
-              onChange={(e) => setNewAffiliation(e.target.value)}
-              error={true}
-            />
-
-            <Button
-              variant="contained"
-              sx={{
-                ...styledRectButton,
-                ...forestGreenButton,
-                marginTop: "0",
-                width: "200px",
-              }}
-              // onClick={handleAddAffiliation} // Save the email when clicked
-            >
-              ADD AFFILIATION
-            </Button>
-          </div>
-          {/* <div className={styles.buttonCodeContainer}>
-            {isEditing ? (
-              <>
-                <Button
-                  variant="contained"
-                  sx={{
-                    ...styledRectButton,
-                    ...whiteButtonGrayBorder,
-                    width: "120px",
-                  }}
-                  onClick={() => {
-                    setEditedCode(codeText);
-                    setIsEditing(false);
-                  }}>
-                  CANCEL
-                </Button>
-                <Button
-                  variant="contained"
-                  sx={{
-                    ...styledRectButton,
-                    ...forestGreenButton,
-                    width: "120px",
-                  }}
-                  onClick={handleCodeSave} // Save the email when clicked
-                >
-                  SAVE
-                </Button>
-              </>
-            ) : (
-              <Button
-                variant="contained"
-                sx={{
-                  ...styledRectButton,
-                  ...whiteButtonGrayBorder,
-                  width: "120px",
-                }}
-                onClick={() => {
-                }}>
-                EDIT
-              </Button>
-            )} 
-          </div>*/}
           {/* Snackbar wrapper container */}
           <div className={styles.snackbarContainer}>
             <Snackbar
@@ -267,6 +239,17 @@ function EditAffiliationList() {
               </Alert>
             </Snackbar>
           </div>
+
+          <DeleteAffiliationPopup
+            open={deletePopupOpen}
+            onClose={() => {
+              setDeletePopupOpen(false);
+              setAffiliationPopupOpen(false);
+              setAffiliationToDelete("");
+            }}
+            affiliation={affiliationToDelete}
+            onDelete={handleDeleteAffiliation}
+          />
         </div>
       )}
     </>
