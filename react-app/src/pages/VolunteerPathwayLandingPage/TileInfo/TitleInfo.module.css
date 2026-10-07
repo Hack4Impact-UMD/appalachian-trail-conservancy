@@ -24,8 +24,6 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
 }
 
 .title {
@@ -36,10 +34,23 @@
   gap: 2%;
 }
 
+.nameShareContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 0.5rem 0 0;
+}
+
 .nameHeading {
   color: var(--forest-green);
   font-size: 3rem;
-  margin: 0 2% 0 0;
+}
+
+.shareIcon {
+  font-size: 1.75rem;
+  color: var(--blue-gray);
+  cursor: pointer;
 }
 
 .arrowButton {
