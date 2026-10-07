@@ -271,44 +271,6 @@ function App() {
                 </RequireAdminAuth>
               }
             />
-
-            {/* TODO: Remove route once emails have been updated  */}
-            <Route
-              path="/test/lowercase-emails"
-              element={
-                <RequireAdminAuth>
-                  <button
-                    onClick={async () => {
-                      const volunteers = await getDocs(
-                        query(
-                          collection(db, "Users"),
-                          where("type", "==", "VOLUNTEER")
-                        )
-                      );
-                      const updates = volunteers.docs
-                        .map((volunteer) => {
-                          const emailAddress = volunteer.data().email;
-                          if (typeof emailAddress !== "string") return null;
-                          const normalizedEmail = emailAddress.trim().toLowerCase();
-                          return normalizedEmail === emailAddress
-                            ? null
-                            : updateDoc(volunteer.ref, {
-                                email: normalizedEmail,
-                              });
-                        })
-                        .filter(
-                          (update): update is Promise<void> => update !== null
-                        );
-                      await Promise.all(updates);
-                      window.alert(
-                        `${updates.length} volunteer emails updated.`
-                      );
-                    }}>
-                    Lowercase Volunteer Emails
-                  </button>
-                </RequireAdminAuth>
-              }
-            />
             <Route
               path="/profile"
               element={
