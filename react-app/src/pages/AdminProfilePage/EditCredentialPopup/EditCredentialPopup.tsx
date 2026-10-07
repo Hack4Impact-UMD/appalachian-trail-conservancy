@@ -102,8 +102,9 @@ const EditCredentialPopup = ({
             success = true; // Set success to true to close popup
             setPrevShowPassword(false);
             setSnackbarMessage("Email updated successfully");
-            setAdmin({ ...admin, email: newEmail });
-            auth.setUser({ ...auth.user, email: newEmail }); // Update user email in auth context
+            const normalizedEmail = newEmail.trim().toLowerCase();
+            setAdmin({ ...admin, email: normalizedEmail });
+            auth.setUser({ ...auth.user, email: normalizedEmail }); // Update user email in auth context
           })
           .catch((e) => {
             console.error(e);

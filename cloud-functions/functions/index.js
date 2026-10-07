@@ -47,6 +47,17 @@ exports.createVolunteerUser = onCall(
   async ({ auth, data }) => {
     return new Promise(async (resolve, reject) => {
       const authorization = admin.auth();
+      if (typeof data?.email !== "string") {
+        reject({
+          reason: "Invalid email",
+          text: "Email must be a valid string.",
+        });
+        throw new functions.https.HttpsError(
+          "invalid-argument",
+          "Email must be a valid string."
+        );
+      }
+      const emailAddress = data.email.trim().toLowerCase();
       // pull registration code from firestore
       let registrationCode;
       await db
@@ -70,7 +81,7 @@ exports.createVolunteerUser = onCall(
       if (data?.code === registrationCode.code) {
         await authorization
           .createUser({
-            email: data.email,
+            email: emailAddress,
           })
           .then(async (userRecord) => {
             await authorization
@@ -80,7 +91,7 @@ exports.createVolunteerUser = onCall(
               .then(async () => {
                 const collectionObject = {
                   auth_id: userRecord.uid,
-                  email: data.email,
+                  email: emailAddress,
                   firstName: data.firstName,
                   lastName: data.lastName,
                   type: "VOLUNTEER",
@@ -99,32 +110,32 @@ exports.createVolunteerUser = onCall(
                         .add(collectionObject)
                         .then(async () => {
                           // get email template from DB or use base email
-                          let email;
+                          let emailTemplate;
                           await db
                             .collection("Assets")
                             .where("type", "==", "EMAIL")
                             .get()
                             .then(async (querySnapshot) => {
                               if (querySnapshot.docs.length != 0) {
-                                email = querySnapshot.docs[0].data();
+                                emailTemplate = querySnapshot.docs[0].data();
                               } else {
                                 // Email has not been set by ATC Admin, defer to base email
-                                email = baseEmail;
+                                emailTemplate = baseEmail;
                               }
 
-                              email = {
-                                ...email,
-                                body: email.body
+                              emailTemplate = {
+                                ...emailTemplate,
+                                body: emailTemplate.body
                                   .replace("FIRSTNAME", data.firstName)
                                   .replace("LASTNAME", data.lastName),
                               };
                               //send email to Volunteer
                               await transporter
                                 .sendMail({
-                                  from: '"ATC" <h4iatctest2@gmail.com>',
-                                  to: data.email,
-                                  subject: email.subject,
-                                  html: email.body,
+                                  from: '"ATC" <apptraillearn@gmail.com>',
+                                  to: emailAddress,
+                                  subject: emailTemplate.subject,
+                                  html: emailTemplate.body,
                                 })
                                 .then(() => {
                                   resolve({
@@ -231,11 +242,22 @@ exports.createAdminUser = onCall(
   async ({ auth, data }) => {
     return new Promise(async (resolve, reject) => {
       if (auth && auth.token && auth.token.role == "ADMIN") {
+        if (typeof data?.email !== "string") {
+          reject({
+            reason: "Invalid email",
+            text: "Email must be a valid string.",
+          });
+          throw new functions.https.HttpsError(
+            "invalid-argument",
+            "Email must be a valid string."
+          );
+        }
         const authorization = admin.auth();
+        const email = data.email.trim().toLowerCase();
         const pass = crypto.randomBytes(32).toString("hex");
         await authorization
           .createUser({
-            email: data.email,
+            email,
             password: pass,
           })
           .then(async (userRecord) => {
@@ -246,7 +268,7 @@ exports.createAdminUser = onCall(
               .then(async () => {
                 const collectionObject = {
                   auth_id: userRecord.uid,
-                  email: data.email,
+                  email,
                   firstName: data.firstName,
                   lastName: data.lastName,
                   type: "ADMIN",
@@ -418,6 +440,17 @@ exports.updateUserEmail = onCall(
   async ({ auth, data }) => {
     return new Promise(async (resolve, reject) => {
       const authorization = admin.auth();
+      if (typeof data?.newEmail !== "string") {
+        reject({
+          reason: "Invalid email",
+          text: "New email must be a valid string.",
+        });
+        throw new functions.https.HttpsError(
+          "invalid-argument",
+          "New email must be a valid string."
+        );
+      }
+      const newEmail = data.newEmail.trim().toLowerCase();
       if (
         data.email != null &&
         data.newEmail != null &&
@@ -427,7 +460,7 @@ exports.updateUserEmail = onCall(
       ) {
         await authorization
           .updateUser(auth.uid, {
-            email: data.newEmail,
+            email: newEmail,
           })
           .then(async () => {
             await db
@@ -447,7 +480,7 @@ exports.updateUserEmail = onCall(
                 } else {
                   const promises = [];
                   querySnapshot.forEach((doc) => {
-                    promises.push(doc.ref.update({ email: data.newEmail }));
+                    promises.push(doc.ref.update({ email: newEmail }));
                   });
                   await Promise.all(promises)
                     .then(() => {
@@ -1044,7 +1077,7 @@ exports.sendSignInEmailLink = onCall(
 
               await transporter
                 .sendMail({
-                  from: '"ATC" <h4iatctest2@gmail.com>',
+                  from: '"ATC" <apptraillearn@gmail.com',
                   to: email,
                   subject: baseLoginEmail.subject,
                   html: baseLoginEmail.body,
@@ -1196,7 +1229,7 @@ exports.sendChangeEmailLink = onCall(
 
                     await transporter
                       .sendMail({
-                        from: '"ATC" <h4iatctest2@gmail.com>',
+                        from: '"ATC" <apptraillearn@gmail.com>',
                         to: email,
                         subject: baseChangeEmail.subject,
                         html: baseChangeEmail.body,
