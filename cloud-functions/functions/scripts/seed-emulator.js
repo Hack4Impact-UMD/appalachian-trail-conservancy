@@ -69,6 +69,7 @@ const users = [
       email: "h4iatctest@gmail.com",
       firstName: "Vera",
       lastName: "Volunteer",
+      affiliation: "Tennessee Eastman Hiking and Canoeing Club (TEHCC)",
       type: "VOLUNTEER",
       trainingInformation: [
         {

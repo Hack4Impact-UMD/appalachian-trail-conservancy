@@ -355,6 +355,7 @@ export function exportVolunteerData(
         volunteer.firstName,
         volunteer.lastName,
         volunteer.email,
+        volunteer.affiliation || "N/A",
         volunteer.numEnrolledTrainings,
         volunteer.numCompletedTrainings,
         volunteer.numEnrolledPathways,

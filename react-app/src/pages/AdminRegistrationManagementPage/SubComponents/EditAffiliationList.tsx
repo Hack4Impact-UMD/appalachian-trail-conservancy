@@ -49,12 +49,13 @@ function EditAffiliationList({
       .then((affiliationList) => {
         setAffiliationList(affiliationList.affiliations);
         setDateUpdated(affiliationList.dateUpdated);
-        setLoading(false);
       })
-      .catch((e) => {
+      .catch(() => {
         setSnackbarMessage("Failed retrieve affiliation list");
         setSnackbar(true);
-        console.error(e);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
 
@@ -129,7 +130,7 @@ function EditAffiliationList({
       dateUpdated: new Date().toISOString(),
     };
 
-    updateAffiliationList(updatedList)
+    return updateAffiliationList(updatedList)
       .then(() => {
         setAffiliationList(updatedList.affiliations);
         setDateUpdated(updatedList.dateUpdated);
@@ -140,6 +141,7 @@ function EditAffiliationList({
       .catch((e) => {
         console.error(e);
         setSnackbarMessage("Failed to remove affiliation");
+        throw e;
       })
       .finally(() => {
         setSnackbar(true);

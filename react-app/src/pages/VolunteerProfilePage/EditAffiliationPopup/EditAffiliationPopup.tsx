@@ -61,6 +61,12 @@ const EditAffiliationPopup = ({
       });
   }, []);
 
+  useEffect(() => {
+    if (open) {
+      setAffiliation(volunteer?.affiliation ?? null);
+    }
+  }, [open, volunteer?.affiliation]);
+
   const handleUpdateName = () => {
     if (volunteer) {
       setCanClose(false);
@@ -76,8 +82,7 @@ const EditAffiliationPopup = ({
             auth.setUser(newVolunteer); // Update user in AuthProvider
             setSnackbarMessage(`Affiliation updated successfully`);
           })
-          .catch((e) => {
-            console.error(e);
+          .catch(() => {
             setSnackbarMessage(`Error updating affiliation`);
           })
           .finally(() => {

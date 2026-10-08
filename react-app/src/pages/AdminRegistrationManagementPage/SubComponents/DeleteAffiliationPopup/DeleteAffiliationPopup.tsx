@@ -51,7 +51,7 @@ const DeleteAffiliationPopup = ({
           }
         }}>
         <div className={styles.content}>
-          <p className={styles.title}>DELETE AFFILIATION?</p>
+          <p className={styles.title}>REMOVE AFFILIATION?</p>
           <div className={styles.textContainer}>
             <span className={styles.text}>
               <strong>{affiliation}</strong>
@@ -99,7 +99,7 @@ const DeleteAffiliationPopup = ({
         onClose={() => setSnackbar(false)}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}>
         <Alert onClose={() => setSnackbar(false)} severity={"error"}>
-          Error deleting volunteer. Please try again.
+          Error removing affiliation. Please try again.
         </Alert>
       </Snackbar>
     </>
