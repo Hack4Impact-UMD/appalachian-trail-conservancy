@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import {
+  Autocomplete,
   FormControl,
   Button,
   OutlinedInput,
@@ -10,15 +11,20 @@ import {
   Snackbar,
 } from "@mui/material";
 import {
+  autocompleteText,
+  autocompleteOptionStyle,
   forestGreenButton,
   grayBorderTextField,
   styledRectButton,
+  whiteSelectGrayBorder,
   whiteTooltip,
 } from "../../../muiTheme.ts";
 import { Navigate } from "react-router";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../auth/AuthProvider.tsx";
 import { createVolunteerUser } from "../../../backend/AuthFunctions.ts";
+import { getAffiliationList } from "../../../backend/FirestoreCalls.ts";
+import { AffiliationList } from "../../../types/AssetsType.ts";
 import styles from "./RegistrationPage.module.css";
 import Loading from "../../../components/LoadingScreen/Loading.tsx";
 import primaryLogo from "../../../assets/atc-primary-logo.png";
@@ -42,6 +48,9 @@ function RegistrationPage() {
   const [email, setEmail] = useState<string>("");
   const [confirmEmail, setConfirmEmail] = useState<string>("");
   const [joinCode, setJoinCode] = useState<string>("");
+  const [affiliation, setAffiliation] = useState<string | null>("");
+  const [affiliationOptions, setAffiliationOptions] = useState<string[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (email !== "" && confirmEmail !== "") {
@@ -55,6 +64,24 @@ function RegistrationPage() {
       setEmailsMatch(match);
     }
   }, [email, confirmEmail]);
+
+  // Fetch affiliation list
+  useEffect(() => {
+    getAffiliationList()
+      .then((affiliationList: AffiliationList) => {
+        setAffiliationOptions(affiliationList.affiliations);
+      })
+      .catch((e) => {
+        console.error("Failed to fetch affiliation list:", e);
+        setSnackbarMessage(
+          "Error retrieving affiliation list. Please try again later."
+        );
+        setSnackbar(true);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
 
   // If user is logged in, navigate to Dashboard
   if (user) {
@@ -70,16 +97,19 @@ function RegistrationPage() {
   const handleConfirm = (event: any) => {
     event.preventDefault();
 
-    // Confirm button validates that inputs arent empty
-
     // Check if email is valid
     if (!validateEmail(email)) {
       setInvalidEmailMessage("Invalid email");
       setInvalidEmail(true);
       setEmailsMatch(false);
+    } else if (affiliation === null || affiliation.trim() === "") {
+      setSnackbarMessage(
+        "Error creating account. Affiliation is required. Please select an affiliation from the dropdown."
+      );
+      setSnackbar(true);
     } else {
       setShowLoading(true);
-      createVolunteerUser(email, firstName, lastName, joinCode)
+      createVolunteerUser(email, firstName, lastName, joinCode, affiliation)
         .then(() => {
           navigate("/registration-confirmation", {
             state: { fromApp: true },
@@ -99,159 +129,206 @@ function RegistrationPage() {
 
   return (
     <div className={styles.pageContainer}>
-      <div className={styles.centered}>
-        {/* logo image */}
-        <div className={styles.top}>
-          <img src={primaryLogo} className={styles.logo} alt="ATC Logo" />
+      {loading ? (
+        <div className={styles.loadingContainer}>
+          <Loading />
         </div>
-
-        {/* form input */}
-        {/* welcome header */}
-        <h1 className={styles.heading}>
-          Welcome!
-          <br />
-          <span className={styles.welcomeSubtext}>New users register here</span>
-        </h1>
-        <form onSubmit={handleConfirm}>
-          <FormControl>
-            {/* first name field */}
-            <div className={styles.alignLeft}>
-              <h3 className={styles.label}>First Name</h3>
-            </div>
-            <OutlinedInput
-              value={firstName}
-              sx={grayBorderTextField}
-              onChange={(event) => {
-                setFirstName(event.target.value);
-              }}
-            />
-
-            {/* last name field */}
-            <div className={styles.alignLeft}>
-              <h3 className={styles.label}>Last Name</h3>
-            </div>
-            <TextField
-              value={lastName}
-              sx={grayBorderTextField}
-              onChange={(event) => {
-                setLastName(event.target.value);
-              }}
-            />
-
-            {/* email field */}
-            <div className={`${styles.alignLeft} ${styles.emailContainer}`}>
-              <h3 className={styles.emailLabelContainer}>Email</h3>
-              <Tooltip
-                title="Please use your email used in the Volunteer Engagement Platform"
-                placement="right"
-                componentsProps={{
-                  tooltip: {
-                    sx: { ...whiteTooltip },
-                  },
-                }}>
-                <InfoOutlinedIcon />
-              </Tooltip>
-            </div>
-            <TextField
-              sx={{
-                ...grayBorderTextField,
-                border: !emailsMatch
-                  ? "2px solid var(--hazard-red)"
-                  : "2px solid var(--blue-gray)",
-              }}
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-              error={invalidEmail}
-            />
-
-            {/* confirm email field */}
-            <div className={`${styles.alignLeft} ${styles.emailContainer}`}>
-              <h3 className={styles.emailLabelContainer}>Confirm Email</h3>
-            </div>
-            <TextField
-              sx={{
-                ...grayBorderTextField,
-                border: !emailsMatch
-                  ? "2px solid var(--hazard-red)"
-                  : "2px solid var(--blue-gray)",
-              }}
-              value={confirmEmail}
-              onChange={(e) => {
-                setConfirmEmail(e.target.value);
-              }}
-              error={invalidEmail}
-            />
-            <div className={styles.invalidEmailMessage}>
-              {!emailsMatch && (
-                <FormHelperText sx={{ margin: "0" }} error>
-                  {invalidEmailMessage}
-                </FormHelperText>
-              )}
-            </div>
-
-            {/* join code field */}
-            <div className={`${styles.alignLeft} ${styles.joinCodeContainer}`}>
-              <h3 className={styles.joinCodeLabel}>Join Code</h3>
-              <Tooltip
-                title="Paste the join code that was provided in the Volunteer Engagement Platform"
-                placement="right"
-                componentsProps={{
-                  tooltip: {
-                    sx: { ...whiteTooltip },
-                  },
-                }}>
-                <InfoOutlinedIcon />
-              </Tooltip>
-            </div>
-            <TextField
-              sx={grayBorderTextField}
-              value={joinCode}
-              onChange={(event) => {
-                setJoinCode(event.target.value);
-              }}
-            />
-          </FormControl>
-
-          {/* submit button */}
-          <div className={styles.confirmButton}>
-            <Button
-              type="submit"
-              sx={{ ...styledRectButton, ...forestGreenButton }}
-              variant="contained"
-              onClick={(e) => handleConfirm(e)}
-              disabled={
-                !(
-                  firstName !== "" &&
-                  lastName !== "" &&
-                  email !== "" &&
-                  confirmEmail !== "" &&
-                  email === confirmEmail &&
-                  joinCode !== ""
-                ) || showLoading
-              }>
-              {showLoading ? <Loading color="white" /> : "Confirm"}
-            </Button>
+      ) : (
+        <div className={styles.centered}>
+          {/* logo image */}
+          <div className={styles.top}>
+            <img src={primaryLogo} className={styles.logo} alt="ATC Logo" />
           </div>
-        </form>
 
-        <Snackbar
-          open={snackbar}
-          autoHideDuration={6000}
-          onClose={() => setSnackbar(false)}
-          anchorOrigin={{ vertical: "bottom", horizontal: "right" }} // Position within the right section
-        >
-          <Alert onClose={() => setSnackbar(false)} severity={"error"}>
-            {snackbarMessage}
-          </Alert>
-        </Snackbar>
+          {/* form input */}
+          {/* welcome header */}
+          <h1 className={styles.heading}>
+            Welcome!
+            <br />
+            <span className={styles.welcomeSubtext}>
+              New users register here
+            </span>
+          </h1>
+          <form onSubmit={handleConfirm}>
+            <FormControl>
+              {/* first name field */}
+              <div className={styles.alignLeft}>
+                <h3 className={styles.label}>First Name</h3>
+              </div>
+              <OutlinedInput
+                value={firstName}
+                sx={grayBorderTextField}
+                onChange={(event) => {
+                  setFirstName(event.target.value);
+                }}
+              />
 
-        {/* switch to sign in */}
-        <Link to="/login/" className={styles.switch}>
-          Already have an account? Log in here!
-        </Link>
-      </div>
+              {/* last name field */}
+              <div className={styles.alignLeft}>
+                <h3 className={styles.label}>Last Name</h3>
+              </div>
+              <TextField
+                value={lastName}
+                sx={grayBorderTextField}
+                onChange={(event) => {
+                  setLastName(event.target.value);
+                }}
+              />
+
+              {/* email field */}
+              <div className={`${styles.alignLeft} ${styles.emailContainer}`}>
+                <h3 className={styles.emailLabelContainer}>Email</h3>
+                <Tooltip
+                  title="Please use your email used in the Volunteer Engagement Platform"
+                  placement="right"
+                  componentsProps={{
+                    tooltip: {
+                      sx: { ...whiteTooltip },
+                    },
+                  }}>
+                  <InfoOutlinedIcon />
+                </Tooltip>
+              </div>
+              <TextField
+                sx={{
+                  ...grayBorderTextField,
+                  border: !emailsMatch
+                    ? "2px solid var(--hazard-red)"
+                    : "2px solid var(--blue-gray)",
+                }}
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+                error={invalidEmail}
+              />
+
+              {/* confirm email field */}
+              <div className={`${styles.alignLeft} ${styles.emailContainer}`}>
+                <h3 className={styles.emailLabelContainer}>Confirm Email</h3>
+              </div>
+              <TextField
+                sx={{
+                  ...grayBorderTextField,
+                  border: !emailsMatch
+                    ? "2px solid var(--hazard-red)"
+                    : "2px solid var(--blue-gray)",
+                }}
+                value={confirmEmail}
+                onChange={(e) => {
+                  setConfirmEmail(e.target.value);
+                }}
+                error={invalidEmail}
+              />
+              <div className={styles.invalidEmailMessage}>
+                {!emailsMatch && (
+                  <FormHelperText sx={{ margin: "0" }} error>
+                    {invalidEmailMessage}
+                  </FormHelperText>
+                )}
+              </div>
+
+              {/* join code field */}
+              <div
+                className={`${styles.alignLeft} ${styles.joinCodeContainer}`}>
+                <h3 className={styles.joinCodeLabel}>Join Code</h3>
+                <Tooltip
+                  title="Paste the join code that was provided in the Volunteer Engagement Platform"
+                  placement="right"
+                  componentsProps={{
+                    tooltip: {
+                      sx: { ...whiteTooltip },
+                    },
+                  }}>
+                  <InfoOutlinedIcon />
+                </Tooltip>
+              </div>
+              <TextField
+                sx={grayBorderTextField}
+                value={joinCode}
+                onChange={(event) => {
+                  setJoinCode(event.target.value);
+                }}
+              />
+
+              {/* affiliation field */}
+              <div className={styles.alignLeft}>
+                <h3 className={styles.label}>Affiliation</h3>
+              </div>
+              <Autocomplete
+                sx={{
+                  ...whiteSelectGrayBorder,
+                  width: "350",
+                  display: "flex",
+                  alignItems: "center",
+                  border: "2px solid var(--blue-gray)",
+                  borderRadius: "10px",
+                }}
+                slotProps={{
+                  // style options
+                  paper: {
+                    sx: { ...autocompleteOptionStyle },
+                  },
+                }}
+                disablePortal
+                value={affiliation}
+                options={affiliationOptions}
+                onChange={(event, selected) => {
+                  setAffiliation(selected);
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    variant="outlined"
+                    InputLabelProps={{
+                      shrink: false,
+                    }}
+                    sx={autocompleteText}
+                  />
+                )}
+              />
+            </FormControl>
+
+            {/* submit button */}
+            <div className={styles.confirmButton}>
+              <Button
+                type="submit"
+                sx={{ ...styledRectButton, ...forestGreenButton }}
+                variant="contained"
+                onClick={(e) => handleConfirm(e)}
+                disabled={
+                  !(
+                    firstName !== "" &&
+                    lastName !== "" &&
+                    email !== "" &&
+                    confirmEmail !== "" &&
+                    email === confirmEmail &&
+                    joinCode !== "" &&
+                    affiliation
+                  ) || showLoading
+                }>
+                {showLoading ? <Loading color="white" /> : "Confirm"}
+              </Button>
+            </div>
+          </form>
+
+          <Snackbar
+            open={snackbar}
+            autoHideDuration={6000}
+            onClose={() => setSnackbar(false)}
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }} // Position within the right section
+          >
+            <Alert onClose={() => setSnackbar(false)} severity={"error"}>
+              {snackbarMessage}
+            </Alert>
+          </Snackbar>
+
+          {/* switch to sign in */}
+          <Link to="/login/" className={styles.switch}>
+            Already have an account? Log in here!
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

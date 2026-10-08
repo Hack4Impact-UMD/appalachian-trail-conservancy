@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../auth/AuthProvider";
 import EditNamePopup from "./EditNamePopup/EditNamePopup";
 import EditEmailPopup from "./EditEmailPopup/EditEmailPopup";
+import EditAffiliationPopup from "./EditAffiliationPopup/EditAffiliationPopup";
 import { Tooltip, Alert, Snackbar, TextField, IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { getVolunteer } from "../../backend/FirestoreCalls";
@@ -31,6 +32,10 @@ function VolunteerProfilePage() {
 
   // state for handling edit email popup
   const [openEditEmailPopup, setEditEmailPopup] = useState<boolean>(false);
+
+  // state for handling edit affiliation popup
+  const [openEditAffiliationPopup, setEditAffiliationPopup] =
+    useState<boolean>(false);
 
   const [snackbar, setSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -70,7 +75,9 @@ function VolunteerProfilePage() {
     <>
       <div
         className={
-          openEditNamePopup || openEditEmailPopup ? styles.popupOpen : ""
+          openEditNamePopup || openEditEmailPopup || openEditAffiliationPopup
+            ? styles.popupOpen
+            : ""
         }>
         <VolunteerNavigationBar
           open={navigationBarOpen}
@@ -176,6 +183,29 @@ function VolunteerProfilePage() {
                       }}
                     />
                   </div>
+
+                  <div className={styles.subHeader}>Affiliation</div>
+                  <div className={styles.inputContainer}>
+                    <TextField
+                      value={volunteer?.affiliation ?? ""}
+                      disabled
+                      className={styles.inputTextField}
+                      sx={grayBorderTextField}
+                      InputProps={{
+                        endAdornment: (
+                          <Tooltip title={"Edit"}>
+                            <IconButton
+                              onClick={() => {
+                                setEditAffiliationPopup(true);
+                              }}
+                              sx={{ color: "var(--blue-gray)" }}>
+                              <EditIcon />
+                            </IconButton>
+                          </Tooltip>
+                        ),
+                      }}
+                    />
+                  </div>
                 </div>
                 <div className={styles.profileIcon}>
                   <SettingsProfileIcon />
@@ -199,6 +229,15 @@ function VolunteerProfilePage() {
           open={openEditEmailPopup}
           onClose={setEditEmailPopup}
           volunteer={volunteer}
+          setSnackbar={setSnackbar}
+          setSnackbarMessage={setSnackbarMessage}
+        />
+
+        <EditAffiliationPopup
+          open={openEditAffiliationPopup}
+          onClose={setEditAffiliationPopup}
+          volunteer={volunteer}
+          setVolunteer={setVolunteer}
           setSnackbar={setSnackbar}
           setSnackbarMessage={setSnackbarMessage}
         />

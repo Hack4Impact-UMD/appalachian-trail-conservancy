@@ -11,7 +11,7 @@ import { db } from "../config/firebase";
 import { Volunteer, VolunteerID, User, Admin } from "../types/UserType";
 import { Training, TrainingID, Quiz } from "../types/TrainingType";
 import { Pathway, PathwayID } from "../types/PathwayType";
-import { ReauthKeyType } from "../types/AssetsType";
+import { ReauthKeyType, AffiliationList } from "../types/AssetsType";
 
 export function getUserWithAuth(auth_id: string): Promise<Admin | VolunteerID> {
   return new Promise((resolve, reject) => {
@@ -208,6 +208,29 @@ export function getReauthKey(email: string): Promise<ReauthKeyType> {
             });
         } else {
           reject(new Error("Reauth key does not exist"));
+        }
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+}
+
+export function getAffiliationList(): Promise<AffiliationList> {
+  return new Promise((resolve, reject) => {
+    const assetsRef = collection(db, "Assets");
+    const affiliationListQuery = query(
+      assetsRef,
+      where("type", "==", "AFFILIATIONLIST")
+    );
+    getDocs(affiliationListQuery)
+      .then((affiliationListSnapshot) => {
+        if (affiliationListSnapshot.size > 0) {
+          const affiliationList =
+            affiliationListSnapshot.docs[0].data() as AffiliationList;
+          resolve(affiliationList);
+        } else {
+          reject(new Error("Affiliation list does not exist"));
         }
       })
       .catch((e) => {

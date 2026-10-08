@@ -3,7 +3,8 @@
   margin-top: 1.5rem;
 }
 
-.emailRegCodeInnerContainer {
+.emailRegCodeInnerContainer,
+.affiliationsInnerContainer {
   width: 90%;
   display: flex;
   flex-direction: column;
@@ -32,8 +33,16 @@
   border-radius: 10px;
 }
 
+.addAffiliationContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+}
+
 @media screen and (max-width: 750px) {
-  .emailRegCodeInnerContainer {
+  .emailRegCodeInnerContainer,
+  .affiliationsInnerContainer {
     width: 100%;
   }
 }

@@ -187,6 +187,25 @@ export const selectOptionStyle = {
   },
 };
 
+// autocomplete option style
+export const autocompleteOptionStyle = {
+  "& .MuiAutocomplete-listbox": {
+    "& .MuiAutocomplete-option": {
+      color: "var(--blue-gray)",
+      '&[aria-selected="true"]': {
+        backgroundColor: "var(--ocean-green)",
+        color: "white",
+        "&:hover": {
+          backgroundColor: "var(--forest-green)",
+        },
+        "&.Mui-focused": {
+          backgroundColor: "var(--forest-green)",
+        },
+      },
+    },
+  },
+};
+
 // autocomplete TextField
 export const autocompleteText = {
   "& .MuiOutlinedInput-root": {
@@ -522,12 +541,11 @@ export const DataGridStyles = {
   },
 };
 
-// tooltip
-const tooltipStyles = {
-  bgcolor: "white",
-  color: "black",
-  borderRadius: "8px",
-  padding: "10px",
-  boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)",
-  fontSize: ".8rem",
+// list style
+export const listStyles = {
+  height: 400,
+  overflowY: "auto",
+  border: "2px solid var(--blue-gray)",
+  borderRadius: "15px",
+  padding: 0,
 };

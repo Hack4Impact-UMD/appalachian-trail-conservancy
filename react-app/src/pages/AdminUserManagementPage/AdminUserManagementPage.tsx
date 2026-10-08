@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styles from "./AdminUserManagementPage.module.css";
 import {
   Button,
@@ -156,18 +156,6 @@ function AdminUserManagementPage() {
     fetchInitialData();
   }, []);
 
-  const filterUsers = () => {
-    let filtered = searchQuery
-      ? usersData.filter(
-          (user) =>
-            user.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            user.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            user.email.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-      : usersData; // Show all users if searchQuery is empty
-    setFilteredUsers(filtered);
-  };
-
   const CustomColumnMenu = (props: GridColumnMenuProps) => {
     const { hideMenu, currentColumn, open } = props;
 
@@ -182,36 +170,6 @@ function AdminUserManagementPage() {
     );
   };
 
-  const filterTrainings = () => {
-    const filtered = searchQuery
-      ? trainingsData.filter((training) =>
-          training.name.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-      : trainingsData; // Show all trainings if searchQuery is empty
-    setFilteredTrainings(filtered);
-  };
-
-  const filterPathways = () => {
-    const filtered = searchQuery
-      ? pathwaysData.filter((pathway) =>
-          pathway.name.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-      : pathwaysData; // Show all pathways if searchQuery is empty
-    setFilteredPathways(filtered);
-  };
-
-  // Apply the appropriate filter based on the active tab and search query
-  useEffect(() => {
-    setSearchQuery(""); // Clear the search query when the table is switched
-    if (alignment === "user") {
-      filterUsers();
-    } else if (alignment === "training") {
-      filterTrainings();
-    } else if (alignment === "pathways") {
-      filterPathways();
-    }
-  }, [alignment]); // Trigger this effect whenever `alignment` changes
-
   const handleSearchChange = (e: { target: { value: string } }) => {
     const value = e.target.value;
     setSearchQuery(value); // Update the state immediately for the input field
@@ -219,50 +177,52 @@ function AdminUserManagementPage() {
   };
 
   // Debounced filter logic
-  const debouncedFilter = debounce((value: string) => {
-    if (alignment === "user") {
-      setFilteredUsers(
-        value
-          ? usersData.filter(
-              (user) =>
-                user.firstName.toLowerCase().includes(value.toLowerCase()) ||
-                user.lastName.toLowerCase().includes(value.toLowerCase()) ||
-                user.email.toLowerCase().includes(value.toLowerCase())
-            )
-          : usersData
-      );
-    } else if (alignment === "training") {
-      setFilteredTrainings(
-        value
-          ? trainingsData.filter((training) =>
-              training.name.toLowerCase().includes(value.toLowerCase())
-            )
-          : trainingsData
-      );
-    } else if (alignment === "pathways") {
-      setFilteredPathways(
-        value
-          ? pathwaysData.filter((pathway) =>
-              pathway.name.toLowerCase().includes(value.toLowerCase())
-            )
-          : pathwaysData
-      );
-    }
-  }, 200); // Debounce interval in milliseconds
+  const debouncedFilter = useMemo(
+    () =>
+      debounce((value: string) => {
+        if (alignment === "user") {
+          setFilteredUsers(
+            value
+              ? usersData.filter(
+                  (user) =>
+                    user.firstName
+                      .toLowerCase()
+                      .includes(value.toLowerCase()) ||
+                    user.lastName.toLowerCase().includes(value.toLowerCase()) ||
+                    user.email.toLowerCase().includes(value.toLowerCase()) ||
+                    (user.affiliation &&
+                      user.affiliation
+                        .toLowerCase()
+                        .includes(value.toLowerCase()))
+                )
+              : usersData // Show all users if searchQuery is empty
+          );
+        } else if (alignment === "training") {
+          setFilteredTrainings(
+            value
+              ? trainingsData.filter((training) =>
+                  training.name.toLowerCase().includes(value.toLowerCase())
+                )
+              : trainingsData // Show all trainings if searchQuery is empty
+          );
+        } else if (alignment === "pathways") {
+          setFilteredPathways(
+            value
+              ? pathwaysData.filter((pathway) =>
+                  pathway.name.toLowerCase().includes(value.toLowerCase())
+                )
+              : pathwaysData
+          );
+        }
+      }, 200), // Debounce interval in milliseconds
+    [alignment, usersData, trainingsData, pathwaysData]
+  );
 
   useEffect(() => {
     return () => {
       debouncedFilter.cancel();
     };
-  }, []);
-
-  useEffect(() => {
-    filterUsers(); // Filter users whenever the searchQuery changes
-  }, [searchQuery]);
-
-  useEffect(() => {
-    setFilteredUsers(usersData); // Initialize filteredUsers with all users
-  }, []);
+  }, [debouncedFilter]);
 
   const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
 

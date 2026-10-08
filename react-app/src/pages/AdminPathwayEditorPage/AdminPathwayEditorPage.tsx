@@ -839,6 +839,9 @@ const AdminPathwayEditorPage: React.FC = () => {
                             "& .MuiAutocomplete-listbox": {
                               "& .MuiAutocomplete-option": {
                                 color: "var(--blue-gray)",
+                                '&[aria-selected="true"]': {
+                                  backgroundColor: "var(--ocean-green-25)",
+                                },
                               },
                             },
                           },

@@ -67,7 +67,8 @@ export function createVolunteerUser(
   newEmail: string,
   newFirstName: string,
   newLastName: string,
-  code: string
+  code: string,
+  affiliation: string
 ): Promise<void> {
   return new Promise((resolve, reject) => {
     const createUserCloudFunction = httpsCallable(
@@ -79,6 +80,7 @@ export function createVolunteerUser(
       firstName: newFirstName,
       lastName: newLastName,
       code: code,
+      affiliation: affiliation,
     })
       .then(async () => {
         resolve();

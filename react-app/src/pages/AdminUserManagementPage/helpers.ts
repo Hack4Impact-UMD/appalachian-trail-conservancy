@@ -84,6 +84,7 @@ export const usersColumns = [
   { field: "firstName", headerName: "FIRST NAME", width: 165 },
   { field: "lastName", headerName: "LAST NAME", width: 160 },
   { field: "email", headerName: "EMAIL", width: 200 },
+  { field: "affiliation", headerName: "AFFILIATION", width: 250 },
   {
     field: "numEnrolledTrainings",
     headerName: "TRAININGS ENROLLED",
@@ -354,6 +355,7 @@ export function exportVolunteerData(
         volunteer.firstName,
         volunteer.lastName,
         volunteer.email,
+        volunteer.affiliation || "N/A",
         volunteer.numEnrolledTrainings,
         volunteer.numCompletedTrainings,
         volunteer.numEnrolledPathways,

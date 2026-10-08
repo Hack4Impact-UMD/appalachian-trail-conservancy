@@ -1,0 +1,69 @@
+.closeButton {
+  display: flex;
+  position: absolute;
+  background: white;
+  top: 20px;
+  right: 20px;
+  border-radius: 50%;
+  color: var(--blue-gray);
+  text-align: center;
+  font-size: 2.25rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  max-width: 300px;
+  text-align: center;
+  color: var(--blue-gray);
+  margin-bottom: 0;
+}
+
+.textContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 2rem 0;
+  gap: 0.5rem;
+}
+
+.text {
+  font-size: 1.1rem;
+  max-width: 300px;
+  text-align: center;
+  color: var(--blue-gray);
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10%;
+}
+
+@media screen and (max-width: 450px) {
+  .inputTextField {
+    width: 200px !important;
+  }
+
+  .title {
+    max-width: 250px;
+    font-size: 1.1rem;
+  }
+
+  .text {
+    max-width: 250px;
+    font-size: 1rem;
+  }
+}

@@ -57,6 +57,16 @@ exports.createVolunteerUser = onCall(
           "Email must be a valid string."
         );
       }
+      if (!data.firstName || !data.lastName || !data.affiliation) {
+        reject({
+          reason: "Invalid name or affiliation",
+          text: "First name, last name, and affiliation must be provided.",
+        });
+        throw new functions.https.HttpsError(
+          "invalid-argument",
+          "First name, last name, and affiliation must be provided."
+        );
+      }
       const emailAddress = data.email.trim().toLowerCase();
       // pull registration code from firestore
       let registrationCode;
@@ -94,6 +104,7 @@ exports.createVolunteerUser = onCall(
                   email: emailAddress,
                   firstName: data.firstName,
                   lastName: data.lastName,
+                  affiliation: data.affiliation,
                   type: "VOLUNTEER",
                   trainingInformation: [],
                   pathwayInformation: [],

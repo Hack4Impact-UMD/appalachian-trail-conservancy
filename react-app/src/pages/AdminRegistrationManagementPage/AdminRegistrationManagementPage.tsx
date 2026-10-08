@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar.tsx";
 import EditRegistrationCode from "./SubComponents/EditRegistrationCode.tsx";
 import EditEmail from "./SubComponents/EditEmail.tsx";
+import EditAffiliationList from "./SubComponents/EditAffiliationList.tsx";
 import { FormControl, MenuItem, Select } from "@mui/material";
 import styles from "./AdminRegistrationManagementPage.module.css";
 import {
@@ -23,6 +24,7 @@ function AdminRegistrationManagementPage() {
   const [tab, setTab] = useState<string | null>("user");
 
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
+  const [openAffiliationPopup, setOpenAffiliationPopup] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -44,10 +46,12 @@ function AdminRegistrationManagementPage() {
 
   return (
     <>
-      <AdminNavigationBar
-        open={navigationBarOpen}
-        setOpen={setNavigationBarOpen}
-      />
+      <div className={openAffiliationPopup ? styles.popupOpen : ""}>
+        <AdminNavigationBar
+          open={navigationBarOpen}
+          setOpen={setNavigationBarOpen}
+        />
+      </div>
       <div
         className={`${styles.split} ${styles.right}`}
         style={{
@@ -83,6 +87,9 @@ function AdminRegistrationManagementPage() {
                     <PurpleToggleButton value="registration">
                       REGISTRATION CODE
                     </PurpleToggleButton>
+                    <PurpleToggleButton value="affiliationList">
+                      EDIT AFFILIATION LIST
+                    </PurpleToggleButton>
                   </CustomToggleButtonGroup>
                 </div>
                 {/* dropdown container */}
@@ -101,14 +108,21 @@ function AdminRegistrationManagementPage() {
                       <MenuItem value="registration" sx={selectOptionStyle}>
                         REGISTRATION CODE
                       </MenuItem>
+                      <MenuItem value="affiliationList" sx={selectOptionStyle}>
+                        EDIT AFFILIATION LIST
+                      </MenuItem>
                     </Select>
                   </FormControl>
                 </div>
                 <div className={styles.emailRegCodeContainer}>
                   {tab === "user" ? (
                     <EditEmail tab={tab} quillRef={quillRef} />
-                  ) : (
+                  ) : tab === "registration" ? (
                     <EditRegistrationCode />
+                  ) : (
+                    <EditAffiliationList
+                      setAffiliationPopupOpen={setOpenAffiliationPopup}
+                    />
                   )}
                 </div>
               </div>
