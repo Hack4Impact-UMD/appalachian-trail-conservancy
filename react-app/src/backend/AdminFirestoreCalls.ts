@@ -564,3 +564,29 @@ export function deletePathway(id: string): Promise<void> {
       });
   });
 }
+
+export function updateVolunteerAffiliation(
+  affiliation: string,
+  id: string
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (id === "") {
+      reject(new Error("Invalid id"));
+      return;
+    }
+
+    if (affiliation.trim() === "") {
+      reject(new Error("Invalid affiliation"));
+      return;
+    }
+
+    const volunteerRef = doc(db, "Users", id);
+    updateDoc(volunteerRef, { affiliation })
+      .then(() => {
+        resolve();
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+}
