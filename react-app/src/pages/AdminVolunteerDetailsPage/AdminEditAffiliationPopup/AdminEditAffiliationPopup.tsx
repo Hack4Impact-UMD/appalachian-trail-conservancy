@@ -70,12 +70,13 @@ const AdminEditAffiliationPopup = ({
       setLoading(true);
 
       if (affiliation && affiliation.trim() !== "") {
-        setAffiliation(affiliation.trim());
-        const newVolunteer = { ...volunteer, affiliation: affiliation };
+        const trimmedAffiliation = affiliation.trim();
+        const newVolunteer = { ...volunteer, affiliation: trimmedAffiliation };
 
-        updateVolunteerAffiliation(affiliation, volunteer.id)
+        updateVolunteerAffiliation(trimmedAffiliation, volunteer.id)
           .then(() => {
             setVolunteer(newVolunteer);
+            setAffiliation(trimmedAffiliation);
             setSnackbarMessage(`Affiliation updated successfully`);
           })
           .catch(() => {
