@@ -56,7 +56,7 @@
 }
 
 @media screen and (max-width: 450px) {
-  .inputTextField {
+  .textFields {
     width: 200px !important;
   }
 }

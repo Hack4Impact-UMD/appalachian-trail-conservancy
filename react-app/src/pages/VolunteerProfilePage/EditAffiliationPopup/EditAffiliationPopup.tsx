@@ -163,11 +163,7 @@ const EditAffiliationPopup = ({
           <Button
             variant="contained"
             sx={{ ...forestGreenButton, width: "120px" }}
-<<<<<<< HEAD
             onClick={handleUpdateAffiliation}
-=======
-            onClick={handleUpdateName}
->>>>>>> c8e486374684751717c4b6c8639fc78cb3f122fb
             disabled={loading}>
             {loading ? <Loading /> : "Confirm"}
           </Button>

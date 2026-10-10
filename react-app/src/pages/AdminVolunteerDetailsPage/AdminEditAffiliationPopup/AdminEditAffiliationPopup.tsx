@@ -42,12 +42,16 @@ const AdminEditAffiliationPopup = ({
 
   // Fetch affiliation list
   useEffect(() => {
+    if (!open) {
+      return;
+    }
+
+    setLoading(true);
     getAffiliationList()
       .then((affiliationList: AffiliationList) => {
         setAffiliationOptions(affiliationList.affiliations);
       })
-      .catch((e) => {
-        console.error("Failed to fetch affiliation list:", e);
+      .catch(() => {
         setSnackbarMessage(
           "Error retrieving affiliation list. Please try again later."
         );
@@ -56,7 +60,7 @@ const AdminEditAffiliationPopup = ({
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [open]);
 
   useEffect(() => {
     if (open) {
