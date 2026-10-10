@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import styles from "./EditAffiliationPopup.module.css";
-import Modal from "../../../components/ModalWrapper/Modal";
-import Loading from "../../../components/LoadingScreen/Loading";
-import { useAuth } from "../../../auth/AuthProvider";
+import styles from "./AdminEditAffiliationPopup.module.css";
+import Modal from "../../../components/ModalWrapper/Modal.tsx";
+import Loading from "../../../components/LoadingScreen/Loading.tsx";
 import { Autocomplete, Button, TextField } from "@mui/material";
 import { IoCloseOutline } from "react-icons/io5";
 import {
@@ -11,22 +10,22 @@ import {
   autocompleteText,
   whiteSelectGrayBorder,
   autocompleteOptionStyle,
-} from "../../../muiTheme";
-import { Volunteer } from "../../../types/UserType";
-import { updateVolunteer } from "../../../backend/VolunteerFirestoreCalls";
+} from "../../../muiTheme.ts";
+import { VolunteerID } from "../../../types/UserType.ts";
+import { updateVolunteerAffiliation } from "../../../backend/AdminFirestoreCalls.ts";
 import { getAffiliationList } from "../../../backend/FirestoreCalls.ts";
 import { AffiliationList } from "../../../types/AssetsType.ts";
 
 interface modalPropsType {
   open: boolean;
   onClose: any;
-  volunteer: Volunteer | undefined;
+  volunteer: VolunteerID;
   setVolunteer: any;
   setSnackbar: any;
   setSnackbarMessage: any;
 }
 
-const EditAffiliationPopup = ({
+const AdminEditAffiliationPopup = ({
   open,
   onClose,
   volunteer,
@@ -34,8 +33,6 @@ const EditAffiliationPopup = ({
   setSnackbar,
   setSnackbarMessage,
 }: modalPropsType): React.ReactElement => {
-  const auth = useAuth();
-
   const [loading, setLoading] = useState<boolean>(false);
   const [canClose, setCanClose] = useState<boolean>(true);
   const [affiliation, setAffiliation] = useState<string | null>(
@@ -45,12 +42,16 @@ const EditAffiliationPopup = ({
 
   // Fetch affiliation list
   useEffect(() => {
+    if (!open) {
+      return;
+    }
+
+    setLoading(true);
     getAffiliationList()
       .then((affiliationList: AffiliationList) => {
         setAffiliationOptions(affiliationList.affiliations);
       })
-      .catch((e) => {
-        console.error("Failed to fetch affiliation list:", e);
+      .catch(() => {
         setSnackbarMessage(
           "Error retrieving affiliation list. Please try again later."
         );
@@ -59,7 +60,7 @@ const EditAffiliationPopup = ({
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [open]);
 
   useEffect(() => {
     if (open) {
@@ -76,10 +77,9 @@ const EditAffiliationPopup = ({
         const trimmedAffiliation = affiliation.trim();
         const newVolunteer = { ...volunteer, affiliation: trimmedAffiliation };
 
-        updateVolunteer(newVolunteer, auth.id)
+        updateVolunteerAffiliation(trimmedAffiliation, volunteer.id)
           .then(() => {
             setVolunteer(newVolunteer);
-            auth.setUser(newVolunteer); // Update user in AuthProvider
             setAffiliation(trimmedAffiliation);
             setSnackbarMessage(`Affiliation updated successfully`);
           })
@@ -176,4 +176,4 @@ const EditAffiliationPopup = ({
   );
 };
 
-export default EditAffiliationPopup;
+export default AdminEditAffiliationPopup;

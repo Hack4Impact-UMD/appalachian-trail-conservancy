@@ -9,6 +9,8 @@ import {
   MenuItem,
   Snackbar,
   Alert,
+  Tooltip,
+  IconButton,
 } from "@mui/material";
 import {
   VolunteerID,
@@ -36,6 +38,7 @@ import {
   selectOptionStyle,
 } from "../../muiTheme.ts";
 import debounce from "lodash.debounce";
+import EditIcon from "@mui/icons-material/Edit";
 import hamburger from "../../assets/hamburger.svg";
 import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar.tsx";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon.tsx";
@@ -51,6 +54,7 @@ import { exportTableToCSV } from "../../backend/AdminFirestoreCalls.ts";
 import { TrainingID } from "../../types/TrainingType.ts";
 import { PathwayID } from "../../types/PathwayType.ts";
 import DeleteUserPopup from "./AdminDeleteUserPopup/AdminDeleteUserPopup.tsx";
+import AdminEditAffiliationPopup from "./AdminEditAffiliationPopup/AdminEditAffiliationPopup.tsx";
 import Loading from "../../components/LoadingScreen/Loading.tsx";
 import {
   quizScoreComparator,
@@ -251,6 +255,9 @@ function AdminVolunteerDetailsPage() {
 
   const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
   const [openSelectSnackbar, setOpenSelectSnackbar] = useState<boolean>(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
+  const [openEditAffiliationPopup, setOpenEditAffiliationPopup] =
+    useState<boolean>(false);
 
   const CustomColumnMenu = (props: GridColumnMenuProps) => {
     const { hideMenu, currentColumn, open } = props;
@@ -404,6 +411,7 @@ function AdminVolunteerDetailsPage() {
 
     // Check if any row is selected
     if (selectionModel.length === 0) {
+      setSnackbarMessage("Please select rows to export.");
       setOpenSelectSnackbar(true);
       return;
     }
@@ -431,6 +439,7 @@ function AdminVolunteerDetailsPage() {
 
     // Check if any row is selected
     if (selectionModel.length === 0) {
+      setSnackbarMessage("Please select rows to export.");
       setOpenSelectSnackbar(true);
       return;
     }
@@ -454,7 +463,12 @@ function AdminVolunteerDetailsPage() {
 
   return (
     <>
-      <div className={openDeleteUserPopup ? styles.popupOpen : ""}>
+      <div
+        className={
+          openDeleteUserPopup || openEditAffiliationPopup
+            ? styles.popupOpen
+            : ""
+        }>
         <AdminNavigationBar
           open={navigationBarOpen}
           setOpen={setNavigationBarOpen}
@@ -508,9 +522,21 @@ function AdminVolunteerDetailsPage() {
                     <b>Email: </b>
                     {volunteer.email}
                   </div>
-                  <div className={styles.text}>
+                  <div className={styles.affiliationText}>
                     <b>Affiliation: </b>
                     {volunteer.affiliation ?? "N/A"}
+                    <Tooltip title={"Edit"}>
+                      <IconButton
+                        onClick={() => {
+                          setOpenEditAffiliationPopup(true);
+                        }}
+                        sx={{
+                          color: "var(--blue-gray)",
+                          padding: "8px",
+                        }}>
+                        <EditIcon sx={{ fontSize: 20 }} />
+                      </IconButton>
+                    </Tooltip>
                   </div>
                   <br></br>
                   <div className={styles.text}>
@@ -674,6 +700,16 @@ function AdminVolunteerDetailsPage() {
               </>
             )}
           </div>
+
+          <AdminEditAffiliationPopup
+            open={openEditAffiliationPopup}
+            onClose={setOpenEditAffiliationPopup}
+            volunteer={volunteer}
+            setVolunteer={setVolunteer}
+            setSnackbar={setOpenSelectSnackbar}
+            setSnackbarMessage={setSnackbarMessage}
+          />
+
           {/* No row selected alert */}
           <Snackbar
             open={openSelectSnackbar}
@@ -683,8 +719,14 @@ function AdminVolunteerDetailsPage() {
           >
             <Alert
               onClose={() => setOpenSelectSnackbar(false)}
-              severity="warning">
-              Please select rows to export.
+              severity={
+                snackbarMessage.includes("successfully")
+                  ? "success"
+                  : snackbarMessage.includes("select rows to export")
+                    ? "warning"
+                    : "error"
+              }>
+              {snackbarMessage}
             </Alert>
           </Snackbar>
         </div>
