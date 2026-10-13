@@ -1,3 +1,8 @@
+.popupOpen {
+  position: absolute;
+  z-index: -1;
+}
+
 .split {
   height: 100%;
   position: fixed;
@@ -75,9 +80,15 @@
   flex-direction: row;
 }
 
-.searchBarContainer {
+.mobileSearchBarContainer {
   margin-top: 2rem;
   margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.searchBarContainer {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -98,6 +109,16 @@
 .dropdownContainer {
   display: none;
   flex-grow: 1;
+}
+
+.actionButtons {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.mobileAffiliationContainer {
+  display: none;
 }
 
 @media screen and (min-width: 1500px) {
@@ -152,9 +173,13 @@
     max-width: 100%;
   }
 
-  .export {
-    display: flex;
-    width: 170px;
+  .affiliationButton {
+    display: none;
+  }
+
+  .mobileAffiliationContainer {
+    display: block;
+    margin-top: 15px;
   }
 }
 
@@ -164,6 +189,10 @@
   }
 
   .dropdownMenu {
+    width: 300px;
+  }
+
+  .mobileAffiliationButton {
     width: 300px;
   }
 }
