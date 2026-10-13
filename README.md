@@ -41,7 +41,7 @@ Once logged in to the Firebase Console, you can view our stored data by clicking
 
 We currently have 3 collections that correspond to our project Types:
 
-- Assets (Registration email and code)
+- Assets (Registration-related information)
 - Trainings
 - Pathways
 - Users (Volunteer and Admin accounts)
