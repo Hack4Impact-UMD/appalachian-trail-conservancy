@@ -259,27 +259,36 @@ function AdminUserManagementPage() {
     affiliation: string
   ) => {
     const idSet = new Set(updatedIds);
-
-    setUsersData((previousUsers) =>
-      previousUsers.map((user) =>
-        idSet.has(user.id)
-          ? {
-              ...user,
-              affiliation,
-            }
-          : user
-      )
+    const updatedUsers = usersData.map((user) =>
+      idSet.has(user.id)
+        ? {
+            ...user,
+            affiliation,
+          }
+        : user
     );
 
-    setFilteredUsers((previousUsers) =>
-      previousUsers.map((user) =>
-        idSet.has(user.id)
-          ? {
-              ...user,
-              affiliation,
-            }
-          : user
-      )
+    setUsersData(updatedUsers);
+    setFilteredUsers(filterVolunteerRows(updatedUsers, searchQuery));
+  };
+
+  const filterVolunteerRows = (
+    volunteers: managementVolunteerType[],
+    query: string
+  ) => {
+    if (!query) {
+      return volunteers;
+    }
+
+    const normalizedQuery = query.toLowerCase();
+
+    return volunteers.filter(
+      (user) =>
+        user.firstName.toLowerCase().includes(normalizedQuery) ||
+        user.lastName.toLowerCase().includes(normalizedQuery) ||
+        user.email.toLowerCase().includes(normalizedQuery) ||
+        (user.affiliation &&
+          user.affiliation.toLowerCase().includes(normalizedQuery))
     );
   };
 
