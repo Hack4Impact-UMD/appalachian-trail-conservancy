@@ -20,12 +20,6 @@ import { Admin, VolunteerID } from "../types/UserType";
 import { Training } from "../types/TrainingType";
 import { Pathway } from "../types/PathwayType";
 
-export interface BulkVolunteerAffiliationResult {
-  message: string;
-  failedIds: string[];
-  succeededIds: string[];
-}
-
 export function getAdmin(id: string): Promise<Admin> {
   return new Promise((resolve, reject) => {
     getDoc(doc(db, "Users", id))
@@ -600,7 +594,11 @@ export function updateVolunteerAffiliation(
 export function updateBulkVolunteerAffiliation(
   affiliation: string,
   ids: string[]
-): Promise<BulkVolunteerAffiliationResult> {
+): Promise<{
+  message: string;
+  failedIds: string[];
+  succeededIds: string[];
+}> {
   return new Promise((resolve, reject) => {
     if (!ids || ids.length === 0) {
       reject(new Error("Invalid ids"));
