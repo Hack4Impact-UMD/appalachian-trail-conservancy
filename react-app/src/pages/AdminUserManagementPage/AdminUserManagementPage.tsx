@@ -254,22 +254,25 @@ function AdminUserManagementPage() {
 
   const selectedVolunteerIds = selectionModel.map((id) => String(id));
 
-  const refreshVolunteerAffiliationRows = (
-    updatedIds: string[],
-    affiliation: string
-  ) => {
-    const idSet = new Set(updatedIds);
-    const updatedUsers = usersData.map((user) =>
-      idSet.has(user.id)
-        ? {
-            ...user,
-            affiliation,
-          }
-        : user
-    );
-
-    setUsersData(updatedUsers);
-    setFilteredUsers(filterVolunteerRows(updatedUsers, searchQuery));
+  const refreshVolunteerAffiliationRows = () => {
+    setLoading(true);
+    getVolunteers()
+      .then((users) => {
+        // Parse the volunteer data for the data table
+        const parsedUsers = parseVolunteerData(users);
+        setUsersData(parsedUsers);
+        setFilteredUsers(filterVolunteerRows(parsedUsers, searchQuery));
+      })
+      .catch(() => {
+        setSnackbarMessage(
+          "Error refreshing volunteer data. Please try again later."
+        );
+        setSnackbarSeverity("error");
+        setOpenSnackbar(true);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const filterVolunteerRows = (

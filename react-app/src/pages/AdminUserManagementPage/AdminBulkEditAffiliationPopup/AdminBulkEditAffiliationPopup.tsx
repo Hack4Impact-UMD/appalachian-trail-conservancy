@@ -19,7 +19,7 @@ interface modalPropsType {
   open: boolean;
   onClose: () => void;
   volunteerIds: string[];
-  onSuccess: (updatedIds: string[], affiliation: string) => void;
+  onSuccess: () => void;
   setOpenSnackbar: (value: boolean) => void;
   setSnackbarMessage: (value: string) => void;
   setSnackbarSeverity: (value: "success" | "warning" | "error") => void;
@@ -78,7 +78,7 @@ const AdminBulkEditAffiliationPopup = ({
 
         updateBulkVolunteerAffiliation(trimmedAffiliation, volunteerIds)
           .then((result) => {
-            onSuccess(result.succeededIds, trimmedAffiliation);
+            onSuccess();
             setAffiliation(trimmedAffiliation);
             setSnackbarMessage(result.message);
             setSnackbarSeverity(
