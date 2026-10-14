@@ -96,6 +96,10 @@
   margin-top: 0.3rem;
 }
 
+.affiliationText {
+  color: var(--blue-gray);
+}
+
 .buttonContainer {
   display: flex;
   justify-content: space-between;

@@ -564,3 +564,82 @@ export function deletePathway(id: string): Promise<void> {
       });
   });
 }
+
+export function updateVolunteerAffiliation(
+  affiliation: string,
+  id: string
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (id === "") {
+      reject(new Error("Invalid id"));
+      return;
+    }
+
+    if (affiliation.trim() === "") {
+      reject(new Error("Invalid affiliation"));
+      return;
+    }
+
+    const volunteerRef = doc(db, "Users", id);
+    updateDoc(volunteerRef, { affiliation })
+      .then(() => {
+        resolve();
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+}
+
+export function updateBulkVolunteerAffiliation(
+  affiliation: string,
+  ids: string[]
+): Promise<{
+  message: string;
+  failedIds: string[];
+  succeededIds: string[];
+}> {
+  return new Promise((resolve, reject) => {
+    if (!ids || ids.length === 0) {
+      reject(new Error("Invalid ids"));
+      return;
+    }
+
+    if (affiliation.trim() === "") {
+      reject(new Error("Invalid affiliation"));
+      return;
+    }
+
+    const validIds = ids.filter((id) => id.trim() !== "");
+    const invalidIds = ids.filter((id) => id.trim() === "");
+
+    Promise.allSettled(
+      validIds.map((id) => {
+        const volunteerRef = doc(db, "Users", id);
+        return updateDoc(volunteerRef, { affiliation });
+      })
+    )
+      .then((results) => {
+        const succeededIds: string[] = [];
+        const failedIds: string[] = [...invalidIds];
+
+        results.forEach((result, index) => {
+          if (result.status === "fulfilled") {
+            succeededIds.push(validIds[index]);
+          } else {
+            failedIds.push(validIds[index]);
+          }
+        });
+
+        const message =
+          failedIds.length === 0
+            ? `Updated ${succeededIds.length} volunteer(s).`
+            : `Updated ${succeededIds.length} volunteer(s). Failed to update ${failedIds.length}.`;
+
+        resolve({ message, failedIds, succeededIds });
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+}

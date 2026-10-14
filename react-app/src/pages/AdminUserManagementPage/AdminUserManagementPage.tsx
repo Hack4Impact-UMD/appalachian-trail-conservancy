@@ -52,6 +52,7 @@ import {
 import debounce from "lodash.debounce";
 import hamburger from "../../assets/hamburger.svg";
 import AdminNavigationBar from "../../components/AdminNavigationBar/AdminNavigationBar.tsx";
+import AdminBulkEditAffiliationPopup from "./AdminBulkEditAffiliationPopup/AdminBulkEditAffiliationPopup.tsx";
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon.tsx";
 import Footer from "../../components/Footer/Footer.tsx";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -82,6 +83,15 @@ function AdminUserManagementPage() {
     managementPathwayType[]
   >([]);
   const [pathwaysData, setPathwaysData] = useState<managementPathwayType[]>([]);
+
+  const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
+  const [openBulkEditAffiliationPopup, setOpenBulkEditAffiliationPopup] =
+    useState<boolean>(false);
+  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<
+    "success" | "warning" | "error"
+  >("success");
 
   const [navigationBarOpen, setNavigationBarOpen] = useState(
     !(window.innerWidth < 1200)
@@ -224,34 +234,89 @@ function AdminUserManagementPage() {
     };
   }, [debouncedFilter]);
 
-  const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
-
   useEffect(() => {
     // Clear the selection whenever the table (alignment) changes
     setSelectionModel([]);
   }, [alignment]);
 
   // Delete user snackbar
-  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
   useEffect(() => {
     if (location.state?.showSnackbar) {
+      setSnackbarMessage("Volunteer successfully deleted.");
+      setSnackbarSeverity("success");
       setOpenSnackbar(true);
     }
   }, [location.state]);
 
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
-    setOpenSelectSnackbar(false);
   };
 
-  const [openSelectSnackbar, setOpenSelectSnackbar] = useState<boolean>(false);
+  const selectedVolunteerIds = selectionModel.map((id) => String(id));
+
+  const refreshVolunteerAffiliationRows = () => {
+    setLoading(true);
+    getVolunteers()
+      .then((users) => {
+        // Parse the volunteer data for the data table
+        const parsedUsers = parseVolunteerData(users);
+        setUsersData(parsedUsers);
+        setFilteredUsers(filterVolunteerRows(parsedUsers, searchQuery));
+      })
+      .catch(() => {
+        setSnackbarMessage(
+          "Error refreshing volunteer data. Please try again later."
+        );
+        setSnackbarSeverity("error");
+        setOpenSnackbar(true);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  const filterVolunteerRows = (
+    volunteers: managementVolunteerType[],
+    query: string
+  ) => {
+    if (!query) {
+      return volunteers;
+    }
+
+    const normalizedQuery = query.toLowerCase();
+
+    return volunteers.filter(
+      (user) =>
+        user.firstName.toLowerCase().includes(normalizedQuery) ||
+        user.lastName.toLowerCase().includes(normalizedQuery) ||
+        user.email.toLowerCase().includes(normalizedQuery) ||
+        (user.affiliation &&
+          user.affiliation.toLowerCase().includes(normalizedQuery))
+    );
+  };
+
+  const handleOpenBulkEditAffiliation = () => {
+    setOpenSnackbar(false);
+
+    if (selectedVolunteerIds.length === 0) {
+      setSnackbarMessage("Please select volunteers to edit.");
+      setSnackbarSeverity("warning");
+      setOpenSnackbar(true);
+      return;
+    }
+
+    setOpenBulkEditAffiliationPopup(true);
+  };
+
   const exportData = () => {
     // Reset the snackbar
-    setOpenSelectSnackbar(false);
+    setOpenSnackbar(false);
 
     // Check if any row is selected
     if (selectionModel.length === 0) {
-      setOpenSelectSnackbar(true);
+      setSnackbarMessage("Please select rows to export.");
+      setSnackbarSeverity("warning");
+      setOpenSnackbar(true);
       return;
     }
 
@@ -338,10 +403,12 @@ function AdminUserManagementPage() {
 
   return (
     <>
-      <AdminNavigationBar
-        open={navigationBarOpen}
-        setOpen={setNavigationBarOpen}
-      />
+      <div className={openBulkEditAffiliationPopup ? styles.popupOpen : ""}>
+        <AdminNavigationBar
+          open={navigationBarOpen}
+          setOpen={setNavigationBarOpen}
+        />
+      </div>
       <div
         className={`${styles.split} ${styles.right}`}
         style={{
@@ -418,53 +485,76 @@ function AdminUserManagementPage() {
                   </div>
                 ) : (
                   <div className={styles.contentSection}>
-                    <div className={styles.searchBarContainer}>
-                      <OutlinedInput
-                        className={styles.searchBar}
-                        sx={grayBorderSearchBar}
-                        placeholder="Search..."
-                        value={searchQuery}
-                        onChange={handleSearchChange}
-                        startAdornment={
-                          <InputAdornment position="start">
-                            <IoIosSearch />
-                          </InputAdornment>
-                        }
-                      />
-                      <Button
-                        className={styles.export}
-                        sx={whiteButtonOceanGreenBorder}
-                        onClick={exportData}>
-                        Export
-                      </Button>
+                    <div className={styles.mobileSearchBarContainer}>
+                      <div className={styles.searchBarContainer}>
+                        <OutlinedInput
+                          className={styles.searchBar}
+                          sx={grayBorderSearchBar}
+                          placeholder="Search..."
+                          value={searchQuery}
+                          onChange={handleSearchChange}
+                          startAdornment={
+                            <InputAdornment position="start">
+                              <IoIosSearch />
+                            </InputAdornment>
+                          }
+                        />
+                        <div className={styles.actionButtons}>
+                          {alignment === "user" && (
+                            <div className={styles.affiliationButton}>
+                              <Button
+                                sx={whiteButtonOceanGreenBorder}
+                                onClick={handleOpenBulkEditAffiliation}>
+                                Edit Affiliation
+                              </Button>
+                            </div>
+                          )}
+                          <Button
+                            className={styles.exportButton}
+                            sx={whiteButtonOceanGreenBorder}
+                            onClick={exportData}>
+                            Export
+                          </Button>
+                        </div>
+                      </div>
+                      {/* Mobile-only Edit Affiliation button */}
+                      {alignment === "user" && (
+                        <div className={styles.mobileAffiliationContainer}>
+                          <Button
+                            sx={whiteButtonOceanGreenBorder}
+                            className={styles.mobileAffiliationButton}
+                            onClick={handleOpenBulkEditAffiliation}>
+                            Edit Affiliation
+                          </Button>
+                        </div>
+                      )}
                     </div>
 
                     <div className={styles.innerGrid}>{table()}</div>
                   </div>
                 )}
 
-                <div className={styles.snackbarContainer}>
-                  {/* No row selected alert */}
-                  <Snackbar
-                    open={openSelectSnackbar}
-                    autoHideDuration={6000}
-                    onClose={handleCloseSnackbar}
-                    anchorOrigin={{ vertical: "bottom", horizontal: "right" }} // Position within the right section
-                  >
-                    <Alert onClose={handleCloseSnackbar} severity="warning">
-                      Please select rows to export.
-                    </Alert>
-                  </Snackbar>
+                <AdminBulkEditAffiliationPopup
+                  open={openBulkEditAffiliationPopup}
+                  onClose={() => setOpenBulkEditAffiliationPopup(false)}
+                  volunteerIds={selectedVolunteerIds}
+                  onSuccess={refreshVolunteerAffiliationRows}
+                  setOpenSnackbar={setOpenSnackbar}
+                  setSnackbarMessage={setSnackbarMessage}
+                  setSnackbarSeverity={setSnackbarSeverity}
+                />
 
-                  {/* Delete volunteer alert */}
+                <div className={styles.snackbarContainer}>
                   <Snackbar
                     open={openSnackbar}
                     autoHideDuration={6000}
                     onClose={handleCloseSnackbar}
                     anchorOrigin={{ vertical: "bottom", horizontal: "right" }} // Position within the right section
                   >
-                    <Alert onClose={handleCloseSnackbar} severity="success">
-                      Volunteer successfully deleted.
+                    <Alert
+                      onClose={handleCloseSnackbar}
+                      severity={snackbarSeverity}>
+                      {snackbarMessage}
                     </Alert>
                   </Snackbar>
                 </div>

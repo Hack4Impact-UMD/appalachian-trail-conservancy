@@ -67,19 +67,20 @@ const EditAffiliationPopup = ({
     }
   }, [open, volunteer?.affiliation]);
 
-  const handleUpdateName = () => {
+  const handleUpdateAffiliation = () => {
     if (volunteer) {
       setCanClose(false);
       setLoading(true);
 
       if (affiliation && affiliation.trim() !== "") {
-        setAffiliation(affiliation.trim());
-        const newVolunteer = { ...volunteer, affiliation: affiliation };
+        const trimmedAffiliation = affiliation.trim();
+        const newVolunteer = { ...volunteer, affiliation: trimmedAffiliation };
 
         updateVolunteer(newVolunteer, auth.id)
           .then(() => {
             setVolunteer(newVolunteer);
             auth.setUser(newVolunteer); // Update user in AuthProvider
+            setAffiliation(trimmedAffiliation);
             setSnackbarMessage(`Affiliation updated successfully`);
           })
           .catch(() => {
@@ -162,7 +163,7 @@ const EditAffiliationPopup = ({
           <Button
             variant="contained"
             sx={{ ...forestGreenButton, width: "120px" }}
-            onClick={handleUpdateName}
+            onClick={handleUpdateAffiliation}
             disabled={loading}>
             {loading ? <Loading /> : "Confirm"}
           </Button>
