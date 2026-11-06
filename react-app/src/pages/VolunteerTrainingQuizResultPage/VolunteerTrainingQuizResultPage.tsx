@@ -63,6 +63,7 @@ const VolunteerTrainingQuizResultPage = () => {
   );
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
   const [achievedScore, setAchievedScore] = useState<number>(0);
+  const [sourcePathwayId, setSourcePathwayId] = useState<number | null>(null);
 
   useEffect(() => {
     // Get data from navigation state
@@ -71,6 +72,10 @@ const VolunteerTrainingQuizResultPage = () => {
       setVolunteerTraining(location.state.volunteerTraining);
       setSelectedAnswers(location.state.selectedAnswers);
       setAchievedScore(location.state.achievedScore);
+
+      if (location.state.sourcePathway) {
+        setSourcePathwayId(location.state.sourcePathway.id);
+      }
     } else {
       navigate("/trainings");
     }
@@ -193,20 +198,43 @@ const VolunteerTrainingQuizResultPage = () => {
           {/* buttons */}
           <div className={styles.footerButtons}>
             {passed ? (
-              <Button
-                sx={forestGreenButton}
-                variant="contained"
-                onClick={() => navigate("/trainings")}>
-                Exit training
-              </Button>
-            ) : (
               <>
+                {sourcePathwayId && (
+                  <Button
+                    sx={{ ...whiteButtonGrayBorder }}
+                    variant="contained"
+                    onClick={() => {
+                      navigate(`/pathways/${sourcePathwayId}`);
+                    }}>
+                    Back to Pathway
+                  </Button>
+                )}
                 <Button
-                  sx={{ ...whiteButtonGrayBorder }}
+                  sx={forestGreenButton}
                   variant="contained"
                   onClick={() => navigate("/trainings")}>
-                  {screenWidth > 450 ? "Exit Training" : "Exit"}
+                  Exit training
                 </Button>
+              </>
+            ) : (
+              <>
+                {sourcePathwayId ? (
+                  <Button
+                    sx={{ ...whiteButtonGrayBorder }}
+                    variant="contained"
+                    onClick={() => {
+                      navigate(`/pathways/${sourcePathwayId}`);
+                    }}>
+                    {screenWidth > 450 ? "Back to Pathway" : "Exit"}
+                  </Button>
+                ) : (
+                  <Button
+                    sx={{ ...whiteButtonGrayBorder }}
+                    variant="contained"
+                    onClick={() => navigate("/trainings")}>
+                    {screenWidth > 450 ? "Exit Training" : "Exit"}
+                  </Button>
+                )}
                 <Button
                   sx={{ ...whiteButtonGrayBorder }}
                   variant="contained"
@@ -215,6 +243,7 @@ const VolunteerTrainingQuizResultPage = () => {
                       state: {
                         volunteerTraining: volunteerTraining,
                         training: training,
+                        sourcePathway: location.state?.sourcePathway,
                         fromApp: true,
                       },
                     })
@@ -229,6 +258,7 @@ const VolunteerTrainingQuizResultPage = () => {
                       state: {
                         volunteerTraining: volunteerTraining,
                         training: training,
+                        sourcePathway: location.state?.sourcePathway,
                         fromApp: true,
                       },
                     })

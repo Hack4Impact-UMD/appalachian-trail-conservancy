@@ -85,6 +85,7 @@ function VolunteerTrainingPage() {
           training: training,
           volunteerTraining: volunteerTraining,
           fromApp: true,
+          sourcePathway: location.state?.sourcePathway,
           from: location,
         },
       });
