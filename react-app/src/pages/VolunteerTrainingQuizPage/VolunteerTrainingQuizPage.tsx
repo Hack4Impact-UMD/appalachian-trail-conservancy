@@ -131,6 +131,7 @@ function VolunteerTrainingQuizPage() {
             volunteerTraining: volunteerTrainingInfo,
             selectedAnswers: selectedAnswers,
             achievedScore: numAnswersCorrect,
+            sourcePathway: location.state?.sourcePathway,
             fromApp: true,
           },
         });

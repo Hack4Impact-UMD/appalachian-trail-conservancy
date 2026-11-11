@@ -212,6 +212,7 @@ function VolunteerTrainingQuizLandingPage() {
                   state: {
                     training: training,
                     volunteerTraining: volunteerTraining,
+                    sourcePathway: location.state?.sourcePathway,
                     fromApp: true,
                   },
                 })

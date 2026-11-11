@@ -330,6 +330,7 @@ function VolunteerTrainingLandingPage() {
               training: training,
               volunteerTraining: updatedVolunteerTraining,
               volunteerId: auth.id.toString(),
+              sourcePathway: location.state?.sourcePathway,
               fromApp: true,
             },
           });
@@ -368,6 +369,7 @@ function VolunteerTrainingLandingPage() {
                 training: training,
                 volunteerTraining: volunteerTraining,
                 volunteerId: auth.id.toString(),
+                sourcePathway: location.state?.sourcePathway,
                 fromApp: true,
               },
             })
@@ -386,6 +388,7 @@ function VolunteerTrainingLandingPage() {
                 training: training,
                 volunteerTraining: volunteerTraining,
                 volunteerId: auth.id.toString(),
+                sourcePathway: location.state?.sourcePathway,
                 fromApp: true,
               },
             })
