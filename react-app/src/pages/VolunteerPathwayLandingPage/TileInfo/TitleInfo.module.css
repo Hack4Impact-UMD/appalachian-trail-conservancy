@@ -18,12 +18,22 @@
   text-align: left;
 }
 
+/* .header {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+} */
+
 .header {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 .title {
@@ -45,6 +55,9 @@
 .nameHeading {
   color: var(--forest-green);
   font-size: 3rem;
+  margin: 0;
+  white-space: normal;
+  word-break: break-word;
 }
 
 .shareIcon {
